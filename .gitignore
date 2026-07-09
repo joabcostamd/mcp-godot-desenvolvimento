@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# VS Code
+.vscode/
+
+# Godot
+.godot/
+
+# Sistema operacional
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
