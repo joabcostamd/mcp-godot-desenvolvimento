@@ -275,7 +275,7 @@ def main():
         print_step(5, "Encontrar projetos", True, "nenhum (você pode criar depois)")
 
     # Passo 6: Instalar addon nos projetos
-    addon_src = Path(__file__).resolve().parent / "addon" / "mcp_bridge"
+    addon_src = Path(__file__).resolve().parent / "addons" / "mcp_bridge"
     installed = 0
     for p in projects:
         if install_addon_to_project(p["path"], addon_src):
