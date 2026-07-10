@@ -5,6 +5,7 @@ get_project_settings, set_project_setting, set_main_scene.
 """
 
 import json
+import os as _os
 import re
 import subprocess
 from pathlib import Path
@@ -15,6 +16,13 @@ from tools.safety import checkpoint
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG_PATH = ROOT / "config.json"
+
+
+def _save_config_atomic(cfg: dict) -> None:
+    """Salva config.json com escrita atômica (tmp + rename)."""
+    tmp = CONFIG_PATH.with_suffix('.json.tmp')
+    tmp.write_text(json.dumps(cfg, indent=2), encoding='utf-8')
+    _os.replace(str(tmp), str(CONFIG_PATH))
 
 # ── Estado interno ──────────────────────────────────────────────────
 
@@ -69,9 +77,15 @@ def _check_path_traversal(path: str, project_root: Path) -> Optional[str]:
     Returns:
         Mensagem de erro se violação, None se OK.
     """
+    # Verificação 1: nenhum componente '..' no path
+    parts = Path(path).parts
+    if '..' in parts:
+        return f"Path contém '..': '{path}' — path traversal bloqueado"
+
     try:
         full = (project_root / path).resolve()
-        full.relative_to(project_root.resolve())
+        proj_resolved = project_root.resolve()
+        full.relative_to(proj_resolved)
         return None
     except ValueError:
         return f"Path traversal não permitido: '{path}' tenta acessar fora da raiz do projeto."
@@ -178,11 +192,10 @@ def set_active_project(project_path: str) -> dict:
 
     _active_project = proj
 
-    # Atualiza config.json
+    # Atualiza config.json atomicamente
     cfg = get_config()
     cfg["default_project"] = str(proj.resolve())
-    with open(CONFIG_PATH, "w", encoding="utf-8") as f:
-        json.dump(cfg, f, indent=2)
+    _save_config_atomic(cfg)
 
     return {"status": "success", "active_project": str(proj.resolve())}
 

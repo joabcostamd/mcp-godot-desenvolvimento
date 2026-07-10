@@ -5,14 +5,19 @@ Usado por toda operação destrutiva (delete, overwrite, move).
 """
 
 import json
+import os as _os
 import shutil
 import subprocess
+import threading
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
 ROOT = Path(__file__).resolve().parent.parent
 MAX_BACKUPS = 50
+
+# Lock para evitar race condition em _save_index
+_backup_lock = threading.Lock()
 
 
 # ── Helpers ─────────────────────────────────────────────────────────
@@ -37,11 +42,13 @@ def _load_index(project_root: Path) -> list[dict]:
 
 
 def _save_index(project_root: Path, index: list[dict]) -> None:
-    """Salva o índice de backups."""
+    """Salva o índice de backups com escrita atômica e lock."""
     idx_path = _index_path(project_root)
     idx_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(idx_path, "w", encoding="utf-8") as f:
-        json.dump(index, f, indent=2)
+    with _backup_lock:
+        tmp = idx_path.with_suffix('.json.tmp')
+        tmp.write_text(json.dumps(index, indent=2), encoding='utf-8')
+        _os.replace(str(tmp), str(idx_path))
 
 
 def _rotate_backups(project_root: Path) -> None:

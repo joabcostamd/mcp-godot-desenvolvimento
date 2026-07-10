@@ -1,6 +1,6 @@
-"""server.py — MCP Server godot-mcp-agent v1.0.
+"""server.py — MCP Server godot-mcp-agent v3.0.
 
-Servidor MCP via stdio com 143 ferramentas para criacao e gestao
+Servidor MCP via stdio com 134 ferramentas para criacao e gestao
 de projetos Godot 4.7. A IA consumidora (DeepSeek V4 Flash/Pro) chama as
 ferramentas para construir jogos a partir de linguagem natural.
 
@@ -21,9 +21,10 @@ sys.path.insert(0, str(ROOT))
 
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
-from mcp.types import TextContent, Tool
+from mcp.types import TextContent, Tool, Resource, ResourceTemplate
 
 from tools.project_ops import (
+    _get_active_project,
     validate_godot_version,
     set_active_project,
     create_project,
@@ -35,6 +36,33 @@ from tools.project_ops import (
     install_mcp_addon,
     generate_project_structure,
 )
+from tools.bootstrap_ops import bootstrap_godot_mcp
+from tools.batch_ops import batch_atomic_edit
+from tools.asset_download import download_asset, import_downloaded_asset
+from tools.workflow_ops import (
+    workflow_snapshot, workflow_handoff,
+)
+from tools.project_map import generate_project_map
+from tools.security_ops import configure_security, security_status
+from tools.gut_ops import run_gut_tests
+from tools.playmode_ops import assert_node_exists, simulate_input_sequence
+from tools.vibe_ops import vibe_coding_mode, get_vibe_context
+from tools.debugger_ops import debugger_set_breakpoint, debugger_status, debugger_step, debugger_get_stack, debugger_get_variables
+from tools.networking_ops import game_http_request, game_multiplayer
+from tools.safety_policy import set_safety_policy, get_audit_log, get_audit_replay
+from tools.validate_write import safe_write_gdscript
+from tools.dynamic_groups import tool_catalog, tool_groups
+from tools.recording_ops import start_recording, stop_recording, game_serialize_state
+from tools.runtime_rich import (
+    game_call_method,
+    game_spawn_node,
+    game_raycast, game_get_camera,
+    game_play_animation,
+    game_find_nodes_by_class,
+    game_await_signal, game_pause,
+)
+from tools.runtime_ui import game_performance, game_window, game_input_state
+from tools.infra_ops import generate_ci_snippet, resource_dependency_graph, build_csharp
 from tools.file_ops import (
     inspect_project,
     read_file,
@@ -97,6 +125,7 @@ from tools.runtime_ops import (
 )
 from tools.classdb import (
     query_classdb,
+    search_classdb,
     list_valid_node_types,
 )
 from tools.export_ops import (
@@ -117,6 +146,13 @@ from tools.placeholder_ops import (
     generate_audio_sfx,
     suggest_color_palette,
 )
+from tools.art_ops import (
+    generate_game_art,
+    apply_game_art,
+)
+from tools.flux_ops import generate_game_art_flux
+from tools.art_postprocess import remove_background, optimize_sprite, create_spritesheet
+from tools.tts_ops import generate_voice
 from tools.analyze_ops import (
     analyze_game_structure,
     suggest_next_steps,
@@ -183,10 +219,126 @@ from tools.devsolo_ops import (
     add_audio_effect,
 )
 from tools.safety import (
-    push_undo,
     undo_last_action,
     get_undo_history,
 )
+
+# ── LSP Bridge (Fase 2A / C3) ───────────────────────────────────
+from tools.lsp_ops import (
+    gdscript_lsp_connect,
+    gdscript_lsp_disconnect,
+    gdscript_references,
+    gdscript_definition,
+    gdscript_hover,
+    gdscript_symbols,
+    gdscript_rename,
+    gdscript_diagnostics,
+    gdscript_sync_file,
+)
+
+# ── Addon Bridge (Fase 2B / A2) ─────────────────────────────────
+from tools.addon_bridge import (
+    addon_connect,
+    addon_disconnect,
+    addon_is_available,
+    addon_ping,
+    addon_create_node,
+    addon_delete_node,
+    addon_set_property,
+    addon_reparent_node,
+    addon_duplicate_node,
+    addon_batch_edit,
+    addon_take_screenshot,
+    addon_get_scene_tree,
+)
+
+# ── Playtest (Fase 2B / A3+A4+A5) ───────────────────────────────
+from tools.playtest_ops import (
+    freeze_game_clock,
+    unfreeze_game_clock,
+    step_game_time,
+    step_until,
+    get_runtime_state_digest,
+    capture_runtime_errors,
+    watch_state_start, watch_state_collect,
+    godot_exec, effect_probe,
+)
+
+# ── Balance (Onda 1) ──────────────────────────────────────────
+from tools.balance_ops import (
+    balance_analyze, wave_generate,
+    dps_calculator, loot_table_generate,
+    gdd_generate,
+)
+
+# ── Behavior Trees (Onda 2) ───────────────────────────────────
+from tools.behavior_ops import (
+    behavior_tree_generate, behavior_tree_list_templates,
+)
+
+# ── Performance Profiler (Onda 2) ──────────────────────────────
+from tools.perf_ops import profile_frame, profile_memory
+
+# ── Auto-Config (Fase 2C) ───────────────────────────────────────
+from tools.vscode_config import (
+    validate_environment as _validate_env,
+    auto_config as _auto_config,
+)
+
+# ── Shader NL (Onda 3) ─────────────────────────────────────────
+from tools.shader_ops import shader_generate, shader_list_templates
+
+# ── World Generation (Onda 3) ───────────────────────────────────
+from tools.world_gen import terrain_generate, dungeon_generate, world_describe
+
+# ── 3D Asset Generation (Onda 3) ────────────────────────────────
+from tools.threed_gen import generate_3d_placeholder, generate_3d_asset
+
+# ── Deploy + Marketplace (Onda 4 — FINAL) ──────────────────────
+from tools.deploy_ops import deploy_itch, release_checklist, auto_screenshot
+from tools.marketplace_ops import marketplace_search, marketplace_download
+
+# ── Juice (Onda 5) ────────────────────────────────────────────
+from tools.juice_ops import juice_apply, juice_list_presets
+
+# ── Pipeline Executor (Onda 7) ──────────────────────────────────
+from tools.pipeline_ops import create_entity, project_status
+
+# ── Onda 6: Server Instructions (system prompt do MCP) ──────────────
+
+MCP_INSTRUCTIONS = """Voce e um designer de jogos Godot 4.7. O usuario fala em portugues simples e NAO e programador.
+
+REGRAS DE OURO:
+1. Gere o artefato INTEIRO de uma vez. Use batch_atomic_edit para multiplas operacoes.
+2. Antes de criar algo complexo, CONFIRME em 1-2 linhas.
+3. Apos cada mudanca visivel, DESCREVA o resultado.
+4. Se algo falhar, explique EM PORTUGUES SIMPLES. Nao mostre stack trace.
+5. Consulte o estado atual ANTES de criar (analyze_game_structure ou load_scene_tree).
+6. Se o pedido for vago, pergunte so o essencial com opcoes curtas (A/B/C).
+7. Use compile_test + run_game apos cada bloco de mudancas.
+
+PADROES (implemente automaticamente):
+- 'cria um personagem' -> CharacterBody2D + CollisionShape2D + Sprite2D + script WASD
+- 'mais dificil' -> ajusta dano/HP/velocidade nos scripts
+- 'muda cor' -> set_node_property
+- 'adiciona som' -> generate_audio_sfx + referencia no script
+- 'fase nova' -> create_scene + TileMap + spawn points
+- 'faz menu' -> CanvasLayer + VBoxContainer + botoes
+- 'muito facil/dificil' -> balance_analyze + ajusta numeros
+
+NUNCA FACA:
+- Use jargao tecnico sem explicar
+- Crie arquivos 'para o futuro'
+- Modifique sem ler estado atual
+- Deixe usuario esperando sem feedback
+- Input.is_action_pressed() sem configure_input_action
+- CollisionObject2D sem CollisionShape2D
+- Assuma que o projeto esta configurado
+
+ANTES DE ENTREGAR:
+1. compile_test passou? 2. run_game iniciou? 3. CollisionShape2D nos CollisionObjects?
+4. Input Map completo? 5. Main scene definida? 6. Condicao de vitoria E derrota?"""
+
 
 # ── Server ──────────────────────────────────────────────────────────
 
@@ -195,8 +347,192 @@ server = Server("godot-agent")
 
 # ── Tool Definitions ────────────────────────────────────────────────
 
+# ── B6: Read/Write Split ────────────────────────────────────────────
+
+_READ_PREFIXES = (
+    "read_", "get_", "query_", "list_", "search_", "ping", "health",
+    "status", "validate_", "inspect_", "check_", "detect_", "find_",
+    "compare_", "suggest_", "analyze_", "estimate_", "summary",
+    "handoff", "map", "take_", "capture_",
+)
+_WRITE_PREFIXES = (
+    "create_", "delete_", "set_", "write_", "generate_", "build_",
+    "install_", "configure_", "import_", "apply_", "paint_", "bake_",
+    "launch_", "close_", "compile", "run_", "stop_", "restart",
+    "freeze_", "unfreeze_", "step_", "inject_", "record_", "download_",
+    "duplicate_", "reparent_", "add_", "remove_",
+)
+
+
+def _classify_operation(tool_name: str) -> str:
+    """Classifica tool como 'read', 'write' ou 'read+write'."""
+    is_read = tool_name.startswith(_READ_PREFIXES)
+    is_write = tool_name.startswith(_WRITE_PREFIXES)
+    if tool_name.endswith("_manage") or tool_name == "addon_batch_edit":
+        return "read+write"
+    if is_read and is_write:
+        return "read+write"
+    if is_read:
+        return "read"
+    if is_write:
+        return "write"
+    has_read = any(w in tool_name for w in ("read", "get", "query", "list", "search", "ping", "health", "check", "status", "snapshot", "symbols", "references", "definition", "hover", "diagnostics"))
+    has_write = any(w in tool_name for w in ("create", "delete", "set", "write", "generate", "build", "install", "config", "import", "apply", "edit", "batch"))
+    if has_read and has_write:
+        return "read+write"
+    if has_read:
+        return "read"
+    if has_write:
+        return "write"
+    return "read+write"
+
+
+def _validate_coord(value, name: str) -> str | None:
+    """Valida coordenadas numéricas para game_raycast e similares."""
+    import math
+    if not isinstance(value, (int, float)):
+        return f"{name} deve ser número, recebeu {type(value).__name__}"
+    if math.isnan(value) or math.isinf(value):
+        return f"{name} não pode ser NaN ou infinito"
+    if abs(value) > 100000:
+        return f"{name} fora do range permitido (-100000 a 100000)"
+    return None
+
+
 # Cache global para _tool_defs (evita recriar 143 tools a cada list_tools)
 _TOOL_DEFS_CACHE: list[Tool] | None = None
+
+
+# ══════════════════════════════════════════════════════════════
+# PÓS-PROCESSADOR: garantir 4 hints em 100% das tools
+# ══════════════════════════════════════════════════════════════
+
+_HINT_RULES = {
+    "readOnly": {
+        "prefixes": ["get_", "list_", "read_", "query_", "search_", "inspect_",
+                     "validate_", "check_", "find_", "suggest_", "analyze_",
+                     "capture_", "detect_", "estimate_", "compare_"],
+        "suffixes": ["_status", "_info", "_history", "_output", "_map",
+                    "_state", "_summary", "_catalog", "_health"],
+        "exact": ["ping", "health_check", "self_test", "project_map",
+                  "tool_catalog", "tool_groups", "get_project_history",
+                  "gdscript_hover", "gdscript_symbols", "gdscript_diagnostics",
+                  "gdscript_references", "gdscript_definition",
+                  "security_status", "get_audit_log", "get_safety_policy",
+                  "get_undo_history", "get_vibe_context",
+                  "get_runtime_state_digest", "capture_runtime_errors",
+                  "detect_empty_screen", "detect_offscreen_elements"],
+    },
+    "destructive": {
+        "prefixes": ["delete_", "remove_", "destroy_", "clear_", "reset_",
+                    "close_", "stop_", "kill_", "wipe_"],
+        "exact": ["restore_backup", "undo_last_action", "push_undo",
+                  "detach_script", "build_export", "configure_security",
+                  "set_safety_policy"],
+    },
+    "idempotent": {
+        "prefixes": ["create_", "set_", "write_", "configure_", "import_",
+                    "generate_", "register_", "install_", "add_"],
+        "suffixes": ["_checkpoint", "_snapshot"],
+        "exact": ["batch_atomic_edit", "attach_script", "connect_signal",
+                  "safe_write_gdscript"],
+    },
+    "openWorld": {
+        "prefixes": ["download_", "fetch_", "generate_game_art", "generate_voice",
+                    "search_codebase", "web_", "http_"],
+        "exact": ["generate_game_art_flux", "generate_audio_sfx",
+                  "download_asset", "import_downloaded_asset",
+                  "game_http_request", "game_websocket"],
+    },
+}
+
+
+def _apply_hints(tools: list) -> list:
+    """Garante que toda tool tenha os 4 hints MCP.
+
+    Regras:
+    - Se o hint JÁ existe na tool, respeita o valor existente
+    - Se NÃO existe, aplica a regra por nome
+    - Se nenhuma regra bate, defaults seguros:
+      readOnlyHint=False, destructiveHint=False,
+      idempotentHint=False, openWorldHint=False
+    """
+    for tool in tools:
+        ann = getattr(tool, 'annotations', None) or {}
+
+        name = tool.name
+
+        # readOnlyHint
+        if 'readOnlyHint' not in ann:
+            is_readonly = (
+                any(name.startswith(p) for p in _HINT_RULES["readOnly"]["prefixes"]) or
+                any(name.endswith(s) for s in _HINT_RULES["readOnly"]["suffixes"]) or
+                name in _HINT_RULES["readOnly"]["exact"]
+            )
+            ann['readOnlyHint'] = is_readonly
+
+        # destructiveHint
+        if 'destructiveHint' not in ann:
+            is_destructive = (
+                any(name.startswith(p) for p in _HINT_RULES["destructive"]["prefixes"]) or
+                name in _HINT_RULES["destructive"]["exact"]
+            )
+            ann['destructiveHint'] = is_destructive
+
+        # idempotentHint
+        if 'idempotentHint' not in ann:
+            is_idempotent = (
+                any(name.startswith(p) for p in _HINT_RULES["idempotent"]["prefixes"]) or
+                any(name.endswith(s) for s in _HINT_RULES["idempotent"]["suffixes"]) or
+                name in _HINT_RULES["idempotent"]["exact"]
+            )
+            ann['idempotentHint'] = is_idempotent
+
+        # openWorldHint
+        if 'openWorldHint' not in ann:
+            is_openworld = (
+                any(name.startswith(p) for p in _HINT_RULES["openWorld"]["prefixes"]) or
+                name in _HINT_RULES["openWorld"]["exact"]
+            )
+            ann['openWorldHint'] = is_openworld
+
+        tool.annotations = ann
+
+    return tools
+
+
+# ══════════════════════════════════════════════════════════════
+# Onda 5: compactar descricoes (-80% tokens)
+# ══════════════════════════════════════════════════════════════
+
+def _compact_description(description: str, max_chars: int = 120) -> str:
+    """Encurta descricao mantendo a informacao essencial."""
+    import re
+    if not description or len(description) <= max_chars:
+        return description
+    first_sentence = re.split(r'[.]\s+(?:Quando|Pré|Pre|Exemplo|Erro)', description)[0].strip()
+    if len(first_sentence) > max_chars:
+        parts = first_sentence.split('. ')
+        result = ''
+        for part in parts:
+            if len(result) + len(part) < max_chars:
+                result += part + '. '
+            else:
+                break
+        first_sentence = result.strip()
+    if first_sentence and first_sentence[-1] not in '.!?':
+        first_sentence += '.'
+    return first_sentence[:max_chars]
+
+
+def _compact_all_tool_descriptions(tools: list) -> list:
+    """Encurta descricoes de todas as tools."""
+    for tool in tools:
+        original = tool.description or ""
+        compact = _compact_description(original)
+        if len(compact) < len(original):
+            tool.description = compact
+    return tools
 
 
 def _tool_defs() -> list[Tool]:
@@ -537,19 +873,219 @@ def _tool_defs() -> list[Tool]:
         Tool(
             name="query_classdb",
             description=(
-                "Consulta informações completas de uma classe na ClassDB do Godot. "
-                "Use para descobrir propriedades, métodos, sinais e herança de qualquer classe. "
-                "Quando NÃO usar: para listar todos os tipos de nó (use list_valid_node_types). "
-                "Pré-condições: classdb_cache/extension_api.json deve existir (gerado na Fase 0). "
-                "Exemplo de input: {\"class_name\": \"CharacterBody2D\"}. "
-                "Erro mais comum: classe não encontrada — verifique o nome exato (case-sensitive)."
+                "Consulta informações COMPLETAS de uma classe na ClassDB do Godot com "
+                "PAGINAÇÃO, FILTROS e DETALHES. Retorna propriedades (com tipo, descrição, default), "
+                "métodos (com args, retorno, descrição), sinais, enums e constantes. "
+                "Use para descobrir TUDO sobre qualquer classe do Godot 4.7. "
+                "Parâmetros de filtro: 'section' escolhe a seção (properties, methods, signals, enums, constants, all), "
+                "'include_inherited' inclui membros da classe pai, 'offset' e 'limit' controlam paginação. "
+                "QUANDO USAR: para consultar uma classe específica com riqueza de detalhes. "
+                "QUANDO NÃO USAR: para listar tipos de nó (use list_valid_node_types) ou buscar por nome parcial (use search_classdb). "
+                "Exemplo: {'class_name': 'CharacterBody2D', 'section': 'methods', 'limit': 10}."
             ),
             inputSchema={
                 "type": "object",
-                "properties": {"class_name": {"type": "string", "description": "Nome da classe Godot."}},
+                "properties": {
+                    "class_name": {"type": "string", "description": "Nome da classe (ex: 'Node2D', 'CharacterBody2D'). Case-sensitive."},
+                    "section": {
+                        "type": "string",
+                        "enum": ["all", "properties", "methods", "signals", "enums", "constants"],
+                        "description": "Seção a retornar. 'all' retorna todas. Default: 'all'."
+                    },
+                    "include_inherited": {
+                        "type": "boolean",
+                        "description": "Incluir membros herdados da classe pai. Default: false."
+                    },
+                    "offset": {
+                        "type": "integer",
+                        "description": "Offset para paginação. Default: 0."
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "description": "Máximo de itens por seção. Default: 50."
+                    },
+                },
                 "required": ["class_name"],
             },
         ),
+        Tool(
+            name="search_classdb",
+            description=(
+                "🔍 Busca classes na ClassDB do Godot por nome PARCIAL. "
+                "Diferente de query_classdb (que exige nome exato), esta tool faz busca fuzzy: "
+                "'Body' encontra CharacterBody2D, StaticBody2D, RigidBody3D, etc. "
+                "Use para descobrir classes quando você não sabe o nome exato. "
+                "QUANDO USAR: 'tem alguma classe de luz?', 'quais classes têm Body no nome?'. "
+                "QUANDO NÃO USAR: se já sabe o nome exato (use query_classdb). "
+                "Exemplo: {'query': 'Light', 'limit': 10}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "Texto parcial para buscar (ex: 'Body', 'Light', 'Camera'). Case-insensitive."
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "description": "Máximo de resultados. Default: 20."
+                    },
+                },
+                "required": ["query"],
+            },
+        ),
+        Tool(
+            name="download_asset",
+            description=(
+                "Baixa assets GRATUITOS (CC0) de APIs publicas. "
+                "Fontes: Poly Haven (texturas PBR, HDRIs, modelos 3D), Kenney (sprites, tilesets, UI, audio), "
+                "AmbientCG (materiais PBR). Use para prototipagem rapida. "
+                "Exemplo: {'source': 'polyhaven', 'query': 'metal', 'category': 'textures'}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "source": {"type": "string", "enum": ["polyhaven", "kenney", "ambientcg"]},
+                    "query": {"type": "string"},
+                    "category": {"type": "string"},
+                    "asset_id": {"type": "string"},
+                    "resolution": {"type": "string"},
+                    "limit": {"type": "integer"},
+                },
+                "required": ["source", "query"],
+            },
+        ),
+        Tool(
+            name="import_downloaded_asset",
+            description=(
+                "Importa um asset baixado para o projeto Godot ativo. "
+                "Use APOS download_asset. "
+                "Exemplo: {'asset_path': 'C:/.../gdm_assets/...', 'target_dir': 'assets/textures'}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "asset_path": {"type": "string"},
+                    "target_dir": {"type": "string"},
+                },
+                "required": ["asset_path"],
+            },
+        ),
+        Tool(
+            name="workflow_snapshot",
+            description=(
+                "Salva snapshot do estado atual do projeto no workflow log. "
+                "Use ANTES de operações grandes para ter ponto de restauração."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "description": {"type": "string"},
+                    "project_path": {"type": "string"},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="workflow_handoff",
+            description=(
+                "Prepara resumo para proxima sessao. Use no FINAL de cada sessao."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "next_steps": {"type": "array", "items": {"type": "string"}},
+                    "notes": {"type": "string"},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="project_map",
+            description="Gera mapa do projeto: cenas, scripts, funcoes, assets. Formatos: json ou html.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string"},
+                    "format": {"type": "string", "enum": ["json", "html", "both"]},
+                },
+                "required": [],
+            },
+        ),
+        Tool(name="configure_security", description="Configura token de seguranca para o addon MCP.",
+            inputSchema={"type":"object","properties":{"generate_token":{"type":"boolean"},"allow_remote":{"type":"boolean"}},"required":[]}),
+        Tool(name="security_status", description="Verifica configuracao de seguranca atual.",
+            inputSchema={"type":"object","properties":{},"required":[]}),
+        Tool(name="run_gut_tests", description="Executa testes GUT via Godot headless. Ex: {'test_dir': 'res://tests'}.",
+            inputSchema={"type":"object","properties":{"project_path":{"type":"string"},"test_dir":{"type":"string"},"timeout":{"type":"integer"}},"required":[]}),
+        Tool(name="assert_node_exists", description="Verifica se no existe na cena. Ex: {'scene_path':'...','node_path':'./Player'}.",
+            inputSchema={"type":"object","properties":{"scene_path":{"type":"string"},"node_path":{"type":"string"},"node_type":{"type":"string"}},"required":["scene_path","node_path"]}),
+        Tool(name="simulate_input_sequence", description="Simula sequencia de inputs. Ex: {'actions':[{'type':'key','key':32}]}.",
+            inputSchema={"type":"object","properties":{"actions":{"type":"array","items":{"type":"object"}},"delay_ms":{"type":"integer"}},"required":["actions"]}),
+        Tool(name="vibe_coding_mode", description="Ativa/desativa Vibe Coding Mode. Foco automatico na cena configurada.",
+            inputSchema={"type":"object","properties":{"enabled":{"type":"boolean"},"scene_path":{"type":"string"},"focus_node":{"type":"string"}},"required":[]}),
+        Tool(name="get_vibe_context", description="Retorna contexto atual do Vibe Coding Mode.",
+            inputSchema={"type":"object","properties":{},"required":[]}),
+        Tool(name="game_http_request", description="HTTP request no jogo. Ex: {'url':'https://api.ex.com','method':'GET'}.",
+            inputSchema={"type":"object","properties":{"url":{"type":"string"},"method":{"type":"string"},"headers":{"type":"object"},"body":{"type":"string"}},"required":["url"]}),
+        Tool(name="game_multiplayer", description="Multiplayer ENet. Ex: {'action':'create_server','port':9090}.",
+            inputSchema={"type":"object","properties":{"action":{"type":"string","enum":["create_server","create_client","disconnect","status"]},"port":{"type":"integer"},"address":{"type":"string"}},"required":["action"]}),
+        Tool(name="set_safety_policy", description="Configura politica de seguranca (allowlist/blocklist).",
+            inputSchema={"type":"object","properties":{"enabled":{"type":"boolean"},"allowlist":{"type":"array","items":{"type":"string"}},"blocklist":{"type":"array","items":{"type":"string"}},"confirm_destructive":{"type":"boolean"}},"required":[]}),
+        Tool(name="get_audit_log", description="Historico de auditoria das acoes da IA.",
+            inputSchema={"type":"object","properties":{"limit":{"type":"integer"}},"required":[]}),
+        Tool(name="get_audit_replay", description="Replay do historico de auditoria.",
+            inputSchema={"type":"object","properties":{"steps":{"type":"integer"}},"required":[]}),
+        Tool(name="safe_write_gdscript", description="Escreve .gd COM validacao. Recusa codigo invalido! Ex: {'file_path':'res://x.gd','content':'...'}.",
+            inputSchema={"type":"object","properties":{"file_path":{"type":"string"},"content":{"type":"string"},"project_path":{"type":"string"},"strict":{"type":"boolean"}},"required":["file_path","content"]}),
+        Tool(name="tool_catalog", description="Catalogo de tools por grupo. Ex: {'query':'scene','group':'core'}.",
+            inputSchema={"type":"object","properties":{"query":{"type":"string"},"group":{"type":"string"},"limit":{"type":"integer"}},"required":[]}),
+        Tool(name="tool_groups", description="Gerencia grupos dinamicos de tools. Ex: {'action':'activate','group':'art'}.",
+            inputSchema={"type":"object","properties":{"action":{"type":"string","enum":["list","activate","deactivate"]},"group":{"type":"string"}},"required":["action"]}),
+        Tool(name="game_serialize_state", description="Salva/restaura estado completo do jogo como JSON.",
+            inputSchema={"type":"object","properties":{"action":{"type":"string","enum":["save","load"]},"file_name":{"type":"string"}},"required":["action"]}),
+        Tool(name="start_recording", description="Inicia gravacao de sessao (inputs/estados).",
+            inputSchema={"type":"object","properties":{"session_name":{"type":"string"}},"required":[]}),
+        Tool(name="stop_recording", description="Para gravacao e retorna resumo.",
+            inputSchema={"type":"object","properties":{"session_name":{"type":"string"}},"required":["session_name"]}),
+        Tool(name="game_call_method", description="Chama metodo em no no jogo rodando.",
+            inputSchema={"type":"object","properties":{"node_path":{"type":"string"},"method":{"type":"string"},"args":{"type":"array"}},"required":["node_path","method"]}),
+        Tool(name="game_spawn_node", description="Cria no dinamicamente no jogo.",
+            inputSchema={"type":"object","properties":{"parent_path":{"type":"string"},"node_type":{"type":"string"},"node_name":{"type":"string"},"properties":{"type":"object"}},"required":["parent_path","node_type"]}),
+        Tool(name="game_raycast", description="Ray cast 2D/3D no jogo.",
+            inputSchema={"type":"object","properties":{"origin_x":{"type":"number"},"origin_y":{"type":"number"},"target_x":{"type":"number"},"target_y":{"type":"number"},"collision_mask":{"type":"integer"},"mode":{"type":"string"}},"required":["origin_x","origin_y","target_x","target_y"]}),
+        Tool(name="game_get_camera", description="Obtem posicao da camera ativa.",
+            inputSchema={"type":"object","properties":{"mode":{"type":"string"}},"required":[]}),
+        Tool(name="game_play_animation", description="Controla AnimationPlayer no jogo.",
+            inputSchema={"type":"object","properties":{"node_path":{"type":"string"},"action":{"type":"string"},"animation_name":{"type":"string"}},"required":["node_path","action"]}),
+        Tool(name="game_find_nodes_by_class", description="Encontra nos por classe no jogo.",
+            inputSchema={"type":"object","properties":{"class_name":{"type":"string"},"limit":{"type":"integer"}},"required":["class_name"]}),
+        Tool(name="game_await_signal", description="Espera sinal com timeout.",
+            inputSchema={"type":"object","properties":{"node_path":{"type":"string"},"signal_name":{"type":"string"},"timeout_ms":{"type":"integer"}},"required":["node_path","signal_name"]}),
+        Tool(name="game_pause", description="Pausa/despausa o jogo.",
+            inputSchema={"type":"object","properties":{"action":{"type":"string","enum":["toggle","pause","unpause"]}},"required":[]}),
+        Tool(name="game_performance", description="Metricas: FPS, memoria, objetos, draw calls.",
+            inputSchema={"type":"object","properties":{},"required":[]}),
+        Tool(name="game_window", description="Controle de janela: size, fullscreen, title.",
+            inputSchema={"type":"object","properties":{"action":{"type":"string"},"width":{"type":"integer"},"height":{"type":"integer"},"fullscreen":{"type":"boolean"},"title":{"type":"string"}},"required":[]}),
+        Tool(name="game_input_state", description="Estado de input: teclas, mouse, gamepad.",
+            inputSchema={"type":"object","properties":{},"required":[]}),
+        Tool(name="generate_ci_snippet", description="Gera GitHub Actions / GitLab CI para export.",
+            inputSchema={"type":"object","properties":{"project_path":{"type":"string"},"target_platforms":{"type":"string"}},"required":[]}),
+        Tool(name="resource_dependency_graph", description="Grafo de dependencias de recursos.",
+            inputSchema={"type":"object","properties":{"project_path":{"type":"string"}},"required":[]}),
+        Tool(name="build_csharp", description="Compila projeto C# e retorna erros estruturados.",
+            inputSchema={"type":"object","properties":{"project_path":{"type":"string"}},"required":[]}),
+        Tool(name="debugger_set_breakpoint", description="Define breakpoint. Ex: {'script_path':'res://player.gd','line':42}.",
+            inputSchema={"type":"object","properties":{"script_path":{"type":"string"},"line":{"type":"integer"},"condition":{"type":"string"}},"required":["script_path","line"]}),
+        Tool(name="debugger_status", description="Verifica estado do debugger do Godot (porta 6006).",
+            inputSchema={"type":"object","properties":{},"required":[]}),
+        Tool(name="debugger_step", description="Avança uma linha no debugger. Ex: {'step_type':'over'}.",
+            inputSchema={"type":"object","properties":{"step_type":{"type":"string","enum":["over","into","out"]}},"required":[]}),
+        Tool(name="debugger_get_stack", description="Obtem stack trace atual do debugger.",
+            inputSchema={"type":"object","properties":{},"required":[]}),
+        Tool(name="debugger_get_variables", description="Inspeciona variaveis no escopo do debugger. Ex: {'variable_name':'health'}.",
+            inputSchema={"type":"object","properties":{"variable_name":{"type":"string","description":"Nome da variavel (null = todas)."}},"required":[]}),
         Tool(
             name="list_valid_node_types",
             description=(
@@ -839,7 +1375,7 @@ def _tool_defs() -> list[Tool]:
                     "frame_height": {"type": "integer"},
                     "target_scene_path": {"type": "string"},
                     "target_node_path": {"type": "string"},
-                    "animations": {"type": "array"},
+                    "animations": {"type": "array", "items": {"type": "object"}},
                 },
                 "required": ["source_path", "target_res_path", "frame_width", "frame_height", "target_scene_path", "target_node_path", "animations"],
             },
@@ -903,6 +1439,51 @@ def _tool_defs() -> list[Tool]:
                         "type": "string",
                         "description": "Caminho do projeto Godot. Opcional se já usou set_active_project. Ex: 'C:/meu_jogo'"
                     }
+                },
+                "required": []
+            },
+        ),
+        Tool(
+            name="bootstrap_godot_mcp",
+            description=(
+                "🚀 BOOTSTRAP AUTOMÁTICO: conecta VS Code → MCP → Godot em UMA chamada. "
+                "Substitui 12+ passos manuais (validar, configurar, abrir Godot, esperar LSP, "
+                "esperar addon, conectar tudo). A IA agêntica deve chamar ESTA tool primeiro, "
+                "sempre que iniciar uma sessão de desenvolvimento Godot. "
+                "QUANDO USAR: primeira tool de toda sessão Godot. "
+                "QUANDO NÃO USAR: se já rodou bootstrap nesta sessão (use health_check para verificar). "
+                "Exemplo: {'target': 'full'} para bootstrap completo com auto-detecção. "
+                "Use target='validate_only' para só checar o ambiente sem abrir Godot. "
+                "Use target='connect_only' se Godot já estiver aberto."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "target": {
+                        "type": "string",
+                        "enum": ["full", "connect_only", "validate_only"],
+                        "description": "full=tudo, connect_only=só conexão (Godot já aberto), validate_only=só checar ambiente"
+                    },
+                    "project_path": {
+                        "type": "string",
+                        "description": "Caminho do projeto Godot. Auto-detecta se omitido."
+                    },
+                    "godot_path": {
+                        "type": "string",
+                        "description": "Caminho do executável Godot. Auto-detecta do config.json se omitido."
+                    },
+                    "launch_editor": {
+                        "type": "boolean",
+                        "description": "Abrir Godot Editor se não estiver aberto. Default: true."
+                    },
+                    "timeout_godot": {
+                        "type": "integer",
+                        "description": "Segundos máximos esperando Godot abrir (default 30)."
+                    },
+                    "timeout_addon": {
+                        "type": "integer",
+                        "description": "Segundos máximos esperando addon iniciar (default 15)."
+                    },
                 },
                 "required": []
             },
@@ -1146,7 +1727,7 @@ def _tool_defs() -> list[Tool]:
                     "anim_name": {"type": "string"},
                     "track_path": {"type": "string"},
                     "track_type": {"type": "string"},
-                    "keyframes": {"type": "array"},
+                    "keyframes": {"type": "array", "items": {"type": "object"}},
                     "fps": {"type": "number"},
                 },
                 "required": ["scene_path", "anim_player_path", "anim_name", "track_path", "track_type", "keyframes"],
@@ -1476,6 +2057,52 @@ def _tool_defs() -> list[Tool]:
                 "required": ["scene_path", "properties"],
             },
         ),
+        Tool(
+            name="batch_atomic_edit",
+            description=(
+                "⚛️ Edição ATÔMICA em lote com ROLLBACK automático. "
+                "Executa múltiplas operações (criar nó, definir propriedade, deletar, "
+                "reparentar, duplicar, conectar sinal) em UMA ação. "
+                "Se QUALQUER operação falhar, TODAS as anteriores são DESFEITAS. "
+                "Modo addon (Godot aberto): UndoRedo nativo — 1 Ctrl+Z desfaz tudo. "
+                "Modo file-based (Godot fechado): snapshot .tscn + restore se erro. "
+                "QUANDO USAR: SEMPRE que for fazer 2+ operações que precisam ser atômicas. "
+                "QUANDO NÃO USAR: para 1 operação isolada (use node_manage direto). "
+                "Exemplo: [{\"op\": \"create_node\", \"params\": {\"parent\": \".\", \"type\": \"Sprite2D\", \"name\": \"Icon\"}}, "
+                "{\"op\": \"set_property\", \"params\": {\"node\": \"./Icon\", \"prop\": \"position\", \"value\": \"Vector2(100,200)\"}}]. "
+                "Ops válidas: create_node, delete_node, set_property, reparent_node, duplicate_node, connect_signal."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "operations": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "op": {
+                                    "type": "string",
+                                    "enum": ["create_node", "delete_node", "set_property", "reparent_node", "duplicate_node", "connect_signal"],
+                                },
+                                "params": {"type": "object"},
+                            },
+                            "required": ["op"],
+                        },
+                        "description": "Lista de operações atômicas. Se uma falhar, todas são desfeitas."
+                    },
+                    "scene_path": {
+                        "type": "string",
+                        "description": "Caminho da cena .tscn. Obrigatório para file-based. Opcional se addon conectado."
+                    },
+                    "mode": {
+                        "type": "string",
+                        "enum": ["auto", "addon", "file"],
+                        "description": "auto=detecta addon, addon=força WebSocket, file=força file-based."
+                    },
+                },
+                "required": ["operations"],
+            },
+        ),
         # ── Onda 3: Assets Procedurais ──
         Tool(
             name="generate_placeholder_sprite",
@@ -1580,25 +2207,56 @@ def _tool_defs() -> list[Tool]:
         Tool(
             name="generate_audio_sfx",
             description=(
-                "Gera um efeito sonoro WAV por síntese procedural (sem assets externos). "
-                "Suporta: beep, jump, laser, explosion, collect, hit. "
-                "Use para sons de pulo, tiro, coleta, explosão sem arquivos de áudio. "
-                "Quando usar: para placeholder de áudio ou jogos com som procedural. "
-                "Pré-condições: nenhuma (usa wave + math nativos do Python). "
-                "Exemplo: {\"name\": \"jump\", \"sfx_type\": \"jump\", \"duration\": 0.3, \"frequency\": 440}. "
-                "Erro mais comum: tipo inválido — use um dos 6 tipos suportados."
+                "Gera um efeito sonoro WAV por sintese procedural com 23 tipos. "
+                "Suporta: beep, jump, laser, explosion, collect, hit, "
+                "coin, ui_click, ui_hover, ui_error, ui_notification, "
+                "wind, rain, footsteps, gunshot, engine, electricity, "
+                "magic, powerup, damage, door, fire, water, string. "
+                "Use para sons de pulo, tiro, coleta, explosao, UI, ambiente "
+                "e muito mais — sem assets externos. "
+                "Pre-condicoes: nenhuma (usa NumPy + SciPy + wave nativos). "
+                "Exemplo: {\"name\": \"magic_spell\", \"sfx_type\": \"magic\", \"duration\": 0.5, \"style\": \"fantasia\"}. "
+                "Erro mais comum: tipo invalido — use um dos 23 tipos suportados."
             ),
             inputSchema={
                 "type": "object",
                 "properties": {
                     "name": {"type": "string"},
-                    "sfx_type": {"type": "string", "enum": ["beep", "jump", "laser", "explosion", "collect", "hit"]},
+                    "sfx_type": {"type": "string", "enum": [
+                        "beep", "jump", "laser", "explosion", "collect", "hit",
+                        "coin", "ui_click", "ui_hover", "ui_error", "ui_notification",
+                        "wind", "rain", "footsteps", "gunshot", "engine", "electricity",
+                        "magic", "powerup", "damage", "door", "fire", "water", "string"
+                    ]},
                     "duration": {"type": "number"},
                     "frequency": {"type": "number"},
                     "sample_rate": {"type": "integer"},
+                    "style": {"type": "string", "enum": ["scifi", "fantasia", "retro", "realista"]},
                     "save_path": {"type": "string"},
                 },
                 "required": ["name"],
+            },
+        ),
+        Tool(
+            name="generate_voice",
+            description=(
+                "Gera narracao/fala a partir de texto (TTS). "
+                "Usa Kokoro TTS local (82M params, Apache 2.0, offline) ou "
+                "Edge TTS gratuito como fallback. "
+                "Ideal para dialogos de NPCs, narracao, voice acting. "
+                "Suporta pt-BR via Edge TTS (Antonio, Francisca)."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "text": {"type": "string", "description": "Texto para converter em fala (max 500 chars)"},
+                    "voice": {"type": "string", "description": "Voz: af_heart, af_bella, am_adam, pt-BR-AntonioNeural..."},
+                    "speed": {"type": "number", "description": "Velocidade (0.5 lento a 2.0 rapido)"},
+                    "language": {"type": "string", "enum": ["pt", "en", "ja", "zh", "kr", "fr"],
+                                "description": "Idioma do texto"},
+                    "save_path": {"type": "string", "description": "Caminho no projeto (auto se None)"},
+                },
+                "required": ["text"],
             },
         ),
         Tool(
@@ -1617,6 +2275,148 @@ def _tool_defs() -> list[Tool]:
                 "type": "object",
                 "properties": {"genre": {"type": "string"}},
                 "required": ["genre"],
+            },
+        ),
+        # ── Onda 12: Arte IA ──
+        Tool(
+            name="generate_game_art",
+            description=(
+                "Gera arte de jogo a partir de descricao em linguagem natural usando IA "
+                "(ChatGPT/DALL-E via navegador headless). Gera QUALQUER artefato: torres, "
+                "inimigos, personagens, biomas, tiles, icones, HUD, VFX, tudo. "
+                "Sprite sheets com multiplos frames para animacao automatica. "
+                "Cache inteligente: mesma descricao = reusa arte (zero custo). "
+                "Use para criar assets visuais completos sem sair do chat. "
+                "Quando usar: SEMPRE que precisar de arte nova no jogo. "
+                "Quando NAO usar: para placeholder rapido (use generate_placeholder_sprite). "
+                "Pré-condicoes: projeto ativo, ChatGPT logado (primeira vez). "
+                "Categorias: torre, inimigo, personagem, bioma, tile, icone, hud, vfx, fundo, projetil, ui. "
+                "Estilos: scifi, fantasia, cartoon, realista, pixel, minimalista. "
+                "Animacoes: idle, fire, walk, run, death, attack, spawn, hit. "
+                "Grid automatico: 4 frames = 2x2, 6 frames = 3x2, etc. "
+                "Exemplo: {\"description\": \"torre railgun com trilhos eletromagneticos azuis\", "
+                "\"category\": \"torre\", \"style\": \"scifi\", \"frames\": 6, \"anim_type\": \"fire\"}. "
+                "Retorna lista de frames recortados e prontos para apply_game_art."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "description": {"type": "string", "description": "Descricao da arte em portugues (ex: 'torre laser com cristal flutuante')."},
+                    "category": {"type": "string", "enum": ["torre", "inimigo", "personagem", "bioma", "tile", "icone", "hud", "vfx", "fundo", "projetil", "ui"], "description": "Categoria do artefato."},
+                    "style": {"type": "string", "enum": ["scifi", "fantasia", "cartoon", "realista", "pixel", "minimalista"], "description": "Estilo visual."},
+                    "anim_type": {"type": "string", "enum": ["idle", "fire", "walk", "run", "death", "attack", "spawn", "hit"], "description": "Tipo de animacao."},
+                    "frames": {"type": "integer", "description": "Quantidade de frames (4-16). Se omitido, usa padrao por animacao."},
+                    "grid_cols": {"type": "integer", "description": "Colunas do grid (opcional, calculado automaticamente)."},
+                    "grid_rows": {"type": "integer", "description": "Linhas do grid (opcional, calculado automaticamente)."},
+                    "width": {"type": "integer", "description": "Largura por frame em pixels."},
+                    "height": {"type": "integer", "description": "Altura por frame em pixels."},
+                    "save_dir": {"type": "string", "description": "Diretorio relativo no projeto (ex: 'assets/sprites/towers/')."},
+                },
+                "required": ["description"],
+            },
+        ),
+        Tool(
+            name="apply_game_art",
+            description=(
+                "Aplica arte gerada (frames recortados) num AnimatedSprite2D do Godot. "
+                "Importa frames, cria SpriteFrames .tres, configura animacao com FPS e loop. "
+                "Use SEMPRE apos generate_game_art para colocar a arte no jogo. "
+                "Quando usar: apos generate_game_art retornar os frames. "
+                "Pré-condicoes: generate_game_art concluido, cena e no existirem. "
+                "Exemplo: {\"frame_paths\": [\"assets/sprites/towers/railgun_f1.png\", ...], "
+                "\"scene_path\": \"scenes/main.tscn\", \"node_path\": \"Grid/Towers/Torre_0\", "
+                "\"anim_name\": \"fire\", \"fps\": 10, \"loop\": true}. "
+                "Erro mais comum: frame nao encontrado — verifique se generate_game_art rodou antes."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "frame_paths": {"type": "array", "items": {"type": "string"}, "description": "Lista de caminhos relativos dos frames."},
+                    "scene_path": {"type": "string", "description": "Caminho da cena .tscn."},
+                    "node_path": {"type": "string", "description": "Caminho do no AnimatedSprite2D."},
+                    "anim_name": {"type": "string", "description": "Nome da animacao (ex: 'idle', 'fire')."},
+                    "fps": {"type": "number", "description": "Frames por segundo. Default: 10."},
+                    "loop": {"type": "boolean", "description": "Se a animacao faz loop. Default: true."},
+                },
+                "required": ["frame_paths", "scene_path", "node_path"],
+            },
+        ),
+        # ── Pacote C: Pipeline de Arte FLUX.2 + Pós-processamento ──
+        Tool(
+            name="generate_game_art_flux",
+            description=(
+                "Gera arte de jogo via FLUX.2 API (Black Forest Labs). "
+                "Substitui o DALL-E/Playwright. Suporta: torre, inimigo, "
+                "personagem, bioma, tile, icone, hud, vfx, fundo, projetil, ui. "
+                "Cache automatico por hash do prompt. Fallback para Replicate "
+                "e Pillow procedural se APIs offline. "
+                "Use esta tool como PRIMEIRA OPCAO para gerar assets visuais. "
+                "A tool generate_game_art (DALL-E) e o fallback legado."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "description": {"type": "string", "description": "Descricao em portugues do que gerar"},
+                    "category": {"type": "string", "enum": ["torre","inimigo","personagem","bioma","tile","icone","hud","vfx","fundo","projetil","ui"],
+                                 "description": "Tipo de artefato"},
+                    "style": {"type": "string", "enum": ["scifi","fantasia","cartoon","realista","pixel","minimalista"],
+                              "description": "Estilo visual"},
+                    "frames": {"type": "integer", "description": "Numero de frames (1 = imagem unica)"},
+                    "width": {"type": "integer", "description": "Largura (auto por categoria se omitido)"},
+                    "height": {"type": "integer", "description": "Altura (auto por categoria se omitido)"},
+                    "save_path": {"type": "string", "description": "Caminho relativo no projeto Godot"},
+                },
+                "required": ["description", "category"],
+            },
+        ),
+        Tool(
+            name="remove_background",
+            description=(
+                "Remove o fundo de uma imagem usando IA (rembg/birefnet). "
+                "Use para sprites gerados por IA que vieram com fundo. "
+                "Suporta PNG, JPG, WebP. Retorna PNG com transparencia."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "image_path": {"type": "string", "description": "Caminho da imagem com fundo"},
+                    "output_path": {"type": "string", "description": "Caminho de saida (auto: _nobg)"},
+                },
+                "required": ["image_path"],
+            },
+        ),
+        Tool(
+            name="optimize_sprite",
+            description=(
+                "Otimiza/compacta sprite PNG usando oxipng (lossless, 10-30% reducao). "
+                "Use antes de exportar o jogo para reduzir tamanho final."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "image_path": {"type": "string", "description": "Caminho da imagem PNG a otimizar"},
+                    "lossless": {"type": "boolean", "description": "True=oxipng sem perda, False=pngquant (default true)"},
+                },
+                "required": ["image_path"],
+            },
+        ),
+        Tool(
+            name="create_spritesheet",
+            description=(
+                "Cria sprite sheet a partir de frames individuais. "
+                "Use para juntar frames de animacao em uma unica imagem."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "frame_paths": {"type": "array", "items": {"type": "string"}, "description": "Lista de caminhos dos frames"},
+                    "output_path": {"type": "string", "description": "Caminho de saida da sprite sheet"},
+                    "frame_width": {"type": "integer", "description": "Largura de cada frame (default 64)"},
+                    "frame_height": {"type": "integer", "description": "Altura de cada frame (default 64)"},
+                    "columns": {"type": "integer", "description": "Numero de colunas (default 4)"},
+                    "gap": {"type": "integer", "description": "Espaco entre frames em px (default 0)"},
+                },
+                "required": ["frame_paths", "output_path"],
             },
         ),
         # ── Onda 4: IA Agêntica ──
@@ -2323,7 +3123,7 @@ def _tool_defs() -> list[Tool]:
                 "type": "object",
                 "properties": {
                     "scene_path": {"type": "string", "description": "Caminho da cena onde adicionar o parallax."},
-                    "layers": {"type": "array", "description": "Lista de camadas [{texture, scroll_scale_x, scroll_scale_y, mirroring_x, mirroring_y}]."},
+                    "layers": {"type": "array", "items": {"type": "object"}, "description": "Lista de camadas [{texture, scroll_scale_x, scroll_scale_y, mirroring_x, mirroring_y}]."},
                     "parent_node_path": {"type": "string", "description": "No pai (default '.' = raiz)."},
                     "bg_name": {"type": "string", "description": "Nome do no ParallaxBackground."},
                 },
@@ -2482,7 +3282,7 @@ def _tool_defs() -> list[Tool]:
                 "properties": {
                     "scene_path": {"type": "string", "description": "Caminho da cena."},
                     "parent_node_path": {"type": "string", "description": "No pai (default '.')."},
-                    "waypoints": {"type": "array", "description": "Lista de pontos Vector2 (ex: ['Vector2(0,0)', 'Vector2(100,100)'])."},
+                    "waypoints": {"type": "array", "items": {"type": "string"}, "description": "Lista de pontos Vector2 (ex: ['Vector2(0,0)', 'Vector2(100,100)'])."},
                     "path_name": {"type": "string", "description": "Nome do no Path2D (default 'Path2D')."},
                     "closed": {"type": "boolean", "description": "Se o caminho e fechado (loop, default false)."},
                 },
@@ -2504,7 +3304,7 @@ def _tool_defs() -> list[Tool]:
                 "properties": {
                     "scene_path": {"type": "string", "description": "Caminho da cena."},
                     "parent_node_path": {"type": "string", "description": "No pai que recebera o script de patrulha."},
-                    "waypoints": {"type": "array", "description": "Lista de posicoes Vector2."},
+                    "waypoints": {"type": "array", "items": {"type": "string"}, "description": "Lista de posicoes Vector2."},
                     "speed": {"type": "number", "description": "Velocidade de movimento (default 100)."},
                     "wait_time": {"type": "number", "description": "Tempo de espera em cada waypoint (default 1.0s)."},
                     "ping_pong": {"type": "boolean", "description": "Vai e volta em vez de reiniciar (default true)."},
@@ -2548,8 +3348,8 @@ def _tool_defs() -> list[Tool]:
                     "speaker": {"type": "string", "description": "Nome de quem fala."},
                     "text": {"type": "string", "description": "Texto da fala."},
                     "next_id": {"type": "string", "description": "ID do proximo dialogo (vazio = fim)."},
-                    "choices": {"type": "array", "description": "Opcoes do jogador [{text, next_id}]."},
-                    "events": {"type": "array", "description": "Eventos disparados [{type, params}]."},
+                    "choices": {"type": "array", "items": {"type": "object"}, "description": "Opcoes do jogador [{text, next_id}]."},
+                    "events": {"type": "array", "items": {"type": "object"}, "description": "Eventos disparados [{type, params}]."},
                 },
                 "required": ["dialogue_id", "speaker", "text"],
             },
@@ -3067,6 +3867,731 @@ def _tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
+        # ── LSP Bridge (Fase 2A / C3) ──────────────────────────
+        Tool(
+            name="gdscript_lsp_connect",
+            description=(
+                "Conecta ao Language Server do Godot na porta 6005. "
+                "Use no início da sessão, após abrir o editor Godot com o projeto. "
+                "Quando NÃO usar: se o editor não estiver aberto (a conexão falhará). "
+                "Pré-condições: Godot editor ABERTO com o projeto carregado. "
+                "Exemplo: {\"project_root\": \"C:/meu-jogo\"}. "
+                "Erro mais comum: conexão recusada — verifique se o Godot está aberto."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_root": {"type": "string", "description": "Caminho raiz do projeto (opcional)."},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="gdscript_lsp_disconnect",
+            description=(
+                "Desconecta do Language Server do Godot. "
+                "Use ao finalizar a sessão ou antes de fechar o editor."
+            ),
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        Tool(
+            name="gdscript_references",
+            description=(
+                "Encontra todas as referências a um símbolo GDScript (variável, função, classe). "
+                "Use para rastrear usos antes de renomear ou refatorar. "
+                "Pré-condições: LSP conectado via gdscript_lsp_connect. "
+                "Exemplo: {\"file_path\": \"scripts/player.gd\", \"line\": 10, \"character\": 5}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "file_path": {"type": "string", "description": "Caminho do arquivo .gd."},
+                    "line": {"type": "integer", "description": "Linha (0-indexed)."},
+                    "character": {"type": "integer", "description": "Posição do caractere (0-indexed)."},
+                },
+                "required": ["file_path", "line", "character"],
+            },
+        ),
+        Tool(
+            name="gdscript_definition",
+            description=(
+                "Navega para a definição de um símbolo GDScript. "
+                "Use para encontrar onde uma variável, função ou classe foi declarada. "
+                "Pré-condições: LSP conectado."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "file_path": {"type": "string", "description": "Caminho do arquivo .gd."},
+                    "line": {"type": "integer", "description": "Linha (0-indexed)."},
+                    "character": {"type": "integer", "description": "Posição do caractere (0-indexed)."},
+                },
+                "required": ["file_path", "line", "character"],
+            },
+        ),
+        Tool(
+            name="gdscript_hover",
+            description=(
+                "Exibe tipo e documentação de um símbolo GDScript sob o cursor. "
+                "Use para inspecionar tipo de variável ou assinatura de função. "
+                "Pré-condições: LSP conectado."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "file_path": {"type": "string", "description": "Caminho do arquivo .gd."},
+                    "line": {"type": "integer", "description": "Linha (0-indexed)."},
+                    "character": {"type": "integer", "description": "Posição do caractere (0-indexed)."},
+                },
+                "required": ["file_path", "line", "character"],
+            },
+        ),
+        Tool(
+            name="gdscript_symbols",
+            description=(
+                "Lista símbolos (funções, classes, variáveis) de um arquivo GDScript. "
+                "Use para obter índice estrutural do código. "
+                "Pré-condições: LSP conectado."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "file_path": {"type": "string", "description": "Caminho do arquivo .gd."},
+                },
+                "required": ["file_path"],
+            },
+        ),
+        Tool(
+            name="gdscript_rename",
+            description=(
+                "Renomeia um símbolo GDScript em TODO o projeto com segurança semântica. "
+                "Diferente de grep/replace, o LSP entende escopo e não quebra referências. "
+                "Quando NÃO usar: se não tiver certeza do escopo (use gdscript_references antes). "
+                "Pré-condições: LSP conectado."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "file_path": {"type": "string", "description": "Caminho do arquivo .gd."},
+                    "line": {"type": "integer", "description": "Linha (0-indexed)."},
+                    "character": {"type": "integer", "description": "Posição do caractere (0-indexed)."},
+                    "new_name": {"type": "string", "description": "Novo nome para o símbolo."},
+                },
+                "required": ["file_path", "line", "character", "new_name"],
+            },
+        ),
+        Tool(
+            name="gdscript_diagnostics",
+            description=(
+                "Retorna erros e warnings do compilador GDScript via LSP. "
+                "Mais preciso que validate_gdscript_syntax (tempo real, contextual). "
+                "Pré-condições: LSP conectado."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "file_path": {"type": "string", "description": "Caminho do arquivo .gd."},
+                },
+                "required": ["file_path"],
+            },
+        ),
+        Tool(
+            name="gdscript_sync_file",
+            description=(
+                "Notifica o LSP sobre alterações em um arquivo GDScript. "
+                "Use após write_file para manter o LSP sincronizado. "
+                "Pré-condições: LSP conectado."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "file_path": {"type": "string", "description": "Caminho do arquivo .gd."},
+                    "content": {"type": "string", "description": "Conteúdo atualizado (se omitido, lê do disco)."},
+                },
+                "required": ["file_path"],
+            },
+        ),
+        # ── Addon Bridge (Fase 2B / A2) ────────────────────────
+        Tool(
+            name="addon_connect",
+            description=(
+                "Conecta ao addon GDScript via WebSocket na porta 9082. "
+                "Use após abrir o Godot com o addon MCP instalado. "
+                "Pré-condições: Godot editor ABERTO com addon MCP ativo."
+            ),
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        Tool(
+            name="addon_disconnect",
+            description="Desconecta do addon GDScript.",
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        Tool(
+            name="addon_is_available",
+            description=(
+                "Verifica se o addon GDScript está conectado e respondendo. "
+                "Use para decidir entre modo editor (addon) ou file-based."
+            ),
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        Tool(
+            name="addon_ping",
+            description="Verifica se o addon GDScript está respondendo (ping/pong).",
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        Tool(
+            name="addon_create_node",
+            description=(
+                "Cria um nó na cena atual do editor Godot com UndoRedo NATIVO (Ctrl+Z funciona). "
+                "Use para adicionar nós visualmente no editor — é a versão ao vivo de node_manage.create. "
+                "Quando NÃO usar: se o addon não estiver disponível (use node_manage.create para file-based). "
+                "Pré-condições: addon conectado via addon_connect. "
+                "Exemplo: {\"parent_path\": \"/root/Main\", \"node_type\": \"Sprite2D\", \"node_name\": \"Player\"}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "parent_path": {"type": "string", "description": "Path do nó pai (ex: /root/Main)."},
+                    "node_type": {"type": "string", "description": "Tipo Godot (ex: Sprite2D)."},
+                    "node_name": {"type": "string", "description": "Nome do novo nó."},
+                    "properties": {"type": "object", "description": "Propriedades iniciais (opcional)."},
+                    "scene_path": {"type": "string", "description": "Cena alvo (opcional)."},
+                },
+                "required": ["parent_path", "node_type", "node_name"],
+            },
+        ),
+        Tool(
+            name="addon_delete_node",
+            description=(
+                "Remove um nó da cena do editor com UndoRedo nativo. "
+                "Pré-condições: addon conectado."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {"node_path": {"type": "string", "description": "Path absoluto do nó."}},
+                "required": ["node_path"],
+            },
+        ),
+        Tool(
+            name="addon_set_property",
+            description=(
+                "Define uma propriedade de nó no editor com UndoRedo nativo. "
+                "Use para ajustar posição, escala, cor, etc. com feedback visual imediato. "
+                "Pré-condições: addon conectado."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "node_path": {"type": "string", "description": "Path do nó."},
+                    "property_name": {"type": "string", "description": "Nome da propriedade."},
+                    "value": {"type": "string", "description": "Valor (tipos Godot serializados como JSON)."},
+                },
+                "required": ["node_path", "property_name", "value"],
+            },
+        ),
+        Tool(
+            name="addon_reparent_node",
+            description=(
+                "Move um nó para outro pai no editor com UndoRedo nativo. "
+                "Pré-condições: addon conectado."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "node_path": {"type": "string", "description": "Path do nó a mover."},
+                    "new_parent_path": {"type": "string", "description": "Path do novo pai."},
+                },
+                "required": ["node_path", "new_parent_path"],
+            },
+        ),
+        Tool(
+            name="addon_duplicate_node",
+            description=(
+                "Duplica um nó no editor com UndoRedo nativo. "
+                "Pré-condições: addon conectado."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "node_path": {"type": "string", "description": "Path do nó a duplicar."},
+                    "new_name": {"type": "string", "description": "Nome da cópia (opcional)."},
+                },
+                "required": ["node_path"],
+            },
+        ),
+        Tool(
+            name="addon_batch_edit",
+            description=(
+                "Executa MÚLTIPLAS operações no editor em UMA ação UndoRedo. "
+                "1 Ctrl+Z desfaz TUDO. Ideal para criar estruturas complexas. "
+                "Exemplo: [{\"method\": \"create_node\", \"params\": {...}}, ...]. "
+                "Pré-condições: addon conectado."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "operations": {
+                        "type": "array",
+                        "description": "Lista de operações [{method, params}, ...].",
+                        "items": {"type": "object"},
+                    },
+                },
+                "required": ["operations"],
+            },
+        ),
+        Tool(
+            name="addon_take_screenshot",
+            description=(
+                "Captura screenshot do viewport do editor Godot via addon. "
+                "Alternativa ao take_screenshot (TCP bridge) — funciona via WebSocket. "
+                "Pré-condições: addon conectado."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {"viewport": {"type": "string", "description": "'editor' (padrão) ou path."}},
+                "required": [],
+            },
+        ),
+        Tool(
+            name="addon_get_scene_tree",
+            description=(
+                "Obtém a árvore da cena atual do editor via addon. "
+                "Retorna estrutura hierárquica completa com tipos e paths. "
+                "Pré-condições: addon conectado."
+            ),
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        # ── Playtest (Fase 2B / A3+A4+A5) ──────────────────────
+        Tool(
+            name="freeze_game_clock",
+            description="Congela o relogio do jogo. Use antes de step_game_time para playtesting deterministico.",
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        Tool(
+            name="unfreeze_game_clock",
+            description="Descongela o relogio do jogo (retoma execucao normal).",
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        Tool(
+            name="step_game_time",
+            description="Avanca o jogo em N ms e congela novamente. Ex: 500ms = meio segundo de jogo processado.",
+            inputSchema={
+                "type": "object",
+                "properties": {"ms": {"type": "integer", "description": "Milissegundos (default: 16)."}},
+                "required": [],
+            },
+        ),
+        Tool(
+            name="step_until",
+            description="Avanca o jogo ate que uma condicao GDScript seja verdadeira. Com timeout.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "condition": {"type": "string", "description": "Expressao GDScript que retorna bool."},
+                    "timeout_ms": {"type": "integer", "description": "Timeout em ms (default: 5000)."},
+                },
+                "required": ["condition"],
+            },
+        ),
+        Tool(
+            name="get_runtime_state_digest",
+            description="Retorna estado do jogo como JSON: posicao, velocidade, grupos de todas as entidades.",
+            inputSchema={
+                "type": "object",
+                "properties": {"groups": {"type": "array", "items": {"type": "string"}, "description": "Grupos a filtrar."}},
+                "required": [],
+            },
+        ),
+        Tool(
+            name="capture_runtime_errors",
+            description="Captura informacoes de runtime: FPS, contagem de objetos, estado da arvore.",
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        # ── Playtest Onda 1 (watch_state, godot_exec, effect_probe) ──
+        Tool(
+            name="watch_state_start",
+            description="Comeca a observar propriedades de nos do jogo a cada step. "
+                        "Use para monitorar HP, posicao, velocidade durante playtesting. "
+                        "Depois colete com watch_state_collect().",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "targets": {"type": "array", "items": {"type": "object"}},
+                    "interval_steps": {"type": "integer"},
+                },
+                "required": ["targets"],
+            },
+        ),
+        Tool(
+            name="watch_state_collect",
+            description="Coleta o historico de estados observados desde watch_state_start(). "
+                        "Retorna array de snapshots com timestamp e valores das propriedades.",
+            inputSchema={"type": "object", "properties": {}},
+        ),
+        Tool(
+            name="godot_exec",
+            description="Executa codigo GDScript DENTRO do jogo rodando. "
+                        "Use para setup de cenarios de teste: spawnar inimigos, modificar estado. "
+                        "Use 'return' para obter valores.",
+            inputSchema={
+                "type": "object",
+                "properties": {"code": {"type": "string", "description": "Codigo GDScript a executar no jogo"}},
+                "required": ["code"],
+            },
+        ),
+        Tool(
+            name="effect_probe",
+            description="Verifica se uma acao no jogo produziu o efeito esperado. "
+                        "Avalia expressao antes, executa acao, avalia depois, compara. "
+                        "Ideal para testar: 'o dano reduziu o HP?', 'o pulo aumentou a posicao Y?'",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "before": {"type": "string", "description": "Expressao GDScript antes da acao"},
+                    "action": {"type": "string", "description": "Codigo GDScript da acao"},
+                    "after": {"type": "string", "description": "Expressao GDScript depois da acao"},
+                    "wait_ms": {"type": "integer", "description": "ms de espera entre acao e verificacao"},
+                },
+                "required": ["before", "action", "after"],
+            },
+        ),
+        # ── Balance Onda 1 ──────────────────────────────────────
+        Tool(
+            name="balance_analyze",
+            description="Analisa o balanceamento do jogo e sugere ajustes. "
+                        "Calcula DPS necessario, verifica se o jogo eh 'vencivel', "
+                        "detecta torres com custo-beneficio ruim, inimigos desbalanceados.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "game_type": {"type": "string", "enum": ["tower_defense", "rpg", "platformer", "shooter"]},
+                    "towers": {"type": "array", "items": {"type": "object"}},
+                    "enemies": {"type": "array", "items": {"type": "object"}},
+                    "waves": {"type": "integer"},
+                    "target_duration_minutes": {"type": "integer"},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="wave_generate",
+            description="Gera composicao de ondas para tower defense. "
+                        "Curva de dificuldade (linear, exponential, staircase). "
+                        "Chefoes a cada N waves. Use para planejar as waves do jogo.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "wave_count": {"type": "integer"},
+                    "enemy_types": {"type": "array", "items": {"type": "object"}},
+                    "difficulty_curve": {"type": "string", "enum": ["linear", "exponential", "staircase"]},
+                    "boss_every": {"type": "integer"},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="dps_calculator",
+            description="Calcula DPS efetivo de uma torre/arma considerando criticos, "
+                        "dano em area e dano continuo (DoT). Retorna Time-To-Kill para HPs de referencia.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "damage": {"type": "number"},
+                    "fire_rate": {"type": "number"},
+                    "crit_chance": {"type": "number"},
+                    "crit_multiplier": {"type": "number"},
+                    "aoe_radius": {"type": "number"},
+                    "aoe_targets": {"type": "integer"},
+                    "damage_over_time": {"type": "number"},
+                    "dot_duration": {"type": "number"},
+                },
+                "required": ["damage", "fire_rate"],
+            },
+        ),
+        Tool(
+            name="loot_table_generate",
+            description="Gera tabela de loot balanceada com chances de drop por raridade. "
+                        "Suporta temas: scifi, fantasy, modern, post_apocalyptic.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "rarity_levels": {"type": "array", "items": {"type": "string"}},
+                    "items_per_rarity": {"type": "integer"},
+                    "game_theme": {"type": "string", "enum": ["scifi", "fantasy", "modern", "post_apocalyptic"]},
+                },
+                "required": [],
+            },
+        ),
+        # ── GDD Generator (Onda 2) ──────────────────────────────
+        Tool(
+            name="gdd_generate",
+            description="Gera Game Design Document (GDD) completo a partir de uma ideia. "
+                        "Suporta: tower_defense, platformer, rpg, shooter, puzzle, roguelike. "
+                        "Niveis de detalhe: brief (1 pagina) ou full (completo com historia, "
+                        "monetizacao, marketing e roadmap). GRATIS — sem API externa.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "concept": {"type": "string", "description": "Ideia do jogo em uma frase"},
+                    "game_type": {"type": "string", "enum": ["tower_defense","platformer","rpg","shooter","puzzle","roguelike"]},
+                    "target_platform": {"type": "string", "enum": ["pc","mobile","web"]},
+                    "detail_level": {"type": "string", "enum": ["brief","full"]},
+                },
+                "required": ["concept"],
+            },
+        ),
+        # ── Behavior Trees (Onda 2) ─────────────────────────────
+        Tool(
+            name="behavior_tree_generate",
+            description="Gera Behavior Tree completa em GDScript a partir de descricao em portugues. "
+                        "Analisa texto como 'patrulha, detecta, persegue, ataca, foge' e gera codigo "
+                        "com Selector/Sequence, acoes e condicoes. Zero custo — puro Python.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "description": {"type": "string", "description": "Comportamento em portugues"},
+                    "behavior_name": {"type": "string", "description": "Nome da classe (ex: EnemyAI)"},
+                    "tree_type": {"type": "string", "enum": ["selector","sequence"]},
+                    "save_path": {"type": "string"},
+                },
+                "required": ["description"],
+            },
+        ),
+        Tool(
+            name="behavior_tree_list_templates",
+            description="Lista templates de Behavior Tree disponiveis: patrol_chase_attack, "
+                        "patrol_chase_attack_flee, guard_alert_chase, idle_wander_flee, boss_phases.",
+            inputSchema={"type": "object", "properties": {}},
+        ),
+        # ── Performance Profiler (Onda 2) ───────────────────────
+        Tool(
+            name="profile_frame",
+            description="Analisa performance do jogo rodando: FPS medio/min/max, draw calls, "
+                        "uso de memoria e nos na cena. Sugere otimizacoes especificas. "
+                        "Nota A (otimo) ate D (critico). GRATIS — sem API externa.",
+            inputSchema={
+                "type": "object",
+                "properties": {"sample_frames": {"type": "integer", "description": "Frames para amostrar (default 60)"}},
+                "required": [],
+            },
+        ),
+        Tool(
+            name="profile_memory",
+            description="Analisa uso de memoria do jogo (estatica + video) e detecta objetos. "
+                        "GRATIS — sem API externa.",
+            inputSchema={
+                "type": "object",
+                "properties": {"track_objects": {"type": "boolean", "description": "Contar objetos por tipo"}},
+                "required": [],
+            },
+        ),
+        # ── Shader NL (Onda 3) ──────────────────────────────────
+        Tool(
+            name="shader_generate",
+            description="Gera arquivo .gdshader a partir de descricao em portugues. "
+                        "15 templates 2D: glow, dissolve, water, wind, hologram, forcefield, "
+                        "outline, pixelate, chromatic_aberration, heat_distortion, toon, "
+                        "grayscale, neon_pulse, frost, invisibility. GRATIS — sem API.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "description": {"type": "string", "description": "Efeito visual desejado. Ex: 'holograma azul com scanlines'"},
+                    "shader_type": {"type": "string", "enum": ["canvas_item","spatial","particles","sky"]},
+                    "save_path": {"type": "string"},
+                },
+                "required": ["description"],
+            },
+        ),
+        Tool(
+            name="shader_list_templates",
+            description="Lista 15 templates de shader 2D disponiveis com palavras-chave.",
+            inputSchema={"type": "object", "properties": {}},
+        ),
+        # ── World Generation (Onda 3) ───────────────────────────
+        Tool(
+            name="terrain_generate",
+            description="Gera terreno procedural com biomas por altura/umidade. "
+                        "Usa FastNoiseLite (built-in Godot). Retorna JSON com seed, "
+                        "distribuicao de biomas e parametros de noise. GRATIS.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "width": {"type": "integer"}, "height": {"type": "integer"},
+                    "seed": {"type": "integer"}, "biomes": {"type": "array", "items": {"type": "string"}},
+                    "water_level": {"type": "number"}, "mountain_level": {"type": "number"},
+                    "save_path": {"type": "string"},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="dungeon_generate",
+            description="Gera dungeon procedural com salas e corredores (algoritmo BSP). "
+                        "Salas classificadas como combat, treasure, boss, start, empty. GRATIS.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "rooms": {"type": "integer"}, "min_room_size": {"type": "integer"},
+                    "max_room_size": {"type": "integer"}, "seed": {"type": "integer"},
+                    "save_path": {"type": "string"},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="world_describe",
+            description="Analisa um mundo gerado e sugere melhorias e pontos de interesse. "
+                        "Detecta biomas e recomenda elementos de gameplay.",
+            inputSchema={
+                "type": "object",
+                "properties": {"terrain_path": {"type": "string"}},
+                "required": [],
+            },
+        ),
+        # ── 3D Asset Generation (Onda 3) ────────────────────────
+        Tool(
+            name="generate_3d_placeholder",
+            description="Gera placeholder 3D procedural (box, sphere, cylinder, cone, pyramid). "
+                        "Preview PNG + codigo de cena Godot .tscn. GRATIS — Pillow.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string"}, "shape": {"type": "string", "enum": ["box","sphere","cylinder","cone","pyramid"]},
+                    "color": {"type": "string"}, "size": {"type": "number"}, "save_path": {"type": "string"},
+                },
+                "required": ["name"],
+            },
+        ),
+        Tool(
+            name="generate_3d_asset",
+            description="Gera asset 3D via API Hyper3D Rodin (⚠️💰 ~$0.05/modelo) ou placeholder GRATIS. "
+                        "SEM custo se HYPER3D_API_KEY nao configurada. Categorias: prop, character, vehicle, building, weapon.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "description": {"type": "string"}, "category": {"type": "string", "enum": ["prop","character","vehicle","building","weapon"]},
+                    "style": {"type": "string", "enum": ["scifi","fantasy","modern","realistic"]}, "save_path": {"type": "string"},
+                },
+                "required": ["description"],
+            },
+        ),
+        # ── Deploy + Marketplace (Onda 4 — FINAL) ────────────────
+        Tool(
+            name="deploy_itch",
+            description="Exporta e envia o jogo para itch.io via butler CLI. "
+                        "Suporta Windows, Linux, Web, macOS, Android. GRATIS.",
+            inputSchema={
+                "type": "object",
+                "properties": {"itch_username": {"type": "string"}, "itch_game": {"type": "string"},
+                    "platforms": {"type": "array", "items": {"type": "string"}},
+                    "version": {"type": "string"}, "dry_run": {"type": "boolean"}},
+                "required": [],
+            },
+        ),
+        Tool(
+            name="release_checklist",
+            description="Verifica se o projeto esta pronto para lancamento (nota 0-10): "
+                        "project.godot, main scene, scripts, assets, audio, export presets, "
+                        "gitignore, readme, license, tamanho. GRATIS.",
+            inputSchema={"type": "object", "properties": {}},
+        ),
+        Tool(
+            name="auto_screenshot",
+            description="Gera screenshots automaticas do jogo rodando para loja (itch.io/Steam). GRATIS.",
+            inputSchema={
+                "type": "object",
+                "properties": {"count": {"type": "integer"}, "delay_between": {"type": "number"}, "save_dir": {"type": "string"}},
+                "required": [],
+            },
+        ),
+        Tool(
+            name="marketplace_search",
+            description="Busca assets em marketplaces gratuitos: Kenney.nl (CC0, 300+ packs), "
+                        "Godot Asset Library, OpenGameArt, Poly Haven. GRATIS.",
+            inputSchema={
+                "type": "object",
+                "properties": {"query": {"type": "string"},
+                    "source": {"type": "string", "enum": ["kenney","godot_assets","opengameart","polyhaven"]},
+                    "category": {"type": "string"}},
+                "required": [],
+            },
+        ),
+        Tool(
+            name="marketplace_download",
+            description="Baixa asset gratuito do marketplace. Kenney.nl (ZIP direto, CC0). GRATIS.",
+            inputSchema={
+                "type": "object",
+                "properties": {"source": {"type": "string", "enum": ["kenney","godot_assets","polyhaven"]},
+                    "slug": {"type": "string"}, "save_to": {"type": "string"}},
+                "required": ["slug"],
+            },
+        ),
+        # ── Juice (Onda 5) ─────────────────────────────────────
+        Tool(
+            name="juice_apply",
+            description="Aplica tecnicas de game feel/polish profissional: coyote time, "
+                        "input buffer, hit-stop, screen shake, squash & stretch, easing. "
+                        "Presets: full, platformer, action, minimal. Gera script GDScript pronto. GRATIS.",
+            inputSchema={
+                "type": "object",
+                "properties": {"preset": {"type": "string", "enum": ["full","platformer","action","minimal"]},
+                              "save_to_script": {"type": "string"}},
+                "required": [],
+            },
+        ),
+        Tool(
+            name="juice_list_presets",
+            description="Lista presets de juice disponiveis com tecnicas incluidas.",
+            inputSchema={"type": "object", "properties": {}},
+        ),
+        # ── Auto-Config (Fase 2C) ───────────────────────────────
+        Tool(
+            name="validate_mcp_environment",
+            description="Verifica se o ambiente MCP esta pronto: Python, dependencias, server.py.",
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        Tool(
+            name="setup_mcp_config",
+            description="Gera arquivo de configuracao MCP para VS Code Copilot, Claude ou Cursor.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "target": {"type": "string", "enum": ["vscode", "claude", "cursor", "all"],
+                               "description": "Cliente alvo (default: vscode)."},
+                },
+                "required": [],
+            },
+        ),
+        # ── Pipeline Executor (Onda 7) ──────────────────────────
+        Tool(
+            name="create_entity",
+            description="Cria uma entidade COMPLETA: cena + collider + script + sprite + audio. "
+                        "Decide automaticamente o que gerar. Use para inimigos, players, NPCs, itens. "
+                        "Exemplo: {'name': 'Slime', 'entity_type': 'enemy', 'behavior': 'patrol'}.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string", "description": "Nome da entidade (ex: Slime, Player, Turret)."},
+                    "entity_type": {"type": "string", "enum": ["enemy", "player", "tower", "npc", "item", "projectile"],
+                                    "description": "Tipo de entidade."},
+                    "description": {"type": "string", "description": "Descricao do comportamento."},
+                    "behavior": {"type": "string", "enum": ["patrol", "chase", "idle", "none"],
+                                 "description": "Comportamento IA."},
+                    "generate_art": {"type": "boolean", "description": "Forcar geracao de arte (null=auto)."},
+                    "generate_audio": {"type": "boolean", "description": "Forcar geracao de audio (null=auto)."},
+                    "art_style": {"type": "string", "enum": ["scifi", "fantasy", "pixel", "cartoon"],
+                                  "description": "Estilo visual."},
+                    "save_path": {"type": "string", "description": "Caminho para salvar a cena."},
+                },
+                "required": ["name"],
+            },
+        ),
+        Tool(
+            name="project_status",
+            description="Status completo do projeto: cenas, scripts, sprites, audio, assets faltantes, "
+                        "sugestoes do que criar a seguir. Use para diagnosticar o estado do jogo.",
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
     ]
 
     # ── Pós-processamento: hints MCP + additionalProperties ────────
@@ -3083,6 +4608,9 @@ def _tool_defs() -> list[Tool]:
         "find_missing_references", "validate_game_design",
         "estimate_game_scope", "search_codebase", "get_project_history",
         "get_undo_history", "health_check", "self_test", "get_performance_stats",
+        # LSP Bridge (C3)
+        "gdscript_references", "gdscript_definition",
+        "gdscript_hover", "gdscript_symbols", "gdscript_diagnostics",
     }
     _DESTRUCTIVE = {
         "delete_file", "delete_node", "write_file", "move_file",
@@ -3119,141 +4647,67 @@ def _tool_defs() -> list[Tool]:
         "create_light_3d", "create_csg_shape",
         "configure_standard_material_3d", "configure_export_preset",
         "configure_audio_bus", "add_audio_effect",
+        "generate_game_art", "apply_game_art",
+        # LSP Bridge (C3)
+        "gdscript_rename",
+        # Addon Bridge (Fase 2B / A2)
+        "addon_create_node", "addon_delete_node", "addon_set_property",
+        "addon_reparent_node", "addon_duplicate_node", "addon_batch_edit",
     }
     _IDEMPOTENT = _READONLY | {
         "set_project_setting", "set_main_scene", "configure_input_action",
         "configure_autoload", "set_collision_layer_mask", "set_node_property",
         "create_project", "set_active_project",
+        # LSP Bridge (C3)
+        "gdscript_sync_file",
     }
     # ── Annotations (Onda 6): titles em PT-BR + tags ────────────────
     _TITLES = {
         "ping": "Ping — Verificar Conexão",
         "validate_godot_version": "Validar Versão do Godot",
-        "set_active_project": "Definir Projeto Ativo",
-        "create_project": "Criar Novo Projeto",
-        "get_project_settings": "Ler Configurações do Projeto",
-        "set_project_setting": "Definir Configuração do Projeto",
-        "set_main_scene": "Definir Cena Principal",
-        "configure_input_action": "Configurar Ação de Input",
-        "configure_autoload": "Configurar Autoload (Singleton)",
-        "inspect_project": "Inspecionar Arquivos do Projeto",
         "read_file": "Ler Arquivo",
         "write_file": "Escrever Arquivo",
-        "delete_file": "Deletar Arquivo",
-        "move_file": "Mover/Renomear Arquivo",
-        "create_scene": "Criar Cena (.tscn)",
-        "load_scene_tree": "Carregar Árvore da Cena",
-        "add_node": "Adicionar Nó",
-        "delete_node": "Remover Nó",
-        "set_node_property": "Definir Propriedade do Nó",
-        "get_node_property": "Ler Propriedade do Nó",
-        "reparent_node": "Re-parentar Nó",
-        "instance_scene_as_child": "Instanciar Sub-Cena",
-        "connect_signal": "Conectar Sinal",
-        "list_signals": "Listar Sinais",
         "query_classdb": "Consultar ClassDB",
         "list_valid_node_types": "Listar Tipos de Nó Válidos",
-        "generate_gdscript": "Gerar GDScript (Template)",
-        "attach_script": "Anexar Script ao Nó",
-        "detach_script": "Desanexar Script",
-        "validate_gdscript_syntax": "Validar Sintaxe GDScript",
-        "add_script_variable": "Adicionar Variável ao Script",
-        "add_script_signal": "Adicionar Sinal ao Script",
-        "add_collision_shape": "Adicionar Forma de Colisão",
-        "set_collision_layer_mask": "Configurar Camadas de Colisão",
-        "import_texture": "Importar Textura",
-        "import_sprite_sheet": "Importar Sprite Sheet",
-        "import_audio": "Importar Áudio",
-        "compile_test": "Teste de Compilação",
-        "run_game": "Rodar Jogo",
-        "stop_game": "Parar Jogo",
-        "smart_restart": "Reinicio Inteligente",
-        "launch_editor": "Abrir Editor Godot",
-        "close_editor": "Fechar Editor Godot",
         "take_screenshot": "Capturar Screenshot (Editor)",
         "read_console_output": "Ler Console",
-        "create_tileset": "Criar TileSet",
-        "create_tilemap_layer": "Criar Camada TileMap",
-        "paint_tilemap_cell": "Pintar Célula do TileMap",
-        "create_animation_player": "Criar AnimationPlayer",
-        "create_animation": "Criar Animação",
-        "create_ui_scene": "Criar Cena de UI",
-        "add_control_node": "Adicionar Nó de UI",
-        "list_export_presets": "Listar Presets de Exportação",
-        "validate_export_templates_installed": "Validar Templates de Exportação",
-        "build_export": "Exportar Projeto",
-        "list_backups": "Listar Backups",
-        "restore_backup": "Restaurar Backup",
-        "git_commit_checkpoint": "Checkpoint Git",
         "inject_input_event": "Injetar Evento de Input",
         "execute_gdscript_runtime": "Executar GDScript (Runtime)",
         "watch_signal": "Observar Sinal",
         "capture_game_screenshot": "Capturar Screenshot do Jogo",
-        "compare_screenshots": "Comparar Screenshots",
-        "detect_empty_screen": "Detectar Tela Vazia",
-        "detect_offscreen_elements": "Detectar Elementos Fora da Tela",
         "add_nodes_batch": "Adicionar Nós em Lote",
         "set_properties_batch": "Definir Propriedades em Lote",
-        "generate_placeholder_sprite": "Gerar Sprite Placeholder",
-        "generate_placeholder_texture_atlas": "Gerar Sprite Sheet Placeholder",
-        "generate_background_gradient": "Gerar Fundo com Gradiente",
-        "generate_tileset_from_colors": "Gerar Tileset de Cores",
         "generate_audio_sfx": "Gerar Efeito Sonoro (SFX)",
-        "suggest_color_palette": "Sugerir Paleta de Cores",
-        "analyze_game_structure": "Analisar Estrutura do Jogo",
-        "suggest_next_steps": "Sugerir Próximos Passos",
-        "find_missing_references": "Encontrar Referências Quebradas",
-        "validate_game_design": "Validar Game Design",
-        "estimate_game_scope": "Estimar Escopo do Jogo",
-        "search_codebase": "Buscar no Código",
-        "get_project_history": "Histórico do Projeto",
         "create_animation_tree": "Criar AnimationTree",
-        "set_physics_material": "Configurar Material de Física",
         "create_joint_2d": "Criar Junta 2D",
         "import_3d_model": "Importar Modelo 3D",
         "create_particles_2d": "Criar Partículas 2D",
         "create_light_2d": "Criar Luz 2D",
-        "create_shader_material": "Criar Shader Material",
         "generate_project_structure": "Gerar Estrutura do Projeto",
         "record_gameplay_gif": "Gravar Gameplay (GIF)",
-        "undo_last_action": "Desfazer Última Ação",
-        "get_undo_history": "Histórico de Desfazer",
         "create_parallax_background": "Criar Fundo Parallax",
         "add_parallax_layer": "Adicionar Camada Parallax",
         "configure_particles_2d": "Configurar Partículas 2D",
         "create_particles_3d": "Criar Partículas 3D",
         "generate_shader_2d": "Gerar Shader 2D",
-        "apply_shader_to_node": "Aplicar Shader ao Nó",
         "create_path_2d": "Criar Path 2D",
         "create_patrol_route": "Criar Rota de Patrulha",
-        "create_dialogue_system": "Criar Sistema de Diálogo",
-        "add_dialogue_node": "Adicionar Nó de Diálogo",
-        "create_dialogue_ui": "Criar UI de Diálogo",
-        "create_inventory_system": "Criar Sistema de Inventário",
-        "define_inventory_item": "Definir Item do Inventário",
-        "create_inventory_ui": "Criar UI de Inventário",
         "create_bullet_template": "Criar Template de Projétil",
         "create_gun_system": "Criar Sistema de Arma",
-        "generate_tilemap_from_noise": "Gerar Tilemap com Noise",
         "generate_dungeon_rooms": "Gerar Salas de Dungeon",
-        "create_loading_screen": "Criar Tela de Carregamento",
         "load_scene_async": "Carregar Cena Assíncrono",
         "add_raycast_2d": "Adicionar RayCast2D",
         "add_shapecast_2d": "Adicionar ShapeCast2D",
-        "enable_debug_collisions": "Ativar Debug de Colisões",
-        "enable_debug_navigation": "Ativar Debug de Navegação",
-        "get_performance_stats": "Estatísticas de Performance",
         "setup_localization": "Configurar Localização (i18n)",
         "add_translation_string": "Adicionar String Traduzida",
         "create_light_3d": "Criar Luz 3D",
-        "create_csg_shape": "Criar Forma CSG 3D",
         "configure_standard_material_3d": "Configurar Material 3D",
         "configure_export_preset": "Configurar Preset de Exportação",
-        "configure_audio_bus": "Configurar Bus de Áudio",
-        "add_audio_effect": "Adicionar Efeito de Áudio",
         "health_check": "Verificação de Saúde",
         "self_test": "Auto-Teste do MCP",
-    }
+        "generate_game_art": "Gerar Arte do Jogo (IA)",
+        "apply_game_art": "Aplicar Arte no Jogo",
+}
     _TAGS = {
         "capture_game_screenshot": ["visão", "screenshot"],
         "compare_screenshots": ["visão", "análise"],
@@ -3266,6 +4720,8 @@ def _tool_defs() -> list[Tool]:
         "generate_background_gradient": ["assets", "background"],
         "generate_tileset_from_colors": ["assets", "tilemap"],
         "generate_audio_sfx": ["assets", "áudio"],
+        "generate_game_art": ["arte", "ia", "assets", "dalle"],
+        "apply_game_art": ["arte", "godot", "animação"],
         "suggest_color_palette": ["assets", "design"],
         "analyze_game_structure": ["ia", "análise", "métricas"],
         "suggest_next_steps": ["ia", "planejamento"],
@@ -3320,6 +4776,45 @@ def _tool_defs() -> list[Tool]:
         "add_audio_effect": ["áudio", "efeitos"],
         "health_check": ["diagnóstico", "sistema"],
         "self_test": ["diagnóstico", "teste"],
+        # LSP Bridge (C3)
+        "gdscript_lsp_connect": ["lsp", "conexão", "godot"],
+        "gdscript_lsp_disconnect": ["lsp", "conexão"],
+        "gdscript_references": ["lsp", "análise", "gdscript"],
+        "gdscript_definition": ["lsp", "análise", "gdscript"],
+        "gdscript_hover": ["lsp", "análise", "gdscript"],
+        "gdscript_symbols": ["lsp", "análise", "gdscript"],
+        "gdscript_rename": ["lsp", "refatoração", "gdscript"],
+        "gdscript_diagnostics": ["lsp", "diagnóstico", "gdscript"],
+        "gdscript_sync_file": ["lsp", "sync", "gdscript"],
+        # Addon Bridge (Fase 2B)
+        "addon_connect": ["addon", "conexão", "websocket"],
+        "addon_disconnect": ["addon", "conexão"],
+        "addon_is_available": ["addon", "diagnóstico"],
+        "addon_ping": ["addon", "diagnóstico"],
+        "addon_create_node": ["addon", "editor", "undo"],
+        "addon_delete_node": ["addon", "editor", "undo"],
+        "addon_set_property": ["addon", "editor", "undo"],
+        "addon_reparent_node": ["addon", "editor", "undo"],
+        "addon_duplicate_node": ["addon", "editor", "undo"],
+        "addon_batch_edit": ["addon", "editor", "batch", "undo"],
+        "addon_take_screenshot": ["addon", "screenshot", "visão"],
+        "addon_get_scene_tree": ["addon", "cena", "debug"],
+        # Playtest (Fase 2B)
+        "freeze_game_clock": ["playtest", "clock", "debug"],
+        "unfreeze_game_clock": ["playtest", "clock"],
+        "step_game_time": ["playtest", "clock", "deterministico"],
+        "step_until": ["playtest", "clock", "condicional"],
+        "get_runtime_state_digest": ["playtest", "state", "json"],
+        "capture_runtime_errors": ["playtest", "debug", "diagnostico"],
+    }
+    # ── Hints: openWorldHint (Fase 2A / C4) ─────────────────────
+    # Tools que NÃO são puro servidor interagem com mundo externo.
+    _SERVER_ONLY = {"ping", "health_check", "self_test"}
+    _CORE_TOOLS = {
+        "ping", "health_check", "self_test", "bootstrap_godot_mcp",
+        "query_classdb", "read_file", "write_file",
+        "project_manage", "scene_manage", "node_manage", "script_manage",
+        "file_manage", "runtime_manage", "take_screenshot",
     }
     for t in _TOOL_DEFS_CACHE:
         if t.name in _READONLY:
@@ -3328,6 +4823,8 @@ def _tool_defs() -> list[Tool]:
             t.destructiveHint = True
         if t.name in _IDEMPOTENT:
             t.idempotentHint = True
+        if t.name not in _SERVER_ONLY:
+            t.openWorldHint = True
         if hasattr(t, 'inputSchema') and isinstance(t.inputSchema, dict):
             if "additionalProperties" not in t.inputSchema:
                 t.inputSchema["additionalProperties"] = False
@@ -3336,7 +4833,225 @@ def _tool_defs() -> list[Tool]:
             t.title = _TITLES[t.name]
         if t.name in _TAGS:
             t.annotations = {"tags": _TAGS[t.name]}
+        # ── B6: Read/Write Split ────────────────────────────────
+        cat = _classify_operation(t.name)
+        if t.annotations:
+            t.annotations["operationCategory"] = cat
+        else:
+            t.annotations = {"operationCategory": cat}
+        # ── M3: Defer Loading ───────────────────────────────────
+        if t.name not in _CORE_TOOLS:
+            t.annotations["deferLoading"] = True
     # ── Fim pós-processamento ──────────────────────────────────────
+
+    # ── Rollups Fase 2A / C1 ───────────────────────────────────────
+    # Domain rollups: colapsam múltiplas tools em <domain>_manage.
+    # Adicionados APÓS o pós-processamento pois já trazem seus próprios hints.
+    try:
+        from tools.rollups import get_rollup_tool_defs
+        _TOOL_DEFS_CACHE.extend(get_rollup_tool_defs())
+    except Exception:
+        pass  # Rollups são bônus — se falhar, server ainda funciona sem eles
+
+    # ── B6: Read/Write Split para rollups ───────────────────────────
+    for t in _TOOL_DEFS_CACHE:
+        cat = _classify_operation(t.name)
+        if t.annotations:
+            t.annotations["operationCategory"] = cat
+        else:
+            t.annotations = {"operationCategory": cat}
+
+    # ── M3: Defer Loading para rollups ─────────────────────────────
+    for t in _TOOL_DEFS_CACHE:
+        if t.name not in _CORE_TOOLS:
+            if t.annotations:
+                t.annotations["deferLoading"] = True
+            else:
+                t.annotations = {"deferLoading": True}
+
+    # ── Output Schema (Fase 2A / C5) ────────────────────────────────
+    # Schema padrão para 90%+ das tools. Ferramentas com formato
+    # específico são sobrescritas pelo dict _OUTPUT_SCHEMAS.
+    _STANDARD_OUTPUT = {
+        "type": "object",
+        "properties": {
+            "status": {
+                "type": "string",
+                "enum": ["success", "error"],
+                "description": (
+                    "Resultado da operação: 'success' para sucesso, "
+                    "'error' para falha."
+                ),
+            },
+            "message": {
+                "type": "string",
+                "description": (
+                    "Mensagem descritiva. Presente em caso de erro "
+                    "ou informação adicional."
+                ),
+            },
+            "error_code": {
+                "type": "integer",
+                "description": "Código numérico do erro (apenas quando status='error').",
+            },
+        },
+        "required": ["status"],
+        "additionalProperties": True,
+    }
+    _OUTPUT_SCHEMAS: dict[str, dict] = {
+        "ping": {
+            "type": "object",
+            "properties": {
+                "status": {"type": "string", "enum": ["success"]},
+                "server": {"type": "string", "description": "Nome do servidor MCP."},
+                "version": {"type": "string", "description": "Versão do servidor."},
+                "tools_count": {"type": "integer", "description": "Número de ferramentas disponíveis."},
+                "message": {"type": "string"},
+            },
+            "required": ["status", "server", "version", "tools_count"],
+        },
+        "take_screenshot": {
+            "type": "object",
+            "properties": {
+                "status": {"type": "string", "enum": ["success", "error"]},
+                "path": {"type": "string", "description": "Caminho do arquivo PNG salvo."},
+                "width": {"type": "integer", "description": "Largura em pixels."},
+                "height": {"type": "integer", "description": "Altura em pixels."},
+                "message": {"type": "string"},
+            },
+            "required": ["status"],
+        },
+        "read_file": {
+            "type": "object",
+            "properties": {
+                "status": {"type": "string", "enum": ["success", "error"]},
+                "content": {"type": "string", "description": "Conteúdo do arquivo."},
+                "path": {"type": "string", "description": "Caminho do arquivo lido."},
+                "message": {"type": "string"},
+            },
+            "required": ["status"],
+        },
+        "read_console_output": {
+            "type": "object",
+            "properties": {
+                "status": {"type": "string", "enum": ["success", "error"]},
+                "output": {"type": "string", "description": "Texto da saída do console."},
+                "lines": {"type": "integer", "description": "Número de linhas retornadas."},
+                "message": {"type": "string"},
+            },
+            "required": ["status"],
+        },
+        "capture_game_screenshot": {
+            "type": "object",
+            "properties": {
+                "status": {"type": "string", "enum": ["success", "error"]},
+                "path": {"type": "string", "description": "Caminho do arquivo PNG."},
+                "message": {"type": "string"},
+            },
+            "required": ["status"],
+        },
+        "generate_game_art": {
+            "type": "object",
+            "properties": {
+                "status": {"type": "string", "enum": ["success", "error"]},
+                "frame_paths": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Lista de caminhos dos frames gerados.",
+                },
+                "prompt": {"type": "string", "description": "Prompt usado para geração."},
+                "message": {"type": "string"},
+            },
+            "required": ["status"],
+        },
+        "query_classdb": {
+            "type": "object",
+            "properties": {
+                "status": {"type": "string", "enum": ["success", "error"]},
+                "results": {
+                    "type": "array",
+                    "items": {"type": "object"},
+                    "description": "Lista de classes encontradas.",
+                },
+                "count": {"type": "integer", "description": "Número de resultados."},
+                "message": {"type": "string"},
+            },
+            "required": ["status"],
+        },
+        "inspect_project": {
+            "type": "object",
+            "properties": {
+                "status": {"type": "string", "enum": ["success", "error"]},
+                "scenes": {"type": "array", "items": {"type": "string"}},
+                "scripts": {"type": "array", "items": {"type": "string"}},
+                "assets": {"type": "array", "items": {"type": "string"}},
+                "message": {"type": "string"},
+            },
+            "required": ["status"],
+        },
+    }
+    for t in _TOOL_DEFS_CACHE:
+        if t.name in _OUTPUT_SCHEMAS:
+            t.outputSchema = _OUTPUT_SCHEMAS[t.name]
+        elif not t.outputSchema:
+            t.outputSchema = _STANDARD_OUTPUT
+
+    # ── Depreciação: tools substituídas por rollups (Fase 2A) ──
+    # Estas 69 tools foram colapsadas nos 16 <domain>_manage rollups.
+    # As funções subjacentes CONTINUAM existindo — só a definição
+    # da tool individual é removida para reduzir o tool count.
+    _DEPRECATED = {
+        "add_audio_effect", "add_collision_shape", "add_control_node",
+        "add_node", "add_script_signal", "add_script_variable",
+        "add_state_transition", "attach_script", "build_export",
+        "chain_tweens", "configure_audio_bus", "configure_autoload",
+        "configure_input_action", "configure_standard_material_3d",
+        "connect_signal", "create_animation", "create_animation_player",
+        "create_csg_shape", "create_health_bar", "create_hud_template",
+        "create_joint_2d", "create_light_3d", "create_loading_screen",
+        "create_main_menu", "create_particles_3d", "create_pause_menu",
+        "create_project", "create_save_system", "create_scene",
+        "create_state_machine", "create_tilemap_layer", "create_tileset",
+        "create_tween_animation", "create_ui_scene", "define_save_data",
+        "delete_file", "delete_node", "detach_script",
+        "enable_debug_collisions", "enable_debug_navigation",
+        "generate_background_gradient", "generate_gdscript",
+        "generate_placeholder_sprite", "generate_placeholder_texture_atlas",
+        "generate_tilemap_from_noise", "generate_tileset_from_colors",
+        "get_node_property", "get_performance_stats",
+        "get_project_settings", "import_audio", "import_sprite_sheet",
+        "import_texture", "inspect_project", "instance_scene_as_child",
+        "list_export_presets", "list_signals", "load_scene_tree",
+        "move_file", "paint_tilemap_cell", "reparent_node",
+        "set_active_project", "set_collision_layer_mask",
+        "set_main_scene", "set_node_property", "set_physics_material",
+        "set_project_setting", "suggest_color_palette",
+        "validate_export_templates_installed", "validate_gdscript_syntax",
+        # Onda Extra
+        "compile_test", "run_game", "stop_game", "smart_restart",
+        "launch_editor", "close_editor",
+        "setup_camera_2d", "setup_camera_follow", "setup_camera_shake",
+        "create_navigation_region_2d", "create_navigation_agent_2d",
+        "bake_navigation_polygon",
+        "create_dialogue_system", "add_dialogue_node", "create_dialogue_ui",
+        "create_inventory_system", "define_inventory_item", "create_inventory_ui",
+        "configure_particles_2d", "create_particles_2d", "create_light_2d",
+        "setup_screen_flash", "setup_world_environment",
+        "generate_shader_2d", "apply_shader_to_node", "create_shader_material",
+        "analyze_game_structure", "suggest_next_steps",
+        "find_missing_references", "validate_game_design",
+        "estimate_game_scope", "search_codebase", "get_project_history",
+        "list_backups", "restore_backup", "git_commit_checkpoint",
+        "undo_last_action", "get_undo_history",
+        "compare_screenshots", "detect_empty_screen", "detect_offscreen_elements",
+    }
+    _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name not in _DEPRECATED]
+
+    # ── Pós-processador: garantir 4 hints em 100% das tools ──
+    _TOOL_DEFS_CACHE = _apply_hints(_TOOL_DEFS_CACHE)
+
+    # ── Onda 5: compactar descricoes ────────────────────────
+    _TOOL_DEFS_CACHE = _compact_all_tool_descriptions(_TOOL_DEFS_CACHE)
 
     return _TOOL_DEFS_CACHE
 
@@ -3358,182 +5073,272 @@ def _build_handlers() -> dict:
     global _HANDLERS_CACHE
     if _HANDLERS_CACHE is not None:
         return _HANDLERS_CACHE
+
+    # Onda 5: cache wrappers para handlers de leitura pesada
+    from tools.cache_utils import cached_tool
+
     _HANDLERS_CACHE = {
         "ping": _handle_ping,
         "validate_godot_version": _handle_validate_godot_version,
-        "set_active_project": _handle_set_active_project,
-        "create_project": _handle_create_project,
-        "get_project_settings": _handle_get_project_settings,
-        "set_project_setting": _handle_set_project_setting,
-        "set_main_scene": _handle_set_main_scene,
-        "inspect_project": _handle_inspect_project,
         "read_file": _handle_read_file,
         "write_file": _handle_write_file,
-        "delete_file": _handle_delete_file,
-        "move_file": _handle_move_file,
-        "create_scene": _handle_create_scene,
-        "load_scene_tree": _handle_load_scene_tree,
-        "add_node": _handle_add_node,
-        "delete_node": _handle_delete_node,
-        "set_node_property": _handle_set_node_property,
-        "get_node_property": _handle_get_node_property,
-        # Fase 2: ClassDB
-        "query_classdb": _handle_query_classdb,
+        # Fase 2: ClassDB (com cache Onda 5)
+        "query_classdb": cached_tool("query_classdb", _handle_query_classdb),
+        "search_classdb": cached_tool("search_classdb", _handle_search_classdb),
+        "download_asset": _handle_download_asset,
+        "import_downloaded_asset": _handle_import_downloaded_asset,
+        "workflow_snapshot": _handle_workflow_snapshot,
+        "workflow_handoff": _handle_workflow_handoff,
+        "project_map": _handle_project_map,
+        "configure_security": _handle_configure_security,
+        "security_status": _handle_security_status,
+        "run_gut_tests": _handle_run_gut_tests,
+        "assert_node_exists": _handle_assert_node_exists,
+        "simulate_input_sequence": _handle_simulate_input_sequence,
+        "vibe_coding_mode": _handle_vibe_coding_mode,
+        "get_vibe_context": _handle_get_vibe_context,
+        "debugger_set_breakpoint": _handle_debugger_set_breakpoint,
+        "debugger_status": _handle_debugger_status,
+        "debugger_step": _handle_debugger_step,
+        "debugger_get_stack": _handle_debugger_get_stack,
+        "debugger_get_variables": _handle_debugger_get_variables,
+        "game_http_request": _handle_game_http_request,
+        "game_multiplayer": _handle_game_multiplayer,
+        "set_safety_policy": _handle_set_safety_policy,
+        "get_audit_log": _handle_get_audit_log,
+        "get_audit_replay": _handle_get_audit_replay,
+        "safe_write_gdscript": _handle_safe_write_gdscript,
+        "tool_catalog": _handle_tool_catalog,
+        "tool_groups": _handle_tool_groups,
+        "game_serialize_state": _handle_game_serialize_state,
+        "start_recording": _handle_start_recording,
+        "stop_recording": _handle_stop_recording,
+        "game_call_method": _handle_game_call_method,
+        "game_spawn_node": _handle_game_spawn_node,
+        "game_raycast": _handle_game_raycast,
+        "game_get_camera": _handle_game_get_camera,
+        "game_play_animation": _handle_game_play_animation,
+        "game_find_nodes_by_class": _handle_game_find_nodes_by_class,
+        "game_await_signal": _handle_game_await_signal,
+        "game_pause": _handle_game_pause,
+        "game_performance": _handle_game_performance,
+        "game_window": _handle_game_window,
+        "game_input_state": _handle_game_input_state,
+        "generate_ci_snippet": _handle_generate_ci_snippet,
+        "resource_dependency_graph": _handle_resource_dependency_graph,
+        "build_csharp": _handle_build_csharp,
         "list_valid_node_types": _handle_list_valid_node_types,
         # Fase 2: Cenas extendidas
-        "reparent_node": _handle_reparent_node,
-        "instance_scene_as_child": _handle_instance_scene_as_child,
-        "connect_signal": _handle_connect_signal,
-        "list_signals": _handle_list_signals,
         # Fase 2: Scripts
-        "generate_gdscript": _handle_generate_gdscript,
-        "attach_script": _handle_attach_script,
-        "detach_script": _handle_detach_script,
-        "validate_gdscript_syntax": _handle_validate_gdscript_syntax,
-        "add_script_variable": _handle_add_script_variable,
-        "add_script_signal": _handle_add_script_signal,
         # Fase 2: Física
-        "add_collision_shape": _handle_add_collision_shape,
-        "set_collision_layer_mask": _handle_set_collision_layer_mask,
         # Fase 2: Assets
-        "import_texture": _handle_import_texture,
-        "import_sprite_sheet": _handle_import_sprite_sheet,
-        "import_audio": _handle_import_audio,
         # Fase 2: Input e Autoload
-        "configure_input_action": _handle_configure_input_action,
         "install_mcp_addon": _handle_install_mcp_addon,
-        "configure_autoload": _handle_configure_autoload,
+        "bootstrap_godot_mcp": _handle_bootstrap_godot_mcp,
         # Fase 2: Runtime
-        "compile_test": _handle_compile_test,
-        "run_game": _handle_run_game,
-        "stop_game": _handle_stop_game,
-        "smart_restart": _handle_smart_restart,
         # Fase 3: Editor
-        "launch_editor": _handle_launch_editor,
-        "close_editor": _handle_close_editor,
         "take_screenshot": _handle_take_screenshot,
         "read_console_output": _handle_read_console_output,
         # Fase 4: Tilemap, Animação, UI
-        "create_tileset": _handle_create_tileset,
-        "create_tilemap_layer": _handle_create_tilemap_layer,
-        "paint_tilemap_cell": _handle_paint_tilemap_cell,
-        "create_animation_player": _handle_create_animation_player,
-        "create_animation": _handle_create_animation,
-        "create_ui_scene": _handle_create_ui_scene,
-        "add_control_node": _handle_add_control_node,
         # Fase 5: Export, Segurança
-        "list_export_presets": _handle_list_export_presets,
-        "validate_export_templates_installed": _handle_validate_export_templates_installed,
-        "build_export": _handle_build_export,
-        "list_backups": _handle_list_backups,
-        "restore_backup": _handle_restore_backup,
-        "git_commit_checkpoint": _handle_git_commit_checkpoint,
         # Game Bridge
         "inject_input_event": _handle_inject_input_event,
         "execute_gdscript_runtime": _handle_execute_gdscript_runtime,
         "watch_signal": _handle_watch_signal,
         # Onda 1: Visão
         "capture_game_screenshot": _handle_capture_game_screenshot,
-        "compare_screenshots": _handle_compare_screenshots,
-        "detect_empty_screen": _handle_detect_empty_screen,
-        "detect_offscreen_elements": _handle_detect_offscreen_elements,
         # Onda 2: Batch
         "add_nodes_batch": _handle_add_nodes_batch,
         "set_properties_batch": _handle_set_properties_batch,
+        "batch_atomic_edit": _handle_batch_atomic_edit,
+        # Onda 12: Arte IA (ChatGPT/DALL-E + Pillow procedural)
+        "generate_game_art": _handle_generate_game_art,
+        "apply_game_art": _handle_apply_game_art,
+        # Pacote C: Pipeline FLUX.2 + Pós-processamento
+        "generate_game_art_flux": generate_game_art_flux,
+        "remove_background": remove_background,
+        "optimize_sprite": optimize_sprite,
+        "create_spritesheet": create_spritesheet,
         # Onda 3: Assets
-        "generate_placeholder_sprite": _handle_generate_placeholder_sprite,
-        "generate_placeholder_texture_atlas": _handle_generate_placeholder_texture_atlas,
-        "generate_background_gradient": _handle_generate_background_gradient,
-        "generate_tileset_from_colors": _handle_generate_tileset_from_colors,
         "generate_audio_sfx": _handle_generate_audio_sfx,
-        "suggest_color_palette": _handle_suggest_color_palette,
+        # Pacote D: TTS Kokoro/Edge
+        "generate_voice": generate_voice,
         # Onda 4: IA Agêntica
-        "analyze_game_structure": _handle_analyze_game_structure,
-        "suggest_next_steps": _handle_suggest_next_steps,
-        "find_missing_references": _handle_find_missing_references,
-        "validate_game_design": _handle_validate_game_design,
-        "estimate_game_scope": _handle_estimate_game_scope,
-        "search_codebase": _handle_search_codebase,
-        "get_project_history": _handle_get_project_history,
         # Onda 5: Cobertura Godot
         "create_animation_tree": _handle_create_animation_tree,
-        "set_physics_material": _handle_set_physics_material,
         "create_joint_2d": _handle_create_joint_2d,
         "import_3d_model": _handle_import_3d_model,
         "create_particles_2d": _handle_create_particles_2d,
         "create_light_2d": _handle_create_light_2d,
-        "create_shader_material": _handle_create_shader_material,
         # Onda 7: Robustez
         "health_check": _handle_health_check,
         "self_test": _handle_self_test,
         # Onda 8: DevSolo Crítico
         "setup_camera_2d": _handle_setup_camera_2d,
-        "setup_camera_follow": _handle_setup_camera_follow,
-        "setup_camera_shake": _handle_setup_camera_shake,
-        "create_main_menu": _handle_create_main_menu,
-        "create_hud_template": _handle_create_hud_template,
-        "create_pause_menu": _handle_create_pause_menu,
-        "create_health_bar": _handle_create_health_bar,
-        "create_save_system": _handle_create_save_system,
-        "define_save_data": _handle_define_save_data,
-        "create_state_machine": _handle_create_state_machine,
-        "add_state_transition": _handle_add_state_transition,
-        "create_tween_animation": _handle_create_tween_animation,
-        "chain_tweens": _handle_chain_tweens,
         "create_navigation_region_2d": _handle_create_navigation_region_2d,
         "create_navigation_agent_2d": _handle_create_navigation_agent_2d,
-        "bake_navigation_polygon": _handle_bake_navigation_polygon,
-        "setup_world_environment": _handle_setup_world_environment,
-        "setup_screen_flash": _handle_setup_screen_flash,
         # Onda 9: Polimento Visual
         "create_parallax_background": _handle_create_parallax_background,
         "add_parallax_layer": _handle_add_parallax_layer,
         "configure_particles_2d": _handle_configure_particles_2d,
         "create_particles_3d": _handle_create_particles_3d,
         "generate_shader_2d": _handle_generate_shader_2d,
-        "apply_shader_to_node": _handle_apply_shader_to_node,
         "create_path_2d": _handle_create_path_2d,
         "create_patrol_route": _handle_create_patrol_route,
         # Onda 10: Gênero-Específico
-        "create_dialogue_system": _handle_create_dialogue_system,
-        "add_dialogue_node": _handle_add_dialogue_node,
-        "create_dialogue_ui": _handle_create_dialogue_ui,
-        "create_inventory_system": _handle_create_inventory_system,
-        "define_inventory_item": _handle_define_inventory_item,
-        "create_inventory_ui": _handle_create_inventory_ui,
         "create_bullet_template": _handle_create_bullet_template,
         "create_gun_system": _handle_create_gun_system,
-        "generate_tilemap_from_noise": _handle_generate_tilemap_from_noise,
         "generate_dungeon_rooms": _handle_generate_dungeon_rooms,
-        "create_loading_screen": _handle_create_loading_screen,
         "load_scene_async": _handle_load_scene_async,
         # Onda 11: Complementos
         "add_raycast_2d": _handle_add_raycast_2d,
         "add_shapecast_2d": _handle_add_shapecast_2d,
-        "enable_debug_collisions": _handle_enable_debug_collisions,
-        "enable_debug_navigation": _handle_enable_debug_navigation,
-        "get_performance_stats": _handle_get_performance_stats,
         "setup_localization": _handle_setup_localization,
         "add_translation_string": _handle_add_translation_string,
         "create_light_3d": _handle_create_light_3d,
-        "create_csg_shape": _handle_create_csg_shape,
         "configure_standard_material_3d": _handle_configure_standard_material_3d,
         "configure_export_preset": _handle_configure_export_preset,
-        "configure_audio_bus": _handle_configure_audio_bus,
-        "add_audio_effect": _handle_add_audio_effect,
         # Novas tools (refinamento)
         "generate_project_structure": _handle_generate_project_structure,
         "record_gameplay_gif": _handle_record_gameplay_gif,
         # Undo/Desfazer
-        "undo_last_action": _handle_undo_last_action,
-        "get_undo_history": _handle_get_undo_history,
+        # LSP Bridge (Fase 2A / C3)
+        "gdscript_lsp_connect": _handle_gdscript_lsp_connect,
+        "gdscript_lsp_disconnect": _handle_gdscript_lsp_disconnect,
+        "gdscript_references": _handle_gdscript_references,
+        "gdscript_definition": _handle_gdscript_definition,
+        "gdscript_hover": _handle_gdscript_hover,
+        "gdscript_symbols": _handle_gdscript_symbols,
+        "gdscript_rename": _handle_gdscript_rename,
+        "gdscript_diagnostics": _handle_gdscript_diagnostics,
+        "gdscript_sync_file": _handle_gdscript_sync_file,
+        # Addon Bridge (Fase 2B / A2)
+        "addon_connect": _handle_addon_connect,
+        "addon_disconnect": _handle_addon_disconnect,
+        "addon_is_available": _handle_addon_is_available,
+        "addon_ping": _handle_addon_ping,
+        "addon_create_node": _handle_addon_create_node,
+        "addon_delete_node": _handle_addon_delete_node,
+        "addon_set_property": _handle_addon_set_property,
+        "addon_reparent_node": _handle_addon_reparent_node,
+        "addon_duplicate_node": _handle_addon_duplicate_node,
+        "addon_batch_edit": _handle_addon_batch_edit,
+        "addon_take_screenshot": _handle_addon_take_screenshot,
+        "addon_get_scene_tree": _handle_addon_get_scene_tree,
+        # Playtest (Fase 2B / A3+A4+A5)
+        "freeze_game_clock": _handle_freeze_game_clock,
+        "unfreeze_game_clock": _handle_unfreeze_game_clock,
+        "step_game_time": _handle_step_game_time,
+        "step_until": _handle_step_until,
+        "get_runtime_state_digest": _handle_get_runtime_state_digest,
+        "capture_runtime_errors": _handle_capture_runtime_errors,
+        # Playtest Onda 1 (watch_state, godot_exec, effect_probe)
+        "watch_state_start": watch_state_start,
+        "watch_state_collect": watch_state_collect,
+        "godot_exec": godot_exec,
+        "effect_probe": effect_probe,
+        # Balance Onda 1
+        "balance_analyze": balance_analyze,
+        "wave_generate": wave_generate,
+        "dps_calculator": dps_calculator,
+        "loot_table_generate": loot_table_generate,
+        "gdd_generate": gdd_generate,
+        # Behavior Trees (Onda 2)
+        "behavior_tree_generate": behavior_tree_generate,
+        "behavior_tree_list_templates": behavior_tree_list_templates,
+        # Performance Profiler (Onda 2)
+        "profile_frame": profile_frame,
+        "profile_memory": profile_memory,
+        # Shader NL (Onda 3)
+        "shader_generate": shader_generate,
+        "shader_list_templates": shader_list_templates,
+        # World Generation (Onda 3)
+        "terrain_generate": terrain_generate,
+        "dungeon_generate": dungeon_generate,
+        "world_describe": world_describe,
+        # 3D Asset Generation (Onda 3)
+        "generate_3d_placeholder": generate_3d_placeholder,
+        "generate_3d_asset": generate_3d_asset,
+        # Deploy + Marketplace (Onda 4 — FINAL)
+        "deploy_itch": deploy_itch,
+        "release_checklist": release_checklist,
+        "auto_screenshot": auto_screenshot,
+        "marketplace_search": marketplace_search,
+        "marketplace_download": marketplace_download,
+        # Juice (Onda 5)
+        "juice_apply": juice_apply,
+        "juice_list_presets": juice_list_presets,
+        # Auto-Config (Fase 2C)
+        "validate_mcp_environment": _handle_validate_mcp_environment,
+        "setup_mcp_config": _handle_setup_mcp_config,
+        # Pipeline Executor (Onda 7)
+        "create_entity": create_entity,
+        "project_status": project_status,
     }
+
+    # ── Rollups Fase 2A / C1 ───────────────────────────────────────
+    try:
+        from tools.rollups import get_rollup_handlers
+        _HANDLERS_CACHE.update(get_rollup_handlers())
+    except Exception:
+        pass  # Rollups são bônus — se falhar, server ainda funciona sem eles
+
+    # ── Depreciação: handlers substituídos por rollups ──────────
+    _DEPRECATED_H = {
+        "add_audio_effect", "add_collision_shape", "add_control_node",
+        "add_node", "add_script_signal", "add_script_variable",
+        "add_state_transition", "attach_script", "build_export",
+        "chain_tweens", "configure_audio_bus", "configure_autoload",
+        "configure_input_action", "configure_standard_material_3d",
+        "connect_signal", "create_animation", "create_animation_player",
+        "create_csg_shape", "create_health_bar", "create_hud_template",
+        "create_joint_2d", "create_light_3d", "create_loading_screen",
+        "create_main_menu", "create_particles_3d", "create_pause_menu",
+        "create_project", "create_save_system", "create_scene",
+        "create_state_machine", "create_tilemap_layer", "create_tileset",
+        "create_tween_animation", "create_ui_scene", "define_save_data",
+        "delete_file", "delete_node", "detach_script",
+        "enable_debug_collisions", "enable_debug_navigation",
+        "generate_background_gradient", "generate_gdscript",
+        "generate_placeholder_sprite", "generate_placeholder_texture_atlas",
+        "generate_tilemap_from_noise", "generate_tileset_from_colors",
+        "get_node_property", "get_performance_stats",
+        "get_project_settings", "import_audio", "import_sprite_sheet",
+        "import_texture", "inspect_project", "instance_scene_as_child",
+        "list_export_presets", "list_signals", "load_scene_tree",
+        "move_file", "paint_tilemap_cell", "reparent_node",
+        "set_active_project", "set_collision_layer_mask",
+        "set_main_scene", "set_node_property", "set_physics_material",
+        "set_project_setting", "suggest_color_palette",
+        "validate_export_templates_installed", "validate_gdscript_syntax",
+        # Onda Extra
+        "compile_test", "run_game", "stop_game", "smart_restart",
+        "launch_editor", "close_editor",
+        "setup_camera_2d", "setup_camera_follow", "setup_camera_shake",
+        "create_navigation_region_2d", "create_navigation_agent_2d",
+        "bake_navigation_polygon",
+        "create_dialogue_system", "add_dialogue_node", "create_dialogue_ui",
+        "create_inventory_system", "define_inventory_item", "create_inventory_ui",
+        "configure_particles_2d", "create_particles_2d", "create_light_2d",
+        "setup_screen_flash", "setup_world_environment",
+        "generate_shader_2d", "apply_shader_to_node", "create_shader_material",
+        "analyze_game_structure", "suggest_next_steps",
+        "find_missing_references", "validate_game_design",
+        "estimate_game_scope", "search_codebase", "get_project_history",
+        "list_backups", "restore_backup", "git_commit_checkpoint",
+        "undo_last_action", "get_undo_history",
+        "compare_screenshots", "detect_empty_screen", "detect_offscreen_elements",
+    }
+    _HANDLERS_CACHE = {k: v for k, v in _HANDLERS_CACHE.items() if k not in _DEPRECATED_H}
+
     return _HANDLERS_CACHE
 
 
 @server.call_tool()
 async def call_tool(name: str, arguments: dict) -> list[TextContent]:
     """Roteia chamadas de tool para o handler correspondente."""
+    import asyncio
+
     # ── Rate Limiting (Onda 6) ──────────────────────────────────
     from tools.rate_limiter import check_rate_limit
     allowed, rate_info = check_rate_limit()
@@ -3553,7 +5358,9 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
     handler = handlers.get(name)
     if handler:
         try:
-            result = handler(arguments)
+            # P1-1: Despachar handlers para thread pool (evita bloquear event loop)
+            loop = asyncio.get_running_loop()
+            result = await loop.run_in_executor(None, handler, arguments)
             is_error = isinstance(result, dict) and result.get("status") == "error"
             # ── error_code automático (Onda 7) ──────────────────
             if is_error and "error_code" not in result:
@@ -3596,38 +5403,6 @@ def _handle_validate_godot_version(args: dict) -> dict:
     return validate_godot_version()
 
 
-def _handle_set_active_project(args: dict) -> dict:
-    return set_active_project(args["project_path"])
-
-
-def _handle_create_project(args: dict) -> dict:
-    return create_project(
-        name=args["name"],
-        path=args["path"],
-        renderer=args.get("renderer", "forward_plus"),
-    )
-
-
-def _handle_get_project_settings(args: dict) -> dict:
-    return get_project_settings(args.get("section"))
-
-
-def _handle_set_project_setting(args: dict) -> dict:
-    return set_project_setting(
-        section=args["section"],
-        key=args["key"],
-        value=args["value"],
-    )
-
-
-def _handle_set_main_scene(args: dict) -> dict:
-    return set_main_scene(args["scene_path"])
-
-
-def _handle_inspect_project(args: dict) -> dict:
-    return inspect_project(args.get("filter", "all"))
-
-
 def _handle_read_file(args: dict) -> dict:
     return read_file(
         path=args["path"],
@@ -3637,164 +5412,249 @@ def _handle_read_file(args: dict) -> dict:
 
 
 def _handle_write_file(args: dict) -> dict:
-    return write_file(
+    result = write_file(
         path=args["path"],
         content=args["content"],
         mode=args.get("mode", "create"),
     )
-
-
-def _handle_delete_file(args: dict) -> dict:
-    return delete_file(args["path"])
-
-
-def _handle_move_file(args: dict) -> dict:
-    return move_file(args["from_path"], args["to_path"])
-
-
-def _handle_create_scene(args: dict) -> dict:
-    return create_scene(
-        name=args["name"],
-        root_type=args["root_type"],
-        path=args["path"],
-    )
-
-
-def _handle_load_scene_tree(args: dict) -> dict:
-    return load_scene_tree(
-        scene_path=args["scene_path"],
-        max_depth=args.get("max_depth"),
-    )
-
-
-def _handle_add_node(args: dict) -> dict:
-    return add_node(
-        scene_path=args["scene_path"],
-        parent_node_path=args["parent_node_path"],
-        node_name=args["node_name"],
-        node_type=args["node_type"],
-    )
-
-
-def _handle_delete_node(args: dict) -> dict:
-    return delete_node(args["scene_path"], args["node_path"])
-
-
-def _handle_set_node_property(args: dict) -> dict:
-    return set_node_property(
-        scene_path=args["scene_path"],
-        node_path=args["node_path"],
-        property_name=args["property_name"],
-        value=args["value"],
-    )
-
-
-def _handle_get_node_property(args: dict) -> dict:
-    return get_node_property(args["scene_path"], args["node_path"], args["property_name"])
+    if result.get("status") == "success":
+        try: from tools.editor_config import _notify_godot_file_changed; _notify_godot_file_changed(args["path"])
+        except Exception: pass
+    return result
 
 
 # ── Fase 2 Handlers ─────────────────────────────────────────────────
 
 def _handle_query_classdb(args: dict) -> dict:
-    return query_classdb(args["class_name"])
+    return query_classdb(
+        class_name=args["class_name"],
+        section=args.get("section", "all"),
+        include_inherited=args.get("include_inherited", False),
+        offset=args.get("offset", 0),
+        limit=args.get("limit", 50),
+    )
+
+
+def _handle_search_classdb(args: dict) -> dict:
+    return search_classdb(args["query"], args.get("limit", 20))
+
+
+def _handle_download_asset(args: dict) -> dict:
+    return download_asset(
+        source=args["source"],
+        query=args.get("query", ""),
+        category=args.get("category", "all"),
+        asset_id=args.get("asset_id"),
+        resolution=args.get("resolution", "2k"),
+        limit=args.get("limit", 10),
+    )
+
+
+def _handle_import_downloaded_asset(args: dict) -> dict:
+    return import_downloaded_asset(
+        args["asset_path"],
+        args.get("target_dir", "assets"),
+    )
+
+
+def _handle_workflow_snapshot(args: dict) -> dict:
+    return workflow_snapshot(args.get("description", ""), args.get("project_path"))
+
+
+def _handle_workflow_handoff(args: dict) -> dict:
+    return workflow_handoff(args.get("next_steps"), args.get("notes", ""))
+
+
+def _handle_project_map(args: dict) -> dict:
+    return generate_project_map(
+        args.get("project_path"),
+        args.get("format", "json"),
+        args.get("output_path"),
+    )
+
+
+def _handle_configure_security(args: dict) -> dict:
+    return configure_security(
+        generate_token=args.get("generate_token", True),
+        allow_remote=args.get("allow_remote", False),
+    )
+
+
+def _handle_security_status(args: dict) -> dict:
+    return security_status()
+
+
+def _handle_run_gut_tests(args: dict) -> dict:
+    return run_gut_tests(
+        args.get("project_path"),
+        args.get("test_dir", "res://tests"),
+        args.get("godot_path"),
+        args.get("timeout", 60),
+    )
+
+
+def _handle_assert_node_exists(args: dict) -> dict:
+    return assert_node_exists(args["scene_path"], args["node_path"], args.get("node_type"))
+
+
+def _handle_simulate_input_sequence(args: dict) -> dict:
+    return simulate_input_sequence(args["actions"], args.get("delay_ms", 100))
+
+
+def _handle_vibe_coding_mode(args: dict) -> dict:
+    return vibe_coding_mode(
+        args.get("enabled", True),
+        args.get("scene_path"),
+        args.get("focus_node"),
+    )
+
+
+def _handle_get_vibe_context(args: dict) -> dict:
+    return get_vibe_context()
+
+
+def _handle_debugger_set_breakpoint(args: dict) -> dict:
+    return debugger_set_breakpoint(args["script_path"], args["line"], args.get("condition"))
+
+
+def _handle_debugger_status(args: dict) -> dict:
+    return debugger_status()
+
+
+def _handle_debugger_step(args: dict) -> dict:
+    return debugger_step(args.get("step_type","over"))
+
+
+def _handle_debugger_get_stack(args: dict) -> dict:
+    return debugger_get_stack()
+
+
+def _handle_debugger_get_variables(args: dict) -> dict:
+    return debugger_get_variables(args.get("variable_name"))
+
+
+def _handle_game_http_request(args: dict) -> dict:
+    return game_http_request(args["url"], args.get("method","GET"), args.get("headers"), args.get("body"))
+
+
+def _handle_game_multiplayer(args: dict) -> dict:
+    return game_multiplayer(args["action"], args.get("port",9090), args.get("address","127.0.0.1"))
+
+
+def _handle_set_safety_policy(args: dict) -> dict:
+    return set_safety_policy(args.get("enabled"), args.get("allowlist"), args.get("blocklist"), args.get("confirm_destructive"))
+
+
+def _handle_get_audit_log(args: dict) -> dict:
+    return get_audit_log(args.get("limit", 50))
+
+
+def _handle_get_audit_replay(args: dict) -> dict:
+    return get_audit_replay(args.get("steps", 10))
+
+
+def _handle_safe_write_gdscript(args: dict) -> dict:
+    result = safe_write_gdscript(args["file_path"], args["content"], args.get("project_path"), args.get("strict", True))
+    if isinstance(result, dict) and result.get("status") == "success":
+        try: from tools.editor_config import _notify_godot_file_changed; _notify_godot_file_changed(args["file_path"])
+        except Exception: pass
+    return result
+
+
+def _handle_tool_catalog(args: dict) -> dict:
+    return tool_catalog(args.get("query",""), args.get("group",""), args.get("limit",20))
+
+
+def _handle_tool_groups(args: dict) -> dict:
+    return tool_groups(args["action"], args.get("group",""), args.get("enabled",True))
+
+
+def _handle_game_serialize_state(args: dict) -> dict:
+    return game_serialize_state(args["action"], args.get("file_name","game_state.json"))
+
+
+def _handle_start_recording(args: dict) -> dict:
+    return start_recording(args.get("session_name",""))
+
+
+def _handle_stop_recording(args: dict) -> dict:
+    return stop_recording(args["session_name"])
+
+
+def _handle_game_call_method(args: dict) -> dict:
+    return game_call_method(args["node_path"], args["method"], args.get("args"))
+
+
+def _handle_game_spawn_node(args: dict) -> dict:
+    return game_spawn_node(args["parent_path"], args["node_type"], args.get("node_name",""), args.get("properties"))
+
+
+def _handle_game_raycast(args: dict) -> dict:
+    return game_raycast(args["origin_x"], args["origin_y"], args["target_x"], args["target_y"], args.get("collision_mask",1), args.get("mode","2d"))
+
+
+def _handle_game_get_camera(args: dict) -> dict:
+    return game_get_camera(args.get("mode","2d"))
+
+
+def _handle_game_play_animation(args: dict) -> dict:
+    return game_play_animation(args["node_path"], args["action"], args.get("animation_name",""))
+
+
+def _handle_game_find_nodes_by_class(args: dict) -> dict:
+    return game_find_nodes_by_class(args["class_name"], args.get("limit",20))
+
+
+def _handle_game_await_signal(args: dict) -> dict:
+    return game_await_signal(args["node_path"], args["signal_name"], args.get("timeout_ms",5000))
+
+
+def _handle_game_pause(args: dict) -> dict:
+    return game_pause(args.get("action","toggle"))
+
+
+def _handle_game_performance(args: dict) -> dict:
+    return game_performance()
+
+
+def _handle_game_window(args: dict) -> dict:
+    return game_window(args.get("action","get"), args.get("width",0), args.get("height",0), args.get("fullscreen"), args.get("title",""))
+
+
+def _handle_game_input_state(args: dict) -> dict:
+    return game_input_state()
+
+
+def _handle_generate_ci_snippet(args: dict) -> dict:
+    return generate_ci_snippet(args.get("project_path",""), args.get("target_platforms","windows,linux,macos"))
+
+
+def _handle_resource_dependency_graph(args: dict) -> dict:
+    return resource_dependency_graph(args.get("project_path",""))
+
+
+def _handle_build_csharp(args: dict) -> dict:
+    return build_csharp(args.get("project_path",""))
 
 
 def _handle_list_valid_node_types(args: dict) -> dict:
     return list_valid_node_types()
 
 
-def _handle_reparent_node(args: dict) -> dict:
-    return reparent_node(args["scene_path"], args["node_path"], args["new_parent_path"])
-
-
-def _handle_instance_scene_as_child(args: dict) -> dict:
-    return instance_scene_as_child(
-        args["scene_path"], args["parent_node_path"],
-        args["instanced_scene_path"], args.get("instance_name"),
-    )
-
-
-def _handle_connect_signal(args: dict) -> dict:
-    return connect_signal(
-        args["scene_path"], args["from_node_path"], args["signal_name"],
-        args["to_node_path"], args["method_name"],
-    )
-
-
-def _handle_list_signals(args: dict) -> dict:
-    return list_signals_for_node(
-        args.get("scene_path"), args.get("node_path"), args.get("node_type"),
-    )
-
-
-def _handle_generate_gdscript(args: dict) -> dict:
-    return generate_gdscript(args["template"], args.get("variables", {}), args["save_path"])
-
-
-def _handle_attach_script(args: dict) -> dict:
-    return attach_script(args["scene_path"], args["node_path"], args["script_path"])
-
-
-def _handle_detach_script(args: dict) -> dict:
-    return detach_script(args["scene_path"], args["node_path"])
-
-
-def _handle_validate_gdscript_syntax(args: dict) -> dict:
-    return validate_gdscript_syntax(args["script_path"])
-
-
-def _handle_add_script_variable(args: dict) -> dict:
-    return add_script_variable(
-        args["script_path"], args["var_name"],
-        args.get("var_type", "Variant"),
-        args.get("default_value"),
-        args.get("export", False),
-    )
-
-
-def _handle_add_script_signal(args: dict) -> dict:
-    return add_script_signal(args["script_path"], args["signal_name"], args.get("args"))
-
-
-def _handle_add_collision_shape(args: dict) -> dict:
-    return add_collision_shape(
-        args["scene_path"], args["parent_node_path"],
-        args["shape_type"], args["dimensions"],
-    )
-
-
-def _handle_set_collision_layer_mask(args: dict) -> dict:
-    return set_collision_layer_mask(
-        args["scene_path"], args["node_path"],
-        args["layer_bits"], args["mask_bits"],
-    )
-
-
-def _handle_import_texture(args: dict) -> dict:
-    return import_texture(args["source_path"], args["target_res_path"])
-
-
-def _handle_import_sprite_sheet(args: dict) -> dict:
-    return import_sprite_sheet(
-        args["source_path"], args["target_res_path"],
-        args["frame_width"], args["frame_height"],
-        args["target_scene_path"], args["target_node_path"],
-        args["animations"],
-    )
-
-
-def _handle_import_audio(args: dict) -> dict:
-    return import_audio(args["source_path"], args["target_res_path"])
-
-
-def _handle_configure_input_action(args: dict) -> dict:
-    return configure_input_action(
-        args["action_name"], args["keys"], args.get("joypad_buttons"),
-    )
-
-
 def _handle_install_mcp_addon(args: dict) -> dict:
     return install_mcp_addon(args.get("project_path"))
+
+
+def _handle_bootstrap_godot_mcp(args: dict) -> dict:
+    """Handler para bootstrap_godot_mcp — conexão automática completa."""
+    return bootstrap_godot_mcp(
+        target=args.get("target", "full"),
+        project_path=args.get("project_path"),
+        godot_path=args.get("godot_path"),
+        launch_editor=args.get("launch_editor", True),
+        timeout_godot=args.get("timeout_godot", 30),
+        timeout_addon=args.get("timeout_addon", 15),
+    )
 
 
 def _handle_generate_project_structure(args: dict) -> dict:
@@ -3813,46 +5673,7 @@ def _handle_record_gameplay_gif(args: dict) -> dict:
     )
 
 
-def _handle_undo_last_action(args: dict) -> dict:
-    return undo_last_action()
-
-
-def _handle_get_undo_history(args: dict) -> dict:
-    return get_undo_history()
-
-
-def _handle_configure_autoload(args: dict) -> dict:
-    return configure_autoload(
-        args["name"], args["script_path"], args.get("singleton", True),
-    )
-
-
-def _handle_compile_test(args: dict) -> dict:
-    return compile_test()
-
-
-def _handle_run_game(args: dict) -> dict:
-    return run_game(args.get("scene_path"))
-
-
-def _handle_stop_game(args: dict) -> dict:
-    return stop_game()
-
-
-def _handle_smart_restart(args: dict) -> dict:
-    from tools.runtime_ops import smart_restart
-    return smart_restart(args.get("project_path"))
-
-
 # ── Fase 3 Handlers ─────────────────────────────────────────────────
-
-def _handle_launch_editor(args: dict) -> dict:
-    return launch_editor(args.get("scene_path"))
-
-
-def _handle_close_editor(args: dict) -> dict:
-    return close_editor()
-
 
 def _handle_take_screenshot(args: dict) -> dict:
     return take_screenshot()
@@ -3864,89 +5685,7 @@ def _handle_read_console_output(args: dict) -> dict:
 
 # ── Fase 4 Handlers ─────────────────────────────────────────────────
 
-def _handle_create_tileset(args: dict) -> dict:
-    return create_tileset(
-        args["tileset_name"], args["save_path"],
-        args.get("tile_width", 16), args.get("tile_height", 16),
-    )
-
-
-def _handle_create_tilemap_layer(args: dict) -> dict:
-    return create_tilemap_layer(
-        args["scene_path"], args["parent_node_path"],
-        args["layer_name"], args["tileset_path"],
-    )
-
-
-def _handle_paint_tilemap_cell(args: dict) -> dict:
-    return paint_tilemap_cell(
-        args["scene_path"], args["layer_node_path"],
-        args["cell_x"], args["cell_y"],
-        args.get("source_id", 0),
-        args.get("atlas_coords_x", 0), args.get("atlas_coords_y", 0),
-    )
-
-
-def _handle_create_animation_player(args: dict) -> dict:
-    return create_animation_player(
-        args["scene_path"], args["parent_node_path"],
-        args.get("player_name", "AnimationPlayer"),
-    )
-
-
-def _handle_create_animation(args: dict) -> dict:
-    return create_animation(
-        args["scene_path"], args["anim_player_path"],
-        args["anim_name"], args["track_path"], args["track_type"],
-        args["keyframes"], args.get("fps", 10.0),
-    )
-
-
-def _handle_create_ui_scene(args: dict) -> dict:
-    return create_ui_scene(args["name"], args["path"])
-
-
-def _handle_add_control_node(args: dict) -> dict:
-    return add_control_node(
-        args["scene_path"], args["parent_node_path"],
-        args["node_name"], args["node_type"],
-        args.get("properties"),
-    )
-
-
 # ── Fase 5 Handlers ─────────────────────────────────────────────────
-
-def _handle_list_export_presets(args: dict) -> dict:
-    return list_export_presets()
-
-
-def _handle_validate_export_templates_installed(args: dict) -> dict:
-    return validate_export_templates_installed()
-
-
-def _handle_build_export(args: dict) -> dict:
-    return build_export(args.get("preset_name"), args.get("output_path"))
-
-
-def _handle_list_backups(args: dict) -> dict:
-    backups = list_backups(args.get("original_path"))
-    return {"status": "success", "backups": backups}
-
-
-def _handle_restore_backup(args: dict) -> dict:
-    if args.get("backup_id"):
-        return restore_backup(args["backup_id"])
-    elif args.get("original_path") and args.get("latest"):
-        backups = list_backups(args["original_path"])
-        if backups:
-            return restore_backup(backups[0]["backup_id"])
-        return {"status": "error", "message": "Nenhum backup encontrado para este arquivo."}
-    return {"status": "error", "message": "Forneça backup_id ou (original_path + latest: true)."}
-
-
-def _handle_git_commit_checkpoint(args: dict) -> dict:
-    return git_commit_checkpoint(args["message"])
-
 
 # ── Game Bridge Handlers ─────────────────────────────────────────────
 
@@ -3970,27 +5709,6 @@ def _handle_capture_game_screenshot(args: dict) -> dict:
         scene_path=args.get("scene_path"),
         resolution_width=args.get("resolution_width", 1280),
         resolution_height=args.get("resolution_height", 720),
-    )
-
-
-def _handle_compare_screenshots(args: dict) -> dict:
-    return compare_screenshots(args["before_path"], args["after_path"])
-
-
-def _handle_detect_empty_screen(args: dict) -> dict:
-    return detect_empty_screen(
-        screenshot_path=args.get("screenshot_path"),
-        image_base64=args.get("image_base64"),
-        empty_threshold=args.get("empty_threshold", 0.95),
-    )
-
-
-def _handle_detect_offscreen_elements(args: dict) -> dict:
-    return detect_offscreen_elements(
-        scene_path=args["scene_path"],
-        viewport_width=args.get("viewport_width", 1280),
-        viewport_height=args.get("viewport_height", 720),
-        margin=args.get("margin", 50),
     )
 
 
@@ -4036,55 +5754,16 @@ def _handle_set_properties_batch(args: dict) -> dict:
     return {"status": "success", "set": set_count, "errors": errors or None}
 
 
+def _handle_batch_atomic_edit(args: dict) -> dict:
+    """Handler para batch_atomic_edit — operações atômicas com rollback."""
+    return batch_atomic_edit(
+        operations=args.get("operations", []),
+        scene_path=args.get("scene_path"),
+        mode=args.get("mode", "auto"),
+    )
+
+
 # ── Onda 3: Assets Handlers ─────────────────────────────────────────
-
-def _handle_generate_placeholder_sprite(args: dict) -> dict:
-    return generate_placeholder_sprite(
-        name=args["name"],
-        width=args.get("width", 64),
-        height=args.get("height", 64),
-        color=args.get("color", "#3498db"),
-        shape=args.get("shape", "rectangle"),
-        save_path=args.get("save_path"),
-    )
-
-
-def _handle_generate_placeholder_texture_atlas(args: dict) -> dict:
-    return generate_placeholder_texture_atlas(
-        name=args["name"],
-        frame_width=args.get("frame_width", 64),
-        frame_height=args.get("frame_height", 64),
-        columns=args.get("columns", 4),
-        rows=args.get("rows", 1),
-        color=args.get("color", "#e74c3c"),
-        shape=args.get("shape", "rectangle"),
-        variation=args.get("variation", "position"),
-        save_path=args.get("save_path"),
-    )
-
-
-def _handle_generate_background_gradient(args: dict) -> dict:
-    return generate_background_gradient(
-        name=args["name"],
-        width=args.get("width", 1280),
-        height=args.get("height", 720),
-        color_top=args.get("color_top", "#1a1a2e"),
-        color_bottom=args.get("color_bottom", "#16213e"),
-        direction=args.get("direction", "vertical"),
-        save_path=args.get("save_path"),
-    )
-
-
-def _handle_generate_tileset_from_colors(args: dict) -> dict:
-    return generate_tileset_from_colors(
-        palette_name=args["palette_name"],
-        colors=args["colors"],
-        tile_width=args.get("tile_width", 16),
-        tile_height=args.get("tile_height", 16),
-        save_texture_path=args.get("save_texture_path"),
-        save_tileset_path=args.get("save_tileset_path"),
-    )
-
 
 def _handle_generate_audio_sfx(args: dict) -> dict:
     return generate_audio_sfx(
@@ -4097,43 +5776,7 @@ def _handle_generate_audio_sfx(args: dict) -> dict:
     )
 
 
-def _handle_suggest_color_palette(args: dict) -> dict:
-    return suggest_color_palette(args["genre"])
-
-
 # ── Onda 4: IA Agêntica Handlers ────────────────────────────────────
-
-def _handle_analyze_game_structure(args: dict) -> dict:
-    return analyze_game_structure()
-
-
-def _handle_suggest_next_steps(args: dict) -> dict:
-    return suggest_next_steps()
-
-
-def _handle_find_missing_references(args: dict) -> dict:
-    return find_missing_references()
-
-
-def _handle_validate_game_design(args: dict) -> dict:
-    return validate_game_design()
-
-
-def _handle_estimate_game_scope(args: dict) -> dict:
-    return estimate_game_scope()
-
-
-def _handle_search_codebase(args: dict) -> dict:
-    return search_codebase(
-        query=args["query"],
-        file_pattern=args.get("file_pattern", "*.gd"),
-        max_results=args.get("max_results", 20),
-    )
-
-
-def _handle_get_project_history(args: dict) -> dict:
-    return get_project_history()
-
 
 # ── Onda 5: Cobertura Godot Handlers ──────────────────────────────
 
@@ -4151,28 +5794,63 @@ def _handle_create_animation_tree(args: dict) -> dict:
     ) if args.get("set_root", True) else r
 
 
-def _handle_set_physics_material(args: dict) -> dict:
-    return set_physics_material(
-        scene_path=args["scene_path"], node_path=args["node_path"],
-        bounce=args.get("bounce"), friction=args.get("friction"),
-        absorb=args.get("absorb"), rough=args.get("rough"),
-    )
-
-
 def _handle_create_joint_2d(args: dict) -> dict:
-    return create_joint_2d(
-        scene_path=args["scene_path"], node_a_path=args["node_a_path"],
-        node_b_path=args["node_b_path"], joint_type=args.get("joint_type", "pin"),
-        softness=args.get("softness", 0.0), bias=args.get("bias", 0.0),
-    )
+    """Cria Joint2D via add_node + configuração."""
+    sp = args["scene_path"]
+    jt = args.get("joint_type", "pin")
+    joint_type = {"pin": "PinJoint2D", "groove": "GrooveJoint2D", "damped_spring": "DampedSpringJoint2D"}.get(jt, "PinJoint2D")
+    r = add_node(sp, args["node_a_path"] if "node_a_path" in args else ".", f"{jt}_joint", joint_type)
+    if r["status"] != "success":
+        return r
+    np = f"./{jt}_joint"
+    if args.get("node_a_path"):
+        set_node_property(sp, np, "node_a", f'NodePath("{args["node_a_path"]}")')
+    if args.get("node_b_path"):
+        set_node_property(sp, np, "node_b", f'NodePath("{args["node_b_path"]}")')
+    if args.get("softness"):
+        set_node_property(sp, np, "softness", float(args["softness"]))
+    if args.get("bias"):
+        set_node_property(sp, np, "bias", float(args["bias"]))
+    return {"status": "success", "node_path": r["node_path"], "joint_type": jt, "note": "Joint 2D criada. Configure node_a e node_b se necessario."}
 
 
 def _handle_import_3d_model(args: dict) -> dict:
-    return import_3d_model(
-        source_path=args["source_path"], target_res_path=args["target_res_path"],
-        create_scene=args.get("create_scene", True),
-        scene_name=args.get("scene_name"),
-    )
+    """Importa modelo 3D (.glb/.gltf) copiando para o projeto + criando MeshInstance3D."""
+    import shutil
+    from pathlib import Path
+
+    source = args["source_path"]
+    target = args["target_res_path"]
+    create_scene = args.get("create_scene", True)
+    scene_name = args.get("scene_name")
+
+    # Valida arquivo fonte
+    src_path = Path(source)
+    if not src_path.exists():
+        return {"status": "error", "message": f"Arquivo fonte nao encontrado: {source}"}
+    if src_path.suffix.lower() not in (".glb", ".gltf"):
+        return {"status": "error", "message": f"Formato nao suportado: {src_path.suffix}. Use .glb ou .gltf."}
+
+    # Copia para o projeto
+    try:
+        target_path = Path(target) if Path(target).is_absolute() else Path.cwd() / target
+        target_path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, str(target_path))
+        imported_res = str(target_path)
+    except Exception as e:
+        return {"status": "error", "message": f"Falha ao copiar modelo: {e}"}
+
+    result = {"status": "success", "imported": imported_res}
+
+    # Cria cena opcionalmente
+    if create_scene:
+        scene_file = scene_name or f"{Path(target).stem}.tscn"
+        r = create_scene(args.get("scene_path", f"scenes/{scene_file}"), "MeshInstance3D")
+        if r["status"] == "success":
+            result["scene"] = r.get("path", scene_file)
+            result["note"] = "Modelo importado e cena criada. Adicione o mesh no MeshInstance3D manualmente."
+
+    return result
 
 
 def _handle_create_particles_2d(args: dict) -> dict:
@@ -4202,8 +5880,13 @@ def _handle_create_particles_2d(args: dict) -> dict:
     if args.get("gravity"):
         mat_line += f'gravity = Vector3({args["gravity"]})\n'
     # Escreve no .tscn
-    proj = _get_active_project() if '_get_active_project' in dir() else Path(".")
-    full = Path(proj) / sp if isinstance(proj, (str, Path)) else Path(str(proj)) / sp
+    try:
+        from tools.project_ops import get_project_settings
+        settings = get_project_settings()
+        proj = settings.get("project_path", ".")
+    except Exception:
+        proj = "."
+    full = Path(proj) / sp if proj else Path(sp)
     if full.exists():
         content = full.read_text(encoding="utf-8")
         content = content.replace("[gd_scene", f"{mat_line}\n[gd_scene")
@@ -4235,28 +5918,6 @@ def _handle_create_light_2d(args: dict) -> dict:
     for k, v in props.items():
         set_node_property(args["scene_path"], f"./{nm}", k, v)
     return {"status": "success", "node_path": r["node_path"], "light_type": godot_type}
-
-
-def _handle_create_shader_material(args: dict) -> dict:
-    """Atribui ShaderMaterial com código shader a um nó."""
-    sp = args["scene_path"]
-    np = args["node_path"]
-    shader_code = args["shader_code"]
-    shader_type = args.get("shader_type", "canvas_item")
-    proj = Path(__file__).resolve().parent
-    # Salva shader como .gdshader
-    shader_name = args.get("shader_name", "custom_shader")
-    shader_path = f"shaders/{shader_name}.gdshader"
-    full_shader = proj / shader_path
-    full_shader.parent.mkdir(parents=True, exist_ok=True)
-    shader_content = f"shader_type {shader_type};\n\n{shader_code}"
-    full_shader.write_text(shader_content, encoding="utf-8")
-    # Atribui ao nó
-    r = set_node_property(sp, np, "material", f'ShaderMaterial{{"shader": preload("res://{shader_path}")}}')
-    if r["status"] != "success":
-        return r
-    return {"status": "success", "shader_path": shader_path,
-            "node_path": f"{sp}::{np}"}
 
 
 def _get_error_code(tool_name: str, result: dict) -> int:
@@ -4404,113 +6065,6 @@ def _handle_setup_camera_2d(args: dict) -> dict:
         current=args.get("current", True),
     )
 
-def _handle_setup_camera_follow(args: dict) -> dict:
-    return setup_camera_follow(
-        scene_path=args["scene_path"],
-        camera_node_path=args["camera_node_path"],
-        target_node_path=args["target_node_path"],
-        smoothing=args.get("smoothing", 5.0),
-        offset_x=args.get("offset_x", 0.0),
-        offset_y=args.get("offset_y", 0.0),
-        deadzone_width=args.get("deadzone_width", 0.0),
-        deadzone_height=args.get("deadzone_height", 0.0),
-    )
-
-def _handle_setup_camera_shake(args: dict) -> dict:
-    return setup_camera_shake(
-        scene_path=args["scene_path"],
-        camera_node_path=args["camera_node_path"],
-        max_amplitude=args.get("max_amplitude", 20.0),
-        decay_rate=args.get("decay_rate", 2.0),
-    )
-
-def _handle_create_main_menu(args: dict) -> dict:
-    return create_main_menu(
-        scene_name=args["scene_name"],
-        game_title=args["game_title"],
-        title_font_size=args.get("title_font_size", 64),
-        buttons=args.get("buttons"),
-        background_color=args.get("background_color", "#1a1a2e"),
-        style=args.get("style", "modern"),
-    )
-
-def _handle_create_hud_template(args: dict) -> dict:
-    return create_hud_template(
-        scene_name=args.get("scene_name", "hud"),
-        elements=args.get("elements"),
-        position=args.get("position", "top_left"),
-    )
-
-def _handle_create_pause_menu(args: dict) -> dict:
-    return create_pause_menu(
-        scene_name=args.get("scene_name", "pause_menu"),
-        overlay_alpha=args.get("overlay_alpha", 0.7),
-    )
-
-def _handle_create_health_bar(args: dict) -> dict:
-    return create_health_bar(
-        scene_path=args["scene_path"],
-        parent_node_path=args.get("parent_node_path", "."),
-        max_health=args.get("max_health", 100.0),
-        bar_name=args.get("bar_name", "HealthBar"),
-        bar_width=args.get("bar_width", 250),
-        bar_height=args.get("bar_height", 25),
-        fill_color=args.get("fill_color", "#2ecc71"),
-        bg_color=args.get("bg_color", "#333333"),
-        show_text=args.get("show_text", True),
-    )
-
-def _handle_create_save_system(args: dict) -> dict:
-    return create_save_system(
-        autoload_name=args.get("autoload_name", "SaveManager"),
-        save_slots=args.get("save_slots", 3),
-        auto_save_enabled=args.get("auto_save_enabled", False),
-        auto_save_interval=args.get("auto_save_interval", 60.0),
-    )
-
-def _handle_define_save_data(args: dict) -> dict:
-    return define_save_data(
-        node_path=args["node_path"],
-        property_name=args["property_name"],
-        section=args.get("section", "default"),
-        key=args.get("key", ""),
-    )
-
-def _handle_create_state_machine(args: dict) -> dict:
-    return create_state_machine(
-        script_path=args["script_path"],
-        states=args["states"],
-        initial_state=args["initial_state"],
-    )
-
-def _handle_add_state_transition(args: dict) -> dict:
-    return add_state_transition(
-        script_path=args["script_path"],
-        from_state=args["from_state"],
-        to_state=args["to_state"],
-        condition_code=args["condition_code"],
-    )
-
-def _handle_create_tween_animation(args: dict) -> dict:
-    return create_tween_animation(
-        scene_path=args["scene_path"],
-        node_path=args["node_path"],
-        property_name=args["property_name"],
-        final_value=args["final_value"],
-        duration=args.get("duration", 0.5),
-        easing=args.get("easing", "out_quad"),
-        transition=args.get("transition", "ease_out"),
-        loops=args.get("loops", 0),
-        auto_play=args.get("auto_play", True),
-    )
-
-def _handle_chain_tweens(args: dict) -> dict:
-    return chain_tweens(
-        scene_path=args["scene_path"],
-        node_path=args["node_path"],
-        steps=args["steps"],
-    )
-
 def _handle_create_navigation_region_2d(args: dict) -> dict:
     return create_navigation_region_2d(
         scene_path=args["scene_path"],
@@ -4528,38 +6082,6 @@ def _handle_create_navigation_agent_2d(args: dict) -> dict:
         speed=args.get("speed", 200.0),
         avoidance_enabled=args.get("avoidance_enabled", True),
     )
-
-def _handle_bake_navigation_polygon(args: dict) -> dict:
-    return bake_navigation_polygon(
-        scene_path=args["scene_path"],
-        tilemap_layer_path=args["tilemap_layer_path"],
-        navigation_region_path=args["navigation_region_path"],
-        walkable_tiles=args.get("walkable_tiles"),
-    )
-
-def _handle_setup_world_environment(args: dict) -> dict:
-    return setup_world_environment(
-        scene_path=args["scene_path"],
-        parent_node_path=args.get("parent_node_path", "."),
-        background_mode=args.get("background_mode", "color"),
-        background_color=args.get("background_color", "#1a1a2e"),
-        ambient_light_color=args.get("ambient_light_color", "#333344"),
-        ambient_light_energy=args.get("ambient_light_energy", 1.0),
-        glow_enabled=args.get("glow_enabled", False),
-        glow_intensity=args.get("glow_intensity", 0.8),
-        fog_enabled=args.get("fog_enabled", False),
-        fog_density=args.get("fog_density", 0.01),
-        fog_color=args.get("fog_color", "#1a1a2e"),
-    )
-
-def _handle_setup_screen_flash(args: dict) -> dict:
-    return setup_screen_flash(
-        scene_path=args["scene_path"],
-        parent_node_path=args.get("parent_node_path", "."),
-        flash_color=args.get("flash_color", "#ffffff"),
-        flash_duration=args.get("flash_duration", 0.3),
-    )
-
 
 # ══════════════════════════════════════════════════════════════════════
 # Onda 9 — Polimento Visual Handlers (8 tools)
@@ -4614,14 +6136,6 @@ def _handle_generate_shader_2d(args: dict) -> dict:
         shader_name=args.get("shader_name", ""),
     )
 
-def _handle_apply_shader_to_node(args: dict) -> dict:
-    return apply_shader_to_node(
-        scene_path=args["scene_path"],
-        node_path=args["node_path"],
-        shader_template=args.get("shader_template", "glow"),
-        uniforms=args.get("uniforms"),
-    )
-
 def _handle_create_path_2d(args: dict) -> dict:
     return create_path_2d(
         scene_path=args["scene_path"],
@@ -4646,46 +6160,6 @@ def _handle_create_patrol_route(args: dict) -> dict:
 # Onda 10 — Gênero-Específico Handlers (12 tools)
 # ══════════════════════════════════════════════════════════════════════
 
-def _handle_create_dialogue_system(args: dict) -> dict:
-    return create_dialogue_system(autoload_name=args.get("autoload_name", "DialogueManager"))
-
-def _handle_add_dialogue_node(args: dict) -> dict:
-    return add_dialogue_node(
-        dialogue_id=args["dialogue_id"],
-        speaker=args["speaker"],
-        text=args["text"],
-        next_id=args.get("next_id", ""),
-        choices=args.get("choices"),
-        events=args.get("events"),
-    )
-
-def _handle_create_dialogue_ui(args: dict) -> dict:
-    return create_dialogue_ui(scene_name=args.get("scene_name", "dialogue_ui"))
-
-def _handle_create_inventory_system(args: dict) -> dict:
-    return create_inventory_system(
-        autoload_name=args.get("autoload_name", "InventoryManager"),
-        max_slots=args.get("max_slots", 20),
-    )
-
-def _handle_define_inventory_item(args: dict) -> dict:
-    return define_inventory_item(
-        item_id=args["item_id"],
-        item_name=args["item_name"],
-        item_type=args.get("item_type", "consumable"),
-        description=args.get("description", ""),
-        stackable=args.get("stackable", True),
-        max_stack=args.get("max_stack", 99),
-        icon_path=args.get("icon_path", ""),
-        properties=args.get("properties"),
-    )
-
-def _handle_create_inventory_ui(args: dict) -> dict:
-    return create_inventory_ui(
-        scene_name=args.get("scene_name", "inventory_ui"),
-        columns=args.get("columns", 5),
-    )
-
 def _handle_create_bullet_template(args: dict) -> dict:
     return create_bullet_template(
         bullet_name=args.get("bullet_name", "Bullet"),
@@ -4707,19 +6181,6 @@ def _handle_create_gun_system(args: dict) -> dict:
         reload_time=args.get("reload_time", 1.5),
     )
 
-def _handle_generate_tilemap_from_noise(args: dict) -> dict:
-    return generate_tilemap_from_noise(
-        scene_path=args["scene_path"],
-        tilemap_layer_path=args["tilemap_layer_path"],
-        tile_size=args.get("tile_size", 32),
-        width=args.get("width", 40),
-        height=args.get("height", 30),
-        seed=args.get("seed", 0),
-        threshold=args.get("threshold", 0.5),
-        tile_ground=args.get("tile_ground", 0),
-        tile_wall=args.get("tile_wall", 1),
-    )
-
 def _handle_generate_dungeon_rooms(args: dict) -> dict:
     return generate_dungeon_rooms(
         num_rooms=args.get("num_rooms", 8),
@@ -4729,14 +6190,6 @@ def _handle_generate_dungeon_rooms(args: dict) -> dict:
         map_height=args.get("map_height", 60),
         corridor_width=args.get("corridor_width", 2),
         seed=args.get("seed", 0),
-    )
-
-def _handle_create_loading_screen(args: dict) -> dict:
-    return create_loading_screen(
-        scene_name=args.get("scene_name", "loading_screen"),
-        tips=args.get("tips"),
-        min_load_time=args.get("min_load_time", 1.0),
-        background_color=args.get("background_color", "#1a1a2e"),
     )
 
 def _handle_load_scene_async(args: dict) -> dict:
@@ -4770,15 +6223,6 @@ def _handle_add_shapecast_2d(args: dict) -> dict:
         node_name=args.get("node_name", "ShapeCast2D"),
     )
 
-def _handle_enable_debug_collisions(args: dict) -> dict:
-    return enable_debug_collisions(enabled=args.get("enabled", True))
-
-def _handle_enable_debug_navigation(args: dict) -> dict:
-    return enable_debug_navigation(enabled=args.get("enabled", True))
-
-def _handle_get_performance_stats(args: dict) -> dict:
-    return get_performance_stats()
-
 def _handle_setup_localization(args: dict) -> dict:
     return setup_localization(
         default_locale=args.get("default_locale", "pt_BR"),
@@ -4802,15 +6246,6 @@ def _handle_create_light_3d(args: dict) -> dict:
         node_name=args.get("node_name", ""),
     )
 
-def _handle_create_csg_shape(args: dict) -> dict:
-    return create_csg_shape(
-        scene_path=args["scene_path"],
-        parent_node_path=args.get("parent_node_path", "."),
-        shape_type=args.get("shape_type", "box"),
-        dimensions=args.get("dimensions"),
-        node_name=args.get("node_name", ""),
-    )
-
 def _handle_configure_standard_material_3d(args: dict) -> dict:
     return configure_standard_material_3d(
         scene_path=args["scene_path"],
@@ -4827,19 +6262,295 @@ def _handle_configure_export_preset(args: dict) -> dict:
         company=args.get("company", ""),
     )
 
-def _handle_configure_audio_bus(args: dict) -> dict:
-    return configure_audio_bus(
-        bus_name=args["bus_name"],
-        volume_db=args.get("volume_db", 0.0),
-        mute=args.get("mute", False),
-        solo=args.get("solo", False),
+# ══════════════════════════════════════════════════════════════════
+# Onda 12: Handlers de Arte IA
+# ══════════════════════════════════════════════════════════════════
+
+def _handle_generate_game_art(args: dict) -> dict:
+    return generate_game_art(
+        description=args["description"],
+        category=args.get("category", "torre"),
+        style=args.get("style", "scifi"),
+        anim_type=args.get("anim_type", "idle"),
+        frames=args.get("frames"),
+        grid_cols=args.get("grid_cols"),
+        grid_rows=args.get("grid_rows"),
+        width=args.get("width"),
+        height=args.get("height"),
+        save_dir=args.get("save_dir"),
     )
 
-def _handle_add_audio_effect(args: dict) -> dict:
-    return add_audio_effect(
-        bus_name=args["bus_name"],
-        effect_type=args["effect_type"],
+
+def _handle_apply_game_art(args: dict) -> dict:
+    return apply_game_art(
+        frame_paths=args["frame_paths"],
+        scene_path=args["scene_path"],
+        node_path=args["node_path"],
+        anim_name=args.get("anim_name", "default"),
+        fps=args.get("fps", 10.0),
+        loop=args.get("loop", True),
     )
+
+
+# ── LSP Bridge Handlers (Fase 2A / C3) ──────────────────────────────
+
+def _handle_gdscript_lsp_connect(args: dict) -> dict:
+    return gdscript_lsp_connect(args.get("project_root"))
+
+
+def _handle_gdscript_lsp_disconnect(args: dict) -> dict:
+    return gdscript_lsp_disconnect()
+
+
+def _handle_gdscript_references(args: dict) -> dict:
+    return gdscript_references(
+        file_path=args["file_path"],
+        line=args["line"],
+        character=args["character"],
+    )
+
+
+def _handle_gdscript_definition(args: dict) -> dict:
+    return gdscript_definition(
+        file_path=args["file_path"],
+        line=args["line"],
+        character=args["character"],
+    )
+
+
+def _handle_gdscript_hover(args: dict) -> dict:
+    return gdscript_hover(
+        file_path=args["file_path"],
+        line=args["line"],
+        character=args["character"],
+    )
+
+
+def _handle_gdscript_symbols(args: dict) -> dict:
+    return gdscript_symbols(args["file_path"])
+
+
+def _handle_gdscript_rename(args: dict) -> dict:
+    return gdscript_rename(
+        file_path=args["file_path"],
+        line=args["line"],
+        character=args["character"],
+        new_name=args["new_name"],
+    )
+
+
+def _handle_gdscript_diagnostics(args: dict) -> dict:
+    return gdscript_diagnostics(args["file_path"])
+
+
+def _handle_gdscript_sync_file(args: dict) -> dict:
+    return gdscript_sync_file(
+        file_path=args["file_path"],
+        content=args.get("content"),
+    )
+
+
+# ── Addon Bridge Handlers (Fase 2B / A2) ────────────────────────────
+
+def _handle_addon_connect(args: dict) -> dict:
+    return addon_connect()
+
+
+def _handle_addon_disconnect(args: dict) -> dict:
+    return addon_disconnect()
+
+
+def _handle_addon_is_available(args: dict) -> dict:
+    return addon_is_available()
+
+
+def _handle_addon_ping(args: dict) -> dict:
+    return addon_ping()
+
+
+def _handle_addon_create_node(args: dict) -> dict:
+    return addon_create_node(
+        parent_path=args["parent_path"],
+        node_type=args["node_type"],
+        node_name=args["node_name"],
+        properties=args.get("properties"),
+        scene_path=args.get("scene_path"),
+    )
+
+
+def _handle_addon_delete_node(args: dict) -> dict:
+    return addon_delete_node(args["node_path"])
+
+
+def _handle_addon_set_property(args: dict) -> dict:
+    return addon_set_property(
+        node_path=args["node_path"],
+        property_name=args["property_name"],
+        value=args["value"],
+    )
+
+
+def _handle_addon_reparent_node(args: dict) -> dict:
+    return addon_reparent_node(
+        node_path=args["node_path"],
+        new_parent_path=args["new_parent_path"],
+    )
+
+
+def _handle_addon_duplicate_node(args: dict) -> dict:
+    return addon_duplicate_node(
+        node_path=args["node_path"],
+        new_name=args.get("new_name"),
+    )
+
+
+def _handle_addon_batch_edit(args: dict) -> dict:
+    return addon_batch_edit(args["operations"])
+
+
+def _handle_addon_take_screenshot(args: dict) -> dict:
+    return addon_take_screenshot(args.get("viewport", "editor"))
+
+
+def _handle_addon_get_scene_tree(args: dict) -> dict:
+    return addon_get_scene_tree()
+
+
+# ── Playtest Handlers (Fase 2B / A3+A4+A5) ──────────────────────────
+
+def _handle_freeze_game_clock(args: dict) -> dict:
+    return freeze_game_clock()
+
+
+def _handle_unfreeze_game_clock(args: dict) -> dict:
+    return unfreeze_game_clock()
+
+
+def _handle_step_game_time(args: dict) -> dict:
+    return step_game_time(args.get("ms", 16))
+
+
+def _handle_step_until(args: dict) -> dict:
+    return step_until(
+        condition=args["condition"],
+        timeout_ms=args.get("timeout_ms", 5000),
+    )
+
+
+def _handle_get_runtime_state_digest(args: dict) -> dict:
+    return get_runtime_state_digest(args.get("groups"))
+
+
+def _handle_capture_runtime_errors(args: dict) -> dict:
+    return capture_runtime_errors()
+
+
+# ── Auto-Config Handlers (Fase 2C) ──────────────────────────────────
+
+def _handle_validate_mcp_environment(args: dict) -> dict:
+    return _validate_env()
+
+
+def _handle_setup_mcp_config(args: dict) -> dict:
+    target = args.get("target", "vscode")
+    return _auto_config(target)
+
+
+# ══════════════════════════════════════════════════════════════════════
+# ── MCP Resources (Fase 2A / C2) ────────────────────────────────────
+# ══════════════════════════════════════════════════════════════════════
+
+@server.list_resources()
+async def list_resources() -> list:
+    """Lista os resources godot:// disponíveis."""
+    try:
+        from resources import get_resources
+        return get_resources()
+    except Exception:
+        return []
+
+
+@server.read_resource()
+async def read_resource(uri: str) -> str:
+    """Lê o conteúdo de um resource godot://.
+
+    Retorna JSON ou texto puro conforme o MIME type do resource.
+    """
+    try:
+        from resources import read_resource as _read
+        return _read(uri)
+    except Exception as e:
+        import json
+        return json.dumps({
+            "status": "error",
+            "message": f"Erro ao ler resource '{uri}': {e}",
+        })
+
+
+# ══════════════════════════════════════════════════════════════
+# Onda 6: Game Patterns (MCP Resources)
+# ══════════════════════════════════════════════════════════════
+
+@server.list_resources()
+async def list_game_patterns():
+    from mcp.types import Resource, ResourceTemplate
+    from resources.game_patterns import get_game_patterns
+    patterns = get_game_patterns()
+    return [
+        Resource(uri="godot://game-patterns", name="Padroes de Jogos",
+                 description=f"{len(patterns)} generos com estruturas tecnicas Godot",
+                 mimeType="application/json"),
+        Resource(uri=ResourceTemplate(uriTemplate="godot://game-patterns/{name}",
+                 name="Padrao Especifico",
+                 description="Estrutura completa para um genero",
+                 mimeType="application/json")),
+    ]
+
+
+@server.read_resource()
+async def read_game_pattern(uri: str):
+    import json
+    from urllib.parse import urlparse
+    from resources.game_patterns import get_game_patterns, get_game_pattern
+    parsed = urlparse(uri)
+    name = parsed.path.strip("/")
+    if not name:
+        return json.dumps(get_game_patterns(), indent=2, ensure_ascii=False)
+    pattern = get_game_pattern(name)
+    if pattern:
+        return json.dumps(pattern, indent=2, ensure_ascii=False)
+    return json.dumps({"error": f"Padrao '{name}' nao encontrado"})
+
+
+# ══════════════════════════════════════════════════════════════
+# Onda 6: MCP Prompts (slash commands)
+# ══════════════════════════════════════════════════════════════
+
+@server.list_prompts()
+async def list_prompts():
+    from mcp.types import Prompt, PromptArgument
+    from resources.prompts import get_mcp_prompts
+    prompts = get_mcp_prompts()
+    return [Prompt(name=p["name"], title=p["title"], description=p["description"],
+                   arguments=[PromptArgument(name=a["name"], description=a["description"], required=a.get("required", False))
+                              for a in p.get("arguments", [])])
+            for p in prompts]
+
+
+@server.get_prompt()
+async def get_prompt(name: str, arguments: dict | None = None):
+    import re
+    from mcp.types import PromptMessage, TextContent
+    from resources.prompts import get_prompt_template
+    prompt = get_prompt_template(name)
+    if not prompt:
+        return PromptMessage(role="user", content=TextContent(type="text", text=f"Prompt '{name}' nao encontrado."))
+    template = prompt["template"]
+    if arguments:
+        for key, value in arguments.items():
+            template = template.replace("{" + key + "}", str(value))
+    template = re.sub(r'\{[^}]+\}', '', template)
+    return PromptMessage(role="user", content=TextContent(type="text", text=template.strip()))
 
 
 async def main() -> None:

@@ -1,8 +1,10 @@
-# MCP Godot — Completo e Funcional + Recuperação
+# MCP Godot — Desenvolvimento
 
-> **Repositório dedicado do MCP Godot Agent v2.9.**
-> Tudo que você precisa para conectar o Godot 4.7 a qualquer IA agêntica
-> e criar jogos por linguagem natural. Autocontido — clone e use.
+> **Servidor MCP Godot Agent v3.0 — 171 ferramentas para criação de jogos por linguagem natural.**
+> Conecta Godot 4.7 ao VS Code Copilot (DeepSeek V4) via protocolo MCP.
+> Autocontido — clone, instale dependências e use.
+
+**Status:** ✅ 171 tools · 171 handlers · 46 bugs corrigidos · Pipeline Executor · DAP debugger · R$0
 
 ---
 
@@ -10,17 +12,28 @@
 
 | Pasta/Arquivo | O que é |
 |---|---|
-| `server.py` | Servidor MCP (4.552 linhas, 143+ ferramentas) |
-| `tools/` | 22 módulos de operação (cenas, scripts, física, UI, etc.) |
-| `templates/` | 5 templates GDScript (Jinja2) |
+| `server.py` | Servidor MCP (~5950 linhas, 171 ferramentas) |
+| `tools/` | 50+ módulos (cenas, scripts, física, arte IA, som IA, pipeline, etc.) |
+| `resources/` | Game patterns (17 gêneros) + MCP Prompts (11 comandos) |
+| `templates/` | Templates GDScript (Jinja2) |
 | `classdb_cache/` | Cache da API do Godot 4.7 |
-| `addon/` | Plugins Godot (mcp_bridge + game_bridge) |
+| `addons/` | Plugins Godot (mcp_bridge + game_bridge) |
 | `config.json` | Configuração (caminhos do Godot + projeto) |
 | `requirements.txt` | Dependências Python |
 | `GUIA_CONEXAO.md` | Como usar — passo a passo do zero |
 | `ARQUITETURA_MCP.md` | Como funciona por dentro — 3 camadas, padrões, extensão |
 
 ---
+
+## Novidades da v3.0 (Onda 7)
+
+| Feature | Descrição |
+|---------|-----------|
+| 🧩 **Pipeline Executor** | `create_entity` — cria entidade completa (cena+collider+script+sprite+áudio) em 1 chamada |
+| 🤖 **Decision Engine** | Decide automaticamente se gera arte placeholder ou FLUX, com base no estágio do projeto |
+| 📊 **Project State** | Snapshot em memória do projeto, atualizado por hooks automáticos |
+| 🔒 **Sandbox** | 80+ padrões de segurança bloqueados em `execute_gdscript_runtime` |
+| 🐛 **46 bugs corrigidos** | Auditoria completa em 4 grupos (CRITICAL/HIGH/MEDIUM/LOW) |
 
 ## Instalação (2 minutos)
 

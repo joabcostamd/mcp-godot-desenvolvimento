@@ -528,6 +528,9 @@ def add_node(scene_path: str, parent_node_path: str, node_name: str, node_type: 
     lines = _deduplicate_tscn_lines(lines)
     full_path.write_text("".join(lines), encoding="utf-8")
 
+    # Invalida cache para que load_scene_tree veja a mudança
+    _tscn_cache.pop(str(full_path), None)
+
     # Marca para compilação pendente
     from tools.runtime_ops import mark_pending_compile
     mark_pending_compile()
@@ -604,6 +607,9 @@ def delete_node(scene_path: str, node_path: str) -> dict:
         del lines[n["line_start"]:n["line_end"]]
 
     full_path.write_text("".join(lines), encoding="utf-8")
+
+    # Invalida cache
+    _tscn_cache.pop(str(full_path), None)
 
     from tools.runtime_ops import mark_pending_compile
     mark_pending_compile()

@@ -75,7 +75,7 @@ def compile_test() -> dict:
     proj = _get_active_project()
     godot = get_godot_bin()
     cfg = get_config()
-    timeout = cfg.get("timeouts", {}).get("compile", 60)
+    timeout = cfg.get("timeouts", {}).get("compile", 30)  # reduzido de 60s para 30s
 
     if not (proj / "project.godot").exists():
         return {"status": "error", "message": f"Projeto '{proj}' não contém project.godot."}

@@ -16,11 +16,24 @@ CACHE_PATH = ROOT / "classdb_cache" / "extension_api.json"
 # ── Carregamento ────────────────────────────────────────────────────
 
 _cache: dict | None = None
+_last_mtime: float = 0.0
+
+
+def _check_stale() -> None:
+    """Invalida cache se extension_api.json foi modificado."""
+    global _cache, _last_mtime
+    if CACHE_PATH.exists():
+        mtime = CACHE_PATH.stat().st_mtime
+        if _last_mtime and mtime > _last_mtime:
+            _cache = None
+            _class_index.cache_clear()
+        _last_mtime = mtime
 
 
 def _load_cache() -> dict:
-    """Carrega o cache ClassDB (lazy, uma vez)."""
+    """Carrega o cache ClassDB (lazy, com verificação de staleness)."""
     global _cache
+    _check_stale()
     if _cache is None:
         with open(CACHE_PATH, encoding="utf-8") as f:
             _cache = json.load(f)
@@ -287,23 +300,43 @@ def get_godot_bin() -> str:
 
 
 def get_config() -> dict:
-    """Retorna o config.json completo."""
+    """Retorna o config.json completo. Cria com defaults se não existir."""
     config_path = ROOT / "config.json"
     if config_path.exists():
         with open(config_path, encoding="utf-8") as f:
             return json.load(f)
-    return {}
+    # Cria config.json com defaults
+    default_cfg = {
+        "godot_path": "godot",
+        "default_project": "example_project",
+        "projects_root": str(Path.home() / "GodotProjects"),
+        "addon_port": 9080,
+        "game_port": 9081,
+        "timeouts": {"fast": 15, "compile": 30, "slow": 120},
+    }
+    config_path.write_text(json.dumps(default_cfg, indent=2), encoding='utf-8')
+    return default_cfg
 
 
-def query_classdb(class_name: str) -> dict:
+def query_classdb(
+    class_name: str,
+    section: str = "all",
+    include_inherited: bool = False,
+    offset: int = 0,
+    limit: int = 50,
+) -> dict:
     """Consulta informações completas de uma classe na ClassDB.
 
     Args:
         class_name: Nome da classe (ex: 'Node2D', 'CharacterBody2D').
+        section: Seção a retornar: "all", "properties", "methods",
+                 "signals", "enums", "constants".
+        include_inherited: Se True, inclui membros herdados da classe pai.
+        offset: Offset para paginação (começa em 0).
+        limit: Máximo de itens por seção (default 50).
 
     Returns:
-        {"status": "success", "class": {...}}
-        ou {"status": "error", "message": str}
+        dict com status, dados da classe, metadados de paginação.
     """
     class_index = _class_index()
     entry = class_index.get(class_name)
@@ -316,18 +349,205 @@ def query_classdb(class_name: str) -> dict:
             "suggestions": suggestions,
         }
 
-    return {
+    result = {
         "status": "success",
         "class": {
             "name": entry["name"],
             "inherits": entry.get("inherits", ""),
             "api_type": entry.get("api_type", ""),
-            "properties": [p["name"] for p in entry.get("properties", [])],
-            "methods": [m["name"] for m in entry.get("methods", [])],
-            "signals": [s["name"] for s in entry.get("signals", [])],
             "hierarchy": get_class_hierarchy(class_name),
         },
     }
+
+    cls = result["class"]
+
+    # ── Seções com detalhes completos ──
+    sections = {
+        "properties": _format_properties(entry, include_inherited, class_index),
+        "methods": _format_methods(entry, include_inherited, class_index),
+        "signals": _format_signals(entry, include_inherited, class_index),
+        "enums": _format_enums(entry, include_inherited, class_index),
+        "constants": _format_constants(entry, include_inherited, class_index),
+    }
+
+    if section == "all":
+        for key, items in sections.items():
+            total = len(items)
+            page = items[offset:offset + limit]
+            cls[key] = page
+            cls[f"{key}_count"] = total
+            cls[f"{key}_offset"] = offset
+            cls[f"{key}_limit"] = limit
+            cls[f"{key}_has_more"] = (offset + limit) < total
+    elif section in sections:
+        items = sections[section]
+        total = len(items)
+        cls[section] = items[offset:offset + limit]
+        cls["count"] = total
+        cls["offset"] = offset
+        cls["limit"] = limit
+        cls["has_more"] = (offset + limit) < total
+
+    return result
+
+
+def search_classdb(query: str, limit: int = 20) -> dict:
+    """Busca classes na ClassDB por nome parcial.
+
+    Args:
+        query: Texto parcial para buscar (ex: 'Body', 'Light').
+        limit: Máximo de resultados (default 20).
+
+    Returns:
+        dict com status, resultados e contagem total.
+    """
+    class_index = _class_index()
+    query_lower = query.lower()
+
+    matches = [
+        {
+            "name": name,
+            "inherits": entry.get("inherits", ""),
+            "api_type": entry.get("api_type", ""),
+        }
+        for name, entry in class_index.items()
+        if query_lower in name.lower()
+    ]
+
+    matches.sort(key=lambda m: (not m["name"].lower().startswith(query_lower), m["name"]))
+
+    total = len(matches)
+    page = matches[:limit]
+
+    return {
+        "status": "success",
+        "query": query,
+        "results": page,
+        "total": total,
+        "returned": len(page),
+        "has_more": total > limit,
+    }
+
+
+# ── Formatadores de Seção ───────────────────────────────────────────
+
+def _format_properties(entry: dict, inherited: bool, index: dict) -> list[dict]:
+    """Formata propriedades com tipo, descrição e valor default."""
+    result = []
+    props = list(entry.get("properties", []))
+    if inherited:
+        props = _merge_inherited(entry, "properties", index)
+
+    for p in props:
+        result.append({
+            "name": p.get("name", ""),
+            "type": p.get("type", ""),
+            "description": p.get("description", ""),
+            "default": p.get("default_value"),
+            "setter": p.get("setter", ""),
+            "getter": p.get("getter", ""),
+        })
+    return result
+
+
+def _format_methods(entry: dict, inherited: bool, index: dict) -> list[dict]:
+    """Formata métodos com argumentos, retorno e descrição."""
+    result = []
+    methods = list(entry.get("methods", []))
+    if inherited:
+        methods = _merge_inherited(entry, "methods", index)
+
+    for m in methods:
+        args = []
+        for a in m.get("arguments", []):
+            args.append({
+                "name": a.get("name", ""),
+                "type": a.get("type", ""),
+                "default": a.get("default_value"),
+                "description": a.get("description", ""),
+            })
+
+        result.append({
+            "name": m.get("name", ""),
+            "return_type": m.get("return_type", ""),
+            "description": m.get("description", ""),
+            "arguments": args,
+            "is_virtual": m.get("is_virtual", False),
+            "is_static": m.get("is_static", False),
+            "is_vararg": m.get("is_vararg", False),
+            "qualifiers": m.get("qualifiers", ""),
+        })
+    return result
+
+
+def _format_signals(entry: dict, inherited: bool, index: dict) -> list[dict]:
+    """Formata sinais com argumentos e descrição."""
+    result = []
+    signals = list(entry.get("signals", []))
+    if inherited:
+        signals = _merge_inherited(entry, "signals", index)
+
+    for s in signals:
+        args = []
+        for a in s.get("arguments", []):
+            args.append({"name": a.get("name", ""), "type": a.get("type", "")})
+
+        result.append({
+            "name": s.get("name", ""),
+            "description": s.get("description", ""),
+            "arguments": args,
+        })
+    return result
+
+
+def _format_enums(entry: dict, inherited: bool, index: dict) -> list[dict]:
+    """Formata enums com valores."""
+    result = []
+    enums = list(entry.get("enums", []))
+    if inherited:
+        enums = _merge_inherited(entry, "enums", index)
+
+    for e in enums:
+        values = []
+        for v in e.get("values", []):
+            values.append({"name": v.get("name", ""), "value": v.get("value")})
+
+        result.append({
+            "name": e.get("name", ""),
+            "description": e.get("description", ""),
+            "values": values,
+        })
+    return result
+
+
+def _format_constants(entry: dict, inherited: bool, index: dict) -> list[dict]:
+    """Formata constantes com tipo e valor."""
+    result = []
+    consts = list(entry.get("constants", []))
+    if inherited:
+        consts = _merge_inherited(entry, "constants", index)
+
+    for c in consts:
+        result.append({
+            "name": c.get("name", ""),
+            "type": c.get("type", ""),
+            "value": c.get("value"),
+            "description": c.get("description", ""),
+        })
+    return result
+
+
+def _merge_inherited(entry: dict, section: str, index: dict) -> list[dict]:
+    """Combina membros próprios + herdados da classe pai."""
+    own = list(entry.get(section, []))
+    parent_name = entry.get("inherits", "")
+    if parent_name and parent_name in index:
+        parent = index[parent_name]
+        parent_items = _merge_inherited(parent, section, index)
+        # Remove duplicatas (filho sobrescreve pai)
+        own_names = {item.get("name") for item in own}
+        own.extend(item for item in parent_items if item.get("name") not in own_names)
+    return own
 
 
 def list_valid_node_types() -> dict:

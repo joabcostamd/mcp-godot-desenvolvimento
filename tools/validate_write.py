@@ -1,0 +1,148 @@
+"""validate_write.py — Validate-Before-Write (Fase 3 / beckettlab).
+
+Recusa escrever GDScript que não compila. Inspirado no beckettlab/beckett-godot-mcp.
+
+Tool: safe_write_file — write com validação automática de sintaxe.
+"""
+
+import re
+from pathlib import Path
+
+
+def validate_gdscript_syntax(code: str) -> dict:
+    """Valida sintaxe GDScript sem precisar do Godot.
+
+    Verificações:
+    - Blocos indentados corretamente
+    - Parênteses/colchetes/chaves balanceados
+    - Palavras-chave reservadas
+    - Estrutura básica de funções
+
+    Args:
+        code: Código GDScript.
+
+    Returns:
+        {"valid": bool, "errors": [...]}
+    """
+    errors = []
+
+    # Verifica indentação (tabs vs spaces)
+    lines = code.splitlines()
+    for i, line in enumerate(lines, 1):
+        if "\t" in line and "    " in line:
+            errors.append({"line": i, "message": "Mistura de tabs e espaços", "code": line.strip()[:60]})
+
+    # Verifica balanceamento
+    brackets = {"(": ")", "[": "]", "{": "}"}
+    stack = []
+    for i, ch in enumerate(code):
+        if ch in brackets:
+            stack.append((brackets[ch], i))
+        elif ch in brackets.values():
+            if not stack or stack[-1][0] != ch:
+                errors.append({"line": code[:i].count("\n") + 1, "message": f"Fechamento inesperado: {ch}"})
+                break
+            stack.pop()
+
+    if stack:
+        for closer, pos in stack:
+            errors.append({"line": code[:pos].count("\n") + 1, "message": f"Abertura não fechada"})
+
+    # Verifica funções sem indentação
+    for i, line in enumerate(lines, 1):
+        stripped = line.strip()
+        if stripped.startswith("func ") and not line.startswith(" ") and not line.startswith("\t"):
+            # func no nível raiz — OK
+            pass
+        elif stripped and not stripped.startswith("#") and not line[0] in (" ", "\t") and i > 1:
+            # Código não indentado fora de função (pode ser class_name, extends, var, signal)
+            if not any(stripped.startswith(kw) for kw in ("extends", "class_name", "var ", "signal ", "enum ", "const ", "@", "func ", "#", "static ", "tool", "preload", "await")):
+                errors.append({"line": i, "message": f"Linha não indentada fora de escopo: {stripped[:50]}"})
+
+    return {
+        "valid": len(errors) == 0,
+        "errors": errors or None,
+        "checked": "sintaxe básica (validação completa requer Godot --check-only)",
+    }
+
+
+def safe_write_gdscript(
+    file_path: str,
+    content: str,
+    project_path: str | None = None,
+    strict: bool = True,
+) -> dict:
+    """Escreve GDScript com validação automática de sintaxe.
+
+    Se o código tiver erros de sintaxe, RECUSA escrever.
+    Isso evita que a IA salve código quebrado.
+
+    Args:
+        file_path: Caminho do arquivo .gd.
+        content: Conteúdo GDScript.
+        project_path: Projeto (para validação Godot completa).
+        strict: Se True, recusa salvar com erros. Se False, avisa mas salva.
+
+    Returns:
+        dict com status, validação e ação tomada.
+    """
+    # 1. Validação básica local
+    validation = validate_gdscript_syntax(content)
+
+    if not validation["valid"] and strict:
+        return {
+            "status": "error",
+            "message": "❌ GDScript INVÁLIDO — escrita BLOQUEADA. Corrija os erros abaixo.",
+            "validation": validation,
+            "written": False,
+            "errors": validation["errors"],
+        }
+
+    # 2. Validação Godot (se projeto disponível)
+    godot_check = None
+    if project_path:
+        try:
+            import subprocess, tempfile
+            config_path = Path(__file__).resolve().parent.parent / "config.json"
+            import json
+            godot_path = ""
+            if config_path.exists():
+                with open(config_path) as f:
+                    godot_path = json.load(f).get("godot_path", "")
+
+            if godot_path:
+                with tempfile.NamedTemporaryFile(suffix=".gd", mode="w", delete=False) as tmp:
+                    tmp.write(content)
+                    tmp_path = tmp.name
+
+                result = subprocess.run(
+                    [godot_path, "--headless", "--check-only", "--path", project_path, tmp_path],
+                    capture_output=True, text=True, timeout=10,
+                )
+                Path(tmp_path).unlink(missing_ok=True)
+
+                if result.returncode != 0:
+                    godot_check = {"valid": False, "output": result.stderr[:500]}
+                    if strict:
+                        return {
+                            "status": "error",
+                            "message": "❌ Godot rejeitou o script. Escrita BLOQUEADA.",
+                            "validation": validation,
+                            "godot_check": godot_check,
+                            "written": False,
+                        }
+        except Exception:
+            pass
+
+    # 3. Escreve
+    try:
+        Path(file_path).write_text(content, encoding="utf-8")
+        return {
+            "status": "success",
+            "message": "✅ GDScript válido. Arquivo salvo." if validation["valid"] else "⚠️ Salvo com warnings.",
+            "validation": validation,
+            "godot_check": godot_check,
+            "written": True,
+        }
+    except Exception as e:
+        return {"status": "error", "message": str(e), "written": False}

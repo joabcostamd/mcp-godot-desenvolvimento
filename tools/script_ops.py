@@ -63,6 +63,21 @@ def _list_templates() -> list[str]:
     return [p.stem for p in TEMPLATES_DIR.glob("*.gd")]
 
 
+def _sanitize_template_var(value) -> str:
+    """Remove quebras de linha e conteúdo perigoso de variáveis de template."""
+    if not isinstance(value, str):
+        return str(value)
+    # Remove quebras de linha
+    value = value.replace('\n', ' ').replace('\r', ' ')
+    # Remove código GDScript embutido
+    forbidden = ['OS.execute', 'FileAccess', 'DirAccess', 'get_tree().quit',
+                 'ProjectSettings', 'ResourceLoader', 'HTTPRequest']
+    for pattern in forbidden:
+        value = value.replace(pattern, '[BLOQUEADO]')
+    # Limita tamanho
+    return value[:200]
+
+
 # ── API Pública ─────────────────────────────────────────────────────
 
 def generate_gdscript(template: str, variables: dict, save_path: str) -> dict:
@@ -95,7 +110,7 @@ def generate_gdscript(template: str, variables: dict, save_path: str) -> dict:
                        f"diretamente via write_file e valide com validate_gdscript_syntax.",
         }
 
-    content = tmpl.render(**variables)
+    content = tmpl.render(**{k: _sanitize_template_var(v) for k, v in variables.items()})
     full_path = proj / save_path
     full_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -218,7 +233,17 @@ def attach_script(scene_path: str, node_path: str, script_path: str) -> dict:
     from tools.scene_ops import _deduplicate_tscn_lines
     current_lines = full_path.read_text(encoding="utf-8").splitlines(keepends=True)
     deduped = _deduplicate_tscn_lines(current_lines)
-    full_path.write_text("".join(deduped), encoding="utf-8")
+    new_content = "".join(deduped)
+
+    # Valida antes de escrever
+    if not new_content.strip().startswith('[gd_scene'):
+        return {"status": "error", "message": "Conteúdo gerado é inválido após dedup — abortado"}
+
+    # Escrita atômica: tmp + rename
+    import os as _os
+    tmp_path = full_path.with_suffix('.tscn.tmp')
+    tmp_path.write_text(new_content, encoding='utf-8')
+    _os.replace(str(tmp_path), str(full_path))
 
     _trigger_hot_reload(script_path)
 

@@ -458,97 +458,296 @@ def generate_audio_sfx(
     duration: float = 0.3,
     frequency: float = 440.0,
     sample_rate: int = 44100,
+    style: str = "scifi",
     save_path: str | None = None,
 ) -> dict:
-    """Gera um efeito sonoro WAV por síntese procedural.
+    """Gera efeito sonoro procedural com 23 tipos.
 
     Args:
-        name: Nome base.
-        sfx_type: "beep" (tom puro), "jump" (sweep ascendente),
-                  "laser" (sweep descendente), "explosion" (ruído),
-                  "collect" (dois tons), "hit" (ruído curto).
-        duration: Duração em segundos.
-        frequency: Frequência base em Hz.
-        sample_rate: Sample rate (default 44100).
-        save_path: Caminho relativo (opcional).
+        name: Nome base do arquivo.
+        sfx_type: Tipo de som. Opcoes:
+            beep, jump, laser, explosion, collect, hit,
+            coin, ui_click, ui_hover, ui_error, ui_notification,
+            wind, rain, footsteps, gunshot, engine, electricity,
+            magic, powerup, damage, door, fire, water, string
+        duration: Duracao em segundos.
+        frequency: Frequencia base em Hz (para tons).
+        sample_rate: Taxa de amostragem (44100 padrao CD).
+        style: Estilo sonoro (scifi, fantasia, retro, realista).
+        save_path: Caminho relativo no projeto (auto se None).
 
     Returns:
-        {"status": "success", "saved_to": str, "duration": float}
+        {"status": "success", "saved_to": str, "audio_base64": str,
+         "duration": float, "sample_rate": int, "sfx_type": str}
     """
+    import base64
+    import io
+    import struct
+    import wave
+    import numpy as np
+
+    from tools.project_ops import _get_active_project, _check_path_traversal
+
     proj = _get_active_project()
+
+    if duration <= 0:
+        duration = 0.05
+
     if not save_path:
-        save_path = f"assets/audio/{name}.wav"
+        save_path = f"assets/audio/sfx/{name}.wav"
 
     violation = _check_path_traversal(save_path, proj)
     if violation:
         return {"status": "error", "message": violation}
 
-    num_samples = int(sample_rate * duration)
-    samples = []
+    # ── Sintetizadores ─────────────────────────────────────
 
-    if sfx_type == "jump":
-        # Sweep ascendente: frequência sobe de freq para freq*2
-        for i in range(num_samples):
-            t = i / sample_rate
-            f = frequency * (1.0 + t / duration)
-            val = math.sin(2 * math.pi * f * t)
-            # Envelope
-            env = 1.0 - (i / num_samples)
-            samples.append(int(val * env * 32767 * 0.7))
-    elif sfx_type == "laser":
-        # Sweep descendente
-        for i in range(num_samples):
-            t = i / sample_rate
-            f = frequency * 2 * (1.0 - t / duration) + frequency * 0.2
-            val = math.sin(2 * math.pi * f * t)
-            samples.append(int(val * 32767 * 0.6))
+    def _tone(freq, dur, wave="sine"):
+        t = np.linspace(0, dur, int(sample_rate * dur), endpoint=False)
+        phase = 2 * np.pi * freq * t
+        waves = {
+            "sine": np.sin(phase),
+            "square": np.sign(np.sin(phase)),
+            "saw": 2 * (t * freq - np.floor(t * freq + 0.5)),
+            "triangle": 2 * np.abs(2 * (t * freq - np.floor(t * freq + 0.5))) - 1,
+            "noise": np.random.uniform(-1, 1, len(t)),
+        }
+        return waves.get(wave, waves["sine"])
+
+    def _sweep(f_start, f_end, dur):
+        t = np.linspace(0, dur, int(sample_rate * dur))
+        freq = np.linspace(f_start, f_end, len(t))
+        phase = 2 * np.pi * np.cumsum(freq / sample_rate)
+        return np.sin(phase)
+
+    def _adsr(signal, attack, decay, sustain_lvl, release):
+        total = len(signal)
+        a = int(attack * sample_rate)
+        d = int(decay * sample_rate)
+        r = int(release * sample_rate)
+        s = max(0, total - a - d - r)
+        env = np.concatenate([
+            np.linspace(0, 1, a),
+            np.linspace(1, sustain_lvl, d),
+            np.full(s, sustain_lvl),
+            np.linspace(sustain_lvl, 0, r),
+        ])
+        if len(env) < total:
+            env = np.pad(env, (0, total - len(env)))
+        return signal * env[:total]
+
+    def _lpf(signal, cutoff):
+        from scipy.ndimage import uniform_filter1d
+        window = max(1, int(sample_rate / cutoff / 2))
+        return uniform_filter1d(signal, window)
+
+    def _noise(dur, color="white"):
+        n = np.random.uniform(-1, 1, int(sample_rate * dur))
+        if color == "pink":
+            from scipy.signal import lfilter
+            b = [0.049922035, -0.095993537, 0.050612699, -0.004408786]
+            a = [1, -2.494956002, 2.017265875, -0.522189400]
+            n = lfilter(b, a, n)
+        return n
+
+    def _karplus_strong(freq, dur, decay=0.996):
+        N = int(sample_rate / freq)
+        buf = np.random.uniform(-1, 1, N)
+        out = np.zeros(int(sample_rate * dur))
+        for i in range(len(out)):
+            out[i] = buf[i % N]
+            buf[i % N] = decay * 0.5 * (buf[i % N] + buf[(i + 1) % N])
+        return out
+
+    # ── Tabela de SFX ─────────────────────────────────────
+
+    sfx = None
+
+    if sfx_type == "laser":
+        sfx = _sweep(1500, 200, duration) * np.exp(-np.linspace(0, 8, int(sample_rate * duration)))
+
     elif sfx_type == "explosion":
-        # Ruído branco com envelope
-        import random
-        rng = random.Random(42)
-        for i in range(num_samples):
-            t = i / sample_rate
-            val = rng.uniform(-1, 1)
-            env = max(0, 1.0 - t / duration) ** 2
-            samples.append(int(val * env * 32767 * 0.8))
-    elif sfx_type == "collect":
-        # Dois tons rápidos (ding-ding!)
-        for i in range(num_samples):
-            t = i / sample_rate
-            f = 880 if t < duration / 2 else 1320
-            val = math.sin(2 * math.pi * f * t)
-            env = max(0, 1.0 - abs(t - duration / 2) / (duration / 2))
-            samples.append(int(val * env * 32767 * 0.7))
-    elif sfx_type == "hit":
-        # Ruído curto com decaimento rápido
-        import random
-        rng = random.Random(99)
-        for i in range(num_samples):
-            t = i / sample_rate
-            tone = math.sin(2 * math.pi * 120 * t)
-            noise = rng.uniform(-0.5, 0.5)
-            val = tone * 0.3 + noise * 0.7
-            env = math.exp(-t * 30)
-            samples.append(int(val * env * 32767 * 0.9))
-    else:  # beep
-        for i in range(num_samples):
-            t = i / sample_rate
-            val = math.sin(2 * math.pi * frequency * t)
-            env = 1.0 - (i / num_samples) ** 0.5
-            samples.append(int(val * env * 32767 * 0.5))
+        raw = _noise(duration)
+        sfx = _adsr(raw, 0.005, duration * 0.3, 0.0, duration * 0.7)
+        sfx = _lpf(sfx, 600)
 
-    # Escreve WAV
+    elif sfx_type == "coin":
+        t = np.linspace(0, duration / 2, int(sample_rate * duration / 2))
+        s1 = np.sin(2 * np.pi * 1200 * t) * np.exp(-t * 30)
+        s2 = np.sin(2 * np.pi * 2400 * t) * np.exp(-t * 40)
+        sfx = np.concatenate([s1, s2])
+
+    elif sfx_type == "jump":
+        sfx = _sweep(200, 600, duration) * np.exp(-np.linspace(0, 6, int(sample_rate * duration)))
+
+    elif sfx_type == "hit":
+        sfx = _noise(duration * 0.3, "pink")
+        pad = np.zeros(int(sample_rate * duration) - len(sfx))
+        sfx = np.concatenate([sfx, pad]) if len(pad) > 0 else sfx[:int(sample_rate * duration)]
+        sfx = sfx * np.exp(-np.linspace(0, 10, len(sfx)))
+
+    elif sfx_type == "collect":
+        s1 = _tone(880, duration * 0.4, "sine")
+        s2 = _tone(1320, duration * 0.3, "sine")
+        s3 = _tone(1760, duration * 0.3, "sine")
+        sfx = np.concatenate([s1, s2, s3])
+        if len(sfx) < int(sample_rate * duration):
+            sfx = np.pad(sfx, (0, int(sample_rate * duration) - len(sfx)))
+        sfx = sfx * np.exp(-np.linspace(0, 4, len(sfx)))
+
+    elif sfx_type == "beep":
+        sfx = _tone(frequency, duration, "sine")
+        sfx = _adsr(sfx, 0.005, 0.0, 1.0, min(0.05, duration))
+
+    elif sfx_type == "ui_click":
+        sfx = _tone(800, 0.05, "square") * np.exp(-np.linspace(0, 30, int(sample_rate * 0.05)))
+
+    elif sfx_type == "ui_hover":
+        sfx = _tone(600, 0.08, "sine") * np.exp(-np.linspace(0, 15, int(sample_rate * 0.08)))
+
+    elif sfx_type == "ui_error":
+        s1 = _tone(200, 0.15, "square")
+        s2 = _tone(150, 0.15, "square")
+        sfx = np.concatenate([s1, s2])
+        sfx = sfx * np.exp(-np.linspace(0, 8, len(sfx)))
+
+    elif sfx_type == "ui_notification":
+        s1 = _tone(1000, 0.06, "sine")
+        s2 = _tone(1400, 0.06, "sine")
+        s3 = _tone(1800, 0.08, "sine")
+        sfx = np.concatenate([s1, s2, s3])
+        sfx = sfx * np.exp(-np.linspace(0, 5, len(sfx)))
+
+    elif sfx_type == "powerup":
+        sfx = _sweep(300, 1200, duration) * np.exp(-np.linspace(0, 3, int(sample_rate * duration)))
+        harmonic = _sweep(600, 2400, duration) * np.exp(-np.linspace(0, 3, int(sample_rate * duration)))
+        sfx = sfx * 0.7 + harmonic * 0.3
+
+    elif sfx_type == "damage":
+        raw = _noise(duration * 0.5, "white")
+        tone = _tone(100, duration * 0.5, "saw")
+        sfx = raw * 0.4 + tone * 0.6
+        sfx = sfx * np.exp(-np.linspace(0, 12, len(sfx)))
+
+    elif sfx_type == "wind":
+        raw = _noise(duration, "pink")
+        sfx = _lpf(raw, 400)
+        lfo = 0.5 + 0.5 * np.sin(2 * np.pi * 0.3 * np.arange(len(sfx)) / sample_rate)
+        sfx = sfx * lfo * 0.5
+
+    elif sfx_type == "rain":
+        base = _lpf(_noise(duration, "white"), 800)
+        drops = np.zeros_like(base)
+        for _ in range(int(duration * 20)):
+            t_start = np.random.randint(0, len(drops) - 500)
+            drops[t_start:t_start + 200] += np.random.uniform(0.1, 0.4) * np.exp(-np.linspace(0, 20, 200))
+        sfx = base * 0.3 + drops * 0.7
+        sfx = sfx / np.max(np.abs(sfx)) if np.max(np.abs(sfx)) > 0 else sfx
+
+    elif sfx_type == "footsteps":
+        step = _lpf(_noise(0.08, "white"), 500)
+        step = step * np.exp(-np.linspace(0, 25, len(step)))
+        silence = np.zeros(int(sample_rate * 0.3))
+        reps = max(1, int(duration / 0.38))
+        steps = [step, silence] * reps
+        sfx = np.concatenate(steps)
+        sfx = sfx[:int(sample_rate * duration)]
+
+    elif sfx_type == "gunshot":
+        impact = _noise(0.05, "white") * np.exp(-np.linspace(0, 40, int(sample_rate * 0.05)))
+        tail = _lpf(_noise(0.2, "pink"), 300) * np.exp(-np.linspace(0, 10, int(sample_rate * 0.2)))
+        sfx = np.concatenate([impact, tail])
+        if len(sfx) < int(sample_rate * duration):
+            sfx = np.pad(sfx, (0, int(sample_rate * duration) - len(sfx)))
+
+    elif sfx_type == "engine":
+        base = _tone(frequency, duration, "saw")
+        lfo = 0.7 + 0.3 * np.sin(2 * np.pi * 8 * np.arange(len(base)) / sample_rate)
+        sfx = base * lfo
+        sfx = _lpf(sfx, 2000)
+
+    elif sfx_type == "electricity":
+        sfx = _noise(duration, "white")
+        sfx = _lpf(sfx, 3000)
+        crackle = 0.5 + 0.5 * np.sin(2 * np.pi * 60 * np.arange(len(sfx)) / sample_rate)
+        sfx = sfx * crackle
+
+    elif sfx_type == "magic":
+        sparkle = _tone(2000, duration, "sine")
+        sparkle = sparkle * np.exp(-np.linspace(0, 4, len(sparkle)))
+        chimes = np.zeros_like(sparkle)
+        for f in [1200, 1600, 2400, 3200]:
+            t_start = np.random.randint(0, int(sample_rate * 0.3))
+            chime = np.sin(2 * np.pi * f * np.linspace(0, 0.2, int(sample_rate * 0.2)))
+            chime = chime * np.exp(-np.linspace(0, 8, len(chime)))
+            if t_start + len(chime) <= len(chimes):
+                chimes[t_start:t_start + len(chime)] += chime * 0.3
+        sfx = sparkle * 0.5 + chimes
+
+    elif sfx_type == "door":
+        low = _tone(80, duration * 0.6, "sine") * np.exp(-np.linspace(0, 5, int(sample_rate * duration * 0.6)))
+        creak = _lpf(_noise(duration * 0.4, "white"), 500) * np.exp(-np.linspace(0, 8, int(sample_rate * duration * 0.4)))
+        sfx = np.concatenate([low, creak])
+        if len(sfx) < int(sample_rate * duration):
+            sfx = np.pad(sfx, (0, int(sample_rate * duration) - len(sfx)))
+
+    elif sfx_type == "fire":
+        crackle = _noise(duration, "white")
+        crackle = _lpf(crackle, 2000)
+        mod = 0.3 + 0.7 * np.abs(np.sin(2 * np.pi * 12 * np.arange(len(crackle)) / sample_rate))
+        sfx = crackle * mod * 0.6
+
+    elif sfx_type == "water":
+        sfx = _lpf(_noise(duration, "pink"), 600)
+        lfo = 0.5 + 0.5 * np.sin(2 * np.pi * 0.5 * np.arange(len(sfx)) / sample_rate)
+        sfx = sfx * lfo
+
+    elif sfx_type == "string":
+        sfx = _karplus_strong(frequency, duration)
+
+    else:
+        return {"status": "error",
+                "message": f"Tipo SFX desconhecido: {sfx_type}. "
+                           f"Use: beep, jump, laser, explosion, collect, hit, "
+                           f"coin, ui_click, ui_hover, ui_error, ui_notification, "
+                           f"wind, rain, footsteps, gunshot, engine, electricity, "
+                           f"magic, powerup, damage, door, fire, water, string"}
+
+    if sfx is None:
+        sfx = _tone(frequency, duration, "sine")
+
+    peak = np.max(np.abs(sfx))
+    if peak > 0:
+        sfx = sfx / peak * 0.95
+
+    samples = (sfx * 32767).astype(np.int16)
+
     full = proj / save_path
     full.parent.mkdir(parents=True, exist_ok=True)
 
-    with wave.open(str(full), "w") as wf:
-        wf.setnchannels(1)
-        wf.setsampwidth(2)  # 16-bit
-        wf.setframerate(sample_rate)
-        wf.writeframes(struct.pack(f"<{len(samples)}h", *samples))
+    with wave.open(str(full), "w") as w:
+        w.setnchannels(1)
+        w.setsampwidth(2)
+        w.setframerate(sample_rate)
+        w.writeframes(samples.tobytes())
 
-    return {"status": "success", "saved_to": save_path,
-            "duration": duration, "type": sfx_type}
+    buf = io.BytesIO()
+    with wave.open(buf, "w") as w:
+        w.setnchannels(1)
+        w.setsampwidth(2)
+        w.setframerate(sample_rate)
+        w.writeframes(samples.tobytes())
+    audio_b64 = base64.b64encode(buf.getvalue()).decode("ascii")
+
+    return {
+        "status": "success",
+        "saved_to": save_path,
+        "audio_base64": audio_b64,
+        "duration": duration,
+        "sample_rate": sample_rate,
+        "sfx_type": sfx_type,
+        "mime_type": "audio/wav",
+    }
 
 
 # ═══════════════════════════════════════════════════════════════════════

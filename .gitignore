@@ -1,19 +1,32 @@
+# Arquivos temporários do MCP (nunca commitar)
+*_mcp_incr_compile.gd
+*.tscn.tmp
+*.json.tmp
+*.py.tmp
+
 # Python
 __pycache__/
 *.pyc
-*.pyo
-.venv/
-venv/
-
-# VS Code
-.vscode/
+*.egg-info/
 
 # Godot
 .godot/
+*.import
+*.uid
 
-# Sistema operacional
-Thumbs.db
-.DS_Store
+# Ambiente virtual
+.venv/
+.venv_quebrado/
 
-# Logs
-*.log
+# Build artifacts
+builds/
+export/
+
+# Cache
+art_cache/
+classdb_cache/
+temp_art/
+workflow_logs/
+
+# IDE
+.vscode/

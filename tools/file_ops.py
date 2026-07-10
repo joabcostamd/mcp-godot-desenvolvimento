@@ -116,6 +116,11 @@ def write_file(path: str, content: str, mode: str = "create") -> dict:
     """
     proj = _get_active_project()
 
+    # Limite de tamanho (10MB) para evitar consumo excessivo
+    MAX_FILE_SIZE = 10 * 1024 * 1024
+    if len(content.encode('utf-8')) > MAX_FILE_SIZE:
+        return {"status": "error", "message": f"Conteúdo excede {MAX_FILE_SIZE//1024//1024}MB — abortado"}
+
     violation = _check_path_traversal(path, proj)
     if violation:
         return {"status": "error", "message": violation}

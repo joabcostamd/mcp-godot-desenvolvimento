@@ -10,5 +10,8 @@
     "fast": 15,
     "compile": 60,
     "export": 300
+  },
+  "vibe_coding": {
+    "enabled": true
   }
 }
