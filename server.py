@@ -302,7 +302,10 @@ from tools.marketplace_ops import marketplace_search, marketplace_download
 from tools.juice_ops import juice_apply, juice_list_presets
 
 # ── Pipeline Executor (Onda 7) ──────────────────────────────────
-from tools.pipeline_ops import create_entity, project_status
+from tools.pipeline_ops import project_status
+
+# ── Orquestrador Genius (Onda 7) ────────────────────────────────
+from tools.orchestrator import create_entity, circuit_breaker_status
 
 # ── Onda 6: Server Instructions (system prompt do MCP) ──────────────
 
@@ -4592,6 +4595,13 @@ def _tool_defs() -> list[Tool]:
                         "sugestoes do que criar a seguir. Use para diagnosticar o estado do jogo.",
             inputSchema={"type": "object", "properties": {}, "required": []},
         ),
+        # ── Orquestrador Genius (Onda 7) ──────────────────────
+        Tool(
+            name="circuit_breaker_status",
+            description="Status dos circuit breakers das APIs externas (FLUX, Replicate, Edge TTS). "
+                        "Use para verificar se alguma API está temporariamente bloqueada.",
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
     ]
 
     # ── Pós-processamento: hints MCP + additionalProperties ────────
@@ -4611,6 +4621,8 @@ def _tool_defs() -> list[Tool]:
         # LSP Bridge (C3)
         "gdscript_references", "gdscript_definition",
         "gdscript_hover", "gdscript_symbols", "gdscript_diagnostics",
+        # Orquestrador Genius (Onda 7)
+        "circuit_breaker_status",
     }
     _DESTRUCTIVE = {
         "delete_file", "delete_node", "write_file", "move_file",
@@ -4660,6 +4672,8 @@ def _tool_defs() -> list[Tool]:
         "create_project", "set_active_project",
         # LSP Bridge (C3)
         "gdscript_sync_file",
+        # Orquestrador Genius (Onda 7)
+        "circuit_breaker_status",
     }
     # ── Annotations (Onda 6): titles em PT-BR + tags ────────────────
     _TITLES = {
@@ -5274,6 +5288,8 @@ def _build_handlers() -> dict:
         # Pipeline Executor (Onda 7)
         "create_entity": create_entity,
         "project_status": project_status,
+        # Orquestrador Genius (Onda 7)
+        "circuit_breaker_status": circuit_breaker_status,
     }
 
     # ── Rollups Fase 2A / C1 ───────────────────────────────────────
