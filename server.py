@@ -5007,8 +5007,6 @@ def _tool_defs() -> list[Tool]:
     for t in _TOOL_DEFS_CACHE:
         if t.name in _OUTPUT_SCHEMAS:
             t.outputSchema = _OUTPUT_SCHEMAS[t.name]
-        elif not t.outputSchema:
-            t.outputSchema = _STANDARD_OUTPUT
 
     # ── Depreciação: tools substituídas por rollups (Fase 2A) ──
     # Estas 69 tools foram colapsadas nos 16 <domain>_manage rollups.
