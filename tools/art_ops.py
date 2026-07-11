@@ -670,7 +670,7 @@ def _draw_category_shape(draw, category, x0, y0, w, h, color, palette, var, fi):
         body_color = palette[(fi + var//20) % len(palette)]
         draw.ellipse([x0 + m*2, y0 + m, x0 + w - m*2, y0 + h - m], fill=body_color)
         # Olhos
-        eye_col = "#FFFFFF" if style != "pixel" else palette[2]
+        eye_col = palette[2] if len(palette) > 2 else "#FFFFFF"
         draw.ellipse([x0 + w//3, y0 + h//3, x0 + w//3 + m*2, y0 + h//3 + m*2], fill=eye_col)
 
     elif category == "personagem":
@@ -788,6 +788,9 @@ def _build_prompt(**kwargs) -> str:
     """Monta prompt final usando template da categoria."""
     category = kwargs.get("category", "torre")
     template = PROMPT_TEMPLATES.get(category, PROMPT_TEMPLATES["torre"])
+    # Normalizar: template usa {style}, kwargs pode ter style_desc
+    if "style" not in kwargs and "style_desc" in kwargs:
+        kwargs["style"] = kwargs["style_desc"]
     return template.format(**kwargs)
 
 
