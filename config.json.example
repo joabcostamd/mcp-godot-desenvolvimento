@@ -1,0 +1,17 @@
+{
+  "godot_path": "C:\\Godot\\Godot_v4.7-stable_win64.exe",
+  "godot_console_path": "C:\\Godot\\Godot_v4.7-stable_win64_console.exe",
+  "python_path": "C:\\Python312\\python.exe",
+  "projects_root": "C:\\meus-projetos",
+  "default_project": "C:\\meus-projetos\\meu-jogo",
+  "addon_port": 9080,
+  "game_port": 9081,
+  "timeouts": {
+    "fast": 15,
+    "compile": 60,
+    "export": 300
+  },
+  "vibe_coding": {
+    "enabled": true
+  }
+}

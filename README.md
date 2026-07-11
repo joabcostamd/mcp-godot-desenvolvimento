@@ -40,7 +40,7 @@
 ```powershell
 # 1. Clone este repositório
 git clone <url-deste-repo>
-cd mcp-godot-completo
+cd mcp-godot-desenvolvimento
 
 # 2. Crie o ambiente virtual
 python -m venv .venv
@@ -77,4 +77,4 @@ python -m venv .venv
 
 ---
 
-**Versão:** 2.9 | **Tools:** 143+ | **Última atualização:** 2026-07-09
+**Versão:** 3.0 | **Tools:** 172 | **Última atualização:** 2026-07-10
