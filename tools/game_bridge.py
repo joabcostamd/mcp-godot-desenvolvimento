@@ -20,20 +20,20 @@ PORT: int = 9081
 
 
 def _get_port() -> int:
-    """Lê a porta do game bridge do config.json."""
-    cfg_path = ROOT / "config.json"
-    if cfg_path.exists():
-        with open(cfg_path, encoding="utf-8") as f:
-            return json.load(f).get("game_port", 9081)
-    return 9081
+    """Lê a porta do game bridge da configuração."""
+    try:
+        from tools.config_loader import load_config
+        return load_config().get("game_port", 9081)
+    except Exception:
+        return 9081
 
 
 def _get_timeout() -> int:
-    cfg_path = ROOT / "config.json"
-    if cfg_path.exists():
-        with open(cfg_path, encoding="utf-8") as f:
-            return json.load(f).get("timeouts", {}).get("fast", 15)
-    return 15
+    try:
+        from tools.config_loader import load_config
+        return load_config().get("timeouts", {}).get("fast", 15)
+    except Exception:
+        return 15
 
 
 # ── Conexão ─────────────────────────────────────────────────────────

@@ -31,11 +31,15 @@ ROOT = Path(__file__).resolve().parent
 # ══════════════════════════════════════════════════════════════════════
 
 def load_config() -> dict:
-    cfg_path = ROOT / "config.json"
-    if cfg_path.exists():
-        with open(cfg_path, encoding="utf-8") as f:
-            return json.load(f)
-    return {}
+    try:
+        from tools.config_loader import load_config as _load
+        return _load()
+    except Exception:
+        cfg_path = ROOT / "config.json"
+        if cfg_path.exists():
+            with open(cfg_path, encoding="utf-8") as f:
+                return json.load(f)
+        return {}
 
 # ══════════════════════════════════════════════════════════════════════
 # Terminal colors (Windows 10+)

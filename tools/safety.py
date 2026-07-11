@@ -70,18 +70,17 @@ def _rotate_backups(project_root: Path) -> None:
 
 
 def _get_project_root() -> Path:
-    """Obtém a raiz do projeto ativo a partir do config.json."""
-    config_path = ROOT / "config.json"
-    if config_path.exists():
-        with open(config_path, encoding="utf-8") as f:
-            cfg = json.load(f)
+    """Obtém a raiz do projeto ativo a partir da configuração."""
+    try:
+        from tools.config_loader import load_config
+        cfg = load_config()
         default = cfg.get("default_project", "example_project")
-        # Se for path relativo, resolve a partir do ROOT
         proj = Path(default)
         if not proj.is_absolute():
             proj = ROOT / proj
         return proj
-    return ROOT / "example_project"
+    except Exception:
+        return ROOT / "example_project"
 
 
 # ── API Pública ─────────────────────────────────────────────────────
@@ -203,7 +202,8 @@ def list_backups(
     return index
 
 
-def git_checkpoint(message: str, project_root: Path | None = None) -> dict:
+def git_checkpoint(message: str, project_root: Path | None = None,
+                    skip_validation: bool = False) -> dict:
     """Faz commit git no projeto alvo (se for repo git).
 
     Returns:
@@ -216,8 +216,38 @@ def git_checkpoint(message: str, project_root: Path | None = None) -> dict:
     if not git_dir.exists():
         return {"status": "skipped", "note": "Projeto não é um repositório git."}
 
+    # ── Gate de compilação (não opcional por padrão) ──
+    if not skip_validation:
+        try:
+            from tools.runtime_ops import compile_test
+            check = compile_test()
+            if check.get("errors"):
+                return {
+                    "status": "error",
+                    "message": "❌ Commit BLOQUEADO — o projeto não compila. "
+                               "Corrija os erros antes de salvar o progresso.",
+                    "compile_errors": check["errors"],
+                }
+        except Exception:
+            pass  # Se compile_test falhar por infra, não bloqueia
+
+        # ── Gate de testes GUT (se a pasta tests/ existir) ──
+        tests_dir = project_root / "tests"
+        if tests_dir.exists() and any(tests_dir.glob("test_*.gd")):
+            try:
+                from tools.gut_ops import run_gut_tests
+                gut_result = run_gut_tests(project_path=str(project_root))
+                if gut_result.get("status") == "tests_failed":
+                    return {
+                        "status": "error",
+                        "message": "❌ Commit BLOQUEADO — testes GUT falharam.",
+                        "test_results": gut_result.get("results"),
+                    }
+            except Exception:
+                pass  # GUT não instalado — não bloqueia
+
     try:
-        result = subprocess.run(
+        subprocess.run(
             ["git", "add", "-A"],
             cwd=str(project_root),
             capture_output=True,
@@ -232,7 +262,7 @@ def git_checkpoint(message: str, project_root: Path | None = None) -> dict:
             timeout=30,
         )
         if result.returncode == 0:
-            return {"status": "success", "commit": message}
+            return {"status": "success", "commit": message, "validated": not skip_validation}
         else:
             return {
                 "status": "error",

@@ -254,14 +254,15 @@ def list_methods(class_name: str) -> list[dict]:
 
 
 def get_godot_bin() -> str:
-    """Retorna o caminho do binário Godot (config.json + auto-detecção)."""
-    config_path = ROOT / "config.json"
-    if config_path.exists():
-        with open(config_path, encoding="utf-8") as f:
-            cfg = json.load(f)
+    """Retorna o caminho do binário Godot (config + auto-detecção)."""
+    try:
+        from tools.config_loader import load_config
+        cfg = load_config()
         path = cfg.get("godot_console_path") or cfg.get("godot_path", "")
         if path and Path(path).exists():
             return path
+    except Exception:
+        pass
 
     # Auto-detecção: procura em paths comuns (Windows + Linux + Mac)
     import platform
@@ -300,12 +301,15 @@ def get_godot_bin() -> str:
 
 
 def get_config() -> dict:
-    """Retorna o config.json completo. Cria com defaults se não existir."""
-    config_path = ROOT / "config.json"
-    if config_path.exists():
-        with open(config_path, encoding="utf-8") as f:
-            return json.load(f)
-    # Cria config.json com defaults
+    """Retorna a configuração completa. Cria com defaults se não existir."""
+    try:
+        from tools.config_loader import load_config
+        cfg = load_config()
+        if not cfg.get("_config_incomplete"):
+            return cfg
+    except Exception:
+        pass
+    # Cria config.json com defaults se nada funcionar
     default_cfg = {
         "godot_path": "godot",
         "default_project": "example_project",
@@ -314,6 +318,7 @@ def get_config() -> dict:
         "game_port": 9081,
         "timeouts": {"fast": 15, "compile": 30, "slow": 120},
     }
+    config_path = ROOT / "config.json"
     config_path.write_text(json.dumps(default_cfg, indent=2), encoding='utf-8')
     return default_cfg
 

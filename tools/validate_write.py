@@ -59,6 +59,52 @@ def validate_gdscript_syntax(code: str) -> dict:
             if not any(stripped.startswith(kw) for kw in ("extends", "class_name", "var ", "signal ", "enum ", "const ", "@", "func ", "#", "static ", "tool", "preload", "await")):
                 errors.append({"line": i, "message": f"Linha não indentada fora de escopo: {stripped[:50]}"})
 
+    # R1: var duplicado na mesma função (regra R1 do LEARNINGS.md)
+    in_function = False
+    func_name = ""
+    seen_vars: dict[str, tuple[int, str]] = {}  # nome_var -> (linha, func_name)
+    for i, line in enumerate(lines, 1):
+        stripped = line.strip()
+        if stripped.startswith("func "):
+            in_function = True
+            func_name = stripped.split("(")[0].replace("func ", "").strip()
+            seen_vars = {}
+            continue
+        if in_function:
+            # Detecta fim de função: outra declaração func ou linha não indentada
+            indent = len(line) - len(line.lstrip())
+            if stripped and indent == 0:
+                if stripped.startswith("func "):
+                    in_function = True
+                    func_name = stripped.split("(")[0].replace("func ", "").strip()
+                    seen_vars = {}
+                    continue
+                elif not stripped.startswith(("var ", "const ", "enum ", "signal ", "static ", "#", "@", "extends", "class_name")):
+                    in_function = False
+                    continue
+            m = re.match(r"var\s+(\w+)", stripped)
+            if m:
+                vname = m.group(1)
+                if vname in seen_vars:
+                    errors.append({
+                        "line": i,
+                        "message": f"R1: variável '{vname}' declarada duas vezes na mesma função '{func_name}' (primeira na linha {seen_vars[vname][0]})",
+                        "rule": "R1_CRITICAL",
+                    })
+                else:
+                    seen_vars[vname] = (i, func_name)
+
+    # R2: := com acesso a Dictionary (regra R2 do LEARNINGS.md)
+    for i, line in enumerate(lines, 1):
+        if re.search(r':=\s*\w+\[', line) or re.search(r':=\s*\w+\.\w+\[', line):
+            errors.append({
+                "line": i,
+                "message": "R2: uso de ':=' com acesso a Dictionary/Array pode falhar "
+                           "inferência de tipo — considere tipo explícito",
+                "rule": "R2_HIGH",
+                "code": line.strip()[:60],
+            })
+
     return {
         "valid": len(errors) == 0,
         "errors": errors or None,
@@ -98,17 +144,21 @@ def safe_write_gdscript(
             "errors": validation["errors"],
         }
 
+    # 1.5 Auto-detectar projeto ativo se não informado
+    if not project_path:
+        try:
+            from tools.project_ops import _get_active_project
+            project_path = str(_get_active_project())
+        except Exception:
+            project_path = None
+
     # 2. Validação Godot (se projeto disponível)
     godot_check = None
     if project_path:
         try:
             import subprocess, tempfile
-            config_path = Path(__file__).resolve().parent.parent / "config.json"
-            import json
-            godot_path = ""
-            if config_path.exists():
-                with open(config_path) as f:
-                    godot_path = json.load(f).get("godot_path", "")
+            from tools.config_loader import load_config
+            godot_path = load_config().get("godot_path", "")
 
             if godot_path:
                 with tempfile.NamedTemporaryFile(suffix=".gd", mode="w", delete=False) as tmp:

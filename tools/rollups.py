@@ -468,15 +468,14 @@ def _build_debug_manage():
 
 
 def _build_config_manage():
-    """config_manage: 4 operações de configuração (input + autoload + signals)."""
+    """config_manage: 2 operações de configuração (input + autoload).
+    NOTA: connect_signal e list_signals estão em node_manage — evite duplicação."""
     return create_manage_tool(
         tool_name="config_manage",
-        description="Gerencia configurações: input actions, autoloads, conexão e listagem de sinais.",
+        description="Gerencia configurações: input actions e autoloads. Para sinais, use node_manage.",
         ops={
             "input_action": configure_input_action,
             "autoload": configure_autoload,
-            "connect_signal": connect_signal,
-            "list_signals": list_signals_for_node,
         },
         tool_hints={"destructiveHint": True, "idempotentHint": False, "openWorldHint": True},
         title="Gerenciar Configurações",

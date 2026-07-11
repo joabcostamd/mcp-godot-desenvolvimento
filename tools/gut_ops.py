@@ -45,17 +45,29 @@ def run_gut_tests(
 
     # Detecta Godot
     if not godot_path:
-        config_path = ROOT / "config.json"
-        if config_path.exists():
-            with open(config_path, encoding="utf-8") as f:
-                config = json.load(f)
+        try:
+            from tools.config_loader import load_config
+            config = load_config()
             godot_path = config.get("godot_path", "")
+        except Exception:
+            pass
 
     if not godot_path:
         return {"status": "error", "message": "Godot não encontrado. Configure godot_path em config.json"}
 
     if not Path(godot_path).exists():
         return {"status": "error", "message": f"Godot executável não encontrado: {godot_path}"}
+
+    # Warm-up: importa o projeto antes de rodar os testes, senão
+    # class_name customizados não registram e a suíte falha por
+    # motivo errado (não é um bug real do jogo).
+    try:
+        subprocess.run(
+            [godot_path, "--headless", "--path", project_path, "--import", "--quit"],
+            capture_output=True, text=True, timeout=30,
+        )
+    except Exception:
+        pass  # Se o warm-up falhar, tenta rodar os testes mesmo assim
 
     # Executa GUT via headless
     start = time.time()

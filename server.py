@@ -5444,14 +5444,30 @@ def _handle_read_file(args: dict) -> dict:
 
 
 def _handle_write_file(args: dict) -> dict:
-    result = write_file(
-        path=args["path"],
-        content=args["content"],
-        mode=args.get("mode", "create"),
-    )
+    path = args["path"]
+    if path.endswith(".gd"):
+        # Redireciona para o caminho validado. Reusa a lógica de
+        # safe_write_gdscript em vez de duplicá-la.
+        from tools.project_ops import _get_active_project
+        proj = _get_active_project()
+        result = safe_write_gdscript(
+            file_path=path,
+            content=args["content"],
+            project_path=str(proj),
+            strict=True,
+        )
+    else:
+        result = write_file(
+            path=path,
+            content=args["content"],
+            mode=args.get("mode", "create"),
+        )
     if result.get("status") == "success":
-        try: from tools.editor_config import _notify_godot_file_changed; _notify_godot_file_changed(args["path"])
-        except Exception: pass
+        try:
+            from tools.editor_config import _notify_godot_file_changed
+            _notify_godot_file_changed(path)
+        except Exception:
+            pass
     return result
 
 
@@ -5853,7 +5869,7 @@ def _handle_import_3d_model(args: dict) -> dict:
 
     source = args["source_path"]
     target = args["target_res_path"]
-    create_scene = args.get("create_scene", True)
+    should_create_scene = args.get("create_scene", True)  # renomeado para evitar shadowing
     scene_name = args.get("scene_name")
 
     # Valida arquivo fonte
@@ -5875,9 +5891,9 @@ def _handle_import_3d_model(args: dict) -> dict:
     result = {"status": "success", "imported": imported_res}
 
     # Cria cena opcionalmente
-    if create_scene:
+    if should_create_scene:  # usa a variável renomeada
         scene_file = scene_name or f"{Path(target).stem}.tscn"
-        r = create_scene(args.get("scene_path", f"scenes/{scene_file}"), "MeshInstance3D")
+        r = create_scene(args.get("scene_path", f"scenes/{scene_file}"), "MeshInstance3D")  # chama a função de verdade
         if r["status"] == "success":
             result["scene"] = r.get("path", scene_file)
             result["note"] = "Modelo importado e cena criada. Adicione o mesh no MeshInstance3D manualmente."
@@ -5977,13 +5993,14 @@ def _handle_health_check(args: dict) -> dict:
     import json as _json
     checks = []
 
-    # 1. config.json
+    # 1. config
     try:
-        cfg = _json.loads((ROOT / "config.json").read_text(encoding="utf-8"))
+        from tools.config_loader import load_config
+        cfg = load_config()
         godot_path = cfg.get("godot_path", "não configurado")
     except Exception:
         godot_path = None
-    checks.append({"component": "config.json",
+    checks.append({"component": "config",
                    "ok": godot_path is not None,
                    "detail": godot_path or "ausente"})
 
@@ -6489,69 +6506,76 @@ def _handle_setup_mcp_config(args: dict) -> dict:
 
 
 # ══════════════════════════════════════════════════════════════════════
-# ── MCP Resources (Fase 2A / C2) ────────────────────────────────────
+# ── MCP Resources (Fase 2A / C2) + Game Patterns (Onda 6) ──────────
+# CONSOLIDADO: um único @server.list_resources() + @server.read_resource()
+# para evitar que o segundo par sobrescreva o primeiro (bug PATCH 9).
 # ══════════════════════════════════════════════════════════════════════
 
 @server.list_resources()
 async def list_resources() -> list:
-    """Lista os resources godot:// disponíveis."""
+    """Lista os resources godot:// disponíveis + game patterns."""
+    all_resources = []
+
+    # 1. Resources godot:// originais
     try:
         from resources import get_resources
-        return get_resources()
+        all_resources.extend(get_resources())
     except Exception:
-        return []
+        pass
+
+    # 2. Game Patterns (Onda 6)
+    try:
+        from mcp.types import Resource, ResourceTemplate
+        from resources.game_patterns import get_game_patterns
+        patterns = get_game_patterns()
+        all_resources.extend([
+            Resource(uri="godot://game-patterns", name="Padroes de Jogos",
+                     description=f"{len(patterns)} generos com estruturas tecnicas Godot",
+                     mimeType="application/json"),
+            Resource(uri=ResourceTemplate(uriTemplate="godot://game-patterns/{name}",
+                     name="Padrao Especifico",
+                     description="Estrutura completa para um genero",
+                     mimeType="application/json")),
+        ])
+    except Exception:
+        pass
+
+    return all_resources
 
 
 @server.read_resource()
 async def read_resource(uri: str) -> str:
-    """Lê o conteúdo de um resource godot://.
+    """Lê o conteúdo de um resource godot:// ou game-patterns.
 
     Retorna JSON ou texto puro conforme o MIME type do resource.
     """
+    import json
+
+    # 1. Game Patterns
+    if uri.startswith("godot://game-patterns"):
+        try:
+            from urllib.parse import urlparse
+            from resources.game_patterns import get_game_patterns, get_game_pattern
+            parsed = urlparse(uri)
+            name = parsed.path.strip("/")
+            if not name:
+                return json.dumps(get_game_patterns(), indent=2, ensure_ascii=False)
+            pattern = get_game_pattern(name)
+            if pattern:
+                return json.dumps(pattern, indent=2, ensure_ascii=False)
+            return json.dumps({"error": f"Padrao '{name}' nao encontrado"})
+        except Exception as e:
+            return json.dumps({"status": "error", "message": f"Erro ao ler pattern: {e}"})
+
+    # 2. Resources godot:// originais
     try:
         from resources import read_resource as _read
         return _read(uri)
     except Exception as e:
-        import json
         return json.dumps({
             "status": "error",
             "message": f"Erro ao ler resource '{uri}': {e}",
         })
-
-
-# ══════════════════════════════════════════════════════════════
-# Onda 6: Game Patterns (MCP Resources)
-# ══════════════════════════════════════════════════════════════
-
-@server.list_resources()
-async def list_game_patterns():
-    from mcp.types import Resource, ResourceTemplate
-    from resources.game_patterns import get_game_patterns
-    patterns = get_game_patterns()
-    return [
-        Resource(uri="godot://game-patterns", name="Padroes de Jogos",
-                 description=f"{len(patterns)} generos com estruturas tecnicas Godot",
-                 mimeType="application/json"),
-        Resource(uri=ResourceTemplate(uriTemplate="godot://game-patterns/{name}",
-                 name="Padrao Especifico",
-                 description="Estrutura completa para um genero",
-                 mimeType="application/json")),
-    ]
-
-
-@server.read_resource()
-async def read_game_pattern(uri: str):
-    import json
-    from urllib.parse import urlparse
-    from resources.game_patterns import get_game_patterns, get_game_pattern
-    parsed = urlparse(uri)
-    name = parsed.path.strip("/")
-    if not name:
-        return json.dumps(get_game_patterns(), indent=2, ensure_ascii=False)
-    pattern = get_game_pattern(name)
-    if pattern:
-        return json.dumps(pattern, indent=2, ensure_ascii=False)
-    return json.dumps({"error": f"Padrao '{name}' nao encontrado"})
 
 
 # ══════════════════════════════════════════════════════════════

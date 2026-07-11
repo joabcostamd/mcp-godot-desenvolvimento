@@ -395,16 +395,16 @@ def godot_keep_alive(project_path: str | None = None,
     # Resolver paths
     if not project_path:
         try:
-            import json
-            cfg = json.loads(Path(ROOT / "config.json").read_text(encoding='utf-8'))
+            from tools.config_loader import load_config
+            cfg = load_config()
             project_path = cfg.get("default_project")
         except Exception:
             pass
 
     if not godot_path:
         try:
-            import json
-            cfg = json.loads(Path(ROOT / "config.json").read_text(encoding='utf-8'))
+            from tools.config_loader import load_config
+            cfg = load_config()
             godot_path = cfg.get("godot_path", r"C:\Godot\Godot_v4.7-stable_win64.exe")
         except Exception:
             godot_path = r"C:\Godot\Godot_v4.7-stable_win64.exe"

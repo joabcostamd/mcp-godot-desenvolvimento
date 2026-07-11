@@ -308,14 +308,15 @@ class DecisionEngine:
         elif project_stage == "desenvolvimento":
             if always_needs:
                 return Decision("generate_flux", 0.92,
-                              f"Desenvolvimento — {entity_type} precisa de sprite. FLUX.2 para qualidade.", True)
+                              f"Desenvolvimento — {entity_type} precisa de sprite. "
+                              f"FLUX.2 é PAGO — confirme antes de gerar.", False)  # era True
             else:
                 return Decision("suggest_art", 0.65,
                               f"{entity_type} pode não precisar de sprite. Confirma?", False)
 
         elif project_stage == "polimento":
             return Decision("generate_flux", 0.88,
-                          f"Polimento — gerar arte final de qualidade.", False)
+                          f"Polimento — gerar arte final de qualidade. FLUX.2 é PAGO.", False)  # já era False
 
         return Decision("skip_art", 0.70, "Estágio desconhecido — não gerar", True)
 
@@ -647,6 +648,10 @@ def create_entity(
     suggestions = []
     if art_decision.action == "skip_art" and not (hasattr(state, 'has_sprite_for') and state.has_sprite_for(name)):
         suggestions.append(f"🎨 '{name}' não tem sprite. Gerar?")
+    if art_decision.action == "generate_flux" and not art_decision.auto_execute:
+        suggestions.append(f"🎨💰 '{name}' poderia ter arte via FLUX.2 (API paga). "
+                          f"Confirme explicitamente se quer gerar: generate_game_art_flux(...). "
+                          f"Enquanto isso, use generate_placeholder_sprite para placeholder gratuito.")
     if not (hasattr(state, 'has_audio_for') and state.has_audio_for(name)):
         suggestions.append(f"🔊 '{name}' não tem SFX. Gerar?")
     if script_path not in str(state.scripts):

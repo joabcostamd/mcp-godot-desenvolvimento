@@ -30,11 +30,11 @@ ROOT = Path(__file__).resolve().parent.parent
 # ── Config ───────────────────────────────────────────────────────────
 
 def _get_config() -> dict:
-    cfg_path = ROOT / "config.json"
-    if cfg_path.exists():
-        with open(cfg_path, encoding="utf-8") as f:
-            return json.load(f)
-    return {}
+    try:
+        from tools.config_loader import load_config
+        return load_config()
+    except Exception:
+        return {}
 
 _CFG = _get_config()
 EDITOR_PORT = _CFG.get("addon_port", 9080)

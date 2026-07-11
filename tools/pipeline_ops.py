@@ -1,11 +1,19 @@
-"""pipeline_ops.py — Pipeline Executor: workflows multi-subsistema (Onda 7)."""
+"""pipeline_ops.py — Pipeline Executor: workflows multi-subsistema (Onda 7).
+
+NOTA: create_entity real está em tools/orchestrator.py — é a versão
+registrada em server.py. Esta função (_create_entity_legacy_unused)
+é uma implementação anterior, mais simples, mantida apenas como
+referência histórica. NÃO reconectar sem revisar as diferenças de
+comportamento (falta Saga, Reconciliation, Circuit Breaker, e o
+gate de confirmação do PATCH 6).
+"""
 
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
 
-def create_entity(name: str, entity_type: str = "enemy", description: str = "",
+def _create_entity_legacy_unused(name: str, entity_type: str = "enemy", description: str = "",
                   behavior: str = "patrol", generate_art: bool | None = None,
                   generate_audio: bool | None = None, art_style: str = "scifi",
                   save_path: str | None = None) -> dict:

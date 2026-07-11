@@ -18,14 +18,19 @@ CONFIG_PATH = ROOT / "config.json"
 
 
 def _load_config() -> dict:
-    if CONFIG_PATH.exists():
-        with open(CONFIG_PATH, encoding="utf-8") as f:
-            return json.load(f)
-    return {}
+    try:
+        from tools.config_loader import load_config
+        return load_config()
+    except Exception:
+        return {}
 
 
 def _save_config(config: dict) -> None:
-    with open(CONFIG_PATH, "w", encoding="utf-8") as f:
+    from tools.config_loader import ROOT
+    config_path = ROOT / "config.local.json"
+    if not config_path.exists():
+        config_path = ROOT / "config.json"
+    with open(config_path, "w", encoding="utf-8") as f:
         json.dump(config, f, indent=2, ensure_ascii=False)
 
 

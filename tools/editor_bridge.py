@@ -22,21 +22,21 @@ _connected: bool = False
 
 
 def _get_port() -> int:
-    """Lê a porta do addon do config.json."""
-    cfg_path = ROOT / "config.json"
-    if cfg_path.exists():
-        with open(cfg_path, encoding="utf-8") as f:
-            return json.load(f).get("addon_port", 9080)
-    return 9080
+    """Lê a porta do addon da configuração."""
+    try:
+        from tools.config_loader import load_config
+        return load_config().get("addon_port", 9080)
+    except Exception:
+        return 9080
 
 
 def _get_timeout() -> int:
-    """Lê timeout fast do config.json."""
-    cfg_path = ROOT / "config.json"
-    if cfg_path.exists():
-        with open(cfg_path, encoding="utf-8") as f:
-            return json.load(f).get("timeouts", {}).get("fast", 15)
-    return 15
+    """Lê timeout fast da configuração."""
+    try:
+        from tools.config_loader import load_config
+        return load_config().get("timeouts", {}).get("fast", 15)
+    except Exception:
+        return 15
 
 
 # ── Conexão ─────────────────────────────────────────────────────────

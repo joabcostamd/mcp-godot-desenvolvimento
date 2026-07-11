@@ -6,6 +6,7 @@
 
 # Configuração local (cada máquina tem a sua — use config.json.example como modelo)
 config.json
+config.local.json
 
 # Python
 __pycache__/
