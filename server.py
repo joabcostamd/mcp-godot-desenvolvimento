@@ -36,7 +36,7 @@ from tools.project_ops import (
     install_mcp_addon,
     generate_project_structure,
 )
-from tools.bootstrap_ops import bootstrap_godot_mcp
+from tools.bootstrap_ops import bootstrap_godot_mcp, godot_keep_alive
 from tools.batch_ops import batch_atomic_edit
 from tools.asset_download import download_asset, import_downloaded_asset
 from tools.workflow_ops import (
@@ -1487,6 +1487,20 @@ def _tool_defs() -> list[Tool]:
                         "type": "integer",
                         "description": "Segundos máximos esperando addon iniciar (default 15)."
                     },
+                },
+                "required": []
+            },
+        ),
+        Tool(
+            name="godot_keep_alive",
+            description="Garante que o Godot Editor esta aberto. Se nao estiver, abre. "
+                        "NAO fecha o Godot em hipotese alguma. Chame no inicio de toda sessao. "
+                        "Use quando suspeitar que o Godot foi fechado.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "Caminho do projeto (auto se omitido)."},
+                    "godot_path": {"type": "string", "description": "Caminho do Godot (auto se omitido)."},
                 },
                 "required": []
             },
@@ -5147,6 +5161,7 @@ def _build_handlers() -> dict:
         # Fase 2: Input e Autoload
         "install_mcp_addon": _handle_install_mcp_addon,
         "bootstrap_godot_mcp": _handle_bootstrap_godot_mcp,
+        "godot_keep_alive": godot_keep_alive,
         # Fase 2: Runtime
         # Fase 3: Editor
         "take_screenshot": _handle_take_screenshot,

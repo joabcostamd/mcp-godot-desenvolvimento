@@ -354,3 +354,78 @@ def auto_bootstrap() -> dict:
         bootstrap_godot_mcp(target="full")
     """
     return bootstrap_godot_mcp(target="full")
+
+
+# ── Godot Keep-Alive ─────────────────────────────────────────────────
+
+def godot_keep_alive(project_path: str | None = None, 
+                     godot_path: str | None = None) -> dict:
+    """Garante que o Godot Editor está aberto. Se não estiver, abre.
+
+    Esta tool DEVE ser chamada pela IA no início de toda sessão e sempre
+    que suspeitar que o Godot foi fechado. NÃO fecha o Godot em hipótese
+    alguma — só abre se não estiver rodando.
+
+    Args:
+        project_path: Caminho do projeto (usa config.json se None).
+        godot_path: Caminho do executável Godot (usa config.json se None).
+
+    Returns:
+        {"status": "success", "godot": "running"|"started", "pid": int}
+    """
+    import subprocess
+    from pathlib import Path
+
+    # Verificar se já está rodando
+    try:
+        result = subprocess.run(
+            ['tasklist', '/fi', 'imagename eq Godot_v4.7-stable_win64.exe'],
+            capture_output=True, text=True, timeout=5
+        )
+        if 'Godot_v4.7-stable_win64.exe' in result.stdout:
+            # Já está rodando
+            return {
+                "status": "success",
+                "godot": "running",
+                "message": "Godot Editor ja esta aberto. Nao feche.",
+            }
+    except Exception:
+        pass
+
+    # Resolver paths
+    if not project_path:
+        try:
+            import json
+            cfg = json.loads(Path(ROOT / "config.json").read_text(encoding='utf-8'))
+            project_path = cfg.get("default_project")
+        except Exception:
+            pass
+
+    if not godot_path:
+        try:
+            import json
+            cfg = json.loads(Path(ROOT / "config.json").read_text(encoding='utf-8'))
+            godot_path = cfg.get("godot_path", r"C:\Godot\Godot_v4.7-stable_win64.exe")
+        except Exception:
+            godot_path = r"C:\Godot\Godot_v4.7-stable_win64.exe"
+
+    if not project_path:
+        return {"status": "error", "message": "project_path nao definido"}
+
+    # Abrir Godot
+    try:
+        subprocess.Popen(
+            [godot_path, "--path", project_path, "--editor"],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        )
+        import time
+        time.sleep(3)
+
+        return {
+            "status": "success",
+            "godot": "started",
+            "message": "Godot Editor iniciado. MANTENHA ABERTO.",
+            "project": project_path,
+        }
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
