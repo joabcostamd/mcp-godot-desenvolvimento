@@ -217,6 +217,10 @@ def git_checkpoint(message: str, project_root: Path | None = None,
         return {"status": "skipped", "note": "Projeto não é um repositório git."}
 
     # ── Gate de compilação: valida todos os .gd do projeto (não opcional) ──
+    # NOTA: este gate valida SINTAXE (parênteses, R1, R2), não SEMÂNTICA.
+    # Não pega: métodos inexistentes, tipos errados, nós referenciados que
+    # não existem na cena. Para essas classes de erro, ainda é necessário
+    # rodar compile_test manualmente antes de confiar 100% no commit.
     if not skip_validation:
         try:
             from tools.validate_write import validate_gdscript_syntax
