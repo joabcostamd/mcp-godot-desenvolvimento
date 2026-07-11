@@ -5377,6 +5377,9 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
             # P1-1: Despachar handlers para thread pool (evita bloquear event loop)
             loop = asyncio.get_running_loop()
             result = await loop.run_in_executor(None, handler, arguments)
+            # Garante status sempre presente (outputSchema exige)
+            if isinstance(result, dict) and "status" not in result:
+                result["status"] = "success"
             is_error = isinstance(result, dict) and result.get("status") == "error"
             # ── error_code automático (Onda 7) ──────────────────
             if is_error and "error_code" not in result:
