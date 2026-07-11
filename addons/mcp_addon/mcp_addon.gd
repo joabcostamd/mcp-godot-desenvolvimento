@@ -1,12 +1,12 @@
-; mcp_addon.gd — Addon GDScript para MCP Godot (Fase 2B / A1)
-;
-; EditorPlugin que hospeda um WebSocket server para receber comandos
-; do servidor Python e executar operações no editor com UndoRedo nativo.
-;
-; Baseado no padrão yurineko73/godot-mcp-native.
-; Porta: 9082 | Protocolo: JSON-RPC 2.0 sobre WebSocket
-;
-; Instalação: copie esta pasta para addons/mcp_addon/ no projeto Godot.
+# mcp_addon.gd — Addon GDScript para MCP Godot (Fase 2B / A1)
+#
+# EditorPlugin que hospeda um WebSocket server para receber comandos
+# do servidor Python e executar operações no editor com UndoRedo nativo.
+#
+# Baseado no padrão yurineko73/godot-mcp-native.
+# Porta: 9082 | Protocolo: JSON-RPC 2.0 sobre WebSocket
+#
+# Instalação: copie esta pasta para addons/mcp_addon/ no projeto Godot.
 
 @tool
 extends EditorPlugin
@@ -335,7 +335,7 @@ func _duplicate_node(id, params: Dictionary) -> void:
 
 	_send_result(id, {
 		"status": "ok",
-		"node_path": parent.get_path() + "/" + duplicate.name,
+		"node_path": str(parent.get_path()) + "/" + duplicate.name,
 		"node_type": duplicate.get_class()
 	})
 
