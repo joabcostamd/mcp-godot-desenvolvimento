@@ -216,20 +216,37 @@ def git_checkpoint(message: str, project_root: Path | None = None,
     if not git_dir.exists():
         return {"status": "skipped", "note": "Projeto não é um repositório git."}
 
-    # ── Gate de compilação (não opcional por padrão) ──
+    # ── Gate de compilação: valida todos os .gd do projeto (não opcional) ──
     if not skip_validation:
         try:
-            from tools.runtime_ops import compile_test
-            check = compile_test()
-            if check.get("errors"):
+            from tools.validate_write import validate_gdscript_syntax
+            errors_found = []
+            for gd_file in project_root.glob("**/*.gd"):
+                # Pula addons e .godot
+                if "addons" in gd_file.parts or ".godot" in gd_file.parts:
+                    continue
+                try:
+                    code = gd_file.read_text(encoding="utf-8")
+                    validation = validate_gdscript_syntax(code)
+                    if not validation.get("valid", True):
+                        for err in (validation.get("errors") or []):
+                            errors_found.append({
+                                "file": str(gd_file.relative_to(project_root)),
+                                "line": err.get("line"),
+                                "message": err.get("message"),
+                                "rule": err.get("rule"),
+                            })
+                except Exception:
+                    pass
+            if errors_found:
                 return {
                     "status": "error",
                     "message": "❌ Commit BLOQUEADO — o projeto não compila. "
                                "Corrija os erros antes de salvar o progresso.",
-                    "compile_errors": check["errors"],
+                    "compile_errors": errors_found,
                 }
         except Exception:
-            pass  # Se compile_test falhar por infra, não bloqueia
+            pass  # Se validação falhar por infra, não bloqueia
 
         # ── Gate de testes GUT (se a pasta tests/ existir) ──
         tests_dir = project_root / "tests"

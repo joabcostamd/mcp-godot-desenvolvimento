@@ -5893,8 +5893,9 @@ def _handle_import_3d_model(args: dict) -> dict:
     # Cria cena opcionalmente
     if should_create_scene:  # usa a variável renomeada
         scene_file = scene_name or f"{Path(target).stem}.tscn"
-        r = create_scene(args.get("scene_path", f"scenes/{scene_file}"), "MeshInstance3D")  # chama a função de verdade
-        if r["status"] == "success":
+        scene_path = args.get("scene_path", f"scenes/{scene_file}")
+        r = create_scene(scene_file, "MeshInstance3D", scene_path)
+        if r.get("status") == "success":
             result["scene"] = r.get("path", scene_file)
             result["note"] = "Modelo importado e cena criada. Adicione o mesh no MeshInstance3D manualmente."
 
@@ -6532,10 +6533,10 @@ async def list_resources() -> list:
             Resource(uri="godot://game-patterns", name="Padroes de Jogos",
                      description=f"{len(patterns)} generos com estruturas tecnicas Godot",
                      mimeType="application/json"),
-            Resource(uri=ResourceTemplate(uriTemplate="godot://game-patterns/{name}",
+            ResourceTemplate(uriTemplate="godot://game-patterns/{name}",
                      name="Padrao Especifico",
                      description="Estrutura completa para um genero",
-                     mimeType="application/json")),
+                     mimeType="application/json"),
         ])
     except Exception:
         pass
