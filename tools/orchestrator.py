@@ -687,6 +687,7 @@ def _generate_art_placeholder(name: str, category: str, save_path: str) -> dict:
 def circuit_breaker_status() -> dict:
     """Status de todos os circuit breakers."""
     return {
+        "status": "success",
         "circuits": [
             flux_circuit.status(),
             replicate_circuit.status(),

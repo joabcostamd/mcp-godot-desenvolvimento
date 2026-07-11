@@ -13,5 +13,9 @@
   },
   "vibe_coding": {
     "enabled": true
+  },
+  "security": {
+    "allow_remote": false,
+    "configured_at": "1783729553.1677995"
   }
 }
