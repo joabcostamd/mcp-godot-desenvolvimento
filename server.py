@@ -23,6 +23,78 @@ from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import TextContent, Tool, Resource, ResourceTemplate
 
+# ══════════════════════════════════════════════════════════════
+# PATCH 17: Curadoria de Toolset (--toolsets)
+# ══════════════════════════════════════════════════════════════
+
+TOOLSETS = {
+    "core": [
+        "ping", "health_check", "self_test", "bootstrap_godot_mcp",
+        "read_file", "write_file", "safe_write_gdscript",
+        "compile_test", "run_game", "stop_game", "smart_restart",
+        "git_commit_checkpoint",
+    ],
+    "scene_ops": [
+        "scene_manage", "node_manage",
+    ],
+    "script_ops": [
+        "script_manage", "safe_write_gdscript", "validate_gdscript_syntax",
+        "gdscript_diagnostics", "gdscript_references", "gdscript_definition",
+    ],
+    "test_ops": [
+        "run_gut_tests", "effect_probe", "godot_exec",
+        "get_runtime_state_digest", "capture_runtime_errors",
+    ],
+    "runtime_ops": [
+        "run_game", "stop_game", "smart_restart", "compile_test",
+        "execute_gdscript_runtime", "capture_game_screenshot",
+    ],
+    "git_ops": [
+        "git_commit_checkpoint", "safety_manage",
+    ],
+    "refs_ops": [
+        "find_missing_references", "search_codebase",
+    ],
+    "asset_ops": [
+        "asset_manage", "generate_placeholder_sprite",
+        "generate_game_art", "generate_game_art_flux",
+        "import_texture", "import_sprite_sheet",
+    ],
+    "design_ops": [
+        "analyze_game_structure", "suggest_next_steps",
+        "validate_game_design", "estimate_game_scope",
+        "project_status", "create_entity",
+    ],
+    "ui_ops": [
+        "ui_manage", "create_main_menu", "create_hud_template",
+        "create_pause_menu", "create_health_bar",
+    ],
+}
+
+def parse_toolset_arg() -> set[str] | None:
+    """Parse --toolsets argument. Returns None if all tools should be enabled."""
+    import argparse
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--toolsets", default="all", type=str)
+    args, _ = parser.parse_known_args()
+
+    if args.toolsets.strip().lower() == "all":
+        return None  # None = no filtering, all tools enabled
+
+    enabled_sets = [t.strip() for t in args.toolsets.split(",")]
+    enabled_tools: set[str] = set()
+    for name in enabled_sets:
+        if name not in TOOLSETS:
+            print(f"Aviso: toolset desconhecido ignorado: {name}", file=sys.stderr)
+            continue
+        enabled_tools.update(TOOLSETS[name])
+    return enabled_tools
+
+# Resolve toolsets uma vez no import
+_ENABLED_TOOLS: set[str] | None = parse_toolset_arg()
+if _ENABLED_TOOLS is not None:
+    print(f"[MCP] Toolsets ativos: {sorted(_ENABLED_TOOLS)}", file=sys.stderr)
+
 from tools.project_ops import (
     _get_active_project,
     validate_godot_version,
@@ -5073,6 +5145,10 @@ def _tool_defs() -> list[Tool]:
     }
     _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name not in _DEPRECATED]
 
+    # ── PATCH 17: Filtrar por --toolsets se ativo ──
+    if _ENABLED_TOOLS is not None:
+        _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name in _ENABLED_TOOLS]
+
     # ── Pós-processador: garantir 4 hints em 100% das tools ──
     _TOOL_DEFS_CACHE = _apply_hints(_TOOL_DEFS_CACHE)
 
@@ -5359,6 +5435,10 @@ def _build_handlers() -> dict:
         "compare_screenshots", "detect_empty_screen", "detect_offscreen_elements",
     }
     _HANDLERS_CACHE = {k: v for k, v in _HANDLERS_CACHE.items() if k not in _DEPRECATED_H}
+
+    # ── PATCH 17: Filtrar handlers por --toolsets ──
+    if _ENABLED_TOOLS is not None:
+        _HANDLERS_CACHE = {k: v for k, v in _HANDLERS_CACHE.items() if k in _ENABLED_TOOLS}
 
     return _HANDLERS_CACHE
 
