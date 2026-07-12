@@ -1,6 +1,36 @@
 # CHANGELOG — mcp-godot-desenvolvimento
 
-## v3.3.0 (2026-07-12) — Features 4-8 + Task B
+## v3.3.0 (2026-07-12) — Onda 0.1 completa
+
+### Features Fase 1 (9 + Task B)
+- Feature 4-9 + Task B já documentados
+
+### Features Grupo C (4)
+- **C1**: `find_unused_resources` — detecção de assets órfãos (matching exato, não substring; autoloads como referência implícita)
+- **C2**: `analyze_signal_flow` — conexões de sinal órfãs (método renomeado/removido)
+- **C3**: `set_auto_dismiss` — fechamento automático de diálogos modais (GDScript + Python)
+- **C4**: `fuzzy_suggest` — sugestão por proximidade generalizada, aplicado em get_node_property + list_signals
+
+### Feature 10
+- `run_stress_test` — orquestra game_spawn_node + inject_input_event + game_performance + capture_runtime_errors
+
+### Shader Editor (A1)
+- `read_shader`, `edit_shader` (validação via RenderingServer), `get_shader_params` (parse de uniforms)
+
+### Bugs corrigidos (Onda 0.1)
+- PHASE_TOOLSETS não filtrava projetos limpos — `_get_phase_tools()` auto-cria `.mcp_phase_state.json`
+- `PhaseState.load()` não persistia estado inicial no disco
+- Validação de gênero case-sensitive em `project_brief_ops` e `balance_ops`
+- BUG-008: dead imports em find_unused_resources.py
+- BUG-009: str/Path em milestone_ops.py
+
+### Métricas
+- **191 tools**, **72 módulos**, **22 patches**, **10 features Fase 1**, **4 Grupo C**, **6 fases**
+- **55+ bugs corrigidos**, **18 regras LEARNINGS (R1-R18)**
+
+---
+
+## v3.2.1 (2026-07-12) — Sessão de auditoria, hardening + Item 1+2 do plano de evolução
 
 ### Feature 4: Vibe Coding Mode fallback
 - 8 funções em `scene_ops.py` com fallback para modo vibe (load_scene_tree, add_node, delete_node, set/get_node_property, reparent_node, instance_scene_as_child, connect_signal)

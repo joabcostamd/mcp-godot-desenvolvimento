@@ -1,13 +1,68 @@
 # NEXT_SESSION.md — MCP Godot Agent
 
-**Última sessão:** 2026-07-12 (Features 4-8 + Task B concluídos)
-**Estado atual:** v3.3.0 — 191 tools, 191 handlers, 69 módulos, 6 fases, tool_catalog PT→EN
+**Última sessão:** 2026-07-12 (Onda 0.1 — auditoria + correções + Features C1-C4, A1, Feature 10)
+**Estado atual:** v3.3.0 — 191 tools, 191 handlers, 72 módulos, 6 fases, 10 features Fase 1, 4 features Grupo C
 **📄 Doc completo:** `MCP_ESTADO_ATUAL.md` — auto-contido com TUDO para retomar
 
 ## 📋 CHECKLIST DE INICIALIZAÇÃO (próxima sessão)
 
 1. [ ] Ler `MCP_ESTADO_ATUAL.md` (este é o doc mais completo)
-2. [ ] Ler `LEARNINGS.md` R1-R17
+2. [ ] Ler `LEARNINGS.md` R1-R18
+3. [ ] Ler `config.json` (verificar paths)
+4. [ ] Ativar venv: `.venv\Scripts\Activate.ps1`
+5. [ ] `python server.py --profile dev`
+6. [ ] Se necessário: abrir Godot (Star Colony)
+
+## Resumo da sessão (12/07/2026 — completa)
+
+### Features implementadas
+- **Feature 4**: Vibe Coding Mode fallback
+- **Feature 5**: Project Brief
+- **Feature 6**: Batch Entity Creation
+- **Feature 7**: Hook Stop
+- **Task B**: tool_catalog PT→EN (scoring ponderado + 35 aliases)
+- **Feature 8**: Toolsets por fase (PHASE_TOOLSETS dinâmico)
+- **Feature 9**: Trava de exportação (mín 6/10)
+- **Feature 10**: Stress Test (run_stress_test)
+- **C1**: find_unused_resources (assets órfãos)
+- **C2**: analyze_signal_flow (conexões de sinal órfãs)
+- **C3**: set_auto_dismiss (fechamento automático de diálogos)
+- **C4**: fuzzy_suggest (sugestão por proximidade + aplicado em handlers)
+- **A1**: Shader editor (read_shader, edit_shader, get_shader_params)
+
+### Bugs corrigidos (Onda 0.1)
+- PHASE_TOOLSETS não filtrava — _get_phase_tools() auto-cria .mcp_phase_state.json
+- PhaseState.load() não persistia estado inicial no disco
+- Validação de gênero case-sensitive (Tower Defense → tower_defense)
+- BUG-008: dead imports em find_unused_resources.py
+- BUG-009: str/Path em milestone_ops.py
+- _find_node_in_parsed: parent="." (Godot root children)
+- Gate marker nunca limpo em _validate_after_edit
+- Várias race conditions com locks
+
+### Pipeline
+- Star Colony: ✅ PASSOU (compile PASS, headless PASS, screenshot OK, GUT SKIPPED)
+- 28 tools visíveis em IDEIA (PHASE_TOOLSETS funcional)
+
+## Para retomar
+
+```bash
+cd "c:\Users\joabc\OneDrive\Documentos\VS CODE\mcp-godot-desenvolvimento"
+.venv\Scripts\Activate.ps1
+python server.py --profile dev
+```
+
+## Pontos de atenção
+
+- `godot --headless --script` E `--check-only` NÃO funcionam no Windows Godot 4.7 (R12)
+- Use `--profile dev` para iniciar com 80 tools (economiza tokens vs full)
+- `tool_catalog` aceita português (35 aliases) — queries: "criar cena", "adicionar nó"
+- Fase do projeto afeta tools visíveis — avance com `advance_phase` para liberar mais tools
+- `safety_manage` (checkpoint/backup/undo) disponível em TODAS as fases
+- `.mcp_phase_state.json` é auto-criado na primeira chamada de get_current_phase()
+- PHASE_TOOLSETS filtra apenas _tool_defs() — _build_handlers() não é afetado
+- `find_unused_resources` usa matching exato de path (não substring)
+- Autoloads do project.godot são detectados como referências implícitas
 3. [ ] Ler `config.json` (verificar paths)
 4. [ ] Ativar venv: `.venv\Scripts\Activate.ps1`
 5. [ ] `python server.py --profile dev`

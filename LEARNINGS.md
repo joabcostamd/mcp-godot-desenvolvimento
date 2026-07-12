@@ -30,6 +30,7 @@
 | R15 | Hooks PostToolUse: validar com PowerShell puro (regex), não depender de venv/Python de outro projeto | 🟡 MÉDIO |
 | R16 | socket.create_connection sem listener dá TimeoutError no Windows (não ConnectionRefusedError) | 🟡 MÉDIO |
 | R17 | Alias "no"→"node" causa falso positivo sistêmico ("erro no script" traz node_manage) | 🔴 CRÍTICO |
+| R18 | PhaseState.load() sem self.save() — estado IDEIA fica só em memória, PHASE_TOOLSETS não filtra | 🔴 CRÍTICO |
 
 ---
 
@@ -600,5 +601,24 @@ Sem o alias: `node_manage` some do top-5, `script_manage` lidera corretamente.
 
 ---
 
-> **Última atualização**: 2026-07-12 — Sessão 4 (Features 4-8 + Task B)
-> **Baseado em**: 17 bugs/limitações reais encontrados no desenvolvimento do MCP Godot Agent
+## 🔴 R18 — PHASESTATE.LOAD() SEM PERSISTÊNCIA NO DISCO
+
+### O padrão que quebra
+```python
+# Estado novo
+self.current_phase = "IDEIA"
+self.history = []
+return {"status": "success", ...}  # ← NUNCA chama self.save()!
+```
+
+### Por que quebra
+`PhaseState.load()` define `current_phase="IDEIA"` em memória mas **não persiste no disco**. O arquivo `.mcp_phase_state.json` nunca é criado. `server.py::_get_phase_tools()` lê do disco, não encontra o arquivo, retorna `None` → PHASE_TOOLSETS não filtra → 208 tools expostas em vez de 28.
+
+### ✅ REGRA DE PREVENÇÃO
+- Todo método que inicializa estado DEVE chamar `self.save()` após setar os campos
+- `_get_phase_tools()` em server.py também tem fallback: se arquivo não existe, cria com IDEIA
+- Dupla proteção: load() persiste + _get_phase_tools() auto-cria
+
+---
+
+> **Última atualização**: 2026-07-12 — Onda 0.1 completa

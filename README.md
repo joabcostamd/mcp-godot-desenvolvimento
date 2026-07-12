@@ -4,7 +4,7 @@
 > Conecta Godot 4.7 ao VS Code Copilot (DeepSeek V4 Pro) via protocolo MCP stdio.
 > Autocontido — clone, instale dependências e use.
 
-**Status:** ✅ 191 tools · 191 handlers · 69 módulos · 18 patches · 8 features Fase 1 · 6 fases · tool_catalog PT→EN · 10 toolsets · 3 perfis · R$0
+**Status:** ✅ 191 tools · 191 handlers · 72 módulos · 22 patches · 10 features Fase 1 · 4 Grupo C · 6 fases · tool_catalog PT→EN · pipeline · stress test · R$0
 
 **GitHub:** `https://github.com/joabcostamd/mcp-godot-desenvolvimento`
 
@@ -25,7 +25,7 @@
 | `MCP_ESTADO_ATUAL.md` | 📄 Documento canônico — TUDO sobre o MCP (arquitetura, 191 tools, protocolos, limitações) |
 | `GUIA_CONEXAO.md` | Como usar — passo a passo do zero |
 | `ARQUITETURA_MCP.md` | Como funciona por dentro — 3 camadas, padrões, extensão |
-| `LEARNINGS.md` | 17 regras anti-padrão (R1-R17) |
+| `LEARNINGS.md` | 18 regras anti-padrão (R1-R18) |
 | `CHANGELOG.md` | Histórico completo de versões |
 | `pendencias.md` | Bugs ativos e resolvidos |
 
