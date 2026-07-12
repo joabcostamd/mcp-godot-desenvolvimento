@@ -53,6 +53,41 @@ def disable_auto_hot_reload() -> dict:
     _auto_hot_reload = False
     return {"status": "success", "auto_hot_reload": False}
 
+
+# ── Post-Write Validation (GRUPO 1 auditoria) ────────────────────────
+
+def _validate_after_edit(script_path: str, content: str, proj: Path) -> None:
+    """Valida GDScript após edição programática. Não bloqueia — apenas loga.
+
+    Chamado por add_script_variable, add_script_signal e generate_gdscript
+    após modificar arquivos .gd. Isso fecha a brecha onde scripts podiam
+    ser corrompidos por edições incrementais (ex: inserir var duplicada,
+    quebrar indentação ao inserir signal).
+
+    Em caso de erro, escreve o marcador .mcp_gate_failed para o hook Stop.
+    """
+    try:
+        from tools.validate_write import validate_gdscript_syntax
+        validation = validate_gdscript_syntax(content)
+        if not validation.get("valid", True):
+            errors = validation.get("errors") or []
+            # Loga o warning mas NÃO reverte (a edição já foi feita)
+            import sys
+            print(f"[MCP WARNING] Post-write validation falhou para {script_path}: "
+                  f"{len(errors)} erro(s) encontrados.", file=sys.stderr)
+            for err in errors[:5]:  # máx 5 para não poluir
+                print(f"  Linha {err.get('line')}: {err.get('message')}", file=sys.stderr)
+            # Escreve marcador de gate para o hook Stop detectar
+            try:
+                from tools.safety import _write_gate_failed_marker
+                _write_gate_failed_marker(
+                    f"Post-write validation: {script_path} — {len(errors)} erro(s)"
+                )
+            except Exception:
+                pass
+    except Exception:
+        pass  # Validação é best-effort, nunca bloqueia a operação
+
 # ── Jinja2 ──────────────────────────────────────────────────────────
 
 _jinja_env = Environment(loader=FileSystemLoader(str(TEMPLATES_DIR)))
@@ -120,6 +155,9 @@ def generate_gdscript(template: str, variables: dict, save_path: str) -> dict:
     full_path.write_text(content, encoding="utf-8")
 
     _trigger_hot_reload(save_path)
+
+    # ── Post-write validation (GRUPO 1 auditoria) ──
+    _validate_after_edit(save_path, content, proj)
 
     return {"status": "success", "content": content, "saved_to": save_path}
 
@@ -458,11 +496,15 @@ def add_script_variable(
 
     checkpoint(script_path, proj)
     lines.insert(insert_at, var_decl)
-    full_path.write_text("".join(lines), encoding="utf-8")
+    new_content = "".join(lines)
+    full_path.write_text(new_content, encoding="utf-8")
 
     _trigger_hot_reload(script_path)
 
-    return {"status": "success"}
+    # ── Post-write validation (GRUPO 1 auditoria) ──
+    _validate_after_edit(script_path, new_content, proj)
+
+    return {"status": "success", "path": script_path}
 
 
 def add_script_signal(script_path: str, signal_name: str, args: list[str] | None = None) -> dict:
@@ -496,8 +538,12 @@ def add_script_signal(script_path: str, signal_name: str, args: list[str] | None
 
     checkpoint(script_path, proj)
     lines.insert(insert_at, signal_decl)
-    full_path.write_text("".join(lines), encoding="utf-8")
+    new_content = "".join(lines)
+    full_path.write_text(new_content, encoding="utf-8")
 
     _trigger_hot_reload(script_path)
 
-    return {"status": "success"}
+    # ── Post-write validation (GRUPO 1 auditoria) ──
+    _validate_after_edit(script_path, new_content, proj)
+
+    return {"status": "success", "path": script_path}

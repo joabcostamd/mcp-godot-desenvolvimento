@@ -102,13 +102,15 @@ def read_file(path: str, start_line: int | None = None, end_line: int | None = N
     return {"status": "success", "content": content, "total_lines": total}
 
 
-def write_file(path: str, content: str, mode: str = "create") -> dict:
+def write_file(path: str, content: str, mode: str = "create",
+                skip_gdscript_validation: bool = False) -> dict:
     """Escreve ou modifica um arquivo no projeto.
 
     Args:
         path: Caminho relativo ao projeto.
         content: Conteúdo a escrever.
         mode: "create" (só se não existir), "overwrite" (substitui), "append" (adiciona ao final).
+        skip_gdscript_validation: Se True, pula validação de sintaxe GDScript (apenas emergências).
 
     Returns:
         {"status": "success", "path": str, "backup_id": str|None}
@@ -124,6 +126,25 @@ def write_file(path: str, content: str, mode: str = "create") -> dict:
     violation = _check_path_traversal(path, proj)
     if violation:
         return {"status": "error", "message": violation}
+
+    # ── GDScript Validation Gate (GRUPO 1 auditoria) ──
+    # Todo .gd escrito via write_file passa por validação de sintaxe.
+    # Isso fecha a brecha onde a IA podia contornar safe_write_gdscript
+    # e salvar código quebrado diretamente.
+    if path.endswith(".gd") and not skip_gdscript_validation:
+        try:
+            from tools.validate_write import validate_gdscript_syntax
+            validation = validate_gdscript_syntax(content)
+            if not validation.get("valid", True):
+                return {
+                    "status": "error",
+                    "message": "❌ GDScript INVÁLIDO — escrita BLOQUEADA. "
+                               "Corrija os erros abaixo ou use safe_write_gdscript para validação completa.",
+                    "validation_errors": validation.get("errors"),
+                    "hint": "Use skip_gdscript_validation=True apenas em emergências.",
+                }
+        except Exception:
+            pass  # Se validação falhar por infra, não bloqueia
 
     full_path = proj / path
     full_path.parent.mkdir(parents=True, exist_ok=True)

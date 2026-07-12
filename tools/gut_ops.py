@@ -58,6 +58,25 @@ def run_gut_tests(
     if not Path(godot_path).exists():
         return {"status": "error", "message": f"Godot executável não encontrado: {godot_path}"}
 
+    # ── Pre-check: verifica se existem testes antes de invocar o Godot ──
+    # Evita falso-positivo "tests_failed" quando na verdade não há testes configurados.
+    # (GRUPO 2.3 da auditoria)
+    tests_path = Path(project_path) / test_dir.replace("res://", "")
+    if not tests_path.exists():
+        return {
+            "status": "skipped",
+            "reason": f"Diretório de testes '{test_dir}' não existe. "
+                       f"Crie testes em {test_dir}/ para habilitar validação.",
+            "hint": "Use test_*.gd como padrão de nomenclatura (ex: test_player.gd).",
+        }
+    test_files = list(tests_path.glob("test_*.gd")) + list(tests_path.glob("*.gd"))
+    if not test_files:
+        return {
+            "status": "skipped",
+            "reason": f"Nenhum arquivo de teste encontrado em '{test_dir}'. "
+                       f"Crie scripts de teste (ex: test_player.gd) para habilitar validação.",
+        }
+
     # Warm-up: importa o projeto antes de rodar os testes, senão
     # class_name customizados não registram e a suíte falha por
     # motivo errado (não é um bug real do jogo).

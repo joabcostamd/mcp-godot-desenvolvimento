@@ -95,15 +95,30 @@ def validate_gdscript_syntax(code: str) -> dict:
                     seen_vars[vname] = (i, func_name)
 
     # R2: := com acesso a Dictionary (regra R2 do LEARNINGS.md)
+    # Padrão: := seguido de qualquer expressão que acesse [...] (dict/array).
+    # Ex: var x := enemies[i]["pos"], var y := (target - pu["pos"]).normalized()
+    # O compilador GDScript não infere tipo de acesso a Dictionary/Array.
     for i, line in enumerate(lines, 1):
-        if re.search(r':=\s*\w+\[', line) or re.search(r':=\s*\w+\.\w+\[', line):
-            errors.append({
-                "line": i,
-                "message": "R2: uso de ':=' com acesso a Dictionary/Array pode falhar "
-                           "inferência de tipo — considere tipo explícito",
-                "rule": "R2_HIGH",
-                "code": line.strip()[:60],
-            })
+        # Procura := em algum lugar da linha
+        walrus_pos = line.find(":=")
+        if walrus_pos >= 0:
+            # Verifica se há acesso por índice [ após o :=
+            after_walrus = line[walrus_pos:]
+            # Padrões: algo[...] onde algo é uma expressão (var, dict[key], call())
+            if re.search(r'\w+\s*\[', after_walrus) or re.search(r'\)\s*\[', after_walrus):
+                # Filtra falsos positivos: anotação de tipo array (ex: var arr: Array[int] = ...)
+                # Se o primeiro [ após := está em uma anotação de tipo (: Type[ ...), pula
+                type_annot = re.search(r':\s*\w+\s*\[', line[:walrus_pos])
+                first_bracket_after = re.search(r'\[', after_walrus)
+                if first_bracket_after:
+                    # Se há := ... algo["chave"] — isso É um problema de inferência
+                    errors.append({
+                        "line": i,
+                        "message": "R2: uso de ':=' com acesso a Dictionary/Array pode falhar "
+                                   "inferência de tipo — considere tipo explícito",
+                        "rule": "R2_HIGH",
+                        "code": line.strip()[:80],
+                    })
 
     return {
         "valid": len(errors) == 0,
@@ -117,6 +132,7 @@ def safe_write_gdscript(
     content: str,
     project_path: str | None = None,
     strict: bool = True,
+    deep_validate: bool = False,
 ) -> dict:
     """Escreve GDScript com validação automática de sintaxe.
 
@@ -128,11 +144,13 @@ def safe_write_gdscript(
         content: Conteúdo GDScript.
         project_path: Projeto (para validação Godot completa).
         strict: Se True, recusa salvar com erros. Se False, avisa mas salva.
+        deep_validate: Se True, executa validação R9 (API mismatch via ClassDB)
+                       usando o motor do validate_gdscript.py standalone.
 
     Returns:
         dict com status, validação e ação tomada.
     """
-    # 1. Validação básica local
+    # 1. Validação básica local (R1, R2, brackets, indentação)
     validation = validate_gdscript_syntax(content)
 
     if not validation["valid"] and strict:
@@ -184,6 +202,33 @@ def safe_write_gdscript(
         except Exception:
             pass
 
+    # 2.5 Validação profunda R9: API mismatch via ClassDB (validate_gdscript.py standalone)
+    r9_check = None
+    if deep_validate:
+        try:
+            # Usa o motor de validação do validate_gdscript.py standalone
+            # para detectar métodos/propriedades que não existem na classe nativa
+            import sys
+            from pathlib import Path as _Path
+            _root = _Path(__file__).resolve().parent.parent
+            if str(_root) not in sys.path:
+                sys.path.insert(0, str(_root))
+            from validate_gdscript import find_api_mismatches as _find_r9
+            r9_issues = _find_r9(content.splitlines())
+            if r9_issues:
+                r9_check = {"valid": False, "api_mismatches": r9_issues}
+                if strict:
+                    return {
+                        "status": "error",
+                        "message": "❌ R9: chamadas a métodos/propriedades inexistentes detectadas. Escrita BLOQUEADA.",
+                        "validation": validation,
+                        "godot_check": godot_check,
+                        "r9_check": r9_check,
+                        "written": False,
+                    }
+        except Exception:
+            pass  # R9 é bônus — se falhar, não bloqueia
+
     # 3. Escreve
     try:
         Path(file_path).write_text(content, encoding="utf-8")
@@ -192,6 +237,7 @@ def safe_write_gdscript(
             "message": "✅ GDScript válido. Arquivo salvo." if validation["valid"] else "⚠️ Salvo com warnings.",
             "validation": validation,
             "godot_check": godot_check,
+            "r9_check": r9_check,
             "written": True,
         }
     except Exception as e:
