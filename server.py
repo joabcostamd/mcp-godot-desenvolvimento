@@ -95,6 +95,9 @@ _ENABLED_TOOLS: set[str] | None = parse_toolset_arg()
 if _ENABLED_TOOLS is not None:
     print(f"[MCP] Toolsets ativos: {sorted(_ENABLED_TOOLS)}", file=sys.stderr)
 
+# ── PATCH 12: Runtime Bridge ─────────────────────────────────
+from runtime_bridge_client import send_bridge_command, BridgeUnavailable
+
 from tools.project_ops import (
     _get_active_project,
     validate_godot_version,
@@ -4688,6 +4691,34 @@ def _tool_defs() -> list[Tool]:
                         "Use para verificar se alguma API está temporariamente bloqueada.",
             inputSchema={"type": "object", "properties": {}, "required": []},
         ),
+        # ── PATCH 12: Runtime Bridge ──────────────────────────
+        Tool(
+            name="godot_screenshot",
+            description="Captura screenshot do jogo rodando via MCPRuntimeBridge. Jogo precisa estar em execucao (debug).",
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        Tool(
+            name="godot_runtime_info",
+            description="FPS, draw calls, memoria estatica e tempo de fisica do jogo rodando agora.",
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        Tool(
+            name="godot_custom_command",
+            description="Chama comando customizado registrado no jogo (ex: get_puzzle_state).",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string", "description": "Nome do comando registrado no jogo."},
+                    "args": {"type": "object", "description": "Argumentos do comando (opcional)."},
+                },
+                "required": ["name"],
+            },
+        ),
+        Tool(
+            name="godot_list_custom_commands",
+            description="Lista comandos customizados registrados no bridge do jogo.",
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
     ]
 
     # ── Pós-processamento: hints MCP + additionalProperties ────────
@@ -5379,6 +5410,11 @@ def _build_handlers() -> dict:
         "project_status": project_status,
         # Orquestrador Genius (Onda 7)
         "circuit_breaker_status": circuit_breaker_status,
+        # PATCH 12: Runtime Bridge
+        "godot_screenshot": _handle_godot_screenshot,
+        "godot_runtime_info": _handle_godot_runtime_info,
+        "godot_custom_command": _handle_godot_custom_command,
+        "godot_list_custom_commands": _handle_godot_list_custom_commands,
     }
 
     # ── Rollups Fase 2A / C1 ───────────────────────────────────────
