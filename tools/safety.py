@@ -19,6 +19,28 @@ MAX_BACKUPS = 50
 # Lock para evitar race condition em _save_index
 _backup_lock = threading.Lock()
 
+# ── PATCH 18: Marcador de falha de gate (.mcp_gate_failed) ──────
+_GATE_FAILED_MARKER = ".mcp_gate_failed"
+
+
+def _write_gate_failed_marker(reason: str) -> None:
+    """Escreve marcador de falha de gate para o hook Stop detectar."""
+    marker_path = ROOT / _GATE_FAILED_MARKER
+    try:
+        marker_path.write_text(reason, encoding="utf-8")
+    except Exception:
+        pass
+
+
+def _clear_gate_failed_marker() -> None:
+    """Remove marcador de falha de gate."""
+    marker_path = ROOT / _GATE_FAILED_MARKER
+    try:
+        if marker_path.exists():
+            marker_path.unlink()
+    except Exception:
+        pass
+
 
 # ── Helpers ─────────────────────────────────────────────────────────
 
@@ -243,6 +265,7 @@ def git_checkpoint(message: str, project_root: Path | None = None,
                 except Exception:
                     pass
             if errors_found:
+                _write_gate_failed_marker(f"git_checkpoint bloqueado: {len(errors_found)} erro(s) de sintaxe")
                 return {
                     "status": "error",
                     "message": "❌ Commit BLOQUEADO — o projeto não compila. "
@@ -259,6 +282,7 @@ def git_checkpoint(message: str, project_root: Path | None = None,
                 from tools.gut_ops import run_gut_tests
                 gut_result = run_gut_tests(project_path=str(project_root))
                 if gut_result.get("status") == "tests_failed":
+                    _write_gate_failed_marker("git_checkpoint bloqueado: testes GUT falharam")
                     return {
                         "status": "error",
                         "message": "❌ Commit BLOQUEADO — testes GUT falharam.",
@@ -266,6 +290,9 @@ def git_checkpoint(message: str, project_root: Path | None = None,
                     }
             except Exception:
                 pass  # GUT não instalado — não bloqueia
+
+    # Limpa marcador de falha antes do commit
+    _clear_gate_failed_marker()
 
     try:
         subprocess.run(
