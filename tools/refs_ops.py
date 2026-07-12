@@ -22,14 +22,25 @@ from tools.project_ops import _get_active_project
 def _parse_tscn_ext_resources(content: str) -> dict[str, str]:
     """Extrai mapeamento id -> path dos [ext_resource] de um .tscn.
 
+    Suporta ordem arbitraria dos atributos (type/path/id/uid).
+
     Returns:
         {"1": "res://scripts/player.gd", "2": "res://assets/icon.png", ...}
     """
     id_map: dict[str, str] = {}
-    for m in re.finditer(r'\[ext_resource\s+type="[^"]*"\s*(?:path="([^"]*)")?\s*id="([^"]+)"', content):
-        path = m.group(1)
-        ext_id = m.group(2)
-        if path:
+    # Extrai cada bloco [ext_resource ...] individualmente e parseia atributos
+    for block_m in re.finditer(r'\[ext_resource\s+(.*?)\]', content):
+        attrs = block_m.group(1)
+        path = None
+        ext_id = None
+        for attr_m in re.finditer(r'(\w+)="([^"]*)"', attrs):
+            key = attr_m.group(1)
+            val = attr_m.group(2)
+            if key == "path":
+                path = val
+            elif key == "id":
+                ext_id = val
+        if path and ext_id:
             id_map[ext_id] = path
     return id_map
 
@@ -247,8 +258,8 @@ def validate_project_refs(project_path: str | None = None, full_report: bool = F
                     "message": f"preload('res://{ref}') — recurso nao encontrado.",
                 })
 
-        # load("res://...")
-        for m in re.finditer(r'(?<!ResourceLoader\.)(?<!\.)load\s*\(\s*"res://([^"]+)"', content):
+        # load("res://...") — bare load() apenas (nao ResourceLoader.load)
+        for m in re.finditer(r'(?<!ResourceLoader\.)(?<!\w\.)load\s*\(\s*"res://([^"]+)"', content):
             ref = m.group(1)
             if ref not in existing:
                 errors.append({
@@ -394,19 +405,6 @@ def find_usages(
                         "reference": ref_val,
                     })
 
-        # Busca o target como scene_instance em OUTRAS cenas
-        # (se o target for uma cena, outras cenas podem instanciá-la)
-        if target_clean.endswith(".tscn"):
-            scene_path = f"res://{target_clean}"
-            if scene_path in content:
-                for m in re.finditer(r'scene\s*=\s*"res://' + re.escape(target_clean) + r'"', content):
-                    usages.append({
-                        "file": rel,
-                        "location": f"scene instance",
-                        "ref_type": "scene_instance",
-                        "reference": f'res://{target_clean}',
-                    })
-
     # ── Varre .gd ──
     for gd_file in sorted(proj.glob("**/*.gd")):
         if _should_skip(gd_file):
@@ -419,7 +417,7 @@ def find_usages(
 
         patterns = [
             (r'preload\s*\(\s*"res://([^"]+)"', "preload"),
-            (r'(?<!ResourceLoader\.)(?<!\.)load\s*\(\s*"res://([^"]+)"', "load"),
+            (r'(?<!ResourceLoader\.)(?<!\w\.)load\s*\(\s*"res://([^"]+)"', "load"),
             (r'ResourceLoader\.load\s*\(\s*"res://([^"]+)"', "ResourceLoader.load"),
             (r'change_scene_to_file\s*\(\s*"res://([^"]+)"', "change_scene_to_file"),
         ]
