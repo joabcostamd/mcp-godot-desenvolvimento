@@ -1,4 +1,4 @@
-# ARQUITETURA MCP — Godot Agent v2.9
+# ARQUITETURA MCP — Godot Agent v3.2
 
 > **Leia este documento para ENTENDER o MCP por dentro.** Não é um tutorial de uso
 > (para isso veja `GUIA_CONEXAO.md`). É o mapa do código: como as peças se encaixam,
@@ -12,7 +12,7 @@
 ## 1. VISÃO GERAL — O que o MCP faz
 
 O MCP (Model Context Protocol) é uma ponte entre **linguagem natural** e **Godot Engine**.
-Ele expõe 143+ ferramentas que uma IA pode chamar para criar jogos completos —
+Ele expõe 189 ferramentas que uma IA pode chamar para criar jogos completos —
 cenas, scripts, física, UI, áudio, partículas, exportação — sem que o usuário
 precise abrir o editor Godot ou escrever uma linha de código.
 
@@ -27,7 +27,7 @@ server.py: recebe JSON-RPC, roteia para o handler
     ↓
 tools/*.py: executa a operação (ex: add_node, attach_script)
     ↓
-Godot (via TCP :9080): aplica a mudança no projeto
+Godot (via TCP :9080 / WebSocket :9082 / Runtime :8790): aplica a mudança
     ↓
 Resposta: volta para a IA → IA explica ao usuário
 ```
@@ -51,12 +51,17 @@ Isso reduz erros, acelera a construção e mantém a coerência.
 │  • Rate limiting                                 │
 │  • Cache de tool definitions e handlers          │
 │  • Error codes + friendly error messages         │
+│  • Perfis (--profile core/dev/full)              │
+│  • Toolsets (--toolsets com 10 grupos)           │
 └────────────────────┬────────────────────────────┘
                      │
 ┌────────────────────▼────────────────────────────┐
 │  CAMADA 2 — Tool Definitions + Handlers          │
 │  ─────────────────────────────────────────────  │
-│  • 143+ tools com schema JSON completo           │
+│  • 189 tools com schema JSON completo            │
+│  • 27 rollups (<domain>_manage)                  │
+│  • 3 perfis (core=16, dev=31, full=189)          │
+│  • 10 toolsets por domínio                       │
 │  • Annotations: readOnlyHint, destructiveHint    │
 │  • Títulos em português (PT-BR)                  │
 │  • Tags por domínio (2D, 3D, física, UI...)     │
@@ -66,11 +71,14 @@ Isso reduz erros, acelera a construção e mantém a coerência.
 ┌────────────────────▼────────────────────────────┐
 │  CAMADA 3 — Implementações (tools/*.py)          │
 │  ─────────────────────────────────────────────  │
-│  • 22 arquivos de operações reais                │
+│  • 64 módulos de operações reais                 │
 │  • Cada tool tem UMA função exportada            │
 │  • Operações no sistema de arquivos (.tscn, .gd) │
-│  • Comunicação TCP com Godot (editor + runtime)  │
+│  • Comunicação TCP/WebSocket com Godot           │
 │  • Sistema de backup e undo automático           │
+│  • Pontes: Editor TCP :9080, Game TCP :9081,     │
+│    Addon WebSocket :9082, Runtime TCP :8790,     │
+│    LSP TCP :6005                                 │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -105,7 +113,7 @@ Dois caches globais evitam recriar estruturas pesadas a cada chamada:
 
 | Cache | O que armazena | Quando invalida |
 |---|---|---|
-| `_TOOL_DEFS_CACHE` | Lista das 143+ definições de tools | Nunca (tools são estáticas) |
+| `_TOOL_DEFS_CACHE` | Lista das 189 definições de tools | Nunca (tools são estáticas) |
 | `_HANDLERS_CACHE` | Dict `{nome_da_tool: função_handler}` | Nunca |
 
 ### 3.4 Rate Limiting
@@ -125,6 +133,28 @@ Se excedido, retorna erro com `retry_after` (tempo de espera em segundos).
 
 Cada erro também recebe uma mensagem amigável em português via `tools/friendly_errors.py`.
 
+### 3.5.1 Perfis de Tools (--profile)
+
+Para controlar quantas tools são expostas (economia de tokens):
+
+```bash
+python server.py --profile core   # 16 tools essenciais (~2K tokens)
+python server.py --profile dev    # 31 tools para desenvolvimento (~5K tokens)
+python server.py --profile full   # 189 tools completas (~18K tokens, default)
+```
+
+Também configurável via env var: `MCP_TOOL_PROFILE=dev`.
+
+### 3.5.2 Toolsets (--toolsets)
+
+Filtra tools por domínio específico:
+
+```bash
+python server.py --toolsets "core,scene_ops,script_ops"
+```
+
+10 toolsets disponíveis: `core`, `scene_ops`, `script_ops`, `test_ops`, `runtime_ops`, `git_ops`, `refs_ops`, `asset_ops`, `design_ops`, `ui_ops`.
+
 ### 3.6 Configuração (config.json)
 
 ```json
@@ -136,7 +166,9 @@ Cada erro também recebe uma mensagem amigável em português via `tools/friendl
   "default_project": "C:\\...\\NUCLEO\\projetos\\star-colony",
   "addon_port": 9080,
   "game_port": 9081,
-  "timeouts": { "fast": 15, "compile": 60, "export": 300 }
+  "timeouts": { "fast": 15, "compile": 60, "export": 300 },
+  "vibe_coding": { "enabled": true },
+  "security": { "allow_remote": false }
 }
 ```
 
@@ -147,14 +179,20 @@ Cada erro também recebe uma mensagem amigável em português via `tools/friendl
 | `python_path` | ✅ | Python usado para iniciar o Godot (precisa ser 3.12+) |
 | `projects_root` | ❌ | Pasta raiz onde projetos Godot são criados (default: `projetos/`) |
 | `default_project` | ❌ | Projeto aberto por padrão quando nenhum é especificado |
-| `addon_port` | ❌ | Porta TCP do mcp_bridge (editor) — default 9080 |
-| `game_port` | ❌ | Porta TCP do game_bridge (runtime) — default 9081 |
+| `addon_port` | ❌ | Porta TCP do editor bridge — default 9080 |
+| `game_port` | ❌ | Porta TCP do game bridge (runtime) — default 9081 |
 | `timeouts.fast` | ❌ | Timeout para operações rápidas (segundos) — default 15 |
 | `timeouts.compile` | ❌ | Timeout para compilação Godot — default 60 |
 | `timeouts.export` | ❌ | Timeout para exportação/build — default 300 |
+| `vibe_coding.enabled` | ❌ | Ativa modo vibe coding (geração automática) — default true |
+| `security.allow_remote` | ❌ | Permite conexões remotas — default false |
 
 > **Ajuste obrigatório por máquina:** apenas `godot_path`, `godot_console_path` e
 > `python_path`. O resto tem defaults que funcionam.
+>
+> **Override local:** Crie `config.local.json` (gitignorado) com os campos que
+> quiser sobrescrever. Ex: `{"default_project": "C:\\...\\meu-outro-jogo"}`.
+> Também pode usar env vars: `GODOT_MCP_*` (ex: `GODOT_MCP_DEFAULT_PROJECT`).
 
 ---
 
@@ -254,16 +292,25 @@ O MCP manipula diretamente arquivos `.tscn` (cenas Godot em formato texto) e `.g
 (GDScript). Não depende do editor Godot estar aberto para a maioria das operações —
 apenas para runtime (run_game, take_screenshot) e editor (launch_editor).
 
-### 5.3 Comunicação TCP com Godot
+### 5.3 Comunicação com Godot (5 pontes)
 
 ```
-Servidor Python                    Godot
-     │                               │
-     │── TCP :9080 (editor) ────────→│ mcp_bridge addon
-     │   comandos de edição          │ (recebe e aplica no editor)
-     │                               │
-     │←── TCP :9081 (runtime) ──────│ game_bridge addon
-     │   estado do jogo em execução  │ (envia posição, HP, colisões)
+Servidor Python                          Godot
+     │                                     │
+     │── TCP :9080 (editor) ──────────────→│ Editor Bridge
+     │   comandos de edição                │ (recebe e aplica no editor)
+     │                                     │
+     │── WebSocket :9082 (addon) ─────────→│ mcp_addon (Dock UI)
+     │   comandos JSON-RPC 2.0             │ (3 tabs: Status/Log/Tools)
+     │                                     │
+     │←── TCP :9081 (runtime) ────────────│ Game Bridge
+     │   estado do jogo em execução        │ (envia posição, HP, colisões)
+     │                                     │
+     │←── TCP :8790 (runtime bridge) ─────│ mcp_runtime_bridge
+     │   screenshot, FPS, input injection  │ (autoload, só debug builds)
+     │                                     │
+     │── TCP :6005 (LSP) ─────────────────│ Godot LSP built-in
+     │   referências, definição, hover     │ (análise semântica)
 ```
 
 ### 5.4 Sistema de backup
@@ -279,76 +326,60 @@ Histórico das últimas 20 ações é mantido.
 
 O MCP tem 2 addons que rodam DENTRO do Godot, escritos em GDScript:
 
-#### mcp_bridge (`addon/mcp_bridge/`)
+#### mcp_addon (`addons/mcp_addon/`)
 
 ```
 EditorPlugin (@tool)
-├── TCPServer em localhost:9080
-├── Protocolo: JSON line-delimited (um JSON por linha, \n)
+├── WebSocket Server em localhost:9082
+├── Protocolo: JSON-RPC 2.0 sobre WebSocket
 ├── Recebe comandos do server.py e aplica no editor
-├── Dock "MCP IA DEV" no painel inferior do Godot
-├── Log das últimas 100 operações
-└── Console buffer (últimas 500 linhas)
+├── Dock "MCP Addon" no painel direito do Godot (3 tabs)
+│   ├── Tab Status: indicador de conexão + porta + clientes
+│   ├── Tab Log: últimas 200 operações (coloridas)
+│   └── Tab Tools: lista de 9 operações disponíveis
+└── Undo/Redo via EditorUndoRedoManager nativo
 ```
 
-**Funções principais:**
-- `_process_editor_command(cmd: Dictionary)` — roteia comandos (get_scene, add_node,
-  set_property, take_screenshot, etc.)
-- `_handle_get_scene()` — serializa a árvore de nós da cena aberta
-- `_handle_add_node()` — adiciona nó via `add_child()` + `set_owner()`
-- `_handle_set_property()` — `node.set(property, value)`
-- `_handle_take_screenshot()` — `get_viewport().get_texture().get_image()`
+**Plugin CFG:** nome "MCP Addon", versão 3.0.1, registrado como `EditorPlugin`.
 
-**Plugin CFG:** nome "MCP IA DEV", versão 0.2.0, registrado como `EditorPlugin`.
-
-#### game_bridge (`addon/game_bridge/`)
+#### mcp_runtime_bridge (`addons/mcp_runtime_bridge/`)
 
 ```
 Autoload (singleton global)
-├── TCPServer em localhost:9081
+├── TCP Server em localhost:8790
 ├── Protocolo: JSON line-delimited
-├── SÓ inicia se NÃO for build exportado (OS.has_feature("standalone") = false)
-├── Buffer contra fragmentação TCP (mensagens parciais)
-└── Log circular das últimas 500 operações
+├── SÓ ativo em debug build (OS.is_debug_build())
+├── Comandos nativos: screenshot (PNG base64), runtime_info (FPS/memória),
+│   input_event (mouse/key injection), wait_frames
+└── Comandos custom registráveis (3 built-in: save_current_scene,
+    add_test_marker, replace_with_runtime_scene)
 ```
 
-**Funções principais:**
-- `execute_gdscript(code: String)` — compila e executa GDScript em runtime, retorna valor
-- `inject_input(event: Dictionary)` — cria InputEventKey/Mouse e chama
-  `Input.parse_input_event()`
-- `watch_signal(node_path, signal_name, timeout)` — conecta ao sinal, espera N segundos,
-  retorna se disparou
-- `get_node_property(node_path, property)` — lê propriedade de qualquer nó em runtime
+**Segurança:** O runtime bridge NUNCA roda em builds exportadas (standalone).
+Só funciona no editor ou via `run_game --path`.
 
-**Segurança:** O game_bridge NUNCA roda em builds exportadas (standalone). Só funciona
-no editor ou via `run_game --path`. Isso impede que um jogo publicado tenha backdoor TCP.
-
-#### Fluxo completo de uma chamada TCP
+#### Fluxo completo de uma chamada
 
 ```
-server.py                     mcp_bridge (Godot)              game_bridge (Godot)
-    │                              │                                │
-    │── connect TCP :9080 ────────→│                                │
-    │   {"cmd":"add_node",         │                                │
-    │    "parent":".",             │                                │
-    │    "name":"Player",          │                                │
-    │    "type":"CharacterBody2D"} │                                │
-    │                              │── add_child + set_owner       │
-    │←── {"status":"ok"} ────────│                                │
-    │                              │                                │
-    │── run_game ────────────────────────────────────────────────→│ (Godot inicia)
-    │                              │                                │
-    │── connect TCP :9081 ───────────────────────────────────────→│
-    │   {"cmd":"execute_gdscript", │                                │
-    │    "code":"get_node('/root/   │                                │
-    │     Main/Player').position"} │                                │
-    │                              │                                │── executa
-    │←── {"result":"(640,360)"} ─────────────────────────────────│
+server.py              mcp_addon (Godot:9082)    runtime_bridge (Godot:8790)
+    │                        │                          │
+    │── WS connect :9082 ──→│                          │
+    │   {"method":"add_node",│                          │
+    │    "params":{...}}     │                          │
+    │                        │── add_child + set_owner │
+    │←── {"status":"ok"} ──│                          │
+    │                        │                          │
+    │── run_game ──────────────────────────────────────→│ (Godot inicia)
+    │                        │                          │
+    │── TCP connect :8790 ────────────────────────────→│
+    │   {"cmd":"runtime_info"}│                          │
+    │                        │                          │── coleta FPS/mem
+    │←── {"fps":60,...} ──────────────────────────────│
 ```
 
-> **Para debugar conexão:** verifique se as portas 9080 e 9081 estão ouvindo
-> (`netstat -ano | findstr "9080"`). Se o Godot não estiver aberto, o mcp_bridge
-> não está rodando e a porta 9080 fica fechada.
+> **Para debugar conexão:** verifique as portas com `netstat -ano | findstr "9080 9081 9082 8790 6005"`.
+> Cada porta tem um propósito: 9080=editor TCP, 9081=game TCP, 9082=addon WebSocket,
+> 8790=runtime bridge, 6005=LSP.
 
 ### 5.6 Sistema de Templates (Jinja2)
 
@@ -478,10 +509,15 @@ _TAGS["minha_tool_nova"] = ["categoria", "subcategoria"]
 
 ## 7. DECISÕES DE DESIGN (o porquê das coisas)
 
-### 7.1 Por que 143+ tools e não 50?
+### 7.1 Por que 189 tools e não 50?
 
 Cada tool faz UMA coisa bem definida. Isso permite que a IA componha operações complexas
 a partir de tools simples. É o princípio UNIX: "faça uma coisa e faça bem".
+
+Para controlar o volume de tools expostas, use perfis:
+- `--profile core`: 16 tools essenciais (~2K tokens)
+- `--profile dev`: 31 tools para desenvolvimento (~5K tokens)
+- `--profile full`: 189 tools completas (default)
 
 ### 7.2 Por que JSON-RPC sobre stdio e não HTTP REST?
 
@@ -551,9 +587,9 @@ cd sistema\mcp-godot\servidor
 ## 10. ARQUIVOS DO PROJETO
 
 ```
-sistema/mcp-godot/servidor/
-├── server.py              ← CORAÇÃO: 4.552 linhas, 143+ tools, roteamento
-├── tools/                 ← Implementações (22 arquivos)
+mcp-godot-desenvolvimento/
+├── server.py              ← CORAÇÃO: ~7100 linhas, 189 tools, roteamento
+├── tools/                 ← Implementações (64 módulos)
 │   ├── scene_ops.py       ← Cenas, nós, tilemap, animação, UI
 │   ├── script_ops.py      ← GDScript (gerar, anexar, validar)
 │   ├── project_ops.py     ← Projeto (criar, configs, input, autoload)
@@ -561,13 +597,19 @@ sistema/mcp-godot/servidor/
 │   ├── runtime_ops.py     ← Runtime + Editor + Visão
 │   ├── physics_ops.py     ← Colisões, física, raycast
 │   ├── asset_ops.py       ← Import/export de assets
+│   ├── asset_manifest.py  ← Manifest de assets (5 fontes)
 │   ├── export_ops.py      ← Exportação (build)
 │   ├── classdb.py         ← Consulta à ClassDB do Godot
 │   ├── safety.py          ← Backups, undo, git checkpoint
 │   ├── analyze_ops.py     ← IA agêntica (análise, sugestões)
 │   ├── devsolo_ops.py     ← DevSolo (câmera, menu, HUD, save, FSM)
+│   ├── refs_ops.py        ← Validação de referências + find_usages
+│   ├── test_ops.py        ← Testes roteirizados (smoke, regression)
+│   ├── rollups.py         ← 27 rollups (<domain>_manage)
+│   ├── orchestrator.py    ← Saga + Circuit Breaker + Decision Engine
 │   ├── editor_bridge.py   ← Ponte TCP com editor Godot
 │   ├── game_bridge.py     ← Ponte TCP com jogo em execução
+│   ├── addon_bridge.py    ← Ponte WebSocket com addon (:9082)
 │   ├── bridge.py          ← Protocolo de comunicação TCP
 │   ├── rate_limiter.py    ← Controle de taxa de chamadas
 │   ├── friendly_errors.py ← Tradução de erros para PT-BR
@@ -576,13 +618,20 @@ sistema/mcp-godot/servidor/
 │   ├── live_stream.py     ← Streaming ao vivo
 │   └── placeholder_ops.py ← Assets procedurais
 ├── templates/             ← Templates GDScript (Jinja2)
-├── classdb_cache/         ← Cache da API do Godot 4.7
+├── resources/             ← Game patterns (18 gêneros) + prompts
+├── classdb_cache/         ← Cache da API do Godot 4.7 (1074 classes)
+├── addons/                ← Plugins Godot (mcp_addon + mcp_runtime_bridge)
 ├── config.json            ← Caminhos do Godot + projeto padrão
+├── config.json.example    ← Template para novas máquinas
+├── config.local.json      ← Overrides locais (gitignorado)
 ├── requirements.txt       ← Dependências Python
-├── GUIA_CONEXAO.md        ← Como usar (já existe)
+├── pyproject.toml         ← Metadata do projeto
+├── GUIA_CONEXAO.md        ← Como usar — passo a passo do zero
+├── GUIA_INSTALACAO.md     ← Setup completo para IA agêntica
+├── LEARNINGS.md           ← Anti-padrões e regras de prevenção
 └── ARQUITETURA_MCP.md     ← Este documento
 ```
 
 ---
 
-**Última atualização:** 2026-07-09 | **MCP versão:** 2.9 | **Tools:** 143+ | **Código:** ~19.000 linhas
+**Última atualização:** 2026-07-12 | **MCP versão:** 3.2 | **Tools:** 189 | **Módulos:** 64 | **Código:** ~24.000 linhas

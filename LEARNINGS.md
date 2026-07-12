@@ -264,7 +264,7 @@ Criar `.tscn` com `format=2` (Godot 3) e o Godot 4 não consegue resolver UIDs.
 > **Após criar QUALQUER `.tscn` via MCP, abra o projeto no Godot Editor 1 vez.**
 > O editor auto-converte `format=2` → `format=3` e gera UIDs corretos.
 >
-> **OU** use `create_scene` com o editor aberto (mcp_bridge na porta 9080 fará a
+> **OU** use `create_scene` com o editor aberto (mcp_addon na porta 9082 fará a
 > conversão automaticamente).
 
 ### ✅ Verificação rápida

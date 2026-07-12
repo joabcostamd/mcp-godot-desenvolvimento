@@ -1,4 +1,4 @@
-# GUIA DE INSTALAÇÃO — MCP Godot Agent v3.0
+# GUIA DE INSTALAÇÃO — MCP Godot Agent v3.2
 
 > **Para a IA agêntica (DeepSeek, Claude, Copilot, etc.):**
 > Siga cada passo na ordem. Não pule nada. Ao final, o MCP estará conectado
@@ -102,7 +102,7 @@ Conteúdo do arquivo mcp.json:
     "godot-mcp-agent": {
       "type": "stdio",
       "command": "C:\\Users\\joabc\\OneDrive\\Documentos\\VS CODE\\mcp-godot-desenvolvimento\\.venv\\Scripts\\python.exe",
-      "args": ["C:\\Users\\joabc\\OneDrive\\Documentos\\VS CODE\\mcp-godot-desenvolvimento\\server.py"],
+      "args": ["C:\\Users\\joabc\\OneDrive\\Documentos\\VS CODE\\mcp-godot-desenvolvimento\\server.py", "--profile", "dev"],
       "env": {
         "PYTHONPATH": "C:\\Users\\joabc\\OneDrive\\Documentos\\VS CODE\\mcp-godot-desenvolvimento"
       }
@@ -161,7 +161,9 @@ enabled=PackedStringArray("res://addons/mcp_addon/plugin.cfg")
 
 1. No VS Code: `Ctrl+Shift+P` → digite **"Reload Window"** → Enter
 2. Aguarde 5 segundos para o servidor iniciar
-3. Teste a conexão: peça no chat do Copilot:
+3. O servidor iniciará com o perfil `dev` (31 tools, ~5K tokens).
+   Para usar todas as 189 tools, mude `--profile dev` para `--profile full` no `mcp.json`.
+4. Teste a conexão: peça no chat do Copilot:
 
 > *"Liste as ferramentas disponíveis do MCP Godot"*
 
@@ -194,6 +196,9 @@ Com o Godot aberto e o servidor rodando, teste uma ferramenta que interage com o
 | `Connection refused` | Servidor não iniciou | `chat.mcp.autoStart` deve estar `true` |
 | Erro de caminho no config.json | Caminhos de outra máquina | Ajustar `godot_path`, `default_project` |
 | Addons não carregam no Godot | `plugin.cfg` ausente | Refazer Passo 6 |
+| Muitas tools (lento/tokens) | Perfil `full` é o default | Use `"--profile", "dev"` no `mcp.json` (31 tools) |
+| Addon WebSocket não conecta | Porta 9082 bloqueada | Verificar firewall, Godot precisa estar aberto |
+| Runtime bridge não responde | Jogo não está em debug | `godot_wait_for_bridge` antes de `godot_screenshot` |
 
 ---
 

@@ -1,10 +1,10 @@
 # MCP Godot — Desenvolvimento
 
-> **Servidor MCP Godot Agent v3.0 — 171 ferramentas para criação de jogos por linguagem natural.**
+> **Servidor MCP Godot Agent v3.2 — 189 ferramentas para criação de jogos por linguagem natural.**
 > Conecta Godot 4.7 ao VS Code Copilot (DeepSeek V4) via protocolo MCP.
 > Autocontido — clone, instale dependências e use.
 
-**Status:** ✅ 171 tools · 171 handlers · 46 bugs corrigidos · Pipeline Executor · DAP debugger · R$0
+**Status:** ✅ 189 tools · 64 módulos · 43 bugs corrigidos · 10 toolsets · 3 perfis · Pipeline Executor · DAP debugger · R$0
 
 ---
 
@@ -12,12 +12,12 @@
 
 | Pasta/Arquivo | O que é |
 |---|---|
-| `server.py` | Servidor MCP (~5950 linhas, 171 ferramentas) |
-| `tools/` | 50+ módulos (cenas, scripts, física, arte IA, som IA, pipeline, etc.) |
+| `server.py` | Servidor MCP (~7100 linhas, 189 ferramentas) |
+| `tools/` | 64 módulos (cenas, scripts, física, arte IA, som IA, pipeline, etc.) |
 | `resources/` | Game patterns (17 gêneros) + MCP Prompts (11 comandos) |
 | `templates/` | Templates GDScript (Jinja2) |
 | `classdb_cache/` | Cache da API do Godot 4.7 |
-| `addons/` | Plugins Godot (mcp_bridge + game_bridge) |
+| `addons/` | Plugins Godot (mcp_addon + mcp_runtime_bridge) |
 | `config.json` | Configuração (caminhos do Godot + projeto) |
 | `requirements.txt` | Dependências Python |
 | `GUIA_CONEXAO.md` | Como usar — passo a passo do zero |
@@ -25,7 +25,25 @@
 
 ---
 
-## Novidades da v3.0 (Onda 7)
+## Novidades da v3.2 (Sessão final — 2026-07-12)
+
+| Feature | Descrição |
+|---------|-----------|
+| 🔬 **Testes roteirizados** | `smoke_test`, `regression_test`, `run_scripted_tests`, `dump_mcp_state`, `estimate_tool_tokens` |
+| 🔍 **Validação de referências** | `validate_project_refs`, `find_usages` (estático, offline, sem precisar do Godot aberto) |
+| 📦 **Asset Manifest** | `import_asset_manifest` (5 fontes), `create_asset_manifest` |
+| ⚡ **Runtime Bridge** | Servidor TCP GDScript (8790) + 4 tools (`screenshot`, `runtime_info`, `custom_command`, `list_custom_commands`) |
+| 🔄 **Process Lifecycle** | `godot_run_project`, `godot_stop_project`, `godot_wait_for_bridge` com save-before-kill |
+| 📚 **ClassDB Introspecção** | `godot_class_ref` via `extension_api.json` (Python puro), 1074 classes com herança, fuzzy suggestions |
+| 🎯 **Curadoria de Toolsets** | `--toolsets` com 10 grupos nomeados (core, 2d, 3d, physics, ui, audio, art, debug, pipeline, advanced) |
+| ⚙️ **Perfis** | `--profile core/dev/full` — inicie com 29, ~80 ou 189 tools (economiza tokens) |
+| ✅ **Validação GDScript** | `safe_write_gdscript` com validação dupla (sintaxe local + `validate_gdscript.py`) |
+| 🛡️ **Git Checkpoint** | `git_commit_checkpoint` com gates de compilação + GUT |
+| 💰 **Cost Guard** | `allow_paid_generation=False` + `estimated_cost` em tools de arte IA |
+| 🔧 **Config local** | `config.local.json` + `GODOT_MCP_*` env vars para overrides por máquina |
+| 🐛 **43 bugs corrigidos** | Auditoria completa em 5 grupos (10 rodadas) |
+
+### Histórico (v3.0)
 
 | Feature | Descrição |
 |---------|-----------|
@@ -33,7 +51,6 @@
 | 🤖 **Decision Engine** | Decide automaticamente se gera arte placeholder ou FLUX, com base no estágio do projeto |
 | 📊 **Project State** | Snapshot em memória do projeto, atualizado por hooks automáticos |
 | 🔒 **Sandbox** | 80+ padrões de segurança bloqueados em `execute_gdscript_runtime` |
-| 🐛 **46 bugs corrigidos** | Auditoria completa em 4 grupos (CRITICAL/HIGH/MEDIUM/LOW) |
 
 ## Instalação (2 minutos)
 
@@ -77,4 +94,4 @@ python -m venv .venv
 
 ---
 
-**Versão:** 3.0 | **Tools:** 172 | **Última atualização:** 2026-07-10
+**Versão:** 3.2 | **Tools:** 189 | **Módulos:** 64 | **Última atualização:** 2026-07-12
