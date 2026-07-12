@@ -187,47 +187,61 @@ def safe_write_gdscript(
         except Exception:
             project_path = None
 
-    # 2. Validação Godot (se projeto disponível)
+    # 2. Validação Godot (se projeto disponível E config permitir)
     godot_check = None
     if project_path:
         try:
-            import subprocess, tempfile
             from tools.config_loader import load_config
             cfg = load_config()
-            # --headless requer o executável CONSOLE, não o GUI
-            godot_bin = cfg.get("godot_console_path", "") or cfg.get("godot_path", "")
+            try_godot = cfg.get("tentar_checagem_godot", False)
 
-            if godot_bin:
-                with tempfile.NamedTemporaryFile(suffix=".gd", mode="w", delete=False) as tmp:
-                    tmp.write(content)
-                    tmp_path = tmp.name
+            if not try_godot:
+                # Godot 4.7 --check-only nunca funciona neste ambiente (R12).
+                # Testado em 3 tipos de projeto (minimal, real Star Colony, completo
+                # com addons) — sempre timeout. A checagem básica (sandbox + sintaxe)
+                # cobre o essencial. Para religar, adicione "tentar_checagem_godot": true
+                # no config.json (quando uma versão futura do Godot corrigir o bug).
+                godot_check = {
+                    "valid": True,
+                    "note": "checagem Godot desligada por config (tentar_checagem_godot=False)",
+                    "skipped": True,
+                }
+            else:
+                import subprocess, tempfile
+                # --headless requer o executável CONSOLE, não o GUI
+                godot_bin = cfg.get("godot_console_path", "") or cfg.get("godot_path", "")
 
-                try:
-                    result = subprocess.run(
-                        [godot_bin, "--editor", "--headless", "--check-only", "--path", project_path, tmp_path],
-                        capture_output=True, text=True, timeout=30,
-                    )
-                except subprocess.TimeoutExpired:
-                    # Godot 4.7 --check-only pode travar em projetos mínimos (R12).
-                    # Neste caso, confiamos na validação de sintaxe + sandbox já feita.
-                    Path(tmp_path).unlink(missing_ok=True)
-                    godot_check = {
-                        "valid": True,
-                        "note": "timeout — confiando na validacao local",
-                        "skipped": True,
-                    }
-                else:
-                    Path(tmp_path).unlink(missing_ok=True)
-                    if result.returncode != 0:
-                        godot_check = {"valid": False, "output": result.stderr[:500]}
-                        if strict:
-                            return {
-                                "status": "error",
-                                "message": "❌ Godot rejeitou o script. Escrita BLOQUEADA.",
-                                "validation": validation,
-                                "godot_check": godot_check,
-                                "written": False,
-                            }
+                if godot_bin:
+                    with tempfile.NamedTemporaryFile(suffix=".gd", mode="w", delete=False) as tmp:
+                        tmp.write(content)
+                        tmp_path = tmp.name
+
+                    try:
+                        result = subprocess.run(
+                            [godot_bin, "--editor", "--headless", "--check-only", "--path", project_path, tmp_path],
+                            capture_output=True, text=True, timeout=30,
+                        )
+                    except subprocess.TimeoutExpired:
+                        # Godot 4.7 --check-only pode travar em projetos mínimos (R12).
+                        # Neste caso, confiamos na validação de sintaxe + sandbox já feita.
+                        Path(tmp_path).unlink(missing_ok=True)
+                        godot_check = {
+                            "valid": True,
+                            "note": "timeout — confiando na validacao local",
+                            "skipped": True,
+                        }
+                    else:
+                        Path(tmp_path).unlink(missing_ok=True)
+                        if result.returncode != 0:
+                            godot_check = {"valid": False, "output": result.stderr[:500]}
+                            if strict:
+                                return {
+                                    "status": "error",
+                                    "message": "❌ Godot rejeitou o script. Escrita BLOQUEADA.",
+                                    "validation": validation,
+                                    "godot_check": godot_check,
+                                    "written": False,
+                                }
         except Exception:
             pass
 

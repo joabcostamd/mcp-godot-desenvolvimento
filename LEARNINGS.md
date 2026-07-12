@@ -24,7 +24,7 @@
 | R9 | Método/propriedade inexistente em classe nativa do Godot | 🟡 MÉDIO |
 | R10 | Ciclo declarativo: ler estado → editar → validar → reiniciar → verificar | 🔴 CRÍTICO |
 | R11 | Handlers referenciados no _HANDLERS_CACHE DEVEM ser definidos antes do import | 🔴 CRÍTICO |
-| R12 | godot --headless --script NÃO produz stdout/stderr/FileAccess no Windows 4.7 | 🔴 CRÍTICO |
+| R12 | godot --headless --script/--check-only NÃO funciona no Windows 4.7 (ampliado) | 🔴 CRÍTICO |
 | R13 | send_bridge_command: sempre testar com jogo RODANDO; ConnectionRefused vira TimeoutError no Windows | 🟠 ALTO |
 | R14 | godot_stop_project: verificar nome do processo antes do taskkill (anti-PID-reaproveitado) | 🟠 ALTO |
 | R15 | Hooks PostToolUse: validar com PowerShell puro (regex), não depender de venv/Python de outro projeto | 🟡 MÉDIO |
@@ -484,24 +484,29 @@ Sempre verificar: `grep "_handle_NOME" server.py` deve retornar PELO MENOS 2 oco
 
 ---
 
-## 🔴 R12 — GODOT --HEADLESS --SCRIPT SEM OUTPUT NO WINDOWS 4.7
+## 🔴 R12 — GODOT --HEADLESS NÃO FUNCIONA NO WINDOWS 4.7 (AMPLIADO 2026-07-12)
 
 ### O padrão que quebra
-```gdscript
-extends SceneTree
-func _init():
-    print("resultado")  # ← NUNCA aparece no stdout do terminal
-    get_tree().quit(0)  # ← exit code sempre 0 ou 1, nunca o valor passado
+```bash
+# AMBOS falham no Windows Godot 4.7:
+godot --headless --script check.gd              # stdout/stderr/FileAccess/exit code vazios
+godot --editor --headless --check-only --path P  # timeout >30s em qualquer projeto
 ```
 
 ### Por que quebra
-No Windows Godot 4.7, `--headless --script` com `SceneTree`:
-- stdout/stderr vazios
-- FileAccess.WRITE não cria arquivos
-- exit code ignorado (sempre 0 ou 1)
+No Windows Godot 4.7:
+- `--headless --script`: stdout/stderr vazios, FileAccess.WRITE não cria arquivos, exit code ignorado
+- `--headless --check-only`: trava indefinidamente (testado em 3 tipos de projeto: minimal, Star Colony real, completo com addons/scenes/scripts)
+
+### Impacto
+- `compile_test` não pode usar `--headless --script` para validação
+- `safe_write_gdscript` não pode confiar na validação Godot — depende apenas de sandbox + sintaxe local
 
 ### ✅ REGRA DE PREVENÇÃO
-NÃO usar `--headless --script` para comunicação checker→caller. Alternativas: LSP bridge (6005), runtime bridge (8790), ou validação Python pura (regex/extension_api.json).
+- **`tentar_checagem_godot` deve ser `false` no config.json** (default desde 2026-07-12)
+- A checagem Godot foi desligada por padrão
+- Para religar quando versão futura corrigir: `"tentar_checagem_godot": true`
+- Usar LSP bridge (:6005) ou runtime bridge (:8790) para validação real
 
 ---
 
