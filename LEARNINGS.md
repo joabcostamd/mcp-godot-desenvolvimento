@@ -23,6 +23,12 @@
 | R8 | seed() só no _ready(), nunca no _draw() ou _process() | 🟢 BAIXO |
 | R9 | Método/propriedade inexistente em classe nativa do Godot | 🟡 MÉDIO |
 | R10 | Ciclo declarativo: ler estado → editar → validar → reiniciar → verificar | 🔴 CRÍTICO |
+| R11 | Handlers referenciados no _HANDLERS_CACHE DEVEM ser definidos antes do import | 🔴 CRÍTICO |
+| R12 | godot --headless --script NÃO produz stdout/stderr/FileAccess no Windows 4.7 | 🔴 CRÍTICO |
+| R13 | send_bridge_command: sempre testar com jogo RODANDO; ConnectionRefused vira TimeoutError no Windows | 🟠 ALTO |
+| R14 | godot_stop_project: verificar nome do processo antes do taskkill (anti-PID-reaproveitado) | 🟠 ALTO |
+| R15 | Hooks PostToolUse: validar com PowerShell puro (regex), não depender de venv/Python de outro projeto | 🟡 MÉDIO |
+| R16 | socket.create_connection sem listener dá TimeoutError no Windows (não ConnectionRefusedError) | 🟡 MÉDIO |
 
 ---
 
@@ -460,6 +466,106 @@ python -c "from tools.runtime_ops import smart_restart; smart_restart()"
 
 ---
 
-> **Última atualização**: 2026-07-08 — Sessão 2
-> **Baseado em**: 8 bugs reais encontrados no desenvolvimento do Space Colony Sci-Fi TD
+## 🔴 R11 — HANDLERS REFERENCIADOS MAS NÃO DEFINIDOS (NameError)
+
+### O padrão que quebra
+```python
+# Em _build_handlers():
+"godot_screenshot": _handle_godot_screenshot,  # ← NameError se não definida antes!
+
+# ... 300 linhas depois, a função NUNCA foi escrita
+```
+
+### Por que quebra
+O `_build_handlers()` referencia funções que precisam ser definidas ANTES do dicionário ser construído (em module-level ou como funções acima do dict no mesmo arquivo). Se a função não existe no namespace quando o dict é avaliado, `NameError`.
+
+### ✅ REGRA DE PREVENÇÃO
+Sempre verificar: `grep "_handle_NOME" server.py` deve retornar PELO MENOS 2 ocorrências (1 no dict, 1 na definição). Nunca commitar com apenas 1 match.
+
+---
+
+## 🔴 R12 — GODOT --HEADLESS --SCRIPT SEM OUTPUT NO WINDOWS 4.7
+
+### O padrão que quebra
+```gdscript
+extends SceneTree
+func _init():
+    print("resultado")  # ← NUNCA aparece no stdout do terminal
+    get_tree().quit(0)  # ← exit code sempre 0 ou 1, nunca o valor passado
+```
+
+### Por que quebra
+No Windows Godot 4.7, `--headless --script` com `SceneTree`:
+- stdout/stderr vazios
+- FileAccess.WRITE não cria arquivos
+- exit code ignorado (sempre 0 ou 1)
+
+### ✅ REGRA DE PREVENÇÃO
+NÃO usar `--headless --script` para comunicação checker→caller. Alternativas: LSP bridge (6005), runtime bridge (8790), ou validação Python pura (regex/extension_api.json).
+
+---
+
+## 🟠 R13 — send_bridge_command EXIGE JOGO RODANDO
+
+### O padrão que quebra
+```python
+send_bridge_command({"cmd": "runtime_info"})  # Jogo parado → hang de 5s
+```
+
+### Por que quebra
+No Windows, `socket.create_connection` para porta sem listener dá `TimeoutError` (5s), não `ConnectionRefusedError`. O script parece "travado".
+
+### ✅ REGRA DE PREVENÇÃO
+Sempre usar `godot_wait_for_bridge(timeout_sec=15)` antes de chamar send_bridge_command. Ou capturar explicitamente `TimeoutError` + `ConnectionRefusedError` + `OSError`.
+
+---
+
+## 🟠 R14 — GODOT_STOP_PROJECT: VERIFICAR NOME DO PROCESSO
+
+### O padrão que quebra
+```python
+taskkill /F /PID 1234  # PID pode ter sido reaproveitado pelo Windows!
+```
+
+### Por que quebra
+Se o Godot já morreu sozinho e o Windows reaproveitou o PID para outro programa (ex: notepad), `taskkill /F` mataria um processo inocente.
+
+### ✅ REGRA DE PREVENÇÃO
+Antes do `taskkill`, verificar `tasklist /FI "PID eq X" /FO CSV`: o nome do executável deve conter "Godot". Se não, recusar com erro.
+
+---
+
+## 🟡 R15 — HOOKS POSTTOOLUSE: NÃO DEPENDER DE VENV EXTERNO
+
+### O padrão que quebra
+```powershell
+# Hook no NUCLEO referencia Python/venv do mcp-godot-desenvolvimento
+$PYTHON = "C:\...\mcp-godot-desenvolvimento\.venv\Scripts\python.exe"
+```
+
+### Por que quebra
+Se o venv for recriado, movido, ou o caminho mudar entre máquinas, o hook quebra silenciosamente.
+
+### ✅ REGRA DE PREVENÇÃO
+Hooks devem ser autocontidos: PowerShell puro (regex) ou binários do sistema (Godot no PATH/Godot_PATH). Zero referências cruzadas entre projetos.
+
+---
+
+## 🟡 R16 — TIMEOUTERROR VS CONNECTIONREFUSEDERROR NO WINDOWS
+
+### O padrão que quebra
+```python
+except ConnectionRefusedError:  # ← NUNCA dispara no Windows para localhost!
+```
+
+### Por que quebra
+No Windows, `socket.create_connection(('127.0.0.1', PORT))` com porta fechada gera `TimeoutError` (subclasse de `OSError`), não `ConnectionRefusedError`.
+
+### ✅ REGRA DE PREVENÇÃO
+Sempre capturar `(ConnectionRefusedError, socket.timeout, OSError)` juntos, ou usar `except Exception` com mensagem genérica de "bridge unavailable".
+
+---
+
+> **Última atualização**: 2026-07-12 — Sessão 3 (Patches 12-18)
+> **Baseado em**: 16 bugs/limitações reais encontrados no desenvolvimento do MCP Godot Agent
 > **Próximo passo**: Automatizar o máximo possível destas verificações
