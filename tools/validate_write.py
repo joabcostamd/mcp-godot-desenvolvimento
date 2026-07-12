@@ -162,6 +162,22 @@ def safe_write_gdscript(
             "errors": validation["errors"],
         }
 
+    # 1.2 Validação de segurança (sandbox — classes/padrões perigosos)
+    try:
+        from tools.gdscript_sandbox import validate_gdscript_code
+        sandbox_result = validate_gdscript_code(content)
+        if not sandbox_result.get("safe", False):
+            return {
+                "status": "error",
+                "message": "❌ GDScript contém código potencialmente perigoso — escrita BLOQUEADA.",
+                "sandbox": sandbox_result,
+                "validation": validation,
+                "written": False,
+                "violations": sandbox_result.get("violations", []),
+            }
+    except ImportError:
+        pass  # sandbox não disponível, prossegue sem ele
+
     # 1.5 Auto-detectar projeto ativo se não informado
     if not project_path:
         try:

@@ -146,6 +146,22 @@ def write_file(path: str, content: str, mode: str = "create",
         except Exception:
             pass  # Se validação falhar por infra, não bloqueia
 
+        # ── Security Sandbox (PATCH 2026-07-12) ──
+        # Além da validação de sintaxe, verifica classes/padrões perigosos
+        # (OS, FileAccess, HTTPRequest, etc.) ANTES de escrever em disco.
+        try:
+            from tools.gdscript_sandbox import validate_gdscript_code
+            sandbox_result = validate_gdscript_code(content)
+            if not sandbox_result.get("safe", False):
+                return {
+                    "status": "error",
+                    "message": "❌ GDScript contém código potencialmente perigoso — escrita BLOQUEADA.",
+                    "sandbox_violations": sandbox_result.get("violations", []),
+                    "hint": "Use skip_gdscript_validation=True apenas em emergências.",
+                }
+        except ImportError:
+            pass  # sandbox não disponível, prossegue sem ele
+
     full_path = proj / path
     full_path.parent.mkdir(parents=True, exist_ok=True)
 

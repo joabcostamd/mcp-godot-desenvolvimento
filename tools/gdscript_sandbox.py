@@ -4,7 +4,19 @@ Impede que execute_gdscript_runtime execute código malicioso.
 Implementa allowlist de classes GDScript permitidas e blocklist de
 operações perigosas.
 
-Usado por: tools/game_bridge.py (inject, execute, watch)
+Usado por: tools/game_bridge.py (inject, execute, watch),
+           tools/validate_write.py (safe_write_gdscript),
+           tools/file_ops.py (write_file para .gd)
+
+AVISO DE ESCOPO: este modulo e um FILTRO DE TEXTO (regex sobre
+codigo-fonte apos normalizacao), nao um sandbox de execucao isolada.
+Ele bloqueia a forma canonica e obvia de ~49 classes/padroes
+perigosos, incluindo casos de concatenacao literal simples e
+comentarios/espacamento apos normalizacao (patch de 2026-07-12).
+NAO detecta: aliasing de variavel para classe bloqueada, reflection
+via get()/set() dinamico, nem qualquer tecnica que nao apareca
+literalmente no texto apos normalizacao. Nao substitui revisao
+humana para codigo gerado por IA com alto risco de alucinacao.
 """
 
 import re
@@ -121,6 +133,100 @@ _ALLOWED_CLASSES = {
     "JSON", "Marshalls",
 }
 
+# ── Normalização de código ──────────────────────────────────────────
+
+def _normalize_gdscript(code: str) -> str:
+    """Normaliza código GDScript para reduzir bypasses triviais.
+
+    1. Remove comentários de linha (tudo após # até fim da linha),
+       preservando # dentro de strings literais.
+    2. Colapsa whitespace entre tokens: quebras de linha e espaços
+       múltiplos viram um único espaço, para que "OS\\n    .execute()"
+       vire "OS .execute()" antes do regex.
+    3. Resolve concatenação literal simples de strings constantes
+       (ex: "OS" + "exec" + "ute" → "OSexecute") e testa se o
+       resultado coincide com alguma classe/pattern bloqueado.
+
+    Args:
+        code: Código fonte GDScript original.
+
+    Returns:
+        Código normalizado (string).
+    """
+    # ── Passo 1: Remove comentários (respeita strings) ──
+    lines = code.split("\n")
+    clean_lines = []
+    for line in lines:
+        in_string = False
+        string_char = ""
+        result = []
+        i = 0
+        while i < len(line):
+            ch = line[i]
+            if not in_string:
+                if ch in ('"', "'"):
+                    # Início de string literal
+                    in_string = True
+                    string_char = ch
+                    result.append(ch)
+                elif ch == "#":
+                    # Comentário — descarta o resto da linha
+                    break
+                else:
+                    result.append(ch)
+            else:
+                if ch == "\\" and i + 1 < len(line):
+                    # Escape — preserva o próximo caractere também
+                    result.append(ch)
+                    result.append(line[i + 1])
+                    i += 1
+                elif ch == string_char:
+                    in_string = False
+                    result.append(ch)
+                else:
+                    result.append(ch)
+            i += 1
+        clean_lines.append("".join(result))
+
+    # ── Passo 2: Colapsa whitespace ──
+    collapsed = " ".join("".join(clean_lines).split())
+    # Remove espaços antes de . ( ) [ para normalizar tokenização:
+    # "OS . execute" → "OS.execute", "OS ( )" → "OS()"
+    collapsed = re.sub(r'\s*\.\s*', '.', collapsed)
+    collapsed = re.sub(r'\s*\(\s*', '(', collapsed)
+
+    # ── Passo 3: Detecta concatenação literal simples ──
+    # Padrão: "lit1" + "lit2" + "lit3" — todas strings constantes
+    # Algoritmo: varre a string normalizada procurando sequências de
+    # "str1" + "str2" + ... e concatena os literais.
+    concat_pattern = re.compile(r'"([^"]*)"\s*\+\s*"([^"]*)"')
+    prev = None
+    current = collapsed
+    while prev != current:
+        prev = current
+        current = concat_pattern.sub(lambda m: '"' + m.group(1) + m.group(2) + '"', current)
+
+    # ── Passo 4: Verifica strings literais contra classes bloqueadas ──
+    # Extrai TODAS as strings do código (após concatenação) e verifica
+    # se alguma contém o nome exato de uma classe bloqueada.
+    # Se encontrar, injeta a classe no final do código para que os
+    # regex de blocked_class a capturem.
+    all_strings = re.findall(r'"([^"]*)"', current) + re.findall(r"'([^']*)'", current)
+    for s in all_strings:
+        for cls in _BLOCKED_CLASSES:
+            if s.strip() == cls:
+                current += f"\n# __SANDBOX_INJECTED__{cls}"
+        for pattern, _desc in _BLOCKED_PATTERNS:
+            # Tenta match do padrão contra a string (ex: "OS.execute" match OS\.execute)
+            # Remove escapes do pattern para comparar como substring
+            clean_pattern = pattern.replace(r'\s*', '').replace(r'\b', '').replace(r'(', '').replace(r')', '')
+            clean_pattern = clean_pattern.replace(r'\.', '.').replace(r'[\'"]', '')
+            if re.search(re.escape(s), clean_pattern, re.IGNORECASE) or re.search(re.escape(clean_pattern), s, re.IGNORECASE):
+                current += f"\n# __SANDBOX_INJECTED__{clean_pattern[:30]}"
+
+    return current
+
+
 # ── API Pública ─────────────────────────────────────────────────────
 
 def validate_gdscript_code(code: str, mode: str = "runtime") -> dict:
@@ -134,12 +240,16 @@ def validate_gdscript_code(code: str, mode: str = "runtime") -> dict:
         {"status": "success", "safe": True}
         ou {"status": "error", "safe": False, "message": str, "violations": [...]}
     """
+    # ── Normaliza o código antes da validação (remove comentários,
+    #     colapsa whitespace, resolve concatenação literal) ──
+    normalized = _normalize_gdscript(code)
+
     violations = []
 
-    # ── Verifica classes bloqueadas ──────────────────────────────
+    # ── Verifica classes bloqueadas (contra código normalizado) ──
     for cls in _BLOCKED_CLASSES:
         # Verifica uso como tipo (ClassName. ou ClassName()
-        if re.search(rf'\b{cls}\.', code) or re.search(rf'\b{cls}\s*\(', code):
+        if re.search(rf'\b{cls}\.', normalized) or re.search(rf'\b{cls}\s*\(', normalized):
             violations.append({
                 "type": "blocked_class",
                 "class": cls,
@@ -148,9 +258,9 @@ def validate_gdscript_code(code: str, mode: str = "runtime") -> dict:
                            f"rede, ou executar processos. Use classes da Godot API segura.",
             })
 
-    # ── Verifica patterns bloqueados ─────────────────────────────
+    # ── Verifica patterns bloqueados (contra código normalizado) ──
     for pattern, description in _BLOCKED_PATTERNS:
-        if re.search(pattern, code):
+        if re.search(pattern, normalized):
             violations.append({
                 "type": "blocked_pattern",
                 "pattern": pattern,
@@ -159,9 +269,9 @@ def validate_gdscript_code(code: str, mode: str = "runtime") -> dict:
             })
 
     # ── Verifica se usa apenas classes seguras ───────────────────
-    # Extrai nomes de classe do código (ClassName.member ou ClassName())
+    # Extrai nomes de classe do código original (ClassName.member ou ClassName())
     class_usage = set()
-    for m in re.finditer(r'\b([A-Z][a-zA-Z0-9_]{1,30})\s*[.\(]', code):
+    for m in re.finditer(r'\b([A-Z][a-zA-Z0-9_]{1,30})\s*[.\(]', normalized):
         name = m.group(1)
         if name not in _ALLOWED_CLASSES and name not in _BLOCKED_CLASSES:
             class_usage.add(name)
