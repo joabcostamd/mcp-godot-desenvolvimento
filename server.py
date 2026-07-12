@@ -71,6 +71,7 @@ TOOLSETS = {
         "analyze_game_structure", "suggest_next_steps",
         "validate_game_design", "estimate_game_scope",
         "project_status", "create_entity",
+        "godot_class_ref",
     ],
     "ui_ops": [
         "ui_manage", "create_main_menu", "create_hud_template",
@@ -294,6 +295,40 @@ def _handle_godot_wait_for_bridge(timeout_sec: int = 10, **kwargs) -> str:
     return json.dumps({"ok": False, "error": f"bridge nao respondeu em {timeout_sec}s"})
 
 
+# ── PATCH 13: Introspecção ClassDB ─────────────────────────────
+def _handle_godot_class_ref(class_name: str = "", **kwargs) -> str:
+    """Consulta metodos, propriedades e sinais reais de uma classe Godot."""
+    from tools.classdb import suggest_similar
+    all_names = []
+    try:
+        from tools.classdb import _all_class_names
+        all_names = _all_class_names()
+    except Exception:
+        pass
+
+    if not class_name:
+        return json.dumps({"ok": False, "error": "class_name obrigatorio"})
+    if class_name not in all_names:
+        suggestions = suggest_similar(class_name, limit=5)
+        return json.dumps({
+            "ok": False,
+            "error": f"classe '{class_name}' nao encontrada na ClassDB",
+            "suggestions": suggestions,
+        })
+
+    methods = list_methods(class_name)
+    hierarchy = get_class_hierarchy(class_name)
+    return json.dumps({
+        "ok": True,
+        "class_name": class_name,
+        "parent_class": hierarchy[1] if len(hierarchy) > 1 else None,
+        "hierarchy": hierarchy,
+        "method_count": len(methods),
+        "methods": [m["name"] for m in methods[:50]],
+        "methods_full": methods[:50],
+    }, indent=2)
+
+
 from tools.project_ops import (
     _get_active_project,
     validate_godot_version,
@@ -398,6 +433,8 @@ from tools.classdb import (
     query_classdb,
     search_classdb,
     list_valid_node_types,
+    list_methods,
+    get_class_hierarchy,
 )
 from tools.export_ops import (
     list_export_presets,
@@ -2774,6 +2811,17 @@ def _tool_defs() -> list[Tool]:
                 "Erro mais comum: scope_score pode variar — é uma estimativa."
             ),
             inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        Tool(
+            name="godot_class_ref",
+            description="Consulta metodos, propriedades e sinais reais de uma classe do Godot via ClassDB (extension_api.json). Evita alucinacao de API desatualizada.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "class_name": {"type": "string", "description": "Nome exato da classe (ex: Node2D, CharacterBody2D)."},
+                },
+                "required": ["class_name"],
+            },
         ),
         Tool(
             name="search_codebase",
@@ -5640,6 +5688,8 @@ def _build_handlers() -> dict:
         "project_status": project_status,
         # Orquestrador Genius (Onda 7)
         "circuit_breaker_status": circuit_breaker_status,
+        # PATCH 13: ClassDB Introspecção
+        "godot_class_ref": _handle_godot_class_ref,
         # PATCH 12: Runtime Bridge
         "godot_screenshot": _handle_godot_screenshot,
         "godot_runtime_info": _handle_godot_runtime_info,
