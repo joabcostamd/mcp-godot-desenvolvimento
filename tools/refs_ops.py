@@ -10,7 +10,6 @@ Tools:
 
 import re
 from pathlib import Path
-from typing import Any
 
 from tools.project_ops import _get_active_project
 
@@ -132,6 +131,7 @@ def validate_project_refs(project_path: str | None = None, full_report: bool = F
 
     errors: list[dict] = []
     warnings: list[dict] = []
+    files_scanned = 0
 
     # ── Coleta todos os paths existentes ──
     existing = _collect_existing_files(proj)
@@ -145,6 +145,7 @@ def validate_project_refs(project_path: str | None = None, full_report: bool = F
             content = tscn.read_text(encoding="utf-8")
         except Exception:
             continue
+        files_scanned += 1
 
         # 1. Mapeia ext_resource IDs → paths
         ext_map = _parse_tscn_ext_resources(content)
@@ -246,6 +247,7 @@ def validate_project_refs(project_path: str | None = None, full_report: bool = F
             content = gd_file.read_text(encoding="utf-8")
         except Exception:
             continue
+        files_scanned += 1
 
         # preload("res://...")
         for m in re.finditer(r'preload\s*\(\s*"res://([^"]+)"', content):
@@ -258,8 +260,8 @@ def validate_project_refs(project_path: str | None = None, full_report: bool = F
                     "message": f"preload('res://{ref}') — recurso nao encontrado.",
                 })
 
-        # load("res://...") — bare load() apenas (nao ResourceLoader.load)
-        for m in re.finditer(r'(?<!ResourceLoader\.)(?<!\w\.)load\s*\(\s*"res://([^"]+)"', content):
+        # load("res://...") — bare load() e self.load() (nao ResourceLoader.load)
+        for m in re.finditer(r'(?<!ResourceLoader\.)load\s*\(\s*"res://([^"]+)"', content):
             ref = m.group(1)
             if ref not in existing:
                 errors.append({
@@ -310,7 +312,7 @@ def validate_project_refs(project_path: str | None = None, full_report: bool = F
     return {
         "status": "success",
         "project": str(proj),
-        "total_files_scanned": len(list(proj.glob("**/*.tscn"))) + len(list(proj.glob("**/*.gd"))),
+        "total_files_scanned": files_scanned,
         "summary": {
             "errors": error_count,
             "warnings": warning_count,
@@ -353,6 +355,11 @@ def find_usages(
     proj = _resolve_project(project_path)
     if not proj:
         return {"status": "error", "message": "Projeto nao encontrado."}
+
+    # Valida search_type
+    valid_types = {"auto", "script", "scene", "texture", "any"}
+    if search_type not in valid_types:
+        return {"status": "error", "message": f"search_type invalido: '{search_type}'. Use: {sorted(valid_types)}."}
 
     # Normaliza target: remove res:// se presente
     target_clean = target.replace("res://", "").replace("\\", "/")
@@ -417,7 +424,7 @@ def find_usages(
 
         patterns = [
             (r'preload\s*\(\s*"res://([^"]+)"', "preload"),
-            (r'(?<!ResourceLoader\.)(?<!\w\.)load\s*\(\s*"res://([^"]+)"', "load"),
+            (r'(?<!ResourceLoader\.)load\s*\(\s*"res://([^"]+)"', "load"),
             (r'ResourceLoader\.load\s*\(\s*"res://([^"]+)"', "ResourceLoader.load"),
             (r'change_scene_to_file\s*\(\s*"res://([^"]+)"', "change_scene_to_file"),
         ]
