@@ -1,6 +1,6 @@
 # MCP Godot — Desenvolvimento
 
-> **Servidor MCP Godot Agent v3.2.1 — 190 ferramentas para criação de jogos por linguagem natural.**
+> **Servidor MCP Godot Agent v3.2.1 — 191 ferramentas para criação de jogos por linguagem natural.**
 > Conecta Godot 4.7 ao VS Code Copilot (DeepSeek V4) via protocolo MCP.
 > Autocontido — clone, instale dependências e use.
 

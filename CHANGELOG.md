@@ -1,6 +1,31 @@
 # CHANGELOG — mcp-godot-desenvolvimento
 
-## v3.2.1 (2026-07-12) — Sessão de auditoria e hardening
+## v3.2.1 (2026-07-12) — Sessão de auditoria, hardening + Item 1+2 do plano de evolução
+
+### Item 1: Pipeline de Verificação (run_verification_pipeline)
+- **Nova tool:** `run_verification_pipeline` — pipeline completo em 4 etapas (compile → headless run → screenshot → GUT)
+- **Módulo novo:** `tools/verification_ops.py` (330 linhas)
+- **Relatório JSON consolidado** com status de cada etapa, early exit na primeira falha
+- **Screenshot via `--write-movie`** com SW_HIDE (não usa `--headless` — evita crash SIGSEGV do renderer DUMMY)
+- **Tratamento de ambiguidade:** retorna `ambiguous` se `test_scene` não definido
+- **6 bugs encontrados e corrigidos** (BUG-V01 a V06): variáveis mortas, self-assignment, mutação de dict, partial output em timeout
+
+### Item 2: Fluxo EARS + Pipeline (Padrão de Fechamento de Pendência)
+- **AGENTS.md** criado no Star Colony com regra de comportamento obrigatória
+- Fluxo documentado: receber → EARS → aprovar → implementar → pipeline → relatório → fechar condicional
+- **EARS-B implementado:** VFX de evolução visual L1→L2→L3 com gatilho provisório (tecla U)
+- **_draw() modificado:** escala por nível (L1=1.0, L2=1.15, L3=1.30) + borda (L2=prata, L3=douro)
+- **VFX:** `spawn_explosion`, `spawn_floating_text`, `add_shake(0.15, 3.0)` via `vfx_system.gd`
+- **Teste visual:** pixel analysis confirma bordas prateada/dourada exclusivas por nível
+
+### Documentação
+- **MCP_ESTADO_ATUAL.md** sincronizado com 191 tools, 69 módulos, v3.2.1
+- **pendencias.md** criado (bugs ativos + resolvidos)
+- **decisoes.md** (Star Colony) atualizado com EARS-B
+
+### Métricas atualizadas
+- **191 tools** (+2: run_verification_pipeline + 1 rollup), **69 módulos** (+5)
+- **49 bugs corrigidos** (+6 BUG-V01~V06) em 12 rodadas de auditoria
 
 ### Correções de segurança
 - **Sandbox conectado à escrita:** `write_file` e `safe_write_gdscript` agora chamam `validate_gdscript_code()` antes de escrever .gd em disco (36/36 padrões bloqueados com confirmação de disco)

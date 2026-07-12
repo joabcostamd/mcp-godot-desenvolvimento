@@ -526,6 +526,9 @@ from tools.test_ops import (
     dump_mcp_state,
     estimate_tool_tokens,
 )
+from tools.verification_ops import (
+    run_verification_pipeline,
+)
 from tools.classdb import (
     query_classdb,
     search_classdb,
@@ -5267,6 +5270,35 @@ def _tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
+        # ── Pipeline de Verificação (Item 1 do plano de evolução) ──
+        Tool(
+            name="run_verification_pipeline",
+            description=(
+                "Executa pipeline de verificacao completo em um projeto Godot: "
+                "compilacao, execucao headless, screenshot e testes GUT. "
+                "Retorna relatorio consolidado JSON com status de cada etapa. "
+                "Use para validar integridade do projeto apos mudancas grandes. "
+                "Quando NAO usar: para compilar um unico arquivo (use compile_test_incremental). "
+                "Pre-requisitos: projeto Godot com project.godot valido. "
+                "Exemplo: {'project_path': 'C:/meus-jogos/meu_pong'}. "
+                "Se o projeto nao tiver run/main_scene definido, passe test_scene obrigatoriamente."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "Caminho do projeto Godot. Se omitido, usa projeto ativo."},
+                    "godot_path": {"type": "string", "description": "Caminho do executavel Godot. Se omitido, auto-detecta."},
+                    "test_scene": {"type": "string", "description": "Cena para rodar headless (ex: 'res://scenes/main.tscn'). Se omitido, le run/main_scene do project.godot."},
+                    "gut_test_dir": {"type": "string", "description": "Diretorio de testes GUT (default: 'res://tests')."},
+                    "headless_frames": {"type": "integer", "description": "Quantos frames executar antes do screenshot (default: 30)."},
+                    "timeout_compile": {"type": "integer", "description": "Timeout em segundos para compile check (default: 30)."},
+                    "timeout_headless": {"type": "integer", "description": "Timeout em segundos para headless run (default: 60)."},
+                    "timeout_gut": {"type": "integer", "description": "Timeout em segundos para GUT (default: 120)."},
+                    "screenshot_dir": {"type": "string", "description": "Diretorio para screenshots. Default: <proj>/verification_screenshots/."},
+                },
+                "required": [],
+            },
+        ),
     ]
 
     # ── Pós-processamento: hints MCP + additionalProperties ────────
@@ -5288,6 +5320,8 @@ def _tool_defs() -> list[Tool]:
         "gdscript_hover", "gdscript_symbols", "gdscript_diagnostics",
         # Orquestrador Genius (Onda 7)
         "circuit_breaker_status",
+        # Pipeline de Verificação
+        "run_verification_pipeline",
     }
     _DESTRUCTIVE = {
         "delete_file", "delete_node", "write_file", "move_file",
@@ -5386,6 +5420,7 @@ def _tool_defs() -> list[Tool]:
         "self_test": "Auto-Teste do MCP",
         "generate_game_art": "Gerar Arte do Jogo (IA)",
         "apply_game_art": "Aplicar Arte no Jogo",
+        "run_verification_pipeline": "Pipeline de Verificação (Compilar + Rodar + Screenshot + GUT)",
 }
     _TAGS = {
         "capture_game_screenshot": ["visão", "screenshot"],
@@ -5485,6 +5520,8 @@ def _tool_defs() -> list[Tool]:
         "step_until": ["playtest", "clock", "condicional"],
         "get_runtime_state_digest": ["playtest", "state", "json"],
         "capture_runtime_errors": ["playtest", "debug", "diagnostico"],
+        # Pipeline de Verificação
+        "run_verification_pipeline": ["verificacao", "pipeline", "teste", "diagnostico"],
     }
     # ── Hints: openWorldHint (Fase 2A / C4) ─────────────────────
     # Tools que NÃO são puro servidor interagem com mundo externo.
@@ -5753,6 +5790,21 @@ async def list_tools() -> list[Tool]:
 _HANDLERS_CACHE: dict | None = None
 
 
+def _handle_run_verification_pipeline(args: dict) -> dict:
+    """Handler da tool run_verification_pipeline."""
+    return run_verification_pipeline(
+        project_path=args.get("project_path"),
+        godot_path=args.get("godot_path"),
+        test_scene=args.get("test_scene"),
+        gut_test_dir=args.get("gut_test_dir", "res://tests"),
+        headless_frames=args.get("headless_frames", 30),
+        timeout_compile=args.get("timeout_compile", 30),
+        timeout_headless=args.get("timeout_headless", 60),
+        timeout_gut=args.get("timeout_gut", 120),
+        screenshot_dir=args.get("screenshot_dir"),
+    )
+
+
 def _build_handlers() -> dict:
     """Constrói o dicionário de handlers (cacheado)."""
     global _HANDLERS_CACHE
@@ -5985,6 +6037,8 @@ def _build_handlers() -> dict:
         "godot_run_project": _handle_godot_run_project,
         "godot_stop_project": _handle_godot_stop_project,
         "godot_wait_for_bridge": _handle_godot_wait_for_bridge,
+        # Pipeline de Verificação
+        "run_verification_pipeline": _handle_run_verification_pipeline,
     }
 
     # ── Rollups Fase 2A / C1 ───────────────────────────────────────

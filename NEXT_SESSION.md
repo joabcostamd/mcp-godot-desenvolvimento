@@ -1,7 +1,7 @@
 # NEXT_SESSION.md — MCP Godot Agent
 
-**Última sessão:** 2026-07-12 (sessão de auditoria e hardening)
-**Estado atual:** v3.2.1 — 190 tools, 190 handlers, 64 módulos, 18 patches, 5 grupos
+**Última sessão:** 2026-07-12 (itens 1+2 do plano de evolução concluídos)
+**Estado atual:** v3.2.1 — 191 tools, 191 handlers, 69 módulos, 18 patches, 5 grupos
 **📄 Doc completo:** `MCP_ESTADO_ATUAL.md` — auto-contido com TUDO para retomar
 
 ## 📋 CHECKLIST DE INICIALIZAÇÃO (próxima sessão)
@@ -34,16 +34,11 @@
 - MCPs duplicados removidos
 
 ### Documentação criada/atualizada
-- ✅ `MCP_ESTADO_ATUAL.md` — NOVO, documento de referência principal
-- ✅ `CHANGELOG.md` — v3.2.1
-- ✅ `README.md` — 190 tools, v3.2.1
-- ✅ `ARQUITETURA_MCP.md` — v3.2.1
-- ✅ `GUIA_CONEXAO.md` — v3.2.1
-- ✅ `GUIA_INSTALACAO.md` — v3.2.1
-- ✅ `LEARNINGS.md` — R12 ampliado (já estava atualizado)
-- ✅ `pyproject.toml` — v3.2.1
-- ✅ `addons/mcp_addon/plugin.cfg` — v3.2.1
-- ✅ `addons/mcp_addon/mcp_addon.gd` — VERSION "3.2.1"
+- ✅ `MCP_ESTADO_ATUAL.md` — sincronizado com versão completa (191 tools, 69 módulos)
+- ✅ `CHANGELOG.md` — v3.2.1 com itens 1+2
+- ✅ `pendencias.md` — NOVO, bugs ativos e resolvidos
+- ✅ `AGENTS.md` (Star Colony) — NOVO, fluxo EARS + pipeline
+- ✅ `decisoes.md` (Star Colony) — atualizado com EARS-B
 
 ## Para retomar
 
@@ -67,7 +62,7 @@ python server.py --profile dev
 
 | Pendência | Prioridade |
 |-----------|-----------|
+| EARS-A: Trigger real de upgrade individual de torre (Star Colony) | Média |
 | Sandbox: BYPASS-1 (concat via variáveis) e BYPASS-5 (aliasing) não bloqueados | Média |
 | B1: regex `\d+` não captura IDs alfanuméricos (ex: `1_sh`) | Baixa |
-| NUCLEO Bloco 14: CLONE-DO-ZERO-NOVO-PC.md, setup-maquina.ps1, PROTOCOLO-MULTI-MAQUINA.md | Baixa |
-| 21 arquivos no NUCLEO ainda referenciam `sistema/mcp-godot/servidor/` (docs desatualizados) | Baixa |
+| Testar gatilho U + VFX visualmente no editor Godot (headless não simula input) | Baixa |
