@@ -891,6 +891,12 @@ from tools.stress_test_ops import run_stress_test
 # ── Grupo C: Detecção de recursos não usados ───────────────────
 from tools.find_unused_resources import find_unused_resources
 
+# ── Grupo C: Análise de fluxo de sinal ─────────────────────────
+from tools.analyze_signal_flow import analyze_signal_flow
+
+# ── Grupo C: Sugestão fuzzy ────────────────────────────────────
+from tools.fuzzy_suggest import suggest_similar, not_found_error
+
 # ── Fase 1 do Roadmap: Máquina de Estados ───────────────────────
 from tools.phase_ops import get_current_phase, advance_phase, get_phase_history, set_cache_invalidator
 from tools.milestone_ops import create_milestone_plan, advance_milestone, get_milestone_plan
@@ -4629,6 +4635,28 @@ def _tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
+        # ── Grupo C: Análise de fluxo de sinal ─────────────────
+        Tool(
+            name="analyze_signal_flow",
+            description=(
+                "Analisa conexoes de sinal no projeto: detecta sinais conectados "
+                "a metodos que nao existem mais (orfaos pos-refatoracao) e sinais "
+                "declarados mas nunca conectados. "
+                "NAO requer Godot rodando — analise estatica de .tscn e .gd. "
+                "Use para limpar conexoes quebradas antes do lancamento. "
+                "Exemplo: {\"project_path\": \"C:\\\\...\\\\star-colony\"}. "
+                "Exemplo: {\"scene_path\": \"scenes/main.tscn\"}. "
+                "Limitacao: nao detecta conexoes feitas via connect() em codigo."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "Caminho do projeto."},
+                    "scene_path": {"type": "string", "description": "Caminho de uma cena especifica (opcional — default: varre todo o projeto)."},
+                },
+                "required": [],
+            },
+        ),
         # ── PATCH 14: Testes Roteirizados ──────────────────────
         Tool(
             name="run_scripted_tests",
@@ -6326,6 +6354,8 @@ def _build_handlers() -> dict:
         "find_usages": find_usages,
         # Grupo C: Detecção de recursos não usados
         "find_unused_resources": find_unused_resources,
+        # Grupo C: Análise de fluxo de sinal
+        "analyze_signal_flow": analyze_signal_flow,
         # PATCH 16: Asset Manifest
         "import_asset_manifest": import_asset_manifest,
         "create_asset_manifest": create_asset_manifest,
