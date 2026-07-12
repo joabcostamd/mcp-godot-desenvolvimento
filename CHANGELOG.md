@@ -1,5 +1,56 @@
 # CHANGELOG — mcp-godot-desenvolvimento
 
+## v3.3.0 (2026-07-12) — Features 4-8 + Task B
+
+### Feature 4: Vibe Coding Mode fallback
+- 8 funções em `scene_ops.py` com fallback para modo vibe (load_scene_tree, add_node, delete_node, set/get_node_property, reparent_node, instance_scene_as_child, connect_signal)
+- `vibe_ops.py` reescrito com `_load_vibe_state`/`_save_vibe_state` (`.mcp_vibe_state.json`)
+- `config_lock.py`: CONFIG_FILE_LOCK, VIBE_STATE_LOCK, BRIEF_STATE_LOCK (threading.Lock)
+- `create_scene` auto-configura `run/main_scene`
+
+### Feature 5: Project Brief
+- `project_brief_ops.py`: set/get/update_project_brief com `_validate_genre()` e VALID_PLATFORMS
+- `orchestrator.py`: fallback para `get_project_brief()` quando `art_style=None`
+
+### Feature 6: Batch Entity Creation
+- `orchestrator.py`: `create_entities(entities, stop_on_first_failure)` com MAX_BATCH_SIZE=20
+- Counter-based duplicate detection, execução sequencial
+
+### Feature 7: Hook Stop
+- `hook_stop.py`: lê JSON com guard `stop_hook_active`, verifica `.mcp_gate_failed`
+- `safety.py`: `_write_gate_failed_marker`/`_clear_gate_failed_marker` usam `_get_active_project()`
+- `script_ops.py`: `_validate_after_edit` limpa marker em sucesso
+
+### Task B: tool_catalog — scoring PT→EN
+- BM25 substituído por scoring ponderado: nome +3pts, ops +2pts, descrição/params +1pt, rollup bônus +1pt
+- 35 aliases PT→EN + `QUERY_ALIASES_ACCENT_ONLY` ("nó"→"node" só com acento)
+- Filtro e scoring usam token matching exato (não substring)
+- `rank-bm25` removido do código e do venv
+
+### Feature 8: Toolsets por Fase (PHASE_TOOLSETS)
+- 6 fases cumulativas: IDEIA(28)→DESIGN(+28)→PROTOTIPO(+48)→CONTEUDO(+35)→POLIMENTO(+27)→PRONTO_PARA_LANCAR(+25) = 191
+- Filtro dinâmico em `_tool_defs()` (lê `.mcp_phase_state.json` do disco)
+- Cache invalidado via callback registration (`set_cache_invalidator`, sem import circular)
+- Visibilidade apenas — `_build_handlers()` NÃO é filtrado
+- `safety_manage` disponível desde IDEIA
+- Fix: `Path()` wrapper em `PhaseState._get_file_path()`
+
+### Bugs corrigidos (sessão)
+- `_find_node_in_parsed`: parent="." (Godot root children)
+- `_snapshot_scene`: path relativo → absoluto
+- `_connect_signal_file`: kwargs from_node_path/to_node_path
+- Godot PID 22104 stuck (morto)
+- 39 temp projects sem `run/main_scene` (auto-config)
+- Race condition: `_load_brief_state()` sem lock
+- Race condition: `_validate_after_edit` nunca limpava gate marker
+- `_get_file_path()`: string vs Path (`Path()` wrapper adicionado)
+
+### Métricas
+- **191 tools**, **69 módulos**, **18 patches**, **8 features da Fase 1**, **6 fases**
+- **55+ bugs corrigidos** em 12 rodadas de auditoria
+
+---
+
 ## v3.2.1 (2026-07-12) — Sessão de auditoria, hardening + Item 1+2 do plano de evolução
 
 ### Item 1: Pipeline de Verificação (run_verification_pipeline)

@@ -1,10 +1,10 @@
 # MCP Godot — Desenvolvimento
 
-> **Servidor MCP Godot Agent v3.2.1 — 191 ferramentas para criação de jogos por linguagem natural.**
+> **Servidor MCP Godot Agent v3.3.0 — 191 ferramentas para criação de jogos por linguagem natural.**
 > Conecta Godot 4.7 ao VS Code Copilot (DeepSeek V4 Pro) via protocolo MCP stdio.
 > Autocontido — clone, instale dependências e use.
 
-**Status:** ✅ 191 tools · 191 handlers · 69 módulos · 18 patches · 5 grupos auditoria · 10 toolsets · 3 perfis · Pipeline de Verificação · DAP debugger · R$0
+**Status:** ✅ 191 tools · 191 handlers · 69 módulos · 18 patches · 8 features Fase 1 · 6 fases · tool_catalog PT→EN · 10 toolsets · 3 perfis · R$0
 
 **GitHub:** `https://github.com/joabcostamd/mcp-godot-desenvolvimento`
 
@@ -14,7 +14,7 @@
 
 | Pasta/Arquivo | O que é |
 |---|---|
-| `server.py` | Servidor MCP (~7400 linhas, 191 ferramentas, stdio JSON-RPC 2.0) |
+| `server.py` | Servidor MCP (~7600 linhas, 191 ferramentas, stdio JSON-RPC 2.0) |
 | `tools/` | 69 módulos Python (cenas, scripts, física, arte IA, som IA, pipeline, verificação, etc.) |
 | `resources/` | Game patterns (17 gêneros) + MCP Prompts (11 comandos) |
 | `templates/` | Templates GDScript (Jinja2) |
@@ -25,7 +25,7 @@
 | `MCP_ESTADO_ATUAL.md` | 📄 Documento canônico — TUDO sobre o MCP (arquitetura, 191 tools, protocolos, limitações) |
 | `GUIA_CONEXAO.md` | Como usar — passo a passo do zero |
 | `ARQUITETURA_MCP.md` | Como funciona por dentro — 3 camadas, padrões, extensão |
-| `LEARNINGS.md` | 16 regras anti-padrão (R1-R16) |
+| `LEARNINGS.md` | 17 regras anti-padrão (R1-R17) |
 | `CHANGELOG.md` | Histórico completo de versões |
 | `pendencias.md` | Bugs ativos e resolvidos |
 

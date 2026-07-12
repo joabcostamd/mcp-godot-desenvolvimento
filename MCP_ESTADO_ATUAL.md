@@ -11,17 +11,19 @@
 | Item | Valor |
 |------|-------|
 | **Nome** | MCP Godot Agent (godot-mcp-agent) |
-| **Versão** | 3.2.1 |
+| **Versão** | 3.3.0 |
 | **Linguagem** | Python 3.12+ (server), GDScript (addons) |
 | **Framework MCP** | `mcp.server` (Python MCP SDK, stdio) |
 | **Engine** | Godot 4.7 stable |
 | **Modelo recomendado** | DeepSeek V4 Pro |
-| **Ponto de entrada** | `server.py` (~7400 linhas) |
+| **Ponto de entrada** | `server.py` (~7600 linhas) |
 | **Total de ferramentas** | 191 (27 rollups + 164 named tools) |
 | **Módulos Python** | 69 em `tools/` |
 | **Perfis** | `--profile core` (31) / `dev` (80) / `full` (191) |
 | **Toolsets** | 10 grupos via `--toolsets` |
-| **Bugs corrigidos** | 49 em 12 rodadas de auditoria |
+| **Fases** | 6 fases cumulativas (IDEIA→PRONTO_PARA_LANCAR) via `PHASE_TOOLSETS` |
+| **Bugs corrigidos** | 55+ em 12 rodadas de auditoria |
+| **Tool catalog** | Scoring ponderado + 35 aliases PT→EN (busca em português) |
 | **Repositório** | `c:\Users\joabc\OneDrive\Documentos\VS CODE\mcp-godot-desenvolvimento\` |
 | **GitHub** | `https://github.com/joabcostamd/mcp-godot-desenvolvimento` |
 
@@ -872,7 +874,42 @@ mcp-godot-desenvolvimento/
 
 ---
 
-## 16. LIMITAÇÕES CONHECIDAS
+## 16. FEATURES DA FASE 1 (ROADMAP)
+
+| # | Feature | Status | Descrição |
+|---|---------|--------|-----------|
+| 1 | Máquina de Estados de Fase | ✅ | `phase_ops.py` — IDEIA→DESIGN→PROTOTIPO→CONTEUDO→POLIMENTO→PRONTO_PARA_LANCAR |
+| 2 | Projeto Ativo (set_active_project) | ✅ | `project_ops.py` — define/consulta projeto ativo |
+| 3 | Milestone Plan | ✅ | `milestone_ops.py` — plano de milestones + advance |
+| 4 | Vibe Coding Mode fallback | ✅ | `vibe_ops.py` + `scene_ops.py` (8 funções com fallback para modo vibe) |
+| 5 | Project Brief | ✅ | `project_brief_ops.py` — brief do projeto (gênero, plataforma, escopo) |
+| 6 | Batch Entity Creation | ✅ | `orchestrator.py` — `create_entities()` com MAX_BATCH_SIZE=20 |
+| 7 | Hook Stop | ✅ | `hook_stop.py` — gate de segurança pós-edição |
+| 8 | Toolsets por Fase | ✅ | `PHASE_TOOLSETS` em `server.py` — 6 fases cumulativas, 191 tools validadas |
+| B | tool_catalog PT→EN | ✅ | `dynamic_groups.py` — scoring ponderado + 35 aliases + QUERY_ALIASES_ACCENT_ONLY |
+
+### PHASE_TOOLSETS (Feature 8)
+
+| Fase | Tools visíveis | Destaques |
+|------|---------------|-----------|
+| IDEIA | 28 | ping, project_manage, safety_manage, gdd_generate, milestones, brief |
+| DESIGN | 56 (+28) | scene_manage, node_manage, script_manage, ui_manage, entities |
+| PROTOTIPO | 104 (+48) | runtime_manage, asset_manage, physics, anim, áudio, VFX, shader |
+| CONTEUDO | 139 (+35) | tilemap, navigation, diálogo, inventário, 3D, dungeon, terreno |
+| POLIMENTO | 166 (+27) | testes, debug, profiling, visão, segurança, CI, vibe |
+| PRONTO_PARA_LANCAR | 191 (+25) | export, deploy_itch, build_csharp, addons, release |
+
+### tool_catalog (Task B)
+
+- **Scoring:** nome +3pts, ops +2pts, descrição/params +1pt, rollup bônus +1pt
+- **35 aliases PT→EN** (ex: "criar"→"create", "cena"→"scene", "compilar"→"compile build")
+- **QUERY_ALIASES_ACCENT_ONLY:** "nó"→"node" (só com acento; "no" sem acento = contração, não expande)
+- **Filtro:** token matching exato (não substring)
+- **BM25:** totalmente removido (substituído por scoring manual)
+
+---
+
+## 17. LIMITAÇÕES CONHECIDAS
 
 | Limitação | Detalhe |
 |-----------|---------|
@@ -889,4 +926,4 @@ mcp-godot-desenvolvimento/
 
 ---
 
-*Documento gerado em 12/07/2026. 191 ferramentas, 69 módulos, 18 patches implementados (1-18), 5 grupos de auditoria, tool run_verification_pipeline (item 1 do plano de evolução).*
+*Documento gerado em 12/07/2026. v3.3.0 — 191 ferramentas, 69 módulos, 18 patches, 8 features da Fase 1, tool_catalog PT→EN (35 aliases), PHASE_TOOLSETS (6 fases cumulativas).*

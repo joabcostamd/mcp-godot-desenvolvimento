@@ -509,6 +509,31 @@ _TAGS["minha_tool_nova"] = ["categoria", "subcategoria"]
 
 ## 7. DECISÕES DE DESIGN (o porquê das coisas)
 
+### 7.0 Por que scoring manual em vez de BM25 no tool_catalog?
+
+BM25 (Okapi) foi testado e removido. Problemas encontrados:
+- Tokenização por underscore não quebrava nomes compostos (`create_scene` = 1 token)
+- Peso do nome (3x repetição) beneficiava ferramentas com termos coincidentes
+- "no" como substring matchava em "animation", "node", "another" — ubíquo
+- Queries em português tinham ranking imprevisível
+
+**Solução:** scoring direto por camada (nome +3, ops +2, descrição +1, rollup bônus +1)
+com token matching exato. Mais previsível, mais fácil de depurar, sem dependência externa.
+
+### 7.0b Por que PHASE_TOOLSETS é dinâmico e não estático?
+
+As fases do projeto mudam em tempo real via `advance_phase()` (Feature 1). Um filtro
+estático (`--phase IDEIA`) exigiria reiniciar o servidor MCP a cada avanço — quebrando
+o fluxo de desenvolvimento. O filtro dinâmico lê `.mcp_phase_state.json` do disco a
+cada `_tool_defs()`, e o cache é invalidado via callback quando a fase avança.
+
+### 7.0c Por que _build_handlers() NÃO é filtrado por fase?
+
+PHASE_TOOLSETS é um mecanismo de **curadoria/visibilidade**, não de segurança.
+Se a IA insistir em chamar uma tool "escondida" (ex: `deploy_itch` na fase IDEIA),
+o handler executa normalmente. O bloqueio de progressão entre fases é responsabilidade
+exclusiva da Feature 1 (`advance_phase`), que verifica critérios objetivos.
+
 ### 7.1 Por que 191 tools e não 50?
 
 Cada tool faz UMA coisa bem definida. Isso permite que a IA componha operações complexas

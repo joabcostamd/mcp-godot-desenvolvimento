@@ -29,6 +29,7 @@
 | R14 | godot_stop_project: verificar nome do processo antes do taskkill (anti-PID-reaproveitado) | 🟠 ALTO |
 | R15 | Hooks PostToolUse: validar com PowerShell puro (regex), não depender de venv/Python de outro projeto | 🟡 MÉDIO |
 | R16 | socket.create_connection sem listener dá TimeoutError no Windows (não ConnectionRefusedError) | 🟡 MÉDIO |
+| R17 | Alias "no"→"node" causa falso positivo sistêmico ("erro no script" traz node_manage) | 🔴 CRÍTICO |
 
 ---
 
@@ -571,6 +572,33 @@ Sempre capturar `(ConnectionRefusedError, socket.timeout, OSError)` juntos, ou u
 
 ---
 
-> **Última atualização**: 2026-07-12 — Sessão 3 (Patches 12-18)
-> **Baseado em**: 16 bugs/limitações reais encontrados no desenvolvimento do MCP Godot Agent
-> **Próximo passo**: Automatizar o máximo possível destas verificações
+## 🔴 R17 — ALIAS "no"→"node" CAUSA FALSO POSITIVO SISTÊMICO
+
+### O padrão que quebra
+```python
+QUERY_ALIASES = {"no": "node"}  # "no" = contração ubíqua em PT
+```
+
+### Por que quebra
+"no" é a contração PT mais comum (em+o). Aparece em virtualmente qualquer frase:
+"erro **no** script", "camera **no** jogo", "bug **no** código". Mapear "no"→"node"
+contamina toda busca com falsos positivos de `node_manage`.
+
+### ✅ REGRA DE PREVENÇÃO
+- **NUNCA** mapear palavras de 2 letras que são contrações gramaticais ("no", "na", "do", "da", "em")
+- Para "nó" (node), usar `QUERY_ALIASES_ACCENT_ONLY`: só expande se o token original tem acento (`"nó" ≠ "no"`)
+- Aliases padrão (`QUERY_ALIASES`) só para palavras semânticas completas (≥4 letras ou inequívocas)
+- Testar SEMPRE com query "erro no script" — `node_manage` NÃO pode aparecer no top-5
+
+### Evidência
+Teste em 12/07/2026: `tool_catalog(query="erro no script")` com alias `"no"→"node"`:
+```
+1. node_manage       ← FALSO POSITIVO (score 4, "node" no nome + bônus rollup)
+2. script_manage
+```
+Sem o alias: `node_manage` some do top-5, `script_manage` lidera corretamente.
+
+---
+
+> **Última atualização**: 2026-07-12 — Sessão 4 (Features 4-8 + Task B)
+> **Baseado em**: 17 bugs/limitações reais encontrados no desenvolvimento do MCP Godot Agent
