@@ -10,8 +10,19 @@ Segue o padrão de singleton de tools/project_state.py.
 import json
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Callable
 
 ROOT = Path(__file__).resolve().parent.parent
+
+# ── Callback de invalidação de cache (Feature 8) ──
+# Registrado por server.py para invalidar _TOOL_DEFS_CACHE quando a fase avança.
+_cache_invalidator: Callable[[], None] | None = None
+
+
+def set_cache_invalidator(fn: Callable[[], None]) -> None:
+    """Registra callback chamado quando a fase avança com sucesso."""
+    global _cache_invalidator
+    _cache_invalidator = fn
 
 # ══════════════════════════════════════════════════════════════════
 # Enum de fases (ordem fixa)
@@ -53,7 +64,7 @@ class PhaseState:
         """Retorna o caminho do JSON de estado, ou None se não houver projeto ativo."""
         try:
             from tools.project_ops import _get_active_project
-            proj = _get_active_project()
+            proj = Path(_get_active_project())
             return proj / ".mcp_phase_state.json"
         except Exception:
             return None
@@ -259,6 +270,10 @@ class PhaseState:
             entry["reason"] = reason
         self.history.append(entry)
         self.save()
+
+        # Feature 8: invalida cache de tools do server.py
+        if _cache_invalidator:
+            _cache_invalidator()
 
         return {
             "status": "success",

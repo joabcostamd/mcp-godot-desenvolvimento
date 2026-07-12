@@ -161,6 +161,177 @@ if _ACTIVE_PROFILE and _ACTIVE_PROFILE != "full":
 else:
     _PROFILE_TOOLS = None
 
+# ── Feature 8: Toolsets por Fase (--phase) ────────────────────
+# Filtro dinâmico: consulta get_current_phase() do projeto ativo
+# a cada _tool_defs(). Cumulativo: cada fase herda tools da anterior.
+# NÃO filtra _build_handlers() — visibilidade, não bloqueio.
+
+PHASE_TOOLSETS: dict[str, set[str]] = {
+    "IDEIA": {
+        "ping", "health_check", "self_test", "bootstrap_godot_mcp",
+        "read_file", "write_file", "dump_mcp_state",
+        "project_manage", "project_status",
+        "tool_catalog", "tool_groups",
+        "get_current_phase", "advance_phase", "get_phase_history",
+        "create_milestone_plan", "get_milestone_plan", "advance_milestone",
+        "set_project_brief", "get_project_brief", "update_project_brief",
+        "gdd_generate",
+        "analysis_manage",
+        "godot_class_ref",
+        "validate_mcp_environment", "validate_godot_version",
+        "setup_mcp_config", "install_mcp_addon",
+        "safety_manage",
+    },
+    "DESIGN": {
+        "scene_manage", "node_manage",
+        "script_manage", "safe_write_gdscript",
+        "gdscript_diagnostics", "gdscript_references", "gdscript_definition",
+        "gdscript_hover", "gdscript_rename", "gdscript_symbols",
+        "gdscript_lsp_connect", "gdscript_lsp_disconnect", "gdscript_sync_file",
+        "file_manage",
+        "create_entity", "create_entities",
+        "ui_manage",
+        "config_manage",
+        "project_map",
+        "resource_dependency_graph",
+        "query_classdb", "search_classdb",
+        "validate_project_refs", "find_usages",
+        "behavior_tree_generate", "behavior_tree_list_templates",
+        "generate_project_structure",
+        "world_describe",
+    },
+    "PROTOTIPO": {
+        "runtime_manage",
+        "godot_run_project", "godot_stop_project", "godot_wait_for_bridge",
+        "execute_gdscript_runtime",
+        "capture_game_screenshot", "godot_screenshot", "take_screenshot",
+        "get_runtime_state_digest", "capture_runtime_errors",
+        "godot_exec", "godot_runtime_info",
+        "godot_custom_command", "godot_list_custom_commands",
+        "godot_keep_alive",
+        "effect_probe",
+        "freeze_game_clock", "unfreeze_game_clock",
+        "step_game_time", "step_until",
+        "game_await_signal", "game_call_method", "game_find_nodes_by_class",
+        "game_get_camera", "game_input_state", "game_pause",
+        "game_performance", "game_play_animation", "game_raycast",
+        "game_serialize_state", "game_spawn_node", "game_window",
+        "game_http_request", "game_multiplayer",
+        "physics_manage",
+        "asset_manage",
+        "generate_game_art", "generate_game_art_flux",
+        "generate_3d_asset", "generate_3d_placeholder",
+        "audio_manage", "generate_audio_sfx",
+        "anim_manage", "create_animation_tree",
+        "camera_manage",
+        "vfx_manage",
+        "shader_manage",
+        "batch_atomic_edit", "add_nodes_batch",
+        "set_properties_batch",
+        "inject_input_event", "simulate_input_sequence",
+        "watch_signal", "watch_state_start", "watch_state_collect",
+        "record_gameplay_gif", "start_recording", "stop_recording",
+    },
+    "CONTEUDO": {
+        "tilemap_manage",
+        "navigation_manage",
+        "create_parallax_background", "create_spritesheet",
+        "optimize_sprite", "remove_background",
+        "create_path_2d", "create_patrol_route",
+        "create_gun_system", "create_bullet_template",
+        "dialogue_manage", "inventory_manage",
+        "d3_manage",
+        "gamestate_manage",
+        "import_3d_model", "import_asset_manifest",
+        "create_asset_manifest",
+        "download_asset", "import_downloaded_asset",
+        "marketplace_search", "marketplace_download",
+        "generate_dungeon_rooms", "dungeon_generate",
+        "terrain_generate", "wave_generate",
+        "dps_calculator", "balance_analyze",
+        "loot_table_generate",
+        "juice_apply", "juice_list_presets",
+        "setup_localization", "add_translation_string",
+        "generate_voice",
+    },
+    "POLIMENTO": {
+        "run_gut_tests", "run_scripted_tests",
+        "regression_test", "smoke_test",
+        "run_verification_pipeline",
+        "debug_manage",
+        "debugger_set_breakpoint", "debugger_status", "debugger_step",
+        "debugger_get_stack", "debugger_get_variables",
+        "vision_manage",
+        "profile_frame", "profile_memory",
+        "set_safety_policy",
+        "security_status",
+        "circuit_breaker_status",
+        "get_audit_log", "get_audit_replay",
+        "auto_screenshot",
+        "estimate_tool_tokens",
+        "workflow_handoff", "workflow_snapshot",
+        "generate_ci_snippet",
+        "vibe_coding_mode", "get_vibe_context",
+    },
+    "PRONTO_PARA_LANCAR": {
+        "export_manage",
+        "build_csharp",
+        "configure_export_preset",
+        "deploy_itch",
+        "release_checklist",
+        "addon_connect", "addon_disconnect", "addon_ping",
+        "addon_is_available", "addon_get_scene_tree",
+        "addon_take_screenshot",
+        "addon_create_node", "addon_delete_node", "addon_set_property",
+        "addon_duplicate_node", "addon_reparent_node",
+        "addon_batch_edit",
+        "read_console_output",
+    },
+}
+
+PHASE_ORDER_FILTER = ["IDEIA", "DESIGN", "PROTOTIPO", "CONTEUDO", "POLIMENTO", "PRONTO_PARA_LANCAR"]
+
+
+def _get_phase_tools() -> set[str] | None:
+    """Retorna o set cumulativo de tools para a fase atual do projeto ativo.
+
+    Lê o arquivo .mcp_phase_state.json diretamente (não usa o singleton
+    em memória) para garantir que reflete o estado real do disco.
+    Returns None se não há projeto ativo com estado de fase configurado.
+    """
+    try:
+        from tools.project_ops import _get_active_project
+        from pathlib import Path as _Path
+        proj = _Path(_get_active_project())
+        phase_file = proj / ".mcp_phase_state.json"
+        if not phase_file.exists():
+            return None
+        import json as _json
+        data = _json.loads(phase_file.read_text(encoding="utf-8"))
+        phase = data.get("current_phase", "")
+        if not phase:
+            return None
+    except Exception:
+        return None
+
+    allowed: set[str] = set()
+    for p in PHASE_ORDER_FILTER:
+        allowed.update(PHASE_TOOLSETS.get(p, set()))
+        if p == phase:
+            return allowed
+    return allowed
+
+
+def _invalidate_tool_caches() -> None:
+    """Invalida caches de _tool_defs() e _build_handlers().
+
+    Chamado por phase_ops.set_cache_invalidator() quando a fase avança.
+    """
+    global _TOOL_DEFS_CACHE, _HANDLERS_CACHE
+    _TOOL_DEFS_CACHE = None
+    _HANDLERS_CACHE = None
+
+
 # ── PATCH 12: Runtime Bridge ─────────────────────────────────
 from runtime_bridge_client import send_bridge_command, BridgeUnavailable
 import base64 as _base64
@@ -715,8 +886,11 @@ from tools.deploy_ops import deploy_itch, release_checklist, auto_screenshot
 from tools.marketplace_ops import marketplace_search, marketplace_download
 
 # ── Fase 1 do Roadmap: Máquina de Estados ───────────────────────
-from tools.phase_ops import get_current_phase, advance_phase, get_phase_history
+from tools.phase_ops import get_current_phase, advance_phase, get_phase_history, set_cache_invalidator
 from tools.milestone_ops import create_milestone_plan, advance_milestone, get_milestone_plan
+
+# Feature 8: registrar callback de invalidação de cache
+set_cache_invalidator(_invalidate_tool_caches)
 
 # ── Feature 5: Project Brief ────────────────────────────────────
 from tools.project_brief_ops import set_project_brief, get_project_brief, update_project_brief
@@ -5925,6 +6099,11 @@ def _tool_defs() -> list[Tool]:
     # ── GRUPO 3: Filtrar por --profile se ativo ──
     if _PROFILE_TOOLS is not None:
         _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name in _PROFILE_TOOLS]
+
+    # ── Feature 8: Filtrar por fase do projeto ativo ──
+    _phase_tools = _get_phase_tools()
+    if _phase_tools is not None:
+        _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name in _phase_tools]
 
     # ── Pós-processador: garantir 4 hints em 100% das tools ──
     _TOOL_DEFS_CACHE = _apply_hints(_TOOL_DEFS_CACHE)
