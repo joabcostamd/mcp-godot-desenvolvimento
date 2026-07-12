@@ -1,4 +1,4 @@
-# mcp_addon.gd — MCP Godot Agent v3.0 | Dock Profissional
+# mcp_addon.gd — MCP Godot Agent v3.2 | Dock Profissional
 #
 # EditorPlugin com dock visual e WebSocket bridge para o servidor Python.
 # Porta: 9082 | Protocolo: JSON-RPC 2.0 sobre WebSocket
@@ -7,7 +7,7 @@
 extends EditorPlugin
 
 const PORT = 9082
-const VERSION = "3.0.1"
+const VERSION = "3.2.0"
 
 var _server: TCPServer
 var _peer: StreamPeerTCP = null

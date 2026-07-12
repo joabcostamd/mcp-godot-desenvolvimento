@@ -925,11 +925,11 @@ def install_mcp_addon(project_path: str | None = None) -> dict:
         "status": "success",
         "project": str(proj.resolve()),
         "bridge_port": 9080,
-        "plugin": "MCP IA DEV",
+        "plugin": "MCP Addon",
         "files_copied": copied,
         "next": (
             "Reinicie o editor Godot (ou abra com --editor --path) para ativar o plugin. "
-            "O dock 'MCP IA DEV' aparecera no painel inferior."
+            "O dock 'MCP Addon' aparecera no painel direito (3 tabs: Status, Log, Tools)."
         ),
     }
 
