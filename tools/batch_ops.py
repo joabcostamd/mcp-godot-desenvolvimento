@@ -40,7 +40,7 @@ def _snapshot_scene(scene_path: str) -> str:
     """Cria backup de um arquivo .tscn e retorna o caminho do backup.
 
     Args:
-        scene_path: Caminho absoluto para o .tscn.
+        scene_path: Caminho relativo ao projeto ou absoluto para o .tscn.
 
     Returns:
         Caminho do arquivo de backup.
@@ -48,7 +48,10 @@ def _snapshot_scene(scene_path: str) -> str:
     Raises:
         FileNotFoundError: Se o .tscn não existe.
     """
+    from tools.project_ops import _get_active_project
     src = Path(scene_path)
+    if not src.is_absolute():
+        src = _get_active_project() / scene_path
     if not src.exists():
         raise FileNotFoundError(f"Cena não encontrada: {scene_path}")
 
@@ -61,10 +64,14 @@ def _restore_scene(scene_path: str, backup_path: str) -> None:
     """Restaura cena a partir do backup.
 
     Args:
-        scene_path: Caminho da cena a restaurar.
+        scene_path: Caminho relativo ao projeto ou absoluto da cena a restaurar.
         backup_path: Caminho do backup.
     """
-    shutil.copy2(backup_path, scene_path)
+    from tools.project_ops import _get_active_project
+    src = Path(scene_path)
+    if not src.is_absolute():
+        src = _get_active_project() / scene_path
+    shutil.copy2(backup_path, str(src))
     # Limpa o backup
     Path(backup_path).unlink(missing_ok=True)
 
@@ -166,9 +173,9 @@ def _connect_signal_file(
 
     return connect_signal(
         scene_path=scene_path,
-        source_path=node_path,
+        from_node_path=node_path,
         signal_name=signal_name,
-        target_path=target_path,
+        to_node_path=target_path,
         method_name=method_name,
     )
 

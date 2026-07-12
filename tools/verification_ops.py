@@ -419,6 +419,15 @@ def _step_gut(proj: Path, godot: str, test_dir: str, timeout: int) -> dict:
 # Pipeline Principal
 # ══════════════════════════════════════════════════════════════════════
 
+def _save_pipeline_result(result: dict) -> None:
+    """Registra resultado do pipeline na maquina de fases (Feature 1 da Fase 1)."""
+    try:
+        from tools.phase_ops import _phase_state
+        _phase_state.set_last_pipeline_result(result)
+    except Exception:
+        pass  # Falha no hook nao deve quebrar o pipeline
+
+
 def run_verification_pipeline(
     project_path: str | None = None,
     godot_path: str | None = None,
@@ -508,7 +517,7 @@ def run_verification_pipeline(
 
     if step1["status"] == "failed":
         elapsed_total = round((time.time() - pipeline_start) * 1000)
-        return {
+        result = {
             "status": "FALHOU",
             "overall": "FALHOU",
             "stopped_at_step": 1,
@@ -518,6 +527,8 @@ def run_verification_pipeline(
             "project_path": str(proj),
             "test_scene": scene,
         }
+        _save_pipeline_result(result)
+        return result
 
     # ══════════════════════════════════════════════════════════════
     # ETAPA 2: HEADLESS RUN
@@ -532,7 +543,7 @@ def run_verification_pipeline(
             "reason": "Etapa 2 (headless run) falhou — screenshot nao capturado.",
         }
         elapsed_total = round((time.time() - pipeline_start) * 1000)
-        return {
+        result = {
             "status": "FALHOU",
             "overall": "FALHOU",
             "stopped_at_step": 2,
@@ -545,6 +556,8 @@ def run_verification_pipeline(
             "project_path": str(proj),
             "test_scene": scene,
         }
+        _save_pipeline_result(result)
+        return result
 
     # ══════════════════════════════════════════════════════════════
     # ETAPA 3: SCREENSHOT (só se etapa 2 passou)
@@ -598,7 +611,7 @@ def run_verification_pipeline(
         gut_label = f"FAIL ({step4.get('results', {}).get('summary', {}).get('failed', '?')} falhas)"
     summary_parts.append(f"GUT: {gut_label}")
 
-    return {
+    final_result = {
         "status": "PASSOU" if all_ok else "FALHOU",
         "overall": "PASSOU" if all_ok else "FALHOU",
         "stopped_at_step": None,
@@ -610,3 +623,8 @@ def run_verification_pipeline(
         "test_scene": scene,
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
+
+    # Hook: registra resultado na maquina de fases (Feature 1 da Fase 1)
+    _save_pipeline_result(final_result)
+
+    return final_result

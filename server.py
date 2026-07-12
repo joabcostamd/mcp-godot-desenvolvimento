@@ -714,6 +714,16 @@ from tools.threed_gen import generate_3d_placeholder, generate_3d_asset
 from tools.deploy_ops import deploy_itch, release_checklist, auto_screenshot
 from tools.marketplace_ops import marketplace_search, marketplace_download
 
+# ── Fase 1 do Roadmap: Máquina de Estados ───────────────────────
+from tools.phase_ops import get_current_phase, advance_phase, get_phase_history
+from tools.milestone_ops import create_milestone_plan, advance_milestone, get_milestone_plan
+
+# ── Feature 5: Project Brief ────────────────────────────────────
+from tools.project_brief_ops import set_project_brief, get_project_brief, update_project_brief
+
+# ── Feature 6: Batch Entity Creation ───────────────────────────
+from tools.orchestrator import create_entities
+
 # ── Juice (Onda 5) ────────────────────────────────────────────
 from tools.juice_ops import juice_apply, juice_list_presets
 
@@ -1195,16 +1205,17 @@ def _tool_defs() -> list[Tool]:
                 "Use para inspecionar a estrutura de uma cena antes de modificá-la. "
                 "Quando NÃO usar: para modificar (use add_node, set_node_property, etc.). "
                 "Pré-condições: a cena deve existir. "
+                "Se scene_path for omitido, usa o Vibe Coding Mode (se ativo). "
                 "Exemplo de input: {\"scene_path\": \"scenes/main.tscn\"}. "
                 "Erro mais comum: cena não encontrada — verifique o caminho com inspect_project."
             ),
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "scene_path": {"type": "string", "description": "Caminho relativo da cena."},
+                    "scene_path": {"type": "string", "description": "Caminho relativo da cena. Opcional se Vibe Coding Mode ativo."},
                     "max_depth": {"type": "integer", "description": "Profundidade máxima (None=sem limite). 0=só raiz, 1=raiz+filhos."},
                 },
-                "required": ["scene_path"],
+                "required": [],
             },
         ),
         Tool(
@@ -1214,18 +1225,19 @@ def _tool_defs() -> list[Tool]:
                 "Use para construir a árvore de nós: adicione filhos ao nó raiz ou a qualquer nó existente. "
                 "Quando NÃO usar: para criar uma cena nova (use create_scene). "
                 "Pré-condições: a cena deve existir; o nó pai deve existir na cena; o tipo de nó deve ser válido no Godot 4.7. "
+                "Se scene_path for omitido, usa o Vibe Coding Mode (se ativo). "
                 "Exemplo de input: {\"scene_path\": \"scenes/main.tscn\", \"parent_node_path\": \".\", \"node_name\": \"Player\", \"node_type\": \"CharacterBody2D\"}. "
                 "Erro mais comum: tipo de nó inválido (ex: 'KinematicBody2D' em vez de 'CharacterBody2D') — a mensagem de erro sugere tipos próximos."
             ),
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "scene_path": {"type": "string", "description": "Caminho relativo da cena."},
+                    "scene_path": {"type": "string", "description": "Caminho relativo da cena. Opcional se Vibe Coding Mode ativo."},
                     "parent_node_path": {"type": "string", "description": "Path do nó pai (\".\" = raiz)."},
                     "node_name": {"type": "string", "description": "Nome do novo nó."},
                     "node_type": {"type": "string", "description": "Tipo Godot 4 do nó (ex: Sprite2D, CollisionShape2D)."},
                 },
-                "required": ["scene_path", "parent_node_path", "node_name", "node_type"],
+                "required": ["parent_node_path", "node_name", "node_type"],
             },
         ),
         Tool(
@@ -1235,16 +1247,17 @@ def _tool_defs() -> list[Tool]:
                 "Use para limpar nós desnecessários. Backup automático permite desfazer. "
                 "Quando NÃO usar: para deletar a cena inteira (use delete_file). "
                 "Pré-condições: a cena e o nó devem existir; não pode deletar a raiz. "
+                "Se scene_path for omitido, usa o Vibe Coding Mode (se ativo). "
                 "Exemplo de input: {\"scene_path\": \"scenes/main.tscn\", \"node_path\": \"./Enemy\"}. "
                 "Erro mais comum: tentar deletar raiz — use delete_file para remover a cena inteira."
             ),
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "scene_path": {"type": "string", "description": "Caminho relativo da cena."},
+                    "scene_path": {"type": "string", "description": "Caminho relativo da cena. Opcional se Vibe Coding Mode ativo."},
                     "node_path": {"type": "string", "description": "Path do nó a remover (não pode ser \".\" = raiz)."},
                 },
-                "required": ["scene_path", "node_path"],
+                "required": ["node_path"],
             },
         ),
         Tool(
@@ -1254,18 +1267,19 @@ def _tool_defs() -> list[Tool]:
                 "Use para configurar nós após criá-los: posição, tamanho, cor, textura, etc. "
                 "Quando NÃO usar: para propriedades de colisão (use set_collision_layer_mask na Fase 2). "
                 "Pré-condições: a cena e o nó devem existir. "
+                "Se scene_path for omitido, usa o Vibe Coding Mode (se ativo). "
                 "Exemplo de input: {\"scene_path\": \"scenes/main.tscn\", \"node_path\": \"./Player\", \"property_name\": \"position\", \"value\": \"Vector2(100, 200)\"}. "
                 "Erro mais comum: valor em formato inválido — use formato Godot (ex: Vector2(x, y), Color(r, g, b))."
             ),
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "scene_path": {"type": "string", "description": "Caminho relativo da cena."},
+                    "scene_path": {"type": "string", "description": "Caminho relativo da cena. Opcional se Vibe Coding Mode ativo."},
                     "node_path": {"type": "string", "description": "Path do nó."},
                     "property_name": {"type": "string", "description": "Nome da propriedade (ex: position, scale, modulate)."},
                     "value": {"description": "Valor em formato Godot (ex: Vector2(100,200), Color(1,0,0,1), 42, true)."},
                 },
-                "required": ["scene_path", "node_path", "property_name", "value"],
+                "required": ["node_path", "property_name", "value"],
             },
         ),
         Tool(
@@ -1275,17 +1289,18 @@ def _tool_defs() -> list[Tool]:
                 "Use para consultar o estado de um nó antes de modificá-lo. "
                 "Quando NÃO usar: para modificar (use set_node_property). "
                 "Pré-condições: a cena e o nó devem existir. "
+                "Se scene_path for omitido, usa o Vibe Coding Mode (se ativo). "
                 "Exemplo de input: {\"scene_path\": \"scenes/main.tscn\", \"node_path\": \"./Player\", \"property_name\": \"position\"}. "
                 "Erro mais comum: propriedade não definida explicitamente — retorna null (a classe usa o valor default)."
             ),
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "scene_path": {"type": "string", "description": "Caminho relativo da cena."},
+                    "scene_path": {"type": "string", "description": "Caminho relativo da cena. Opcional se Vibe Coding Mode ativo."},
                     "node_path": {"type": "string", "description": "Path do nó."},
                     "property_name": {"type": "string", "description": "Nome da propriedade."},
                 },
-                "required": ["scene_path", "node_path", "property_name"],
+                "required": ["node_path", "property_name"],
             },
         ),
         # ── Fase 2: ClassDB ──
@@ -1525,17 +1540,18 @@ def _tool_defs() -> list[Tool]:
                 "Use para reorganizar a hierarquia sem recriar nós. "
                 "Quando NÃO usar: para mover entre cenas diferentes (recrie o nó). "
                 "Pré-condições: ambos os nós (origem e novo pai) devem existir na cena. "
+                "Se scene_path for omitido, usa o Vibe Coding Mode (se ativo). "
                 "Exemplo de input: {\"scene_path\": \"scenes/main.tscn\", \"node_path\": \"./Enemy\", \"new_parent_path\": \"./Enemies\"}. "
                 "Erro mais comum: nó não encontrado — confira os paths com load_scene_tree."
             ),
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "scene_path": {"type": "string"},
-                    "node_path": {"type": "string"},
-                    "new_parent_path": {"type": "string"},
+                    "scene_path": {"type": "string", "description": "Caminho relativo da cena. Opcional se Vibe Coding Mode ativo."},
+                    "node_path": {"type": "string", "description": "Path do nó a mover."},
+                    "new_parent_path": {"type": "string", "description": "Path do novo pai (\".\" = raiz)."},
                 },
-                "required": ["scene_path", "node_path", "new_parent_path"],
+                "required": ["node_path", "new_parent_path"],
             },
         ),
         Tool(
@@ -1545,18 +1561,19 @@ def _tool_defs() -> list[Tool]:
                 "Use para compor cenas complexas a partir de cenas menores (player, inimigo como sub-cenas). "
                 "Quando NÃO usar: para criar nós simples (use add_node). "
                 "Pré-condições: a cena a instanciar deve existir. "
+                "Se scene_path for omitido, usa o Vibe Coding Mode (se ativo). "
                 "Exemplo de input: {\"scene_path\": \"scenes/main.tscn\", \"parent_node_path\": \".\", \"instanced_scene_path\": \"scenes/player.tscn\"}. "
                 "Erro mais comum: cena a instanciar não encontrada — crie-a primeiro com create_scene."
             ),
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "scene_path": {"type": "string"},
-                    "parent_node_path": {"type": "string"},
-                    "instanced_scene_path": {"type": "string"},
-                    "instance_name": {"type": "string"},
+                    "scene_path": {"type": "string", "description": "Caminho relativo da cena. Opcional se Vibe Coding Mode ativo."},
+                    "parent_node_path": {"type": "string", "description": "Path do nó pai (\".\" = raiz)."},
+                    "instanced_scene_path": {"type": "string", "description": "Caminho da cena a instanciar."},
+                    "instance_name": {"type": "string", "description": "Nome da instância (opcional)."},
                 },
-                "required": ["scene_path", "parent_node_path", "instanced_scene_path"],
+                "required": ["parent_node_path", "instanced_scene_path"],
             },
         ),
         Tool(
@@ -1566,19 +1583,20 @@ def _tool_defs() -> list[Tool]:
                 "Use para ligar eventos: botão pressionado, corpo entrou em área, timer, etc. "
                 "Quando NÃO usar: para lógica que não depende de sinal (use scripts). "
                 "Pré-condições: ambos os nós devem existir na cena. "
+                "Se scene_path for omitido, usa o Vibe Coding Mode (se ativo). "
                 "Exemplo de input: {\"scene_path\": \"scenes/main.tscn\", \"from_node_path\": \"./Area2D\", \"signal_name\": \"body_entered\", \"to_node_path\": \".\", \"method_name\": \"_on_body_entered\"}. "
                 "Erro mais comum: método não existe no nó destino — o sinal será conectado mas falhará em runtime; crie o método no script do nó destino."
             ),
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "scene_path": {"type": "string"},
-                    "from_node_path": {"type": "string"},
-                    "signal_name": {"type": "string"},
-                    "to_node_path": {"type": "string"},
-                    "method_name": {"type": "string"},
+                    "scene_path": {"type": "string", "description": "Caminho relativo da cena. Opcional se Vibe Coding Mode ativo."},
+                    "from_node_path": {"type": "string", "description": "Nó emissor do sinal."},
+                    "signal_name": {"type": "string", "description": "Nome do sinal (ex: body_entered, pressed)."},
+                    "to_node_path": {"type": "string", "description": "Nó receptor."},
+                    "method_name": {"type": "string", "description": "Método no nó receptor."},
                 },
-                "required": ["scene_path", "from_node_path", "signal_name", "to_node_path", "method_name"],
+                "required": ["from_node_path", "signal_name", "to_node_path", "method_name"],
             },
         ),
         Tool(
@@ -5105,6 +5123,116 @@ def _tool_defs() -> list[Tool]:
             inputSchema={"type": "object", "properties": {}},
         ),
         Tool(
+            name="get_current_phase",
+            description="Mostra em que fase do projeto o time esta "
+                        "(IDEIA/DESIGN/PROTOTIPO/CONTEUDO/POLIMENTO/PRONTO_PARA_LANCAR) "
+                        "e o que falta para avancar. GRATIS.",
+            inputSchema={"type": "object", "properties": {}},
+        ),
+        Tool(
+            name="advance_phase",
+            description="Avanca o projeto para a proxima fase, SE o criterio "
+                        "da fase atual foi cumprido. Use force=true so com motivo "
+                        "explicito. GRATIS.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "force": {"type": "boolean", "description": "Ignora criterios de transicao (obrigatorio informar reason)."},
+                    "reason": {"type": "string", "description": "Justificativa para avanco forcado (obrigatorio se force=true)."},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="get_phase_history",
+            description="Mostra o historico de mudancas de fase do projeto. GRATIS.",
+            inputSchema={"type": "object", "properties": {}},
+        ),
+        # ── Feature 5: Project Brief ────────────────────────────
+        Tool(
+            name="set_project_brief",
+            description=(
+                "Define ou sobrescreve o project brief (genero, estilo de arte, tom, plataforma). "
+                "Use no inicio do projeto para configurar caracteristicas fundamentais que "
+                "ferramentas como create_entity usam como fallback. "
+                "So aceita sobrescrever brief existente com force=True. "
+                "Genero validado contra os 17 generos de GAME_PATTERNS. "
+                "Exemplo: {\"genre\": \"tower_defense\", \"art_style\": \"scifi\", \"tone\": \"estrategico\", \"target_platform\": \"pc\"}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "genre": {"type": "string", "description": "Genero do jogo (17 validos: tower_defense, platformer, rpg_turn_based, etc.)."},
+                    "art_style": {"type": "string", "description": "Estilo visual (scifi, fantasia, cartoon, pixel, minimalista)."},
+                    "tone": {"type": "string", "description": "Tom do jogo (estrategico, casual, sombrio, epico, humorado, frenetico)."},
+                    "target_platform": {"type": "string", "description": "Plataforma alvo (pc, mobile, web)."},
+                    "force": {"type": "boolean", "description": "Obrigatorio True para sobrescrever brief existente."},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="get_project_brief",
+            description=(
+                "Retorna o project brief atual. "
+                "Se nunca foi configurado, retorna brief=null e configured=False. "
+                "Use para consultar as caracteristicas do projeto antes de criar entidades."
+            ),
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        Tool(
+            name="update_project_brief",
+            description=(
+                "Atualiza campos especificos do project brief sem sobrescrever os demais. "
+                "Use para ajustar uma caracteristica sem redefinir o brief inteiro. "
+                "Nunca exige force (update parcial por definicao). "
+                "Exemplo: {\"tone\": \"sombrio\"} — altera so o tom, mantendo genero, art_style e platform."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "genre": {"type": "string", "description": "Genero do jogo (validado contra GAME_PATTERNS)."},
+                    "art_style": {"type": "string", "description": "Estilo visual."},
+                    "tone": {"type": "string", "description": "Tom do jogo."},
+                    "target_platform": {"type": "string", "description": "Plataforma alvo (pc, mobile, web)."},
+                },
+                "required": [],
+            },
+        ),
+        # ── Fase 1 do Roadmap: Milestone Plan ────────────────────
+        Tool(
+            name="create_milestone_plan",
+            description="Cria um plano de milestones (roteiro) baseado no genero e ideia do jogo. "
+                        "Usa gdd_generate() + estimate_game_scope() para gerar milestones "
+                        "distribuidos entre PROTOTIPO, CONTEUDO e POLIMENTO. GRATIS.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "genero": {"type": "string", "description": "Genero do jogo (17 generos via GAME_PATTERNS). Default: tower_defense."},
+                    "ideia": {"type": "string", "description": "Descricao da ideia do jogo."},
+                    "num_milestones": {"type": "integer", "description": "Quantidade de milestones (default: 8)."},
+                    "force": {"type": "boolean", "description": "Sobrescrever plano existente."},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="advance_milestone",
+            description="Conclui um milestone. Sem ID, avanca o proximo pendente automaticamente. GRATIS.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "milestone_id": {"type": "string", "description": "ID do milestone a concluir. Se omitido, usa get_next_milestone()."},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="get_milestone_plan",
+            description="Mostra o plano completo de milestones + progresso (total, concluidos, pendentes, %). GRATIS.",
+            inputSchema={"type": "object", "properties": {}},
+        ),
+        Tool(
             name="auto_screenshot",
             description="Gera screenshots automaticas do jogo rodando para loja (itch.io/Steam). GRATIS.",
             inputSchema={
@@ -5193,6 +5321,35 @@ def _tool_defs() -> list[Tool]:
                     "save_path": {"type": "string", "description": "Caminho para salvar a cena."},
                 },
                 "required": ["name"],
+            },
+        ),
+        # ── Feature 6: Batch Entity Creation ──────────────────
+        Tool(
+            name="create_entities",
+            description=(
+                "Cria MULTIPLAS entidades em lote sequencial. "
+                "Cada entidade passa pelo mesmo pipeline de create_entity "
+                "(cena + collider + script + arte + audio + compile gate). "
+                "Maximo 20 entidades por chamada. Execucao sequencial. "
+                "Nomes duplicados no batch sao rejeitados antes da criacao. "
+                "Se um item nao tiver 'name', falha so aquele item. "
+                "Use stop_on_first_failure=True para parar na primeira falha. "
+                "Exemplo: {'entities': [{'name': 'Slime'}, {'name': 'Bat', 'behavior': 'chase'}]}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "entities": {
+                        "type": "array",
+                        "description": "Lista de specs de entidade (cada uma igual ao create_entity).",
+                        "items": {"type": "object"},
+                    },
+                    "stop_on_first_failure": {
+                        "type": "boolean",
+                        "description": "Se True, para na primeira falha (default: False).",
+                    },
+                },
+                "required": ["entities"],
             },
         ),
         Tool(
@@ -6012,6 +6169,20 @@ def _build_handlers() -> dict:
         # Deploy + Marketplace (Onda 4 — FINAL)
         "deploy_itch": deploy_itch,
         "release_checklist": release_checklist,
+        # Fase 1 do Roadmap: Máquina de Estados
+        "get_current_phase": get_current_phase,
+        "advance_phase": advance_phase,
+        "get_phase_history": get_phase_history,
+        # Fase 1 do Roadmap: Milestone Plan
+        "create_milestone_plan": create_milestone_plan,
+        "advance_milestone": advance_milestone,
+        "get_milestone_plan": get_milestone_plan,
+        # Feature 5: Project Brief
+        "set_project_brief": set_project_brief,
+        "get_project_brief": get_project_brief,
+        "update_project_brief": update_project_brief,
+        # Feature 6: Batch Entity Creation
+        "create_entities": create_entities,
         "auto_screenshot": auto_screenshot,
         "marketplace_search": marketplace_search,
         "marketplace_download": marketplace_download,

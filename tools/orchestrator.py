@@ -489,7 +489,7 @@ def create_entity(
     entity_type: str = "enemy",
     description: str = "",
     behavior: str = "patrol",
-    art_style: str = "scifi",
+    art_style: str | None = None,
     save_path: str | None = None,
 ) -> dict:
     """Cria uma entidade COMPLETA de jogo usando o Orquestrador Genius.
@@ -510,6 +510,20 @@ def create_entity(
     """
     from tools.project_ops import _get_active_project, _check_path_traversal
     from tools.project_state import get_state, refresh_state
+
+    # ── Project Brief fallback (Feature 5): art_style ──
+    if art_style is None:
+        try:
+            from tools.project_brief_ops import get_project_brief
+            brief_result = get_project_brief()
+            if brief_result.get("configured"):
+                brief = brief_result.get("brief", {})
+                if brief.get("art_style"):
+                    art_style = brief["art_style"]
+        except Exception:
+            pass
+    if art_style is None:
+        art_style = "scifi"  # default final se nem brief tem
 
     proj = _get_active_project()
     refresh_state(proj)
@@ -640,6 +654,26 @@ def create_entity(
                                lambda: Path(proj / audio_path).unlink(missing_ok=True),
                                critical=False))
 
+    # ── Passo 6: Gate de verificação obrigatório (Feature 2 da Fase 1) ──
+    # NÍVEL LEVE: apenas compile check. O pipeline completo (4 etapas) é
+    # obrigatório só na transição PROTOTIPO→CONTEUDO (Feature 1), não aqui.
+    # ⚠️ NÃO grava _last_pipeline_result — isso contaminaria o gate da Feature 1.
+    # Só run_verification_pipeline() standalone escreve no estado global de fase.
+    def compile_gate_step():
+        from tools.verification_ops import _step_compile
+        from tools.classdb import get_godot_bin
+        godot = get_godot_bin()
+        compile_result = _step_compile(proj, godot, timeout=30)
+        if compile_result["status"] == "failed":
+            errors_text = "\n".join(compile_result.get("errors", [])[:5])
+            raise Exception(f"Entidade '{name}' quebrou a compilação do projeto.\n"
+                          f"Erros ({len(compile_result.get('errors', []))}):\n{errors_text}\n"
+                          f"A entidade será desfeita (rollback). Corrija o script e tente novamente.")
+        return compile_result
+
+    saga.add_step(SagaStep("compile_gate", compile_gate_step,
+                           lambda: None, critical=True))
+
     # ── EXECUTAR SAGA ──────────────────────────────────────
     result = saga.run()
     refresh_state(proj)
@@ -668,6 +702,163 @@ def create_entity(
         },
         "suggestions": suggestions[:2],
         "project_stage": stage,
+    }
+
+
+# ═══════════════════════════════════════════════════════════════════
+# Feature 6: Batch de criação de entidades
+# ═══════════════════════════════════════════════════════════════════
+
+MAX_BATCH_SIZE = 20
+
+
+def create_entities(
+    entities: list[dict],
+    stop_on_first_failure: bool = False,
+) -> dict:
+    """Cria múltiplas entidades em lote, sequencialmente.
+
+    Cada entidade passa pelo mesmo pipeline de create_entity:
+    cena → collider → script → arte → áudio → compile gate (Feature 2).
+    Com Saga e rollback INDIVIDUAIS por entidade — uma falha nao
+    desfaz entidades ja criadas com sucesso (a menos que
+    stop_on_first_failure=True).
+
+    Validações PRÉ-execucao:
+    - Batch > 20 itens → erro imediato
+    - Nomes duplicados → erro imediato
+
+    Args:
+        entities: Lista de specs de entidade. Cada dict aceita:
+            name (str, obrigatorio), entity_type, description,
+            behavior, art_style, save_path.
+        stop_on_first_failure: Se True, para na primeira falha.
+            Entidades ja criadas NAO sao desfeitas.
+
+    Returns:
+        dict com status, total, succeeded, failed, results[], elapsed_ms.
+    """
+    import time
+    from collections import Counter
+
+    # ── Validação: tamanho do batch ──
+    if len(entities) > MAX_BATCH_SIZE:
+        return {
+            "status": "error",
+            "message": f"Maximo {MAX_BATCH_SIZE} entidades por chamada, recebido {len(entities)}.",
+        }
+
+    # ── Validação: nomes duplicados (ignora itens sem 'name') ──
+    names = [e.get("name") for e in entities if e.get("name")]
+    dupes = [name for name, count in Counter(names).items() if count > 1]
+    if dupes:
+        positions = {}
+        for i, e in enumerate(entities):
+            n = e.get("name")
+            if n in dupes:
+                positions.setdefault(n, []).append(i)
+        dup_details = ", ".join(
+            f"'{n}' (posicoes {', '.join(map(str, ps))})"
+            for n, ps in positions.items()
+        )
+        return {
+            "status": "error",
+            "message": f"Nomes duplicados no batch: {dup_details}. Use nomes unicos por entidade.",
+        }
+
+    t0 = time.time()
+    results = []
+    succeeded = 0
+    failed = 0
+
+    for i, spec in enumerate(entities):
+        # ── Validação por item: name obrigatório ──
+        if not spec.get("name"):
+            results.append({
+                "index": i,
+                "name": None,
+                "status": "error",
+                "message": "Campo 'name' obrigatorio ausente.",
+                "rolled_back": False,
+                "elapsed_ms": 0,
+            })
+            failed += 1
+            if stop_on_first_failure:
+                break
+            continue
+
+        name = spec["name"]
+        entity_type = spec.get("entity_type", "enemy")
+        description = spec.get("description", "")
+        behavior = spec.get("behavior", "patrol")
+        art_style = spec.get("art_style", None)
+        save_path = spec.get("save_path", None)
+
+        t_item = time.time()
+        try:
+            r = create_entity(
+                name=name,
+                entity_type=entity_type,
+                description=description,
+                behavior=behavior,
+                art_style=art_style,
+                save_path=save_path,
+            )
+            elapsed = int((time.time() - t_item) * 1000)
+
+            if r.get("status") in ("success",):
+                results.append({
+                    "index": i,
+                    "name": name,
+                    "status": "success",
+                    "steps": r.get("steps_completed", 0),
+                    "scene": r.get("entity", {}).get("scene", ""),
+                    "elapsed_ms": elapsed,
+                })
+                succeeded += 1
+            else:
+                results.append({
+                    "index": i,
+                    "name": name,
+                    "status": r.get("status", "error"),
+                    "message": r.get("message", "Erro desconhecido"),
+                    "rolled_back": r.get("status") == "compensated",
+                    "elapsed_ms": elapsed,
+                })
+                failed += 1
+                if stop_on_first_failure:
+                    break
+        except Exception as e:
+            elapsed = int((time.time() - t_item) * 1000)
+            results.append({
+                "index": i,
+                "name": name,
+                "status": "error",
+                "message": str(e),
+                "rolled_back": False,
+                "elapsed_ms": elapsed,
+            })
+            failed += 1
+            if stop_on_first_failure:
+                break
+
+    total_elapsed = int((time.time() - t0) * 1000)
+
+    # Determina status agregado
+    if failed == 0:
+        agg_status = "success"
+    elif succeeded == 0:
+        agg_status = "error"
+    else:
+        agg_status = "partial"
+
+    return {
+        "status": agg_status,
+        "total": len(entities),
+        "succeeded": succeeded,
+        "failed": failed,
+        "results": results,
+        "total_elapsed_ms": total_elapsed,
     }
 
 

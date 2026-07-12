@@ -24,20 +24,30 @@ _GATE_FAILED_MARKER = ".mcp_gate_failed"
 
 
 def _write_gate_failed_marker(reason: str) -> None:
-    """Escreve marcador de falha de gate para o hook Stop detectar."""
-    marker_path = ROOT / _GATE_FAILED_MARKER
+    """Escreve marcador de falha de gate no PROJETO ATIVO (nao no MCP).
+
+    Padrao consistente com Features 1, 3, 4, 5: estado vive em
+    <project_root>/.mcp_<nome>, nunca na instalacao do MCP.
+    """
     try:
-        marker_path.write_text(reason, encoding="utf-8")
+        from tools.project_ops import _get_active_project
+        proj = _get_active_project()
+        if proj and proj.exists():
+            marker_path = proj / _GATE_FAILED_MARKER
+            marker_path.write_text(reason, encoding="utf-8")
     except Exception:
         pass
 
 
 def _clear_gate_failed_marker() -> None:
-    """Remove marcador de falha de gate."""
-    marker_path = ROOT / _GATE_FAILED_MARKER
+    """Remove marcador de falha de gate do projeto ativo."""
     try:
-        if marker_path.exists():
-            marker_path.unlink()
+        from tools.project_ops import _get_active_project
+        proj = _get_active_project()
+        if proj and proj.exists():
+            marker_path = proj / _GATE_FAILED_MARKER
+            if marker_path.exists():
+                marker_path.unlink()
     except Exception:
         pass
 

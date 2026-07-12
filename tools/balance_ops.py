@@ -359,8 +359,7 @@ def gdd_generate(
 
     Args:
         concept: Ideia do jogo em uma frase.
-            Ex: "tower defense sci-fi com 5 torres elementais e chefoes a cada 10 waves"
-        game_type: Tipo de jogo (tower_defense, platformer, rpg, shooter, puzzle, roguelike).
+        game_type: Tipo de jogo. 17 generos suportados via GAME_PATTERNS.
         target_platform: Plataforma alvo (pc, mobile, web).
         detail_level: Nivel de detalhe (brief = 1 pagina, full = documento completo).
 
@@ -370,9 +369,32 @@ def gdd_generate(
     import hashlib
     import random
 
+    # ── Import lazy para evitar circular ──
+    from resources.game_patterns import GAME_PATTERNS
+
+    # ── Mapa de alias: chaves antigas (6) → chaves canônicas (17) ──
+    ALIAS_MAP = {
+        "rpg": "rpg_turn_based",
+        "shooter": "top_down_shooter",
+        "puzzle": "puzzle_match3",
+        "roguelike": "roguelike_dungeon_crawler",
+    }
+
+    canonical = ALIAS_MAP.get(game_type, game_type)
+    valid_genres = sorted(GAME_PATTERNS.keys())
+
+    # ── Validação: gênero precisa existir nas 17 chaves canônicas ──
+    if canonical not in GAME_PATTERNS:
+        return {
+            "status": "error",
+            "message": f"Genero '{game_type}' nao reconhecido. "
+                       f"Generos validos: {', '.join(valid_genres)}.",
+        }
+
     seed = int(hashlib.md5(concept.encode()).hexdigest()[:8], 16)
     rng = random.Random(seed)
 
+    # ── 6 templates manuais (ricos, escritos à mão) ──
     type_templates = {
         "tower_defense": {
             "core_loop": "Posicionar torres -> Inimigos avancam -> Torres atacam -> Coletar recursos -> Melhorar torres -> Proxima wave",
@@ -391,7 +413,7 @@ def gdd_generate(
             "lose_condition": "Perder todas as vidas",
             "metrics": ["velocidade", "altura do pulo", "dano", "vidas", "tempo"],
         },
-        "rpg": {
+        "rpg_turn_based": {
             "core_loop": "Explorar mundo -> Encontrar inimigos -> Batalhar -> Ganhar XP -> Upgradear",
             "mechanics": ["Sistema de nivel e experiencia", "Arvore de habilidades",
                 "Inventario e equipamentos", "Dialogos com NPCs", "Quests principais e secundarias"],
@@ -399,7 +421,7 @@ def gdd_generate(
             "lose_condition": "Game over (perder todo HP)",
             "metrics": ["HP", "MP", "ATK", "DEF", "SPD", "nivel"],
         },
-        "shooter": {
+        "top_down_shooter": {
             "core_loop": "Mover -> Mirar -> Atirar -> Eliminar inimigos -> Avancar",
             "mechanics": ["Movimento WASD + mouse", "Armas variadas",
                 "Sistema de cobertura", "Recarga e municao", "Headshots e dano critico"],
@@ -407,7 +429,7 @@ def gdd_generate(
             "lose_condition": "Morrer",
             "metrics": ["dano", "cadencia", "precisao", "municao", "vida"],
         },
-        "puzzle": {
+        "puzzle_match3": {
             "core_loop": "Observar -> Raciocinar -> Mover pecas -> Resolver -> Proximo nivel",
             "mechanics": ["Mecanica central unica", "Dificuldade progressiva",
                 "Dicas opcionais", "Sistema de pontuacao (estrelas)"],
@@ -415,7 +437,7 @@ def gdd_generate(
             "lose_condition": "Desistir ou ficar sem movimentos",
             "metrics": ["movimentos", "tempo", "estrelas", "dicas usadas"],
         },
-        "roguelike": {
+        "roguelike_dungeon_crawler": {
             "core_loop": "Entrar dungeon -> Explorar salas -> Combater -> Coletar loot -> Morrer -> Renascer mais forte",
             "mechanics": ["Geracao procedural de salas", "Permadeath com meta-progressao",
                 "Itens e habilidades aleatorias", "Builds e sinergias", "Chefoes por bioma"],
@@ -425,43 +447,66 @@ def gdd_generate(
         },
     }
 
-    template = type_templates.get(game_type, type_templates["tower_defense"])
+    # ── Resolve template: manual (6) ou auto-gerado de GAME_PATTERNS (11) ──
+    if canonical in type_templates:
+        template = type_templates[canonical]
+    else:
+        pattern = GAME_PATTERNS[canonical]
+        mechanics_list = pattern.get("core_mechanics", [])
+        template = {
+            "core_loop": " -> ".join(mechanics_list[:4]) if mechanics_list else f"Loop principal de {canonical}",
+            "mechanics": mechanics_list,
+            "win_condition": "Completar o objetivo principal do genero (ver minimum_viable).",
+            "lose_condition": "Falhar conforme as regras tipicas do genero (ver common_bugs para armadilhas conhecidas).",
+            "metrics": [],
+        }
 
+    # ── Prefixos de titulo ──
     prefixes = {
         "tower_defense": ["Defense of", "Siege of", "Guardians of", "Last Stand:", "Hold the"],
         "platformer": ["Super", "Mega", "Ultra", "Jump:", "Adventures of"],
-        "rpg": ["Chronicles of", "Legend of", "Tales of", "Age of", "Realms of"],
-        "shooter": ["Operation:", "Strike:", "Assault:", "Combat:", "Warzone:"],
-        "puzzle": ["The Mystery of", "Puzzle:", "Enigma:", "Riddle of", "Connect:"],
-        "roguelike": ["Dungeons of", "Depths of", "Void:", "Runs of", "Eternal"],
+        "rpg_turn_based": ["Chronicles of", "Legend of", "Tales of", "Age of", "Realms of"],
+        "top_down_shooter": ["Operation:", "Strike:", "Assault:", "Combat:", "Warzone:"],
+        "puzzle_match3": ["The Mystery of", "Puzzle:", "Enigma:", "Riddle of", "Connect:"],
+        "roguelike_dungeon_crawler": ["Dungeons of", "Depths of", "Void:", "Runs of", "Eternal"],
+        "vampire_survivors_like": ["Survivors of", "Horde:", "Endless", "Last", "Midnight"],
+        "card_deck_builder": ["Deck of", "Hand of", "Cards of", "Deal:", "Draft:"],
+        "arcade_breakout": ["Break:", "Brick:", "Shatter:", "Paddle:", "Bounce:"],
+        "metroidvania": ["Echoes of", "Lost", "Hollow", "Void:", "Forgotten"],
+        "racing_top_down": ["Turbo", "Speed:", "Drift:", "Nitro", "Grand"],
+        "visual_novel": ["Tales of", "Story of", "Memories of", "Heart of", "Whispers of"],
+        "idle_clicker": ["Clicker:", "Idle:", "Tap:", "Incremental:", "Billion"],
+        "physics_puzzle": ["Gravity:", "Fling:", "Catapult:", "Launch:", "Toss:"],
+        "twin_stick_shooter": ["Arena:", "Blast:", "Mayhem:", "Fury:", "Rampage:"],
+        "snake_classic": ["Serpent:", "Viper:", "Coil:", "Slither:", "Scale:"],
+        "bullet_hell": ["Danmaku:", "Barrage:", "Storm:", "Rain of", "Bullet:"],
     }
-
-    prefix = rng.choice(prefixes.get(game_type, prefixes["tower_defense"]))
+    prefix = rng.choice(prefixes.get(canonical, ["Project:"]))
     title = f"{prefix} {concept[:40]}"
 
     gdd = {
         "title": title,
         "concept": concept,
-        "genre": game_type.replace("_", " ").title(),
+        "genre": canonical.replace("_", " ").title(),
         "platform": target_platform,
-        "elevator_pitch": f"Um jogo de {game_type.replace('_', ' ')} onde {concept}",
-        "target_audience": "Fas de jogos de estrategia e sci-fi" if game_type == "tower_defense" else "Jogadores casuais e hardcore",
+        "elevator_pitch": f"Um jogo de {canonical.replace('_', ' ')} onde {concept}",
+        "target_audience": "Fas de jogos de estrategia e sci-fi" if canonical == "tower_defense" else "Jogadores casuais e hardcore",
         "gameplay": {
             "core_loop": template["core_loop"],
             "mechanics": template["mechanics"],
-            "controls": _gdd_controls(game_type, target_platform),
-            "progression": _gdd_progression(game_type),
+            "controls": _gdd_controls(canonical, target_platform),
+            "progression": _gdd_progression(canonical),
         },
         "win_lose": {"win": template["win_condition"], "lose": template["lose_condition"]},
         "balance": {
             "metrics": template["metrics"],
             "difficulty_curve": "Facil nas primeiras fases, aumenta progressivamente, pico nos chefoes",
-            "economy": _gdd_economy(game_type),
+            "economy": _gdd_economy(canonical),
         },
         "content_scope": {
-            "estimated_levels": 30 if game_type == "tower_defense" else 20,
+            "estimated_levels": 30 if canonical == "tower_defense" else 20,
             "enemy_types": "8-12 tipos com variacoes",
-            "bosses": "1 chefao a cada 10 niveis" if game_type == "tower_defense" else "1 chefao por bioma",
+            "bosses": "1 chefao a cada 10 niveis" if canonical == "tower_defense" else "1 chefao por bioma",
             "items_powerups": "15-20 itens/power-ups",
             "estimated_playtime": "2-4 horas para campanha principal",
         },
@@ -476,9 +521,9 @@ def gdd_generate(
     }
 
     if detail_level == "full":
-        gdd["story"] = _gdd_story(concept, game_type)
+        gdd["story"] = _gdd_story(concept, canonical)
         gdd["monetization"] = _gdd_monetization(target_platform)
-        gdd["marketing"] = _gdd_marketing(title, game_type)
+        gdd["marketing"] = _gdd_marketing(title, canonical)
         gdd["development_roadmap"] = _gdd_roadmap()
 
     return {

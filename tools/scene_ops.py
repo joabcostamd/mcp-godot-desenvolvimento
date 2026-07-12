@@ -50,6 +50,19 @@ def _get_open_scene_path() -> str:
     return ""
 
 
+def _resolve_scene_path_from_vibe() -> str | None:
+    """Resolve scene_path do Vibe Coding Mode, se ativo. Retorna None se não disponível."""
+    try:
+        from tools.vibe_ops import get_vibe_context
+        ctx = get_vibe_context()
+        vibe = ctx.get("vibe_coding", {})
+        if vibe.get("enabled") and vibe.get("scene_path"):
+            return vibe["scene_path"]
+    except Exception:
+        pass
+    return None
+
+
 def _ensure_scene_open(scene_path: str, proj) -> bool:
     """Garante que a cena correta está aberta no editor. GAP #12.
 
@@ -274,7 +287,13 @@ def _find_node_in_parsed(nodes: list[dict], node_path: str) -> dict | None:
     for part in parts:
         found = None
         for n in nodes:
-            if n.get("parent") == current["name"] and n["name"] == part:
+            parent = n.get("parent") or ""
+            # Godot .tscn usa parent="." para indicar "filho da raiz"
+            matches_parent = (
+                parent == current["name"]
+                or (parent == "." and current is root)
+            )
+            if matches_parent and n["name"] == part:
                 found = n
                 break
         if not found:
@@ -324,6 +343,22 @@ def create_scene(name: str, root_type: str, path: str) -> dict:
 """
     full_path.write_text(content, encoding="utf-8")
 
+    # ── Auto-config: definir run/main_scene se ainda nao existe ──
+    try:
+        godot_file = proj / "project.godot"
+        if godot_file.exists():
+            cfg_text = godot_file.read_text(encoding="utf-8")
+            if "run/main_scene" not in cfg_text:
+                # Adiciona run/main_scene na secao [application]
+                if "[application]" in cfg_text:
+                    cfg_text = cfg_text.replace(
+                        "[application]",
+                        "[application]\n\nrun/main_scene=\"%s\"" % path,
+                    )
+                    godot_file.write_text(cfg_text, encoding="utf-8")
+    except Exception:
+        pass  # falha nao-critica: o projeto funciona sem isso, so da alerta
+
     # Marca para compilação pendente (executada em compile_test/run_game)
     from tools.runtime_ops import mark_pending_compile
     mark_pending_compile()
@@ -331,18 +366,21 @@ def create_scene(name: str, root_type: str, path: str) -> dict:
     return {"status": "success", "path": path}
 
 
-def load_scene_tree(scene_path: str, max_depth: int | None = None) -> dict:
+def load_scene_tree(scene_path: str | None = None, max_depth: int | None = None) -> dict:
     """Carrega a árvore de nós de uma cena.
 
     Args:
-        scene_path: Caminho relativo da cena.
+        scene_path: Caminho relativo da cena. Se omitido, usa Vibe Coding Mode.
         max_depth: Profundidade máxima (None = sem limite).
-                   Ex: 0 = só raiz, 1 = raiz + filhos diretos.
 
     Returns:
         {"status": "success", "tree": {"name", "type", "properties": {}, "children": [...]}}
         ou {"status": "error", "message": str}
     """
+    if scene_path is None:
+        scene_path = _resolve_scene_path_from_vibe()
+        if scene_path is None:
+            return {"status": "error", "message": "scene_path nao informado e Vibe Coding Mode nao esta ativo. Informe scene_path ou ative vibe_coding_mode com uma cena definida."}
     proj = _get_active_project()
     full_path = proj / scene_path
 
@@ -430,7 +468,7 @@ def _prune_tree_depth(node: dict, max_depth: int, current_depth: int) -> None:
     return {"status": "success", "tree": tree}
 
 
-def add_node(scene_path: str, parent_node_path: str, node_name: str, node_type: str) -> dict:
+def add_node(scene_path: str | None = None, parent_node_path: str = ".", node_name: str = "", node_type: str = "Node") -> dict:
     """Adiciona um nó a uma cena existente.
 
     Args:
@@ -443,6 +481,10 @@ def add_node(scene_path: str, parent_node_path: str, node_name: str, node_type: 
         {"status": "success", "node_path": str}
         ou {"status": "error", "message": str}
     """
+    if scene_path is None:
+        scene_path = _resolve_scene_path_from_vibe()
+        if scene_path is None:
+            return {"status": "error", "message": "scene_path nao informado e Vibe Coding Mode nao esta ativo. Informe scene_path ou ative vibe_coding_mode com uma cena definida."}
     # ── Modo Direto: cria nó em TEMPO REAL ──────────────────
     # Prioridade: 1) Editor Bridge (auto-abre cena se necessário)
     #             2) Game Bridge (jogo rodando)
@@ -538,7 +580,7 @@ def add_node(scene_path: str, parent_node_path: str, node_name: str, node_type: 
     return {"status": "success", "node_path": f"{scene_path}::{node_name}"}
 
 
-def delete_node(scene_path: str, node_path: str) -> dict:
+def delete_node(scene_path: str | None = None, node_path: str = "") -> dict:
     """Remove um nó de uma cena.
 
     Args:
@@ -549,6 +591,10 @@ def delete_node(scene_path: str, node_path: str) -> dict:
         {"status": "success", "backup_id": str}
         ou {"status": "error", "message": str}
     """
+    if scene_path is None:
+        scene_path = _resolve_scene_path_from_vibe()
+        if scene_path is None:
+            return {"status": "error", "message": "scene_path nao informado e Vibe Coding Mode nao esta ativo. Informe scene_path ou ative vibe_coding_mode com uma cena definida."}
     # ── Modo Direto ──────────────────────────────────────────
     # Prioridade: 1) Editor Bridge  2) Game Bridge  3) Arquivo
     if _editor_bridge_available() and _ensure_scene_open(scene_path, None):
@@ -617,11 +663,15 @@ def delete_node(scene_path: str, node_path: str) -> dict:
     return {"status": "success", "backup_id": backup_id or "unknown"}
 
 
-def set_node_property(scene_path: str, node_path: str, property_name: str, value: Any) -> dict:
+def set_node_property(scene_path: str | None = None, node_path: str = "", property_name: str = "", value: Any = None) -> dict:
     """Define uma propriedade de um nó em uma cena.
 
     Modo Direto: muda em TEMPO REAL no editor se bridge conectado.
     """
+    if scene_path is None:
+        scene_path = _resolve_scene_path_from_vibe()
+        if scene_path is None:
+            return {"status": "error", "message": "scene_path nao informado e Vibe Coding Mode nao esta ativo. Informe scene_path ou ative vibe_coding_mode com uma cena definida."}
     # ── Modo Direto ──────────────────────────────────────────
     # Prioridade: 1) Editor Bridge  2) Game Bridge  3) Arquivo
     if _editor_bridge_available() and _ensure_scene_open(scene_path, None):
@@ -692,8 +742,12 @@ def set_node_property(scene_path: str, node_path: str, property_name: str, value
     return {"status": "success"}
 
 
-def get_node_property(scene_path: str, node_path: str, property_name: str) -> dict:
+def get_node_property(scene_path: str | None = None, node_path: str = "", property_name: str = "") -> dict:
     """Lê uma propriedade de um nó. Modo Direto se editor aberto."""
+    if scene_path is None:
+        scene_path = _resolve_scene_path_from_vibe()
+        if scene_path is None:
+            return {"status": "error", "message": "scene_path nao informado e Vibe Coding Mode nao esta ativo. Informe scene_path ou ative vibe_coding_mode com uma cena definida."}
     # ── Modo Direto ──────────────────────────────────────────
     # Prioridade: 1) Editor Bridge  2) Game Bridge  3) Arquivo
     if _editor_bridge_available() and _ensure_scene_open(scene_path, None):
@@ -766,7 +820,7 @@ def _serialize_godot_value(value: Any) -> str:
 
 # ── Fase 2: Extensões de cena ──────────────────────────────────────
 
-def reparent_node(scene_path: str, node_path: str, new_parent_path: str) -> dict:
+def reparent_node(scene_path: str | None = None, node_path: str = "", new_parent_path: str = ".") -> dict:
     """Move um nó para um novo pai na mesma cena.
 
     Args:
@@ -777,6 +831,10 @@ def reparent_node(scene_path: str, node_path: str, new_parent_path: str) -> dict
     Returns:
         {"status": "success", "new_node_path": str}
     """
+    if scene_path is None:
+        scene_path = _resolve_scene_path_from_vibe()
+        if scene_path is None:
+            return {"status": "error", "message": "scene_path nao informado e Vibe Coding Mode nao esta ativo. Informe scene_path ou ative vibe_coding_mode com uma cena definida."}
     proj = _get_active_project()
 
     violation = _check_path_traversal(scene_path, proj)
@@ -820,7 +878,7 @@ def reparent_node(scene_path: str, node_path: str, new_parent_path: str) -> dict
 
 
 def instance_scene_as_child(
-    scene_path: str, parent_node_path: str, instanced_scene_path: str, instance_name: str | None = None
+    scene_path: str | None = None, parent_node_path: str = ".", instanced_scene_path: str = "", instance_name: str | None = None
 ) -> dict:
     """Instancia uma cena como filha de um nó (sub-cena / prefab).
 
@@ -833,6 +891,10 @@ def instance_scene_as_child(
     Returns:
         {"status": "success", "node_path": str}
     """
+    if scene_path is None:
+        scene_path = _resolve_scene_path_from_vibe()
+        if scene_path is None:
+            return {"status": "error", "message": "scene_path nao informado e Vibe Coding Mode nao esta ativo. Informe scene_path ou ative vibe_coding_mode com uma cena definida."}
     proj = _get_active_project()
     full_path = proj / scene_path
 
@@ -894,8 +956,8 @@ def instance_scene_as_child(
 
 
 def connect_signal(
-    scene_path: str, from_node_path: str, signal_name: str,
-    to_node_path: str, method_name: str
+    scene_path: str | None = None, from_node_path: str = "", signal_name: str = "",
+    to_node_path: str = "", method_name: str = ""
 ) -> dict:
     """Conecta um sinal de um nó a um método de outro nó.
 
@@ -909,6 +971,10 @@ def connect_signal(
     Returns:
         {"status": "success"}
     """
+    if scene_path is None:
+        scene_path = _resolve_scene_path_from_vibe()
+        if scene_path is None:
+            return {"status": "error", "message": "scene_path nao informado e Vibe Coding Mode nao esta ativo. Informe scene_path ou ative vibe_coding_mode com uma cena definida."}
     proj = _get_active_project()
 
     violation = _check_path_traversal(scene_path, proj)
@@ -1006,6 +1072,10 @@ def create_tileset(tileset_name: str, save_path: str, tile_width: int = 16, tile
     Returns:
         {"status": "success", "path": str}
     """
+    if scene_path is None:
+        scene_path = _resolve_scene_path_from_vibe()
+        if scene_path is None:
+            return {"status": "error", "message": "scene_path nao informado e Vibe Coding Mode nao esta ativo. Informe scene_path ou ative vibe_coding_mode com uma cena definida."}
     proj = _get_active_project()
 
     violation = _check_path_traversal(save_path, proj)
@@ -1044,6 +1114,10 @@ def create_tilemap_layer(scene_path: str, parent_node_path: str, layer_name: str
     Returns:
         {"status": "success", "node_path": str}
     """
+    if scene_path is None:
+        scene_path = _resolve_scene_path_from_vibe()
+        if scene_path is None:
+            return {"status": "error", "message": "scene_path nao informado e Vibe Coding Mode nao esta ativo. Informe scene_path ou ative vibe_coding_mode com uma cena definida."}
     proj = _get_active_project()
 
     violation = _check_path_traversal(scene_path, proj)
@@ -1230,6 +1304,10 @@ def create_animation(scene_path: str, anim_player_path: str,
     Returns:
         {"status": "success", "animation": str}
     """
+    if scene_path is None:
+        scene_path = _resolve_scene_path_from_vibe()
+        if scene_path is None:
+            return {"status": "error", "message": "scene_path nao informado e Vibe Coding Mode nao esta ativo. Informe scene_path ou ative vibe_coding_mode com uma cena definida."}
     proj = _get_active_project()
 
     violation = _check_path_traversal(scene_path, proj)

@@ -4,11 +4,12 @@ Grupos dinâmicos de tools: catalog, groups, ativação sob demanda.
 Inspirado no HaD0Yun/GoPeak (tool.catalog, tool.groups).
 
 Tools:
-    - tool_catalog: busca e lista tools por grupo
+    - tool_catalog: busca e lista tools por grupo (scoring ponderado + aliases PT→EN)
     - tool_groups: ativa/desativa grupos de tools
 """
 
 import json
+import unicodedata
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -34,12 +35,126 @@ GROUPS = {
     ],
 }
 
+# ── Aliases PT→EN para buscas em português ──
+# Chaves e valores normalizados (sem acento, lowercase).
+# "no"/"nó" NÃO está mapeado → risco de falso positivo sistemático
+# (contração comum "em"+"o" apareceria em qualquer frase PT).
+QUERY_ALIASES = {
+    "criar": "create",
+    "cena": "scene",
+    "compilar": "compile build",
+    "gerar": "generate create",
+    "sprite": "sprite",
+    "adicionar": "create",
+    "sinal": "signal",
+    "conectar": "connect",
+    "remover": "delete remove",
+    "salvar": "save",
+    "carregar": "load",
+    "executar": "run",
+    "projeto": "project",
+    "arquivo": "file",
+    "script": "script",
+    "audio": "audio",
+    "som": "audio sound",
+    "textura": "texture",
+    "animacao": "animation",
+    "fisica": "physics",
+    "colisao": "collision",
+    "camera": "camera",
+    "ui": "ui interface",
+    "interface": "ui interface",
+    "menu": "menu",
+    "inimigo": "enemy",
+    "jogador": "player",
+    "mapa": "map tilemap",
+    "exportar": "export build",
+    "importar": "import",
+    "testar": "test",
+    "depurar": "debug",
+    "otimizar": "optimize",
+    "configurar": "configure setup",
+    "instalar": "install",
+    "validar": "validate",
+    "buscar": "search find",
+    "procurar": "search find",
+}
+
+# Aliases que só aplicam quando o token original tem acento.
+# Chave = forma normalizada (sem acento). Evita que "no" (contração)
+# seja expandido para "node", mas permite "nó" → "node".
+QUERY_ALIASES_ACCENT_ONLY = {
+    "no": "node",       # "nó" → "node"
+}
+
+
+def _normalize(text: str) -> str:
+    """Remove acentos e normaliza para lowercase ASCII."""
+    nfkd = unicodedata.normalize('NFKD', text)
+    return ''.join(c for c in nfkd if not unicodedata.combining(c)).lower()
+
+
+def _expand_query(query: str) -> str:
+    """Expande query PT com aliases → EN. Termos sem alias passam normalizados."""
+    tokens = query.split()
+    expanded = []
+    for token in tokens:
+        norm = _normalize(token)
+        # 1) Alias padrão (chave normalizada)
+        alias = QUERY_ALIASES.get(norm, "")
+        if alias:
+            expanded.append(alias)
+        # 2) Alias com acento obrigatório (token original != normalizado)
+        elif token != norm:
+            alias_acc = QUERY_ALIASES_ACCENT_ONLY.get(norm, "")
+            if alias_acc:
+                expanded.append(alias_acc)
+            else:
+                expanded.append(norm)
+        else:
+            expanded.append(norm)
+    return ' '.join(expanded)
+
+
+def _get_rollup_ops_map() -> dict[str, list[str]]:
+    """Extrai as ops keys (em ingles) dos rollups em tools/rollups.py.
+
+    Ex: {"scene_manage": ["create", "load_tree", "instance"], ...}
+    Cacheado em memória após a primeira chamada.
+    """
+    if _get_rollup_ops_map._cache is not None:
+        return _get_rollup_ops_map._cache
+    result = {}
+    try:
+        import re as _re2
+        rollup_text = Path(__file__).resolve().parent / "rollups.py"
+        if rollup_text.exists():
+            text = rollup_text.read_text(encoding='utf-8')
+            for block in text.split('def _build_'):
+                tn_match = _re2.search(r'tool_name="(\w+)"', block)
+                if not tn_match:
+                    continue
+                tool_name = tn_match.group(1)
+                # Extrair chaves do dict ops={...}
+                ops_match = _re2.search(r'ops=\{\s*\n((?:\s*"[^"]+":\s*\w+,?\s*\n?)*)\s*\}', block)
+                if ops_match:
+                    result[tool_name] = _re2.findall(r'"(\w+)"', ops_match.group(1))
+    except Exception:
+        pass
+    _get_rollup_ops_map._cache = result
+    return result
+_get_rollup_ops_map._cache = None
+
 
 def tool_catalog(query: str = "", group: str = "", limit: int = 20) -> dict:
     """Busca tools no catálogo por nome ou grupo.
 
+    Usa scoring ponderado (nome 3pts, ops 2pts, descrição 1pt)
+    com aliases PT→EN para buscas em português e bônus de +1
+    para rollups (ferramentas agregadoras recomendadas).
+
     Args:
-        query: Texto para buscar no nome da tool.
+        query: Texto para buscar. Aceita português ou inglês.
         group: Filtrar por grupo (core, scene, runtime, lsp, etc.).
         limit: Máximo de resultados.
 
@@ -48,15 +163,66 @@ def tool_catalog(query: str = "", group: str = "", limit: int = 20) -> dict:
     """
     from server import _tool_defs
     tools = _tool_defs()
+    import re as _re
+
+    # ── Expansão PT→EN ──
+    if query:
+        query = _expand_query(query)
+
+    # ── Scoring por token ──
+    # 3 pts → nome, 2 pts → ops, 1 pt → descrição/params.
+    # +1 bônus para rollups (ferramentas agregadoras recomendadas).
+    # Soma ponderada, depois ordenada desc.
+    _rollup_ops = {}
+    if query:
+        _rollup_ops = _get_rollup_ops_map()
+        expanded_tokens = _re.split(r'[\s_]+', query.lower())
+        scored = []
+        for t in tools:
+            name_lower = t.name.lower()
+            name_tokens = _re.split(r'[\s_]+', name_lower)
+            ops_terms = _re.split(r'[\s_]+', ' '.join(_rollup_ops.get(t.name, [])).lower())
+            desc_lower = (t.description or "").lower()
+            desc_tokens = _re.split(r'[\s_]+', desc_lower)
+            params_lower = ""
+            if hasattr(t, 'inputSchema') and isinstance(t.inputSchema, dict):
+                params_lower = ' '.join(t.inputSchema.get("properties", {}).keys()).lower()
+            params_tokens = _re.split(r'[\s_]+', params_lower)
+
+            score = 0
+            for tok in expanded_tokens:
+                if tok in name_tokens:
+                    score += 3
+                elif tok in ops_terms:
+                    score += 2
+                elif tok in desc_tokens:
+                    score += 1
+                elif tok in params_tokens:
+                    score += 1
+            # Bônus para rollups: +1
+            if t.name in _rollup_ops:
+                score += 1
+            scored.append((t, score))
+
+        # Ordenar por score desc, rollups primeiro em empate
+        scored.sort(key=lambda x: (x[1], x[0].name in _rollup_ops), reverse=True)
+        tools = [t for t, _ in scored]
 
     results = []
+    query_tokens = _re.split(r'[\s_]+', query.lower()) if query else []
     for t in tools:
         name = t.name
         desc = (t.description or "")[:100]
 
-        # Filtro por query
-        if query and query.lower() not in name.lower() and query.lower() not in desc.lower():
-            continue
+        # Filtro por query: exige que pelo menos metade dos tokens casem
+        # Matching por token exato (não substring), igual ao scoring.
+        if query_tokens:
+            combined_tokens = set(_re.split(r'[\s_]+', name.lower()))
+            combined_tokens.update(_re.split(r'[\s_]+', desc.lower()))
+            combined_tokens.update(_re.split(r'[\s_]+', ' '.join(_rollup_ops.get(t.name, [])).lower()))
+            matched = sum(1 for tok in query_tokens if tok in combined_tokens)
+            if matched < max(1, len(query_tokens) // 2):
+                continue
 
         # Filtro por grupo
         if group:

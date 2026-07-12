@@ -65,24 +65,30 @@ def _validate_after_edit(script_path: str, content: str, proj: Path) -> None:
     quebrar indentação ao inserir signal).
 
     Em caso de erro, escreve o marcador .mcp_gate_failed para o hook Stop.
+    Se a validação passar, limpa qualquer marcador stale de falha anterior.
     """
     try:
         from tools.validate_write import validate_gdscript_syntax
         validation = validate_gdscript_syntax(content)
         if not validation.get("valid", True):
             errors = validation.get("errors") or []
-            # Loga o warning mas NÃO reverte (a edição já foi feita)
             import sys
             print(f"[MCP WARNING] Post-write validation falhou para {script_path}: "
                   f"{len(errors)} erro(s) encontrados.", file=sys.stderr)
-            for err in errors[:5]:  # máx 5 para não poluir
+            for err in errors[:5]:
                 print(f"  Linha {err.get('line')}: {err.get('message')}", file=sys.stderr)
-            # Escreve marcador de gate para o hook Stop detectar
             try:
                 from tools.safety import _write_gate_failed_marker
                 _write_gate_failed_marker(
                     f"Post-write validation: {script_path} — {len(errors)} erro(s)"
                 )
+            except Exception:
+                pass
+        else:
+            # Validação passou → limpa marcador stale de falha anterior
+            try:
+                from tools.safety import _clear_gate_failed_marker
+                _clear_gate_failed_marker()
             except Exception:
                 pass
     except Exception:

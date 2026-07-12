@@ -27,11 +27,13 @@ def _load_config() -> dict:
 
 def _save_config(config: dict) -> None:
     from tools.config_loader import ROOT
+    from tools.config_lock import CONFIG_FILE_LOCK
     config_path = ROOT / "config.local.json"
     if not config_path.exists():
         config_path = ROOT / "config.json"
-    with open(config_path, "w", encoding="utf-8") as f:
-        json.dump(config, f, indent=2, ensure_ascii=False)
+    with CONFIG_FILE_LOCK:
+        with open(config_path, "w", encoding="utf-8") as f:
+            json.dump(config, f, indent=2, ensure_ascii=False)
 
 
 def configure_security(
