@@ -181,6 +181,12 @@ def _invoke_tool_synthetic(tool: str, args: dict) -> dict:
     if tool == "dump_mcp_state":
         return _simulate_dump_state()
 
+    # ── Runtime Bridge tools (PATCH 14 B2 fix) ──
+    if tool == "godot_screenshot":
+        return _invoke_runtime_screenshot()
+    if tool == "godot_runtime_info":
+        return _invoke_runtime_info()
+
     # NOTA: run_scripted_tests, smoke_test e regression_test NAO tem handlers
     # sinteticos para evitar risco de recursao infinita.
 
@@ -459,6 +465,28 @@ def _simulate_dump_state() -> dict:
     }
 
 
+def _invoke_runtime_screenshot() -> dict:
+    """Invoca godot_screenshot via Runtime Bridge (8790)."""
+    try:
+        from runtime_bridge_client import send_bridge_command, BridgeUnavailable
+        return send_bridge_command({"cmd": "screenshot"}, timeout=5.0)
+    except BridgeUnavailable:
+        return {"status": "error", "message": "Runtime Bridge nao disponivel (jogo nao esta rodando em debug?)"}
+    except Exception as e:
+        return {"status": "error", "message": f"Erro ao invocar godot_screenshot: {e}"}
+
+
+def _invoke_runtime_info() -> dict:
+    """Invoca godot_runtime_info via Runtime Bridge (8790)."""
+    try:
+        from runtime_bridge_client import send_bridge_command, BridgeUnavailable
+        return send_bridge_command({"cmd": "runtime_info"}, timeout=5.0)
+    except BridgeUnavailable:
+        return {"status": "error", "message": "Runtime Bridge nao disponivel (jogo nao esta rodando em debug?)"}
+    except Exception as e:
+        return {"status": "error", "message": f"Erro ao invocar godot_runtime_info: {e}"}
+
+
 # ══════════════════════════════════════════════════════════════════════
 # Cenários Padrão
 # ══════════════════════════════════════════════════════════════════════
@@ -666,6 +694,7 @@ def dump_mcp_state() -> dict:
         dict com estado completo.
     """
     return {
+        "status": "success",
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "state": _capture_state(),
     }

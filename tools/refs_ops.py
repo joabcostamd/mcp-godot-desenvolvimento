@@ -71,6 +71,11 @@ def _parse_tscn_node_refs(content: str) -> list[dict]:
     Returns:
         [{"node": "Player", "ref_type": "script", "ref_value": "ExtResource(\"1\")"}, ...]
     """
+    # LIMITACAO CONHECIDA (B1, auditoria 2026-07-12): regex so aceita IDs
+    # numericos puros. IDs alfanumericos tipo "1_sh" nao sao detectados por
+    # find_usages nem validate_project_refs. Nao corrigido nesta rodada —
+    # ver backlog. Se o projeto real usa esse padrao de ID, isso e um falso
+    # negativo silencioso.
     refs: list[dict] = []
     node_pattern = r'\[node\s+name="([^"]*)"[^\]]*\](?:\n(?:[^\[].*\n?)*)'
     for node_m in re.finditer(node_pattern, content):
