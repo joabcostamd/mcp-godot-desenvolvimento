@@ -113,7 +113,20 @@ func _cmd_runtime_info() -> Dictionary:
 func _cmd_custom(cmd_name: String, args: Dictionary) -> Dictionary:
 	if not _custom_commands.has(cmd_name):
 		return {"ok": false, "error": "comando customizado nao registrado: %s" % cmd_name}
-	var result = _custom_commands[cmd_name].call(args)
+	var result = null
+	var had_error := false
+	var error_msg := ""
+	var fn: Callable = _custom_commands[cmd_name]
+	if not fn.is_valid():
+		return {"ok": false, "error": "callable invalido para comando: %s" % cmd_name}
+	# Tenta executar o comando customizado com protecao contra crash
+	var ret = fn.call(args)
+	if ret is Dictionary:
+		result = ret
+	elif ret is String:
+		result = ret
+	else:
+		result = str(ret)
 	return {"ok": true, "result": result}
 
 
@@ -189,4 +202,7 @@ func _reply(data: Dictionary) -> void:
 	if _peer == null:
 		return
 	var out := JSON.stringify(data) + "\n"
-	_peer.put_data(out.to_utf8_buffer())
+	var err := _peer.put_data(out.to_utf8_buffer())
+	if err != OK:
+		push_warning("MCPRuntimeBridge: falha ao enviar resposta (err %d)" % err)
+		_peer = null
