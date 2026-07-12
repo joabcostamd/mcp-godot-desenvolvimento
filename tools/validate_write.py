@@ -267,7 +267,7 @@ def safe_write_gdscript(
             full_path = Path(file_path)
         full_path.parent.mkdir(parents=True, exist_ok=True)
         full_path.write_text(content, encoding="utf-8")
-        return {
+        result = {
             "status": "success",
             "message": "✅ GDScript válido. Arquivo salvo." if validation["valid"] else "⚠️ Salvo com warnings.",
             "validation": validation,
@@ -275,5 +275,10 @@ def safe_write_gdscript(
             "r9_check": r9_check,
             "written": True,
         }
+        # Propaga aviso de fallback para o nível raiz (visível)
+        if godot_check and godot_check.get("skipped"):
+            result["godot_check_skipped"] = True
+            result["warning"] = "Validação Godot --check-only expirou (30s); prosseguiu apenas com sandbox+sintaxe local. Revisar manualmente se o código for crítico."
+        return result
     except Exception as e:
         return {"status": "error", "message": str(e), "written": False}
