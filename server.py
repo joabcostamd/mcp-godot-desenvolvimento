@@ -69,6 +69,7 @@ TOOLSETS = {
         "asset_manage", "generate_placeholder_sprite",
         "generate_game_art", "generate_game_art_flux",
         "import_texture", "import_sprite_sheet",
+        "import_asset_manifest", "create_asset_manifest",
     ],
     "design_ops": [
         "analyze_game_structure", "suggest_next_steps",
@@ -514,6 +515,10 @@ from tools.analyze_ops import (
 from tools.refs_ops import (
     validate_project_refs,
     find_usages,
+)
+from tools.asset_manifest import (
+    import_asset_manifest,
+    create_asset_manifest,
 )
 from tools.devsolo_ops import (
     setup_camera_2d,
@@ -4250,6 +4255,46 @@ def _tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
+        # ── PATCH 16: Asset Manifest ─────────────────────────
+        Tool(
+            name="import_asset_manifest",
+            description=(
+                "Importa TODOS os assets listados no asset_manifest.json do projeto. "
+                "Suporta 5 fontes: generate (IA), placeholder (procedural), sfx (audio), "
+                "import (arquivo local), download (CC0 da web). "
+                "Use dry_run=True para validar o manifest sem importar. "
+                "Pre-condicoes: asset_manifest.json na raiz do projeto. "
+                "Exemplo: {} (processa o manifest padrao). "
+                "Exemplo: {\"dry_run\": true} (apenas valida)."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "manifest_path": {"type": "string", "description": "Caminho para o manifest (opcional)."},
+                    "project_path": {"type": "string", "description": "Caminho do projeto (opcional)."},
+                    "dry_run": {"type": "boolean", "description": "Apenas valida, nao importa (default: false)."},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="create_asset_manifest",
+            description=(
+                "Gera um template de asset_manifest.json no projeto com exemplos. "
+                "Use para iniciar a configuracao de assets em lote. "
+                "Pre-condicoes: projeto ativo configurado. "
+                "Exemplo: {} (cria template). "
+                "Exemplo: {\"overwrite\": true} (sobrescreve existente)."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "Caminho do projeto (opcional)."},
+                    "overwrite": {"type": "boolean", "description": "Sobrescrever existente (default: false)."},
+                },
+                "required": [],
+            },
+        ),
         # ── PATCH 15: Validacao de Referencias ────────────────
         Tool(
             name="validate_project_refs",
@@ -5737,6 +5782,9 @@ def _build_handlers() -> dict:
         # PATCH 15: Validacao de Referencias
         "validate_project_refs": validate_project_refs,
         "find_usages": find_usages,
+        # PATCH 16: Asset Manifest
+        "import_asset_manifest": import_asset_manifest,
+        "create_asset_manifest": create_asset_manifest,
         # Onda 8: DevSolo Crítico
         "setup_camera_2d": _handle_setup_camera_2d,
         "create_navigation_region_2d": _handle_create_navigation_region_2d,

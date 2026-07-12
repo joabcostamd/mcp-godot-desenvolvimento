@@ -25,7 +25,8 @@ GROUPS = {
     "audio": ["audio_manage","generate_audio_sfx"],
     "networking": ["game_http_request","game_multiplayer"],
     "testing": ["run_gut_tests","assert_node_exists","simulate_input_sequence"],
-    "assets": ["download_asset","import_downloaded_asset","asset_manage"],
+    "assets": ["download_asset", "import_downloaded_asset", "asset_manage",
+               "import_asset_manifest", "create_asset_manifest"],
     "security": ["set_safety_policy","configure_security"],
     "refs_ops": [
         "find_missing_references", "search_codebase",
