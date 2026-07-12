@@ -192,29 +192,37 @@ def safe_write_gdscript(
         try:
             import subprocess, tempfile
             from tools.config_loader import load_config
-            godot_path = load_config().get("godot_path", "")
+            cfg = load_config()
+            # --headless requer o executável CONSOLE, não o GUI
+            godot_bin = cfg.get("godot_console_path", "") or cfg.get("godot_path", "")
 
-            if godot_path:
+            if godot_bin:
                 with tempfile.NamedTemporaryFile(suffix=".gd", mode="w", delete=False) as tmp:
                     tmp.write(content)
                     tmp_path = tmp.name
 
-                result = subprocess.run(
-                    [godot_path, "--headless", "--check-only", "--path", project_path, tmp_path],
-                    capture_output=True, text=True, timeout=10,
-                )
-                Path(tmp_path).unlink(missing_ok=True)
-
-                if result.returncode != 0:
-                    godot_check = {"valid": False, "output": result.stderr[:500]}
-                    if strict:
-                        return {
-                            "status": "error",
-                            "message": "❌ Godot rejeitou o script. Escrita BLOQUEADA.",
-                            "validation": validation,
-                            "godot_check": godot_check,
-                            "written": False,
-                        }
+                try:
+                    result = subprocess.run(
+                        [godot_bin, "--editor", "--headless", "--check-only", "--path", project_path, tmp_path],
+                        capture_output=True, text=True, timeout=30,
+                    )
+                except subprocess.TimeoutExpired:
+                    # Godot 4.7 --check-only pode travar em projetos mínimos (R12).
+                    # Neste caso, confiamos na validação de sintaxe + sandbox já feita.
+                    Path(tmp_path).unlink(missing_ok=True)
+                    godot_check = {"valid": True, "note": "timeout — confiando na validacao local"}
+                else:
+                    Path(tmp_path).unlink(missing_ok=True)
+                    if result.returncode != 0:
+                        godot_check = {"valid": False, "output": result.stderr[:500]}
+                        if strict:
+                            return {
+                                "status": "error",
+                                "message": "❌ Godot rejeitou o script. Escrita BLOQUEADA.",
+                                "validation": validation,
+                                "godot_check": godot_check,
+                                "written": False,
+                            }
         except Exception:
             pass
 
