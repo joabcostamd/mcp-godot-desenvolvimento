@@ -12,7 +12,11 @@ procedural, shaders, 3D, audio, exportacao, debug, localizacao).
 """
 
 import json
+import os
+import subprocess
 import sys
+import tempfile
+import time
 from pathlib import Path
 from typing import Any
 
@@ -48,6 +52,9 @@ TOOLSETS = {
     "runtime_ops": [
         "run_game", "stop_game", "smart_restart", "compile_test",
         "execute_gdscript_runtime", "capture_game_screenshot",
+        "godot_screenshot", "godot_runtime_info",
+        "godot_custom_command", "godot_list_custom_commands",
+        "godot_run_project", "godot_stop_project", "godot_wait_for_bridge",
     ],
     "git_ops": [
         "git_commit_checkpoint", "safety_manage",
@@ -97,6 +104,97 @@ if _ENABLED_TOOLS is not None:
 
 # ── PATCH 12: Runtime Bridge ─────────────────────────────────
 from runtime_bridge_client import send_bridge_command, BridgeUnavailable
+import base64 as _base64
+
+
+def _handle_godot_screenshot(**kwargs) -> str:
+    """Captura screenshot do jogo rodando via bridge TCP."""
+    try:
+        result = send_bridge_command({"cmd": "screenshot"})
+    except BridgeUnavailable as e:
+        return json.dumps({"ok": False, "error": str(e)})
+    if not result.get("ok"):
+        return json.dumps(result)
+    # Salva screenshot em disco e retorna caminho + base64
+    png_data = _base64.b64decode(result["image_base64"])
+    out_path = os.path.join(tempfile.gettempdir(), f"godot_screenshot_{int(time.time())}.png")
+    with open(out_path, "wb") as f:
+        f.write(png_data)
+    result["saved_to"] = out_path
+    return json.dumps(result)
+
+
+def _handle_godot_runtime_info(**kwargs) -> str:
+    """Obtem FPS, draw calls, memoria do jogo rodando."""
+    try:
+        result = send_bridge_command({"cmd": "runtime_info"})
+    except BridgeUnavailable as e:
+        return json.dumps({"ok": False, "error": str(e)})
+    return json.dumps(result)
+
+
+def _handle_godot_custom_command(name: str = "", args: dict | None = None, **kwargs) -> str:
+    """Chama comando customizado registrado no bridge do jogo."""
+    try:
+        result = send_bridge_command({"cmd": "custom", "name": name, "args": args or {}})
+    except BridgeUnavailable as e:
+        return json.dumps({"ok": False, "error": str(e)})
+    return json.dumps(result)
+
+
+def _handle_godot_list_custom_commands(**kwargs) -> str:
+    """Lista comandos customizados registrados no bridge."""
+    try:
+        result = send_bridge_command({"cmd": "list_commands"})
+    except BridgeUnavailable as e:
+        return json.dumps({"ok": False, "error": str(e)})
+    return json.dumps(result)
+
+
+# ── PATCH 12.1: Process Lifecycle ────────────────────────────
+_running_godot_processes: dict[str, subprocess.Popen] = {}
+
+
+def _handle_godot_run_project(project_path: str = "", godot_executable: str = "", **kwargs) -> str:
+    """Lanca o jogo direto via CLI, sem editor."""
+    if not project_path or not godot_executable:
+        return json.dumps({"ok": False, "error": "project_path e godot_executable obrigatorios"})
+    try:
+        proc = subprocess.Popen(
+            [godot_executable, "--path", project_path],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        )
+        _running_godot_processes[str(proc.pid)] = proc
+        return json.dumps({"ok": True, "pid": proc.pid})
+    except Exception as exc:
+        return json.dumps({"ok": False, "error": str(exc)})
+
+
+def _handle_godot_stop_project(pid: int = 0, **kwargs) -> str:
+    """Encerra um processo de jogo iniciado por godot_run_project."""
+    proc = _running_godot_processes.get(str(pid))
+    if proc is None:
+        return json.dumps({"ok": False, "error": f"pid {pid} nao rastreado (ja encerrado ou MCP reiniciou)"})
+    try:
+        proc.terminate()
+        proc.wait(timeout=5)
+    except subprocess.TimeoutExpired:
+        proc.kill()
+    del _running_godot_processes[str(pid)]
+    return json.dumps({"ok": True})
+
+
+def _handle_godot_wait_for_bridge(timeout_sec: int = 10, **kwargs) -> str:
+    """Espera ate o MCPRuntimeBridge responder via runtime_info."""
+    start = time.time()
+    while time.time() - start < timeout_sec:
+        try:
+            result = send_bridge_command({"cmd": "runtime_info"})
+            return json.dumps(result)
+        except BridgeUnavailable:
+            time.sleep(0.3)
+    return json.dumps({"ok": False, "error": f"bridge nao respondeu em {timeout_sec}s"})
+
 
 from tools.project_ops import (
     _get_active_project,
@@ -4719,6 +4817,40 @@ def _tool_defs() -> list[Tool]:
             description="Lista comandos customizados registrados no bridge do jogo.",
             inputSchema={"type": "object", "properties": {}, "required": []},
         ),
+        Tool(
+            name="godot_run_project",
+            description="Lanca o jogo direto via CLI (godot --path <projeto>), sem abrir o editor. Retorna pid.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "Caminho absoluto da pasta do projeto."},
+                    "godot_executable": {"type": "string", "description": "Caminho absoluto do executavel do Godot."},
+                },
+                "required": ["project_path", "godot_executable"],
+            },
+        ),
+        Tool(
+            name="godot_stop_project",
+            description="Encerra um processo de jogo iniciado por godot_run_project.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "pid": {"type": "integer", "description": "PID retornado por godot_run_project."},
+                },
+                "required": ["pid"],
+            },
+        ),
+        Tool(
+            name="godot_wait_for_bridge",
+            description="Espera ate o MCPRuntimeBridge responder (polling de runtime_info).",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "timeout_sec": {"type": "integer", "description": "Timeout em segundos (default 10)."},
+                },
+                "required": [],
+            },
+        ),
     ]
 
     # ── Pós-processamento: hints MCP + additionalProperties ────────
@@ -5415,6 +5547,10 @@ def _build_handlers() -> dict:
         "godot_runtime_info": _handle_godot_runtime_info,
         "godot_custom_command": _handle_godot_custom_command,
         "godot_list_custom_commands": _handle_godot_list_custom_commands,
+        # PATCH 12.1: Process Lifecycle
+        "godot_run_project": _handle_godot_run_project,
+        "godot_stop_project": _handle_godot_stop_project,
+        "godot_wait_for_bridge": _handle_godot_wait_for_bridge,
     }
 
     # ── Rollups Fase 2A / C1 ───────────────────────────────────────
