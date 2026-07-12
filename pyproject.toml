@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "godot-mcp-agent"
 version = "3.2.1"
-description = "MCP server para criação de jogos Godot 4.7 via linguagem natural"
+description = "MCP Godot Agent v3.2.1 — 191 ferramentas, 69 módulos, 10 toolsets. Servidor MCP stdio para criação de jogos Godot 4.7 via IA agêntica (DeepSeek V4 Pro). Pipeline de verificação, sandbox GDScript, ClassDB introspecção, Runtime Bridge TCP."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

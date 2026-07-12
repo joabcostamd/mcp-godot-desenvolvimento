@@ -12,7 +12,7 @@
 ## 1. VISÃO GERAL — O que o MCP faz
 
 O MCP (Model Context Protocol) é uma ponte entre **linguagem natural** e **Godot Engine**.
-Ele expõe 189 ferramentas que uma IA pode chamar para criar jogos completos —
+Ele expõe 191 ferramentas que uma IA pode chamar para criar jogos completos —
 cenas, scripts, física, UI, áudio, partículas, exportação — sem que o usuário
 precise abrir o editor Godot ou escrever uma linha de código.
 
@@ -58,9 +58,9 @@ Isso reduz erros, acelera a construção e mantém a coerência.
 ┌────────────────────▼────────────────────────────┐
 │  CAMADA 2 — Tool Definitions + Handlers          │
 │  ─────────────────────────────────────────────  │
-│  • 189 tools com schema JSON completo            │
+│  • 191 tools com schema JSON completo            │
 │  • 27 rollups (<domain>_manage)                  │
-│  • 3 perfis (core=16, dev=31, full=189)          │
+│  • 3 perfis (core=31, dev=80, full=191)          │
 │  • 10 toolsets por domínio                       │
 │  • Annotations: readOnlyHint, destructiveHint    │
 │  • Títulos em português (PT-BR)                  │
@@ -71,7 +71,7 @@ Isso reduz erros, acelera a construção e mantém a coerência.
 ┌────────────────────▼────────────────────────────┐
 │  CAMADA 3 — Implementações (tools/*.py)          │
 │  ─────────────────────────────────────────────  │
-│  • 64 módulos de operações reais                 │
+│  • 69 módulos de operações reais                 │
 │  • Cada tool tem UMA função exportada            │
 │  • Operações no sistema de arquivos (.tscn, .gd) │
 │  • Comunicação TCP/WebSocket com Godot           │
@@ -113,7 +113,7 @@ Dois caches globais evitam recriar estruturas pesadas a cada chamada:
 
 | Cache | O que armazena | Quando invalida |
 |---|---|---|
-| `_TOOL_DEFS_CACHE` | Lista das 189 definições de tools | Nunca (tools são estáticas) |
+| `_TOOL_DEFS_CACHE` | Lista das 191 definições de tools | Nunca (tools são estáticas) |
 | `_HANDLERS_CACHE` | Dict `{nome_da_tool: função_handler}` | Nunca |
 
 ### 3.4 Rate Limiting
@@ -140,7 +140,7 @@ Para controlar quantas tools são expostas (economia de tokens):
 ```bash
 python server.py --profile core   # 16 tools essenciais (~2K tokens)
 python server.py --profile dev    # 31 tools para desenvolvimento (~5K tokens)
-python server.py --profile full   # 189 tools completas (~18K tokens, default)
+python server.py --profile full   # 191 tools completas (~19K tokens, default)
 ```
 
 Também configurável via env var: `MCP_TOOL_PROFILE=dev`.
@@ -509,7 +509,7 @@ _TAGS["minha_tool_nova"] = ["categoria", "subcategoria"]
 
 ## 7. DECISÕES DE DESIGN (o porquê das coisas)
 
-### 7.1 Por que 189 tools e não 50?
+### 7.1 Por que 191 tools e não 50?
 
 Cada tool faz UMA coisa bem definida. Isso permite que a IA componha operações complexas
 a partir de tools simples. É o princípio UNIX: "faça uma coisa e faça bem".
@@ -517,7 +517,7 @@ a partir de tools simples. É o princípio UNIX: "faça uma coisa e faça bem".
 Para controlar o volume de tools expostas, use perfis:
 - `--profile core`: 16 tools essenciais (~2K tokens)
 - `--profile dev`: 31 tools para desenvolvimento (~5K tokens)
-- `--profile full`: 189 tools completas (default)
+- `--profile full`: 191 tools completas (default)
 
 ### 7.2 Por que JSON-RPC sobre stdio e não HTTP REST?
 
@@ -588,7 +588,7 @@ cd sistema\mcp-godot\servidor
 
 ```
 mcp-godot-desenvolvimento/
-├── server.py              ← CORAÇÃO: ~7100 linhas, 189 tools, roteamento
+├── server.py              ← CORAÇÃO: ~7400 linhas, 191 tools, roteamento
 ├── tools/                 ← Implementações (64 módulos)
 │   ├── scene_ops.py       ← Cenas, nós, tilemap, animação, UI
 │   ├── script_ops.py      ← GDScript (gerar, anexar, validar)
