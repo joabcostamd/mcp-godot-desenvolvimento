@@ -888,6 +888,9 @@ from tools.marketplace_ops import marketplace_search, marketplace_download
 # ── Feature 10: Stress Test ─────────────────────────────────────
 from tools.stress_test_ops import run_stress_test
 
+# ── Grupo C: Detecção de recursos não usados ───────────────────
+from tools.find_unused_resources import find_unused_resources
+
 # ── Fase 1 do Roadmap: Máquina de Estados ───────────────────────
 from tools.phase_ops import get_current_phase, advance_phase, get_phase_history, set_cache_invalidator
 from tools.milestone_ops import create_milestone_plan, advance_milestone, get_milestone_plan
@@ -4593,6 +4596,39 @@ def _tool_defs() -> list[Tool]:
                 "required": ["target"],
             },
         ),
+        # ── Grupo C: Detecção de recursos não usados ───────────
+        Tool(
+            name="find_unused_resources",
+            description=(
+                "Encontra assets que existem no projeto mas nao sao referenciados "
+                "por nenhum .tscn, .gd ou .tres (orfaos). "
+                "Varre imagens, audio, modelos 3D, .tres e fontes. "
+                "Use para limpar o projeto antes do lancamento. "
+                "NAO requer Godot rodando — analise estatica de arquivos. "
+                "Exemplo: {\"project_path\": \"C:\\\\...\\\\star-colony\"}. "
+                "Exemplo: {\"asset_types\": [\"image\", \"audio\"]}. "
+                "Erro mais comum: assets referenciados via codigo dinamico "
+                "(string montada em runtime) podem ser falsos positivos."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "Caminho do projeto."},
+                    "asset_types": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "Tipos: image, audio, model, resource, font (default: todos).",
+                    },
+                    "exclude_paths": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "Pastas a excluir (default: addons/, .godot/, .git/, _backups/, build/).",
+                    },
+                    "min_size_bytes": {"type": "integer", "description": "Tamanho minimo em bytes (default: 0)."},
+                },
+                "required": [],
+            },
+        ),
         # ── PATCH 14: Testes Roteirizados ──────────────────────
         Tool(
             name="run_scripted_tests",
@@ -6288,6 +6324,8 @@ def _build_handlers() -> dict:
         # PATCH 15: Validacao de Referencias
         "validate_project_refs": validate_project_refs,
         "find_usages": find_usages,
+        # Grupo C: Detecção de recursos não usados
+        "find_unused_resources": find_unused_resources,
         # PATCH 16: Asset Manifest
         "import_asset_manifest": import_asset_manifest,
         "create_asset_manifest": create_asset_manifest,
