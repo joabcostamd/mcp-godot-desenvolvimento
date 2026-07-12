@@ -4449,6 +4449,30 @@ def _tool_defs() -> list[Tool]:
             ),
             inputSchema={"type": "object", "properties": {}, "required": []},
         ),
+        Tool(
+            name="estimate_tool_tokens",
+            description=(
+                "Estima o consumo de tokens do tools/list para cada perfil de ferramentas. "
+                "Mede o tamanho do JSON que seria enviado no tools/list inicial "
+                "e converte para tokens (~4 chars por token em JSON). "
+                "QUANDO USAR: para decidir entre perfis (core=16 tools/~2K tokens, "
+                "dev=31/~5K, full=189/~18K) ou verificar impacto de adicionar toolsets. "
+                "NAO requer Godot rodando — é puramente analítico. "
+                "Pre-condicoes: nenhuma. "
+                "Exemplo: {\"profile\": \"dev\"}. "
+                "Erro mais comum: perfil inválido — use core, dev ou full."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "profile": {
+                        "type": "string",
+                        "description": "Perfil a estimar: core (16 tools), dev (31), ou full (189, default)."
+                    },
+                },
+                "required": [],
+            },
+        ),
         # ── LSP Bridge (Fase 2A / C3) ──────────────────────────
         Tool(
             name="gdscript_lsp_connect",
