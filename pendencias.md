@@ -8,6 +8,8 @@
 
 | ID | Descrição | Severidade | Status |
 |----|-----------|-----------|--------|
+| BUG-008 | `find_unused_resources.py` — dead import `_get_active_project` (linha 46) + dead import `os` (linha 10) | 🟢 Baixa | ✅ Resolvido |
+| BUG-009 | `milestone_ops.py` linha 30 — `proj / ".mcp_milestones.json"` sem `Path()` wrapper (idêntico ao bug já corrigido em `phase_ops.py`) | 🟡 Média | ✅ Resolvido |
 | BUG-V01 | `movie_path` variável não utilizada em `_step_screenshot` (linha 288) | 🟢 Baixa | ✅ Resolvido |
 | BUG-V02 | `_step_headless_run` timeout não captura partial output | 🟡 Média | ✅ Resolvido |
 | BUG-V03 | `_step_screenshot` sem `--headless` abre janela visível em Linux/Mac (SW_HIDE só funciona no Windows) | 🟢 Baixa | ✅ Documentado |
