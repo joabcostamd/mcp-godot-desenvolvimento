@@ -885,6 +885,9 @@ from tools.threed_gen import generate_3d_placeholder, generate_3d_asset
 from tools.deploy_ops import deploy_itch, release_checklist, auto_screenshot
 from tools.marketplace_ops import marketplace_search, marketplace_download
 
+# ── Feature 10: Stress Test ─────────────────────────────────────
+from tools.stress_test_ops import run_stress_test
+
 # ── Fase 1 do Roadmap: Máquina de Estados ───────────────────────
 from tools.phase_ops import get_current_phase, advance_phase, get_phase_history, set_cache_invalidator
 from tools.milestone_ops import create_milestone_plan, advance_milestone, get_milestone_plan
@@ -5186,6 +5189,35 @@ def _tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
+        # ── Feature 10: Stress Test ─────────────────────────────
+        Tool(
+            name="run_stress_test",
+            description=(
+                "Teste de stress com carga e input aleatorio REPRODUTIVEL. "
+                "Spawna N instancias de uma cena, injeta input aleatorio "
+                "com seed explicita, e coleta FPS/memoria em intervalos. "
+                "Use para validar performance sob carga antes do lancamento. "
+                "Pre-condicoes: jogo rodando via godot_run_project. "
+                "Exemplo: run_stress_test(spawn_scene_path='res://scenes/enemy.tscn', "
+                "spawn_count=50, duration_seconds=10, input_actions=['move_left','jump'], "
+                "random_seed=42, fps_threshold=30). "
+                "Erro mais comum: bridge nao disponivel — inicie o jogo primeiro."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "Caminho do projeto."},
+                    "spawn_scene_path": {"type": "string", "description": "Cena a instanciar em massa (ex: res://scenes/enemy.tscn)."},
+                    "spawn_count": {"type": "integer", "description": "Quantidade de instancias (default: 10)."},
+                    "duration_seconds": {"type": "integer", "description": "Duracao total do teste em segundos (default: 5)."},
+                    "input_actions": {"type": "array", "items": {"type": "string"}, "description": "Acoes do InputMap a injetar aleatoriamente."},
+                    "random_seed": {"type": "integer", "description": "Seed explicita para reproducibilidade (OBRIGATORIO)."},
+                    "fps_threshold": {"type": "number", "description": "FPS minimo aceitavel — abaixo marca FALHOU (default: 30)."},
+                    "sample_interval_ms": {"type": "integer", "description": "Intervalo entre amostras em ms (default: 500)."},
+                },
+                "required": ["spawn_scene_path", "random_seed"],
+            },
+        ),
         # ── Shader NL (Onda 3) ──────────────────────────────────
         Tool(
             name="shader_generate",
@@ -6348,6 +6380,8 @@ def _build_handlers() -> dict:
         # Deploy + Marketplace (Onda 4 — FINAL)
         "deploy_itch": deploy_itch,
         "release_checklist": release_checklist,
+        # Feature 10: Stress Test
+        "run_stress_test": run_stress_test,
         # Fase 1 do Roadmap: Máquina de Estados
         "get_current_phase": get_current_phase,
         "advance_phase": advance_phase,
