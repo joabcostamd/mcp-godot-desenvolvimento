@@ -177,18 +177,32 @@ def _process_generate(asset: dict, proj: Path) -> dict:
     except ImportError:
         return {"status": "error", "message": "Modulo art_ops nao disponivel."}
 
+    width = asset.get("width", 128)
+    height = asset.get("height", 128)
+    frames = asset.get("frames", 1)
+
+    # Estimativa de custo (apenas informativo)
+    # FLUX.2 via Replicate: ~$0.003 por imagem 512x512
+    # Ajuste proporcional para resolucoes maiores
+    pixel_area = width * height * frames
+    base_area = 512 * 512
+    estimated_cost = round(pixel_area / base_area * 0.003, 4)
+    cost_note = f"Custo estimado: ~${estimated_cost:.4f} ({width}x{height}, {frames} frame(s))"
+
     result = generate_game_art(
         description=asset.get("description", asset.get("id", "asset")),
         category=asset.get("category", "personagem"),
         style=asset.get("style", "scifi"),
         anim_type=asset.get("anim_type", "idle"),
-        frames=asset.get("frames", 1),
+        frames=frames,
         grid_cols=asset.get("grid_cols", 1),
         grid_rows=asset.get("grid_rows", 1),
-        width=asset.get("width", 128),
-        height=asset.get("height", 128),
+        width=width,
+        height=height,
         save_dir=asset.get("save_dir", "assets/generated/"),
     )
+
+    result["estimated_cost"] = cost_note
 
     # Se tem cena alvo, aplica a arte
     if result.get("status") == "success" and asset.get("target_scene"):

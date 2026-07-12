@@ -670,6 +670,76 @@ def dump_mcp_state() -> dict:
         "state": _capture_state(),
     }
 
+def estimate_tool_tokens(profile: str = "full") -> dict:
+    """Estima o consumo de tokens do tools/list para cada perfil.
+
+    Mede o tamanho do JSON que seria enviado no tools/list inicial
+    e estima tokens (~4 chars por token para JSON).
+
+    Args:
+        profile: "core", "dev", ou "full" (default).
+
+    Returns:
+        {"status": "success", "profile": str, "tool_count": int, "json_bytes": int, "estimated_tokens": int}
+    """
+    valid_profiles = {"core", "dev", "full"}
+    if profile not in valid_profiles:
+        return {"status": "error", "message": f"Perfil '{profile}' invalido. Use: {sorted(valid_profiles)}."}
+
+    try:
+        from server import TOOL_PROFILES, _tool_defs
+        all_tools = _tool_defs()
+    except Exception:
+        return {"status": "error", "message": "Nao foi possivel carregar as definicoes de tools do server."}
+
+    if profile == "full":
+        filtered = all_tools
+    else:
+        profile_set = set(TOOL_PROFILES.get(profile, []))
+        filtered = [t for t in all_tools if t.name in profile_set]
+
+    # Serializa como JSON (simula tools/list)
+    tool_dicts = []
+    for t in filtered:
+        d = {"name": t.name}
+        if hasattr(t, 'description') and t.description:
+            d["description"] = t.description[:200]  # descricao compactada
+        if hasattr(t, 'inputSchema') and t.inputSchema:
+            d["inputSchema"] = t.inputSchema
+        tool_dicts.append(d)
+
+    json_str = json.dumps(tool_dicts, ensure_ascii=False)
+    json_bytes = len(json_str.encode("utf-8"))
+    estimated_tokens = json_bytes // 4  # ~4 chars por token em JSON
+
+    # Tambem estima com deferLoading (apenas nome + annotations)
+    deferred_dicts = []
+    for t in filtered:
+        d = {"name": t.name}
+        if hasattr(t, 'annotations') and t.annotations:
+            d["annotations"] = t.annotations
+        deferred_dicts.append(d)
+
+    deferred_json = json.dumps(deferred_dicts, ensure_ascii=False)
+    deferred_bytes = len(deferred_json.encode("utf-8"))
+    deferred_tokens = deferred_bytes // 4
+
+    return {
+        "status": "success",
+        "profile": profile,
+        "tool_count": len(filtered),
+        "full_json_bytes": json_bytes,
+        "full_estimated_tokens": estimated_tokens,
+        "deferred_json_bytes": deferred_bytes,
+        "deferred_estimated_tokens": deferred_tokens,
+        "savings_percent": round((1 - deferred_tokens / max(estimated_tokens, 1)) * 100, 1),
+        "note": (
+            f"Perfil '{profile}': {len(filtered)} tools. "
+            f"Full: ~{estimated_tokens} tokens. "
+            f"Com deferLoading: ~{deferred_tokens} tokens "
+            f"({round((1 - deferred_tokens / max(estimated_tokens, 1)) * 100, 1)}% economia)."
+        ),
+    }
 
 # ══════════════════════════════════════════════════════════════════════
 # Captura de Estado

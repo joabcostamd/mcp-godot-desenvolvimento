@@ -49,7 +49,7 @@ TOOLSETS = {
         "run_gut_tests", "effect_probe", "godot_exec",
         "get_runtime_state_digest", "capture_runtime_errors",
         "run_scripted_tests", "smoke_test", "regression_test",
-        "dump_mcp_state",
+        "dump_mcp_state", "estimate_tool_tokens",
     ],
     "runtime_ops": [
         "run_game", "stop_game", "smart_restart", "compile_test",
@@ -106,6 +106,60 @@ def parse_toolset_arg() -> set[str] | None:
 _ENABLED_TOOLS: set[str] | None = parse_toolset_arg()
 if _ENABLED_TOOLS is not None:
     print(f"[MCP] Toolsets ativos: {sorted(_ENABLED_TOOLS)}", file=sys.stderr)
+
+# ── GRUPO 3: Tool Profiles (MCP_TOOL_PROFILE env var ou --profile) ──
+
+def _resolve_tool_profile() -> str | None:
+    """Resolve o perfil de tools: env var > --profile flag."""
+    import os as _os
+    env_profile = _os.environ.get("MCP_TOOL_PROFILE", "").strip().lower()
+    if env_profile:
+        return env_profile
+    try:
+        import argparse as _ap
+        parser = _ap.ArgumentParser(add_help=False)
+        parser.add_argument("--profile", default="", type=str)
+        args, _ = parser.parse_known_args()
+        if args.profile:
+            return args.profile.strip().lower()
+    except Exception:
+        pass
+    return None
+
+TOOL_PROFILES = {
+    "core": [
+        "ping", "health_check", "self_test", "bootstrap_godot_mcp",
+        "read_file", "write_file", "safe_write_gdscript",
+        "compile_test", "run_game", "stop_game", "smart_restart",
+        "git_commit_checkpoint", "smoke_test", "dump_mcp_state",
+        "project_manage",
+    ],
+    "dev": [
+        "ping", "health_check", "self_test", "bootstrap_godot_mcp",
+        "read_file", "write_file", "safe_write_gdscript",
+        "compile_test", "run_game", "stop_game", "smart_restart",
+        "git_commit_checkpoint", "smoke_test", "dump_mcp_state",
+        "project_manage", "scene_manage", "node_manage", "script_manage",
+        "file_manage", "asset_manage", "runtime_manage",
+        "validate_gdscript_syntax", "validate_project_refs", "find_usages",
+        "run_scripted_tests", "regression_test",
+        "run_gut_tests", "godot_class_ref", "godot_exec", "effect_probe",
+        "take_screenshot", "capture_runtime_errors", "get_runtime_state_digest",
+        "import_asset_manifest", "create_asset_manifest",
+    ],
+    "full": [],  # vazio = sem filtro (todas as tools)
+}
+
+_ACTIVE_PROFILE = _resolve_tool_profile()
+if _ACTIVE_PROFILE and _ACTIVE_PROFILE != "full":
+    if _ACTIVE_PROFILE in TOOL_PROFILES:
+        _PROFILE_TOOLS = set(TOOL_PROFILES[_ACTIVE_PROFILE])
+        print(f"[MCP] Profile '{_ACTIVE_PROFILE}': {len(_PROFILE_TOOLS)} tools", file=sys.stderr)
+    else:
+        print(f"[MCP] Profile '{_ACTIVE_PROFILE}' desconhecido. Use: {sorted(TOOL_PROFILES.keys())}", file=sys.stderr)
+        _PROFILE_TOOLS = None
+else:
+    _PROFILE_TOOLS = None
 
 # ── PATCH 12: Runtime Bridge ─────────────────────────────────
 from runtime_bridge_client import send_bridge_command, BridgeUnavailable
@@ -470,6 +524,7 @@ from tools.test_ops import (
     smoke_test,
     regression_test,
     dump_mcp_state,
+    estimate_tool_tokens,
 )
 from tools.classdb import (
     query_classdb,
@@ -5648,6 +5703,10 @@ def _tool_defs() -> list[Tool]:
     if _ENABLED_TOOLS is not None:
         _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name in _ENABLED_TOOLS]
 
+    # ── GRUPO 3: Filtrar por --profile se ativo ──
+    if _PROFILE_TOOLS is not None:
+        _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name in _PROFILE_TOOLS]
+
     # ── Pós-processador: garantir 4 hints em 100% das tools ──
     _TOOL_DEFS_CACHE = _apply_hints(_TOOL_DEFS_CACHE)
 
@@ -5780,6 +5839,7 @@ def _build_handlers() -> dict:
         "smoke_test": smoke_test,
         "regression_test": regression_test,
         "dump_mcp_state": dump_mcp_state,
+        "estimate_tool_tokens": estimate_tool_tokens,
         # PATCH 15: Validacao de Referencias
         "validate_project_refs": validate_project_refs,
         "find_usages": find_usages,
