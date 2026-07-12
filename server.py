@@ -170,10 +170,45 @@ def _handle_godot_run_project(project_path: str = "", godot_executable: str = ""
         return json.dumps({"ok": False, "error": str(exc)})
 
 
+def _get_process_name(pid: int) -> str | None:
+    """Obtem o nome do executavel de um PID. Retorna None se nao encontrado."""
+    try:
+        if sys.platform == "win32":
+            result = subprocess.run(
+                ["tasklist", "/FI", f"PID eq {pid}", "/FO", "CSV", "/NH"],
+                capture_output=True, text=True, timeout=5,
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                line = result.stdout.strip()
+                # Detecta mensagens de "nenhum resultado" em varios idiomas
+                if any(phrase in line.lower() for phrase in (
+                    "nenhuma tarefa", "no tasks", "aucune t", "keine",
+                )):
+                    return None
+                parts = line.split(",")
+                if len(parts) >= 2:
+                    name = parts[0].strip('"')
+                    # Nome de processo valido tipicamente termina com .exe
+                    if name.lower().endswith(".exe") or name.lower().endswith(".scr"):
+                        return name
+                    # Fallback: se nao terminar com .exe, suspeito
+                    return None
+        else:
+            try:
+                import psutil
+                return psutil.Process(pid).name()
+            except ImportError:
+                pass
+    except Exception:
+        pass
+    return None
+
+
 def _handle_godot_stop_project(pid: int = 0, **kwargs) -> str:
     """Encerra um processo de jogo iniciado por godot_run_project.
     Mata diretamente pelo PID (taskkill no Windows, SIGKILL no Unix),
-    NAO depende do dicionario _running_godot_processes."""
+    NAO depende do dicionario _running_godot_processes.
+    Antes de matar, verifica que o nome do processo contem 'godot'."""
     killed = False
     was_tracked = False
 
@@ -196,6 +231,16 @@ def _handle_godot_stop_project(pid: int = 0, **kwargs) -> str:
 
     # Tentativa 2: matar diretamente pelo PID (fallback)
     if not killed:
+        # Protecao: verificar nome do processo antes de matar
+        pname = _get_process_name(pid)
+        if pname is None:
+            return json.dumps({"ok": False, "error": f"pid {pid} nao encontrado no sistema"})
+        if "godot" not in pname.lower():
+            return json.dumps({
+                "ok": False,
+                "error": f"pid {pid} pertence a '{pname}', nao a um processo Godot. Recusado por seguranca.",
+            })
+
         try:
             if sys.platform == "win32":
                 result = subprocess.run(
