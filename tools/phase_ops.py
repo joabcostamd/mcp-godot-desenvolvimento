@@ -81,10 +81,17 @@ class PhaseState:
             except Exception as e:
                 return {"status": "error", "message": f"Erro ao carregar estado: {e}"}
 
-        # Estado novo
+        # Estado novo — persiste no disco para que _get_phase_tools() funcione
         self.current_phase = "IDEIA"
         self.history = []
-        return {"status": "success", "phase": "IDEIA", "loaded": False, "note": "Estado inicial criado."}
+        save_result = self.save()
+        return {
+            "status": "success",
+            "phase": "IDEIA",
+            "loaded": False,
+            "note": "Estado inicial criado e persistido.",
+            "save_result": save_result,
+        }
 
     def save(self) -> dict:
         """Grava estado no JSON."""
