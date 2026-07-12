@@ -20,6 +20,8 @@ func _ready() -> void:
 	if err != OK:
 		push_warning("MCPRuntimeBridge: falha ao abrir porta %d (err %d)" % [PORT, err])
 		return
+	register_command("save_current_scene", _cmd_save_current_scene)
+	register_command("add_test_marker", _cmd_add_test_marker)
 	print("MCPRuntimeBridge: escutando em %s:%d" % [HOST, PORT])
 
 
@@ -138,6 +140,36 @@ func _cmd_input_event(event_data: Dictionary) -> Dictionary:
 			return {"ok": true}
 		_:
 			return {"ok": false, "error": "tipo de evento desconhecido: %s" % event_type}
+
+
+func _cmd_save_current_scene(_args: Dictionary) -> Dictionary:
+	var scene: Node = get_tree().current_scene
+	if scene == null:
+		return {"saved": false, "error": "nenhuma cena atual"}
+	var scene_path: String = scene.scene_file_path
+	if scene_path == "":
+		return {"saved": false, "error": "cena atual nao tem arquivo associado (runtime)"}
+	var packed := PackedScene.new()
+	var err := packed.pack(scene)
+	if err != OK:
+		return {"saved": false, "error": "pack falhou: %d" % err, "path": scene_path}
+	err = ResourceSaver.save(packed, scene_path)
+	if err != OK:
+		return {"saved": false, "error": "ResourceSaver.save falhou: %d" % err, "path": scene_path}
+	print("MCPRuntimeBridge: cena salva em %s" % scene_path)
+	return {"saved": true, "path": scene_path}
+
+
+func _cmd_add_test_marker(_args: Dictionary) -> Dictionary:
+	var scene: Node = get_tree().current_scene
+	if scene == null:
+		return {"ok": false, "error": "nenhuma cena atual"}
+	var marker := Node.new()
+	marker.name = "SavedMarker"
+	scene.add_child(marker)
+	marker.owner = scene
+	print("MCPRuntimeBridge: marcador SavedMarker adicionado a cena")
+	return {"ok": true, "marker_added": true}
 
 
 func _reply(data: Dictionary) -> void:

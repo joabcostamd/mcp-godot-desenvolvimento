@@ -206,11 +206,26 @@ def _get_process_name(pid: int) -> str | None:
 
 def _handle_godot_stop_project(pid: int = 0, **kwargs) -> str:
     """Encerra um processo de jogo iniciado por godot_run_project.
+    Antes de matar, tenta salvar a cena atual via bridge (timeout 2s).
     Mata diretamente pelo PID (taskkill no Windows, SIGKILL no Unix),
     NAO depende do dicionario _running_godot_processes.
     Antes de matar, verifica que o nome do processo contem 'godot'."""
     killed = False
     was_tracked = False
+    save_attempted = False
+    save_result = None
+
+    # ── Save-before-kill: tentar salvar via bridge (timeout 2s) ──
+    try:
+        save_attempted = True
+        save_result = send_bridge_command(
+            {"cmd": "custom", "name": "save_current_scene", "args": {}},
+            timeout=2.0,
+        )
+    except BridgeUnavailable:
+        save_result = {"error": "bridge unavailable"}
+    except Exception as exc:
+        save_result = {"error": str(exc)}
 
     # Tentativa 1: processo rastreado (terminate graceful)
     proc = _running_godot_processes.get(str(pid))
@@ -261,7 +276,10 @@ def _handle_godot_stop_project(pid: int = 0, **kwargs) -> str:
         except Exception as exc:
             return json.dumps({"ok": False, "error": f"falha ao matar pid {pid}: {exc}"})
 
-    return json.dumps({"ok": True, "pid": pid, "was_tracked": was_tracked})
+    return json.dumps({
+        "ok": True, "pid": pid, "was_tracked": was_tracked,
+        "save_attempted": save_attempted, "save_result": save_result,
+    })
 
 
 def _handle_godot_wait_for_bridge(timeout_sec: int = 10, **kwargs) -> str:
