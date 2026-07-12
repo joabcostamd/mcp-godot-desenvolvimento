@@ -171,17 +171,52 @@ def _handle_godot_run_project(project_path: str = "", godot_executable: str = ""
 
 
 def _handle_godot_stop_project(pid: int = 0, **kwargs) -> str:
-    """Encerra um processo de jogo iniciado por godot_run_project."""
+    """Encerra um processo de jogo iniciado por godot_run_project.
+    Mata diretamente pelo PID (taskkill no Windows, SIGKILL no Unix),
+    NAO depende do dicionario _running_godot_processes."""
+    killed = False
+    was_tracked = False
+
+    # Tentativa 1: processo rastreado (terminate graceful)
     proc = _running_godot_processes.get(str(pid))
-    if proc is None:
-        return json.dumps({"ok": False, "error": f"pid {pid} nao rastreado (ja encerrado ou MCP reiniciou)"})
-    try:
-        proc.terminate()
-        proc.wait(timeout=5)
-    except subprocess.TimeoutExpired:
-        proc.kill()
-    del _running_godot_processes[str(pid)]
-    return json.dumps({"ok": True})
+    if proc is not None:
+        was_tracked = True
+        try:
+            proc.terminate()
+            proc.wait(timeout=5)
+            killed = True
+        except subprocess.TimeoutExpired:
+            proc.kill()
+            proc.wait(timeout=5)
+            killed = True
+        except Exception:
+            pass
+        finally:
+            _running_godot_processes.pop(str(pid), None)
+
+    # Tentativa 2: matar diretamente pelo PID (fallback)
+    if not killed:
+        try:
+            if sys.platform == "win32":
+                result = subprocess.run(
+                    ["taskkill", "/F", "/PID", str(pid)],
+                    capture_output=True, text=True, timeout=10,
+                )
+                if result.returncode != 0 and "não encontrado" not in result.stderr.lower():
+                    return json.dumps({
+                        "ok": False,
+                        "error": f"taskkill falhou (rc={result.returncode}): {result.stderr.strip()}",
+                    })
+            else:
+                import signal
+                os.kill(pid, signal.SIGKILL)
+            killed = True
+        except ProcessLookupError:
+            return json.dumps({"ok": False, "error": f"pid {pid} nao encontrado no sistema"})
+        except Exception as exc:
+            return json.dumps({"ok": False, "error": f"falha ao matar pid {pid}: {exc}"})
+
+    return json.dumps({"ok": True, "pid": pid, "was_tracked": was_tracked})
 
 
 def _handle_godot_wait_for_bridge(timeout_sec: int = 10, **kwargs) -> str:
