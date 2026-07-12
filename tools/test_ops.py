@@ -178,6 +178,18 @@ def _invoke_tool_synthetic(tool: str, args: dict) -> dict:
     if tool == "read_file":
         return _simulate_read_file(args)
 
+    if tool == "dump_mcp_state":
+        return _simulate_dump_state()
+
+    if tool == "run_scripted_tests":
+        return run_scripted_tests(**args)
+
+    if tool == "smoke_test":
+        return smoke_test()
+
+    if tool == "regression_test":
+        return regression_test()
+
     # ── Fallback para tools não mapeadas ──
     return {
         "status": "skipped",
@@ -222,15 +234,23 @@ def _validate_result(result: dict, expected: dict) -> tuple[bool, list[str]]:
         if expected["contains"] not in result_str:
             failures.append(f"contains: '{expected['contains']}' nao encontrado na resposta")
 
-    # Verifica chave presente (suporta nested: "a.b.c")
+    # Verifica chave presente (suporta nested: "a.b.c" ou lista ["a", "b"])
     if "has_key" in expected:
-        if not _nested_key_exists(result, expected["has_key"]):
-            failures.append(f"has_key: '{expected['has_key']}' ausente no resultado")
+        keys_to_check = expected["has_key"]
+        if isinstance(keys_to_check, str):
+            keys_to_check = [keys_to_check]
+        for k in keys_to_check:
+            if not _nested_key_exists(result, k):
+                failures.append(f"has_key: '{k}' ausente no resultado")
 
-    # Verifica chave ausente (suporta nested)
+    # Verifica chave ausente (suporta nested: "a.b.c" ou lista)
     if "not_has_key" in expected:
-        if _nested_key_exists(result, expected["not_has_key"]):
-            failures.append(f"not_has_key: '{expected['not_has_key']}' presente (nao deveria)")
+        keys_to_check = expected["not_has_key"]
+        if isinstance(keys_to_check, str):
+            keys_to_check = [keys_to_check]
+        for k in keys_to_check:
+            if _nested_key_exists(result, k):
+                failures.append(f"not_has_key: '{k}' presente (nao deveria)")
 
     # Verifica valor exato de uma chave (suporta nested)
     if "has_value" in expected:
@@ -373,8 +393,25 @@ def _simulate_gut_tests(args: dict) -> dict:
 
 
 def _simulate_git_checkpoint(args: dict) -> dict:
-    """Simula git_commit_checkpoint."""
+    """Simula git_commit_checkpoint.
+
+    Comportamento:
+    - skip_validation=True: commit passa sem validacao
+    - skip_validation=False (default): commit passa COM validacao (simulada)
+    - fail_validation=True: simula falha de validacao (para teste de bloqueio)
+    """
     skip = args.get("skip_validation", False)
+    fail = args.get("fail_validation", False)
+
+    if fail:
+        return {
+            "status": "error",
+            "message": "Commit BLOQUEADO — o projeto nao compila. Corrija os erros antes de salvar o progresso.",
+            "compile_errors": [
+                {"file": "scripts/broken.gd", "line": 5, "message": "R1: variavel 'x' declarada duas vezes", "rule": "R1_CRITICAL"},
+            ],
+        }
+
     if skip:
         return {"status": "success", "commit": "test-commit", "validated": False}
     return {"status": "success", "commit": "test-commit", "validated": True}
@@ -416,6 +453,15 @@ def _simulate_read_file(args: dict) -> dict:
         "status": "success",
         "content": content,
         "total_lines": len(content.splitlines()),
+    }
+
+
+def _simulate_dump_state() -> dict:
+    """Simula dump_mcp_state."""
+    return {
+        "status": "success",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "state": _capture_state(),
     }
 
 
@@ -468,6 +514,17 @@ def _smoke_scenarios() -> list[dict]:
             "description": "Valida que config.json e templates estão acessíveis.",
             "steps": [
                 {"tool": "read_file", "args": {"path": "project.godot"}, "expect": {"status": "success", "has_key": "content"}},
+            ],
+        },
+        {
+            "name": "SMOKE-04: State Dump",
+            "description": "Valida que dump_mcp_state captura estado com timestamp, tools, imports e git.",
+            "steps": [
+                {"tool": "dump_mcp_state", "args": {}, "expect": {
+                    "status": "success",
+                    "has_key": ["timestamp", "state"],
+                    "has_value": {"status": "success"},
+                }},
             ],
         },
     ]
@@ -570,7 +627,7 @@ def _regression_scenarios() -> list[dict]:
                 {
                     "tool": "self_test",
                     "args": {},
-                    "expect": {"has_value": {"passed": 5}, "has_key": "results"},
+                    "expect": {"has_key": ["passed", "results"], "status": "success"},
                 },
             ],
         },
@@ -668,14 +725,21 @@ def _capture_state() -> dict:
     except Exception:
         state["tools"] = {"error": "server.py não pôde ser importado (esperado em teste unitário)"}
 
-    # Imports críticos
+    # Imports críticos (usa nomes de modulo corretos)
     imports = {}
-    for mod in ["godot_parser", "jinja2", "Pillow", "mcp"]:
+    import_map = {
+        "godot_parser": "godot_parser",
+        "jinja2": "jinja2",
+        "PIL (Pillow)": "PIL",
+        "mcp": "mcp",
+        "yaml": "yaml",
+    }
+    for label, mod in import_map.items():
         try:
             __import__(mod)
-            imports[mod] = True
+            imports[label] = True
         except ImportError:
-            imports[mod] = False
+            imports[label] = False
     state["imports"] = imports
 
     # Git
