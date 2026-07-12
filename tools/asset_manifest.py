@@ -23,6 +23,18 @@ from pathlib import Path
 
 from tools.project_ops import _get_active_project, _check_path_traversal
 
+# Allowlist de extensoes seguras para import (constante a nivel de modulo)
+_ALLOWED_EXTENSIONS = {
+    ".png", ".jpg", ".jpeg", ".bmp", ".svg", ".webp",  # imagens
+    ".wav", ".ogg", ".mp3", ".flac",                     # audio
+    ".glb", ".gltf", ".obj", ".fbx", ".blend",          # 3D
+    ".ttf", ".otf", ".woff", ".woff2",                   # fontes
+    ".tres", ".tscn", ".gd", ".gdshader",                 # godot
+}
+
+# Fontes validas de asset
+_VALID_SOURCES = {"generate", "placeholder", "sfx", "import", "download"}
+
 
 # ══════════════════════════════════════════════════════════════════════
 # import_asset_manifest
@@ -88,11 +100,14 @@ def import_asset_manifest(
         source = asset.get("source", "placeholder")
 
         if dry_run:
+            # Valida campos obrigatorios por source
+            dry_errors = _validate_asset_requirements(asset, source)
             results.append({
                 "id": asset_id,
                 "source": source,
                 "status": "dry_run",
                 "message": f"[DRY RUN] Seria processado como '{source}'.",
+                "warnings": dry_errors if dry_errors else None,
             })
             skip_count += 1
             continue
@@ -267,13 +282,13 @@ def _process_import(asset: dict, proj: Path) -> dict:
     if not source_path or not target_path:
         return {"status": "error", "message": "source_path e target_res_path sao obrigatorios para import."}
 
-    # Valida path traversal
+    # Valida path traversal (apenas captura erros de importacao)
     try:
         violation = _check_path_traversal(target_path, proj)
         if violation:
             return {"status": "error", "message": violation}
-    except Exception:
-        pass  # _check_path_traversal pode nao estar disponivel
+    except (ImportError, AttributeError):
+        pass  # modulo ou funcao nao disponivel — segue sem validacao
 
     src = Path(source_path)
     if not src.exists():
@@ -281,15 +296,8 @@ def _process_import(asset: dict, proj: Path) -> dict:
 
     # Allowlist de extensoes seguras
     ext = src.suffix.lower()
-    ALLOWED_EXTENSIONS = {
-        ".png", ".jpg", ".jpeg", ".bmp", ".svg", ".webp",  # imagens
-        ".wav", ".ogg", ".mp3", ".flac",                     # audio
-        ".glb", ".gltf", ".obj", ".fbx", ".blend",          # 3D
-        ".ttf", ".otf", ".woff", ".woff2",                   # fontes
-        ".tres", ".tscn", ".gd", ".gdshader",                 # godot
-    }
-    if ext not in ALLOWED_EXTENSIONS:
-        return {"status": "error", "message": f"Extensao '{ext}' nao permitida. Allowlist: {sorted(ALLOWED_EXTENSIONS)}."}
+    if ext not in _ALLOWED_EXTENSIONS:
+        return {"status": "error", "message": f"Extensao '{ext}' nao permitida. Allowlist: {sorted(_ALLOWED_EXTENSIONS)}."}
 
     if ext in (".png", ".jpg", ".jpeg", ".bmp", ".svg", ".webp"):
         try:
@@ -376,6 +384,14 @@ def create_asset_manifest(
             "message": f"asset_manifest.json ja existe em '{mf_path}'. Use overwrite=True para sobrescrever.",
         }
 
+    # Backup do manifest existente antes de sobrescrever
+    if mf_path.exists() and overwrite:
+        try:
+            backup_path = mf_path.with_suffix(".json.bak")
+            shutil.copy2(mf_path, backup_path)
+        except Exception:
+            pass  # backup best-effort
+
     template = {
         "version": "1.0",
         "project": proj.name,
@@ -436,3 +452,45 @@ def _resolve_project(project_path: str | None) -> Path | None:
         return _get_active_project()
     except Exception:
         return None
+
+
+def _validate_asset_requirements(asset: dict, source: str) -> list[str]:
+    """Valida campos obrigatorios de um asset para dry_run.
+
+    Returns:
+        Lista de warnings (vazia se tudo OK).
+    """
+    warnings: list[str] = []
+
+    if source not in _VALID_SOURCES:
+        warnings.append(f"Source '{source}' desconhecido. Use: {sorted(_VALID_SOURCES)}.")
+        return warnings
+
+    if source == "generate":
+        if not asset.get("description"):
+            warnings.append("Campo 'description' recomendado para source='generate'.")
+
+    elif source == "import":
+        if not asset.get("source_path"):
+            warnings.append("Campo 'source_path' obrigatorio para source='import'.")
+        if not asset.get("target_res_path"):
+            warnings.append("Campo 'target_res_path' obrigatorio para source='import'.")
+
+    elif source == "download":
+        if not asset.get("query") and not asset.get("asset_id"):
+            warnings.append("Campo 'query' ou 'asset_id' obrigatorio para source='download'.")
+        if asset.get("download_source") not in (None, "polyhaven", "kenney", "ambientcg"):
+            warnings.append(f"download_source='{asset.get('download_source')}' pode nao ser valido.")
+
+    elif source == "sfx":
+        valid_sfx = {
+            "beep", "laser", "explosion", "powerup", "hit", "jump",
+            "collect", "shoot", "click", "confirm", "cancel", "error",
+            "warning", "success", "ambient", "engine", "footstep",
+            "door", "ui_hover", "ui_click",
+        }
+        sfx_type = asset.get("sfx_type", "")
+        if sfx_type and sfx_type not in valid_sfx:
+            warnings.append(f"sfx_type='{sfx_type}' pode nao ser valido. Tipos conhecidos: {sorted(valid_sfx)}.")
+
+    return warnings
