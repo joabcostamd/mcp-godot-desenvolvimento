@@ -36,7 +36,7 @@ TOOLSETS = {
         "ping", "health_check", "self_test", "bootstrap_godot_mcp",
         "read_file", "write_file", "safe_write_gdscript",
         "compile_test", "run_game", "stop_game", "smart_restart",
-        "git_commit_checkpoint",
+        "git_commit_checkpoint", "smoke_test", "dump_mcp_state",
     ],
     "scene_ops": [
         "scene_manage", "node_manage",
@@ -48,6 +48,8 @@ TOOLSETS = {
     "test_ops": [
         "run_gut_tests", "effect_probe", "godot_exec",
         "get_runtime_state_digest", "capture_runtime_errors",
+        "run_scripted_tests", "smoke_test", "regression_test",
+        "dump_mcp_state",
     ],
     "runtime_ops": [
         "run_game", "stop_game", "smart_restart", "compile_test",
@@ -460,6 +462,12 @@ from tools.runtime_ops import (
     compare_screenshots,
     detect_empty_screen,
     record_gameplay_gif,
+)
+from tools.test_ops import (
+    run_scripted_tests,
+    smoke_test,
+    regression_test,
+    dump_mcp_state,
 )
 from tools.classdb import (
     query_classdb,
@@ -4237,6 +4245,60 @@ def _tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
+        # ── PATCH 14: Testes Roteirizados ──────────────────────
+        Tool(
+            name="run_scripted_tests",
+            description=(
+                "Executa cenarios de teste roteirizados com input sintetico. "
+                "NAO requer Godot rodando — testa as tools do MCP diretamente. "
+                "Use para validar correcoes, smoke tests e regressao. "
+                "Cada cenario define steps com tool/args/expect. "
+                "Pre-condicoes: nenhuma. "
+                "Exemplo: {} (executa smoke + regression padrao). "
+                "Exemplo avancado: {\"scenarios\": [{\"name\":\"meu-teste\",\"steps\":[{\"tool\":\"ping\",\"args\":{},\"expect\":{\"status\":\"success\"}}]}]}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scenarios": {"type": "array", "description": "Lista de cenarios customizados (opcional)."},
+                    "stop_on_failure": {"type": "boolean", "description": "Parar no primeiro cenario que falhar (default: false)."},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="smoke_test",
+            description=(
+                "Smoke test rapido: valida pipeline core do MCP (ping, ClassDB, validacao, config). "
+                "NAO requer Godot rodando. Ideal para inicio de sessao. "
+                "Retorna status de cada componente e veredito geral. "
+                "Pre-condicoes: nenhuma. "
+                "Exemplo: {} (chamada sem argumentos)."
+            ),
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        Tool(
+            name="regression_test",
+            description=(
+                "Teste de regressao: valida correcoes dos GRUPOS 1 e 2 (write_file .gd, R2, GUT skipped). "
+                "NAO requer Godot rodando. "
+                "Retorna status de cada validacao e veredito geral. "
+                "Pre-condicoes: nenhuma. "
+                "Exemplo: {} (chamada sem argumentos)."
+            ),
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        Tool(
+            name="dump_mcp_state",
+            description=(
+                "Captura snapshot completo do estado do MCP: config, tool counts, caches, imports, git. "
+                "Util para debugging e comparacao entre maquinas. "
+                "NAO requer Godot rodando. "
+                "Pre-condicoes: nenhuma. "
+                "Exemplo: {} (chamada sem argumentos)."
+            ),
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
         # ── LSP Bridge (Fase 2A / C3) ──────────────────────────
         Tool(
             name="gdscript_lsp_connect",
@@ -5619,6 +5681,11 @@ def _build_handlers() -> dict:
         # Onda 7: Robustez
         "health_check": _handle_health_check,
         "self_test": _handle_self_test,
+        # PATCH 14: Testes Roteirizados
+        "run_scripted_tests": run_scripted_tests,
+        "smoke_test": smoke_test,
+        "regression_test": regression_test,
+        "dump_mcp_state": dump_mcp_state,
         # Onda 8: DevSolo Crítico
         "setup_camera_2d": _handle_setup_camera_2d,
         "create_navigation_region_2d": _handle_create_navigation_region_2d,
