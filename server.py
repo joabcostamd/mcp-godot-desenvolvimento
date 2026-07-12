@@ -297,14 +297,16 @@ def _handle_godot_wait_for_bridge(timeout_sec: int = 10, **kwargs) -> str:
 
 # ── PATCH 13: Introspecção ClassDB ─────────────────────────────
 def _handle_godot_class_ref(class_name: str = "", **kwargs) -> str:
-    """Consulta metodos, propriedades e sinais reais de uma classe Godot."""
-    from tools.classdb import suggest_similar
-    all_names = []
+    """Consulta metodos, propriedades e sinais reais de uma classe Godot.
+    Cobre APENAS classes nativas do Godot (extension_api.json).
+    NAO retorna classes custom do projeto (class_name em scripts .gd)."""
+    from tools.classdb import (suggest_similar, _class_index, _all_class_names,
+                                list_methods, list_signals, get_class_hierarchy)
+
     try:
-        from tools.classdb import _all_class_names
         all_names = _all_class_names()
     except Exception:
-        pass
+        all_names = []
 
     if not class_name:
         return json.dumps({"ok": False, "error": "class_name obrigatorio"})
@@ -316,8 +318,31 @@ def _handle_godot_class_ref(class_name: str = "", **kwargs) -> str:
             "suggestions": suggestions,
         })
 
+    # Metodos e sinais com heranca (classdb.py ja faz merge)
     methods = list_methods(class_name)
+    signals_list = list_signals(class_name)
+
+    # Propriedades, enums, constantes — walking inheritance manualmente
+    all_props: dict[str, dict] = {}
+    all_enums: dict[str, dict] = {}
+    all_constants: dict[str, dict] = {}
+    current = class_name
+    class_index = _class_index()
+    while current:
+        e = class_index.get(current, {})
+        for p in e.get("properties", []):
+            if p["name"] not in all_props:
+                all_props[p["name"]] = p
+        for en in e.get("enums", []):
+            if en["name"] not in all_enums:
+                all_enums[en["name"]] = en
+        for c in e.get("constants", []):
+            if c["name"] not in all_constants:
+                all_constants[c["name"]] = c
+        current = e.get("inherits", "")
+
     hierarchy = get_class_hierarchy(class_name)
+
     return json.dumps({
         "ok": True,
         "class_name": class_name,
@@ -325,7 +350,14 @@ def _handle_godot_class_ref(class_name: str = "", **kwargs) -> str:
         "hierarchy": hierarchy,
         "method_count": len(methods),
         "methods": [m["name"] for m in methods[:50]],
-        "methods_full": methods[:50],
+        "property_count": len(all_props),
+        "properties": sorted(all_props.keys())[:50],
+        "signal_count": len(signals_list),
+        "signals": [s["name"] for s in signals_list[:50]],
+        "enum_count": len(all_enums),
+        "enums": sorted(all_enums.keys())[:50],
+        "constant_count": len(all_constants),
+        "constants": sorted(all_constants.keys())[:50],
     }, indent=2)
 
 
@@ -2814,11 +2846,13 @@ def _tool_defs() -> list[Tool]:
         ),
         Tool(
             name="godot_class_ref",
-            description="Consulta metodos, propriedades e sinais reais de uma classe do Godot via ClassDB (extension_api.json). Evita alucinacao de API desatualizada.",
+            description="Consulta metodos, propriedades, sinais, enums e constantes nativos do Godot via ClassDB (extension_api.json). "
+                        "Cobre APENAS classes nativas do engine; NAO retorna classes custom do projeto (class_name em scripts .gd). "
+                        "Evita alucinacao de API desatualizada. Use antes de gerar codigo contra uma classe desconhecida.",
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "class_name": {"type": "string", "description": "Nome exato da classe (ex: Node2D, CharacterBody2D)."},
+                    "class_name": {"type": "string", "description": "Nome exato da classe nativa (ex: Node2D, CharacterBody2D). Nao funciona com classes custom de projetos."},
                 },
                 "required": ["class_name"],
             },
