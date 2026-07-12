@@ -150,7 +150,8 @@ def validate_project_refs(project_path: str | None = None, full_report: bool = F
         # 1. Mapeia ext_resource IDs → paths
         ext_map = _parse_tscn_ext_resources(content)
 
-        # 2. Valida cada ext_resource
+        # 2. Valida cada ext_resource (incluindo duplicatas)
+        seen_paths: dict[str, str] = {}  # path -> primeiro ext_id
         for ext_id, ref_path in ext_map.items():
             # Normaliza: remove res://
             clean = ref_path.replace("res://", "")
@@ -162,6 +163,19 @@ def validate_project_refs(project_path: str | None = None, full_report: bool = F
                     "reference": ref_path,
                     "message": f"ext_resource id={ext_id}: path '{ref_path}' nao encontrado no disco.",
                 })
+            # Detecta duplicatas: mesmo path com IDs diferentes
+            if clean in seen_paths:
+                warnings.append({
+                    "file": rel,
+                    "type": "ext_resource_duplicate",
+                    "ext_id_1": seen_paths[clean],
+                    "ext_id_2": ext_id,
+                    "reference": ref_path,
+                    "message": f"ext_resource duplicado: path '{ref_path}' com IDs {seen_paths[clean]} e {ext_id}. "
+                               f"Isso consome memoria extra no Godot.",
+                })
+            else:
+                seen_paths[clean] = ext_id
 
         # 3. Valida que ExtResource("N") tem [ext_resource id="N"]
         all_ext_refs = set()
@@ -506,5 +520,13 @@ def _matches_target(ref: str, target: str, search_type: str) -> bool:
     if search_type == "texture" and not (ref.endswith(".png") or ref.endswith(".jpg") or ref.endswith(".svg")):
         return False
 
-    # auto: match parcial no nome do arquivo
+    # auto: match exato no nome do arquivo OU path parcial
+    # Evita falsos positivos: "player" nao deve match "multiplayer"
+    ref_name = ref.rsplit("/", 1)[-1]  # so o nome do arquivo
+    if target == ref_name:
+        return True
+    # Path parcial: target aparece como componente de diretorio
+    if f"/{target}/" in f"/{ref}/" or ref.startswith(target + "/"):
+        return True
+    # Substring como fallback (menos preciso, mas util)
     return target in ref
