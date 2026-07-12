@@ -1,10 +1,12 @@
 # MCP Godot — Desenvolvimento
 
 > **Servidor MCP Godot Agent v3.2.1 — 191 ferramentas para criação de jogos por linguagem natural.**
-> Conecta Godot 4.7 ao VS Code Copilot (DeepSeek V4) via protocolo MCP.
+> Conecta Godot 4.7 ao VS Code Copilot (DeepSeek V4 Pro) via protocolo MCP stdio.
 > Autocontido — clone, instale dependências e use.
 
-**Status:** ✅ 190 tools · 190 handlers · 64 módulos · 18 patches · 5 grupos auditoria · 10 toolsets · 3 perfis · Pipeline Executor · DAP debugger · R$0
+**Status:** ✅ 191 tools · 191 handlers · 69 módulos · 18 patches · 5 grupos auditoria · 10 toolsets · 3 perfis · Pipeline de Verificação · DAP debugger · R$0
+
+**GitHub:** `https://github.com/joabcostamd/mcp-godot-desenvolvimento`
 
 ---
 
@@ -12,79 +14,90 @@
 
 | Pasta/Arquivo | O que é |
 |---|---|
-| `server.py` | Servidor MCP (~7300 linhas, 190 ferramentas) |
-| `tools/` | 64 módulos (cenas, scripts, física, arte IA, som IA, pipeline, etc.) |
+| `server.py` | Servidor MCP (~7400 linhas, 191 ferramentas, stdio JSON-RPC 2.0) |
+| `tools/` | 69 módulos Python (cenas, scripts, física, arte IA, som IA, pipeline, verificação, etc.) |
 | `resources/` | Game patterns (17 gêneros) + MCP Prompts (11 comandos) |
 | `templates/` | Templates GDScript (Jinja2) |
-| `classdb_cache/` | Cache da API do Godot 4.7 |
+| `classdb_cache/` | Cache da API do Godot 4.7 (1074 classes) |
 | `addons/` | Plugins Godot (mcp_addon + mcp_runtime_bridge) |
-| `config.json` | Configuração (caminhos do Godot + projeto) |
+| `config.json.example` | Template de configuração |
 | `requirements.txt` | Dependências Python |
+| `MCP_ESTADO_ATUAL.md` | 📄 Documento canônico — TUDO sobre o MCP (arquitetura, 191 tools, protocolos, limitações) |
 | `GUIA_CONEXAO.md` | Como usar — passo a passo do zero |
 | `ARQUITETURA_MCP.md` | Como funciona por dentro — 3 camadas, padrões, extensão |
+| `LEARNINGS.md` | 16 regras anti-padrão (R1-R16) |
+| `CHANGELOG.md` | Histórico completo de versões |
+| `pendencias.md` | Bugs ativos e resolvidos |
 
 ---
 
-## Novidades da v3.2.1 (Auditoria e Hardening — 2026-07-12)
+## 🆕 Novidades da v3.2.1 (2026-07-12)
 
+### Item 1: Pipeline de Verificação (`run_verification_pipeline`)
 | Feature | Descrição |
 |---------|-----------|
-| 🛡️ **Sandbox conectado** | `write_file` + `safe_write_gdscript` validam antes de escrever .gd (36/36 padrões bloqueados) |
-| 🧹 **Normalizador GDScript** | Remove comentários, colapsa whitespace, resolve concatenação — fecha 3/4 bypasses |
-| 🐛 **Bugs B1-B3** | B2 runtime tools corrigido, B3 status corrigido, B1 documentado |
-| 🔧 **Godot check desligado** | `tentar_checagem_godot=false` (padrão) — `--check-only` não funciona no Windows Godot 4.7 |
-| 🪝 **Hook Stop NUCLEO** | `check-gate-failed.ps1` bloqueia encerramento se `.mcp_gate_failed` existir |
-| 🧹 **Limpeza** | MCPs duplicados removidos, `config.json` untracked, paths corrigidos |
-| 📚 **Docs sincronizados** | Todos os 6 docs + MCP ESTADO ATUAL atualizados para 190 tools |
+| 🔬 **Pipeline 4 etapas** | Compile check → headless run → screenshot → GUT tests em 1 chamada |
+| 📊 **Relatório JSON** | Status consolidado com evidência bruta de cada etapa + early exit |
+| 📸 **Screenshot automático** | `--write-movie` com SW_HIDE, salva PNG em `verification_screenshots/` |
+| ⚠️ **Ambiguity handling** | Retorna `ambiguous` se cena de teste não definida — não adivinha |
+| 🐛 **6 bugs corrigidos** | BUG-V01 a V06 encontrados e resolvidos na própria implementação |
 
-## Novidades da v3.2 (Sessão anterior — 2026-07-12)
+### Item 2: Fluxo EARS + Pipeline (Padrão de Fechamento de Pendência)
+| Feature | Descrição |
+|---------|-----------|
+| 📋 **Fluxo documentado** | `AGENTS.md` no Star Colony: receber → EARS → aprovar → implementar → pipeline → relatório |
+| 🎨 **EARS-B implementado** | VFX de evolução visual L1→L2→L3 com escala + borda por nível |
+| ⌨️ **Gatilho debug** | Tecla U (provisório) — `spawn_explosion` + `spawn_floating_text` + `add_shake` |
+| ✅ **Pixel evidence** | Análise de screenshot confirma borda prateada L2 (RGB 126,126,147) e dourada L3 (RGB 205,174,64) |
+
+### Segurança & Infra (continuação)
+| Feature | Descrição |
+|---------|-----------|
+| 🛡️ **Sandbox conectado** | `write_file` + `safe_write_gdscript` validam .gd antes de escrever (36/36 padrões) |
+| 🧹 **Normalizador** | Remove comentários, colapsa whitespace, resolve concatenação — fecha 4/6 bypasses |
+| 🔧 **Godot check off** | `tentar_checagem_godot=false` — `--check-only` quebrado no Windows Godot 4.7 (R12) |
+| 🪝 **Hook Stop** | `check-gate-failed.ps1` bloqueia encerramento com gate falho |
+
+---
+
+## Histórico (v3.2.0 — 2026-07-12)
 
 | Feature | Descrição |
 |---------|-----------|
 | 🔬 **Testes roteirizados** | `smoke_test`, `regression_test`, `run_scripted_tests`, `dump_mcp_state`, `estimate_tool_tokens` |
-| 🔍 **Validação de referências** | `validate_project_refs`, `find_usages` (estático, offline, sem precisar do Godot aberto) |
+| 🔍 **Validação de refs** | `validate_project_refs`, `find_usages` (estático, offline) |
 | 📦 **Asset Manifest** | `import_asset_manifest` (5 fontes), `create_asset_manifest` |
-| ⚡ **Runtime Bridge** | Servidor TCP GDScript (8790) + 4 tools (`screenshot`, `runtime_info`, `custom_command`, `list_custom_commands`) |
-| 🔄 **Process Lifecycle** | `godot_run_project`, `godot_stop_project`, `godot_wait_for_bridge` com save-before-kill |
-| 📚 **ClassDB Introspecção** | `godot_class_ref` via `extension_api.json` (Python puro), 1074 classes com herança, fuzzy suggestions |
-| 🎯 **Curadoria de Toolsets** | `--toolsets` com 10 grupos nomeados (core, 2d, 3d, physics, ui, audio, art, debug, pipeline, advanced) |
-| ⚙️ **Perfis** | `--profile core/dev/full` — inicie com 29, ~80 ou 189 tools (economiza tokens) |
-| ✅ **Validação GDScript** | `safe_write_gdscript` com validação dupla (sintaxe local + `validate_gdscript.py`) |
+| ⚡ **Runtime Bridge** | Servidor TCP GDScript (8790) + screenshot, runtime_info, custom_command |
+| 🔄 **Process Lifecycle** | `godot_run/stop_project`, `godot_wait_for_bridge` com save-before-kill |
+| 📚 **ClassDB** | `godot_class_ref` via `extension_api.json`, 1074 classes, fuzzy suggestions |
+| 🎯 **Toolsets** | `--toolsets` com 10 grupos + `--profile core/dev/full` (31/80/191 tools) |
+| ✅ **Validação GDScript** | `safe_write_gdscript` com validação dupla (sintaxe local + sandbox) |
 | 🛡️ **Git Checkpoint** | `git_commit_checkpoint` com gates de compilação + GUT |
 | 💰 **Cost Guard** | `allow_paid_generation=False` + `estimated_cost` em tools de arte IA |
-| 🔧 **Config local** | `config.local.json` + `GODOT_MCP_*` env vars para overrides por máquina |
-| 🐛 **43 bugs corrigidos** | Auditoria completa em 5 grupos (10 rodadas) |
+| 🐛 **43 bugs** | Auditoria completa em 5 grupos (10 rodadas) |
 
-### Histórico (v3.0)
-
-| Feature | Descrição |
-|---------|-----------|
-| 🧩 **Pipeline Executor** | `create_entity` — cria entidade completa (cena+collider+script+sprite+áudio) em 1 chamada |
-| 🤖 **Decision Engine** | Decide automaticamente se gera arte placeholder ou FLUX, com base no estágio do projeto |
-| 📊 **Project State** | Snapshot em memória do projeto, atualizado por hooks automáticos |
-| 🔒 **Sandbox** | 80+ padrões de segurança bloqueados em `execute_gdscript_runtime` |
+---
 
 ## Instalação (2 minutos)
 
 ```powershell
-# 1. Clone este repositório
-git clone <url-deste-repo>
+# 1. Clone
+git clone https://github.com/joabcostamd/mcp-godot-desenvolvimento
 cd mcp-godot-desenvolvimento
 
-# 2. Crie o ambiente virtual
+# 2. Ambiente virtual
 python -m venv .venv
-
-# 3. Instale as dependências
 .venv\Scripts\pip install -r requirements.txt
 
-# 4. Ajuste config.json com seus caminhos
-#    (godot_path, godot_console_path, python_path)
+# 3. Configure (copie config.json.example → config.json e ajuste os paths)
+#    godot_path: caminho do Godot 4.7
+#    godot_console_path: mesmo executável (Windows)
 
-# 5. Inicie o servidor
-.venv\Scripts\python server.py
+# 4. Inicie
+.venv\Scripts\python server.py --profile dev
 ```
 
-**Documentação completa:** leia `GUIA_CONEXAO.md` para o passo a passo detalhado.
+**Docs:** `MCP_ESTADO_ATUAL.md` (referência canônica) · `GUIA_CONEXAO.md` (passo a passo) · `ARQUITETURA_MCP.md` (internals)
 
 ---
 
@@ -92,7 +105,7 @@ python -m venv .venv
 
 - Python 3.12+
 - Godot 4.7
-- VS Code + Copilot + DeepSeek (ou qualquer IA com suporte MCP)
+- VS Code + Copilot + DeepSeek V4 Pro (ou qualquer IA com suporte MCP)
 
 ---
 
@@ -102,8 +115,8 @@ python -m venv .venv
 2. Clone este repositório
 3. Execute os passos de instalação acima
 4. Ajuste `config.json` para os caminhos da máquina
-5. Leia `GUIA_CONEXAO.md` se tiver dúvidas
+5. Leia `MCP_ESTADO_ATUAL.md` para referência completa
 
 ---
 
-**Versão:** 3.2 | **Tools:** 189 | **Módulos:** 64 | **Última atualização:** 2026-07-12
+**Versão:** 3.2.1 | **Tools:** 191 | **Módulos:** 69 | **Patches:** 18 | **Última atualização:** 2026-07-12
