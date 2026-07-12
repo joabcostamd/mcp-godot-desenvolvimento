@@ -22,6 +22,7 @@ func _ready() -> void:
 		return
 	register_command("save_current_scene", _cmd_save_current_scene)
 	register_command("add_test_marker", _cmd_add_test_marker)
+	register_command("replace_with_runtime_scene", _cmd_replace_with_runtime_scene)
 	print("MCPRuntimeBridge: escutando em %s:%d" % [HOST, PORT])
 
 
@@ -170,6 +171,18 @@ func _cmd_add_test_marker(_args: Dictionary) -> Dictionary:
 	marker.owner = scene
 	print("MCPRuntimeBridge: marcador SavedMarker adicionado a cena")
 	return {"ok": true, "marker_added": true}
+
+
+func _cmd_replace_with_runtime_scene(_args: Dictionary) -> Dictionary:
+	var old_scene: Node = get_tree().current_scene
+	var new_root := Node.new()
+	new_root.name = "RuntimeRoot"
+	get_tree().root.add_child(new_root)
+	get_tree().current_scene = new_root
+	if old_scene != null:
+		old_scene.queue_free()
+	print("MCPRuntimeBridge: cena substituida por runtime (sem scene_file_path)")
+	return {"ok": true, "runtime_scene": true}
 
 
 func _reply(data: Dictionary) -> void:
