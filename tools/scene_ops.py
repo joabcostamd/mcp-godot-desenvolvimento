@@ -302,6 +302,19 @@ def _find_node_in_parsed(nodes: list[dict], node_path: str) -> dict | None:
     return current
 
 
+def _list_node_paths_from_parsed(nodes: list[dict]) -> list[str]:
+    """Extrai todos os node_paths de uma lista de nós parseados."""
+    paths = []
+    for n in nodes:
+        name = n.get("name", "")
+        parent = n.get("parent", "")
+        if parent and parent != ".":
+            paths.append(f"{parent}/{name}")
+        else:
+            paths.append(name if name else ".")
+    return paths
+
+
 # ── API Pública ─────────────────────────────────────────────────────
 
 def create_scene(name: str, root_type: str, path: str) -> dict:
@@ -782,10 +795,9 @@ def get_node_property(scene_path: str | None = None, node_path: str = "", proper
 
     target = _find_node_in_parsed(nodes, node_path)
     if not target:
-        return {
-            "status": "error",
-            "message": f"Nó '{node_path}' não encontrado na cena.",
-        }
+        from tools.fuzzy_suggest import not_found_error
+        all_paths = _list_node_paths_from_parsed(nodes)
+        return not_found_error("nó", node_path, all_paths)
 
     value = target["properties"].get(property_name)
     if value is None:
@@ -1049,7 +1061,9 @@ def list_signals_for_node(scene_path: str | None = None, node_path: str | None =
         _, nodes = _parse_tscn_content(full_path)
         target = _find_node_in_parsed(nodes, node_path)
         if not target:
-            return {"status": "error", "message": f"Nó '{node_path}' não encontrado."}
+            from tools.fuzzy_suggest import not_found_error
+            all_paths = _list_node_paths_from_parsed(nodes)
+            return not_found_error("nó", node_path, all_paths)
         if target.get("type"):
             signals = list_signals(target["type"])
     else:

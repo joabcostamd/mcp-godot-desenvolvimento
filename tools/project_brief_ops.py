@@ -30,7 +30,7 @@ def _validate_genre(genre: str) -> str | None:
     """Valida um genero contra GAME_PATTERNS + ALIAS_MAP.
 
     Retorna o nome canonico se valido, ou None se invalido.
-    Mesmo mecanismo da Feature 3 (gdd_generate em balance_ops.py).
+    Normaliza para lowercase + underscores (ex: "Tower Defense" -> "tower_defense").
     """
     try:
         from resources.game_patterns import GAME_PATTERNS
@@ -42,7 +42,9 @@ def _validate_genre(genre: str) -> str | None:
             "roguelike": "roguelike_dungeon_crawler",
         }
 
-        canonical = ALIAS_MAP.get(genre, genre)
+        # Normaliza: lowercase, espaços → underscores
+        normalized = genre.lower().strip().replace(" ", "_").replace("-", "_")
+        canonical = ALIAS_MAP.get(normalized, normalized)
         if canonical in GAME_PATTERNS:
             return canonical
     except Exception:

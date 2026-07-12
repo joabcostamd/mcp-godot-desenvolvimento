@@ -11,6 +11,11 @@ var _peer: StreamPeerTCP = null
 var _custom_commands: Dictionary = {}
 # Fila para comandos pendentes que precisam de espera (ex: wait_frames)
 var _pending_commands: Array[Dictionary] = []
+# Feature: Auto-dismiss de diálogos modais durante testes
+var _auto_dismiss_enabled := false
+var _auto_dismiss_action := "hide"
+var _auto_dismiss_interval_ms := 500
+var _auto_dismiss_timer := 0.0
 
 func _ready() -> void:
 	if not OS.is_debug_build():
@@ -23,6 +28,7 @@ func _ready() -> void:
 	register_command("save_current_scene", _cmd_save_current_scene)
 	register_command("add_test_marker", _cmd_add_test_marker)
 	register_command("replace_with_runtime_scene", _cmd_replace_with_runtime_scene)
+	register_command("set_auto_dismiss", _cmd_set_auto_dismiss)
 	print("MCPRuntimeBridge: escutando em %s:%d" % [HOST, PORT])
 
 
@@ -30,7 +36,14 @@ func register_command(cmd_name: String, callable: Callable) -> void:
 	_custom_commands[cmd_name] = callable
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	# Auto-dismiss de diálogos modais (Feature C3)
+	if _auto_dismiss_enabled:
+		_auto_dismiss_timer += delta * 1000.0
+		if _auto_dismiss_timer >= _auto_dismiss_interval_ms:
+			_auto_dismiss_timer = 0.0
+			_check_and_dismiss_dialogs()
+
 	if _server == null:
 		return
 
@@ -206,3 +219,37 @@ func _reply(data: Dictionary) -> void:
 	if err != OK:
 		push_warning("MCPRuntimeBridge: falha ao enviar resposta (err %d)" % err)
 		_peer = null
+
+# ── Auto-dismiss de diálogos modais (Feature C3) ──────────────
+
+func _cmd_set_auto_dismiss(args: Dictionary) -> Dictionary:
+	_auto_dismiss_enabled = args.get("enabled", false)
+	_auto_dismiss_action = args.get("action", "hide")
+	_auto_dismiss_interval_ms = args.get("check_interval_ms", 500)
+	_auto_dismiss_timer = 0.0
+	return {
+		"ok": true,
+		"enabled": _auto_dismiss_enabled,
+		"action": _auto_dismiss_action,
+	}
+
+
+func _check_and_dismiss_dialogs() -> void:
+	_dismiss_recursive(get_tree().root)
+
+
+func _dismiss_recursive(node: Node) -> void:
+	if node is AcceptDialog and node.visible:
+		match _auto_dismiss_action:
+			"confirm":
+				if node.has_signal("confirmed"):
+					node.emit_signal("confirmed")
+				node.hide()
+			"cancel":
+				if node.has_signal("canceled"):
+					node.emit_signal("canceled")
+				node.hide()
+			"hide", _:
+				node.hide()
+	for child in node.get_children():
+		_dismiss_recursive(child)

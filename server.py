@@ -297,20 +297,26 @@ def _get_phase_tools() -> set[str] | None:
 
     Lê o arquivo .mcp_phase_state.json diretamente (não usa o singleton
     em memória) para garantir que reflete o estado real do disco.
-    Returns None se não há projeto ativo com estado de fase configurado.
+    Se o arquivo não existe, cria com IDEIA (estado inicial padrão).
+    Returns None se não há projeto ativo.
     """
     try:
         from tools.project_ops import _get_active_project
         from pathlib import Path as _Path
         proj = _Path(_get_active_project())
         phase_file = proj / ".mcp_phase_state.json"
-        if not phase_file.exists():
-            return None
         import json as _json
-        data = _json.loads(phase_file.read_text(encoding="utf-8"))
-        phase = data.get("current_phase", "")
-        if not phase:
-            return None
+        if not phase_file.exists():
+            # Inicializa com IDEIA
+            default_state = {"current_phase": "IDEIA", "history": [], "updated_at": ""}
+            phase_file.parent.mkdir(parents=True, exist_ok=True)
+            phase_file.write_text(_json.dumps(default_state, indent=2, ensure_ascii=False), encoding="utf-8")
+            phase = "IDEIA"
+        else:
+            data = _json.loads(phase_file.read_text(encoding="utf-8"))
+            phase = data.get("current_phase", "")
+            if not phase:
+                return None
     except Exception:
         return None
 
@@ -896,6 +902,12 @@ from tools.analyze_signal_flow import analyze_signal_flow
 
 # ── Grupo C: Sugestão fuzzy ────────────────────────────────────
 from tools.fuzzy_suggest import suggest_similar, not_found_error
+
+# ── Grupo C: Auto-dismiss de diálogo modal ─────────────────────
+from tools.set_auto_dismiss import set_auto_dismiss
+
+# ── Shader Editor (read/edit/get_params) ───────────────────────
+from tools.shader_editor_ops import read_shader, edit_shader, get_shader_params
 
 # ── Fase 1 do Roadmap: Máquina de Estados ───────────────────────
 from tools.phase_ops import get_current_phase, advance_phase, get_phase_history, set_cache_invalidator
@@ -4657,6 +4669,63 @@ def _tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
+        # ── Grupo C: Auto-dismiss ──────────────────────────────
+        Tool(
+            name="set_auto_dismiss",
+            description=(
+                "Liga/desliga o fechamento automatico de dialogos modais "
+                "durante testes automatizados. Use antes de run_stress_test. "
+                "Pre-condicoes: jogo rodando via godot_run_project."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "enabled": {"type": "boolean", "description": "Ativar (true) ou desativar."},
+                    "action": {"type": "string", "description": "confirm, cancel ou hide (default: hide)."},
+                    "check_interval_ms": {"type": "integer", "description": "Intervalo em ms (default: 500)."},
+                },
+                "required": [],
+            },
+        ),
+        # ── Shader Editor ──────────────────────────────────────
+        Tool(
+            name="read_shader",
+            description="Le o conteudo de um arquivo .gdshader existente.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "shader_path": {"type": "string"},
+                    "project_path": {"type": "string"},
+                },
+                "required": ["shader_path"],
+            },
+        ),
+        Tool(
+            name="get_shader_params",
+            description="Extrai as declaracoes uniform de um shader.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "shader_path": {"type": "string"},
+                    "project_path": {"type": "string"},
+                },
+                "required": ["shader_path"],
+            },
+        ),
+        Tool(
+            name="edit_shader",
+            description="Edita .gdshader com validacao antes de escrever.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "shader_path": {"type": "string"},
+                    "new_code": {"type": "string"},
+                    "project_path": {"type": "string"},
+                    "validate": {"type": "boolean"},
+                },
+                "required": ["shader_path", "new_code"],
+            },
+        ),
         # ── PATCH 14: Testes Roteirizados ──────────────────────
         Tool(
             name="run_scripted_tests",
@@ -6356,6 +6425,12 @@ def _build_handlers() -> dict:
         "find_unused_resources": find_unused_resources,
         # Grupo C: Análise de fluxo de sinal
         "analyze_signal_flow": analyze_signal_flow,
+        # Grupo C: Auto-dismiss
+        "set_auto_dismiss": set_auto_dismiss,
+        # Shader Editor
+        "read_shader": read_shader,
+        "edit_shader": edit_shader,
+        "get_shader_params": get_shader_params,
         # PATCH 16: Asset Manifest
         "import_asset_manifest": import_asset_manifest,
         "create_asset_manifest": create_asset_manifest,
