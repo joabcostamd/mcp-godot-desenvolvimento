@@ -181,14 +181,8 @@ def _invoke_tool_synthetic(tool: str, args: dict) -> dict:
     if tool == "dump_mcp_state":
         return _simulate_dump_state()
 
-    if tool == "run_scripted_tests":
-        return run_scripted_tests(**args)
-
-    if tool == "smoke_test":
-        return smoke_test()
-
-    if tool == "regression_test":
-        return regression_test()
+    # NOTA: run_scripted_tests, smoke_test e regression_test NAO tem handlers
+    # sinteticos para evitar risco de recursao infinita.
 
     # ── Fallback para tools não mapeadas ──
     return {
@@ -431,7 +425,7 @@ def _simulate_classdb_lookup(args: dict) -> dict:
 
 def _simulate_compile_test(_args: dict) -> dict:
     """Simula compile_test sem Godot."""
-    _ = _args  # reservado para uso futuro (ex: project_path)
+    # _args reservado para uso futuro (ex: project_path)
     return {
         "status": "success",
         "errors": [],
@@ -725,7 +719,8 @@ def _capture_state() -> dict:
     except Exception:
         state["tools"] = {"error": "server.py não pôde ser importado (esperado em teste unitário)"}
 
-    # Imports críticos (usa nomes de modulo corretos)
+    # Imports críticos (usa importlib em vez de __import__)
+    import importlib
     imports = {}
     import_map = {
         "godot_parser": "godot_parser",
@@ -736,7 +731,7 @@ def _capture_state() -> dict:
     }
     for label, mod in import_map.items():
         try:
-            __import__(mod)
+            importlib.import_module(mod)
             imports[label] = True
         except ImportError:
             imports[label] = False
