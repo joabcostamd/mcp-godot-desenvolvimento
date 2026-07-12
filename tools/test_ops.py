@@ -688,6 +688,10 @@ def estimate_tool_tokens(profile: str = "full") -> dict:
 
     try:
         from server import TOOL_PROFILES, _tool_defs
+        # Sincroniza valid_profiles com os perfis reais do server
+        valid_profiles = set(TOOL_PROFILES.keys())
+        if profile not in valid_profiles:
+            return {"status": "error", "message": f"Perfil '{profile}' invalido. Use: {sorted(valid_profiles)}."}
         all_tools = _tool_defs()
     except Exception:
         return {"status": "error", "message": "Nao foi possivel carregar as definicoes de tools do server."}
@@ -724,6 +728,8 @@ def estimate_tool_tokens(profile: str = "full") -> dict:
     deferred_bytes = len(deferred_json.encode("utf-8"))
     deferred_tokens = deferred_bytes // 4
 
+    savings = round((1 - deferred_tokens / max(estimated_tokens, 1)) * 100, 1)
+
     return {
         "status": "success",
         "profile": profile,
@@ -732,12 +738,13 @@ def estimate_tool_tokens(profile: str = "full") -> dict:
         "full_estimated_tokens": estimated_tokens,
         "deferred_json_bytes": deferred_bytes,
         "deferred_estimated_tokens": deferred_tokens,
-        "savings_percent": round((1 - deferred_tokens / max(estimated_tokens, 1)) * 100, 1),
+        "savings_percent": savings,
         "note": (
             f"Perfil '{profile}': {len(filtered)} tools. "
             f"Full: ~{estimated_tokens} tokens. "
             f"Com deferLoading: ~{deferred_tokens} tokens "
-            f"({round((1 - deferred_tokens / max(estimated_tokens, 1)) * 100, 1)}% economia)."
+            f"({savings}% economia). "
+            f"Tokens estimados como bytes_json // 4 (aproximado)."
         ),
     }
 
