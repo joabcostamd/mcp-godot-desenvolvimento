@@ -2,6 +2,16 @@
 
 **Última sessão:** 2026-07-12 (sessão de auditoria e hardening)
 **Estado atual:** v3.2.1 — 190 tools, 190 handlers, 64 módulos, 18 patches, 5 grupos
+**📄 Doc completo:** `MCP_ESTADO_ATUAL.md` — auto-contido com TUDO para retomar
+
+## 📋 CHECKLIST DE INICIALIZAÇÃO (próxima sessão)
+
+1. [ ] Ler `MCP_ESTADO_ATUAL.md` (este é o doc mais completo)
+2. [ ] Ler `LEARNINGS.md` R1-R16
+3. [ ] Ler `config.json` (verificar paths)
+4. [ ] Ativar venv: `.venv\Scripts\Activate.ps1`
+5. [ ] `python server.py --profile dev`
+6. [ ] Se necessário: abrir Godot (Star Colony)
 
 ## Resumo da sessão
 
@@ -23,10 +33,17 @@
 - config.json untracked do Git
 - MCPs duplicados removidos
 
-### Documentação
-- Todos os 6 docs atualizados para v3.2
-- LEARNINGS.md R12 ampliado
-- MCP ESTADO ATUAL externo sincronizado
+### Documentação criada/atualizada
+- ✅ `MCP_ESTADO_ATUAL.md` — NOVO, documento de referência principal
+- ✅ `CHANGELOG.md` — v3.2.1
+- ✅ `README.md` — 190 tools, v3.2.1
+- ✅ `ARQUITETURA_MCP.md` — v3.2.1
+- ✅ `GUIA_CONEXAO.md` — v3.2.1
+- ✅ `GUIA_INSTALACAO.md` — v3.2.1
+- ✅ `LEARNINGS.md` — R12 ampliado (já estava atualizado)
+- ✅ `pyproject.toml` — v3.2.1
+- ✅ `addons/mcp_addon/plugin.cfg` — v3.2.1
+- ✅ `addons/mcp_addon/mcp_addon.gd` — VERSION "3.2.1"
 
 ## Para retomar
 
@@ -43,7 +60,7 @@ python server.py --profile dev
 - `send_bridge_command` só funciona com jogo rodando em debug (use `godot_wait_for_bridge` antes)
 - `godot_class_ref` cobre APENAS classes nativas (extension_api.json), não classes custom
 - Hooks do NUCLEO são PowerShell puro — zero dependências do MCP
-- Use `--profile dev` para iniciar com 31 tools (economiza ~75% tokens vs full)
+- Use `--profile dev` para iniciar com 80 tools (economiza tokens vs full)
 - **config.json NÃO é mais versionado** — use `config.json.example` como template, `config.local.json` para overrides
 
 ## Pendências conhecidas
