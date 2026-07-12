@@ -74,11 +74,11 @@ FRIENDLY_MAP: dict[str, str] = {
     # Conexão
     "Connection refused": (
         "Não foi possível conectar ao Godot. "
-        "Verifique se o Godot está aberto com o plugin MCP IA DEV ativo."
+        "Verifique se o Godot está aberto com o plugin MCP Addon ativo."
     ),
     "Bridge offline": (
         "A ponte de comunicação com o Godot não está ativa. "
-        "Abra o Godot e ative o plugin MCP IA DEV em Project → Project Settings → Plugins."
+        "Abra o Godot e ative o plugin MCP Addon em Project → Project Settings → Plugins."
     ),
 
     # Export

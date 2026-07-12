@@ -1,6 +1,6 @@
 """game_bridge — Cliente TCP para comunicação com o jogo em execução.
 
-Conecta ao game_bridge.gd (autoload) via TCP localhost:9081.
+Conecta ao mcp_runtime_bridge (autoload, runtime_bridge.gd) via TCP localhost:9081/8790.
 Protocolo: JSON-RPC 2.0 line-delimited.
 Usado por inject_input_event, execute_gdscript_runtime, watch_signal.
 """

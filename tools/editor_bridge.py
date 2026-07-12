@@ -1,6 +1,6 @@
 """editor_bridge — Cliente TCP para comunicação com addon in-editor.
 
-Fase 3+: conecta ao addon mcp_bridge no Godot Editor via TCP localhost.
+Fase 3+: conecta ao addon mcp_addon no Godot Editor (WebSocket :9082 / TCP :9080).
 Protocolo: JSON-RPC 2.0 sobre TCP, um JSON por linha (line-delimited).
 Nota: Godot 4 put_string() prefixa 4 bytes (uint32 LE length) — removemos ao ler.
 """
@@ -68,7 +68,7 @@ def connect(port: int | None = None) -> dict:
         return {
             "status": "error",
             "message": f"Não foi possível conectar ao editor na porta {port}: {e}. "
-                       f"O editor está aberto com o addon mcp_bridge habilitado?",
+                       f"O editor está aberto com o addon mcp_addon habilitado?",
         }
 
 

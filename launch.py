@@ -156,7 +156,7 @@ def show_status(cfg: dict, bridge_ok: bool):
         print(f"{G}╚════════════════════════════════════════════╝{X}")
     else:
         print(f"{Y}⚠  Godot aberto mas bridge não detectado.{X}")
-        print(f"{Y}   Verifique se o plugin 'MCP IA DEV' está ativo em:{X}")
+        print(f"{Y}   Verifique se o plugin 'MCP Addon' está ativo em:{X}")
         print(f"{Y}   Project → Project Settings → Plugins{X}")
 
 

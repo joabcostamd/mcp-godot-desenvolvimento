@@ -369,11 +369,11 @@ def smart_restart(project_path: str | None = None) -> dict:
     stop_result = stop_game()
     _time.sleep(0.3)
 
-    # 2. Copia addon game_bridge (garante versao mais recente)
+    # 2. Copia addon mcp_runtime_bridge (garante versao mais recente)
     proj = _get_active_project() if not project_path else Path(project_path)
     try:
-        addon_src = Path(__file__).resolve().parent.parent / "addon" / "game_bridge" / "game_bridge.gd"
-        addon_dst = proj / "addon" / "game_bridge" / "game_bridge.gd"
+        addon_src = Path(__file__).resolve().parent.parent / "addons" / "mcp_runtime_bridge" / "runtime_bridge.gd"
+        addon_dst = proj / "addons" / "mcp_runtime_bridge" / "runtime_bridge.gd"
         if addon_src.exists():
             addon_dst.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(str(addon_src), str(addon_dst))
@@ -442,9 +442,9 @@ _editor_open: bool = False
 
 
 def _ensure_addon_installed(proj: Path) -> None:
-    """Garante que o addon mcp_bridge está copiado e habilitado no projeto."""
-    addon_src = Path(__file__).resolve().parent.parent / "addon" / "mcp_bridge"
-    addon_dst = proj / "addons" / "mcp_bridge"
+    """Garante que o addon mcp_addon está copiado e habilitado no projeto."""
+    addon_src = Path(__file__).resolve().parent.parent / "addons" / "mcp_addon"
+    addon_dst = proj / "addons" / "mcp_addon"
 
     if not addon_dst.exists():
         addon_dst.parent.mkdir(parents=True, exist_ok=True)
@@ -454,12 +454,12 @@ def _ensure_addon_installed(proj: Path) -> None:
     if godot_file.exists():
         content = godot_file.read_text(encoding="utf-8")
         if "[editor_plugins]" not in content:
-            godot_file.write_text(content + '\n[editor_plugins]\nenabled=PackedStringArray("res://addons/mcp_bridge/plugin.cfg")\n')
-        elif "mcp_bridge" not in content:
+            godot_file.write_text(content + '\n[editor_plugins]\nenabled=PackedStringArray("res://addons/mcp_addon/plugin.cfg")\n')
+        elif "mcp_addon" not in content:
             lines = content.splitlines(keepends=True)
             for i, line in enumerate(lines):
                 if line.strip().startswith("enabled="):
-                    lines[i] = line.rstrip()[:-1] + ', "res://addons/mcp_bridge/plugin.cfg")\n'
+                    lines[i] = line.rstrip()[:-1] + ', "res://addons/mcp_addon/plugin.cfg")\n'
                     break
             godot_file.write_text("".join(lines))
 
@@ -523,7 +523,7 @@ def ensure_godot_windows() -> dict:
 
 
 def launch_editor(scene_path: str | None = None) -> dict:
-    """Abre o editor Godot com o addon mcp_bridge instalado."""
+    """Abre o editor Godot com o addon mcp_addon instalado."""
     global _editor_process, _editor_open
     proj = _get_active_project()
     godot = get_godot_bin()

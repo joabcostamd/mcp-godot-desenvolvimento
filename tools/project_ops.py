@@ -703,7 +703,7 @@ def generate_project_structure(
     readme = proj / "README.md"
     readme_text = f"""# {proj.name}
 
-Projeto Godot 4.7 criado com MCP IA DEV.
+Projeto Godot 4.7 criado com MCP Godot Agent.
 
 ## Estrutura
 ```
@@ -713,7 +713,7 @@ Projeto Godot 4.7 criado com MCP IA DEV.
 ## Como abrir
 1. Abra o Godot 4.7
 2. Importe este projeto
-3. Ative o plugin MCP IA DEV em Project → Project Settings → Plugins
+3. Ative o plugin MCP Addon em Project → Project Settings → Plugins
 """
     readme.write_text(readme_text, encoding="utf-8")
     created.append("README.md")
@@ -759,7 +759,7 @@ def _generate_main_script(template: str) -> str:
     if template == "3d":
         return """extends Node3D
 ## Script principal do jogo 3D.
-## Gerado pelo MCP IA DEV.
+## Gerado pelo MCP Godot Agent.
 
 func _ready() -> void:
     print("Jogo 3D iniciado!")
@@ -769,7 +769,7 @@ func _process(delta: float) -> void:
 """
     return """extends Node2D
 ## Script principal do jogo 2D.
-## Gerado pelo MCP IA DEV.
+## Gerado pelo MCP Godot Agent.
 
 func _ready() -> void:
     print("Jogo 2D iniciado!")
@@ -815,9 +815,9 @@ def _configure_game_bridge_autoload(proj: Path) -> None:
     """Configura o GameBridge como autoload no projeto (uso interno)."""
     godot_file = proj / "project.godot"
     content = godot_file.read_text(encoding="utf-8")
-    autoload_line = 'GameBridge="*res://addons/game_bridge/game_bridge.gd"\n'
+    autoload_line = 'MCPRuntimeBridge="*res://addons/mcp_runtime_bridge/runtime_bridge.gd"\n'
 
-    if "GameBridge" in content:
+    if "MCPRuntimeBridge" in content:
         return  # Já configurado
 
     if "[autoload]" in content:
@@ -838,16 +838,16 @@ def _configure_game_bridge_autoload(proj: Path) -> None:
 
 
 def install_mcp_addon(project_path: str | None = None) -> dict:
-    """Instala o addon MCP IA DEV no projeto Godot ativo e ativa o plugin.
+    """Instala o addon MCP no projeto Godot ativo e ativa o plugin.
 
-    Copia os arquivos de addon/mcp_bridge/ para addons/mcp_bridge/ no projeto
+    Copia os arquivos de addons/mcp_addon/ para addons/mcp_addon/ no projeto
     e adiciona o plugin em editor_plugins no project.godot.
 
     Args:
         project_path: Caminho do projeto (opcional, usa o ativo).
 
     Returns:
-        {"status": "success", "project": str, "bridge_port": 9080}
+        {"status": "success", "project": str, "bridge_port": 9082}
         ou {"status": "error", "message": str}
     """
     import shutil
@@ -860,19 +860,19 @@ def install_mcp_addon(project_path: str | None = None) -> dict:
 
     proj = _get_active_project()
 
-    # Origem: addon/mcp_bridge na raiz do MCP
-    source = ROOT / "addon" / "mcp_bridge"
+    # Origem: addons/mcp_addon na raiz do MCP
+    source = ROOT / "addons" / "mcp_addon"
     if not source.exists():
         return {
             "status": "error",
             "message": (
-                f"Addon MCP IA DEV não encontrado em '{source}'. "
-                f"Verifique se a pasta addon/mcp_bridge/ existe na raiz do MCP."
+                f"Addon MCP não encontrado em '{source}'. "
+                f"Verifique se a pasta addons/mcp_addon/ existe na raiz do MCP."
             ),
         }
 
-    # Destino: addons/mcp_bridge no projeto
-    dest = proj / "addons" / "mcp_bridge"
+    # Destino: addons/mcp_addon no projeto
+    dest = proj / "addons" / "mcp_addon"
     dest.mkdir(parents=True, exist_ok=True)
 
     # Copia todos os arquivos .gd e plugin.cfg
@@ -882,10 +882,10 @@ def install_mcp_addon(project_path: str | None = None) -> dict:
             shutil.copy2(f, dest / f.name)
             copied.append(f.name)
 
-    # ── Game Bridge (autoload para runtime) ──────────────────────
-    gb_source = ROOT / "addon" / "game_bridge"
+    # ── Runtime Bridge (autoload para runtime) ──────────────────
+    gb_source = ROOT / "addons" / "mcp_runtime_bridge"
     if gb_source.exists():
-        gb_dest = proj / "addons" / "game_bridge"
+        gb_dest = proj / "addons" / "mcp_runtime_bridge"
         gb_dest.mkdir(parents=True, exist_ok=True)
         for f in gb_source.glob("*"):
             if f.is_file():
@@ -893,14 +893,14 @@ def install_mcp_addon(project_path: str | None = None) -> dict:
                 if f.name not in copied:
                     copied.append(f.name)
 
-        # Configura autoload do GameBridge automaticamente
+        # Configura autoload do RuntimeBridge automaticamente
         _configure_game_bridge_autoload(proj)
 
     # Ativa o plugin no project.godot
     godot_file = proj / "project.godot"
     content = godot_file.read_text(encoding="utf-8")
 
-    plugin_line = 'enabled=PackedStringArray("res://addons/mcp_bridge/plugin.cfg")'
+    plugin_line = 'enabled=PackedStringArray("res://addons/mcp_addon/plugin.cfg")'
 
     if "[editor_plugins]" in content:
         # Já tem seção — atualiza

@@ -1,8 +1,8 @@
 """bridge.py — Cliente Unificado para Editor Bridge + Game Bridge.
 
 GAP #3 — Barramento Unificado:
-Conecta ao editor bridge (porta 9080, mcp_bridge.gd) e ao game bridge
-(porta 9081, game_bridge.gd). Expõe API única que roteia comandos
+Conecta ao editor bridge (porta 9080, addon mcp_addon) e ao runtime bridge
+(porta 9081/8790, addon mcp_runtime_bridge). Expõe API única que roteia comandos
 automaticamente para o canal correto.
 
 Editor Bridge: operações que exigem EditorInterface (create_node no
@@ -349,7 +349,7 @@ def set_node_property(
     """Define propriedade no editor ou no jogo rodando.
 
     Game bridge aceita Vector2, Vector3, Color, int, float, bool, string.
-    Editor bridge converte tudo para string (limitação do mcp_bridge.gd).
+    Editor bridge converte tudo para string (limitação do mcp_addon.gd).
     """
     value_str = str(value)
     # Se é um tipo complexo, serializa

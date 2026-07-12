@@ -1838,14 +1838,15 @@ def _tool_defs() -> list[Tool]:
         Tool(
             name="install_mcp_addon",
             description=(
-                "Instala o addon MCP IA DEV no projeto Godot ativo e ativa o plugin do editor. "
-                "O QUE FAZ: copia os arquivos do addon (mcp_bridge.gd, mcp_dock.gd, plugin.cfg) "
-                "para addons/mcp_bridge/ no projeto e adiciona o plugin em editor_plugins no project.godot. "
+                "Instala o addon MCP no projeto Godot ativo e ativa o plugin do editor. "
+                "O QUE FAZ: copia os arquivos do addon (mcp_addon.gd, plugin.cfg) "
+                "para addons/mcp_addon/ no projeto e adiciona o plugin em editor_plugins no project.godot. "
+                "Também instala o runtime bridge (mcp_runtime_bridge/) para debug runtime. "
                 "QUANDO USAR: sempre que criar um projeto novo com create_project, antes de usar "
                 "ferramentas que precisam do editor (screenshots, run_game, etc). "
                 "Também use se o projeto foi movido ou o addon foi removido acidentalmente. "
                 "Após instalar, reinicie o editor Godot para ativar o plugin. "
-                "O dock 'MCP IA DEV' aparecerá no painel inferior do editor. "
+                "O dock 'MCP Addon' aparecerá no painel direito do editor (3 tabs). "
                 "NÃO requer parâmetros se já houver um projeto ativo (set_active_project)."
             ),
             inputSchema={
@@ -2000,7 +2001,7 @@ def _tool_defs() -> list[Tool]:
         Tool(
             name="launch_editor",
             description=(
-                "Abre o editor Godot com o addon mcp_bridge para comunicação bidirecional. "
+                "Abre o editor Godot com o addon mcp_addon para comunicação bidirecional. "
                 "Use quando o usuário quiser VER o jogo no editor, ou quando precisar de "
                 "screenshot/console em tempo real. "
                 "Quando NÃO usar: se só precisa rodar o jogo (use run_game). "

@@ -127,8 +127,8 @@ def create_config(godot_path: str, python_path: str, target_dir: Path) -> dict:
 
 
 def install_addon_to_project(project_path: str, source_addon: Path) -> bool:
-    """Instala o addon MCP IA DEV em um projeto Godot."""
-    dest = Path(project_path) / "addons" / "mcp_bridge"
+    """Instala o addon MCP em um projeto Godot."""
+    dest = Path(project_path) / "addons" / "mcp_addon"
     dest.mkdir(parents=True, exist_ok=True)
 
     # Copia arquivos do addon
@@ -142,7 +142,7 @@ def install_addon_to_project(project_path: str, source_addon: Path) -> bool:
         return False
 
     content = godot_file.read_text(encoding="utf-8")
-    plugin_line = 'enabled=PackedStringArray("res://addons/mcp_bridge/plugin.cfg")'
+    plugin_line = 'enabled=PackedStringArray("res://addons/mcp_addon/plugin.cfg")'
 
     if "[editor_plugins]" not in content:
         content += f"\n[editor_plugins]\n{plugin_line}\n"
@@ -275,7 +275,7 @@ def main():
         print_step(5, "Encontrar projetos", True, "nenhum (você pode criar depois)")
 
     # Passo 6: Instalar addon nos projetos
-    addon_src = Path(__file__).resolve().parent / "addon" / "mcp_bridge"
+    addon_src = Path(__file__).resolve().parent / "addons" / "mcp_addon"
     installed = 0
     for p in projects:
         if install_addon_to_project(p["path"], addon_src):
