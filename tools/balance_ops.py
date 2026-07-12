@@ -381,6 +381,8 @@ def gdd_generate(
     }
 
     canonical = ALIAS_MAP.get(game_type, game_type)
+    # Normaliza: lowercase, espaços/hífens → underscores
+    canonical = canonical.lower().strip().replace(" ", "_").replace("-", "_")
     valid_genres = sorted(GAME_PATTERNS.keys())
 
     # ── Validação: gênero precisa existir nas 17 chaves canônicas ──
