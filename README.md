@@ -1,10 +1,10 @@
 # MCP Godot — Desenvolvimento
 
-> **Servidor MCP Godot Agent v3.2 — 189 ferramentas para criação de jogos por linguagem natural.**
+> **Servidor MCP Godot Agent v3.2.1 — 190 ferramentas para criação de jogos por linguagem natural.**
 > Conecta Godot 4.7 ao VS Code Copilot (DeepSeek V4) via protocolo MCP.
 > Autocontido — clone, instale dependências e use.
 
-**Status:** ✅ 189 tools · 64 módulos · 43 bugs corrigidos · 10 toolsets · 3 perfis · Pipeline Executor · DAP debugger · R$0
+**Status:** ✅ 190 tools · 190 handlers · 64 módulos · 18 patches · 5 grupos auditoria · 10 toolsets · 3 perfis · Pipeline Executor · DAP debugger · R$0
 
 ---
 
@@ -12,7 +12,7 @@
 
 | Pasta/Arquivo | O que é |
 |---|---|
-| `server.py` | Servidor MCP (~7100 linhas, 189 ferramentas) |
+| `server.py` | Servidor MCP (~7300 linhas, 190 ferramentas) |
 | `tools/` | 64 módulos (cenas, scripts, física, arte IA, som IA, pipeline, etc.) |
 | `resources/` | Game patterns (17 gêneros) + MCP Prompts (11 comandos) |
 | `templates/` | Templates GDScript (Jinja2) |
@@ -25,7 +25,19 @@
 
 ---
 
-## Novidades da v3.2 (Sessão final — 2026-07-12)
+## Novidades da v3.2.1 (Auditoria e Hardening — 2026-07-12)
+
+| Feature | Descrição |
+|---------|-----------|
+| 🛡️ **Sandbox conectado** | `write_file` + `safe_write_gdscript` validam antes de escrever .gd (36/36 padrões bloqueados) |
+| 🧹 **Normalizador GDScript** | Remove comentários, colapsa whitespace, resolve concatenação — fecha 3/4 bypasses |
+| 🐛 **Bugs B1-B3** | B2 runtime tools corrigido, B3 status corrigido, B1 documentado |
+| 🔧 **Godot check desligado** | `tentar_checagem_godot=false` (padrão) — `--check-only` não funciona no Windows Godot 4.7 |
+| 🪝 **Hook Stop NUCLEO** | `check-gate-failed.ps1` bloqueia encerramento se `.mcp_gate_failed` existir |
+| 🧹 **Limpeza** | MCPs duplicados removidos, `config.json` untracked, paths corrigidos |
+| 📚 **Docs sincronizados** | Todos os 6 docs + MCP ESTADO ATUAL atualizados para 190 tools |
+
+## Novidades da v3.2 (Sessão anterior — 2026-07-12)
 
 | Feature | Descrição |
 |---------|-----------|

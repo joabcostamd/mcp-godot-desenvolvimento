@@ -1,4 +1,4 @@
-# GUIA DE CONEXÃO — Godot 4.7 + MCP v3.2 (do zero)
+# GUIA DE CONEXÃO — Godot 4.7 + MCP v3.2.1 (do zero)
 
 > **Leia este arquivo primeiro.** Ele contém TUDO que você precisa para conectar o
 > Godot 4.7 ao servidor MCP e começar a criar jogos por linguagem natural.

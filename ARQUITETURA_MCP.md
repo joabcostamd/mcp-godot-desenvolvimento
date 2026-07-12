@@ -1,4 +1,4 @@
-# ARQUITETURA MCP — Godot Agent v3.2
+# ARQUITETURA MCP — Godot Agent v3.2.1
 
 > **Leia este documento para ENTENDER o MCP por dentro.** Não é um tutorial de uso
 > (para isso veja `GUIA_CONEXAO.md`). É o mapa do código: como as peças se encaixam,

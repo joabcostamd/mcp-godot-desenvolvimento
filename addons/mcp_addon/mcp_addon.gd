@@ -7,7 +7,7 @@
 extends EditorPlugin
 
 const PORT = 9082
-const VERSION = "3.2.0"
+const VERSION = "3.2.1"
 
 var _server: TCPServer
 var _peer: StreamPeerTCP = null

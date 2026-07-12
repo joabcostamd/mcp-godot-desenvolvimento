@@ -1,4 +1,4 @@
-# GUIA DE INSTALAÇÃO — MCP Godot Agent v3.2
+# GUIA DE INSTALAÇÃO — MCP Godot Agent v3.2.1
 
 > **Para a IA agêntica (DeepSeek, Claude, Copilot, etc.):**
 > Siga cada passo na ordem. Não pule nada. Ao final, o MCP estará conectado
