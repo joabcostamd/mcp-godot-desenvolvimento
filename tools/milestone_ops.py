@@ -26,7 +26,7 @@ class MilestonePlan:
     def _get_file_path(self) -> Path | None:
         try:
             from tools.project_ops import _get_active_project
-            proj = _get_active_project()
+            proj = Path(_get_active_project())
             return proj / ".mcp_milestones.json"
         except Exception:
             return None

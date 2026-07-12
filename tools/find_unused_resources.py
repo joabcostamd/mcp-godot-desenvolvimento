@@ -7,7 +7,6 @@ nenhum .tscn, .gd ou .tres.
 Feature: Grupo C — Detecção de recursos não usados.
 """
 
-import os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -43,7 +42,6 @@ def find_unused_resources(
     Returns:
         dict com lista de órfãos, total de assets escaneados, economia estimada.
     """
-    from tools.project_ops import _get_active_project
 
     proj = _resolve_project(project_path)
     if isinstance(proj, dict) and proj.get("status") == "error":
@@ -110,31 +108,32 @@ def find_unused_resources(
             # Busca padrões de referência
             referenced.update(_extract_refs_from_content(content))
 
-    # Adiciona referências implícitas: cenas que são main_scene
+    # Adiciona referências implícitas: main_scene + autoloads
     try:
         godot_cfg = (proj / "project.godot").read_text(encoding="utf-8")
         import re
         main_match = re.search(r'run/main_scene\s*=\s*"(.+?)"', godot_cfg)
         if main_match:
             referenced.add(main_match.group(1).replace("res://", ""))
+        # Autoloads: Nome="*res://caminho/script.gd"
+        for m in re.finditer(r'^\s*(\w+)\s*=\s*"\*?res://([^"]+)"', godot_cfg, re.MULTILINE):
+            autoload_path = m.group(2)
+            referenced.add(autoload_path)
     except Exception:
         pass
 
     # ═══ 3. Filtrar órfãos ═══
+    # Normaliza referências para comparação exata de path
+    normalized_refs: set[str] = set()
+    for ref in referenced:
+        normalized_refs.add(ref.replace("\\", "/").lower())
+
     orphans: list[dict] = []
     total_orphan_size = 0
 
     for asset in all_assets:
-        asset_res = asset["path"]
-        asset_rel = asset_res.replace("res://", "")
-        asset_name = Path(asset_rel).name
-
-        is_referenced = False
-        for ref in referenced:
-            # Match exato ou parcial (nome do arquivo no path)
-            if asset_rel in ref or asset_name in ref or ref in asset_rel:
-                is_referenced = True
-                break
+        asset_rel = asset["path"].replace("res://", "").replace("\\", "/").lower()
+        is_referenced = asset_rel in normalized_refs
 
         if not is_referenced:
             orphans.append(asset)
