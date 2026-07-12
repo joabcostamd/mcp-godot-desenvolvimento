@@ -27,6 +27,10 @@ GROUPS = {
     "testing": ["run_gut_tests","assert_node_exists","simulate_input_sequence"],
     "assets": ["download_asset","import_downloaded_asset","asset_manage"],
     "security": ["set_safety_policy","configure_security"],
+    "refs_ops": [
+        "find_missing_references", "search_codebase",
+        "validate_project_refs", "find_usages",
+    ],
 }
 
 

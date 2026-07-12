@@ -63,6 +63,7 @@ TOOLSETS = {
     ],
     "refs_ops": [
         "find_missing_references", "search_codebase",
+        "validate_project_refs", "find_usages",
     ],
     "asset_ops": [
         "asset_manage", "generate_placeholder_sprite",
@@ -509,6 +510,10 @@ from tools.analyze_ops import (
     estimate_game_scope,
     search_codebase,
     get_project_history,
+)
+from tools.refs_ops import (
+    validate_project_refs,
+    find_usages,
 )
 from tools.devsolo_ops import (
     setup_camera_2d,
@@ -4245,6 +4250,49 @@ def _tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
+        # ── PATCH 15: Validacao de Referencias ────────────────
+        Tool(
+            name="validate_project_refs",
+            description=(
+                "Valida TODAS as referencias cruzadas no projeto Godot: ext_resource, "
+                "sub_resource, nodes (script/textura/mesh), preload/load/ResourceLoader.load. "
+                "NAO requer Godot rodando — analise estatica dos arquivos. "
+                "Retorna erros (quebrados) e warnings com localizacao exata. "
+                "Use apos edicoes em lote para garantir integridade. "
+                "Pre-condicoes: projeto ativo configurado. "
+                "Exemplo: {\"full_report\": true} (relatorio completo sem truncar)."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "Caminho do projeto (opcional)."},
+                    "full_report": {"type": "boolean", "description": "Relatorio completo sem truncar (default: false)."},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="find_usages",
+            description=(
+                "Encontra TODOS os usos de um recurso/alvo no projeto (estatico, sem LSP). "
+                "Busca em .tscn (ExtResource, scene instances) e .gd (preload/load). "
+                "NAO requer Godot rodando. "
+                "Use para rastrear dependencias antes de renomear ou deletar. "
+                "Pre-condicoes: projeto ativo configurado. "
+                "Exemplo: {\"target\": \"player.gd\"}. "
+                "Exemplo: {\"target\": \"main_menu.tscn\", \"search_type\": \"scene\"}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "target": {"type": "string", "description": "Nome do arquivo ou path parcial (ex: player.gd)."},
+                    "project_path": {"type": "string", "description": "Caminho do projeto (opcional)."},
+                    "search_type": {"type": "string", "description": "auto, script, scene, texture, any (default: auto)."},
+                    "max_results": {"type": "integer", "description": "Limite de resultados (default: 50)."},
+                },
+                "required": ["target"],
+            },
+        ),
         # ── PATCH 14: Testes Roteirizados ──────────────────────
         Tool(
             name="run_scripted_tests",
@@ -5686,6 +5734,9 @@ def _build_handlers() -> dict:
         "smoke_test": smoke_test,
         "regression_test": regression_test,
         "dump_mcp_state": dump_mcp_state,
+        # PATCH 15: Validacao de Referencias
+        "validate_project_refs": validate_project_refs,
+        "find_usages": find_usages,
         # Onda 8: DevSolo Crítico
         "setup_camera_2d": _handle_setup_camera_2d,
         "create_navigation_region_2d": _handle_create_navigation_region_2d,
