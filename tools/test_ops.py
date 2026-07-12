@@ -94,7 +94,7 @@ def run_scripted_tests(
 
 
 def _run_scenario(scenario: dict) -> dict:
-    """Executa um único cenário de teste."""
+    """Executa um unico cenario de teste com medicao de tempo por step."""
     name = scenario.get("name", "unnamed")
     steps = scenario.get("steps", [])
     step_results = []
@@ -105,10 +105,12 @@ def _run_scenario(scenario: dict) -> dict:
         args = step.get("args", {})
         expected = step.get("expect", {})
 
+        step_start = time.time()
         try:
             result = _invoke_tool_synthetic(tool, args)
         except Exception as e:
-            result = {"status": "error", "message": f"Exceção: {e}", "_exception": str(e)}
+            result = {"status": "error", "message": f"Excecao: {e}", "_exception": str(e)}
+        step_ms = round((time.time() - step_start) * 1000)
 
         passed, failures = _validate_result(result, expected)
 
@@ -117,6 +119,7 @@ def _run_scenario(scenario: dict) -> dict:
             "tool": tool,
             "args": args,
             "passed": passed,
+            "duration_ms": step_ms,
             "result": result,
             "expected": expected,
             "failures": failures,
@@ -185,7 +188,14 @@ def _invoke_tool_synthetic(tool: str, args: dict) -> dict:
 
 
 def _validate_result(result: dict, expected: dict) -> tuple[bool, list[str]]:
-    """Valida resultado contra condições esperadas.
+    """Valida resultado contra condicoes esperadas.
+
+    Suporta:
+        status: "success"|"error"|"skipped"|None (None = qualquer)
+        contains: substring esperada na resposta JSON
+        has_key: chave que deve existir (suporta nested: "a.b.c")
+        not_has_key: chave que NAO deve existir (suporta nested)
+        has_value: {key: expected_value} — valor exato esperado
 
     Returns:
         (passed: bool, failures: list[str])
@@ -193,10 +203,10 @@ def _validate_result(result: dict, expected: dict) -> tuple[bool, list[str]]:
     failures = []
 
     if not expected:
-        # Sem expectativas = só verifica se não explodiu
-        if result.get("status") == "error" and "_exception" not in result:
-            # Erro legítimo (não exceção nossa)
-            pass
+        # Sem expectativas = verifica apenas se nao explodiu com excecao nossa
+        if "_exception" in result:
+            failures.append(f"excecao inesperada: {result['_exception']}")
+            return False, failures
         return True, []
 
     # Verifica status
@@ -210,19 +220,55 @@ def _validate_result(result: dict, expected: dict) -> tuple[bool, list[str]]:
     if "contains" in expected:
         result_str = json.dumps(result, ensure_ascii=False)
         if expected["contains"] not in result_str:
-            failures.append(f"contains: '{expected['contains']}' não encontrado na resposta")
+            failures.append(f"contains: '{expected['contains']}' nao encontrado na resposta")
 
-    # Verifica chave presente
+    # Verifica chave presente (suporta nested: "a.b.c")
     if "has_key" in expected:
-        if expected["has_key"] not in result:
+        if not _nested_key_exists(result, expected["has_key"]):
             failures.append(f"has_key: '{expected['has_key']}' ausente no resultado")
 
-    # Verifica chave ausente
+    # Verifica chave ausente (suporta nested)
     if "not_has_key" in expected:
-        if expected["not_has_key"] in result:
-            failures.append(f"not_has_key: '{expected['not_has_key']}' presente (não deveria)")
+        if _nested_key_exists(result, expected["not_has_key"]):
+            failures.append(f"not_has_key: '{expected['not_has_key']}' presente (nao deveria)")
+
+    # Verifica valor exato de uma chave (suporta nested)
+    if "has_value" in expected:
+        for key, exp_val in expected["has_value"].items():
+            actual_val = _nested_get(result, key, _SENTINEL)
+            if actual_val is _SENTINEL:
+                failures.append(f"has_value: chave '{key}' nao encontrada")
+            elif actual_val != exp_val:
+                failures.append(f"has_value: '{key}' esperado={exp_val!r}, obtido={actual_val!r}")
 
     return len(failures) == 0, failures
+
+
+# Sentinel para distinguir None de chave ausente
+_SENTINEL = object()
+
+
+def _nested_key_exists(data: dict, dotted_key: str) -> bool:
+    """Verifica se uma chave aninhada existe no dicionario.
+
+    Ex: _nested_key_exists({"a": {"b": 1}}, "a.b") -> True
+    """
+    return _nested_get(data, dotted_key, _SENTINEL) is not _SENTINEL
+
+
+def _nested_get(data: dict, dotted_key: str, default: Any = None) -> Any:
+    """Obtem valor de chave aninhada via dotted notation.
+
+    Ex: _nested_get({"a": {"b": 1}}, "a.b") -> 1
+    """
+    keys = dotted_key.split(".")
+    current: Any = data
+    for key in keys:
+        if isinstance(current, dict) and key in current:
+            current = current[key]
+        else:
+            return default
+    return current
 
 
 # ══════════════════════════════════════════════════════════════════════
@@ -346,8 +392,9 @@ def _simulate_classdb_lookup(args: dict) -> dict:
         return {"status": "error", "message": str(e)}
 
 
-def _simulate_compile_test(args: dict) -> dict:
+def _simulate_compile_test(_args: dict) -> dict:
     """Simula compile_test sem Godot."""
+    _ = _args  # reservado para uso futuro (ex: project_path)
     return {
         "status": "success",
         "errors": [],
@@ -396,23 +443,23 @@ def _smoke_scenarios() -> list[dict]:
             ],
         },
         {
-            "name": "SMOKE-02: Validação GDScript (R1/R2/brackets)",
-            "description": "Valida que o motor de validação detecta R1 (var duplicada) e R2 (:= com dict).",
+            "name": "SMOKE-02: Validacao GDScript (R1/R2/brackets)",
+            "description": "Valida que o motor de validacao detecta R1 (var duplicada) e R2 (:= com dict).",
             "steps": [
                 {
                     "tool": "validate_gdscript_syntax",
                     "args": {"code": "extends Node\nfunc _ready():\n    var x = 1\n    var x = 2\n"},
-                    "expect": {"has_key": "valid"},
+                    "expect": {"has_value": {"valid": False}},
                 },
                 {
                     "tool": "validate_gdscript_syntax",
                     "args": {"code": "extends Node\nfunc _ready():\n    var blocked_pos := enemies[i][\"pos\"]\n"},
-                    "expect": {"has_key": "valid"},
+                    "expect": {"has_value": {"valid": False}},
                 },
                 {
                     "tool": "validate_gdscript_syntax",
                     "args": {"code": "extends Node\nfunc _ready():\n    var v := Vector2(10, 20)\n    print(v)\n"},
-                    "expect": {"has_key": "valid"},
+                    "expect": {"has_value": {"valid": True}},
                 },
             ],
         },
@@ -503,6 +550,27 @@ def _regression_scenarios() -> list[dict]:
                     "tool": "git_commit_checkpoint",
                     "args": {"message": "test", "skip_validation": True},
                     "expect": {"status": "success", "contains": "test-commit"},
+                },
+            ],
+        },
+        {
+            "name": "REGRESS-05: Stress — tools desconhecidas e cenarios vazios",
+            "description": "Valida que o motor trata gracefulmente tools nao mapeadas e expectativas vazias.",
+            "steps": [
+                {
+                    "tool": "ferramenta_que_nao_existe",
+                    "args": {},
+                    "expect": {"status": "skipped", "has_key": "reason"},
+                },
+                {
+                    "tool": "ping",
+                    "args": {},
+                    "expect": {},
+                },
+                {
+                    "tool": "self_test",
+                    "args": {},
+                    "expect": {"has_value": {"passed": 5}, "has_key": "results"},
                 },
             ],
         },
