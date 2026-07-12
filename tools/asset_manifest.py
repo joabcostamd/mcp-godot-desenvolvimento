@@ -18,10 +18,10 @@ Tools:
 """
 
 import json
+import shutil
 from pathlib import Path
-from typing import Any
 
-from tools.project_ops import _get_active_project
+from tools.project_ops import _get_active_project, _check_path_traversal
 
 
 # ══════════════════════════════════════════════════════════════════════
@@ -32,6 +32,7 @@ def import_asset_manifest(
     manifest_path: str | None = None,
     project_path: str | None = None,
     dry_run: bool = False,
+    allow_paid_generation: bool = False,
 ) -> dict:
     """Importa todos os assets listados no asset_manifest.json.
 
@@ -46,6 +47,7 @@ def import_asset_manifest(
         manifest_path: Caminho para o manifest (default: <projeto>/asset_manifest.json).
         project_path: Caminho do projeto (opcional, usa projeto ativo).
         dry_run: Se True, valida o manifest mas nao importa nada.
+        allow_paid_generation: Se True, permite source="generate" (pode custar $$ via API FLUX).
 
     Returns:
         {"status": "success", "results": [...], "summary": {...}}
@@ -97,7 +99,15 @@ def import_asset_manifest(
 
         try:
             if source == "generate":
-                result = _process_generate(asset, proj)
+                if not allow_paid_generation:
+                    result = {
+                        "status": "error",
+                        "message": "source='generate' requer allow_paid_generation=True. "
+                                   "Geracao IA pode custar $$ (API FLUX/Replicate). "
+                                   "Use dry_run=True primeiro para revisar.",
+                    }
+                else:
+                    result = _process_generate(asset, proj)
             elif source == "placeholder":
                 result = _process_placeholder(asset, proj)
             elif source == "sfx":
@@ -169,16 +179,18 @@ def _process_generate(asset: dict, proj: Path) -> dict:
     if result.get("status") == "success" and asset.get("target_scene"):
         try:
             from tools.art_ops import apply_game_art
-            frame_paths = result.get("frame_paths", [result.get("output_path")])
-            apply_game_art(
-                frame_paths=frame_paths,
-                scene_path=asset["target_scene"],
-                node_path=asset.get("target_node", "."),
-                anim_name=asset.get("animation_name", "default"),
-                fps=asset.get("fps", 10.0),
-                loop=asset.get("loop", True),
-            )
-            result["applied_to"] = f"{asset['target_scene']}::{asset.get('target_node', '.')}"
+            frame_paths = result.get("frame_paths") or [result.get("output_path")]
+            frame_paths = [p for p in frame_paths if p]  # filtra None
+            if frame_paths:
+                apply_game_art(
+                    frame_paths=frame_paths,
+                    scene_path=asset["target_scene"],
+                    node_path=asset.get("target_node", "."),
+                    anim_name=asset.get("animation_name", "default"),
+                    fps=asset.get("fps", 10.0),
+                    loop=asset.get("loop", True),
+                )
+                result["applied_to"] = f"{asset['target_scene']}::{asset.get('target_node', '.')}"
         except Exception as e:
             result["apply_error"] = str(e)
 
@@ -187,50 +199,47 @@ def _process_generate(asset: dict, proj: Path) -> dict:
 
 def _process_placeholder(asset: dict, proj: Path) -> dict:
     """Gera sprite/textura procedural via placeholder_ops."""
-    category = asset.get("category", "sprite")
-
-    if category == "tileset":
-        try:
-            from tools.placeholder_ops import generate_tileset_from_colors
-            return generate_tileset_from_colors(
-                palette_name=asset.get("palette_name", "custom"),
-                colors=asset.get("colors", ["#3498db", "#2ecc71", "#e74c3c", "#f1c40f"]),
-                tile_width=asset.get("tile_width", 16),
-                tile_height=asset.get("tile_height", 16),
-                save_texture_path=asset.get("save_texture_path", "assets/tiles/custom.png"),
-                save_tileset_path=asset.get("save_tileset_path", "assets/tiles/custom.tres"),
-            )
-        except ImportError:
-            return {"status": "error", "message": "Modulo placeholder_ops nao disponivel."}
-
-    if category == "background":
-        try:
-            from tools.placeholder_ops import generate_background_gradient
-            return generate_background_gradient(
-                name=asset.get("id", "bg"),
-                width=asset.get("width", 1280),
-                height=asset.get("height", 720),
-                color_top=asset.get("color_top", "#1a1a2e"),
-                color_bottom=asset.get("color_bottom", "#16213e"),
-                direction=asset.get("direction", "vertical"),
-                save_path=asset.get("save_path"),
-            )
-        except ImportError:
-            return {"status": "error", "message": "Modulo placeholder_ops nao disponivel."}
-
-    # Sprite padrao
     try:
-        from tools.placeholder_ops import generate_placeholder_sprite
-        return generate_placeholder_sprite(
-            name=asset.get("id", "sprite"),
-            width=asset.get("width", 64),
-            height=asset.get("height", 64),
-            color=asset.get("color", "#3498db"),
-            shape=asset.get("shape", "rectangle"),
-            save_path=asset.get("save_path"),
+        from tools.placeholder_ops import (
+            generate_placeholder_sprite,
+            generate_background_gradient,
+            generate_tileset_from_colors,
         )
     except ImportError:
         return {"status": "error", "message": "Modulo placeholder_ops nao disponivel."}
+
+    category = asset.get("category", "sprite")
+
+    if category == "tileset":
+        return generate_tileset_from_colors(
+            palette_name=asset.get("palette_name", "custom"),
+            colors=asset.get("colors", ["#3498db", "#2ecc71", "#e74c3c", "#f1c40f"]),
+            tile_width=asset.get("tile_width", 16),
+            tile_height=asset.get("tile_height", 16),
+            save_texture_path=asset.get("save_texture_path", "assets/tiles/custom.png"),
+            save_tileset_path=asset.get("save_tileset_path", "assets/tiles/custom.tres"),
+        )
+
+    if category == "background":
+        return generate_background_gradient(
+            name=asset.get("id", "bg"),
+            width=asset.get("width", 1280),
+            height=asset.get("height", 720),
+            color_top=asset.get("color_top", "#1a1a2e"),
+            color_bottom=asset.get("color_bottom", "#16213e"),
+            direction=asset.get("direction", "vertical"),
+            save_path=asset.get("save_path"),
+        )
+
+    # Sprite padrao
+    return generate_placeholder_sprite(
+        name=asset.get("id", "sprite"),
+        width=asset.get("width", 64),
+        height=asset.get("height", 64),
+        color=asset.get("color", "#3498db"),
+        shape=asset.get("shape", "rectangle"),
+        save_path=asset.get("save_path"),
+    )
 
 
 def _process_sfx(asset: dict, proj: Path) -> dict:
@@ -251,37 +260,54 @@ def _process_sfx(asset: dict, proj: Path) -> dict:
 
 
 def _process_import(asset: dict, proj: Path) -> dict:
-    """Importa arquivo local para o projeto."""
+    """Importa arquivo local para o projeto com validacao de seguranca."""
     source_path = asset.get("source_path", "")
     target_path = asset.get("target_res_path", "")
 
     if not source_path or not target_path:
         return {"status": "error", "message": "source_path e target_res_path sao obrigatorios para import."}
 
+    # Valida path traversal
+    try:
+        violation = _check_path_traversal(target_path, proj)
+        if violation:
+            return {"status": "error", "message": violation}
+    except Exception:
+        pass  # _check_path_traversal pode nao estar disponivel
+
     src = Path(source_path)
     if not src.exists():
         return {"status": "error", "message": f"Arquivo fonte nao encontrado: {source_path}"}
 
+    # Allowlist de extensoes seguras
     ext = src.suffix.lower()
+    ALLOWED_EXTENSIONS = {
+        ".png", ".jpg", ".jpeg", ".bmp", ".svg", ".webp",  # imagens
+        ".wav", ".ogg", ".mp3", ".flac",                     # audio
+        ".glb", ".gltf", ".obj", ".fbx", ".blend",          # 3D
+        ".ttf", ".otf", ".woff", ".woff2",                   # fontes
+        ".tres", ".tscn", ".gd", ".gdshader",                 # godot
+    }
+    if ext not in ALLOWED_EXTENSIONS:
+        return {"status": "error", "message": f"Extensao '{ext}' nao permitida. Allowlist: {sorted(ALLOWED_EXTENSIONS)}."}
 
-    if ext in (".png", ".jpg", ".jpeg", ".bmp", ".svg"):
+    if ext in (".png", ".jpg", ".jpeg", ".bmp", ".svg", ".webp"):
         try:
             from tools.asset_ops import import_texture
             return import_texture(source_path=str(src), target_res_path=target_path)
         except ImportError:
             pass
 
-    if ext in (".wav", ".ogg", ".mp3"):
+    if ext in (".wav", ".ogg", ".mp3", ".flac"):
         try:
             from tools.asset_ops import import_audio
             return import_audio(source_path=str(src), target_res_path=target_path)
         except ImportError:
             pass
 
-    # Fallback: copia simples
+    # Fallback: copia simples (para formatos Godot nativos)
     dest = proj / target_path
     dest.parent.mkdir(parents=True, exist_ok=True)
-    import shutil
     shutil.copy2(src, dest)
     return {"status": "success", "res_path": target_path, "method": "copy"}
 
@@ -295,7 +321,7 @@ def _process_download(asset: dict, proj: Path) -> dict:
 
     dl_source = asset.get("download_source", "polyhaven")
     query = asset.get("query", asset.get("id", ""))
-    category = asset.get("category", "all")
+    dl_category = asset.get("dl_category", asset.get("category", "all"))
     asset_id = asset.get("asset_id")
     resolution = asset.get("resolution", "2k")
 
@@ -303,7 +329,7 @@ def _process_download(asset: dict, proj: Path) -> dict:
     dl_result = download_asset(
         source=dl_source,
         query=query,
-        category=category if category != "all" else "all",
+        category=dl_category,
         asset_id=asset_id,
         resolution=resolution,
         limit=1,

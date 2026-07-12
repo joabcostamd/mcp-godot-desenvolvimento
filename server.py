@@ -4273,6 +4273,7 @@ def _tool_defs() -> list[Tool]:
                     "manifest_path": {"type": "string", "description": "Caminho para o manifest (opcional)."},
                     "project_path": {"type": "string", "description": "Caminho do projeto (opcional)."},
                     "dry_run": {"type": "boolean", "description": "Apenas valida, nao importa (default: false)."},
+                    "allow_paid_generation": {"type": "boolean", "description": "Permite source='generate' (pode custar $$). Default: false."},
                 },
                 "required": [],
             },
