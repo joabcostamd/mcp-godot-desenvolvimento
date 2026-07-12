@@ -156,6 +156,9 @@ def validate_export_templates_installed() -> dict:
 def build_export(preset_name: str | None = None, output_path: str | None = None) -> dict:
     """Exporta o projeto para executável.
 
+    Feature 9: Trava de exportação — exige release_checklist >= 6/10.
+    Se a nota for insuficiente, retorna erro com os itens reprovados.
+
     Args:
         preset_name: Nome do preset (se None, cria preset padrão para o SO atual).
         output_path: Caminho do executável de saída.
@@ -165,6 +168,35 @@ def build_export(preset_name: str | None = None, output_path: str | None = None)
     """
     proj = _get_active_project()
     godot = get_godot_bin()
+
+    # ── Feature 9: Trava de exportação ──────────────────────────
+    from tools.deploy_ops import release_checklist
+
+    checklist = release_checklist()
+    score_str = checklist.get("score", "0/10")
+    try:
+        score_num = int(score_str.split("/")[0])
+    except (ValueError, IndexError):
+        score_num = 0
+
+    MIN_SCORE = 6
+    if score_num < MIN_SCORE:
+        failed = [c for c in checklist.get("checks", []) if c.get("status") in ("fail", "warn")]
+        failed_items = "; ".join(
+            f"{c['check']}={c.get('status', '?')}" for c in failed
+        )
+        return {
+            "status": "error",
+            "message": (
+                f"Exportação bloqueada: release_checklist retornou {score_str} "
+                f"(mínimo: {MIN_SCORE}/10). Itens pendentes: {failed_items or 'nenhum listado'}. "
+                f"Corrija os problemas e tente novamente, ou use release_checklist() "
+                f"para ver o relatório completo."
+            ),
+            "checklist_score": score_str,
+            "minimum_required": f"{MIN_SCORE}/10",
+            "failed_checks": failed,
+        }
 
     # ── Validação de segurança ──────────────────────────────────
     if output_path:
