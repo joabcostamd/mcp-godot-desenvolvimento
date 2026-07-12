@@ -6,6 +6,7 @@ Tool: safe_write_file — write com validação automática de sintaxe.
 """
 
 import re
+import os
 from pathlib import Path
 
 
@@ -210,7 +211,11 @@ def safe_write_gdscript(
                     # Godot 4.7 --check-only pode travar em projetos mínimos (R12).
                     # Neste caso, confiamos na validação de sintaxe + sandbox já feita.
                     Path(tmp_path).unlink(missing_ok=True)
-                    godot_check = {"valid": True, "note": "timeout — confiando na validacao local"}
+                    godot_check = {
+                        "valid": True,
+                        "note": "timeout — confiando na validacao local",
+                        "skipped": True,
+                    }
                 else:
                     Path(tmp_path).unlink(missing_ok=True)
                     if result.returncode != 0:
@@ -255,7 +260,13 @@ def safe_write_gdscript(
 
     # 3. Escreve
     try:
-        Path(file_path).write_text(content, encoding="utf-8")
+        # Resolve caminho relativo ao projeto (ou absoluto)
+        if project_path and not os.path.isabs(file_path):
+            full_path = Path(project_path) / file_path
+        else:
+            full_path = Path(file_path)
+        full_path.parent.mkdir(parents=True, exist_ok=True)
+        full_path.write_text(content, encoding="utf-8")
         return {
             "status": "success",
             "message": "✅ GDScript válido. Arquivo salvo." if validation["valid"] else "⚠️ Salvo com warnings.",
