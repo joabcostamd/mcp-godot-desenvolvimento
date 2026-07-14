@@ -127,6 +127,18 @@ from tools.devsolo_ops import (
     configure_particles_2d,
 )
 
+# ── Shader Editor ─────────────────────────────────────────────
+
+from tools.shader_editor_ops import (
+    read_shader,
+    edit_shader,
+    get_shader_params,
+)
+
+# ── VFX ───────────────────────────────────────────────────────
+
+from tools.vfx_ops import create_particles_2d
+
 # ── Runtime, Analysis, Safety ──────────────────────────────────
 
 from tools.runtime_ops import (
@@ -583,8 +595,9 @@ def _build_inventory_manage():
 def _build_vfx_manage():
     return create_manage_tool(
         tool_name="vfx_manage",
-        description="Gerencia efeitos visuais: partículas 2D, screen flash e ambiente.",
+        description="Gerencia efeitos visuais: criar partículas 2D, configurar, screen flash e ambiente.",
         ops={
+            "create_particles": create_particles_2d,
             "config_particles": configure_particles_2d,
             "screen_flash": setup_screen_flash,
             "world_env": setup_world_environment,
@@ -598,10 +611,13 @@ def _build_vfx_manage():
 def _build_shader_manage():
     return create_manage_tool(
         tool_name="shader_manage",
-        description="Gerencia shaders: gerar e aplicar shaders 2D.",
+        description="Gerencia shaders: gerar, ler, editar e aplicar shaders 2D.",
         ops={
             "generate": generate_shader_2d,
             "apply": apply_shader_to_node,
+            "read": read_shader,
+            "edit": edit_shader,
+            "get_params": get_shader_params,
         },
         tool_hints={"destructiveHint": True, "idempotentHint": False, "openWorldHint": True},
         title="Gerenciar Shaders",

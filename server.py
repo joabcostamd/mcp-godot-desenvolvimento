@@ -929,6 +929,9 @@ from tools.registry_validation import validate_mcp_registry_handler
 # ── Shader Editor (read/edit/get_params) ───────────────────────
 from tools.shader_editor_ops import read_shader, edit_shader, get_shader_params
 
+# ── VFX Ops (partículas 2D) ──────────────────────────────────
+from tools.vfx_ops import create_particles_2d
+
 # ── Fase 1 do Roadmap: Máquina de Estados ───────────────────────
 from tools.phase_ops import get_current_phase, advance_phase, get_phase_history, set_cache_invalidator
 from tools.milestone_ops import create_milestone_plan, advance_milestone, get_milestone_plan
@@ -5528,48 +5531,17 @@ def _handle_import_3d_model(args: dict) -> dict:
 
 def _handle_create_particles_2d(args: dict) -> dict:
     """Cria GPUParticles2D com ParticleProcessMaterial."""
-    sp = args["scene_path"]
-    pp = args["parent_node_path"]
-    nm = args.get("node_name", "Particles")
-    r = add_node(sp, pp, nm, "GPUParticles2D")
-    if r["status"] != "success":
-        return r
-    # Configura propriedades comuns
-    props = {}
-    if args.get("amount"):
-        props["amount"] = args["amount"]
-    if args.get("lifetime"):
-        props["lifetime"] = args["lifetime"]
-    if args.get("explosiveness"):
-        props["explosiveness"] = args["explosiveness"]
-    for k, v in props.items():
-        set_node_property(sp, f"./{nm}", k, v)
-    # Cria ParticleProcessMaterial
-    mat_line = f'[sub_resource type="ParticleProcessMaterial" id="1"]\n'
-    if args.get("direction"):
-        mat_line += f'direction = Vector3({args["direction"]})\n'
-    if args.get("spread"):
-        mat_line += f'spread = {args["spread"]}\n'
-    if args.get("gravity"):
-        mat_line += f'gravity = Vector3({args["gravity"]})\n'
-    # Escreve no .tscn
-    try:
-        from tools.project_ops import get_project_settings
-        settings = get_project_settings()
-        proj = settings.get("project_path", ".")
-    except Exception:
-        proj = "."
-    full = Path(proj) / sp if proj else Path(sp)
-    if full.exists():
-        content = full.read_text(encoding="utf-8")
-        content = content.replace("[gd_scene", f"{mat_line}\n[gd_scene")
-        content = content.replace(
-            f'[node name="{nm}" type="GPUParticles2D"',
-            f'[node name="{nm}" type="GPUParticles2D"\nprocess_material = SubResource("1")'
-        )
-        full.write_text(content, encoding="utf-8")
-    return {"status": "success", "node_path": r["node_path"],
-            "note": "Partículas configuradas. Use run_game para ver o efeito."}
+    return create_particles_2d(
+        scene_path=args["scene_path"],
+        parent_node_path=args["parent_node_path"],
+        node_name=args.get("node_name", "Particles"),
+        amount=args.get("amount"),
+        lifetime=args.get("lifetime"),
+        explosiveness=args.get("explosiveness"),
+        direction=args.get("direction"),
+        spread=args.get("spread"),
+        gravity=args.get("gravity"),
+    )
 
 
 def _handle_create_light_2d(args: dict) -> dict:
