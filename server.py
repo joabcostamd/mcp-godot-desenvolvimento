@@ -38,6 +38,7 @@ TOOLSETS = {
         "compile_test", "run_game", "stop_game", "smart_restart",
         "git_commit_checkpoint", "smoke_test", "dump_mcp_state",
         "capture_proof", "verify_proof",
+        "validate_mcp_registry",
     ],
     "scene_ops": [
         "scene_manage", "node_manage",
@@ -190,6 +191,7 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "capture_proof", "verify_proof",
         "audit_input_map", "audit_autoloads", "audit_scene_reachability",
         "audit_uid_consistency", "audit_save_compatibility",
+        "validate_mcp_registry",
     },
     "DESIGN": {
         "scene_manage", "node_manage",
@@ -205,6 +207,7 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "resource_dependency_graph",
         "query_classdb", "search_classdb",
         "validate_project_refs", "find_usages",
+        "analyze_signal_flow",
         "behavior_tree_generate", "behavior_tree_list_templates",
         "generate_project_structure",
         "world_describe",
@@ -240,6 +243,7 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "inject_input_event", "simulate_input_sequence",
         "watch_signal", "watch_state_start", "watch_state_collect",
         "record_gameplay_gif", "start_recording", "stop_recording",
+        "analyze_signal_flow",
     },
     "CONTEUDO": {
         "tilemap_manage",
@@ -262,6 +266,7 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "juice_apply", "juice_list_presets",
         "setup_localization", "add_translation_string",
         "generate_voice",
+        "find_unused_resources",
     },
     "POLIMENTO": {
         "run_gut_tests", "run_scripted_tests",
@@ -280,6 +285,8 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "estimate_tool_tokens",
         "workflow_handoff", "workflow_snapshot",
         "generate_ci_snippet",
+        "find_unused_resources",
+        "set_auto_dismiss",
         "vibe_coding_mode", "get_vibe_context",
     },
     "PRONTO_PARA_LANCAR": {
@@ -923,6 +930,9 @@ from tools.fuzzy_suggest import suggest_similar, not_found_error
 # ── Grupo C: Auto-dismiss de diálogo modal ─────────────────────
 from tools.set_auto_dismiss import set_auto_dismiss
 
+# ── Validação de Consistência do Registro ──────────────────────
+from tools.registry_validation import validate_mcp_registry_handler
+
 # ── Shader Editor (read/edit/get_params) ───────────────────────
 from tools.shader_editor_ops import read_shader, edit_shader, get_shader_params
 
@@ -1045,6 +1055,11 @@ def _validate_coord(value, name: str) -> str | None:
 
 # Cache global para _tool_defs (evita recriar 143 tools a cada list_tools)
 _TOOL_DEFS_CACHE: list[Tool] | None = None
+
+# Flag interna: quando True, _tool_defs() e _build_handlers() retornam
+# conjuntos COMPLETOS sem filtrar depreciação, fase, toolsets ou profile.
+# Usado APENAS por tools/registry_validation.py para diagnóstico.
+_REGISTRY_VALIDATION_UNFILTERED: bool = False
 
 
 # ══════════════════════════════════════════════════════════════
@@ -1196,6 +1211,20 @@ def _tool_defs() -> list[Tool]:
                 "Exemplo de input: {} (chamada sem argumentos). "
                 "Erro mais comum: timeout ou conexão recusada — significa que o servidor não está rodando; "
                 "verifique se server.py está em execução no terminal."
+            ),
+            inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        Tool(
+            name="validate_mcp_registry",
+            description=(
+                "Ferramenta de diagnóstico: valida a consistência entre as 3 fontes "
+                "de verdade do registro de tools (definições Tool(), handlers, e "
+                "TOOLSETS/PHASE_TOOLSETS). Retorna relatório JSON com 3 categorias: "
+                "tools sem handler (não implementadas), handlers sem Tool() "
+                "(código morto/inacessível), e tools funcionais não categorizadas "
+                "em nenhuma fase. NÃO requer parâmetros. "
+                "Quando usar: para auditar a saúde do registro de tools, "
+                "especialmente após adicionar/remover tools ou modificar fases."
             ),
             inputSchema={"type": "object", "properties": {}, "required": []},
         ),
@@ -6404,20 +6433,22 @@ def _tool_defs() -> list[Tool]:
         "undo_last_action", "get_undo_history",
         "compare_screenshots", "detect_empty_screen", "detect_offscreen_elements",
     }
-    _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name not in _DEPRECATED]
+    if not _REGISTRY_VALIDATION_UNFILTERED:
+        _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name not in _DEPRECATED]
 
     # ── PATCH 17: Filtrar por --toolsets se ativo ──
-    if _ENABLED_TOOLS is not None:
+    if not _REGISTRY_VALIDATION_UNFILTERED and _ENABLED_TOOLS is not None:
         _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name in _ENABLED_TOOLS]
 
     # ── GRUPO 3: Filtrar por --profile se ativo ──
-    if _PROFILE_TOOLS is not None:
+    if not _REGISTRY_VALIDATION_UNFILTERED and _PROFILE_TOOLS is not None:
         _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name in _PROFILE_TOOLS]
 
     # ── Feature 8: Filtrar por fase do projeto ativo ──
-    _phase_tools = _get_phase_tools()
-    if _phase_tools is not None:
-        _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name in _phase_tools]
+    if not _REGISTRY_VALIDATION_UNFILTERED:
+        _phase_tools = _get_phase_tools()
+        if _phase_tools is not None:
+            _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name in _phase_tools]
 
     # ── Pós-processador: garantir 4 hints em 100% das tools ──
     _TOOL_DEFS_CACHE = _apply_hints(_TOOL_DEFS_CACHE)
@@ -6725,6 +6756,8 @@ def _build_handlers() -> dict:
         "godot_wait_for_bridge": _handle_godot_wait_for_bridge,
         # Pipeline de Verificação
         "run_verification_pipeline": _handle_run_verification_pipeline,
+        # Validação de Consistência do Registro
+        "validate_mcp_registry": _handle_validate_mcp_registry,
     }
 
     # ── Rollups Fase 2A / C1 ───────────────────────────────────────
@@ -6780,10 +6813,11 @@ def _build_handlers() -> dict:
         "undo_last_action", "get_undo_history",
         "compare_screenshots", "detect_empty_screen", "detect_offscreen_elements",
     }
-    _HANDLERS_CACHE = {k: v for k, v in _HANDLERS_CACHE.items() if k not in _DEPRECATED_H}
+    if not _REGISTRY_VALIDATION_UNFILTERED:
+        _HANDLERS_CACHE = {k: v for k, v in _HANDLERS_CACHE.items() if k not in _DEPRECATED_H}
 
     # ── PATCH 17: Filtrar handlers por --toolsets ──
-    if _ENABLED_TOOLS is not None:
+    if not _REGISTRY_VALIDATION_UNFILTERED and _ENABLED_TOOLS is not None:
         _HANDLERS_CACHE = {k: v for k, v in _HANDLERS_CACHE.items() if k in _ENABLED_TOOLS}
 
     return _HANDLERS_CACHE
@@ -6842,6 +6876,11 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
 
 
 # ── Handlers ────────────────────────────────────────────────────────
+
+def _handle_validate_mcp_registry(args: dict) -> dict:
+    """Handler da tool validate_mcp_registry."""
+    return validate_mcp_registry_handler(args)
+
 
 def _handle_ping(args: dict) -> dict:
     """Handler da tool ping."""
@@ -8110,6 +8149,12 @@ async def main() -> None:
 def run() -> None:
     """Entry point síncrono."""
     import asyncio
+    # Validação de consistência do registro (diagnóstico, não trava boot)
+    try:
+        from tools.registry_validation import validate_tool_registry_consistency
+        validate_tool_registry_consistency()
+    except Exception as e:
+        print(f"[MCP] Aviso: validação de registro falhou: {e}", file=sys.stderr)
     asyncio.run(main())
 
 

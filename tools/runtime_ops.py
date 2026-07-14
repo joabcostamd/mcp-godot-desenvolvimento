@@ -15,6 +15,7 @@ from pathlib import Path
 from tools.classdb import get_godot_bin, get_config
 from tools.project_ops import _get_active_project, _check_path_traversal
 from tools.gdscript_sandbox import validate_gdscript_code
+from tools.subprocess_utils import run_subprocess_safe
 
 # ── Estado interno ──────────────────────────────────────────────────
 
@@ -269,8 +270,10 @@ def run_game(scene_path: str | None = None, wait_for_bridge: bool = True) -> dic
 
         _game_process = subprocess.Popen(
             cmd,
+            stdin=subprocess.DEVNULL,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
+            close_fds=True,
             startupinfo=startup,
         )
 
@@ -547,7 +550,7 @@ def launch_editor(scene_path: str | None = None) -> dict:
         cmd.append(str(scene_path))
 
     try:
-        _editor_process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        _editor_process = subprocess.Popen(cmd, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, close_fds=True)
         _editor_open = True
 
         addon_ok = False
@@ -782,8 +785,7 @@ def capture_game_screenshot(
         cmd.append(scene_path)
 
     try:
-        subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                       timeout=timeout, startupinfo=startup)
+        run_subprocess_safe(cmd, timeout=timeout, startupinfo=startup)
     except subprocess.TimeoutExpired:
         return {"status": "error", "message": f"Timeout apos {timeout}s."}
     except Exception as e:
@@ -1113,9 +1115,8 @@ def record_gameplay_gif(
             startupinfo.wShowWindow = 0  # SW_HIDE
 
         try:
-            subprocess.run(
-                cmd, capture_output=True, text=True,
-                timeout=duration + 30, cwd=str(proj),
+            run_subprocess_safe(
+                cmd, timeout=duration + 30, cwd=str(proj),
                 startupinfo=startupinfo,
             )
         except subprocess.TimeoutExpired:
