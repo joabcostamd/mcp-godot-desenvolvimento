@@ -389,13 +389,16 @@ def validate_gdscript_syntax(script_path: str) -> dict:
     """Valida a sintaxe de um script GDScript usando o Godot.
 
     Args:
-        script_path: Caminho relativo do script.
+        script_path: Caminho relativo do script (com ou sem prefixo res://).
 
     Returns:
         {"status": "success", "valid": True}
         ou {"status": "error", "valid": False, "errors": [str]}
     """
     proj = _get_active_project()
+    # Normaliza: remove prefixo res:// se presente
+    if script_path.startswith("res://"):
+        script_path = script_path[6:]
     full_path = proj / script_path
 
     if not full_path.exists():

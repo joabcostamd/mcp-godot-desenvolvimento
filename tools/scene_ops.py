@@ -755,8 +755,11 @@ def set_node_property(scene_path: str | None = None, node_path: str = "", proper
     return {"status": "success"}
 
 
-def get_node_property(scene_path: str | None = None, node_path: str = "", property_name: str = "") -> dict:
+def get_node_property(scene_path: str | None = None, node_path: str = "", property_name: str = "", property: str | None = None) -> dict:
     """Lê uma propriedade de um nó. Modo Direto se editor aberto."""
+    # Alias: 'property' aceito como sinônimo de 'property_name' para compatibilidade com rollup node_manage
+    if property is not None and not property_name:
+        property_name = property
     if scene_path is None:
         scene_path = _resolve_scene_path_from_vibe()
         if scene_path is None:
