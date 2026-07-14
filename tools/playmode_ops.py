@@ -32,32 +32,53 @@ def assert_node_exists(
     from tools.scene_ops import load_scene_tree
 
     try:
-        tree = load_scene_tree(scene_path)
-        if tree.get("status") != "success":
+        result = load_scene_tree(scene_path)
+        tree = result.get("tree", result) if isinstance(result, dict) else {}
+        if isinstance(result, dict) and result.get("status") == "error":
             return {"status": "fail", "assertion": "node_exists", "message": f"Cena não carregada: {scene_path}"}
 
-        # Procura o nó na árvore
-        nodes = tree.get("nodes", [])
-        found = None
-        for n in nodes:
-            if n.get("path") == node_path or n.get("name") == node_path.lstrip("./"):
-                found = n
-                break
+        # Navega recursivamente na árvore (estrutura: {name, type, children: [...]})
+        def _find_node(n, target_path):
+            clean = target_path.lstrip("./")
+            path_parts = [p for p in clean.split("/") if p] if clean else []
+            if not path_parts:
+                return n  # "." = raiz
+            # Se o primeiro segmento bate com o nome do nó atual, começa daqui
+            if n.get("name") == path_parts[0]:
+                path_parts = path_parts[1:]
+                if not path_parts:
+                    return n
+            current = n
+            for part in path_parts:
+                children = current.get("children", [])
+                found = None
+                for child in children:
+                    if child.get("name") == part:
+                        found = child
+                        break
+                if not found:
+                    return None
+                current = found
+            return current
+
+        found = _find_node(tree, node_path)
 
         if not found:
-            # Tenta busca por path exato
-            for n in nodes:
-                if node_path in n.get("path", ""):
-                    found = n
-                    break
-
-        if not found:
+            # Coleta paths disponíveis para o erro
+            available = []
+            def _collect_paths(n, prefix=""):
+                name = n.get("name", "?")
+                p = f"{prefix}/{name}" if prefix else name
+                available.append(p)
+                for c in n.get("children", []):
+                    _collect_paths(c, p)
+            _collect_paths(tree)
             return {
                 "status": "fail",
                 "assertion": "node_exists",
                 "node": node_path,
                 "message": f"Nó '{node_path}' não encontrado na cena",
-                "available_nodes": [n.get("path", n.get("name", "?")) for n in nodes[:10]],
+                "available_nodes": available[:15],
             }
 
         if node_type and found.get("type") != node_type:

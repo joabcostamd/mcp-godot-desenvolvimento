@@ -139,6 +139,18 @@ from tools.shader_editor_ops import (
 
 from tools.vfx_ops import create_particles_2d
 
+# ── DevSolo (raycast) ─────────────────────────────────────────
+
+from tools.devsolo_ops import add_raycast_2d, add_shapecast_2d
+
+# ── Stress Test ───────────────────────────────────────────────
+
+from tools.stress_test_ops import run_stress_test
+
+# ── Playmode (assert) ─────────────────────────────────────────
+
+from tools.playmode_ops import assert_node_exists
+
 # ── Runtime, Analysis, Safety ──────────────────────────────────
 
 from tools.runtime_ops import (
@@ -625,6 +637,35 @@ def _build_shader_manage():
     )
 
 
+
+def _build_raycast_manage():
+    return create_manage_tool(
+        tool_name="raycast_manage",
+        description="Gerencia raycasts 2D: adicionar RayCast2D e ShapeCast2D para detecção de colisão.",
+        ops={
+            "add_raycast": add_raycast_2d,
+            "add_shapecast": add_shapecast_2d,
+        },
+        tool_hints={"destructiveHint": True, "idempotentHint": False, "openWorldHint": True},
+        title="Gerenciar Raycasts",
+        tags=["raycast", "física", "2D", "colisão"],
+    )
+
+
+def _build_test_manage():
+    return create_manage_tool(
+        tool_name="test_manage",
+        description="Gerencia testes automatizados: assert_node_exists para verificar nós em cena e run_stress_test para teste de performance.",
+        ops={
+            "assert_node": assert_node_exists,
+            "stress_test": run_stress_test,
+        },
+        tool_hints={"destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
+        title="Gerenciar Testes",
+        tags=["teste", "assert", "stress", "performance"],
+    )
+
+
 def _build_analysis_manage():
     return create_manage_tool(
         tool_name="analysis_manage",
@@ -711,6 +752,9 @@ _ROLLUP_BUILDERS = [
     _build_analysis_manage,
     _build_safety_manage,
     _build_vision_manage,
+    # Etapa 4: raycast + test
+    _build_raycast_manage,
+    _build_test_manage,
 ]
 
 # Cache interno — garante que cada builder só executa UMA vez.

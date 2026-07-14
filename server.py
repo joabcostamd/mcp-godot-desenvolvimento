@@ -40,7 +40,7 @@ TOOLSETS = {
         "validate_mcp_registry",
     ],
     "scene_ops": [
-        "scene_manage", "node_manage",
+        "scene_manage", "node_manage", "raycast_manage",
     ],
     "script_ops": [
         "script_manage", "safe_write_gdscript",
@@ -52,6 +52,7 @@ TOOLSETS = {
         "run_scripted_tests", "smoke_test", "regression_test",
         "dump_mcp_state", "estimate_tool_tokens",
         "capture_proof", "verify_proof",
+        "test_manage",
     ],
     "runtime_ops": [
         "execute_gdscript_runtime", "capture_game_screenshot",
@@ -231,6 +232,7 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "camera_manage",
         "vfx_manage",
         "shader_manage",
+        "raycast_manage",
         "batch_atomic_edit", "add_nodes_batch",
         "set_properties_batch",
         "inject_input_event", "simulate_input_sequence",
@@ -280,6 +282,7 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "generate_ci_snippet",
         "find_unused_resources",
         "set_auto_dismiss",
+        "test_manage",
         "vibe_coding_mode", "get_vibe_context",
     },
     "PRONTO_PARA_LANCAR": {
