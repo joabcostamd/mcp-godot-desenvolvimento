@@ -112,27 +112,55 @@ def find_unused_resources(
     try:
         godot_cfg = (proj / "project.godot").read_text(encoding="utf-8")
         import re
+
+        # main_scene
         main_match = re.search(r'run/main_scene\s*=\s*"(.+?)"', godot_cfg)
         if main_match:
-            referenced.add(main_match.group(1).replace("res://", ""))
-        # Autoloads: Nome="*res://caminho/script.gd"
-        for m in re.finditer(r'^\s*(\w+)\s*=\s*"\*?res://([^"]+)"', godot_cfg, re.MULTILINE):
-            autoload_path = m.group(2)
-            referenced.add(autoload_path)
+            main_path = main_match.group(1)
+            if main_path.startswith("res://"):
+                main_path = main_path[6:]
+            referenced.add(main_path)
+
+        # ── Autoloads: parse SOMENTE da seção [autoload] ──
+        # Extrai o bloco entre [autoload] e a próxima seção ou fim do arquivo
+        autoload_section = re.search(
+            r'\[autoload\]\s*\n(.*?)(?=\n\[|\Z)',
+            godot_cfg, re.DOTALL
+        )
+        if autoload_section:
+            section_text = autoload_section.group(1)
+            # Formato: NomeSingleton="*res://caminho/script.gd"
+            # O * antes de res:// indica singleton global (opcional)
+            for m in re.finditer(
+                r'^\s*(\w+)\s*=\s*"\*?res://([^"]+)"',
+                section_text, re.MULTILINE
+            ):
+                autoload_path = m.group(2)
+                referenced.add(autoload_path)
     except Exception:
         pass
 
     # ═══ 3. Filtrar órfãos ═══
-    # Normaliza referências para comparação exata de path
+    # Normaliza referências para comparação EXATA de path
+    # (NUNCA substring — corrige falso negativo onde "icon.png" ⊂ "player_icon.png")
     normalized_refs: set[str] = set()
     for ref in referenced:
-        normalized_refs.add(ref.replace("\\", "/").lower())
+        # Remove prefixo res://, normaliza separadores, lowercase
+        clean = ref.replace("\\", "/").lower()
+        if clean.startswith("res://"):
+            clean = clean[6:]
+        normalized_refs.add(clean)
 
     orphans: list[dict] = []
     total_orphan_size = 0
 
     for asset in all_assets:
-        asset_rel = asset["path"].replace("res://", "").replace("\\", "/").lower()
+        # Normaliza o path do asset da mesma forma
+        asset_rel = asset["path"].replace("\\", "/").lower()
+        if asset_rel.startswith("res://"):
+            asset_rel = asset_rel[6:]
+
+        # Comparação EXATA (==) — sem substring, sem fuzzy
         is_referenced = asset_rel in normalized_refs
 
         if not is_referenced:
@@ -168,11 +196,31 @@ def _resolve_project(project_path: str | None = None) -> Path:
 
 
 def _should_skip(path: Path, exclude_paths: list[str]) -> bool:
-    """Verifica se o path deve ser ignorado."""
+    """Verifica se o path deve ser ignorado.
+
+    Usa comparação por COMPONENTE de path (não substring).
+    Ex: exclude_paths=["addons/"] NÃO pula "assets/myaddons_sprite.png"
+        porque "addons/" não é um componente do path.
+    """
+    # Normaliza para compatibilidade cross-platform
     path_str = str(path).replace("\\", "/")
+    path_parts = path_str.split("/")
+
     for excl in exclude_paths:
-        if excl in path_str:
+        # Remove trailing slash para comparação consistente
+        excl_clean = excl.rstrip("/")
+
+        # Verifica se o componente exato está presente
+        # Ex: excl="addons" → verifica se "addons" é um dos diretórios no path
+        if excl_clean in path_parts:
             return True
+
+        # Também verifica prefixo de diretório (ex: ".mcp_" como prefixo de nome)
+        # Isso captura padrões como ".mcp_phase_state.json"
+        for part in path_parts:
+            if part.startswith(excl_clean):
+                return True
+
     return False
 
 

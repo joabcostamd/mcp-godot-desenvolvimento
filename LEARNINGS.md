@@ -31,10 +31,43 @@
 | R16 | socket.create_connection sem listener dá TimeoutError no Windows (não ConnectionRefusedError) | 🟡 MÉDIO |
 | R17 | Alias "no"→"node" causa falso positivo sistêmico ("erro no script" traz node_manage) | 🔴 CRÍTICO |
 | R18 | PhaseState.load() sem self.save() — estado IDEIA fica só em memória, PHASE_TOOLSETS não filtra | 🔴 CRÍTICO |
+| R19 | @tool plugin com `:=` em JSON.new()/Dictionary.get() → "processamento da configuração falhou" | 🔴 CRÍTICO |
+| R20 | Agent hooks do VS Code NÃO disparam com extensões third-party de modelo (vizards.deepseek-v4-for-copilot) — gates devem residir nos handlers MCP | 🔴 CRÍTICO |
 
 ---
 
-## 🔴 R1 — VARIÁVEL DUPLICADA NO MESMO ESCOPO
+## 🔴 R20 — AGENT HOOKS NÃO DISPARAM COM EXTENSÃO THIRD-PARTY
+
+### O padrão que quebra
+Configurar hooks no `.github/hooks/hooks.json` (formato correto: `timeoutSec`, `windows`) e esperar que `PreToolUse`/`PostToolUse`/`Stop`/`SessionStart` disparem durante sessões do agente.
+
+### Por que quebra
+A extensão `vizards.deepseek-v4-for-copilot` (v0.6.2) implementa seu próprio loop de tool-calling: intercepta a resposta do modelo, faz parsing dos tool calls, e os executa diretamente — bypassando completamente o mecanismo nativo de hooks do Copilot Chat.
+
+### Evidência
+5 tentativas com métodos diferentes (JSON inline, PowerShell, cmd /c echo, scripts .ps1), zero evidências de disparo. Scripts funcionam standalone (exit 0, escrevem arquivo), mas nunca são invocados pelo VS Code.
+
+### Regra
+**NUNCA dependa de agent hooks do VS Code para gates de segurança/automação.** Toda automação deve residir nos handlers do MCP (`tools/safety.py`, `tools/hook_stop.py`, `tools/verification_ops.py`). Os hooks do VS Code são bônus não-confiáveis no ambiente atual.
+
+---
+```gdscript
+@tool
+extends EditorPlugin
+
+func _handle_message(raw: String) -> void:
+    var json := JSON.new()          # JSON.new() retorna Variant → ERRO
+    var data := request.get("id")   # Dictionary.get() retorna Variant → ERRO
+```
+
+### Por que quebra
+Godot 4.x trata `inferred_declaration` como erro em @tool scripts.
+O plugin.cfg ativa o script, mas o parse falha SILENCIOSAMENTE.
+O editor mostra: "processamento da configuração falhou".
+
+### Solução (2 opções)
+1. **No projeto**: `[debug] gdscript/warnings/inferred_declaration=false`
+2. **No código**: trocar `:=` por tipo explícito (`var json: JSON = JSON.new()`)
 
 ### O padrão que quebra
 ```gdscript

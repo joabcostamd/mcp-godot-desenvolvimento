@@ -415,6 +415,30 @@ def _step_gut(proj: Path, godot: str, test_dir: str, timeout: int) -> dict:
     return result
 
 
+def _step_audit_reachability(proj: Path, root_scene: str | None = None) -> dict:
+    """Etapa 5: Auditoria de alcançabilidade de cenas."""
+    start = time.time()
+
+    try:
+        from tools.audit_scene_reachability import audit_scene_reachability
+        result = audit_scene_reachability(
+            project_path=str(proj),
+            root_scene=root_scene,
+        )
+    except Exception as e:
+        return {
+            "status": "error",
+            "error": f"Erro ao invocar audit_scene_reachability: {e}",
+            "duration_ms": round((time.time() - start) * 1000),
+        }
+
+    elapsed = round((time.time() - start) * 1000)
+    result = dict(result)
+    result["duration_ms"] = elapsed
+    result["unreachable_count"] = len(result.get("unreachable_scenes", []))
+    return result
+
+
 # ══════════════════════════════════════════════════════════════════════
 # Pipeline Principal
 # ══════════════════════════════════════════════════════════════════════
@@ -438,6 +462,7 @@ def run_verification_pipeline(
     timeout_headless: int = 60,
     timeout_gut: int = 120,
     screenshot_dir: str | None = None,
+    include_reachability_audit: bool = True,
 ) -> dict:
     """Executa pipeline de verificação completo em um projeto Godot.
 
@@ -577,6 +602,16 @@ def run_verification_pipeline(
     steps["4_gut_tests"] = step4
 
     # ══════════════════════════════════════════════════════════════
+    # ETAPA 5: AUDITORIA DE ALCANÇABILIDADE (opcional)
+    # ══════════════════════════════════════════════════════════════
+    if include_reachability_audit:
+        step5 = _step_audit_reachability(proj, scene)
+        steps["5_audit_reachability"] = step5
+    else:
+        step5 = {"status": "skipped", "reason": "include_reachability_audit=False"}
+        steps["5_audit_reachability"] = step5
+
+    # ══════════════════════════════════════════════════════════════
     # RELATÓRIO CONSOLIDADO
     # ══════════════════════════════════════════════════════════════
     elapsed_total = round((time.time() - pipeline_start) * 1000)
@@ -592,8 +627,9 @@ def run_verification_pipeline(
     headless_ok = step2["status"] == "passed"
     screenshot_ok = step3["status"] == "success"
     gut_ok = step4.get("status") in ("success", "skipped") and not gut_has_failures
+    reachability_ok = step5.get("status") in ("ok", "skipped", "issues_found")
 
-    all_ok = compile_ok and headless_ok and gut_ok
+    all_ok = compile_ok and headless_ok and gut_ok and reachability_ok
     # Screenshot não bloqueia (pode falhar por timeout/--write-movie)
     # mas reportamos no sumário
 
@@ -610,6 +646,9 @@ def run_verification_pipeline(
     elif gut_label == "tests_failed":
         gut_label = f"FAIL ({step4.get('results', {}).get('summary', {}).get('failed', '?')} falhas)"
     summary_parts.append(f"GUT: {gut_label}")
+    if include_reachability_audit:
+        u_count = step5.get("unreachable_count", 0)
+        summary_parts.append(f"Alcancabilidade: {u_count} cenas orfas")
 
     final_result = {
         "status": "PASSOU" if all_ok else "FALHOU",

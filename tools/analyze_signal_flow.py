@@ -35,7 +35,8 @@ def analyze_signal_flow(
         scene_files = [f for f in proj.rglob("*.tscn") if not _should_skip(f)]
 
     broken_connections: list[dict] = []
-    all_connected_signals: set[str] = set()
+    # Rastreia (from_node_path, signal_name) para o bônus de sinais não conectados
+    all_connected_pairs: set[tuple[str, str]] = set()
 
     for scene_file in scene_files:
         try:
@@ -43,36 +44,41 @@ def analyze_signal_flow(
         except Exception:
             continue
 
-        node_scripts = _map_nodes_to_scripts(content)
+        node_scripts, _ext_resources = _map_nodes_to_scripts(content)
+        scene_rel = str(scene_file.relative_to(proj)).replace("\\", "/")
 
         for conn in re.finditer(
             r'\[connection\s+signal="([^"]+)"\s+from="([^"]+)"\s+to="([^"]+)"\s+method="([^"]+)"',
             content,
         ):
             signal_name, from_node, to_node, method_name = conn.groups()
+
+            # ── Verificar método no destino ──
             target_script = node_scripts.get(to_node)
+            if target_script is not None:
+                script_full_path = (
+                    Path(target_script) if Path(target_script).is_absolute()
+                    else proj / target_script
+                )
+                script_methods = _get_script_methods(script_full_path)
+                if script_methods is not None:
+                    if method_name not in script_methods:
+                        broken_connections.append({
+                            "scene": scene_rel,
+                            "signal": signal_name,
+                            "from_node": from_node,
+                            "to_node": to_node,
+                            "expected_method": method_name,
+                            "target_script": target_script,
+                            "reason": f"Método '{method_name}' não existe em '{target_script}'",
+                        })
 
-            if target_script is None:
-                continue
+            # ── Rastrear (nó_origem, sinal) para bônus de sinais não conectados ──
+            src_script = node_scripts.get(from_node)
+            if src_script is not None:
+                all_connected_pairs.add((src_script, signal_name))
 
-            all_connected_signals.add(f"{target_script}::{method_name}")
-
-            script_full_path = proj / target_script if not Path(target_script).is_absolute() else Path(target_script)
-            script_methods = _get_script_methods(script_full_path)
-            if script_methods is None:
-                continue
-
-            if method_name not in script_methods:
-                broken_connections.append({
-                    "scene": str(scene_file.relative_to(proj)).replace("\\", "/"),
-                    "signal": signal_name,
-                    "from_node": from_node,
-                    "to_node": to_node,
-                    "expected_method": method_name,
-                    "target_script": target_script,
-                    "reason": f"Método '{method_name}' não existe em '{target_script}'",
-                })
-
+    # ═══ Bônus: sinais declarados mas nunca conectados ═══
     unconnected_signals: list[dict] = []
     for script_file in proj.rglob("*.gd"):
         if _should_skip(script_file):
@@ -82,13 +88,15 @@ def analyze_signal_flow(
         except Exception:
             continue
         rel_script = str(script_file.relative_to(proj)).replace("\\", "/")
-        declared = re.findall(r'^signal\s+(\w+)', content, re.MULTILINE)
-        for sig_name in declared:
-            has_any_connection = any(
-                k.startswith(f"{rel_script}::") for k in all_connected_signals
-            )
-            if not has_any_connection:
-                unconnected_signals.append({"script": rel_script, "signal": sig_name})
+        declared_signals = re.findall(r'^signal\s+(\w+)', content, re.MULTILINE)
+        for sig_name in declared_signals:
+            # Verifica se este sinal específico (deste script) aparece em alguma conexão
+            is_connected = (rel_script, sig_name) in all_connected_pairs
+            if not is_connected:
+                unconnected_signals.append({
+                    "script": rel_script,
+                    "signal": sig_name,
+                })
 
     return {
         "status": "success",
@@ -102,28 +110,36 @@ def analyze_signal_flow(
     }
 
 
-def _map_nodes_to_scripts(content: str) -> dict[str, str]:
-    """Mapeia node_path para o caminho relativo do script anexado."""
+def _map_nodes_to_scripts(content: str) -> tuple[dict[str, str], dict[str, str]]:
+    """Mapeia node_path para o caminho relativo do script anexado.
+
+    Returns:
+        (node_scripts: dict[node_path -> script_rel_path],
+         script_id_to_path: dict[ext_resource_id -> script_rel_path])
+    """
     ext_resources: dict[str, str] = {}
     for m in re.finditer(
         r'\[ext_resource\s+type="Script"[^\]]*path="res://([^"]+)"[^\]]*id="([^"]+)"',
         content,
     ):
-        path, res_id = m.groups()
-        ext_resources[res_id] = path
+        ext_path, res_id = m.groups()
+        ext_resources[res_id] = ext_path
 
     node_scripts: dict[str, str] = {}
     node_blocks = re.split(r'(?=\[node\s)', content)
     for block in node_blocks:
+        # Pula blocos que não começam com [node
         name_match = re.search(r'\[node\s+name="([^"]+)"', block)
         if not name_match:
             continue
         node_name = name_match.group(1)
+
         parent_match = re.search(r'parent="([^"]+)"', block)
         if parent_match:
             parent = parent_match.group(1)
-            node_path = f"{parent}/{node_name}" if parent != "." else node_name
+            node_path = f"{parent}/{node_name}" if parent and parent != "." else node_name
         else:
+            # Root node (sem parent) — path é só "."
             node_path = "."
 
         script_match = re.search(r'script\s*=\s*ExtResource\("([^"]+)"\)', block)
@@ -132,7 +148,7 @@ def _map_nodes_to_scripts(content: str) -> dict[str, str]:
             if res_id in ext_resources:
                 node_scripts[node_path] = ext_resources[res_id]
 
-    return node_scripts
+    return node_scripts, ext_resources
 
 
 def _get_script_methods(script_path: Path) -> set[str] | None:
@@ -161,9 +177,14 @@ def _resolve_project(project_path: str | None = None) -> Path:
 
 
 def _should_skip(path: Path) -> bool:
-    """Verifica se o path deve ser ignorado."""
+    """Verifica se o path deve ser ignorado (path-component matching)."""
     path_str = str(path).replace("\\", "/")
-    for excl in ["addons/", ".godot/", ".git/", "_backups/", "build/", ".mcp_"]:
-        if excl in path_str:
+    path_parts = path_str.split("/")
+    for excl in ["addons", ".godot", ".git", "_backups", "build", ".mcp_"]:
+        excl_clean = excl.rstrip("/")
+        if excl_clean in path_parts:
             return True
+        for part in path_parts:
+            if part.startswith(excl_clean):
+                return True
     return False

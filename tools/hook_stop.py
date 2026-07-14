@@ -21,6 +21,31 @@ from pathlib import Path
 GATE_MARKER = ".mcp_gate_failed"
 
 
+def _run_reachability_audit_on_stop(proj: Path) -> None:
+    """Executa auditoria de alcançabilidade no encerramento da sessão.
+    Não bloqueia — apenas imprime aviso se houver cenas órfãs."""
+    try:
+        from tools.audit_scene_reachability import audit_scene_reachability
+        result = audit_scene_reachability(project_path=str(proj))
+        if result.get("status") == "issues_found":
+            unreachable = result.get("unreachable_scenes", [])
+            if unreachable:
+                print()
+                print("-" * 70)
+                print("  AUDITORIA DE ALCANÇABILIDADE")
+                print(f"  {len(unreachable)} cena(s) órfã(s) detectada(s):")
+                for scene in unreachable[:10]:  # máximo 10 para não poluir
+                    print(f"    • {scene}")
+                if len(unreachable) > 10:
+                    print(f"    ... e mais {len(unreachable) - 10} cenas.")
+                print(f"  Rode audit_scene_reachability para detalhes completos.")
+                print("-" * 70)
+        elif result.get("status") == "ambiguous":
+            pass  # Sem main_scene definida — não é erro
+    except Exception:
+        pass  # Falha na auditoria não bloqueia encerramento
+
+
 def _get_active_project() -> Path | None:
     """Resolve o projeto ativo via project_ops."""
     try:
@@ -54,6 +79,8 @@ def main() -> int:
     # ── Verificar marcador de gate falho ──
     marker_path = proj / GATE_MARKER
     if not marker_path.exists():
+        # ── Auditoria de alcançabilidade (NÃO bloqueante) ──
+        _run_reachability_audit_on_stop(proj)
         return 0
 
     # ── Gate falho ativo: ler razao e bloquear ──

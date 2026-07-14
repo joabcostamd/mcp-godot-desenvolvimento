@@ -187,8 +187,111 @@ def _invoke_tool_synthetic(tool: str, args: dict) -> dict:
     if tool == "godot_runtime_info":
         return _invoke_runtime_info()
 
+    # ── Bloco 2: UID + Save ──
+    if tool == "audit_uid_consistency":
+        return {
+            "status": "ok",
+            "total_uid_refs_checked": 3,
+            "mismatched_uid": [],
+            "missing_uid_file": [],
+            "duplicate_uid": [],
+            "unresolved": [],
+            "note": "Mock: projeto config_version=5, sem .uid files.",
+            "summary": "3 UIDs declarados verificados, nenhum problema encontrado.",
+        }
+    if tool == "audit_save_compatibility":
+        return {
+            "status": "issues_found",
+            "save_manager_script": "res://scripts/autoloads/save_manager.gd",
+            "has_version_field": True,
+            "has_migration_logic": False,
+            "write_read_key_mismatch": [],
+            "tested_against_file": None,
+            "missing_key_in_save": [],
+            "orphaned_key_in_save": [],
+            "note": "Mock: SaveManager encontrado, campo version existe mas sem migracao.",
+            "summary": "SaveManager: SaveManager, campo version existe mas sem lógica de migração.",
+        }
+
+    # ── Bloco 1: Auditoria de Wiring ──
+    if tool == "audit_input_map":
+        return {
+            "status": "ok",
+            "declared_actions": ["move_left", "move_right", "jump"],
+            "unused_actions": [],
+            "undeclared_actions_referenced": [],
+            "summary": "3 ações declaradas, nenhum problema encontrado.",
+        }
+    if tool == "audit_autoloads":
+        return {
+            "status": "ok",
+            "registered_autoloads": [{"name": "GameManager", "script_path": "res://scripts/game_manager.gd"}],
+            "possibly_unused_autoloads": [],
+            "summary": "1 autoload registrado, 0 sem referência.",
+        }
+    if tool == "audit_scene_reachability":
+        # Se chamado sem root_scene e sem main_scene definido → ambiguous
+        args = args or {}
+        if not args.get("root_scene"):
+            return {
+                "status": "ambiguous",
+                "root_scene": None,
+                "total_scenes_in_project": 0,
+                "reachable_scenes": 0,
+                "unreachable_scenes": [],
+                "summary": "Cena raiz não definida. Defina run/main_scene no project.godot.",
+            }
+        return {
+            "status": "ok",
+            "root_scene": args.get("root_scene", "res://scenes/main.tscn"),
+            "total_scenes_in_project": 5,
+            "reachable_scenes": 5,
+            "unreachable_scenes": [],
+            "summary": "5 cenas no projeto, 5 alcançáveis, 0 órfãs.",
+        }
+
     # NOTA: run_scripted_tests, smoke_test e regression_test NAO tem handlers
     # sinteticos para evitar risco de recursao infinita.
+
+    # ── Bloco 4: Proof Ledger ──
+    if tool == "capture_proof":
+        return {
+            "status": "ok",
+            "task_id": args.get("task_id", "unknown"),
+            "proof_file": "/tmp/.mcp_proof/test_1234567890.json",
+            "worktree_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+            "head_commit": "abc12345",
+            "files_changed": 0,
+            "untracked_captured": 0,
+            "diff_lines": 0,
+            "regression": {"total": 10, "passed": 10, "failed": 0},
+            "extra_commands_run": 0,
+            "note": "Prova coletada mecanicamente pela ferramenta.",
+            "summary": "Mock: prova coletada com sucesso (handler sintético).",
+        }
+    if tool == "verify_proof":
+        task_id = args.get("task_id", None)
+        if task_id == "inexistente":
+            return {
+                "status": "missing",
+                "proof_file": None,
+                "task_id": task_id,
+                "age_minutes": 0,
+                "hash_match": False,
+                "regression_passed": False,
+                "reason": "Nenhuma prova encontrada para task_id='inexistente'.",
+                "summary": "Nenhuma prova encontrada.",
+            }
+        return {
+            "status": "valid",
+            "proof_file": "/tmp/.mcp_proof/test_1234567890.json",
+            "task_id": task_id or "test",
+            "age_minutes": 3,
+            "hash_match": True,
+            "regression_passed": True,
+            "reason": "",
+            "summary": "Mock: prova válida (handler sintético).",
+        }
 
     # ── Fallback para tools não mapeadas ──
     return {
@@ -650,6 +753,107 @@ def _regression_scenarios() -> list[dict]:
                     "tool": "self_test",
                     "args": {},
                     "expect": {"has_key": ["passed", "results"], "status": "success"},
+                },
+            ],
+        },
+        # ── Bloco 1: Auditoria de Wiring (regressão) ──
+        {
+            "name": "REGRESS-06: audit_input_map retorna estrutura esperada",
+            "description": "Confirma que audit_input_map retorna status, declared_actions, unused_actions.",
+            "steps": [
+                {
+                    "tool": "audit_input_map",
+                    "args": {},
+                    "expect": {
+                        "status": "ok",
+                        "has_key": ["declared_actions", "unused_actions", "undeclared_actions_referenced", "summary"],
+                    },
+                },
+            ],
+        },
+        {
+            "name": "REGRESS-07: audit_autoloads retorna estrutura esperada",
+            "description": "Confirma que audit_autoloads retorna status, registered_autoloads, possibly_unused_autoloads.",
+            "steps": [
+                {
+                    "tool": "audit_autoloads",
+                    "args": {},
+                    "expect": {
+                        "status": "ok",
+                        "has_key": ["registered_autoloads", "possibly_unused_autoloads", "summary"],
+                    },
+                },
+            ],
+        },
+        {
+            "name": "REGRESS-08: audit_scene_reachability retorna ambiguous sem root_scene",
+            "description": "Confirma que audit_scene_reachability retorna 'ambiguous' quando não há main_scene definida.",
+            "steps": [
+                {
+                    "tool": "audit_scene_reachability",
+                    "args": {},
+                    "expect": {
+                        "status": "ambiguous",
+                        "has_key": ["summary"],
+                    },
+                },
+            ],
+        },
+        # ── Bloco 2: UID + Save Compatibility (regressão) ──
+        {
+            "name": "REGRESS-09: audit_uid_consistency retorna estrutura esperada",
+            "description": "Confirma que audit_uid_consistency retorna status, total_uid_refs_checked, duplicate_uid.",
+            "steps": [
+                {
+                    "tool": "audit_uid_consistency",
+                    "args": {},
+                    "expect": {
+                        "status": "ok",
+                        "has_key": ["total_uid_refs_checked", "mismatched_uid", "duplicate_uid", "summary"],
+                    },
+                },
+            ],
+        },
+        {
+            "name": "REGRESS-10: audit_save_compatibility retorna estrutura esperada",
+            "description": "Confirma que audit_save_compatibility retorna status, save_manager_script, has_migration_logic.",
+            "steps": [
+                {
+                    "tool": "audit_save_compatibility",
+                    "args": {},
+                    "expect": {
+                        "status": "issues_found",
+                        "has_key": ["save_manager_script", "has_version_field", "has_migration_logic", "write_read_key_mismatch", "summary"],
+                    },
+                },
+            ],
+        },
+        # ── Bloco 4: Proof Ledger (regressão) ──
+        {
+            "name": "REGRESS-11: capture_proof retorna estrutura esperada",
+            "description": "Confirma que capture_proof retorna status, proof_file, worktree_hash, regression.",
+            "steps": [
+                {
+                    "tool": "capture_proof",
+                    "args": {"task_id": "regress-11-test"},
+                    "expect": {
+                        "status": "ok",
+                        "has_key": ["proof_file", "worktree_hash", "head_commit", "regression", "summary"],
+                    },
+                },
+            ],
+        },
+        {
+            "name": "REGRESS-12: verify_proof retorna 'missing' quando não há prova",
+            "description": "Confirma que verify_proof retorna status='missing' para task_id inexistente.",
+            "steps": [
+                {
+                    "tool": "verify_proof",
+                    "args": {"task_id": "inexistente"},
+                    "expect": {
+                        "status": "missing",
+                        "has_key": ["reason", "summary"],
+                    },
                 },
             ],
         },

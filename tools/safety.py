@@ -235,8 +235,15 @@ def list_backups(
 
 
 def git_checkpoint(message: str, project_root: Path | None = None,
-                    skip_validation: bool = False) -> dict:
+                    skip_validation: bool = False,
+                    skip_proof: bool = False) -> dict:
     """Faz commit git no projeto alvo (se for repo git).
+
+    Args:
+        message: Mensagem do commit.
+        project_root: Raiz do projeto Godot. Se None, usa config.json.
+        skip_validation: Se True, pula validação de sintaxe GDScript.
+        skip_proof: Se True, pula verificação de prova (proof ledger).
 
     Returns:
         {"status": "success", "commit": str} ou {"status": "skipped"}.
@@ -253,6 +260,7 @@ def git_checkpoint(message: str, project_root: Path | None = None,
     # Não pega: métodos inexistentes, tipos errados, nós referenciados que
     # não existem na cena. Para essas classes de erro, ainda é necessário
     # rodar compile_test manualmente antes de confiar 100% no commit.
+    wiring_warnings: dict = {}
     if not skip_validation:
         try:
             from tools.validate_write import validate_gdscript_syntax
@@ -301,6 +309,72 @@ def git_checkpoint(message: str, project_root: Path | None = None,
             except Exception:
                 pass  # GUT não instalado — não bloqueia
 
+        # ── Auditoria de Wiring (NÃO bloqueante) ──
+        wiring_warnings = {}
+        try:
+            from tools.audit_input_map import audit_input_map
+            from tools.audit_autoloads import audit_autoloads
+            input_audit = audit_input_map(project_path=str(project_root))
+            autoload_audit = audit_autoloads(project_path=str(project_root))
+            if input_audit.get("status") == "issues_found":
+                wiring_warnings["input_map"] = {
+                    "unused_actions": input_audit.get("unused_actions", []),
+                    "undeclared_actions": input_audit.get("undeclared_actions_referenced", []),
+                }
+            if autoload_audit.get("status") == "issues_found":
+                wiring_warnings["autoloads"] = {
+                    "possibly_unused": autoload_audit.get("possibly_unused_autoloads", []),
+                }
+        except Exception:
+            pass  # Auditoria de wiring não deve bloquear
+
+        # ── Auditoria de UID (NÃO bloqueante, destaque para duplicados) ──
+        try:
+            from tools.audit_uid_consistency import audit_uid_consistency
+            uid_audit = audit_uid_consistency(project_path=str(project_root))
+            if uid_audit.get("status") == "issues_found":
+                dupes = uid_audit.get("duplicate_uid", [])
+                mismatched = uid_audit.get("mismatched_uid", [])
+                if dupes:
+                    wiring_warnings["uid_duplicates"] = {
+                        "count": len(dupes),
+                        "detail": dupes,
+                        "severity": "ALTO — UIDs duplicados podem causar carregamento de asset errado silenciosamente",
+                    }
+                if mismatched:
+                    wiring_warnings["uid_mismatches"] = {
+                        "count": len(mismatched),
+                        "detail": mismatched,
+                    }
+        except Exception:
+            pass
+
+    # ── Gate de Prova (Proof Ledger) — BLOQUEANTE ──
+    # NOTA: este gate fica FORA do skip_validation porque prova
+    # é independente de compilação — é sobre auditoria do código.
+    if not skip_proof:
+        try:
+            from tools.proof_ledger import verify_proof
+            proof_result = verify_proof(
+                project_path=str(project_root),
+                max_age_minutes=60,
+            )
+            if proof_result.get("status") != "valid":
+                _write_gate_failed_marker(
+                    f"git_checkpoint bloqueado: proof gate falhou — {proof_result.get('reason', 'status desconhecido')}"
+                )
+                return {
+                    "status": "error",
+                    "message": (
+                        "❌ Commit BLOQUEADO — prova inválida ou ausente. "
+                        "Rode capture_proof antes de commitar."
+                    ),
+                    "proof_gate": proof_result,
+                }
+        except Exception as e:
+            # Se proof_ledger não estiver disponível, não bloqueia
+            pass
+
     # Limpa marcador de falha antes do commit
     _clear_gate_failed_marker()
 
@@ -320,7 +394,12 @@ def git_checkpoint(message: str, project_root: Path | None = None,
             timeout=30,
         )
         if result.returncode == 0:
-            return {"status": "success", "commit": message, "validated": not skip_validation}
+            response = {"status": "success", "commit": message, "validated": not skip_validation}
+            if skip_proof:
+                response["proof_skipped"] = True
+            if wiring_warnings:
+                response["wiring_warnings"] = wiring_warnings
+            return response
         else:
             return {
                 "status": "error",

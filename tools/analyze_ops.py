@@ -115,6 +115,41 @@ def analyze_game_structure() -> dict:
         if f.is_file() and ".godot" not in str(f) and ".mcp_backups" not in str(f)
     )
 
+    # ── Auditoria de Wiring (resumo, sem detalhes completos) ──
+    wiring_status = {}
+    try:
+        from tools.audit_input_map import audit_input_map
+        from tools.audit_autoloads import audit_autoloads
+        from tools.audit_scene_reachability import audit_scene_reachability
+
+        input_audit = audit_input_map(project_path=str(proj))
+        if input_audit.get("status") in ("ok", "issues_found"):
+            wiring_status["unused_actions"] = input_audit.get("unused_actions", [])
+            wiring_status["undeclared_actions_count"] = len(input_audit.get("undeclared_actions_referenced", []))
+
+        autoload_audit = audit_autoloads(project_path=str(proj))
+        if autoload_audit.get("status") in ("ok", "issues_found"):
+            wiring_status["possibly_unused_autoloads"] = autoload_audit.get("possibly_unused_autoloads", [])
+
+        reach_audit = audit_scene_reachability(project_path=str(proj))
+        if reach_audit.get("status") in ("ok", "issues_found"):
+            wiring_status["unreachable_scenes"] = reach_audit.get("unreachable_scenes", [])
+
+        # ── Bloco 2: UID + Save ──
+        from tools.audit_uid_consistency import audit_uid_consistency
+        from tools.audit_save_compatibility import audit_save_compatibility
+        uid_audit = audit_uid_consistency(project_path=str(proj))
+        if uid_audit.get("status") in ("ok", "issues_found"):
+            wiring_status["uid_duplicates"] = len(uid_audit.get("duplicate_uid", []))
+            wiring_status["uid_mismatches"] = len(uid_audit.get("mismatched_uid", []))
+        save_audit = audit_save_compatibility(project_path=str(proj))
+        if save_audit.get("status") in ("ok", "issues_found"):
+            wiring_status["save_key_mismatches"] = len(save_audit.get("write_read_key_mismatch", []))
+            wiring_status["save_has_migration"] = save_audit.get("has_migration_logic", False)
+            wiring_status["save_has_version"] = save_audit.get("has_version_field", False)
+    except Exception:
+        pass  # Falha na auditoria não quebra analyze_game_structure
+
     return {
         "status": "success",
         "project_name": project_name,
@@ -138,6 +173,7 @@ def analyze_game_structure() -> dict:
         "assets_by_type": asset_types,
         "autoloads": [{"name": a[0], "path": a[1]} for a in autoloads],
         "top_node_types": sorted(node_types.items(), key=lambda x: -x[1])[:10],
+        "wiring_status": wiring_status,
     }
 
 
@@ -225,6 +261,42 @@ def suggest_next_steps() -> dict:
             "priority": len(suggestions) + 1, "action": "Fazer checkpoint git",
             "tool": "git_commit_checkpoint",
             "detail": "Projeto está crescendo — salve o progresso."})
+
+    # ── Status de wiring (se houver issues) ──
+    ws = analysis.get("wiring_status", {})
+    wiring_issue_count = (
+        len(ws.get("unused_actions", [])) +
+        ws.get("undeclared_actions_count", 0) +
+        len(ws.get("possibly_unused_autoloads", [])) +
+        len(ws.get("unreachable_scenes", [])) +
+        ws.get("uid_duplicates", 0) +
+        ws.get("uid_mismatches", 0) +
+        ws.get("save_key_mismatches", 0)
+    )
+    if wiring_issue_count > 0:
+        summary_parts = []
+        if ws.get("unused_actions"):
+            summary_parts.append(f"{len(ws['unused_actions'])} ações não usadas")
+        if ws.get("undeclared_actions_count", 0) > 0:
+            summary_parts.append(f"{ws['undeclared_actions_count']} ações referenciadas sem existir")
+        if ws.get("possibly_unused_autoloads"):
+            summary_parts.append(f"{len(ws['possibly_unused_autoloads'])} autoloads órfãos")
+        if ws.get("unreachable_scenes"):
+            summary_parts.append(f"{len(ws['unreachable_scenes'])} cenas inalcançáveis")
+        if ws.get("uid_duplicates", 0) > 0:
+            summary_parts.append(f"{ws['uid_duplicates']} UIDs duplicados (crítico)")
+        if ws.get("uid_mismatches", 0) > 0:
+            summary_parts.append(f"{ws['uid_mismatches']} UIDs divergentes")
+        if ws.get("save_key_mismatches", 0) > 0:
+            summary_parts.append(f"{ws['save_key_mismatches']} chaves de save divergentes")
+        if not ws.get("save_has_migration") and ws.get("save_has_version"):
+            summary_parts.append("save sem lógica de migração")
+        suggestions.insert(0, {
+            "priority": 0,
+            "action": "Corrigir wiring do projeto",
+            "tool": "audit_input_map / audit_autoloads / audit_scene_reachability / audit_uid_consistency / audit_save_compatibility",
+            "detail": f"Status de wiring: {', '.join(summary_parts)}.",
+        })
 
     return {"status": "success", "stage": stage, "suggestions": suggestions,
             "metrics_summary": {k: m[k] for k in ["scene_count", "script_count", "total_nodes",

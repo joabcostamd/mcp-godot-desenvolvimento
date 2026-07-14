@@ -37,6 +37,7 @@ TOOLSETS = {
         "read_file", "write_file", "safe_write_gdscript",
         "compile_test", "run_game", "stop_game", "smart_restart",
         "git_commit_checkpoint", "smoke_test", "dump_mcp_state",
+        "capture_proof", "verify_proof",
     ],
     "scene_ops": [
         "scene_manage", "node_manage",
@@ -50,6 +51,7 @@ TOOLSETS = {
         "get_runtime_state_digest", "capture_runtime_errors",
         "run_scripted_tests", "smoke_test", "regression_test",
         "dump_mcp_state", "estimate_tool_tokens",
+        "capture_proof", "verify_proof",
     ],
     "runtime_ops": [
         "run_game", "stop_game", "smart_restart", "compile_test",
@@ -60,10 +62,13 @@ TOOLSETS = {
     ],
     "git_ops": [
         "git_commit_checkpoint", "safety_manage",
+        "capture_proof", "verify_proof",
     ],
     "refs_ops": [
         "find_missing_references", "search_codebase",
         "validate_project_refs", "find_usages",
+        "audit_input_map", "audit_autoloads", "audit_scene_reachability",
+        "audit_uid_consistency", "audit_save_compatibility",
     ],
     "asset_ops": [
         "asset_manage", "generate_placeholder_sprite",
@@ -76,6 +81,7 @@ TOOLSETS = {
         "validate_game_design", "estimate_game_scope",
         "project_status", "create_entity",
         "godot_class_ref",
+        "audit_input_map", "audit_autoloads", "audit_scene_reachability",
     ],
     "ui_ops": [
         "ui_manage", "create_main_menu", "create_hud_template",
@@ -181,6 +187,9 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "validate_mcp_environment", "validate_godot_version",
         "setup_mcp_config", "install_mcp_addon",
         "safety_manage",
+        "capture_proof", "verify_proof",
+        "audit_input_map", "audit_autoloads", "audit_scene_reachability",
+        "audit_uid_consistency", "audit_save_compatibility",
     },
     "DESIGN": {
         "scene_manage", "node_manage",
@@ -722,6 +731,10 @@ from tools.safety import (
     list_backups,
     restore as restore_backup,
     git_checkpoint as git_commit_checkpoint,
+)
+from tools.proof_ledger import (
+    capture_proof,
+    verify_proof,
 )
 from tools.placeholder_ops import (
     generate_placeholder_sprite,
@@ -2512,6 +2525,50 @@ def _tool_defs() -> list[Tool]:
                 "type": "object",
                 "properties": {"message": {"type": "string"}},
                 "required": ["message"],
+            },
+        ),
+        # ── Bloco 4: Proof Ledger ──
+        Tool(
+            name="capture_proof",
+            description=(
+                "Coleta MECANICAMENTE a evidência de uma tarefa concluída e grava "
+                "num arquivo assinado por hash SHA-256. NENHUM texto vem da IA — "
+                "tudo é output literal capturado via subprocess (git diff, git status, "
+                "conteúdo de arquivos, testes). "
+                "Use ao final de cada tarefa para gerar prova auditável. "
+                "Pré-condições: projeto deve ser um repositório git. "
+                "Exemplo de input: {\"task_id\": \"bloco4-capture-proof\"}. "
+                "Erro mais comum: project_path não existe."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "task_id": {"type": "string", "description": "Identificador curto da tarefa."},
+                    "project_path": {"type": "string", "description": "Caminho do repositório. Default: raiz do MCP."},
+                    "run_tests": {"type": "boolean", "description": "Se roda regression_test como parte da prova. Default: true."},
+                    "extra_commands": {"type": "array", "items": {"type": "string"}, "description": "Comandos extras cujo stdout/stderr capturar. Máx 5."},
+                },
+                "required": ["task_id"],
+            },
+        ),
+        Tool(
+            name="verify_proof",
+            description=(
+                "Verifica se uma prova é válida E se corresponde ao estado ATUAL do código "
+                "(ou seja: se o código não mudou depois que a prova foi coletada). "
+                "Use para validar provas antes de commits ou auditorias. "
+                "Pré-condições: capture_proof deve ter sido executado antes. "
+                "Exemplo de input: {\"task_id\": \"bloco4\"}. "
+                "Erro mais comum: prova não encontrada — retorna 'missing'."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "task_id": {"type": "string", "description": "Se passado, verifica a prova mais recente desse task_id."},
+                    "project_path": {"type": "string", "description": "Caminho do repositório. Default: raiz do MCP."},
+                    "max_age_minutes": {"type": "integer", "description": "Prova mais velha que isso é obsoleta. Default: 60."},
+                },
+                "required": [],
             },
         ),
         # ── Game Bridge (runtime) ──
@@ -4669,6 +4726,91 @@ def _tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
+        # ── Bloco 1: Auditoria de Wiring ──
+        Tool(
+            name="audit_input_map",
+            description=(
+                "Audita o Input Map do projeto: lista acoes declaradas, "
+                "acoes nao usadas e acoes referenciadas mas nao declaradas. "
+                "NAO requer Godot rodando — analise estatica do project.godot. "
+                "Exemplo: {\"project_path\": \"C:\\\\...\\\\projeto\"}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "Caminho do projeto."},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="audit_autoloads",
+            description=(
+                "Audita os Autoloads do projeto: lista autoloads registrados "
+                "e detecta autoloads possivelmente nao usados. "
+                "NAO requer Godot rodando — analise estatica. "
+                "Exemplo: {\"project_path\": \"C:\\\\...\\\\projeto\"}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "Caminho do projeto."},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="audit_scene_reachability",
+            description=(
+                "Audita a alcançabilidade de cenas: partindo da cena principal, "
+                "detecta cenas que nao sao referenciadas por nenhuma outra (orfas). "
+                "NAO requer Godot rodando — analise estatica. "
+                "Exemplo: {\"project_path\": \"C:\\\\...\\\\projeto\"}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "Caminho do projeto."},
+                    "root_scene": {"type": "string", "description": "Cena raiz. Default: main_scene do project.godot."},
+                },
+                "required": [],
+            },
+        ),
+        # ── Bloco 2: UID + Save Compatibility ──
+        Tool(
+            name="audit_uid_consistency",
+            description=(
+                "Audita a consistencia de UIDs no projeto: detecta UIDs duplicados, "
+                "UIDs com mismatch entre .uid e .import, e UIDs nao resolvidos. "
+                "NAO requer Godot rodando. "
+                "Exemplo: {\"project_path\": \"C:\\\\...\\\\projeto\"}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "Caminho do projeto."},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="audit_save_compatibility",
+            description=(
+                "Audita a compatibilidade de save: verifica se o SaveManager "
+                "tem campo de versao e logica de migracao. Detecta chaves "
+                "write/read inconsistentes e chaves orfas. "
+                "NAO requer Godot rodando. "
+                "Exemplo: {\"project_path\": \"C:\\\\...\\\\projeto\"}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "Caminho do projeto."},
+                    "save_file_path": {"type": "string", "description": "Caminho de um save file para testar (opcional)."},
+                },
+                "required": [],
+            },
+        ),
         # ── Grupo C: Auto-dismiss ──────────────────────────────
         Tool(
             name="set_auto_dismiss",
@@ -5805,6 +5947,9 @@ def _tool_defs() -> list[Tool]:
         "list_signals", "validate_gdscript_syntax", "compile_test",
         "read_console_output", "take_screenshot", "list_export_presets",
         "validate_export_templates_installed", "list_backups",
+        "audit_input_map", "audit_autoloads", "audit_scene_reachability",
+        "audit_uid_consistency", "audit_save_compatibility",
+        "capture_proof", "verify_proof",
         "compare_screenshots", "detect_empty_screen",
         "detect_offscreen_elements", "suggest_color_palette",
         "analyze_game_structure", "suggest_next_steps",
@@ -6425,6 +6570,16 @@ def _build_handlers() -> dict:
         "find_unused_resources": find_unused_resources,
         # Grupo C: Análise de fluxo de sinal
         "analyze_signal_flow": analyze_signal_flow,
+        # Bloco 1: Auditoria de Wiring
+        "audit_input_map": _handle_audit_input_map,
+        "audit_autoloads": _handle_audit_autoloads,
+        "audit_scene_reachability": _handle_audit_scene_reachability,
+        # Bloco 2: UID + Save Compatibility
+        "audit_uid_consistency": _handle_audit_uid_consistency,
+        "audit_save_compatibility": _handle_audit_save_compatibility,
+        # Bloco 4: Proof Ledger
+        "capture_proof": _handle_capture_proof,
+        "verify_proof": _handle_verify_proof,
         # Grupo C: Auto-dismiss
         "set_auto_dismiss": set_auto_dismiss,
         # Shader Editor
@@ -6736,6 +6891,71 @@ def _handle_write_file(args: dict) -> dict:
         except Exception:
             pass
     return result
+
+
+# ── Bloco 1: Handlers de Auditoria de Wiring ───────────────────────
+
+def _handle_audit_input_map(args: dict) -> dict:
+    from tools.audit_input_map import audit_input_map
+    return audit_input_map(
+        project_path=args.get("project_path"),
+    )
+
+
+def _handle_audit_autoloads(args: dict) -> dict:
+    from tools.audit_autoloads import audit_autoloads
+    return audit_autoloads(
+        project_path=args.get("project_path"),
+    )
+
+
+def _handle_audit_scene_reachability(args: dict) -> dict:
+    from tools.audit_scene_reachability import audit_scene_reachability
+    return audit_scene_reachability(
+        project_path=args.get("project_path"),
+        root_scene=args.get("root_scene"),
+    )
+
+
+# ── Bloco 2: Handlers de UID + Save Compatibility ─────────────────
+
+def _handle_audit_uid_consistency(args: dict) -> dict:
+    from tools.audit_uid_consistency import audit_uid_consistency
+    return audit_uid_consistency(
+        project_path=args.get("project_path"),
+    )
+
+
+def _handle_audit_save_compatibility(args: dict) -> dict:
+    from tools.audit_save_compatibility import audit_save_compatibility
+    return audit_save_compatibility(
+        project_path=args.get("project_path"),
+        save_file_path=args.get("save_file_path"),
+    )
+
+
+# ── Bloco 4: Handlers de Proof Ledger ──────────────────────────────
+
+def _handle_capture_proof(args: dict) -> dict:
+    """Handler síncrono — dispatch via thread pool. Usa os.system() internamente."""
+    extra = args.get("extra_commands")
+    if extra is not None and not isinstance(extra, list):
+        extra = None
+    return capture_proof(
+        task_id=args["task_id"],
+        project_path=args.get("project_path"),
+        run_tests=args.get("run_tests", False),
+        extra_commands=extra,
+    )
+
+
+def _handle_verify_proof(args: dict) -> dict:
+    """Handler síncrono — dispatch via thread pool. Usa os.system() internamente."""
+    return verify_proof(
+        task_id=args.get("task_id"),
+        project_path=args.get("project_path"),
+        max_age_minutes=args.get("max_age_minutes", 60),
+    )
 
 
 # ── Fase 2 Handlers ─────────────────────────────────────────────────

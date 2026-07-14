@@ -1,5 +1,40 @@
 # CHANGELOG — mcp-godot-desenvolvimento
 
+## v3.3.1 (2026-07-14) — Blocos 1-3 + Smoke Test
+
+### Bloco 1 — Auditoria de Wiring (3 ferramentas)
+- `audit_input_map` — ações declaradas vs usadas no código
+- `audit_autoloads` — singletons registrados vs referenciados
+- `audit_scene_reachability` — BFS de cenas a partir da raiz, detecta change_scene_to_file
+
+### Bloco 2 — UID + Save (2 ferramentas)
+- `audit_uid_consistency` — UID declarado vs .uid file, duplicados, uid_cache.bin
+- `audit_save_compatibility` — chaves escrita/leitura, versionamento, migração
+
+### Bloco 3 — Documentação
+- `FEATURES.md` — registro de wiring do Shardbreaker com dados reais das 5 auditorias
+- `AUDIT_PROTOCOL.md` — cadência, escopo, regras de deleção segura
+
+### Integração de Automação (6 pontos de disparo)
+- `git_commit_checkpoint` → wiring + UID warnings (não bloqueia)
+- `run_verification_pipeline` → etapa 5: audit_scene_reachability
+- `hook_stop.py` → audit_scene_reachability no encerramento
+- `analyze_game_structure` → campo wiring_status agregado
+- `suggest_next_steps` → sugestão priority 0 com resumo de issues
+- `regression_test` → 10 cenários (REGRESS-01 a REGRESS-10)
+
+### Smoke Test — Hooks do VS Code
+- ❌ NO-GO: agent hooks (PreToolUse/PostToolUse/Stop/SessionStart) não disparam com `vizards.deepseek-v4-for-copilot` v0.6.2
+- Causa: a extensão implementa loop de tool-calling próprio, bypassando hooks nativos
+- Consequência: gates residem nos handlers MCP (safety.py, hook_stop.py), não em hooks VS Code
+- BYOK nativo testado sem sucesso para hooks
+
+### Métricas
+- **211 tools**, **76 módulos**, **5 ferramentas de auditoria**, **10 cenários de regressão**
+- **3 blocos entregues**, **6 integrações de automação**
+
+---
+
 ## v3.3.0 (2026-07-12) — Onda 0.1 completa
 
 ### Features Fase 1 (9 + Task B)
