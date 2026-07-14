@@ -379,18 +379,15 @@ def git_checkpoint(message: str, project_root: Path | None = None,
     _clear_gate_failed_marker()
 
     try:
-        subprocess.run(
+        from tools.subprocess_utils import run_subprocess_safe
+        run_subprocess_safe(
             ["git", "add", "-A"],
             cwd=str(project_root),
-            capture_output=True,
-            text=True,
             timeout=30,
         )
-        result = subprocess.run(
+        result = run_subprocess_safe(
             ["git", "commit", "-m", message],
             cwd=str(project_root),
-            capture_output=True,
-            text=True,
             timeout=30,
         )
         if result.returncode == 0:

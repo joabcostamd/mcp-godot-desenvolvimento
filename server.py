@@ -407,7 +407,9 @@ def _handle_godot_run_project(project_path: str = "", godot_executable: str = ""
     try:
         proc = subprocess.Popen(
             [godot_executable, "--path", project_path],
+            stdin=subprocess.DEVNULL,
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            close_fds=True,
         )
         _running_godot_processes[str(proc.pid)] = proc
         return json.dumps({"ok": True, "pid": proc.pid})
@@ -419,9 +421,10 @@ def _get_process_name(pid: int) -> str | None:
     """Obtem o nome do executavel de um PID. Retorna None se nao encontrado."""
     try:
         if sys.platform == "win32":
-            result = subprocess.run(
+            from tools.subprocess_utils import run_subprocess_safe
+            result = run_subprocess_safe(
                 ["tasklist", "/FI", f"PID eq {pid}", "/FO", "CSV", "/NH"],
-                capture_output=True, text=True, timeout=5,
+                timeout=5,
             )
             if result.returncode == 0 and result.stdout.strip():
                 line = result.stdout.strip()
@@ -503,9 +506,10 @@ def _handle_godot_stop_project(pid: int = 0, **kwargs) -> str:
 
         try:
             if sys.platform == "win32":
-                result = subprocess.run(
+                from tools.subprocess_utils import run_subprocess_safe
+                result = run_subprocess_safe(
                     ["taskkill", "/F", "/PID", str(pid)],
-                    capture_output=True, text=True, timeout=10,
+                    timeout=10,
                 )
                 if result.returncode != 0 and "não encontrado" not in result.stderr.lower():
                     return json.dumps({
@@ -7507,9 +7511,9 @@ def _handle_health_check(args: dict) -> dict:
 
     # 4. Godot binário
     if godot_path:
-        import subprocess
+        from tools.subprocess_utils import run_subprocess_safe
         try:
-            r = subprocess.run([godot_path, "--version"], capture_output=True, text=True, timeout=10)
+            r = run_subprocess_safe([godot_path, "--version"], timeout=10)
             godot_ok = "4." in r.stdout or "4." in r.stderr
         except Exception:
             godot_ok = False

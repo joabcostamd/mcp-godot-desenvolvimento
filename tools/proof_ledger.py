@@ -100,16 +100,10 @@ def capture_proof(
     extra_results = []
     for cmd in extra_commands:
         try:
-            result = subprocess.run(
+            from tools.subprocess_utils import run_subprocess_safe
+            result = run_subprocess_safe(
                 cmd,
                 shell=True,
-                stdin=subprocess.DEVNULL,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-                encoding='utf-8',
-                errors='replace',
-                close_fds=True,
                 timeout=120,
                 cwd=str(proj),
             )
@@ -375,17 +369,11 @@ def verify_proof(
 # ══════════════════════════════════════════════════════════════════════
 
 def _run_git_cmd(cmd: str, cwd: str, timeout: int = 15) -> str:
-    """Executa comando git. stdin=DEVNULL evita herança de pipe do MCP."""
+    """Executa comando git. Usa wrapper seguro para MCP (stdin=DEVNULL)."""
     try:
-        result = subprocess.run(
+        from tools.subprocess_utils import run_subprocess_safe
+        result = run_subprocess_safe(
             cmd.split(),
-            stdin=subprocess.DEVNULL,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
-            close_fds=True,
             timeout=timeout,
             cwd=cwd,
         )

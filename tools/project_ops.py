@@ -102,10 +102,9 @@ def validate_godot_version() -> dict:
     """
     godot = get_godot_bin()
     try:
-        result = subprocess.run(
+        from tools.subprocess_utils import run_subprocess_safe
+        result = run_subprocess_safe(
             [godot, "--version"],
-            capture_output=True,
-            text=True,
             timeout=15,
         )
         version_str = result.stdout.strip() or result.stderr.strip()
@@ -264,10 +263,9 @@ renderer/rendering_method="{rendering_method}"
     # Inicializa com Godot headless
     godot = get_godot_bin()
     try:
-        subprocess.run(
+        from tools.subprocess_utils import run_subprocess_safe
+        run_subprocess_safe(
             [godot, "--headless", "--editor", "--quit", "--path", str(proj)],
-            capture_output=True,
-            text=True,
             timeout=60,
         )
     except subprocess.TimeoutExpired:

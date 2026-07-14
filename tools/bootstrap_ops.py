@@ -378,9 +378,10 @@ def godot_keep_alive(project_path: str | None = None,
 
     # Verificar se já está rodando
     try:
-        result = subprocess.run(
+        from tools.subprocess_utils import run_subprocess_safe
+        result = run_subprocess_safe(
             ['tasklist', '/fi', 'imagename eq Godot_v4.7-stable_win64.exe'],
-            capture_output=True, text=True, timeout=5
+            timeout=5,
         )
         if 'Godot_v4.7-stable_win64.exe' in result.stdout:
             # Já está rodando
@@ -416,7 +417,9 @@ def godot_keep_alive(project_path: str | None = None,
     try:
         subprocess.Popen(
             [godot_path, "--path", project_path, "--editor"],
+            stdin=subprocess.DEVNULL,
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            close_fds=True,
         )
         import time
         time.sleep(3)

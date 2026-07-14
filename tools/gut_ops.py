@@ -81,9 +81,10 @@ def run_gut_tests(
     # class_name customizados não registram e a suíte falha por
     # motivo errado (não é um bug real do jogo).
     try:
-        subprocess.run(
+        from tools.subprocess_utils import run_subprocess_safe
+        run_subprocess_safe(
             [godot_path, "--headless", "--path", project_path, "--import", "--quit"],
-            capture_output=True, text=True, timeout=30,
+            timeout=30,
         )
     except Exception:
         pass  # Se o warm-up falhar, tenta rodar os testes mesmo assim
@@ -91,7 +92,7 @@ def run_gut_tests(
     # Executa GUT via headless
     start = time.time()
     try:
-        result = subprocess.run(
+        result = run_subprocess_safe(
             [
                 godot_path,
                 "--headless",
@@ -101,8 +102,6 @@ def run_gut_tests(
                 "-gexit",
                 "-glog=1",
             ],
-            capture_output=True,
-            text=True,
             timeout=timeout,
             cwd=project_path,
         )

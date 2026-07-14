@@ -98,10 +98,11 @@ def validate_export_templates_installed() -> dict:
             with tempfile.NamedTemporaryFile(suffix=".zip", delete=False) as tmp:
                 tmp_path = tmp.name
             try:
-                result = subprocess.run(
+                from tools.subprocess_utils import run_subprocess_safe
+                result = run_subprocess_safe(
                     [godot, "--headless", "--path", str(proj),
                      "--export-release", "Web", tmp_path],
-                    capture_output=True, text=True, timeout=30,
+                    timeout=30,
                 )
                 output = result.stdout + result.stderr
                 # Templates instalados = Godot tenta exportar (erro de preset OK)
@@ -125,9 +126,10 @@ def validate_export_templates_installed() -> dict:
         else:
             # Sem projeto ativo, tenta --dump-extension-api como smoke test
             try:
-                result = subprocess.run(
+                from tools.subprocess_utils import run_subprocess_safe
+                result = run_subprocess_safe(
                     [godot, "--headless", "--dump-extension-api"],
-                    capture_output=True, text=True, timeout=10,
+                    timeout=10,
                 )
                 if result.returncode == 0:
                     detail = "Godot responde (sem projeto para teste de exportação)"
@@ -240,9 +242,10 @@ def build_export(preset_name: str | None = None, output_path: str | None = None)
         output_path = str(build_dir / (proj.name + ext))
 
     try:
-        result = subprocess.run(
+        from tools.subprocess_utils import run_subprocess_safe
+        result = run_subprocess_safe(
             [godot, "--headless", "--export-release", preset_name, output_path, "--path", str(proj)],
-            capture_output=True, text=True, timeout=timeout,
+            timeout=timeout,
         )
         output = result.stdout + result.stderr
         if result.returncode != 0:
