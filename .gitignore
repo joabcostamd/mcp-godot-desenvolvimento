@@ -34,3 +34,4 @@ workflow_logs/
 
 # IDE
 .vscode/
+.n.mcp_proof/

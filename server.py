@@ -23,7 +23,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
-from mcp.server import Server
+from mcp.server import NotificationOptions, Server
 from mcp.server.stdio import stdio_server
 from mcp.types import TextContent, Tool, Resource, ResourceTemplate
 
@@ -147,6 +147,8 @@ TOOL_PROFILES = {
         "run_gut_tests", "godot_class_ref", "godot_exec", "effect_probe",
         "take_screenshot", "capture_runtime_errors", "get_runtime_state_digest",
         "import_asset_manifest", "create_asset_manifest",
+        # ── Phase management (Feature 8: tool_list_changed) ──
+        "get_current_phase", "advance_phase", "get_phase_history",
     ],
     "full": [],  # vazio = sem filtro (todas as tools)
 }
@@ -158,9 +160,13 @@ if _ACTIVE_PROFILE and _ACTIVE_PROFILE != "full":
         print(f"[MCP] Profile '{_ACTIVE_PROFILE}': {len(_PROFILE_TOOLS)} tools", file=sys.stderr)
     else:
         print(f"[MCP] Profile '{_ACTIVE_PROFILE}' desconhecido. Use: {sorted(TOOL_PROFILES.keys())}", file=sys.stderr)
-        _PROFILE_TOOLS = None
+        _PROFILE_TOOLS = set(TOOL_PROFILES["dev"])  # fallback seguro
+elif _ACTIVE_PROFILE == "full":
+    _PROFILE_TOOLS = None  # sem filtro = todas as tools (~134)
 else:
-    _PROFILE_TOOLS = None
+    # Default seguro: dev profile (31 tools, bem abaixo do limite de 128 do DeepSeek V4)
+    _PROFILE_TOOLS = set(TOOL_PROFILES["dev"])
+    print(f"[MCP] Profile 'dev' (default): {len(_PROFILE_TOOLS)} tools", file=sys.stderr)
 
 # ── Feature 8: Toolsets por Fase (--phase) ────────────────────
 # Filtro dinâmico: consulta get_current_phase() do projeto ativo
@@ -3022,7 +3028,20 @@ def _tool_defs() -> list[Tool]:
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "scenarios": {"type": "array", "description": "Lista de cenarios customizados (opcional)."},
+                    "scenarios": {
+                        "type": "array",
+                        "description": "Lista de cenarios customizados (opcional).",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": {"type": "string"},
+                                "steps": {
+                                    "type": "array",
+                                    "items": {"type": "object"}
+                                }
+                            }
+                        }
+                    },
                     "stop_on_failure": {"type": "boolean", "description": "Parar no primeiro cenario que falhar (default: false)."},
                 },
                 "required": [],
@@ -4967,6 +4986,14 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
             if is_error and "friendly" not in result:
                 from tools.friendly_errors import translate_error
                 result["friendly"] = translate_error(result.get("message", ""))
+            # ── Feature 8: notificar cliente sobre mudança na lista de tools ──
+            if name == "advance_phase" and not is_error:
+                try:
+                    from mcp.server.lowlevel.server import request_ctx
+                    session = request_ctx.get().session
+                    await session.send_tool_list_changed()
+                except Exception as e:
+                    print(f"[MCP] send_tool_list_changed falhou: {e}", file=sys.stderr)
             return [TextContent(type="text", text=json.dumps(result, ensure_ascii=False), isError=is_error)]
         except Exception as e:
             return [TextContent(type="text", text=json.dumps({
@@ -6218,7 +6245,9 @@ async def get_prompt(name: str, arguments: dict | None = None):
 async def main() -> None:
     """Inicializa o servidor MCP via stdio."""
     async with stdio_server() as (read_stream, write_stream):
-        await server.run(read_stream, write_stream, server.create_initialization_options())
+        await server.run(read_stream, write_stream, server.create_initialization_options(
+            notification_options=NotificationOptions(tools_changed=True)
+        ))
 
 
 def run() -> None:

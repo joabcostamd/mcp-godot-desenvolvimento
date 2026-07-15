@@ -26,28 +26,26 @@ ROOT = Path(__file__).resolve().parent.parent
 # ══════════════════════════════════════════════════════════════════════
 
 def run_scripted_tests(
-    scenarios: list[dict] | None = None,
-    stop_on_failure: bool = False,
+    args: dict | None = None,
 ) -> dict:
-    """Executa cenários de teste roteirizados com input sintético.
+    """Executa cenarios de teste roteirizados com input sintetico.
 
-    Cada cenário é um dict com:
-        name: str — nome do cenário
-        description: str — o que está sendo testado
-        steps: list[dict] — sequência de passos, cada um com:
+    Cada cenario e um dict com:
+        name: str — nome do cenario
+        description: str — o que esta sendo testado
+        steps: list[dict] — sequencia de passos, cada um com:
             tool: str — nome da tool a invocar
-            args: dict — argumentos sintéticos
-            expect: dict — condições esperadas (opcional):
+            args: dict — argumentos sinteticos
+            expect: dict — condicoes esperadas (opcional):
                 status: "success" | "error" | "skipped" | None (qualquer)
                 contains: str — substring esperada na resposta
                 has_key: str — chave que deve existir no resultado
-                not_has_key: str — chave que NÃO deve existir
-        setup: dict — estado a preparar antes (opcional, não implementado ainda)
-        teardown: dict — limpeza após (opcional, não implementado ainda)
+                not_has_key: str — chave que NAO deve existir
+        setup: dict — estado a preparar antes (opcional, nao implementado ainda)
+        teardown: dict — limpeza apos (opcional, nao implementado ainda)
 
     Args:
-        scenarios: Lista de cenários. Se None, executa smoke + regression.
-        stop_on_failure: Se True, para no primeiro cenário que falhar.
+        args: dict com 'scenarios' (list[dict]|None) e 'stop_on_failure' (bool).
 
     Returns:
         {
@@ -57,6 +55,10 @@ def run_scripted_tests(
             "state_dump": {...}
         }
     """
+    args = args or {}
+    scenarios = args.get("scenarios", None)
+    stop_on_failure = args.get("stop_on_failure", False)
+
     if scenarios is None:
         scenarios = _default_scenarios()
 
@@ -864,35 +866,35 @@ def _regression_scenarios() -> list[dict]:
 # Cenários Customizados (API pública)
 # ══════════════════════════════════════════════════════════════════════
 
-def smoke_test() -> dict:
-    """Smoke test rápido: valida pipeline core do MCP.
+def smoke_test(args: dict | None = None) -> dict:
+    """Smoke test rapido: valida pipeline core do MCP.
 
-    Cenários: ping, health_check, self_test, ClassDB, validação GDScript.
-    NÃO requer Godot rodando. Ideal para início de sessão.
+    Cenarios: ping, health_check, self_test, ClassDB, validacao GDScript.
+    NAO requer Godot rodando. Ideal para inicio de sessao.
 
     Returns:
-        Resultado completo com status e sumário.
+        Resultado completo com status e sumario.
     """
-    return run_scripted_tests(scenarios=_smoke_scenarios())
+    return run_scripted_tests({"scenarios": _smoke_scenarios()})
 
 
-def regression_test() -> dict:
-    """Teste de regressão: valida correções dos GRUPOS 1 e 2.
+def regression_test(args: dict | None = None) -> dict:
+    """Teste de regressao: valida correcoes dos GRUPOS 1 e 2.
 
-    Cenários: write_file .gd inválido, safe_write_gdscript R2,
+    Cenarios: write_file .gd invalido, safe_write_gdscript R2,
     run_gut_tests skipped, git_commit_checkpoint com skip_validation.
 
     Returns:
-        Resultado completo com status e sumário.
+        Resultado completo com status e sumario.
     """
-    return run_scripted_tests(scenarios=_regression_scenarios())
+    return run_scripted_tests({"scenarios": _regression_scenarios()})
 
 
-def dump_mcp_state() -> dict:
+def dump_mcp_state(args: dict | None = None) -> dict:
     """Captura snapshot completo do estado do MCP.
 
-    Inclui: configuração, contagem de tools, caches, imports, ambiente.
-    Útil para debugging e comparação entre máquinas.
+    Inclui: configuracao, contagem de tools, caches, imports, ambiente.
+    Util para debugging e comparacao entre maquinas.
 
     Returns:
         dict com estado completo.
@@ -903,18 +905,20 @@ def dump_mcp_state() -> dict:
         "state": _capture_state(),
     }
 
-def estimate_tool_tokens(profile: str = "full") -> dict:
+def estimate_tool_tokens(args: dict | None = None) -> dict:
     """Estima o consumo de tokens do tools/list para cada perfil.
 
     Mede o tamanho do JSON que seria enviado no tools/list inicial
     e estima tokens (~4 chars por token para JSON).
 
     Args:
-        profile: "core", "dev", ou "full" (default).
+        args: dict com 'profile' (str, opcional, default "full").
 
     Returns:
         {"status": "success", "profile": str, "tool_count": int, "json_bytes": int, "estimated_tokens": int}
     """
+    args = args or {}
+    profile = args.get("profile", "full")
     valid_profiles = {"core", "dev", "full"}
     if profile not in valid_profiles:
         return {"status": "error", "message": f"Perfil '{profile}' invalido. Use: {sorted(valid_profiles)}."}
