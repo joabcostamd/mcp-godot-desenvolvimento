@@ -27,5 +27,23 @@
   },
   "vibe_coding": {
     "enabled": true
+  },
+  "_api_keys": {
+    "_comment": [
+      "═══ CHAVES DE API ═══",
+      "NUNCA coloque valores reais aqui! Este é apenas um template.",
+      "Use variáveis de ambiente ou um arquivo .env (adicionado ao .gitignore).",
+      "",
+      "Exemplos de variáveis de ambiente:",
+      "  HYPER3D_API_KEY=...      (geração 3D, Fatia 3.x)",
+      "  REPLICATE_API_TOKEN=...   (geração de arte FLUX, Fatia 3.x)",
+      "  ELEVENLABS_API_KEY=...    (geração de voz TTS, Fatia 3.x)",
+      "",
+      "Para verificar se há segredos vazados no repositório:",
+      "  python -c \"from tools.security_ops import scan_secrets; print(scan_secrets())\""
+    ],
+    "hyper3d_api_key": "",
+    "replicate_api_token": "",
+    "elevenlabs_api_key": ""
   }
 }

@@ -1,3 +1,10 @@
+# Arquivos de ambiente e credenciais (nunca commitar — chaves de API)
+.env
+.env.*
+credentials.*
+*.key
+*.pem
+
 # Arquivos temporários do MCP (nunca commitar)
 *_mcp_incr_compile.gd
 *.tscn.tmp
