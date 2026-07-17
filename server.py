@@ -5063,6 +5063,21 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
     """Roteia chamadas de tool para o handler correspondente."""
     import asyncio
 
+    # ── Governador de Autonomia (Fatia 0.14) ──────────────────────
+    from tools.governor import get_governor
+    gov = get_governor()
+    allowed, reason = gov.check_before(name, arguments or {})
+    if not allowed:
+        return [TextContent(
+            type="text",
+            text=json.dumps({
+                "status": "error",
+                "message": reason,
+                "governor_blocked": True,
+            }, ensure_ascii=False),
+            isError=True,
+        )]
+
     # ── Rate Limiting (Onda 6) ──────────────────────────────────
     from tools.rate_limiter import check_rate_limit
     allowed, rate_info = check_rate_limit()
@@ -5118,8 +5133,28 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
                     await session.send_tool_list_changed()
                 except Exception as e:
                     logger.warning("send_tool_list_changed falhou: %s", e)
+            # ── Governador: registrar resultado após execução ──────
+            gov.record_after(
+                name, arguments or {},
+                success=not is_error,
+                error_message=result.get("message", "") if is_error else "",
+            )
+            # Salvar estado periodicamente
+            if gov.state.iteration_count % 10 == 0:
+                try:
+                    gov.save()
+                except Exception:
+                    pass
+
             return [TextContent(type="text", text=json.dumps(result, ensure_ascii=False), isError=is_error)]
         except Exception as e:
+            # ── Governador: registrar falha na exceção ────────────
+            gov.record_after(
+                name, arguments or {},
+                success=False,
+                error_message=str(e),
+            )
+
             return [TextContent(type="text", text=json.dumps({
                 "status": "error",
                 "error_code": 5000,
