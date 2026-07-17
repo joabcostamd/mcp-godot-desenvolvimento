@@ -370,3 +370,108 @@ def get_phase_history() -> dict:
         "history": _phase_state.history,
         "total_advances": len(_phase_state.history),
     }
+
+
+def get_next_step() -> dict:
+    """Feature 10: retorna o proximo passo obrigatorio da sessao.
+
+    Grava o PID atual no marcador .mcp_session_started do projeto ativo,
+    liberando o gate em call_tool() para esta sessao.
+
+    Tool MCP: get_next_step
+    """
+    import os
+    from tools.project_ops import _get_active_project
+
+    try:
+        proj = _get_active_project()
+        marker = proj / ".mcp_session_started"
+    except Exception:
+        # Sem projeto ativo: retorna orientacao basica, sem gravar marcador
+        return {
+            "status": "success",
+            "phase": None,
+            "phase_label": "Sem projeto ativo",
+            "next_milestone": "Selecionar ou criar um projeto",
+            "blockers": ["Nenhum projeto ativo selecionado"],
+            "suggested_action": "Use project_manage para selecionar um projeto existente ou criar um novo. "
+                                "Depois chame get_next_step() novamente.",
+            "session_started": False,
+        }
+
+    # Grava PID no marcador
+    marker_content = {"session_started": True, "server_pid": os.getpid()}
+    import json
+    marker.write_text(json.dumps(marker_content), encoding="utf-8")
+
+    # Coleta dados da fase atual
+    phase_info = get_current_phase()
+    if phase_info.get("status") != "success":
+        return {"status": "error", "message": "Erro ao consultar fase atual.", "detail": phase_info}
+
+    phase = phase_info["phase"]
+    pode_avancar = phase_info.get("pode_avancar", False)
+    criterio = phase_info.get("criterio_para_avancar", "")
+    next_phase = phase_info.get("next_phase")
+    next_label = phase_info.get("next_phase_label", "")
+
+    # Monta blockers e suggested_action com base na fase
+    blockers = []
+    suggested_action = ""
+
+    if phase == "IDEIA":
+        blockers = [] if pode_avancar else ["Nenhum criterio bloqueia IDEIA->DESIGN (sempre permitido)"]
+        suggested_action = "Defina o conceito do jogo: use set_project_brief para registrar genero e estilo. "
+        suggested_action += "Depois avance com advance_phase()."
+
+    elif phase == "DESIGN":
+        blockers = ["Nenhum arquivo .tscn encontrado"] if not pode_avancar else []
+        suggested_action = "Crie a cena principal do jogo: use scene_manage op 'create' com root_type apropriado. "
+        if next_phase:
+            suggested_action += f"Quando tiver pelo menos 1 .tscn, avance para {next_label} com advance_phase()."
+
+    elif phase == "PROTOTIPO":
+        blockers = ["Pipeline de verificacao nao executado ou falhou"] if not pode_avancar else []
+        suggested_action = "Execute run_verification_pipeline para validar compilacao, execucao e testes. "
+        if next_phase:
+            suggested_action += f"Se passar, avance para {next_label} com advance_phase()."
+
+    elif phase == "CONTEUDO":
+        blockers = []
+        if not pode_avancar:
+            crit_parts = criterio.split(".")
+            for part in crit_parts:
+                part = part.strip()
+                if "sprite" in part.lower():
+                    blockers.append(f"Sprites insuficientes: {part}")
+                elif "audio" in part.lower():
+                    blockers.append(f"Audio insuficiente: {part}")
+            if not blockers:
+                blockers = [criterio]
+        suggested_action = "Adicione sprites e audio ao projeto. Use asset_manage para importar assets. "
+        if next_phase:
+            suggested_action += f"Quando tiver >= 3 sprites e >= 1 audio, avance para {next_label} com advance_phase()."
+
+    elif phase == "POLIMENTO":
+        blockers = ["Release checklist insuficiente (< 8/10)"] if not pode_avancar else []
+        suggested_action = "Execute release_checklist() e corrija os itens pendentes. "
+        if next_phase:
+            suggested_action += f"Quando atingir >= 8/10, avance para {next_label} com advance_phase()."
+
+    elif phase == "PRONTO_PARA_LANCAR":
+        blockers = []
+        suggested_action = "Projeto na fase final. Execute export_manage op 'build' para exportar o executavel. "
+        suggested_action += "Use release_checklist() para verificar se todos os itens estao OK."
+
+    return {
+        "status": "success",
+        "phase": phase,
+        "phase_label": phase_info.get("phase_label", phase),
+        "next_milestone": f"{next_label}" if next_phase else "Fase final",
+        "pode_avancar": pode_avancar,
+        "criterio_para_avancar": criterio,
+        "blockers": blockers,
+        "suggested_action": suggested_action,
+        "session_started": True,
+        "server_pid": os.getpid(),
+    }

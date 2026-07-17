@@ -155,6 +155,15 @@ def wave_generate(
             {"name": "Speeder", "base_count": 3, "weight": 1.2, "min_wave": 5, "hp_mult": 0.8},
         ]
 
+    # Normaliza: string → {"name": string, defaults}
+    normalized = []
+    for e in enemy_types:
+        if isinstance(e, str):
+            normalized.append({"name": e, "base_count": 3, "weight": 1.0, "min_wave": 1, "hp_mult": 1.0})
+        elif isinstance(e, dict):
+            normalized.append(e)
+    enemy_types = normalized if normalized else enemy_types
+
     waves = []
 
     for w in range(1, wave_count + 1):

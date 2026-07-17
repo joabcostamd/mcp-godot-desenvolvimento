@@ -485,12 +485,7 @@ reconciler = ReconciliationLoop()
 # ══════════════════════════════════════════════════════════════
 
 def create_entity(
-    name: str,
-    entity_type: str = "enemy",
-    description: str = "",
-    behavior: str = "patrol",
-    art_style: str | None = None,
-    save_path: str | None = None,
+    args: dict | None = None,
 ) -> dict:
     """Cria uma entidade COMPLETA de jogo usando o Orquestrador Genius.
 
@@ -498,16 +493,19 @@ def create_entity(
     Com Saga (rollback), Reconciliation (verificação), Circuit Breaker (APIs).
 
     Args:
-        name: Nome da entidade.
-        entity_type: enemy, player, tower, npc, item, projectile.
-        description: Descricao visual.
-        behavior: patrol, chase, static, flee, none.
-        art_style: scifi, fantasia, cartoon, pixel, minimalista.
-        save_path: Caminho da cena (auto se None).
+        args: dict com name, entity_type, description, behavior, art_style, save_path.
 
     Returns:
         Resultado completo com status, passos, artefatos, sugestões.
     """
+    args = args or {}
+    name = args.get("name", "")
+    entity_type = args.get("entity_type", "enemy")
+    description = args.get("description", "")
+    behavior = args.get("behavior", "patrol")
+    art_style = args.get("art_style", None)
+    save_path = args.get("save_path", None)
+
     from tools.project_ops import _get_active_project, _check_path_traversal
     from tools.project_state import get_state, refresh_state
 
@@ -713,8 +711,7 @@ MAX_BATCH_SIZE = 20
 
 
 def create_entities(
-    entities: list[dict],
-    stop_on_first_failure: bool = False,
+    args: dict | None = None,
 ) -> dict:
     """Cria múltiplas entidades em lote, sequencialmente.
 
@@ -729,15 +726,14 @@ def create_entities(
     - Nomes duplicados → erro imediato
 
     Args:
-        entities: Lista de specs de entidade. Cada dict aceita:
-            name (str, obrigatorio), entity_type, description,
-            behavior, art_style, save_path.
-        stop_on_first_failure: Se True, para na primeira falha.
-            Entidades ja criadas NAO sao desfeitas.
+        args: dict com entities (list[dict]) e stop_on_first_failure (bool).
 
     Returns:
         dict com status, total, succeeded, failed, results[], elapsed_ms.
     """
+    args = args or {}
+    entities = args.get("entities", [])
+    stop_on_first_failure = args.get("stop_on_first_failure", False)
     import time
     from collections import Counter
 
@@ -796,14 +792,14 @@ def create_entities(
 
         t_item = time.time()
         try:
-            r = create_entity(
-                name=name,
-                entity_type=entity_type,
-                description=description,
-                behavior=behavior,
-                art_style=art_style,
-                save_path=save_path,
-            )
+            r = create_entity({
+                "name": name,
+                "entity_type": entity_type,
+                "description": description,
+                "behavior": behavior,
+                "art_style": art_style,
+                "save_path": save_path,
+            })
             elapsed = int((time.time() - t_item) * 1000)
 
             if r.get("status") in ("success",):

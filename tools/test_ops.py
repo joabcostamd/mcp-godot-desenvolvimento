@@ -924,19 +924,21 @@ def estimate_tool_tokens(args: dict | None = None) -> dict:
         return {"status": "error", "message": f"Perfil '{profile}' invalido. Use: {sorted(valid_profiles)}."}
 
     try:
-        from server import TOOL_PROFILES, _tool_defs
+        _srv = sys.modules.get("server")
+        if _srv is None:
+            return {"status": "error", "message": "server.py nao esta no sys.modules."}
         # Sincroniza valid_profiles com os perfis reais do server
-        valid_profiles = set(TOOL_PROFILES.keys())
+        valid_profiles = set(_srv.TOOL_PROFILES.keys())
         if profile not in valid_profiles:
             return {"status": "error", "message": f"Perfil '{profile}' invalido. Use: {sorted(valid_profiles)}."}
-        all_tools = _tool_defs()
+        all_tools = _srv._tool_defs()
     except Exception:
         return {"status": "error", "message": "Nao foi possivel carregar as definicoes de tools do server."}
 
     if profile == "full":
         filtered = all_tools
     else:
-        profile_set = set(TOOL_PROFILES.get(profile, []))
+        profile_set = set(_srv.TOOL_PROFILES.get(profile, []))
         filtered = [t for t in all_tools if t.name in profile_set]
 
     # Serializa como JSON (simula tools/list)
@@ -1021,15 +1023,18 @@ def _capture_state() -> dict:
         "names": sorted([p.stem for p in tpl_dir.glob("*.gd")]) if tpl_dir.exists() else [],
     }
 
-    # Tools
+    # Tools — usa sys.modules (evita deadlock de import em thread run_in_executor)
     try:
-        from server import _TOOL_DEFS_CACHE, _HANDLERS_CACHE
-        state["tools"] = {
-            "defs_cached": _TOOL_DEFS_CACHE is not None,
-            "handlers_cached": _HANDLERS_CACHE is not None,
-            "tool_count": len(_TOOL_DEFS_CACHE) if _TOOL_DEFS_CACHE else 0,
-            "handler_count": len(_HANDLERS_CACHE) if _HANDLERS_CACHE else 0,
-        }
+        _srv = sys.modules.get("server")
+        if _srv is not None:
+            state["tools"] = {
+                "defs_cached": _srv._TOOL_DEFS_CACHE is not None,
+                "handlers_cached": _srv._HANDLERS_CACHE is not None,
+                "tool_count": len(_srv._TOOL_DEFS_CACHE) if _srv._TOOL_DEFS_CACHE else 0,
+                "handler_count": len(_srv._HANDLERS_CACHE) if _srv._HANDLERS_CACHE else 0,
+            }
+        else:
+            state["tools"] = {"error": "server.py não está no sys.modules (esperado em teste unitário?)"}
     except Exception:
         state["tools"] = {"error": "server.py não pôde ser importado (esperado em teste unitário)"}
 

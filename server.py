@@ -12,6 +12,7 @@ procedural, shaders, 3D, audio, exportacao, debug, localizacao).
 """
 
 import json
+import logging
 import os
 import subprocess
 import sys
@@ -22,6 +23,10 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
+
+# Logger do MCP
+logging.basicConfig(level=logging.WARNING, format="%(levelname)s:%(name)s:%(message)s")
+logger = logging.getLogger("mcp-godot")
 
 from mcp.server import NotificationOptions, Server
 from mcp.server.stdio import stdio_server
@@ -164,9 +169,9 @@ if _ACTIVE_PROFILE and _ACTIVE_PROFILE != "full":
 elif _ACTIVE_PROFILE == "full":
     _PROFILE_TOOLS = None  # sem filtro = todas as tools (~134)
 else:
-    # Default seguro: dev profile (31 tools, bem abaixo do limite de 128 do DeepSeek V4)
-    _PROFILE_TOOLS = set(TOOL_PROFILES["dev"])
-    print(f"[MCP] Profile 'dev' (default): {len(_PROFILE_TOOLS)} tools", file=sys.stderr)
+    # Default: full profile (sem filtro). Opcao C (CORE + fase) ja limita por fase
+    # Mantem maximo de 92 tools (PROTOTIPO), bem abaixo do limite de 128 do DeepSeek V4.
+    _PROFILE_TOOLS = None
 
 # ── Feature 8: Toolsets por Fase (--phase) ────────────────────
 # Filtro dinâmico: consulta get_current_phase() do projeto ativo
@@ -315,14 +320,36 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
 
 PHASE_ORDER_FILTER = ["IDEIA", "DESIGN", "PROTOTIPO", "CONTEUDO", "POLIMENTO", "PRONTO_PARA_LANCAR"]
 
+# ── Opcao C: CORE sempre visivel + ferramentas da fase atual ──
+# CORE = tools essenciais em QUALQUER fase (27 ferramentas).
+# As fases sao nao-cumulativas: cada fase ve CORE + suas proprias tools.
+PHASE_TOOLS_CORE = {
+    "ping", "health_check", "self_test", "bootstrap_godot_mcp",
+    "get_current_phase", "advance_phase", "get_phase_history",
+    "read_file", "write_file", "file_manage",
+    "safe_write_gdscript", "script_manage",
+    "project_manage", "project_status",
+    "safety_manage", "capture_proof", "verify_proof",
+    "dump_mcp_state",
+    "tool_catalog", "tool_groups", "godot_class_ref",
+    "scene_manage", "node_manage",
+    "validate_project_refs", "find_usages",
+    "create_entity", "create_entities",
+}
 
-def _get_phase_tools() -> set[str] | None:
-    """Retorna o set cumulativo de tools para a fase atual do projeto ativo.
 
-    Lê o arquivo .mcp_phase_state.json diretamente (não usa o singleton
-    em memória) para garantir que reflete o estado real do disco.
-    Se o arquivo não existe, cria com IDEIA (estado inicial padrão).
-    Returns None se não há projeto ativo.
+def _get_phase_tools() -> set[str]:
+    """Retorna o set de tools para a fase atual (Opcao C).
+
+    CORE (27 tools) esta sempre visivel. A elas somam-se as tools
+    exclusivas da fase atual (NAO cumulativo entre fases).
+
+    Se nao ha projeto ativo, retorna apenas o CORE (27 tools,
+    bem abaixo do limite de 128 do DeepSeek/Copilot).
+
+    Le o arquivo .mcp_phase_state.json diretamente (nao usa o singleton
+    em memoria) para garantir que reflete o estado real do disco.
+    Se o arquivo nao existe, cria com IDEIA (estado inicial padrao).
     """
     try:
         from tools.project_ops import _get_active_project
@@ -331,7 +358,6 @@ def _get_phase_tools() -> set[str] | None:
         phase_file = proj / ".mcp_phase_state.json"
         import json as _json
         if not phase_file.exists():
-            # Inicializa com IDEIA
             default_state = {"current_phase": "IDEIA", "history": [], "updated_at": ""}
             phase_file.parent.mkdir(parents=True, exist_ok=True)
             phase_file.write_text(_json.dumps(default_state, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -340,16 +366,12 @@ def _get_phase_tools() -> set[str] | None:
             data = _json.loads(phase_file.read_text(encoding="utf-8"))
             phase = data.get("current_phase", "")
             if not phase:
-                return None
+                return PHASE_TOOLS_CORE
     except Exception:
-        return None
+        return PHASE_TOOLS_CORE
 
-    allowed: set[str] = set()
-    for p in PHASE_ORDER_FILTER:
-        allowed.update(PHASE_TOOLSETS.get(p, set()))
-        if p == phase:
-            return allowed
-    return allowed
+    phase_tools = PHASE_TOOLSETS.get(phase, set())
+    return PHASE_TOOLS_CORE | phase_tools
 
 
 def _invalidate_tool_caches() -> None:
@@ -948,7 +970,7 @@ from tools.shader_editor_ops import read_shader, edit_shader, get_shader_params
 from tools.vfx_ops import create_particles_2d
 
 # ── Fase 1 do Roadmap: Máquina de Estados ───────────────────────
-from tools.phase_ops import get_current_phase, advance_phase, get_phase_history, set_cache_invalidator
+from tools.phase_ops import get_current_phase, advance_phase, get_phase_history, get_next_step, set_cache_invalidator
 from tools.milestone_ops import create_milestone_plan, advance_milestone, get_milestone_plan
 
 # Feature 8: registrar callback de invalidação de cache
@@ -3787,6 +3809,19 @@ def _tool_defs() -> list[Tool]:
             description="Mostra o historico de mudancas de fase do projeto. GRATIS.",
             inputSchema={"type": "object", "properties": {}},
         ),
+        # ── Feature 10: proximo passo obrigatorio ─────────────
+        Tool(
+            name="get_next_step",
+            description=(
+                "Retorna o PROXIMO PASSO OBRIGATORIO da sessao: fase atual, "
+                "blockers, criterio para avancar, e acao sugerida. "
+                "DEVE ser chamada no inicio de TODA sessao antes de qualquer "
+                "outra tool (exceto ping/health_check/setup). "
+                "Grava o PID da sessao no marcador .mcp_session_started "
+                "para liberar o gate de sessao. GRATIS."
+            ),
+            inputSchema={"type": "object", "properties": {}},
+        ),
         # ── Feature 5: Project Brief ────────────────────────────
         Tool(
             name="set_project_brief",
@@ -4569,11 +4604,11 @@ def _tool_defs() -> list[Tool]:
     if not _REGISTRY_VALIDATION_UNFILTERED and _PROFILE_TOOLS is not None:
         _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name in _PROFILE_TOOLS]
 
-    # ── Feature 8: Filtrar por fase do projeto ativo ──
+    # ── Feature 8: Filtrar por fase do projeto ativo (Opcao C) ──
+    # _get_phase_tools() sempre retorna um set: CORE + fase atual, ou so CORE
     if not _REGISTRY_VALIDATION_UNFILTERED:
         _phase_tools = _get_phase_tools()
-        if _phase_tools is not None:
-            _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name in _phase_tools]
+        _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name in _phase_tools]
 
     # ── Pós-processador: garantir 4 hints em 100% das tools ──
     _TOOL_DEFS_CACHE = _apply_hints(_TOOL_DEFS_CACHE)
@@ -4844,6 +4879,7 @@ def _build_handlers() -> dict:
         "get_current_phase": get_current_phase,
         "advance_phase": advance_phase,
         "get_phase_history": get_phase_history,
+        "get_next_step": get_next_step,
         # Fase 1 do Roadmap: Milestone Plan
         "create_milestone_plan": create_milestone_plan,
         "advance_milestone": advance_milestone,
@@ -4948,6 +4984,80 @@ def _build_handlers() -> dict:
     return _HANDLERS_CACHE
 
 
+# ── Opcao B: dispatch inteligente com cache de assinatura ──
+_SIGNATURE_CACHE: dict[int, int] = {}
+# 0 = sem parametros, 1 = args:dict, 2 = keyword params
+
+def _smart_call(handler, arguments: dict):
+    """Invoca handler com assinatura correta (args:dict, keyword, ou sem params)."""
+    import inspect
+    hid = id(handler)
+    mode = _SIGNATURE_CACHE.get(hid)
+    if mode is None:
+        sig = inspect.signature(handler)
+        params = list(sig.parameters.keys())
+        if not params:
+            mode = 0  # handler()
+        elif params[0] in ("args", "arguments"):
+            mode = 1  # handler(args)
+        else:
+            mode = 2  # handler(**kwargs)
+        _SIGNATURE_CACHE[hid] = mode
+    if mode == 0:
+        return handler()
+    if mode == 1:
+        return handler(arguments)
+    return handler(**arguments)
+
+
+# ── Feature 10: Session Gate ──────────────────────────────────
+SESSION_ALWAYS_ALLOWED = {
+    "ping", "health_check", "self_test", "bootstrap_godot_mcp",
+    "project_manage", "setup_mcp_config", "install_mcp_addon",
+    "validate_mcp_environment", "validate_godot_version",
+    "validate_mcp_registry",
+    "safety_manage", "dump_mcp_state",
+    "tool_catalog", "tool_groups",
+    "get_current_phase", "get_phase_history",
+    "get_next_step",
+}
+
+
+def _check_session_gate() -> tuple[bool, str]:
+    """Verifica se get_next_step() ja foi chamado nesta sessao (PID match)."""
+    import os
+    import json as _json
+    from tools.project_ops import _get_active_project
+
+    try:
+        proj = _get_active_project()
+        marker = proj / ".mcp_session_started"
+    except Exception:
+        # Sem projeto ativo: não bloqueia (tools sempre liberadas cobrem este caso)
+        return True, ""
+
+    if not marker.exists():
+        return False, _SESSION_GATE_MESSAGE
+
+    try:
+        data = _json.loads(marker.read_text(encoding="utf-8"))
+        if data.get("server_pid") != os.getpid():
+            return False, _SESSION_GATE_MESSAGE
+    except Exception:
+        # Marcador corrompido: fail-open (travar tudo e pior que perder o gate)
+        logger.warning("Session gate: marcador corrompido, fail-open liberando")
+        return True, ""
+
+    return True, ""
+
+
+_SESSION_GATE_MESSAGE = (
+    "Sessao nao inicializada. Chame get_next_step() primeiro para ver "
+    "a fase atual do projeto, os blockers e o proximo passo obrigatorio. "
+    "Isso garante que voce esta trabalhando na feature certa, na ordem certa."
+)
+
+
 @server.call_tool()
 async def call_tool(name: str, arguments: dict) -> list[TextContent]:
     """Roteia chamadas de tool para o handler correspondente."""
@@ -4968,13 +5078,27 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
             isError=True,
         )]
 
+    # ── Feature 10: Session Gate ──────────────────────────────────
+    if name not in SESSION_ALWAYS_ALLOWED:
+        try:
+            ok, msg = _check_session_gate()
+            if not ok:
+                return [TextContent(
+                    type="text",
+                    text=json.dumps({"status": "error", "message": msg}, ensure_ascii=False),
+                    isError=True,
+                )]
+        except Exception as e:
+            logger.warning("Session gate falhou (fail-open): %s", e)
+            # fail-open: não bloqueia — trava total é pior que perder gate uma vez
+
     handlers = _build_handlers()
     handler = handlers.get(name)
     if handler:
         try:
-            # P1-1: Despachar handlers para thread pool (evita bloquear event loop)
+            # P1-1: Despachar handlers para thread pool (Opcao B: _smart_call)
             loop = asyncio.get_running_loop()
-            result = await loop.run_in_executor(None, handler, arguments)
+            result = await loop.run_in_executor(None, _smart_call, handler, arguments)
             # Garante status sempre presente (outputSchema exige)
             if isinstance(result, dict) and "status" not in result:
                 result["status"] = "success"
@@ -4993,7 +5117,7 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
                     session = request_ctx.get().session
                     await session.send_tool_list_changed()
                 except Exception as e:
-                    print(f"[MCP] send_tool_list_changed falhou: {e}", file=sys.stderr)
+                    logger.warning("send_tool_list_changed falhou: %s", e)
             return [TextContent(type="text", text=json.dumps(result, ensure_ascii=False), isError=is_error)]
         except Exception as e:
             return [TextContent(type="text", text=json.dumps({

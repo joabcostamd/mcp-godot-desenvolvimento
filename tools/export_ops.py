@@ -181,7 +181,7 @@ def build_export(preset_name: str | None = None, output_path: str | None = None)
     except (ValueError, IndexError):
         score_num = 0
 
-    MIN_SCORE = 6
+    MIN_SCORE = 7
     if score_num < MIN_SCORE:
         failed = [c for c in checklist.get("checks", []) if c.get("status") in ("fail", "warn")]
         failed_items = "; ".join(
