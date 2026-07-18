@@ -81,7 +81,7 @@ Lembrete permanente: rode o fluxo da seção 7 do mestre em toda fatia (definir 
 
 ---
 
-## FATIA 0.4 — Bind loopback 127.0.0.1 **[AUTO]**
+## FATIA 0.4 — Bind loopback 127.0.0.1 **[AUTO]** *(rebalanceado de [SÊNIOR] — portão auditar.py cobre)*
 
 **Objetivo:** garantir que o servidor MCP, o Runtime Bridge (8790) e o Addon Bridge (9082) bindam em `127.0.0.1`, nunca `0.0.0.0`.
 
