@@ -702,6 +702,57 @@ def _build_safety_manage():
     )
 
 
+# ── Game Bridge (consolidação FATIA 0.7a) ─────────────────────────
+
+from tools.runtime_rich import (
+    game_call_method,
+    game_spawn_node,
+    game_raycast,
+    game_get_camera,
+    game_find_nodes_by_class,
+    game_await_signal,
+    game_pause,
+    game_play_animation,
+)
+from tools.networking_ops import game_http_request, game_multiplayer
+from tools.recording_ops import game_serialize_state
+from tools.runtime_ui import game_performance, game_window, game_input_state
+
+
+def _build_game_bridge_manage():
+    """game_bridge_manage: 14 operações de game bridge (consolidação FATIA 0.7a)."""
+    return create_manage_tool(
+        tool_name="game_bridge_manage",
+        description=(
+            "Gerencia o jogo em execução via Runtime Bridge: métodos, spawn, "
+            "raycast, câmera, busca, sinais, pausa, animação, performance, "
+            "janela, input, HTTP, multiplayer e serialização de estado. "
+            "Use para controlar o jogo rodando sem precisar de ferramentas "
+            "individuais. Quando NÃO usar: para operações de editor/cena "
+            "(use scene_manage, node_manage)."
+        ),
+        ops={
+            "call_method": game_call_method,
+            "spawn_node": game_spawn_node,
+            "raycast": game_raycast,
+            "get_camera": game_get_camera,
+            "find_by_class": game_find_nodes_by_class,
+            "await_signal": game_await_signal,
+            "pause": game_pause,
+            "play_animation": game_play_animation,
+            "performance": game_performance,
+            "window": game_window,
+            "input_state": game_input_state,
+            "http_request": game_http_request,
+            "multiplayer": game_multiplayer,
+            "serialize_state": game_serialize_state,
+        },
+        tool_hints={"destructiveHint": True, "idempotentHint": False, "openWorldHint": True},
+        title="Gerenciar Game Bridge",
+        tags=["game", "runtime", "bridge", "multiplayer", "input"],
+    )
+
+
 def _build_vision_manage():
     return create_manage_tool(
         tool_name="vision_manage",
@@ -755,6 +806,8 @@ _ROLLUP_BUILDERS = [
     # Etapa 4: raycast + test
     _build_raycast_manage,
     _build_test_manage,
+    # Etapa 5: game bridge (consolidação FATIA 0.7a)
+    _build_game_bridge_manage,
 ]
 
 # Cache interno — garante que cada builder só executa UMA vez.
