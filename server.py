@@ -4616,6 +4616,15 @@ def _tool_defs() -> list[Tool]:
     # ── Onda 5: compactar descricoes ────────────────────────
     _TOOL_DEFS_CACHE = _compact_all_tool_descriptions(_TOOL_DEFS_CACHE)
 
+    # ── Kill Switch (Fatia 0.12): remove tools de features desabilitadas ──
+    try:
+        from tools.kill_switch import get_disabled_tools as _get_disabled
+        _disabled = _get_disabled()
+        if _disabled:
+            _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name not in _disabled]
+    except Exception:
+        pass  # Kill switch não disponível — segue sem filtro
+
     return _TOOL_DEFS_CACHE
 
 

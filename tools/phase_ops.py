@@ -94,7 +94,7 @@ class PhaseState:
         }
 
     def save(self) -> dict:
-        """Grava estado no JSON."""
+        """Grava estado no JSON (com schema_version via Fatia 0.10)."""
         fp = self._get_file_path()
         if not fp:
             return {"status": "error", "message": "Nenhum projeto ativo definido."}
@@ -105,7 +105,8 @@ class PhaseState:
                 "history": self.history,
                 "updated_at": datetime.now(timezone.utc).isoformat(),
             }
-            fp.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
+            from tools.schema_migration import save_state_with_version
+            save_state_with_version(".mcp_phase_state.json", data, fp.parent)
             return {"status": "success", "path": str(fp)}
         except Exception as e:
             return {"status": "error", "message": f"Erro ao salvar estado: {e}"}

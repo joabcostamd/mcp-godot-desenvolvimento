@@ -169,21 +169,40 @@ def write_file(path: str, content: str, mode: str = "create",
 
     if mode == "create":
         if full_path.exists():
+            # Idempotente: retorna sucesso se já existe (Fatia 0.13)
             return {
-                "status": "error",
-                "message": f"Arquivo '{path}' já existe. Use mode='overwrite' para sobrescrever "
-                           f"ou mode='append' para adicionar conteúdo.",
+                "status": "success",
+                "path": path,
+                "idempotent": True,
+                "note": f"Arquivo '{path}' já existia. Use mode='overwrite' se quiser substituir.",
             }
-        # B16 FIX: Checkpoint tambem em create (seguranca se arquivo for recriado)
+        # Checkpoint em create (seguranca se arquivo for recriado)
         if full_path.parent.exists():
             backup_id = checkpoint(path, proj)
     elif mode == "overwrite":
         if full_path.exists():
+            # Idempotente: verifica se conteúdo é idêntico antes de sobrescrever
+            from tools.idempotency_audit import content_identical
+            if content_identical(full_path, content):
+                return {
+                    "status": "success",
+                    "path": path,
+                    "idempotent": True,
+                    "note": f"Conteúdo de '{path}' é idêntico ao atual. Nada foi alterado.",
+                }
             backup_id = checkpoint(path, proj)
     elif mode == "append":
         if full_path.exists():
-            backup_id = checkpoint(path, proj)
+            # Idempotente: verifica se conteúdo a appended já existe no final
             existing = full_path.read_text(encoding="utf-8")
+            if existing.endswith(content):
+                return {
+                    "status": "success",
+                    "path": path,
+                    "idempotent": True,
+                    "note": f"Conteúdo já existia no final de '{path}'. Nada foi alterado.",
+                }
+            backup_id = checkpoint(path, proj)
             content = existing + content
     else:
         return {
@@ -214,9 +233,11 @@ def delete_file(path: str) -> dict:
     full_path = proj / path
 
     if not full_path.exists():
+        # Idempotente: se já foi removido, retorna sucesso (Fatia 0.13)
         return {
-            "status": "error",
-            "message": f"Arquivo '{path}' não encontrado. Use inspect_project para listar arquivos.",
+            "status": "success",
+            "idempotent": True,
+            "note": f"Arquivo '{path}' já não existia. Nada foi alterado.",
         }
 
     if full_path.is_dir():

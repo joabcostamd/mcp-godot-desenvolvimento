@@ -251,7 +251,7 @@ class AutonomyGovernor:
     # ── Persistência ─────────────────────────────────────────────────
 
     def save(self, path: Optional[Path] = None) -> str:
-        """Salva o estado do governador em disco."""
+        """Salva o estado do governador em disco (com schema_version via Fatia 0.10)."""
         if isinstance(path, str):
             path = Path(path)
         save_path = path or self._state_path or Path(".mcp_governor_state.json")
@@ -263,12 +263,16 @@ class AutonomyGovernor:
             "no_progress_count": self.state.no_progress_count,
             "budget_used": self.state.budget_used,
         }
-        save_path.write_text(json.dumps(data, indent=2, ensure_ascii=False))
+        try:
+            from tools.schema_migration import save_state_with_version
+            save_state_with_version(".mcp_governor_state.json", data, save_path.parent)
+        except Exception:
+            save_path.write_text(json.dumps(data, indent=2, ensure_ascii=False))
         logger.info("Governador: estado salvo em %s", save_path)
         return str(save_path)
 
     def load(self, path: Optional[Path] = None):
-        """Restaura o estado do governador do disco."""
+        """Restaura o estado do governador do disco (com migração se necessário)."""
         # Aceitar str ou Path
         if isinstance(path, str):
             path = Path(path)
@@ -276,7 +280,10 @@ class AutonomyGovernor:
         self._state_path = load_path
         if load_path.exists():
             try:
-                data = json.loads(load_path.read_text())
+                from tools.schema_migration import load_state_with_migration
+                data, _migrated = load_state_with_migration(
+                    ".mcp_governor_state.json", load_path.parent
+                )
                 self.state.iteration_count = data.get("iteration_count", 0)
                 self.state.stopped = data.get("stopped", False)
                 self.state.stop_reason = data.get("stop_reason", "")

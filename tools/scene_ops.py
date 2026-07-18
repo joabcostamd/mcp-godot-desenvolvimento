@@ -320,13 +320,16 @@ def _list_node_paths_from_parsed(nodes: list[dict]) -> list[str]:
 def create_scene(name: str, root_type: str, path: str) -> dict:
     """Cria uma nova cena (.tscn) com um nó raiz.
 
+    Idempotente (Fatia 0.13): se a cena já existe, retorna sucesso
+    com {"idempotent": True} — não cria duplicata nem sobrescreve.
+
     Args:
         name: Nome do nó raiz (ex: "Main").
         root_type: Tipo do nó raiz (ex: "Node2D"). Validado contra ClassDB.
         path: Caminho relativo ao projeto (ex: "scenes/main.tscn").
 
     Returns:
-        {"status": "success", "path": str}
+        {"status": "success", "path": str, "idempotent": bool|None}
         ou {"status": "error", "message": str}
     """
     proj = _get_active_project()
@@ -343,8 +346,10 @@ def create_scene(name: str, root_type: str, path: str) -> dict:
     full_path = proj / path
     if full_path.exists():
         return {
-            "status": "error",
-            "message": f"Cena '{path}' já existe. Use outro nome ou delete_file primeiro.",
+            "status": "success",
+            "path": path,
+            "idempotent": True,
+            "note": f"Cena '{path}' já existia. Use delete_file primeiro se quiser substituir.",
         }
 
     full_path.parent.mkdir(parents=True, exist_ok=True)
@@ -550,13 +555,14 @@ def add_node(scene_path: str | None = None, parent_node_path: str = ".", node_na
                        f"Use load_scene_tree para ver a árvore de nós.",
         }
 
-    # Verifica se nó com mesmo nome já existe sob o pai
+    # Verifica se nó com mesmo nome já existe sob o pai (idempotente: retorna sucesso)
     for n in nodes:
         if n.get("parent") == parent_node["name"] and n["name"] == node_name:
             return {
-                "status": "error",
-                "message": f"Já existe um nó chamado '{node_name}' sob '{parent_node_path}'. "
-                           f"Escolha outro nome.",
+                "status": "success",
+                "node_path": f"{scene_path}::{node_name}",
+                "idempotent": True,
+                "note": f"Nó '{node_name}' já existia sob '{parent_node_path}'. Nada foi alterado.",
             }
 
     # Checkpoint
@@ -641,9 +647,11 @@ def delete_node(scene_path: str | None = None, node_path: str = "") -> dict:
 
     target = _find_node_in_parsed(nodes, node_path)
     if not target:
+        # Idempotente: se já foi removido, retorna sucesso
         return {
-            "status": "error",
-            "message": f"Nó '{node_path}' não encontrado na cena.",
+            "status": "success",
+            "idempotent": True,
+            "note": f"Nó '{node_path}' já não existia na cena (provavelmente já foi removido). Nada foi alterado.",
         }
 
     # Encontra todos os descendentes (nós cujo parent é o target ou descendente)

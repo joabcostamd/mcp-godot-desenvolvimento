@@ -1,0 +1,928 @@
+{
+  "generated_at": "2026-07-18T01:41:35.008072+00:00",
+  "hash": "bba777052c9ad4bcb09d0159d38dc2a5a3f0e09aaaa039209abcea99ac8b0876",
+  "tool_count": 45,
+  "tools": {
+    "addon_batch_edit": {
+      "description": "Executa MÚLTIPLAS operações no editor em UMA ação UndoRedo. 1 Ctrl+Z desfaz TUDO. Ideal para criar estruturas complexas.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "operations": {
+            "description": "Lista de operações [{method, params}, ...].",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "operations"
+        ],
+        "type": "object"
+      }
+    },
+    "addon_connect": {
+      "description": "Conecta ao addon GDScript via WebSocket na porta 9082. Use após abrir o Godot com o addon MCP instalado.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      }
+    },
+    "addon_create_node": {
+      "description": "Cria um nó na cena atual do editor Godot com UndoRedo NATIVO (Ctrl+Z funciona).",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "node_name": {
+            "description": "Nome do novo nó.",
+            "type": "string"
+          },
+          "node_type": {
+            "description": "Tipo Godot (ex: Sprite2D).",
+            "type": "string"
+          },
+          "parent_path": {
+            "description": "Path do nó pai (ex: /root/Main).",
+            "type": "string"
+          },
+          "properties": {
+            "description": "Propriedades iniciais (opcional).",
+            "type": "object"
+          },
+          "scene_path": {
+            "description": "Cena alvo (opcional).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parent_path",
+          "node_type",
+          "node_name"
+        ],
+        "type": "object"
+      }
+    },
+    "addon_delete_node": {
+      "description": "Remove um nó da cena do editor com UndoRedo nativo. Pré-condições: addon conectado.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "node_path": {
+            "description": "Path absoluto do nó.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "node_path"
+        ],
+        "type": "object"
+      }
+    },
+    "addon_disconnect": {
+      "description": "Desconecta do addon GDScript.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      }
+    },
+    "addon_duplicate_node": {
+      "description": "Duplica um nó no editor com UndoRedo nativo. Pré-condições: addon conectado.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "new_name": {
+            "description": "Nome da cópia (opcional).",
+            "type": "string"
+          },
+          "node_path": {
+            "description": "Path do nó a duplicar.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "node_path"
+        ],
+        "type": "object"
+      }
+    },
+    "addon_get_scene_tree": {
+      "description": "Obtém a árvore da cena atual do editor via addon. Retorna estrutura hierárquica completa com tipos e paths.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      }
+    },
+    "addon_is_available": {
+      "description": "Verifica se o addon GDScript está conectado e respondendo. Use para decidir entre modo editor (addon) ou file-based.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      }
+    },
+    "addon_ping": {
+      "description": "Verifica se o addon GDScript está respondendo (ping/pong).",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      }
+    },
+    "addon_reparent_node": {
+      "description": "Move um nó para outro pai no editor com UndoRedo nativo. Pré-condições: addon conectado.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "new_parent_path": {
+            "description": "Path do novo pai.",
+            "type": "string"
+          },
+          "node_path": {
+            "description": "Path do nó a mover.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "node_path",
+          "new_parent_path"
+        ],
+        "type": "object"
+      }
+    },
+    "addon_set_property": {
+      "description": "Define uma propriedade de nó no editor com UndoRedo nativo. Use para ajustar posição, escala, cor, etc.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "node_path": {
+            "description": "Path do nó.",
+            "type": "string"
+          },
+          "property_name": {
+            "description": "Nome da propriedade.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Valor (tipos Godot serializados como JSON).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "node_path",
+          "property_name",
+          "value"
+        ],
+        "type": "object"
+      }
+    },
+    "addon_take_screenshot": {
+      "description": "Captura screenshot do viewport do editor Godot via addon.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "viewport": {
+            "description": "'editor' (padrão) ou path.",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      }
+    },
+    "advance_phase": {
+      "description": "Avanca o projeto para a proxima fase, SE o criterio da fase atual foi cumprido. Use force=true so com motivo explicito.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "force": {
+            "description": "Ignora criterios de transicao (obrigatorio informar reason).",
+            "type": "boolean"
+          },
+          "reason": {
+            "description": "Justificativa para avanco forcado (obrigatorio se force=true).",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      }
+    },
+    "bootstrap_godot_mcp": {
+      "description": "🚀 BOOTSTRAP AUTOMÁTICO: conecta VS Code → MCP → Godot em UMA chamada.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "godot_path": {
+            "description": "Caminho do executável Godot. Auto-detecta do config.json se omitido.",
+            "type": "string"
+          },
+          "launch_editor": {
+            "description": "Abrir Godot Editor se não estiver aberto. Default: true.",
+            "type": "boolean"
+          },
+          "project_path": {
+            "description": "Caminho do projeto Godot. Auto-detecta se omitido.",
+            "type": "string"
+          },
+          "target": {
+            "description": "full=tudo, connect_only=só conexão (Godot já aberto), validate_only=só checar ambiente",
+            "enum": [
+              "full",
+              "connect_only",
+              "validate_only"
+            ],
+            "type": "string"
+          },
+          "timeout_addon": {
+            "description": "Segundos máximos esperando addon iniciar (default 15).",
+            "type": "integer"
+          },
+          "timeout_godot": {
+            "description": "Segundos máximos esperando Godot abrir (default 30).",
+            "type": "integer"
+          }
+        },
+        "required": [],
+        "type": "object"
+      }
+    },
+    "build_csharp": {
+      "description": "Compila projeto C# e retorna erros estruturados.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "project_path": {
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      }
+    },
+    "capture_proof": {
+      "description": "Coleta MECANICAMENTE a evidência de uma tarefa concluída e grava num arquivo assinado por hash SHA-256.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "extra_commands": {
+            "description": "Comandos extras cujo stdout/stderr capturar. Máx 5.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "project_path": {
+            "description": "Caminho do repositório. Default: raiz do MCP.",
+            "type": "string"
+          },
+          "run_tests": {
+            "description": "Se roda regression_test como parte da prova. Default: true.",
+            "type": "boolean"
+          },
+          "task_id": {
+            "description": "Identificador curto da tarefa.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "type": "object"
+      }
+    },
+    "configure_export_preset": {
+      "description": "Configura um preset de exportacao (Windows, Linux, macOS, Web, Android).",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "app_name": {
+            "description": "Nome do aplicativo.",
+            "type": "string"
+          },
+          "company": {
+            "description": "Nome da empresa/estudio.",
+            "type": "string"
+          },
+          "icon_path": {
+            "description": "Caminho do icone .ico/.png.",
+            "type": "string"
+          },
+          "preset_name": {
+            "description": "Nome do preset (default 'Windows Desktop').",
+            "type": "string"
+          },
+          "version": {
+            "description": "Versao (ex: '1.0.0').",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      }
+    },
+    "create_entities": {
+      "description": "Cria MULTIPLAS entidades em lote sequencial.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "entities": {
+            "description": "Lista de specs de entidade (cada uma igual ao create_entity).",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "stop_on_first_failure": {
+            "description": "Se True, para na primeira falha (default: False).",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "entities"
+        ],
+        "type": "object"
+      }
+    },
+    "create_entity": {
+      "description": "Cria uma entidade COMPLETA: cena + collider + script + sprite + audio. Decide automaticamente o que gerar.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "art_style": {
+            "description": "Estilo visual.",
+            "enum": [
+              "scifi",
+              "fantasy",
+              "pixel",
+              "cartoon"
+            ],
+            "type": "string"
+          },
+          "behavior": {
+            "description": "Comportamento IA.",
+            "enum": [
+              "patrol",
+              "chase",
+              "idle",
+              "none"
+            ],
+            "type": "string"
+          },
+          "description": {
+            "description": "Descricao do comportamento.",
+            "type": "string"
+          },
+          "entity_type": {
+            "description": "Tipo de entidade.",
+            "enum": [
+              "enemy",
+              "player",
+              "tower",
+              "npc",
+              "item",
+              "projectile"
+            ],
+            "type": "string"
+          },
+          "generate_art": {
+            "description": "Forcar geracao de arte (null=auto).",
+            "type": "boolean"
+          },
+          "generate_audio": {
+            "description": "Forcar geracao de audio (null=auto).",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Nome da entidade (ex: Slime, Player, Turret).",
+            "type": "string"
+          },
+          "save_path": {
+            "description": "Caminho para salvar a cena.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      }
+    },
+    "deploy_itch": {
+      "description": "Exporta e envia o jogo para itch.io via butler CLI. Suporta Windows, Linux, Web, macOS, Android. GRATIS.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "dry_run": {
+            "type": "boolean"
+          },
+          "itch_game": {
+            "type": "string"
+          },
+          "itch_username": {
+            "type": "string"
+          },
+          "platforms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      }
+    },
+    "dump_mcp_state": {
+      "description": "Captura snapshot completo do estado do MCP: config, tool counts, caches, imports, git.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      }
+    },
+    "export_manage": {
+      "description": "",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "op": {
+            "description": "Operação a executar. Valores válidos: list_presets, validate_templates, build.",
+            "enum": [
+              "list_presets",
+              "validate_templates",
+              "build"
+            ],
+            "type": "string"
+          },
+          "params": {
+            "additionalProperties": true,
+            "description": "Parâmetros da operação. Cada op espera campos específicos — consulte a descrição da tool para saber quais campos são necessários para cada op.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "op"
+        ],
+        "type": "object"
+      }
+    },
+    "file_manage": {
+      "description": "Gerencia arquivos do projeto Godot: deletar, mover/renomear e inspecionar/listar arquivos por categoria.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "op": {
+            "description": "Operação a executar. Valores válidos: delete, move, inspect.",
+            "enum": [
+              "delete",
+              "move",
+              "inspect"
+            ],
+            "type": "string"
+          },
+          "params": {
+            "additionalProperties": true,
+            "description": "Parâmetros da operação. Cada op espera campos específicos — consulte a descrição da tool para saber quais campos são necessários para cada op.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "op"
+        ],
+        "type": "object"
+      }
+    },
+    "find_usages": {
+      "description": "Encontra TODOS os usos de um recurso/alvo no projeto (estatico, sem LSP).",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "max_results": {
+            "description": "Limite de resultados (default: 50).",
+            "type": "integer"
+          },
+          "project_path": {
+            "description": "Caminho do projeto (opcional).",
+            "type": "string"
+          },
+          "search_type": {
+            "description": "auto, script, scene, texture, any (default: auto).",
+            "type": "string"
+          },
+          "target": {
+            "description": "Nome do arquivo ou path parcial (ex: player.gd).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "target"
+        ],
+        "type": "object"
+      }
+    },
+    "get_current_phase": {
+      "description": "",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      }
+    },
+    "get_phase_history": {
+      "description": "Mostra o historico de mudancas de fase do projeto. GRATIS.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      }
+    },
+    "godot_class_ref": {
+      "description": "Consulta metodos, propriedades, sinais, enums e constantes nativos do Godot via ClassDB (extension_api.json).",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "class_name": {
+            "description": "Nome exato da classe nativa (ex: Node2D, CharacterBody2D). Nao funciona com classes custom de projetos.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "class_name"
+        ],
+        "type": "object"
+      }
+    },
+    "health_check": {
+      "description": "Verifica a saude de todos os componentes do MCP: config.json, Godot, ClassDB, templates, projeto ativo.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      }
+    },
+    "node_manage": {
+      "description": "",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "op": {
+            "description": "Operação a executar. Valores válidos: create, delete, set_property, get_property, reparent, connect_signal, list_signals.",
+            "enum": [
+              "create",
+              "delete",
+              "set_property",
+              "get_property",
+              "reparent",
+              "connect_signal",
+              "list_signals"
+            ],
+            "type": "string"
+          },
+          "params": {
+            "additionalProperties": true,
+            "description": "Parâmetros da operação. Cada op espera campos específicos — consulte a descrição da tool para saber quais campos são necessários para cada op.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "op"
+        ],
+        "type": "object"
+      }
+    },
+    "ping": {
+      "description": "Verifica se o servidor godot-mcp-agent está funcional e conectado.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      }
+    },
+    "project_manage": {
+      "description": "",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "op": {
+            "description": "Operação a executar. Valores válidos: create, set_active, get_settings, set_setting, set_main_scene.",
+            "enum": [
+              "create",
+              "set_active",
+              "get_settings",
+              "set_setting",
+              "set_main_scene"
+            ],
+            "type": "string"
+          },
+          "params": {
+            "additionalProperties": true,
+            "description": "Parâmetros da operação. Cada op espera campos específicos — consulte a descrição da tool para saber quais campos são necessários para cada op.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "op"
+        ],
+        "type": "object"
+      }
+    },
+    "project_status": {
+      "description": "Status completo do projeto: cenas, scripts, sprites, audio, assets faltantes, sugestoes do que criar a seguir.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      }
+    },
+    "read_console_output": {
+      "description": "Lê as últimas linhas do console do editor Godot.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "since_timestamp": {
+            "type": "number"
+          }
+        },
+        "required": [],
+        "type": "object"
+      }
+    },
+    "read_file": {
+      "description": "Lê o conteúdo de um arquivo do projeto (.gd, .tscn, .tres, etc.).",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "end_line": {
+            "description": "Linha final inclusiva (opcional).",
+            "type": "integer"
+          },
+          "path": {
+            "description": "Caminho relativo ao projeto.",
+            "type": "string"
+          },
+          "start_line": {
+            "description": "Linha inicial (1-indexed, opcional).",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "type": "object"
+      }
+    },
+    "release_checklist": {
+      "description": "",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      }
+    },
+    "safe_write_gdscript": {
+      "description": "Escreve .gd COM validacao. Recusa codigo invalido! Ex: {'file_path':'res://x.gd','content':'...'}.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "file_path": {
+            "type": "string"
+          },
+          "project_path": {
+            "type": "string"
+          },
+          "strict": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "file_path",
+          "content"
+        ],
+        "type": "object"
+      }
+    },
+    "safety_manage": {
+      "description": "",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "op": {
+            "description": "Operação a executar. Valores válidos: list_backups, restore, checkpoint, undo, undo_history.",
+            "enum": [
+              "list_backups",
+              "restore",
+              "checkpoint",
+              "undo",
+              "undo_history"
+            ],
+            "type": "string"
+          },
+          "params": {
+            "additionalProperties": true,
+            "description": "Parâmetros da operação. Cada op espera campos específicos — consulte a descrição da tool para saber quais campos são necessários para cada op.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "op"
+        ],
+        "type": "object"
+      }
+    },
+    "scene_manage": {
+      "description": "Gerencia cenas Godot (.tscn) com operações de criação, carregamento e instanciação.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "op": {
+            "description": "Operação a executar. Valores válidos: create, load_tree, instance.",
+            "enum": [
+              "create",
+              "load_tree",
+              "instance"
+            ],
+            "type": "string"
+          },
+          "params": {
+            "additionalProperties": true,
+            "description": "Parâmetros da operação. Cada op espera campos específicos — consulte a descrição da tool para saber quais campos são necessários para cada op.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "op"
+        ],
+        "type": "object"
+      }
+    },
+    "script_manage": {
+      "description": "",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "op": {
+            "description": "Operação a executar. Valores válidos: generate, attach, detach, validate, add_var, add_signal.",
+            "enum": [
+              "generate",
+              "attach",
+              "detach",
+              "validate",
+              "add_var",
+              "add_signal"
+            ],
+            "type": "string"
+          },
+          "params": {
+            "additionalProperties": true,
+            "description": "Parâmetros da operação. Cada op espera campos específicos — consulte a descrição da tool para saber quais campos são necessários para cada op.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "op"
+        ],
+        "type": "object"
+      }
+    },
+    "self_test": {
+      "description": "Executa uma suite de testes internos do MCP: ping, ClassDB, godot_parser, jinja2, Pillow.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      }
+    },
+    "tool_catalog": {
+      "description": "Catalogo de tools por grupo. Ex: {'query':'scene','group':'core'}.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "group": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "query": {
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      }
+    },
+    "tool_groups": {
+      "description": "Gerencia grupos dinamicos de tools. Ex: {'action':'activate','group':'art'}.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "enum": [
+              "list",
+              "activate",
+              "deactivate"
+            ],
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "type": "object"
+      }
+    },
+    "validate_project_refs": {
+      "description": "",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "full_report": {
+            "description": "Relatorio completo sem truncar (default: false).",
+            "type": "boolean"
+          },
+          "project_path": {
+            "description": "Caminho do projeto (opcional).",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      }
+    },
+    "verify_proof": {
+      "description": "",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "max_age_minutes": {
+            "description": "Prova mais velha que isso é obsoleta. Default: 60.",
+            "type": "integer"
+          },
+          "project_path": {
+            "description": "Caminho do repositório. Default: raiz do MCP.",
+            "type": "string"
+          },
+          "task_id": {
+            "description": "Se passado, verifica a prova mais recente desse task_id.",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      }
+    },
+    "write_file": {
+      "description": "Cria ou modifica um arquivo no projeto.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "description": "Conteúdo a escrever.",
+            "type": "string"
+          },
+          "mode": {
+            "description": "Modo: create (só se não existir), overwrite (substitui), append (adiciona).",
+            "enum": [
+              "create",
+              "overwrite",
+              "append"
+            ],
+            "type": "string"
+          },
+          "path": {
+            "description": "Caminho relativo ao projeto.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "content"
+        ],
+        "type": "object"
+      }
+    }
+  }
+}

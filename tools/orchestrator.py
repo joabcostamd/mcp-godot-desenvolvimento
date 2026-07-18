@@ -560,6 +560,12 @@ def create_entity(
     audio_path = f"assets/audio/sfx/{name}.wav"
 
     # Passo 1: Criar cena
+    # BUGFIX (Fatia 0.13, auditoria): Se a cena já existia ANTES desta Saga,
+    # a compensação NÃO deve apagá-la — evitar perda de dados quando outro
+    # passo falha posteriormente.
+    _scene_path_full = proj / save_path
+    _scene_existed_before = _scene_path_full.exists()
+
     def create_scene_step():
         from tools.scene_ops import create_scene as sc_create
         r = sc_create(name, godot_type, save_path)
@@ -571,6 +577,8 @@ def create_entity(
         return r
 
     def compensate_scene():
+        if _scene_existed_before:
+            return  # NÃO deletar cena que já existia antes desta Saga
         full = proj / save_path
         if full.exists():
             full.unlink()
