@@ -5010,7 +5010,7 @@ def _smart_call(handler, arguments: dict):
     return handler(**arguments)
 
 
-# ── Feature 10: Session Gate ──────────────────────────────────
+    # ── Feature 10: Session Gate ──────────────────────────────────
 SESSION_ALWAYS_ALLOWED = {
     "ping", "health_check", "self_test", "bootstrap_godot_mcp",
     "project_manage", "setup_mcp_config", "install_mcp_addon",
@@ -5077,6 +5077,28 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
             }, ensure_ascii=False),
             isError=True,
         )]
+
+    # ── Auto-checkpoint antes de operação destrutiva (Fatia 0.5) ──
+    _DESTRUCTIVE_TOOLS = {
+        "batch_atomic_edit", "addon_batch_edit", "write_file",
+        "delete_node", "delete_file", "reparent_node",
+        "set_node_property", "safe_write_gdscript",
+        "create_scene", "create_entity", "create_entities",
+        "import_3d_model", "build_export", "paint_tilemap_cell",
+        "set_project_setting", "set_main_scene",
+        "configure_input_action", "configure_autoload",
+        "addon_create_node", "addon_delete_node",
+        "addon_set_property", "addon_reparent_node",
+        "addon_duplicate_node",
+    }
+    if name in _DESTRUCTIVE_TOOLS:
+        try:
+            from tools.safety import _auto_checkpoint
+            cp_result = _auto_checkpoint()
+            if cp_result.get("status") == "error":
+                logger.warning("Auto-checkpoint falhou (fail-open): %s", cp_result.get("message"))
+        except Exception as e:
+            logger.warning("Auto-checkpoint exception (fail-open): %s", e)
 
     # ── Rate Limiting (Onda 6) ──────────────────────────────────
     from tools.rate_limiter import check_rate_limit

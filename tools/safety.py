@@ -234,6 +234,56 @@ def list_backups(
     return index
 
 
+def _auto_checkpoint() -> dict:
+    """Checkpoint git automático e silencioso para operações destrutivas.
+
+    DIFERENTE de git_checkpoint(): não valida GDScript, não gera proof ledger,
+    não bloqueia por erros de compilação no jogo. É um save-and-commit rápido
+    antes de operações destrutivas (Fatia 0.5).
+
+    Retorna:
+        {"status": "success", "commit": str} | {"status": "skipped"} | {"status": "error", "message": str}
+    """
+    import subprocess
+    from pathlib import Path
+
+    try:
+        from tools.project_ops import _get_active_project as _gap
+        project_root = _gap()
+    except Exception:
+        project_root = None
+
+    if project_root is None:
+        return {"status": "skipped", "note": "Sem projeto ativo."}
+
+    git_dir = project_root / ".git"
+    if not git_dir.exists():
+        return {"status": "skipped", "note": "Projeto não é repositório git."}
+
+    try:
+        # git add -A
+        r1 = subprocess.run(["git", "add", "-A"],
+                            cwd=str(project_root), capture_output=True, text=True, timeout=10)
+        if r1.returncode != 0:
+            return {"status": "error", "message": f"git add falhou: {r1.stderr[:200]}"}
+
+        # git commit com mensagem prefixada
+        msg = f"[auto-checkpoint] checkpoint pre-operacao destrutiva"
+        r2 = subprocess.run(["git", "commit", "-m", msg, "--allow-empty"],
+                            cwd=str(project_root), capture_output=True, text=True, timeout=10)
+        if r2.returncode == 0:
+            sha = r2.stdout.strip().split()[-1]
+            return {"status": "success", "commit": sha}
+        elif "nothing to commit" in r2.stdout or "nothing to commit" in r2.stderr:
+            return {"status": "skipped", "note": "Nada a commitar."}
+        else:
+            return {"status": "error", "message": f"git commit falhou: {r2.stderr[:200]}"}
+    except subprocess.TimeoutExpired:
+        return {"status": "error", "message": "Checkpoint git excedeu timeout de 10s."}
+    except Exception as e:
+        return {"status": "error", "message": f"Checkpoint git exceção: {e}"}
+
+
 def git_checkpoint(message: str, project_root: Path | None = None,
                     skip_validation: bool = False,
                     skip_proof: bool = False) -> dict:
