@@ -43,6 +43,8 @@ TOOLSETS = {
         "smoke_test", "dump_mcp_state",
         "capture_proof", "verify_proof",
         "validate_mcp_registry",
+        # Meta-tools (Fatia 0.15)
+        "catalog_search", "describe_tool", "invoke_by_name",
     ],
     "scene_ops": [
         "scene_manage", "node_manage", "raycast_manage",
@@ -153,6 +155,14 @@ TOOL_PROFILES = {
         "take_screenshot", "capture_runtime_errors", "get_runtime_state_digest",
         "import_asset_manifest", "create_asset_manifest",
         # ── Phase management (Feature 8: tool_list_changed) ──
+        "get_current_phase", "advance_phase", "get_phase_history",
+    ],
+    "lean": [
+        "ping", "health_check", "self_test", "bootstrap_godot_mcp",
+        "read_file", "write_file", "safe_write_gdscript",
+        # ── Meta-tools (Fatia 0.15) ──
+        "catalog_search", "describe_tool", "invoke_by_name",
+        # ── Phase management ──
         "get_current_phase", "advance_phase", "get_phase_history",
     ],
     "full": [],  # vazio = sem filtro (todas as tools)
@@ -4928,6 +4938,10 @@ def _build_handlers() -> dict:
         "run_verification_pipeline": _handle_run_verification_pipeline,
         # Validação de Consistência do Registro
         "validate_mcp_registry": _handle_validate_mcp_registry,
+        # ── Meta-tools (Fatia 0.15) ──
+        "catalog_search": _handle_catalog_search,
+        "describe_tool": _handle_describe_tool,
+        "invoke_by_name": _handle_invoke_by_name,
     }
 
     # ── Rollups Fase 2A / C1 ───────────────────────────────────────
@@ -5199,6 +5213,28 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
 
 
 # ── Handlers ────────────────────────────────────────────────────────
+
+def _handle_catalog_search(args: dict) -> dict:
+    """Handler da meta-tool catalog_search."""
+    from tools.meta_ops import catalog_search
+    return catalog_search(
+        query=args.get("query", ""),
+        group=args.get("group", ""),
+        limit=args.get("limit", 20),
+    )
+
+def _handle_describe_tool(args: dict) -> dict:
+    """Handler da meta-tool describe_tool."""
+    from tools.meta_ops import describe_tool
+    return describe_tool(name=args.get("name", ""))
+
+def _handle_invoke_by_name(args: dict) -> dict:
+    """Handler da meta-tool invoke_by_name."""
+    from tools.meta_ops import invoke_by_name
+    return invoke_by_name(
+        name=args.get("name", ""),
+        arguments=args.get("arguments"),
+    )
 
 def _handle_validate_mcp_registry(args: dict) -> dict:
     """Handler da tool validate_mcp_registry."""
