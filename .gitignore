@@ -42,3 +42,6 @@ workflow_logs/
 # IDE
 .vscode/
 .mcp_proof/
+
+# Roadmap progress (Governador 4.8 - nao versionar, append-only)
+.roadmap_progress.json

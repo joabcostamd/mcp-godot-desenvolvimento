@@ -4,6 +4,10 @@
 
 Formato de cada fatia abaixo: **Objetivo · Por quê · Arquivos prováveis · O que fazer · Critério de aceite específico · Marcação**. A spec de código concreta é gerada sob demanda, no momento de fazer a fatia — aqui está o *o quê* e o *como auditar*, não o código.
 
+> ⚠️ **AVISO SOBRE "ARQUIVOS PROVÁVEIS"** — em todas as camadas deste roadmap, os caminhos de arquivo citados são **palpite**, feitos a partir do catálogo de tools e do documento de contexto, **não de leitura do repositório real**. Trate-os como pista, nunca como fato. Confirme onde as coisas realmente estão antes de editar (é o passo 2 do fluxo, mestre seção 7).
+>
+> **Consequência esperada e normal:** as 2–3 primeiras fatias provavelmente vão revelar que parte deste plano precisa de ajuste — um rollup que não esconde o que eu supus, um arquivo que não existe, uma tool que já cobre o que eu marquei como buraco. **Isso é o plano funcionando, não falhando.** Ajuste o documento e siga.
+
 Lembrete permanente: rode o fluxo da seção 7 do mestre em toda fatia (definir pronto → checkpoint git → snapshot → implementar → 6 critérios → cross-model → decidir/escalar).
 
 ---
@@ -370,9 +374,11 @@ Lembrete permanente: rode o fluxo da seção 7 do mestre em toda fatia (definir 
 
 ## ORDEM SUGERIDA DENTRO DA CAMADA 0
 
-Recomendação (o humano pode ajustar):
-1. **0.1** (inventário) — destrava o resto.
-2. **0.14** (governador) — cedo, porque protege todas as fatias seguintes.
+**Antes de tudo (ver mestre, seções 8 e 9):** Fatia 0.0 (bootstrap) → **0.0.1 (verificação de ambiente, bloqueadora)** → **0.0.5 (`auditar.py`, o portão)** → rebalanceamento das marcações [SÊNIOR]/[AUTO].
+
+Depois disso, dentro da Camada 0:
+1. **0.14** (governador) — **primeiro**, porque a 0.1 é uma varredura grande e deve rodar já protegida pelos freios (teto de iteração, anti-spiral, não-progresso).
+2. **0.1** (inventário) — destrava o planejamento de todas as camadas seguintes.
 3. **0.4, 0.6** (bind loopback, segredo) — segurança rápida, [AUTO].
 4. **0.2, 0.3** (spec MCP, Cline) — diagnósticos com prazo.
 5. **0.5, 0.13** (git safety, idempotência) — segurança de cadeia.

@@ -38,6 +38,8 @@ O problema: cada tool exposta consome tokens de contexto em toda requisição, e
 
 **Regra 1 — Rollup-first, é lei.** Toda feature nova entra como **op dentro de um rollup** (`nome_manage` com parâmetro `op`), nunca como tool nova de topo. Exceção só com justificativa explícita registrada na fatia e aprovada em revisão sênior. Exemplo: 9 features de música = 1 tool `music_manage` com 9 ops, não 9 tools.
 
+**Como se cria um rollup neste repositório (fato confirmado do código):** usar a factory **`create_manage_tool()` de `_meta_tool.py`**. Não escreva um rollup à mão nem invente outro padrão — use a factory existente. E registre normalmente: `Tool()` em `_tool_defs()` + handler em `_build_handlers()`.
+
 **Regra 2 — Consolidar o que já estourou, antes de adicionar.** Antes de adicionar features numa fase, se essa fase já passou do teto, consolidar tools existentes em rollups primeiro. (A Camada 0 trata a consolidação de PROTOTIPO.)
 
 **Regra 3 — Gate de orçamento de tools no CI.** Existe um teste que **falha o build** se qualquer fase passar de ~40 tools visíveis ou se o total de tools de topo passar de ~70 (teto secundário; ver seção 2). Toda fatia roda esse gate na autoauditoria (critério 5). Estourar o teto por acidente é impossível — o processo barra.
@@ -64,9 +66,22 @@ Baseadas em incidentes reais de 2026 (agentes autônomos apagando produção + b
 
 **3.1 — Rede em loopback.** O servidor MCP, o Runtime Bridge (8790) e o Addon Bridge (9082) devem bindar em `127.0.0.1`, **nunca** `0.0.0.0`. Toda fatia que toca em bind de rede verifica isso na autoauditoria. Bind em `0.0.0.0` = falha automática, sem discussão.
 
-**3.2 — Backup fora do raio de explosão.** Checkpoint/backup nunca vive só dentro da pasta do projeto que pode ser apagada/corrompida. A rede de segurança real é **git**: antes de qualquer operação destrutiva, um commit/checkpoint automático. Duas redes independentes: UndoRedo do editor (para mudanças de cena/nó) + git (para tudo).
+**3.2 — Backup fora do raio de explosão.** Checkpoint/backup nunca vive só dentro da pasta do projeto que pode ser apagada/corrompida. A rede de segurança real é **git**. Duas redes independentes: UndoRedo do editor (para mudanças de cena/nó) + git (para tudo).
 
-**3.3 — Commit/checkpoint antes de operação destrutiva, obrigatório.** Operação destrutiva = edição em lote, delete de arquivo/nó, correção automática de erro, qualquer coisa que sobrescreve. Antes: checkpoint. Se a operação quebra algo, rollback. Sem checkpoint prévio, a operação não roda.
+**3.3 — CHECKPOINT ≠ COMMIT (regra única, não confundir).**
+
+Estas são duas coisas diferentes e têm regras opostas. Nunca misture:
+
+| | **Checkpoint de segurança** | **Commit de verdade** |
+|---|---|---|
+| O que é | `git stash` nomeado ou branch de segurança (`safety/fatia-X`) | `git commit` na branch de trabalho |
+| Quando | **Antes de toda operação destrutiva**, sempre | Ao fechar uma fatia aprovada |
+| Aprovação humana | **NÃO precisa.** É rede de segurança, não decisão. | **SEMPRE precisa.** É decisão. |
+| Objetivo | Poder desfazer | Registrar o que ficou pronto |
+
+Operação destrutiva = edição em lote, delete de arquivo/nó, correção automática de erro, consolidação de tools, qualquer coisa que sobrescreve. **Sem checkpoint prévio, a operação não roda.** Se a operação quebra algo, rollback para o checkpoint.
+
+Commit nunca é automático. A IA prepara e propõe; o humano confirma. (Exceção única: a Fatia 0.0 de bootstrap, que só move arquivos de documentação e pode commitar — está explicitado lá.)
 
 **3.4 — Segredos nunca em commit.** Com integrações de API externas (música, arte, 3D, voz), chaves de API são risco. Nenhuma chave em código ou em arquivo versionado. Toda fatia que adiciona integração externa verifica isso (scan de segredo) na autoauditoria.
 
@@ -91,6 +106,39 @@ Todo loop autônomo sem teto duro não é um sistema, é uma esperança. Estes s
 **4.6 — Checkpoint humano antes de irreversível.** Commit, push, delete em massa, mudança de arquivo de config do projeto: **espere aprovação humana.** Você prepara e propõe; o humano confirma.
 
 **4.7 — Escalação entrega pacote, não só "parei".** Ao escalar, entregue: (a) o que a fatia deveria fazer, (b) o que você tentou, (c) o output real da falha, (d) sua hipótese da causa, (e) estado atual preservado. Isso faz a retomada ser útil, não um recomeço do zero.
+
+**4.8 — O registro de progresso vive FORA do que o rollback reverte.**
+
+Problema real: se o registro de "estou na fatia X, passos 1–3 feitos, tentativa 2 falhou assim" estiver versionado no git, um rollback de fatia falha **apaga o registro junto** — e você esquece que já tentou, e repete a tentativa que falhou (violando o anti-spiral 4.2).
+
+Regra: o arquivo de progresso (`.roadmap_progress.json` ou equivalente) fica **no `.gitignore`**, nunca é revertido por rollback, e é **append-only** (você acrescenta tentativas, nunca sobrescreve o histórico). Ele registra:
+- fatia atual, passos concluídos com resultado
+- tentativas feitas, com o que falhou em cada uma
+- contadores do governador (iterações, repetições, passagens sem progresso, orçamento consumido)
+
+Ao retomar qualquer fatia: **leia este arquivo primeiro.** Se ele mostra que uma abordagem já falhou, não repita.
+
+**4.9 — Se, no meio da implementação, o plano se mostrar errado: PARE.**
+
+Não conserte o plano silenciosamente enquanto executa. Isso é a deriva mais comum e é invisível para o humano. Ao descobrir que uma suposição do plano era falsa:
+1. Pare a implementação.
+2. Registre no arquivo de progresso: qual suposição caiu e qual é a realidade.
+3. Volte para Plan (ou reporte, se estiver em execução autônoma) e replaneje com a informação nova.
+
+Replanejar com informação nova é progresso legítimo (não conta como repetição). Continuar executando um plano sabidamente errado, não.
+
+**4.10 — Formato do pacote de escalação para revisão sênior (Claude/Opus).**
+
+Quem revisar **não terá o histórico desta conversa nem do seu contexto**. Entregue sempre, nesta ordem:
+1. Número e nome da fatia + a marcação ([AUTO]/[SÊNIOR]/[MARGINAL])
+2. O trecho do documento da camada que descreve essa fatia (colado, não referenciado)
+3. Os critérios de aceite que você definiu antes de começar
+4. O que passou e o que falhou, com output real e curto
+5. As tentativas já feitas (do arquivo de progresso) — para não sugerirem algo já testado
+6. Sua hipótese de causa
+7. A pergunta específica que você precisa que seja respondida
+
+Sem o item 2 e o item 5, a revisão sai genérica ou repete o que já falhou.
 
 **Escalar vs. repetir — a regra que decide:** só tente de novo se a próxima tentativa tiver **informação nova**. Se você repetiria a mesma coisa, não tente — escale. Repetição idêntica nunca ajuda.
 
@@ -158,15 +206,49 @@ A pesquisa mostra que tool ambígua degrada a escolha mais que tool a mais — "
 - ❌ Falha se: nome/descrição se confunde com tool existente, ou duas tools ficam "intercambiáveis" para o modelo.
 - Prova: o resultado da busca mostrando que não há colisão, OU o ajuste de nome/descrição feito para eliminar a colisão.
 
+### IMPORTANTE — os critérios são PROGRESSIVOS (leia antes de auditar qualquer coisa)
+
+Alguns critérios dependem de ferramental que só é construído no meio da Camada 0. Exigir os 6 desde a primeira fatia forçaria você a improvisar a auditoria — e improvisar diferente a cada vez é exatamente a causa de inconsistência entre fatias. Então:
+
+**Nível 1 — vale desde a Fatia 0.1 (sem ferramental novo):**
+- **C3** Regressão (o `smoke_test` já existe no MCP)
+- **C4** Segurança/não-intrusão (checklist binária, não precisa de ferramenta)
+- **C5** Orçamento (contagem manual de tools)
+- **C1 reduzido:** em vez do snapshot automático, salvar `tools/list` num arquivo antes e depois e comparar com `diff`. Manual, mas objetivo.
+- **C2 reduzido:** declarar entrada e saída esperada antes, rodar, comparar à mão. Manual, mas objetivo.
+- **C6 reduzido:** conferir o nome novo contra a lista de tools existente (busca textual simples).
+
+**Nível 2 — passa a valer quando o ferramental existir:**
+- **C1 completo** → depois da Fatia **0.11** (contract snapshot automático com classificação breaking/warning/cosmético)
+- **C6 completo** → depois da Fatia **0.15** (`catalog_search` para colisão semântica, não só textual)
+- **C2 completo** → depois da Fatia **2.7** (canary queries versionadas, rodadas automaticamente)
+
+**Nível 3 — o portão executável:**
+Assim que o `auditar.py` existir (Fatia 0.0.5), **ele passa a ser a única forma válida de fechar uma fatia**. Nenhum critério vale mais como "eu conferi e está ok" — vale como "o script rodou e retornou zero".
+
+**Regra que fecha o buraco:** você **nunca** pula um critério por falta de ferramenta. Você roda a versão reduzida dele e **registra no relatório qual nível usou**. Pular critério é falha de auditoria; usar a versão reduzida declarada, não.
+
 ### Segunda camada — verificação cross-model (Pro ↔ Flash)
 
 A pesquisa mostra que usar um modelo diferente para verificar reduz o viés de auto-preferência (o modelo tende a aprovar o próprio trabalho). Você tem dois modelos. Use-os:
 
-- **Pro implementa** a fatia.
-- **Flash verifica**, em **contexto novo** (sessão/tarefa nova, não continuando a conversa do Pro), rodando os 6 critérios contra o resultado do Pro, **sem ver o raciocínio do Pro** — só o resultado e os testes.
+- **Pro implementa** a fatia (Pro é o modelo do modo **Act** — implementar é o trabalho difícil).
+- **Flash verifica**, rodando os critérios contra o resultado do Pro, **sem ver o raciocínio do Pro** — só o resultado e os testes.
 - Se Flash reprova onde Pro aprovou: escale. A divergência é sinal, não ruído.
 
-Isto não é cross-model perfeito (mesma família de modelo), mas é muito melhor que a mesma instância se auto-avaliando na mesma janela de contexto, que é onde o viés é mais forte.
+**Duas formas de rodar a verificação, com força diferente — escolha consciente:**
+
+| | **Forte (recomendada)** | **Fraca (conforto)** |
+|---|---|---|
+| Como | Abrir **tarefa nova** no Cline com o Flash, colando só o resultado e os critérios | Flash roda como subtarefa **dentro** do `/act`, na mesma janela |
+| Custo pra você | 1 clique a mais (abrir tarefa) | zero |
+| Vale? | Sim — contexto independente é o que **de fato** reduz alucinação | Parcial — mesma janela é onde o viés é mais forte |
+
+A ciência é clara: *modelos que "olham" para as próprias alucinações no contexto tendem a repeti-las*. A versão fraca não é inútil (o Flash ainda é outro modelo), mas perde a maior parte do benefício.
+
+**Recomendação:** use a forte em toda fatia [SÊNIOR] e em qualquer fatia que mexa em código já aprovado. Use a fraca nas [AUTO] triviais, se quiser velocidade. **Registre no relatório qual foi usada** — para que uma revisão futura saiba o peso daquela verificação.
+
+Isto não é cross-model perfeito (mesma família de modelo), mas mesmo a versão forte já é muito melhor que a mesma instância se auto-avaliando na mesma janela.
 
 ### Marcação de cada fatia
 
@@ -181,17 +263,22 @@ Cada fatia no roadmap é marcada:
 
 Para cada fatia, nesta ordem:
 
+0. **Ler o arquivo de progresso** (`.roadmap_progress.json`, Governador 4.8). Se esta fatia já foi tentada, veja o que falhou — **não repita abordagem já testada**.
 1. **Ler** o documento da camada da fatia + este mestre.
-2. **Definir "pronto"**: escrever os critérios de aceite objetivos (os testes que vão provar). (Governador 4.5)
-3. **Checkpoint git** do estado atual. (Segurança 3.3)
-4. **Snapshot de contrato** antes (C1).
-5. **Implementar** a fatia (Pro).
-6. **Rodar os 6 critérios de autoauditoria** (seção 6).
-7. **Verificação cross-model** (Flash, contexto novo).
-8. **Decidir pela marcação:**
-   - [AUTO] + tudo passou → atualizar o mestre (marcar fatia como feita), commit proposto ao humano, seguir para a próxima.
-   - [SÊNIOR] ou qualquer critério falhou ou Flash divergiu → montar pacote de escalação (Governador 4.7), parar, escalar.
-9. **Respeitar os guardrails** (seção 4) o tempo todo: teto de iteração, anti-spiral, não-progresso, orçamento.
+2. **Verificar as suposições do plano contra o código real** antes de aceitar o plano. Os "arquivos prováveis" nos documentos das camadas são **palpite**, não fato — confirme onde as coisas realmente estão. (Se uma suposição cair, Governador 4.9.)
+3. **Definir "pronto"**: escrever os critérios de aceite objetivos (os testes que vão provar). (Governador 4.5)
+4. **Checkpoint de segurança** (`git stash`/branch, sem pedir aprovação — Segurança 3.3).
+5. **Capturar o estado "antes"** para os critérios (tools/list, contagens).
+6. **Implementar** a fatia (Pro, modo Act).
+7. **Rodar a autoauditoria:** o `auditar.py` se já existir (a partir da Fatia 0.0.5); antes disso, os critérios no nível progressivo disponível (seção 6).
+8. **Verificação cross-model** (Flash — forte ou fraca, declarar qual).
+9. **Gravar no arquivo de progresso**: o que ficou pronto, o que falhou, qual nível de critério e qual verificação foram usados.
+10. **Decidir pela marcação:**
+   - [AUTO] + tudo passou → atualizar o mestre (marcar fatia como feita), **propor** commit ao humano (nunca commitar sozinha), seguir para a próxima.
+   - [SÊNIOR] ou qualquer critério falhou ou Flash divergiu → montar pacote de escalação (Governador 4.7 e 4.10), parar, escalar.
+11. **Respeitar os guardrails** (seção 4) o tempo todo: teto de iteração, anti-spiral, não-progresso, orçamento.
+
+**Se a fatia se mostrar grande demais** (estourou o teto de 8 iterações ou o orçamento sem chegar perto de "pronto"): não force. Proponha uma **divisão da fatia** em duas menores, com critérios próprios cada, registre no arquivo de progresso, e escale para o humano aprovar a divisão. Fatia grande demais é erro de planejamento meu, não sua falha — dividir é a correção certa.
 
 Nunca pule etapas. Nunca faça duas fatias "de uma vez" — a pesquisa e o histórico deste projeto provam que batch não funciona aqui.
 
@@ -204,7 +291,27 @@ Legenda: **[AUTO]** autofechável · **[SÊNIOR]** requer revisão sênior · **
 Os detalhes de cada fatia (arquivos, ops, critério específico) estão no documento da camada correspondente. A spec de código concreto de cada fatia é gerada sob demanda, uma por vez, no momento de fazê-la — não está pré-escrita, de propósito (código escrito cedo demais envelhece antes do uso).
 
 ### FATIA 0.0 — BOOTSTRAP [AUTO]
-Ler os documentos colados na raiz, criar a estrutura `.clinerules/`, mover cada documento para lá com o nome/prefixo correto, verificar que o Cline os lê, reportar. (É a primeira coisa a rodar. Detalhe no fim deste documento, seção 10.)
+Ler os documentos colados na raiz, criar a estrutura `.clinerules/`, mover cada documento para lá, verificar que o Cline os lê, reportar. (Detalhe na seção 10.)
+
+### FATIA 0.0.1 — PASSO ZERO: VERIFICAÇÃO DE AMBIENTE [SÊNIOR]
+**Vem antes de qualquer código.** A dor da primeira tentativa deste projeto veio de começar sem verificar o ambiente — não de plano ruim. Verificar e reportar:
+1. **Bug do `reasoning_content` (BLOQUEADOR).** O DeepSeek V4 em modo thinking exige que `reasoning_content` seja devolvido em toda mensagem do assistente após uma chamada de ferramenta; clientes que descartam o campo recebem **erro 400 a partir do segundo turno** — exatamente onde uma fatia vive. Testar uma tarefa com 3+ chamadas de ferramenta seguidas. Se der 400: reportar e parar até o humano decidir (desligar thinking mode, ou rotear por OpenRouter, que faz o round-trip transparentemente).
+2. **Versão do Cline** e se ela tem: Strict Plan Mode, Focus Chain, workflows em `.clinerules/workflows/`.
+3. **Caminho real das rules** nesta instalação (confirmar que é `.clinerules/`).
+4. **Decisão: o MCP fica conectado ao Cline durante o desenvolvimento?** Você vai editar o próprio servidor MCP. Se ele estiver conectado, cada mudança em `server.py` muda as tools debaixo dos seus pés no meio da fatia. Recomendação: **desconectar** e testar por script. Precisa de decisão humana registrada.
+5. **Ambiente Godot**: versão, export templates instalados, o que falta para as fatias que exigem Godot real.
+6. **Custo**: registrar o custo das 3 primeiras fatias e extrapolar para as ~70. Reportar ao humano antes de assumir que é irrelevante.
+
+### FATIA 0.0.5 — `auditar.py`, O PORTÃO EXECUTÁVEL [SÊNIOR — revisão obrigatória]
+Construir o script que decide o que é "pronto". **É a fatia mais importante do roadmap inteiro.**
+
+Por quê: a falha que domina execução autônoma é *o agente declarar sucesso que nunca verificou* — e um agente que fabrica é tipicamente confiante. A correção medida (taxa de fabricação de ~0,95%) é impor que **"done" só seja alcançável através de um portão que realmente executou e retornou verdadeiro**. Enquanto a auditoria for checklist que você diz ter cumprido, ela é falsificável. Como script com código de saída, não é.
+
+O script roda os critérios do nível disponível (seção 6) e retorna **exit code 0 (passou) ou ≠0 (falhou)**, gravando o resultado em arquivo. A partir daqui, **nenhuma fatia fecha sem `auditar.py` retornar 0.**
+
+Dois furos circulares que precisam de tratamento explícito:
+- **Ele não pode auditar a si mesmo.** Esta fatia é a única sem portão — exige revisão humana/Claude obrigatória. Não pode ser autofechada em nenhuma hipótese.
+- **Se uma fatia quebrar o servidor, o script para de funcionar** (ele importa `server.py` para contar tools). Deve rodar em **subprocesso isolado** e tratar "não consegui importar" como **FALHA** (fail-closed), nunca como "sem resultado". Silêncio nunca pode ser lido como aprovação.
 
 ### CAMADA 0 — FUNDAÇÃO E SEGURANÇA (documento `01`)
 Vem antes de qualquer feature. Destrava tudo e protege o que existe.
@@ -328,13 +435,17 @@ Fase 4 do roadmap original. Adiar.
 
 ## 9. ORDEM DE EXECUÇÃO (resumo)
 
-1. Fatia 0.0 (bootstrap) primeiro, sempre.
-2. Camada 0 inteira (fundação + segurança) — **não pule.** Nada de feature antes disso.
-3. Camada 2 (testes) começa **intercalada** com a Camada 0 — não deixe testes para depois (erro já cometido neste projeto).
-4. Camada 1 (experiência do dev) — resolve dores de toda sessão.
-5. Camada 3 (criação com fosso) — maior valor de produto.
-6. Camada 4 (extensões de processo).
-7. Camadas 5, 6, 7 — só com confirmação humana explícita por fatia (são [MARGINAL]).
+1. **Fatia 0.0** (bootstrap) primeiro, sempre.
+2. **Fatia 0.0.1** (verificação de ambiente) — **bloqueadora**. Se o `reasoning_content` estiver quebrado, nada mais funciona; pare e reporte.
+3. **Fatia 0.0.5** (`auditar.py`) — o portão executável, com revisão humana obrigatória.
+4. **Fatia 0.14** (governador) — antes da 0.1, porque a 0.1 é uma varredura grande e deve rodar já protegida pelos freios.
+5. **Rebalanceamento de marcações** — depois que o `auditar.py` existir, revisar quais fatias ainda precisam ser [SÊNIOR]. Muitas foram marcadas assim por falta de portão confiável; com o portão de pé, a maioria pode virar [AUTO]. **Este passo é obrigatório** — sem ele o processo fica travado em revisão manual e perde a autonomia que o desenho promete.
+6. Camada 0 restante (fundação + segurança) — **não pule.** Nada de feature antes disso.
+7. Camada 2 (testes) começa **intercalada** com a Camada 0 — não deixe testes para depois (erro já cometido neste projeto).
+8. Camada 1 (experiência do dev) — resolve dores de toda sessão.
+9. Camada 3 (criação com fosso) — maior valor de produto.
+10. Camada 4 (extensões de processo).
+11. Camadas 5, 6, 7 — só com confirmação humana explícita por fatia (são [MARGINAL]).
 
 Dentro de cada camada, siga a ordem numérica das fatias, salvo instrução em contrário no documento da camada.
 
@@ -350,14 +461,30 @@ Esta é a primeira tarefa. Execute assim:
 4. Mova cada documento numerado para dentro de `.clinerules/`, mantendo o nome exato.
 5. Verifique que os arquivos estão em `.clinerules/` e legíveis.
 6. Faça um commit git: `chore: bootstrap roadmap Memory Bank`.
-7. Reporte ao humano: quais arquivos foram movidos, confirmação de que o `.gitignore` está correto, e a mensagem: **"Bootstrap completo. Li o mestre. Próximo passo: Fatia 0.1 (inventário nível-op dos rollups), marcada [SÊNIOR] — vou preparar e escalar para revisão. Confirma?"**
-8. **Pare e espere confirmação humana** antes da Fatia 0.1. (A primeira fatia real é [SÊNIOR]; não a feche sozinha.)
+7. Adicione `.roadmap_progress.json` ao `.gitignore` (Governador 4.8 — o registro de progresso não pode ser revertido por rollback).
+8. Reporte ao humano: quais arquivos foram movidos, confirmação do `.gitignore`, e a mensagem: **"Bootstrap completo. Li o mestre. Próximo passo: Fatia 0.0.1 (verificação de ambiente), que é bloqueadora — vou testar o bug do `reasoning_content`, a versão do Cline, e o ambiente Godot, e reportar antes de tocar em qualquer código. Confirma?"**
+9. **Pare e espere confirmação humana.**
 
-Bootstrap é operação de arquivo pura — baixo risco. As fatias de implementação (a partir da 0.1) seguem todos os guardrails e a autoauditoria deste documento.
+Bootstrap é operação de arquivo pura — baixo risco, e é a única exceção onde você pode commitar sem aprovação (Segurança 3.3). As fatias seguintes seguem todos os guardrails e a autoauditoria deste documento.
 
 ---
 
-## 11. QUANDO ESCALAR PARA O HUMANO (e para o Claude/Opus como crítico sênior)
+## 11. CONFIGURAÇÃO DO CLINE (fazer antes de começar)
+
+Não é prompt, mas decide se o processo funciona:
+
+- **Modelo por modo:** **Pro no Act** (implementar é o trabalho difícil) e Pro no Plan. O **Flash é reservado para a verificação** (tarefa separada), não para implementar. Não inverta isso — colocar Flash no Act faz o modelo mais fraco implementar e deixa a verificação sem verificador.
+- **Strict Plan Mode: LIGADO.** Existe bug reportado onde DeepSeek V4 Pro/Flash troca de Plan para Act sozinho e se auto-aprova. Este toggle impede.
+- **Focus Chain: ligado** (padrão). Reinjeta a lista de passos a cada ~6 mensagens e sobrevive a resumo de contexto — é o que impede a fatia de derivar.
+- **Auto-approve granular e generoso:** leitura de arquivo, edição dentro do workspace, comandos seguros (testes, lint, `git status`) automáticos. Isso remove ~90% dos cliques sem remover o portão de conclusão.
+- **Auto-approve NUNCA para:** comandos destrutivos, push, instalação de dependência.
+- **YOLO Mode: DESLIGADO.** Ele auto-aprova a transição Plan→Act e desliga toda checagem — é a configuração onde a falha dominante (declarar sucesso não verificado) fica invisível.
+- **Nota:** o Cline **removeu** o limite de "máximo de requisições" na v3.35. Não existe mais freio nativo — o freio vem do Governador (seção 4) e do `auditar.py`.
+- **Painel do Cline arrastado para a área do editor** (aba), não a barra lateral estreita — melhora muito a leitura em monitor pequeno.
+
+---
+
+## 12. QUANDO ESCALAR PARA O HUMANO (e para o Claude/Opus como crítico sênior)
 
 Escale — pare e monte o pacote da seção 4.7 — sempre que:
 - A fatia é **[SÊNIOR]** (não fecha sozinha).
@@ -369,6 +496,30 @@ Escale — pare e monte o pacote da seção 4.7 — sempre que:
 - A fatia é **[MARGINAL]** e não há confirmação humana explícita de fazê-la.
 
 O humano usa o Claude (Opus) como crítico sênior de qualidade nos pontos de escalação. Seu pacote de escalação (4.7) é o que alimenta essa revisão — quanto melhor o pacote, mais útil a revisão.
+
+---
+
+## 13. PADRÕES TÉCNICOS DO REPOSITÓRIO (fatos confirmados, não suposição)
+
+Diferente dos "arquivos prováveis" das camadas (que são palpite), o que está aqui foi confirmado no código real. Vale para toda fatia.
+
+**13.1 — Registro de tool nova.** `Tool(name=..., description=..., inputSchema=...)` em `_tool_defs()` **+** handler correspondente em `_build_handlers()`. Rollup se cria com a factory `create_manage_tool()` de `_meta_tool.py` (ver seção 2, Regra 1).
+
+**13.2 — Estado por projeto.** Sempre em `<project_root>/.mcp_<nome>_state.json`, **nunca** em config global do MCP. Exemplos reais: `.mcp_phase_state.json`, `.mcp_session_started`, `.safety_policy.json`. Toda escrita concorrente em arquivo compartilhado precisa de lock (`tools/config_lock.py`).
+
+**13.3 — Session Gate.** `get_next_step()` é obrigatório no início de toda sessão — é ele que libera o gate em `call_tool()`. As tools de infra/setup/safety listadas em `SESSION_ALWAYS_ALLOWED` funcionam sem gate.
+
+**13.4 — Visibilidade ≠ bloqueio.** `_tool_defs()` é filtrado por fase; `_build_handlers()` **não é**. Uma tool escondida numa fase ainda pode ser chamada diretamente. Não confunda curadoria de visibilidade com trava de execução ao avaliar se um gate é real ou cosmético.
+
+**13.5 — Decisão aprovada não se reverte em silêncio.** Nunca desfaça uma decisão já aprovada pelo humano sem avisar e justificar. "Aprovado" inclui: arquitetura, fase, feature completa, política de segurança, escolha de nome ou caminho. (Já aconteceu neste projeto: um alias foi revertido sem aviso.) Se você precisa reverter algo aprovado, **pare e peça**.
+
+**13.6 — Confirmação de regressão tem formato fixo.** Ao retestar feature já aprovada, confirme explicitamente assim: **"Regressão testada: [nome da feature] — OK"**. Sem essa linha, a regressão não foi confirmada.
+
+**13.7 — Relatório final em bloco único.** Rode todas as ferramentas necessárias **primeiro**, e só então escreva o relatório final em **um único bloco consolidado**, com resultados reais e diffs. Nunca fragmente o relatório em várias chamadas de ferramenta — isso torna a leitura confusa e esconde o que importa.
+
+**13.8 — Fim de sessão.** `CONTEXTO_PROJETO_MCP_GODOT.md` atualizado ao final de cada sessão. O `.roadmap_progress.json` (Governador 4.8) cobre o progresso das fatias; use o `CONTEXTO` para o estado geral do projeto, não duplique.
+
+**⚠️ Conflito a resolver na Fatia 0.0.1:** a regra antiga dizia que toda mudança estrutural exige `advance_phase()`/`get_next_step()` primeiro — o que pressupõe o MCP **conectado** ao Cline. Mas a Fatia 0.0.1 pode decidir **desconectá-lo** durante o desenvolvimento (para as tools não mudarem debaixo dos seus pés ao editar `server.py`). As duas coisas não coexistem. Decida na 0.0.1 e registre: se o MCP ficar desconectado, o session gate dele não se aplica ao trabalho de desenvolvimento — só ao uso do MCP em projetos de jogo.
 
 ---
 
