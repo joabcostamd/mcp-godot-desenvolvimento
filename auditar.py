@@ -523,14 +523,14 @@ def main():
     args = parser.parse_args()
 
     print("=" * 65)
-    print(f"🔍 AUDITAR.PY — Portao Executavel (Fatia {args.fatia})")
+    print(f"AUDITAR.PY — Portao Executavel (Fatia {args.fatia})")
     print("=" * 65)
 
     try:
         import server  # noqa: F401 — verifica se o servidor importa
-        print("✅ server.py importado com sucesso")
+        print("[OK] server.py importado com sucesso")
     except Exception as e:
-        print(f"❌ FALHA ao importar server.py: {e}")
+        print(f"[FALHA] ao importar server.py: {e}")
         # Fail-closed: sem servidor funcionando, nao pode auditar
         result = _result_template(args.fatia)
         result["exit_code"] = 1
@@ -539,7 +539,7 @@ def main():
         result["criteria"]["C1_contrato"]["detail"] = f"Import server falhou: {e}"
         output_path = Path(args.output) if args.output else ROOT / "audit_result.json"
         _save_result(result, output_path)
-        print(f"\n❌ AUDITORIA ABORTADA — servidor quebrado. Resultado: {output_path}")
+        print(f"\n[FALHA] AUDITORIA ABORTADA — servidor quebrado. Resultado: {output_path}")
         sys.exit(1)
 
     result = run_audit(
@@ -553,24 +553,24 @@ def main():
     )
 
     # Reporte
-    print(f"\n📊 RESULTADO POR CRITERIO:")
+    print(f"\nRESULTADO POR CRITERIO:")
     for crit_key, crit_data in result["criteria"].items():
-        icon = "✅" if crit_data["status"] == "pass" else (
-            "⚠️" if crit_data["status"] == "skipped" else "❌"
+        icon = "[PASS]" if crit_data["status"] == "pass" else (
+            "[SKIP]" if crit_data["status"] == "skipped" else "[FAIL]"
         )
         print(f"  {icon} {crit_key}: {crit_data['status']} — {crit_data['detail'][:120]}")
 
-    print(f"\n🔢 Erros: {len(result['errors'])}")
+    print(f"\nErros: {len(result['errors'])}")
     for e in result["errors"]:
-        print(f"  ❌ {e[:200]}")
+        print(f"  [FAIL] {e[:200]}")
 
-    print(f"\n📁 Resultado gravado: {result['output_file']}")
-    print(f"🚪 Exit code: {result['exit_code']}")
+    print(f"\nResultado gravado: {result['output_file']}")
+    print(f"Exit code: {result['exit_code']}")
 
     if result["exit_code"] == 0:
-        print("\n✅ AUDITORIA PASSOU — Todos os criterios OK.")
+        print("\n[PASS] AUDITORIA PASSOU — Todos os criterios OK.")
     else:
-        print(f"\n❌ AUDITORIA FALHOU — {len(result['errors'])} erro(s).")
+        print(f"\n[FAIL] AUDITORIA FALHOU — {len(result['errors'])} erro(s).")
 
     sys.exit(result["exit_code"])
 
