@@ -6,7 +6,16 @@
 ## Último Handoff (AGENTE 01)
 - **Data:** 2026-07-19
 - **De:** AGENTE 01 (Arquitetura & Core)
-- **Etapas concluídas:** A1 (Namespaces) + A2 (ExecutionContext)
+- **Etapas concluídas:** A1 (Namespaces) + A2 (ExecutionContext) + A3 (DATA_CONTRACTS)
+
+### O que foi feito (A3)
+- **`DATA_CONTRACTS.md`** (novo): Contrato formal entre agentes — ZERO código
+  - **6 seções**: Tool Definition, Handler, Pipeline, Comunicação, Nomenclatura, Validação
+  - Documenta o ciclo completo: `Tool()` → filtros → `call_tool` → handler → resposta
+  - Inclui contratos das Etapas A1 (5 namespaces, `TOOLSETS`, `TOOL_NAMESPACES`) e A2 (`ExecutionContext`, thread-local, cache TTL)
+  - Define regras para AGENTE 02 adicionar tools (onde mexer, onde NÃO mexer)
+  - Especifica Zona de Sutura (arquivos congelados)
+  - Referência canônica para ambos os agentes
 
 ### O que foi feito (A2)
 - **`core/context.py`** (novo): `ExecutionContext` dataclass com thread-local storage
@@ -52,16 +61,14 @@
 
 ## Histórico
 
-### AGENTE 02 — B3 (2026-07-19) 🔶 [aguardando revisão]
-- Criado `tools/code_quality_ops.py` (~520 linhas, 4 funções + helpers)
-- Criado `.gdlintrc` (limiares: 80 linhas/função, CC≤10, 500 linhas/classe)
-- Integrado no `run_verification_pipeline` (etapa 6, parâmetro `include_code_quality`)
-- `requirements.txt` atualizado com `gdtoolkit>=4.0,<5.0`
-- **2 auditorias realizadas**: 12 problemas encontrados, 12 corrigidos
-  - Bugs críticos: import ausente, parâmetro ausente (NameError), gate false-pass
-  - Performance: regex O(n²)→O(n) com pre-filtro, stdin=DEVNULL
-  - Robustez: Windows paths, FileNotFoundError, gdtoolkit_version consistente
-- ⚠️ **Pendente**: teste canary com Godot real, validação do `.gdlintrc`
+### AGENTE 02 — B3 (2026-07-19) ✅ Testado com gdtoolkit 4.5.0 real
+- Criado `tools/code_quality_ops.py` (~570 linhas) com gdlint + gdformat + gdradon
+- `.gdlintrc` reescrito em YAML (formato correto do gdlint 4.5.0)
+- Gate integrado no `run_verification_pipeline` (etapa 6)
+- 19/19 testes passaram (T1-T6) com projeto real (max-manos-like)
+- Gate detectou: 569 violações gdlint, 89 arquivos mal formatados, avg CC=2.2
+- 4 bugs de CLI corrigidos (--config, --show-complexity, PATH, SyntaxWarning)
+- `tests/test_code_quality_ops.py` criado com 19 testes automatizados
 
 ### AGENTE 02 — B2 (2026-07-19)
 - Criado `.github/workflows/verification.yml` — CI com 7 jobs

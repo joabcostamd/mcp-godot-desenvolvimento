@@ -176,17 +176,20 @@ Ao finalizar:
 - `paint_tilemap_cell` e `detect_offscreen_elements` ganharam fallback
 - Contexto injetado via thread-local em `_dispatch_with_context`
 
-### ⬜ A3 — DATA_CONTRACTS.md (~1h)
+### ✅ A3 — DATA_CONTRACTS.md (~1h) — CONCLUÍDO 2026-07-19
 
 **Meta:** Criar o contrato formal entre os agentes. ZERO código.
 
-| # | Ação | Arquivo |
-|---|---|---|
-| A3.1 | Documentar `Tool(name, description, inputSchema)` | `DATA_CONTRACTS.md` |
-| A3.2 | Documentar interface `ToolRegistry` | `DATA_CONTRACTS.md` |
-| A3.3 | Documentar pipeline `_tool_defs → handlers → call_tool` | `DATA_CONTRACTS.md` |
+| # | Ação | Arquivo | Status |
+|---|---|---|---|
+| A3.1 | Documentar `Tool(name, description, inputSchema)` | `DATA_CONTRACTS.md` | ✅ |
+| A3.2 | Documentar interface `ToolRegistry` | `DATA_CONTRACTS.md` | ✅ |
+| A3.3 | Documentar pipeline `_tool_defs → handlers → call_tool` | `DATA_CONTRACTS.md` | ✅ |
 
-**Gate:** `DATA_CONTRACTS.md` existe. Ambos os agentes podem consultar.
+**Gate:** `DATA_CONTRACTS.md` existe. Ambos os agentes podem consultar. ✅
+- 6 seções: Tool Definition, Handler, Pipeline, Comunicação, Nomenclatura, Validação
+- Cobre fluxo completo: definição → filtros → dispatch → pós-processamento
+- Inclui contratos das Etapas A1 (Namespaces) e A2 (ExecutionContext)
 
 ### ⬜ A4 — Intent Router (~4h)
 
