@@ -2410,43 +2410,29 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
                 except Exception:
                     pass
 
+            # A6.4: isError + resultado (structuredContent requer SDK update)
             return [TextContent(
                 type="text",
                 text=json.dumps(result, ensure_ascii=False),
                 isError=is_error,
-                # A6.4: structuredContent para clientes que suportam output schema
-                structuredContent=result if isinstance(result, dict) else None,
             )]
         except Exception as e:
-            # ── Governador: registrar falha na exceção ────────────
             gov.record_after(
                 name, arguments or {},
                 success=False,
                 error_message=str(e),
             )
 
-            error_result = {
+            return [TextContent(type="text", text=json.dumps({
                 "status": "error",
                 "error_code": 5000,
-                "message": f"Erro interno ao executar '{name}': {e}. Reporte este erro para análise.",
-            }
-            return [TextContent(
-                type="text",
-                text=json.dumps(error_result, ensure_ascii=False),
-                isError=True,
-                structuredContent=error_result,
-            )]
+                "message": f"Erro interno ao executar '{name}': {e}. Reporte este erro para analise.",
+            }, ensure_ascii=False), isError=True)]
 
-    error_result = {
+    return [TextContent(type="text", text=json.dumps({
         "status": "error",
-        "message": f"Tool '{name}' não implementada. Tools disponíveis: {list(handlers.keys())}.",
-    }
-    return [TextContent(
-        type="text",
-        text=json.dumps(error_result, ensure_ascii=False),
-        isError=True,
-        structuredContent=error_result,
-    )]
+        "message": f"Tool '{name}' nao implementada. Tools disponiveis: {list(handlers.keys())}.",
+    }, ensure_ascii=False), isError=True)]
 
 
 # ── Handlers ────────────────────────────────────────────────────────
