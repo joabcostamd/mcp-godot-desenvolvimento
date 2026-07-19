@@ -295,6 +295,54 @@ def _invoke_tool_synthetic(tool: str, args: dict) -> dict:
             "summary": "Mock: prova válida (handler sintético).",
         }
 
+    # ── Bloco 5: Project Status & Phase (18 tools sem cobertura - Fase 2) ──
+    if tool == "get_current_phase":
+        return {"status": "success", "phase": "PROTOTIPO", "phase_index": 2, "total_phases": 7}
+    if tool == "get_phase_history":
+        return {"status": "success", "history": [{"phase": "IDEIA", "timestamp": "2026-07-19T10:00:00Z"}, {"phase": "DESIGN", "timestamp": "2026-07-19T11:00:00Z"}, {"phase": "PROTOTIPO", "timestamp": "2026-07-19T12:00:00Z"}]}
+    if tool == "project_status":
+        return {"status": "success", "project": "meu-jogo", "phase": "PROTOTIPO", "tools_available": 49, "bridge_connected": True, "godot_running": False}
+    if tool == "project_progress":
+        return {"status": "success", "completed_fatias": 76, "total_fatias": 96, "percent": 79.2, "current_phase": "PROTOTIPO"}
+    if tool == "get_project_brief":
+        return {"status": "success", "configured": True, "brief": {"concept": "Tower defense com aliens", "genre": "tower_defense", "art_style": "scifi", "game_type": "tower_defense"}}
+    if tool == "set_project_brief":
+        return {"status": "success", "configured": True, "brief": args, "message": "Brief salvo com sucesso."}
+    if tool == "update_project_brief":
+        return {"status": "success", "updated": True, "fields": list(args.keys()) if args else [], "message": "Brief atualizado."}
+    if tool == "advance_milestone":
+        return {"status": "success", "milestone": args.get("milestone", "1"), "completed": True, "next": "2"}
+    if tool == "get_milestone_plan":
+        return {"status": "success", "milestones": [{"id": "1", "name": "MVP", "status": "done"}, {"id": "2", "name": "Alpha", "status": "in_progress"}, {"id": "3", "name": "Beta", "status": "pending"}]}
+    if tool == "get_next_step":
+        return {"status": "success", "next_step": "Fase 2 — Cobertura Tier-1", "agent": "AGENTE 02", "priority": "alta"}
+    if tool == "resume_session":
+        return {"status": "success", "session_id": "sessao-2026-07-19", "last_phase": "PROTOTIPO", "pending_tasks": 2}
+    if tool == "create_milestone_plan":
+        return {"status": "success", "milestones": [{"id": "1", "name": "MVP", "tasks": 5}], "total_weeks": 4}
+    if tool == "find_usages":
+        return {"status": "success", "target": args.get("target", ""), "usages": 3, "files": ["main.gd", "enemy.gd", "ui.gd"]}
+    if tool == "gdd_generate":
+        return {"status": "success", "gdd": "## GDD - " + args.get("concept", "Meu Jogo"), "sections": 8}
+    if tool == "advance_phase":
+        return {"status": "success", "phase": args.get("phase", "DESIGN"), "forced": args.get("force", False)}
+    if tool == "validate_godot_version":
+        return {"status": "success", "godot_version": "4.7-stable", "compatible": True, "min_required": "4.3"}
+    if tool == "validate_mcp_environment":
+        return {"status": "success", "python_version": "3.14", "venv_active": True, "dependencies_ok": True, "issues": []}
+    if tool == "validate_mcp_registry":
+        return {"status": "success", "tools_registered": 49, "handlers_mapped": 49, "consistency": "ok", "orphans": 0}
+    if tool == "godot":
+        return {"status": "success", "action": args.get("action", ""), "resolved_tool": "scene_manage", "confidence": 0.95, "message": "Intent routed successfully."}
+    if tool == "analysis_manage":
+        return {"status": "success", "op": args.get("op", "analyze"), "result": "Analysis complete.", "issues_found": 0}
+    if tool == "tool_catalog":
+        return {"status": "success", "total_tools": 49, "namespaces": ["project", "assets", "runtime", "analysis", "orchestration"], "sample_tools": ["ping", "scene_manage", "asset_manage"]}
+    if tool == "install_mcp_addon":
+        return {"status": "success", "installed": True, "target_project": args.get("project_path", "res://"), "version": "1.0.0"}
+    if tool == "setup_mcp_config":
+        return {"status": "success", "config_path": "mcp_config.json", "created": True, "godot_path": "C:/Godot/Godot_v4.7-stable_win64.exe"}
+
     # ── Fallback para tools não mapeadas ──
     return {
         "status": "skipped",
@@ -1099,7 +1147,7 @@ def _capture_state() -> dict:
 _RECURSION_GUARD = {"smoke_test","regression_test","run_scripted_tests","dump_mcp_state","estimate_tool_tokens","run_verification_pipeline","debugger_status","debugger_get_stack","debugger_get_variables","debugger_set_breakpoint","debugger_step"}
 _SMOKE_SKIP_HEAVY = {"create_entity","create_entities","safe_write_gdscript","capture_proof","verify_proof","deploy_itch","build_csharp","export_manage","read_console_output"}
 _MINIMAL_ARGS: dict[str, dict | None] = {"read_file":{"path":"project.godot"},"write_file":{"path":"_smoke_test.txt","content":"smoke","mode":"create"},"validate_gdscript_syntax":{"code":"extends Node\nfunc _ready():\n    pass\n"},"godot_class_ref":{"class_name":"Node"},"gdd_generate":{"concept":"test","game_type":"tower_defense"},"advance_phase":{"force":True,"reason":"smoke test"},"scene_manage":{"op":"load_tree"},"node_manage":{"op":"get_property","node_path":".","property_name":"name"},"script_manage":{"op":"validate","script_path":"scripts/_smoke.gd"},"file_manage":{"op":"read","path":"project.godot"},"project_manage":{"op":"status"},"safety_manage":{"op":"list_backups"},"validate_project_refs":{},"find_usages":{"target":"project.godot"},"tool_groups":{"action":"list"},"bootstrap_godot_mcp":{"target":"validate_only"},"configure_export_preset":{},"release_checklist":{},"create_asset_manifest":{},"generate_project_structure":{},"create_milestone_plan":{"genero":"tower_defense","force":True},"addon_connect":None,"addon_disconnect":None,"addon_ping":None,"addon_is_available":None,"addon_get_scene_tree":None,"addon_take_screenshot":None,"addon_create_node":None,"addon_delete_node":None,"addon_set_property":None,"addon_reparent_node":None,"addon_duplicate_node":None,"addon_batch_edit":None,"set_project_brief":{"genre":"tower_defense","art_style":"scifi","force":True}}
-_SYNTHETIC_HANDLERS = {"ping","health_check","self_test","validate_gdscript_syntax","write_file","safe_write_gdscript","run_gut_tests","git_commit_checkpoint","godot_class_ref","compile_test","read_file","dump_mcp_state","godot_screenshot","godot_runtime_info","audit_uid_consistency","audit_save_compatibility","audit_input_map","audit_autoloads","audit_scene_reachability","capture_proof","verify_proof"}
+_SYNTHETIC_HANDLERS = {"ping","health_check","self_test","validate_gdscript_syntax","write_file","safe_write_gdscript","run_gut_tests","git_commit_checkpoint","godot_class_ref","compile_test","read_file","dump_mcp_state","godot_screenshot","godot_runtime_info","audit_uid_consistency","audit_save_compatibility","audit_input_map","audit_autoloads","audit_scene_reachability","capture_proof","verify_proof","get_current_phase","get_phase_history","project_status","project_progress","get_project_brief","update_project_brief","advance_milestone","get_milestone_plan","get_next_step","resume_session","validate_godot_version","validate_mcp_environment","validate_mcp_registry","godot","analysis_manage","tool_catalog","install_mcp_addon","setup_mcp_config"}
 _TIER1_MAP = {"scene_manage":"success","node_manage":"success","script_manage":"error","file_manage":"success","project_manage":"success","asset_manage":"success","audio_manage":"success","anim_manage":"success","tilemap_manage":"success","safety_manage":"success","create_entity":"success"}
 
 def test_coverage_report(args=None):
