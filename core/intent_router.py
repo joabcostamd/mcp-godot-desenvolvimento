@@ -61,13 +61,14 @@ def _type() -> str:
 
 INTENT_PATTERNS: list[IntentRule] = [
     # ─────────────── CENA (scene_manage) ───────────────
-    (
-        r'(?:criar|cria|create|make)\s+(?:uma\s+|a\s+)?(?:nova\s+|new\s+)?(?:cena|scene)\s+(?:chamada|nomeada|com\snome\s+|named\s+)?(?P<name>[\w\sà-ú]+?)(?:\s+(?:do\s+tipo|of\s+type|type)\s+(?P<root_type>\w+))?\s*$',
-        "scene_manage", "create",
-        {"name": "name", "root_type": "root_type"}, 2
-    ),
+    # Ordem: padrões mais específicos PRIMEIRO (type + name antes de name-only)
     (
         r'(?:criar|cria|create|make)\s+(?:uma\s+|a\s+)?(?:cena|scene)\s+(?P<root_type>\w+)\s+(?:chamada|nomeada|com\snome\s+|named\s+)?(?P<name>[\w\sà-ú]+)',
+        "scene_manage", "create",
+        {"name": "name", "root_type": "root_type"}, 3
+    ),
+    (
+        r'(?:criar|cria|create|make)\s+(?:uma\s+|a\s+)?(?:nova\s+|new\s+)?(?:cena|scene)\s+(?:chamada|nomeada|com\snome\s+|named\s+)?(?P<name>[\w\sà-ú]+?)(?:\s+(?:do\s+tipo|of\s+type|type)\s+(?P<root_type>\w+))?\s*$',
         "scene_manage", "create",
         {"name": "name", "root_type": "root_type"}, 2
     ),
@@ -80,6 +81,12 @@ INTENT_PATTERNS: list[IntentRule] = [
         r'(?:instanciar|instancie|instance)\s+(?:a\s+)?(?:cena|scene)\s+(?P<name>[\w\sà-ú/_.]+)',
         "scene_manage", "instance",
         {"name": "name"}, 1
+    ),
+    # Fallback: "criar cena" sem detalhes → scene_manage.create genérico
+    (
+        r'(?:criar|cria|create|make)\s+(?:uma\s+|a\s+)?(?:nova\s+|new\s+)?(?:cena|scene)\s*$',
+        "scene_manage", "create",
+        {}, 0
     ),
 
     # ─────────────── NÓ (node_manage) ───────────────
@@ -408,12 +415,12 @@ INTENT_PATTERNS: list[IntentRule] = [
     (
         r'(?:o\s+que\s+(?:é|eh|são|sao)|what\s+(?:is|are)|explique|explain|descreva|describe)\s+(?:a\s+)?(?:classe|class)\s+(?P<name>[A-Z]\w*(?:2D|3D)?)',
         "query_classdb", "",
-        {"class_name": "name"}, 1
+        {"name": "class_name"}, 1
     ),
     (
         r'(?:buscar|busque|search|find|procurar|procure)\s+(?:a\s+)?(?:classe|class)\s+(?P<name>\w+)',
         "search_classdb", "",
-        {"query": "name"}, 1
+        {"name": "query"}, 1
     ),
     (
         r'(?:quais|que|what)\s+(?:são|sao|are)\s+(?:os\s+)?(?:tipos\s+de\s+)?(?:nós|nos|nodes)\s+(?:válidos|validos|valid|disponíveis|disponiveis|available)',
@@ -554,9 +561,21 @@ def classify_intent(action: str) -> dict[str, Any]:
 def _extract_params(match: re.Match, param_map: dict[str, str] | Callable | None) -> dict[str, Any]:
     """Extrai parâmetros do match da regex.
 
+    Dois modos, diferenciados pela presença da chave nos grupos da regex:
+
+    1. EXTRACT mode (chave É um grupo nomeado):
+       param_map = {regex_group: param_name}
+       → extrai valor do match, armazena como param_name.
+       Ex: {"behavior": "behavior"} → params["behavior"] = "patrol"
+
+    2. STATIC mode (chave NÃO é um grupo nomeado):
+       param_map = {param_name: default_value}
+       → injeta o valor como default estático.
+       Ex: {"entity_type": "enemy"} → params["entity_type"] = "enemy"
+
     Args:
         match: Objeto Match da regex.
-        param_map: Mapeamento grupo → nome do parâmetro, ou callable customizado.
+        param_map: Mapeamento híbrido (grupo→param ou param→default).
 
     Returns:
         Dict de parâmetros prontos para passar ao handler.
@@ -567,22 +586,23 @@ def _extract_params(match: re.Match, param_map: dict[str, str] | Callable | None
     if callable(param_map):
         return param_map(match)
 
+    regex_groups = set(match.groupdict().keys()) if match.groupdict() else set()
     params: dict[str, Any] = {}
-    for regex_group, param_name in param_map.items():
-        try:
-            value = match.group(regex_group)
-            if value:
-                # Limpeza: strip + normalizar
-                value = value.strip().strip('"\'').strip()
-                # Mapear valores PT→EN para enums
-                value = _translate_value(param_name, value)
-                params[param_name] = value
-        except (IndexError, AttributeError):
-            pass
 
-    # Se tem 'name' mas a tool espera 'node_name' ou 'node_path', mapear
-    if "name" in params and "node_name" not in params:
-        pass  # handlers usam 'name' consistentemente
+    for map_key, map_val in param_map.items():
+        if map_key in regex_groups:
+            # ── EXTRACT mode: map_key = regex_group, map_val = param_name ──
+            try:
+                value = match.group(map_key)
+                if value:
+                    value = value.strip().strip('"\'').strip()
+                    value = _translate_value(map_val, value)
+                    params[map_val] = value
+            except (IndexError, AttributeError):
+                pass
+        else:
+            # ── STATIC mode: map_key = param_name, map_val = default_value ──
+            params[map_key] = _translate_value(map_key, map_val)
 
     return params
 

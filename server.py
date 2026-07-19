@@ -254,6 +254,7 @@ TOOL_PROFILES = {
         "project_manage",
     ],
     "dev": [
+        "godot",
         "ping", "health_check", "self_test", "bootstrap_godot_mcp",
         "read_file", "write_file", "safe_write_gdscript",
         "compile_test", "run_game", "stop_game", "smart_restart",
@@ -270,6 +271,7 @@ TOOL_PROFILES = {
         "get_next_step", "resume_session",
     ],
     "lean": [
+        "godot",
         "ping", "health_check", "self_test", "bootstrap_godot_mcp",
         "read_file", "write_file", "safe_write_gdscript",
         # ── Meta-tools (Fatia 0.15) ──
@@ -443,6 +445,7 @@ PHASE_ORDER_FILTER = ["IDEIA", "DESIGN", "PROTOTIPO", "CONTEUDO", "POLIMENTO", "
 # CORE = tools essenciais em QUALQUER fase (27 ferramentas).
 # As fases sao nao-cumulativas: cada fase ve CORE + suas proprias tools.
 PHASE_TOOLS_CORE = {
+    "godot",
     "ping", "health_check", "self_test", "bootstrap_godot_mcp",
     "get_current_phase", "advance_phase", "get_phase_history",
     "get_next_step", "resume_session",
