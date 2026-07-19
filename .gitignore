@@ -45,3 +45,4 @@ workflow_logs/
 
 # config.json removido do gitignore — versionado para setup multiplataforma
 # .roadmap_progress.json removido do gitignore — versionado para setup multiplataforma
+ws_bridge.py
