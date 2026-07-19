@@ -4,3 +4,4 @@ Pillow>=10.0.0
 jinja2>=3.1.0
 pyinstaller>=6.0.0
 pygltflib>=1.16.0
+gdtoolkit>=4.0,<5.0

@@ -1,12 +1,14 @@
 """verification_ops.py — Pipeline de Verificação (item 1 do plano de evolução).
 
-Executa 4 etapas sequenciais em um projeto Godot:
-  1. Compile Check — força parse de todos os scripts (godot --headless --quit)
-  2. Headless Run  — executa cena de teste e captura stdout/stderr
-  3. Screenshot    — captura frame após N frames via --write-movie
-  4. GUT Tests     — roda suíte de testes unitários (opcional)
+Executa até 6 etapas sequenciais em um projeto Godot:
+  1. Compile Check  — força parse de todos os scripts (godot --headless --quit)
+  2. Headless Run   — executa cena de teste e captura stdout/stderr
+  3. Screenshot     — captura frame após N frames via --write-movie
+  4. GUT Tests      — roda suíte de testes unitários (opcional)
+  5. Reachability   — auditoria de cenas órfãs (opcional)
+  6. Code Quality   — gate gdtoolkit (gdlint + gdformat + gdradon) (Fatia 4.3)
 
-Tool: run_verification_pipeline — executa as 4 etapas e retorna relatório consolidado.
+Tool: run_verification_pipeline — executa as etapas e retorna relatório consolidado.
 """
 
 import base64
@@ -16,6 +18,12 @@ import subprocess
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+
+# ── Code Quality Gate (Fatia 4.3 / Etapa B3) ────────────────────────
+try:
+    from tools.code_quality_ops import run_code_quality_gate
+except ImportError:
+    run_code_quality_gate = None  # graceful degradation
 
 
 # ══════════════════════════════════════════════════════════════════════
@@ -463,14 +471,17 @@ def run_verification_pipeline(
     timeout_gut: int = 120,
     screenshot_dir: str | None = None,
     include_reachability_audit: bool = True,
+    include_code_quality: bool = True,
 ) -> dict:
     """Executa pipeline de verificação completo em um projeto Godot.
 
     Etapas (executadas em sequência, com early exit na primeira falha):
-      1. COMPILE CHECK — força parse de todos os scripts (godot --headless --quit)
-      2. HEADLESS RUN — executa cena de teste, captura stdout/stderr/crash
-      3. SCREENSHOT  — captura frame após N frames via --write-movie
-      4. GUT TESTS   — roda suíte de testes unitários (opcional)
+      1. COMPILE CHECK  — força parse de todos os scripts (godot --headless --quit)
+      2. HEADLESS RUN   — executa cena de teste, captura stdout/stderr/crash
+      3. SCREENSHOT     — captura frame após N frames via --write-movie
+      4. GUT TESTS      — roda suíte de testes unitários (opcional)
+      5. REACHABILITY   — auditoria de cenas órfãs (opcional)
+      6. CODE QUALITY   — gate gdtoolkit (gdlint + gdformat + gdradon) (Fatia 4.3, opcional)
 
     O pipeline PARA na primeira etapa que falhar (exceto GUT, que é opcional).
     Se test_scene não for fornecido e project.godot não definir run/main_scene,
@@ -487,6 +498,9 @@ def run_verification_pipeline(
         timeout_headless: Timeout em segundos para headless run (default: 60).
         timeout_gut: Timeout em segundos para GUT (default: 120).
         screenshot_dir: Diretório para screenshots. Default: <proj>/verification_screenshots/.
+        include_reachability_audit: Se True, audita cenas órfãs (default: True).
+        include_code_quality: Se True, roda gate gdtoolkit (default: True).
+            Requer: pip install 'gdtoolkit>=4.0,<5.0'.
 
     Returns:
         dict com relatório consolidado JSON.
@@ -612,6 +626,22 @@ def run_verification_pipeline(
         steps["5_audit_reachability"] = step5
 
     # ══════════════════════════════════════════════════════════════
+    # ETAPA 6: CODE QUALITY GATE (gdtoolkit — Fatia 4.3)
+    # ══════════════════════════════════════════════════════════════
+    if include_code_quality and run_code_quality_gate is not None:
+        step6 = run_code_quality_gate(str(proj))
+        steps["6_code_quality"] = step6
+    elif not include_code_quality:
+        step6 = {"status": "skipped", "reason": "include_code_quality=False"}
+        steps["6_code_quality"] = step6
+    else:
+        step6 = {
+            "status": "skipped",
+            "reason": "gdtoolkit não instalado. Instale com: pip install 'gdtoolkit>=4.0,<5.0'",
+        }
+        steps["6_code_quality"] = step6
+
+    # ══════════════════════════════════════════════════════════════
     # RELATÓRIO CONSOLIDADO
     # ══════════════════════════════════════════════════════════════
     elapsed_total = round((time.time() - pipeline_start) * 1000)
@@ -628,8 +658,9 @@ def run_verification_pipeline(
     screenshot_ok = step3["status"] == "success"
     gut_ok = step4.get("status") in ("success", "skipped") and not gut_has_failures
     reachability_ok = step5.get("status") in ("ok", "skipped", "issues_found")
+    code_quality_ok = step6.get("gate_passed", True)  # True se skipped ou passou
 
-    all_ok = compile_ok and headless_ok and gut_ok and reachability_ok
+    all_ok = compile_ok and headless_ok and gut_ok and reachability_ok and code_quality_ok
     # Screenshot não bloqueia (pode falhar por timeout/--write-movie)
     # mas reportamos no sumário
 
@@ -649,6 +680,9 @@ def run_verification_pipeline(
     if include_reachability_audit:
         u_count = step5.get("unreachable_count", 0)
         summary_parts.append(f"Alcancabilidade: {u_count} cenas orfas")
+    if include_code_quality:
+        cq_label = step6.get("summary", step6.get("status", "?"))
+        summary_parts.append(f"Code Quality: {cq_label}")
 
     final_result = {
         "status": "PASSOU" if all_ok else "FALHOU",

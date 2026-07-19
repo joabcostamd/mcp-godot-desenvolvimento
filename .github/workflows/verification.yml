@@ -1,0 +1,304 @@
+# ─────────────────────────────────────────────────────────────────
+# verification.yml — Pipeline de Verificação (Fatia 4.2 / Etapa B2)
+# ─────────────────────────────────────────────────────────────────
+# Roda a verificação completa + gates de orçamento (0.8) +
+# contract snapshot (0.11) a cada push/PR.
+# Falha o build em regressão/breaking não intencional.
+# ─────────────────────────────────────────────────────────────────
+
+name: "🔍 Verificação — MCP Godot"
+
+# ══════════════════════════════════════════════════════════════════
+# 🌐 Environment global — logs em tempo real, sem buffering
+# ══════════════════════════════════════════════════════════════════
+env:
+  PYTHONUNBUFFERED: "1"
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
+on:
+  push:
+    branches: [main, master]
+    paths-ignore:
+      - "**.md"
+      - "locales/**"
+      - "art_cache/**"
+      - "recordings/**"
+      - "workflow_logs/**"
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:  # permite execução manual
+
+# ══════════════════════════════════════════════════════════════════
+# 🔒 Permissions — Princípio do menor privilégio (Security Best Practice)
+# Só concede o que cada job realmente precisa.
+# ══════════════════════════════════════════════════════════════════
+permissions:
+  contents: read        # checkout do repositório
+  actions: read         # ler status de outros jobs (needs.*.result)
+
+# ══════════════════════════════════════════════════════════════════
+# 🔄 Concurrency — Isolado por workflow + ref para evitar colisões
+# ══════════════════════════════════════════════════════════════════
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  # ── Gate Primário: Orçamento de Tools (Fatia 0.8) ──────────────
+  budget-gate:
+    name: "💰 Orçamento de Tools"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "🐍 Python 3.11"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: "📦 Instalar dependências"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt 2>/dev/null || true
+
+      - name: "🔒 Tool Budget Gate (teto de tokens + contagem)"
+        id: budget
+        run: python tests/test_budget_gate.py
+
+      - name: "📊 Perfil Lean (CORE + meta-tools)"
+        run: python tests/test_budget_gate.py --lean
+
+  # ── Gate de Contrato: Snapshot de Schema (Fatia 0.11) ─────────
+  contract-snapshot:
+    name: "📸 Contract Snapshot"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "🐍 Python 3.11"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: "📦 Instalar dependências"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt 2>/dev/null || true
+
+      - name: "🔍 Contract Snapshot Check (drift de schema)"
+        run: python tests/contract_snapshot.py --check
+
+  # ── Governador: Testes dos Freios de Autonomia (Fatia 0.14) ───
+  governor:
+    name: "🚦 Governador de Autonomia"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "🐍 Python 3.11"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: "📦 Instalar dependências"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt 2>/dev/null || true
+
+      - name: "🧪 Testes do Governador (teto, anti-spiral, não-progresso)"
+        run: python tests/test_governor.py
+
+  # ── Integridade de Código: Compilação + Import ────────────────
+  code-integrity:
+    name: "🔧 Integridade de Código"
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "🐍 Python 3.11"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: "📦 Instalar dependências"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt 2>/dev/null || true
+
+      - name: "🔬 Compilar todos os .py (syntax check)"
+        run: |
+          echo "=== Verificando sintaxe de todos os arquivos Python ==="
+          FAILED=0
+          while IFS= read -r -d '' f; do
+            python -m py_compile "$f" || FAILED=1
+          done < <(find . -name "*.py" -not -path "./.venv/*" -not -path "./backups/*" -print0)
+          if [ "$FAILED" -ne 0 ]; then
+            echo "❌ Erro de sintaxe detectado!"
+            exit 1
+          fi
+          echo "✅ Todos os arquivos Python compilam sem erros."
+
+      - name: "📥 Teste de imports críticos"
+        run: |
+          echo "=== Verificando imports do servidor ==="
+          python -c "
+          import sys
+          sys.path.insert(0, '.')
+          # Importa módulos críticos (sem iniciar o servidor)
+          from tools.governor import AutonomyGovernor
+          from tools import governor, kill_switch, config_loader
+          from tools.infra_ops import generate_ci_snippet
+          from tools.verification_ops import run_verification_pipeline
+          print('✅ Imports críticos OK')
+          "
+
+  # ── Regressão: generate_ci_snippet (C3) ──────────────────────
+  regression-ci-snippet:
+    name: "🔄 Regressão — generate_ci_snippet"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "🐍 Python 3.11"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: "📦 Instalar dependências"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt 2>/dev/null || true
+
+      - name: "🧪 Teste de regressão: generate_ci_snippet"
+        run: |
+          python -c "
+          import sys, json
+          sys.path.insert(0, '.')
+          from tools.infra_ops import generate_ci_snippet
+
+          # Teste 1: Chamada padrão
+          result = generate_ci_snippet()
+          assert result['status'] == 'success', f'Status inesperado: {result[\"status\"]}'
+          assert 'github_actions' in result, 'Falta github_actions no output'
+          assert 'gitlab_ci' in result, 'Falta gitlab_ci no output'
+          print('✅ Teste 1 (padrão): OK')
+
+          # Teste 2: Plataformas customizadas
+          result2 = generate_ci_snippet(target_platforms='linux,web')
+          assert result2['platforms'] == ['linux', 'web'], f'Plataformas erradas: {result2[\"platforms\"]}'
+          print('✅ Teste 2 (plataformas custom): OK')
+
+          # Teste 3: Com project_path
+          result3 = generate_ci_snippet(project_path='./example_project')
+          assert 'example_project' in result3['github_actions'], 'project_path não aparece no snippet'
+          print('✅ Teste 3 (project_path): OK')
+
+          print('✅✅✅ Todos os testes de regressão passaram!')
+          "
+
+  # ── Auditoria: C1-C6 (via auditar.py) ────────────────────────
+  audit:
+    name: "📋 Auditoria C1-C6"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [budget-gate, contract-snapshot, code-integrity]
+    permissions:
+      contents: read
+      actions: write   # requerido para upload-artifact
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "🐍 Python 3.11"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: "📦 Instalar dependências"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt 2>/dev/null || true
+
+      - name: "📝 Auditoria Estrutural (C1 contrato, C3 regressão)"
+        shell: bash
+        run: |
+          set -o pipefail
+          python auditar.py --fatia "4.2" --skip-c5 --output audit_result.json 2>&1 | tee audit_output.txt
+          echo "=== Resultado da Auditoria ==="
+          cat audit_result.json 2>/dev/null || echo "(resultado não gerado)"
+
+      - name: "📤 Upload do resultado da auditoria"
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-result-${{ github.run_id }}
+          path: |
+            audit_result.json
+            audit_output.txt
+          retention-days: 7
+
+  # ── Resumo Final ─────────────────────────────────────────────
+  summary:
+    name: "✅ Resumo da Verificação"
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    needs: [budget-gate, contract-snapshot, governor, code-integrity, regression-ci-snippet, audit]
+    if: always()
+    steps:
+      - name: "📊 Consolidar resultados"
+        run: |
+          # Define resultados como variáveis de ambiente
+          BUDGET="${{ needs.budget-gate.result }}"
+          SNAPSHOT="${{ needs.contract-snapshot.result }}"
+          GOVERNOR="${{ needs.governor.result }}"
+          INTEGRITY="${{ needs.code-integrity.result }}"
+          REGRESSION="${{ needs.regression-ci-snippet.result }}"
+          AUDIT="${{ needs.audit.result }}"
+
+          # Gera tabela Markdown no GitHub Step Summary
+          {
+            echo "## 🔍 Resultado da Verificação — MCP Godot"
+            echo ""
+            echo "| Gate | Status |"
+            echo "|------|--------|"
+            for pair in "💰 Budget Gate:${BUDGET}" "📸 Contract Snapshot:${SNAPSHOT}" "🚦 Governador:${GOVERNOR}" "🔧 Integridade:${INTEGRITY}" "🔄 Regressão CI Snippet:${REGRESSION}" "📋 Auditoria:${AUDIT}"; do
+              name="${pair%%:*}"
+              status="${pair##*:}"
+              case "$status" in
+                success) icon="✅" ;;
+                skipped) icon="⏭️" ;;
+                *)       icon="❌" ;;
+              esac
+              echo "| ${icon} ${name} | ${status} |"
+            done
+            echo ""
+            # Verifica se todos passaram
+            if [ "${BUDGET}" != "failure" ] && [ "${SNAPSHOT}" != "failure" ] && [ "${GOVERNOR}" != "failure" ] && [ "${INTEGRITY}" != "failure" ] && [ "${REGRESSION}" != "failure" ] && [ "${AUDIT}" != "failure" ]; then
+              echo "### ✅ Todos os gates passaram!"
+            else
+              echo "### ❌ Alguns gates falharam. Verifique os logs acima."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: "🚨 Falhar se algum gate quebrou"
+        if: |
+          needs.budget-gate.result == 'failure' ||
+          needs.contract-snapshot.result == 'failure' ||
+          needs.governor.result == 'failure' ||
+          needs.code-integrity.result == 'failure' ||
+          needs.regression-ci-snippet.result == 'failure' ||
+          needs.audit.result == 'failure'
+        run: |
+          echo "❌ Verificação falhou! Consulte o resumo acima para detalhes."
+          exit 1

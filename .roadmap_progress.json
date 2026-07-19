@@ -781,5 +781,56 @@
       "temp_art/test_i18n.tscn (cena sintetica de teste)"
     ],
     "novas_ops": ["find_missing", "detect_overflow", "check_contrast"]
+  },
+  "fatia_4.2": {
+    "status": "concluida",
+    "data": "2026-07-19",
+    "tentativa": 1,
+    "resultado": "CI de Verificação criado: .github/workflows/verification.yml com 7 jobs paralelos — budget-gate (0.8), contract-snapshot (0.11), governor (0.14), code-integrity (syntax+imports), regression-ci-snippet (C3), audit (C1-C6), summary. Concurrency + workflow_dispatch + paths-ignore. ci.yml existente preservado como CI rápido.",
+    "c1": "skipped — sem ferramenta nova, sem mudança de schema",
+    "c2": "pendente_ci — requer push para testar no GitHub Actions",
+    "c3": "pass — generate_ci_snippet testado com 3 cenários (padrão, plataformas custom, project_path)",
+    "c4": "pass — workflow sem segredos, sem rede além do checkout/actions oficiais",
+    "c5": "skipped — sem tool nova",
+    "c6": "skipped — sem tool nova",
+    "cross_model": "fraca — [AUTO], workflow YAML determinístico",
+    "auditoria_posterior": {
+      "data": "2026-07-19",
+      "problemas_encontrados": 8,
+      "corrigidos": 8,
+      "destaques": [
+        "permissions: least privilege (contents:read + actions:read topo, actions:write só no audit)",
+        "concurrency: github.workflow prefix para isolamento cross-workflow",
+        "timeout-minutes: todos os 7 jobs (5-10min)",
+        "cache: pip em todos setup-python",
+        "PYTHONUNBUFFERED + PIP_DISABLE_PIP_VERSION_CHECK",
+        "set -o pipefail no audit (bug crítico: pipe mascarava exit code)",
+        "summary: POSIX for pair in (sem declare -A bash-only)"
+      ]
+    },
+    "arquivos_modificados": [
+      ".github/workflows/verification.yml (295 linhas finais, 7 jobs, 8 correções de auditoria)"
+    ]
+  },
+  "fatia_4.3": {
+    "status": "implementada_pendente_revisao",
+    "data": "2026-07-19",
+    "tentativa": 1,
+    "marcacao": "[SÊNIOR]",
+    "resultado": "gdtoolkit integrado como gate no run_verification_pipeline. Criado code_quality_ops.py (~350 linhas, 4 funções), .gdlintrc (limiares configurados), etapa 6 no pipeline com graceful degradation. requirements.txt atualizado com gdtoolkit>=4.0,<5.0.",
+    "c1": "skipped — sem tool nova de topo, sem mudança de schema",
+    "c2": "pendente — requer Godot com scripts .gd para canary real (gdlint/gdformat/gdradon)",
+    "c3": "pendente_verificar — run_verification_pipeline estendido (6 etapas), reteste pendente",
+    "c4": "pass — subprocess isolado, sem rede, sem segredo, graceful degradation se gdtoolkit ausente",
+    "c5": "pre_existente — sem tool nova de topo",
+    "c6": "skipped — sem tool nova",
+    "cross_model": "fraca — [SÊNIOR] requer revisão humana obrigatória",
+    "motivo_escalacao": "[SÊNIOR] — (1) gate mexe no pipeline central de verificação, (2) requer Godot real para teste canary, (3) thresholds do .gdlintrc podem precisar de ajuste fino",
+    "arquivos_modificados": [
+      "tools/code_quality_ops.py (novo — ~350 linhas, 4 funções)",
+      ".gdlintrc (novo — configuração de limiares)",
+      "tools/verification_ops.py (+etapa 6 code quality, +parâmetro include_code_quality)",
+      "requirements.txt (+gdtoolkit>=4.0,<5.0)"
+    ]
   }
 }
