@@ -266,6 +266,32 @@ def generate_game_art(
     style = style.lower()
     anim_type = anim_type.lower()
 
+    # ── Fatia 3.6: Style lock injection ──────────────────────
+    # Injeta automaticamente o contrato de estilo do project_brief
+    style_context = {}
+    try:
+        from tools.project_brief_ops import get_project_brief
+        br = get_project_brief()
+        if br.get("configured") and br.get("brief"):
+            sl = br["brief"].get("style_lock", {})
+            if sl:
+                style_context["style_lock"] = sl
+                # Se o style nao foi passado explicitamente, usa o do brief
+                if not style or style == "scifi":
+                    style = sl.get("art_type", style)
+                # Injeta paleta no contexto de geracao
+                if sl.get("palette"):
+                    style_context["palette"] = sl["palette"]
+                if sl.get("reference"):
+                    style_context["reference"] = sl["reference"]
+                if sl.get("detail_level"):
+                    style_context["detail_level"] = sl["detail_level"]
+                # Fonte por categoria de asset
+                if sl.get("asset_sources", {}).get(category):
+                    style_context["asset_source"] = sl["asset_sources"][category]
+    except Exception:
+        pass  # style_lock e opcional — nao quebra se nao existir
+
     # Calcular parametros
     if frames is None:
         frames = DEFAULT_FRAMES.get(anim_type, 4)

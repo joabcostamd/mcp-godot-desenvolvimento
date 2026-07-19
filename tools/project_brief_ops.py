@@ -108,6 +108,7 @@ def set_project_brief(
     art_style: str | None = None,
     tone: str | None = None,
     target_platform: str | None = None,
+    style_lock: dict | None = None,
     force: bool = False,
 ) -> dict:
     """Define/sobrescreve o project brief do projeto ativo.
@@ -117,6 +118,12 @@ def set_project_brief(
         art_style: Estilo visual (ex: scifi, fantasia, cartoon, pixel, minimalista).
         tone: Tom do jogo (ex: estrategico, casual, sombrio, epico, humorado).
         target_platform: Plataforma alvo (pc, mobile, web). Validado.
+        style_lock: Contrato de estilo (Fatia 3.6). Dict com:
+            palette: list[str] — paleta de cores (ex: ["#ff6b35", "#004e89"])
+            reference: str — referencia visual (ex: "Into the Breach meets FTL")
+            detail_level: str — "low"|"medium"|"high"
+            art_type: str — "pixel"|"flat"|"hand_painted"|"low_poly"|"realistic"
+            asset_sources: dict[str,str] — fonte por categoria (ex: {"torre":"scifi", "inimigo":"alien"})
         force: Obrigatorio True se ja existir brief. Evita sobrescrita acidental.
 
     Returns:
@@ -176,6 +183,8 @@ def set_project_brief(
             brief["tone"] = tone
         if target_platform is not None:
             brief["target_platform"] = target_platform
+        if style_lock is not None:
+            brief["style_lock"] = style_lock
 
         _save_brief_state(brief)
 
@@ -187,6 +196,7 @@ def update_project_brief(
     art_style: str | None = None,
     tone: str | None = None,
     target_platform: str | None = None,
+    style_lock: dict | None = None,
 ) -> dict:
     """Atualiza campos especificos do brief sem sobrescrever os demais.
 
@@ -198,6 +208,7 @@ def update_project_brief(
         art_style: Estilo visual.
         tone: Tom do jogo.
         target_platform: Plataforma alvo. Validado contra lista fixa.
+        style_lock: Contrato de estilo (Fatia 3.6). Ver set_project_brief para estrutura.
 
     Returns:
         {"status": "success", "brief": {...}} ou {"status": "error", "message": str}
@@ -237,7 +248,8 @@ def update_project_brief(
             brief["tone"] = tone
         if target_platform is not None:
             brief["target_platform"] = target_platform
-
+        if style_lock is not None:
+            brief["style_lock"] = style_lock
         _save_brief_state(brief)
 
     return {"status": "success", "brief": brief}

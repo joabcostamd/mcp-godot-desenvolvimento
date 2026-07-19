@@ -152,7 +152,8 @@
   "pendentes": {
     "0.7b+": "consolidar godot_* e outras fases",
     "Camada_1": "CONCLUIDA (16/16)",
-    "Camada_2_proximo": "2.5 Regressao visual [ESCALADA] — Camada 2 completa (2.2 concluida)"
+    "Camada_2_proximo": "2.5 Regressao visual [ESCALADA] — Camada 2 completa (2.2 concluida)",
+    "Camada_3_proximo": "3.8 Preset de import [SENIOR] (3.1-3.4 escaladas, 3.5-3.6 concluidas)"
   },
   "fatia_2.2": {
     "status": "concluida",
@@ -479,6 +480,24 @@
     "arquivos_modificados": [
       "tools/milestone_ops.py (+project_progress ~45 linhas)",
       "server.py (+import, +Tool, +handler, +CORE)"
+    ]
+  },
+  "fatia_3.6": {
+    "status": "concluida",
+    "data": "2026-07-19",
+    "tentativa": 1,
+    "resultado": "Style lock adicionado ao project_brief: campo style_lock com palette, reference, detail_level, art_type, asset_sources. set_project_brief e update_project_brief aceitam style_lock. generate_game_art injeta automaticamente style_lock no prompt. generate_music usa style_lock.art_type como fallback. Feature 5 sem regressao. 3 arquivos, +43 linhas.",
+    "c1": "pass — 48 tools, zero mudanca",
+    "c2": "pass — 3/3 canaries",
+    "c3": "pass — smoke_test 5/5, Feature 5 OK",
+    "c4": "pass — sem rede, sem segredo, idempotente, sem tool nova",
+    "c5": "pre_existente — 48 tools",
+    "c6": "pass — sem tool nova",
+    "cross_model": "fraca — [SENIOR] requer revisao humana da estrutura do style_lock",
+    "arquivos_modificados": [
+      "tools/project_brief_ops.py (+style_lock em set e update)",
+      "tools/art_ops.py (+style_lock injection em generate_game_art)",
+      "tools/music_ops.py (+style_lock.art_type fallback)"
     ]
   },
   "camada_2": {

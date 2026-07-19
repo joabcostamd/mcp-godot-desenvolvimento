@@ -32,7 +32,10 @@ def generate_music(args: dict | None = None) -> dict:
             from tools.project_brief_ops import get_project_brief
             br = get_project_brief()
             if br.get("configured") and br.get("brief"):
-                style = br["brief"].get("art_style", br["brief"].get("genre", ""))
+                b = br["brief"]
+                # Fatia 3.6: usa style_lock.art_type se disponivel, fallback para art_style/genre
+                sl = b.get("style_lock", {})
+                style = sl.get("art_type", "") or b.get("art_style", "") or b.get("genre", "")
         except: pass
     if not MINIMAX_API_KEY:
         return {"status": "error", "message": "MINIMAX_API_KEY não configurada."}
