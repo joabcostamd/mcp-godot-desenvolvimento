@@ -477,7 +477,7 @@ def _run_c7_visual(result: dict, baseline_name: str = "baseline", threshold: flo
         from tools.runtime_ops import visual_regression
         vr = visual_regression({"baseline_name": baseline_name, "threshold": threshold})
 
-        if vr.get("status") == "baseline_saved":
+        if vr.get("action") == "baseline_saved":
             result["criteria"]["C7_visual"]["status"] = "baseline_saved"
             result["criteria"]["C7_visual"]["detail"] = (
                 f"Baseline '{baseline_name}' criado. Execute novamente para comparar."

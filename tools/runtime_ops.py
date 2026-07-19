@@ -1234,20 +1234,28 @@ def visual_regression(args=None):
     Returns:
         {"status": "success", "passed": bool, "difference_percent": float, ...}
     """
-    import shutil; from pathlib import Path; args=args or {}
+    from pathlib import Path; args=args or {}
     sp=args.get("scene_path"); th=args.get("threshold",1.0); bn=args.get("baseline_name","baseline")
+
+    # H3: Validar threshold
+    if not isinstance(th, (int, float)) or th < 0:
+        return {"status":"error","message":"threshold deve ser um numero >= 0."}
+
     proj=_get_active_project(); bd=proj/"captures"/"baselines"; bd.mkdir(parents=True,exist_ok=True); bf=bd/f"{bn}.png"
     if not bf.exists():
         cap=capture_game_screenshot(scene_path=sp) if sp else capture_game_screenshot()
         if cap.get("status")!="success": return {"status":"error","message":f"Falha: {cap.get('message','')}"}
         shutil.copy2(str(Path(cap["image_path"])),str(bf))
-        return {"status":"baseline_saved","baseline_path":str(bf),"message":"Baseline salvo. Execute novamente para comparar."}
+        return {"status":"success","action":"baseline_saved","baseline_path":str(bf),"message":"Baseline salvo. Execute novamente para comparar."}
     cap=capture_game_screenshot(scene_path=sp) if sp else capture_game_screenshot()
     if cap.get("status")!="success": return {"status":"error","message":f"Falha: {cap.get('message','')}"}
     cp=Path(cap["image_path"]); tb=proj/"captures"/f"_rb_{bn}.png"; tc=proj/"captures"/f"_rc_{bn}.png"
     shutil.copy2(str(bf),str(tb)); shutil.copy2(str(cp),str(tc))
-    cmp=compare_screenshots(before_path=f"captures/_rb_{bn}.png",after_path=f"captures/_rc_{bn}.png")
-    tb.unlink(missing_ok=True); tc.unlink(missing_ok=True)
+    # H4: try/finally para evitar vazamento de arquivos temporarios
+    try:
+        cmp=compare_screenshots(before_path=f"captures/_rb_{bn}.png",after_path=f"captures/_rc_{bn}.png")
+    finally:
+        tb.unlink(missing_ok=True); tc.unlink(missing_ok=True)
     if cmp.get("status")!="success": return {"status":"error","message":f"Comparação: {cmp.get('message','')}"}
     m=cmp["metrics"]; dp=m.get("difference_percent",100.0); passed=dp<=th
     r={"status":"success","passed":passed,"difference_percent":round(dp,2),"threshold":th,"metrics":m}

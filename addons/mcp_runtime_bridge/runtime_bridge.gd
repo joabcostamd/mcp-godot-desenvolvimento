@@ -258,7 +258,7 @@ func _dismiss_recursive(node: Node) -> void:
 		_dismiss_recursive(child)
 
 
-# ── Comandos de Áudio (Fase 6) ──────────────────────────────────
+# ── Comandos de Áudio (Fase 6 — Corrigido Auditoria C2/C3/C4/C5/M1) ──
 
 func _cmd_play_audio(args: Dictionary) -> Dictionary:
 	var node_path: String = args.get("node_path", "")
@@ -271,29 +271,40 @@ func _cmd_play_audio(args: Dictionary) -> Dictionary:
 	if node_path != "":
 		target = get_node_or_null(node_path)
 	if target == null:
-		# Procura um AudioStreamPlayer na árvore ou cria um
 		target = _find_audio_player(node_path)
 	if target == null:
-		# Cria um novo AudioStreamPlayer na raiz
 		target = AudioStreamPlayer.new()
 		target.name = "MCP_AudioPlayer"
 		get_tree().root.add_child(target)
 
 	if not target is AudioStreamPlayer:
-		return {"ok": false, "error": "Nó '%s' nao e um AudioStreamPlayer" % node_path}
+		return {"ok": false, "error": "No '%s' nao e um AudioStreamPlayer" % node_path}
 
 	var player: AudioStreamPlayer = target as AudioStreamPlayer
 
 	if audio_file != "":
-		var stream = load(audio_file)
+		var stream: Resource = load(audio_file)
+		# Godot 4.x: AudioStreamMP3 usa .data (PackedByteArray), nao .file
+		# AudioStreamOggVorbis e built-in e recomendado. Suportamos ambos.
 		if stream == null:
-			stream = AudioStreamMP3.new()
-			stream.file = audio_file
+			var fa := FileAccess.open(audio_file, FileAccess.READ)
+			if fa:
+				var ext := audio_file.get_extension().to_lower()
+				if ext == "mp3":
+					stream = AudioStreamMP3.new()
+					if stream:
+						stream.data = fa.get_buffer(fa.get_length())
+				else:
+					# Fallback: OGG/WAV como AudioStreamOggVorbis
+					stream = AudioStreamOggVorbis.new()
+					if stream:
+						stream.packet_sequence = fa.get_buffer(fa.get_length())
+				fa.close()
 		player.stream = stream
 
 	player.bus = bus
 	player.volume_db = volume_db
-	if loop and player.stream is AudioStream:
+	if loop and player.stream != null and player.stream is AudioStream:
 		(player.stream as AudioStream).loop = true
 
 	player.play()
@@ -312,7 +323,6 @@ func _cmd_set_volume(args: Dictionary) -> Dictionary:
 			return {"ok": true, "target": "player", "node_path": node_path, "volume_db": volume_db}
 		return {"ok": false, "error": "AudioStreamPlayer nao encontrado: %s" % node_path}
 
-	# Ajusta volume do bus
 	var bus_idx := AudioServer.get_bus_index(bus_name)
 	if bus_idx < 0:
 		return {"ok": false, "error": "Bus nao encontrado: %s" % bus_name}
@@ -330,38 +340,35 @@ func _cmd_stop_audio(args: Dictionary) -> Dictionary:
 			player.stop()
 			stopped = 1
 	else:
-		_stop_all_audio_recursive(get_tree().root, stopped)
-		# stopped é atualizado por referência via array — vamos usar contagem manual
 		stopped = _count_and_stop_audio(get_tree().root)
 
 	return {"ok": true, "stopped": stopped}
 
 
+# Busca recursiva em toda a árvore (corrigido: antes só buscava filhos diretos da raiz)
 func _find_audio_player(hint_path: String) -> Node:
-	var root := get_tree().root
-	for child in root.get_children():
-		if child is AudioStreamPlayer and (hint_path == "" or hint_path in child.get_path()):
+	return _find_audio_recursive(get_tree().root, hint_path)
+
+
+func _find_audio_recursive(node: Node, hint: String) -> Node:
+	for child in node.get_children():
+		if child is AudioStreamPlayer and (hint == "" or hint in child.get_path()):
 			return child
+		var found := _find_audio_recursive(child, hint)
+		if found:
+			return found
 	return null
 
 
-func _stop_all_audio_recursive(node: Node, stopped_count: int) -> void:
-	for child in node.get_children():
-		if child is AudioStreamPlayer and child.playing:
-			child.stop()
-			stopped_count += 1
-		_stop_all_audio_recursive(child, stopped_count)
-
-
-func _count_and_stop_audio(node: Node) -> int:
+# Contagem iterativa (corrigido: GDScript int é value type, recursão com int não funciona)
+func _count_and_stop_audio(root_node: Node) -> int:
 	var count := 0
-	_count_and_stop_audio_recursive(node, count)
+	var stack: Array[Node] = [root_node]
+	while not stack.is_empty():
+		var node := stack.pop_back()
+		for child in node.get_children():
+			if child is AudioStreamPlayer and child.playing:
+				child.stop()
+				count += 1
+			stack.append(child)
 	return count
-
-
-func _count_and_stop_audio_recursive(node: Node, count: int) -> void:
-	for child in node.get_children():
-		if child is AudioStreamPlayer and child.playing:
-			child.stop()
-			count += 1
-		_count_and_stop_audio_recursive(child, count)
