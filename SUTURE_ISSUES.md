@@ -26,7 +26,11 @@
 ---
 
 ## Issues Resolvidas
-*(nenhuma no momento)*
+
+### ✅ [AGENTE 01] — SyntaxError em tools/code_quality_ops.py (AGENTE 02 — B3)
+- **Data:** 2026-07-19
+- **Resolvido por:** AGENTE 02 (sessão 2026-07-19)
+- **Diagnóstico:** O erro original (f-string com escape `\"`) já havia sido corrigido em sessão anterior. A linha 620-621 agora extrai a variável antes do f-string: `unformatted = fmt_result.get("unformatted_count", 0)`. Pylance confirma 0 erros de sintaxe. `import server` funciona. 19/19 testes passam.
 
 ---
 

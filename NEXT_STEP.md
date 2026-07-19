@@ -16,5 +16,4 @@
 
 ## Última atualização
 - **Data:** 2026-07-19
-- **Por:** AGENTE 01 (Etapa A4 concluída — Intent Router, 100% cobertura)
-- **Por:** AGENTE 01 (Etapa A1 concluída — 5 Namespaces Semânticos)
+- **Por:** AGENTE 02 (sessão de verificação de pendências — todas resolvidas ou documentadas)

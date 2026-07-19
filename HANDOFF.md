@@ -3,6 +3,34 @@
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo
 > para que o outro agente saiba o estado do projeto na próxima sessão.
 
+## Último Handoff (AGENTE 02 — 2026-07-19)
+
+- **Data:** 2026-07-19
+- **De:** AGENTE 02 (Extensões & Qualidade)
+- **Ação:** Sessão de verificação de pendências
+
+### O que foi feito
+- **SUTURE_ISSUES.md**: SyntaxError em `code_quality_ops.py` marcado como RESOLVIDO (já havia sido corrigido em sessão anterior — extrai variável antes do f-string, linha 620-621)
+- **Verificação de sintaxe**: Pylance confirma 0 erros em `server.py`, `code_quality_ops.py`, `dynamic_groups.py`, `core/context.py`, `core/intent_router.py`, `devsolo_ops.py`
+- **Import test**: `import server` funciona perfeitamente (exit code 0)
+- **Test suites**:
+  - `test_code_quality_ops.py`: ✅ 19/19 passaram
+  - `test_budget_gate.py`: ✅ teto primário (tokens) OK em todas as fases; ⚠️ C5 pré-existente (>40 tools por fase)
+- **Git**: working tree limpo, 0 stashes pendentes
+
+### Pendências verificadas (status)
+| Pendência | Status |
+|---|---|
+| SyntaxError `code_quality_ops.py` | ✅ Resolvido |
+| Import circular `server.py` ↔ `dynamic_groups.py` | 🟡 Dívida de design (Etapa A5 — AGENTE 01) |
+| C5 (>40 tools/fase) | 🟡 Pré-existente (fatia 0.7) |
+| Stash pendente | ✅ Limpo |
+
+### Próximo passo (AGENTE 02)
+- **Camada 5 (Gameplay)**: TODAS [MARGINAL] — aguarda aprovação do Joab para qualquer fatia
+
+---
+
 ## Último Handoff (AGENTE 01)
 - **Data:** 2026-07-19
 - **De:** AGENTE 01 (Arquitetura & Core)
