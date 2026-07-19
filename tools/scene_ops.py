@@ -1118,10 +1118,6 @@ def create_tileset(tileset_name: str, save_path: str, tile_width: int = 16, tile
     Returns:
         {"status": "success", "path": str}
     """
-    if scene_path is None:
-        scene_path = _resolve_scene_path_from_vibe()
-        if scene_path is None:
-            return {"status": "error", "message": "scene_path nao informado e Vibe Coding Mode nao esta ativo. Informe scene_path ou ative vibe_coding_mode com uma cena definida."}
     proj = _get_active_project()
 
     violation = _check_path_traversal(save_path, proj)

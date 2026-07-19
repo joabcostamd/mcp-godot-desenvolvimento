@@ -275,14 +275,29 @@ def create_milestone_plan(
         scope_category = "medio"
         scope_estimation = "fallback"
 
-    # Gera milestones a partir do GDD
-    raw_milestones = _generate_milestones_from_gdd(gdd, num_milestones, scope=scope_category)
+    # ── Fatia 1.16: Buffer de escopo ──────────────────────────
+    # Reserva ~20% dos milestones como folga (minimo 1)
+    buffer_count = max(1, round(num_milestones * 0.2))
+    milestones_uteis = max(3, num_milestones - buffer_count)
+
+    # Scope warning: alerta quando escopo e grande ou epico
+    scope_warning = None
+    if scope_category in ("grande", "epico"):
+        scope_warning = (
+            f"Escopo {scope_category.upper()} detectado. "
+            f"Recomenda-se cortar para medio ou pequeno para evitar abandono do projeto. "
+            f"Considere remover mecanicas secundarias e focar no core loop. "
+            f"Milestones gerados: {milestones_uteis} (+ {buffer_count} de buffer)."
+        )
+
+    # Gera milestones a partir do GDD (com folga reservada)
+    raw_milestones = _generate_milestones_from_gdd(gdd, milestones_uteis, scope=scope_category)
 
     # Limpa plano anterior se force=True
     if force:
         _milestone_plan.milestones = []
 
-    # Adiciona cada milestone
+    # Adiciona cada milestone de conteudo
     created = []
     for rm in raw_milestones:
         r = _milestone_plan.add_milestone(
@@ -293,12 +308,29 @@ def create_milestone_plan(
         if r["status"] == "success":
             created.append(r["milestone"])
 
+    # Adiciona milestones de buffer/folga
+    for i in range(buffer_count):
+        b = _milestone_plan.add_milestone(
+            titulo=f"Buffer / Folga ({i+1}/{buffer_count})",
+            descricao=(
+                "Tempo reserva para imprevistos, ajustes finos e polimento extra. "
+                "Use esta folga para corrigir bugs criticos, refinar UI/UX, "
+                "ou compensar atrasos em milestones anteriores. "
+                "NAO preencha com novas features."
+            ),
+            fase_associada="POLIMENTO",
+        )
+        if b["status"] == "success":
+            created.append(b["milestone"])
+
     return {
         "status": "success",
         "genero": genero,
         "gdd_title": gdd.get("title", ""),
         "scope": scope_category,
         "scope_estimation": scope_estimation,
+        "buffer_reservado": buffer_count,
+        "scope_warning": scope_warning,
         "milestones": created,
         "progress": _milestone_plan.progress_summary(),
     }

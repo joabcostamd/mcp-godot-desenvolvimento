@@ -602,8 +602,8 @@ def _default_scenarios() -> list[dict]:
 
 
 def _smoke_scenarios() -> list[dict]:
-    """Smoke test: valida pipeline core do MCP."""
-    return [
+    """Smoke test: valida pipeline core do MCP + inventario completo (Fatia 2.2)."""
+    scenarios = [
         {
             "name": "SMOKE-01: Pipeline core",
             "description": "Valida que ping, health_check, self_test e ClassDB respondem corretamente.",
@@ -655,6 +655,32 @@ def _smoke_scenarios() -> list[dict]:
             ],
         },
     ]
+
+    # ── Fatia 2.2: SMOKE-05 — inventario completo ──────────
+    try:
+        from server import _tool_defs
+        tools = _tool_defs()
+        tool_names = sorted([t.name for t in tools])
+        inventory_steps = []
+        for name in tool_names:
+            inventory_steps.append({
+                "tool": name,
+                "args": {},
+                "expect": {"status": None},  # aceita qualquer status (sem crash = passou)
+            })
+        scenarios.append({
+            "name": f"SMOKE-05: Inventario completo ({len(tool_names)} tools)",
+            "description": "Itera sobre TODAS as tools registradas com entrada minima. Objetivo: detectar crash de dispatch/import — nao valida comportamento.",
+            "steps": inventory_steps,
+        })
+    except Exception as e:
+        scenarios.append({
+            "name": "SMOKE-05: Inventario (ERRO ao carregar tools)",
+            "description": f"Falha ao carregar _tool_defs(): {e}",
+            "steps": [],
+        })
+
+    return scenarios
 
 
 def _regression_scenarios() -> list[dict]:

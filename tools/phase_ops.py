@@ -373,8 +373,15 @@ def get_phase_history() -> dict:
     }
 
 
-def get_next_step() -> dict:
-    """Feature 10: retorna o proximo passo obrigatorio da sessao.
+def get_next_step(low_energy: bool = False) -> dict:
+    """Fatia 1.15: get_next_step evolvido — proximo passo + por que + nao-fazer + menor passo.
+
+    Alem do passo obrigatorio (Feature 10), retorna:
+    - why_now: justificativa contextual do porque este passo agora
+    - do_not_do: lista de acoes para EVITAR nesta fase (usa scope_guard)
+    - smallest_step: a menor acao possivel que avanca (modo baixa energia)
+
+    Se low_energy=True, smallest_step sobe para suggested_action.
 
     Grava o PID atual no marcador .mcp_session_started do projeto ativo,
     liberando o gate em call_tool() para esta sessao.
@@ -397,6 +404,12 @@ def get_next_step() -> dict:
             "blockers": ["Nenhum projeto ativo selecionado"],
             "suggested_action": "Use project_manage para selecionar um projeto existente ou criar um novo. "
                                 "Depois chame get_next_step() novamente.",
+            "why_now": "Sem um projeto ativo, nenhuma ferramenta de cena ou script funciona.",
+            "do_not_do": [
+                "Nao tente criar cenas, nodes ou scripts sem um projeto selecionado.",
+                "Nao avance fases sem um projeto ativo.",
+            ],
+            "smallest_step": "Use project_manage para listar projetos existentes.",
             "session_started": False,
         }
 
@@ -419,6 +432,75 @@ def get_next_step() -> dict:
     # Monta blockers e suggested_action com base na fase
     blockers = []
     suggested_action = ""
+
+    # -- Dicionarios de contexto por fase (Fatia 1.15) --
+    why_now_map = {
+        "IDEIA": "A fase IDEIA e o momento de definir o conceito ANTES de qualquer codigo. "
+                 "Mudar de ideia agora e gratis — depois de criar cenas, refazer custa caro.",
+        "DESIGN": "A fase DESIGN define a estrutura base do projeto. "
+                  "E o alicerce: criar a cena principal agora evita retrabalho depois.",
+        "PROTOTIPO": "A fase PROTOTIPO e onde a mecanica principal e validada. "
+                     "O pipeline de verificacao garante que o jogo compila e roda antes de investir em conteudo.",
+        "CONTEUDO": "A fase CONTEUDO e onde o jogo ganha corpo com assets reais. "
+                    "So faz sentido depois que a mecanica base esta funcionando.",
+        "POLIMENTO": "A fase POLIMENTO e o ajuste fino antes do lancamento. "
+                     "O release checklist garante que nada essencial foi esquecido.",
+        "PRONTO_PARA_LANCAR": "Projeto na fase final. "
+                              "Hora de exportar o executavel e verificar os ultimos detalhes.",
+    }
+    do_not_do_map = {
+        "IDEIA": [
+            "Nao crie cenas ou scripts ainda — defina o conceito primeiro.",
+            "Nao gere arte ou musica final — placeholder e suficiente.",
+            "Nao implemente mecanicas complexas — esta e a fase de definir, nao de construir.",
+        ],
+        "DESIGN": [
+            "Nao se preocupe com balanceamento ou polimento visual agora.",
+            "Nao gere assets finais — use placeholders (ColorRect, formas geometricas).",
+            "Nao implemente sistemas avancados (save, multiplayer, conquistas).",
+        ],
+        "PROTOTIPO": [
+            "Nao adicione conteudo em massa — valide a mecanica primeiro.",
+            "Nao gaste tempo com UI bonita — botoes de placeholder bastam.",
+            "Nao otimize performance prematuramente — so se o smoke test falhar.",
+        ],
+        "CONTEUDO": [
+            "Nao mude a mecanica principal — ela ja foi validada no PROTOTIPO.",
+            "Nao adicione novas mecanicas de escopo — va para o scope_guard.",
+            "Nao use assets sem validacao game-ready (asset_manage.validate_game_ready).",
+        ],
+        "POLIMENTO": [
+            "Nao adicione features novas — e fase de ajuste, nao de expansao.",
+            "Nao pule itens do release checklist — cada item existe por um motivo.",
+            "Nao exporte sem rodar o pipeline de verificacao completo.",
+        ],
+        "PRONTO_PARA_LANCAR": [
+            "Nao adicione nada novo — o escopo esta fechado.",
+            "Nao exporte sem verificar o release checklist uma ultima vez.",
+        ],
+    }
+    smallest_step_map = {
+        "IDEIA": "Escreva 1 frase definindo o genero do jogo (ex: 'um roguelike de cartas no espaco').",
+        "DESIGN": "Crie 1 Node2D vazio como root da cena principal.",
+        "PROTOTIPO": "Rode run_verification_pipeline e veja o que passa e o que falha.",
+        "CONTEUDO": "Importe 1 sprite placeholder para a entidade principal do jogo.",
+        "POLIMENTO": "Rode release_checklist() e anote o primeiro item que nao passa.",
+        "PRONTO_PARA_LANCAR": "Rode release_checklist() para ver o status atual.",
+    }
+
+    why_now = why_now_map.get(phase, f"Fase atual: {phase}. Siga o proximo passo para avancar.")
+    do_not_do = do_not_do_map.get(phase, [])
+    smallest_step = smallest_step_map.get(phase, "Rode resume_session() para ver o panorama completo.")
+
+    # Tenta enriquecer do_not_do com scope_guard se disponivel
+    try:
+        from tools.scope_guard import scope_check
+        for acao_generica in ["multiplayer", "conquistas", "mods", "IA avancada", "VR"]:
+            verdict = scope_check(acao_generica)
+            if verdict.classificacao == "fora_escopo":
+                do_not_do.append(f"Nao implemente {acao_generica}: {verdict.justificativa}")
+    except Exception:
+        pass  # scope_guard pode nao estar disponivel — nao e critico
 
     if phase == "IDEIA":
         blockers = [] if pode_avancar else ["Nenhum criterio bloqueia IDEIA->DESIGN (sempre permitido)"]
@@ -464,6 +546,10 @@ def get_next_step() -> dict:
         suggested_action = "Projeto na fase final. Execute export_manage op 'build' para exportar o executavel. "
         suggested_action += "Use release_checklist() para verificar se todos os itens estao OK."
 
+    # Modo baixa energia: smallest_step sobe para suggested_action
+    if low_energy:
+        suggested_action = smallest_step
+
     return {
         "status": "success",
         "phase": phase,
@@ -473,6 +559,9 @@ def get_next_step() -> dict:
         "criterio_para_avancar": criterio,
         "blockers": blockers,
         "suggested_action": suggested_action,
+        "why_now": why_now,
+        "do_not_do": do_not_do,
+        "smallest_step": smallest_step,
         "session_started": True,
         "server_pid": os.getpid(),
     }

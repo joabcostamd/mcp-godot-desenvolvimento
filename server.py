@@ -3829,12 +3829,25 @@ def _tool_defs() -> list[Tool]:
             description=(
                 "Retorna o PROXIMO PASSO OBRIGATORIO da sessao: fase atual, "
                 "blockers, criterio para avancar, e acao sugerida. "
+                "Inclui why_now (justificativa), do_not_do (o que EVITAR), "
+                "e smallest_step (menor acao que avanca — util quando cansado). "
+                "Use low_energy=true para focar apenas no menor passo possivel. "
                 "DEVE ser chamada no inicio de TODA sessao antes de qualquer "
                 "outra tool (exceto ping/health_check/setup). "
                 "Grava o PID da sessao no marcador .mcp_session_started "
                 "para liberar o gate de sessao. GRATIS."
             ),
-            inputSchema={"type": "object", "properties": {}},
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "low_energy": {
+                        "type": "boolean",
+                        "description": "Se true, retorna apenas a menor acao possivel como passo sugerido. "
+                                       "Util quando o desenvolvedor esta cansado e quer um passo trivial.",
+                        "default": False,
+                    }
+                },
+            },
         ),
         # ── Fatia 1.8: resume_session ──────────────────────────
         Tool(
