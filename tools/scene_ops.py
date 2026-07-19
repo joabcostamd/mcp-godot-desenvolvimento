@@ -72,7 +72,17 @@ def _get_open_scene_path() -> str:
 
 
 def _resolve_scene_path_from_vibe() -> str | None:
-    """Resolve scene_path do Vibe Coding Mode, se ativo. Retorna None se não disponível."""
+    """Resolve scene_path do Vibe Coding Mode ou ExecutionContext (Etapa A2).
+
+    Ordem de precedência:
+    1. Vibe Coding Mode (se ativo com scene_path definido)
+    2. ExecutionContext.active_scene (injetado automaticamente pelo call_tool)
+    3. None — o chamador deve retornar erro amigável
+
+    Returns:
+        str com o caminho da cena ou None se não disponível.
+    """
+    # ── 1. Vibe Coding Mode ──
     try:
         from tools.vibe_ops import get_vibe_context
         ctx = get_vibe_context()
@@ -81,6 +91,16 @@ def _resolve_scene_path_from_vibe() -> str | None:
             return vibe["scene_path"]
     except Exception:
         pass
+
+    # ── 2. ExecutionContext (Etapa A2) ──
+    try:
+        from core.context import get_execution_context
+        exec_ctx = get_execution_context()
+        if exec_ctx is not None and exec_ctx.active_scene:
+            return exec_ctx.active_scene
+    except Exception:
+        pass
+
     return None
 
 
@@ -1224,8 +1244,8 @@ def create_tilemap_layer(scene_path: str, parent_node_path: str, layer_name: str
     return {"status": "success", "node_path": f"{scene_path}::{layer_name}"}
 
 
-def paint_tilemap_cell(scene_path: str, layer_node_path: str,
-                       cell_x: int, cell_y: int, source_id: int = 0,
+def paint_tilemap_cell(scene_path: str | None = None, layer_node_path: str = "",
+                       cell_x: int = 0, cell_y: int = 0, source_id: int = 0,
                        atlas_coords_x: int = 0, atlas_coords_y: int = 0) -> dict:
     """Pinta uma célula em uma TileMapLayer no formato PackedByteArray do Godot 4.
 
@@ -1233,7 +1253,7 @@ def paint_tilemap_cell(scene_path: str, layer_node_path: str,
       uint16 x, uint16 y, int32 source_id, uint16 atlas_x, uint16 atlas_y
 
     Args:
-        scene_path: Cena alvo.
+        scene_path: Cena alvo (opcional — resolve via Vibe/ExecutionContext).
         layer_node_path: Path da TileMapLayer.
         cell_x, cell_y: Coordenadas da célula.
         source_id: ID da fonte no tileset.
@@ -1243,6 +1263,12 @@ def paint_tilemap_cell(scene_path: str, layer_node_path: str,
         {"status": "success", "cell": [int, int]}
     """
     import struct
+
+    # ── Resolver scene_path (Etapa A2) ──
+    if scene_path is None:
+        scene_path = _resolve_scene_path_from_vibe()
+    if scene_path is None:
+        return {"status": "error", "message": "scene_path não informado e nenhum contexto ativo (Vibe/ExecutionContext)."}
 
     proj = _get_active_project()
 
@@ -1518,7 +1544,7 @@ def add_control_node(scene_path: str, parent_node_path: str,
 # ── Onda 1: Visão — Análise de cena ─────────────────────────────────
 
 def detect_offscreen_elements(
-    scene_path: str,
+    scene_path: str | None = None,
     viewport_width: int = 1280,
     viewport_height: int = 720,
     margin: int = 50,
@@ -1533,14 +1559,20 @@ def detect_offscreen_elements(
     está o player spawnando?"
 
     Args:
-        scene_path: Caminho da cena a analisar.
+        scene_path: Caminho da cena a analisar (opcional — resolve via Vibe/ExecutionContext).
         viewport_width: Largura da viewport (default 1280).
         viewport_height: Altura da viewport (default 720).
         margin: Margem de tolerância em pixels (default 50).
 
     Returns:
-        {"status": "success", "offscreen": [...], "total_nodes": int}
+        dict com elementos fora da tela.
     """
+    # ── Resolver scene_path (Etapa A2) ──
+    if scene_path is None:
+        scene_path = _resolve_scene_path_from_vibe()
+    if scene_path is None:
+        return {"status": "error", "message": "scene_path não informado e nenhum contexto ativo (Vibe/ExecutionContext)."}
+
     proj = _get_active_project()
     full_path = proj / scene_path
 

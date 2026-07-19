@@ -160,18 +160,21 @@ Ao finalizar:
 
 **Gate:** `tool_groups` mostra 5 namespaces. Zero tools perdidas. C5 reduzido. ✅
 
-### ⬜ A2 — ExecutionContext (~2h)
+### ✅ A2 — ExecutionContext (~2h) — CONCLUÍDO 2026-07-19
 
 **Meta:** IA nunca mais digitar `scene_path`. Contexto injetado automaticamente.
 
-| # | Ação | Arquivo |
-|---|---|---|
-| A2.1 | Criar `ExecutionContext` dataclass | `core/context.py` (novo) |
-| A2.2 | Implementar `pre_handler` que carrega contexto antes de cada tool | `server.py` |
-| A2.3 | Cache de `scene_tree` com TTL 5s | `server.py` |
-| A2.4 | Tools de cena → `scene_path` implícito (via contexto) | `server.py` (handlers) |
+| # | Ação | Arquivo | Status |
+|---|---|---|---|
+| A2.1 | Criar `ExecutionContext` dataclass | `core/context.py` (novo) | ✅ |
+| A2.2 | Implementar `_dispatch_with_context` que carrega contexto antes de cada tool | `server.py` (call_tool) | ✅ |
+| A2.3 | Cache de `scene_tree` com TTL 5s | `core/context.py` | ✅ |
+| A2.4 | Tools de cena → `scene_path` implícito (via contexto) | `tools/scene_ops.py` | ✅ |
 
-**Gate:** `scene_manage(op="create")` funciona SEM parâmetro `scene_path`.
+**Gate:** `scene_manage(op="create")` funciona SEM parâmetro `scene_path`. ✅
+- `_resolve_scene_path_from_vibe()` agora consulta `ExecutionContext.active_scene`
+- `paint_tilemap_cell` e `detect_offscreen_elements` ganharam fallback
+- Contexto injetado via thread-local em `_dispatch_with_context`
 
 ### ⬜ A3 — DATA_CONTRACTS.md (~1h)
 
@@ -244,13 +247,14 @@ Ao finalizar:
 | 3 — Criação com Fosso | ✅ 16/16 (3.1-3.4 escaladas) |
 | B1 (4.1) — i18n testing | ✅ |
 | B2 (4.2) — CI Verificação | ✅ |
+| B3 (4.3) — gdtoolkit Gate | 🔶 |
 
-### ⬜ Camada 4 — Extensões de Processo (7 pendentes)
+### ⬜ Camada 4 — Extensões de Processo (6 pendentes)
 
 | Etapa | Nome | Arquivos | ⏱ | Depende |
 |---|---|---|---|---|
 | B2 (4.2) | CI Verificação [AUTO] | `.github/workflows/verification.yml` | 45m | Nenhuma | ✅ |
-| B3 (4.3) | gdtoolkit Gate [SÊNIOR] | `tools/code_quality_ops.py`, `.gdlintrc` | 90m | Nenhuma |
+| B3 (4.3) | gdtoolkit Gate [SÊNIOR] | `tools/code_quality_ops.py`, `.gdlintrc` | 90m | Nenhuma | 🔶 |
 | B4 (4.4) | Análises Específicas [SÊNIOR] | `tools/code_quality_ops.py` +9 ops | 2h | B3 |
 | B5 (4.5) | Segurança Supply-Chain [SÊNIOR] | `tools/security_ops.py` +3 ops | 1h | Nenhuma |
 | B6 (4.6) | agent_manage [SÊNIOR] | `tools/agent_ops.py` novo | 2h | Nenhuma |

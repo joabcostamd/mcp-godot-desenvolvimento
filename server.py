@@ -5276,13 +5276,29 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
             logger.warning("Session gate falhou (fail-open): %s", e)
             # fail-open: não bloqueia — trava total é pior que perder gate uma vez
 
+    # ── Etapa A2: ExecutionContext — injetar contexto antes do dispatch ──
+    # Resolve projeto ativo, cena ativa (Vibe), fase, etc. UMA vez por tool.
+    # O contexto fica disponível via core.context.get_execution_context()
+    # para qualquer handler que precise de scene_path, project_path, etc.
+    try:
+        from core.context import resolve_execution_context, set_execution_context
+        _exec_ctx = resolve_execution_context(tool_name=name)
+    except Exception:
+        _exec_ctx = None
+
+    def _dispatch_with_context():
+        """Wrapper que injeta contexto thread-local antes do handler."""
+        if _exec_ctx is not None:
+            set_execution_context(_exec_ctx)
+        return _smart_call(handler, arguments)
+
     handlers = _build_handlers()
     handler = handlers.get(name)
     if handler:
         try:
             # P1-1: Despachar handlers para thread pool (Opcao B: _smart_call)
             loop = asyncio.get_running_loop()
-            result = await loop.run_in_executor(None, _smart_call, handler, arguments)
+            result = await loop.run_in_executor(None, _dispatch_with_context)
             # Garante status sempre presente (outputSchema exige)
             if isinstance(result, dict) and "status" not in result:
                 result["status"] = "success"

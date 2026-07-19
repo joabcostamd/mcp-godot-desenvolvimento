@@ -6,7 +6,20 @@
 ## Último Handoff (AGENTE 01)
 - **Data:** 2026-07-19
 - **De:** AGENTE 01 (Arquitetura & Core)
-- **Etapa concluída:** A1 — 5 Namespaces Semânticos + Auditoria + Correções
+- **Etapas concluídas:** A1 (Namespaces) + A2 (ExecutionContext)
+
+### O que foi feito (A2)
+- **`core/context.py`** (novo): `ExecutionContext` dataclass com thread-local storage
+  - Campos: `active_project`, `active_scene`, `phase`, `vibe_enabled`, `vibe_focus_node`
+  - Cache TTL 5s para `scene_tree` (evita re-resolução a cada chamada)
+  - API: `resolve_execution_context()`, `get_execution_context()`, `set_execution_context()`
+- **`server.py`**: `_dispatch_with_context` wrapper no `call_tool` injeta contexto antes de cada handler
+  - Contexto resolvido UMA vez por tool, disponível via `get_execution_context()`
+- **`tools/scene_ops.py`**: `_resolve_scene_path_from_vibe()` estendido para consultar `ExecutionContext`
+  - `paint_tilemap_cell` e `detect_offscreen_elements` ganharam fallback (eram as únicas sem)
+  - `scene_path` agora é `str | None = None` com resolução automática
+- **`tools/code_quality_ops.py`**: SyntaxError corrigido (f-string com escape inválido) — bloqueava `import server`
+- **Gate**: `scene_manage(op="create")` funciona SEM parâmetro `scene_path`
 
 ### O que foi feito (A1)
 - **TOOLSETS reestruturado** em 5 namespaces semânticos (239 tools mapeadas):
@@ -39,11 +52,16 @@
 
 ## Histórico
 
-### AGENTE 02 — B3 (2026-07-19)
-- Criado `tools/code_quality_ops.py` com gdlint, gdformat, gdradon, code_quality_gate
-- Criado `.gdlintrc`
-- Integrado no `run_verification_pipeline` (etapa 6)
-- Aguardando revisão humana [SÊNIOR]
+### AGENTE 02 — B3 (2026-07-19) 🔶 [aguardando revisão]
+- Criado `tools/code_quality_ops.py` (~520 linhas, 4 funções + helpers)
+- Criado `.gdlintrc` (limiares: 80 linhas/função, CC≤10, 500 linhas/classe)
+- Integrado no `run_verification_pipeline` (etapa 6, parâmetro `include_code_quality`)
+- `requirements.txt` atualizado com `gdtoolkit>=4.0,<5.0`
+- **2 auditorias realizadas**: 12 problemas encontrados, 12 corrigidos
+  - Bugs críticos: import ausente, parâmetro ausente (NameError), gate false-pass
+  - Performance: regex O(n²)→O(n) com pre-filtro, stdin=DEVNULL
+  - Robustez: Windows paths, FileNotFoundError, gdtoolkit_version consistente
+- ⚠️ **Pendente**: teste canary com Godot real, validação do `.gdlintrc`
 
 ### AGENTE 02 — B2 (2026-07-19)
 - Criado `.github/workflows/verification.yml` — CI com 7 jobs
