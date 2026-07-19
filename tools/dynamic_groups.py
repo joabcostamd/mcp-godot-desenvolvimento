@@ -15,24 +15,133 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 GROUPS_FILE = ROOT / ".tool_groups.json"
 
+# ── Etapa A1: 5 Namespaces Semânticos ─────────────────────────────
+# Substitui os 13 grupos anteriores por 5 namespaces hierárquicos.
+# Cada namespace agrupa tools por domínio funcional.
+# A IA primeiro vê os 5 namespaces, depois explora as tools de um namespace.
+
 GROUPS = {
-    "core": ["ping","health_check","bootstrap_godot_mcp","read_file","write_file"],
-    "scene": ["scene_manage","node_manage","batch_atomic_edit","add_nodes_batch"],
-    "script": ["script_manage","safe_write_gdscript","gdscript_diagnostics"],
-    "runtime": ["runtime_manage","freeze_game_clock","get_runtime_state_digest"],
-    "lsp": ["gdscript_lsp_connect","gdscript_references","gdscript_definition"],
-    "dap": ["debugger_set_breakpoint","debugger_status"],
-    "art": ["generate_game_art","apply_game_art","create_parallax_background"],
-    "audio": ["audio_manage","generate_audio_sfx"],
-    "networking": ["game_http_request","game_multiplayer"],
-    "testing": ["run_gut_tests","assert_node_exists","simulate_input_sequence"],
-    "assets": ["download_asset", "import_downloaded_asset", "asset_manage",
-               "import_asset_manifest", "create_asset_manifest"],
-    "security": ["set_safety_policy","configure_security"],
-    "refs_ops": [
-        "find_missing_references", "search_codebase",
-        "validate_project_refs", "find_usages",
+    "project": [
+        "project_manage", "project_status", "project_map",
+        "scene_manage", "node_manage",
+        "script_manage", "safe_write_gdscript",
+        "file_manage", "read_file", "write_file",
+        "ui_manage",
+        "create_entity", "create_entities",
+        "generate_project_structure",
+        "physics_manage", "anim_manage", "camera_manage",
+        "tilemap_manage", "navigation_manage",
+        "gamestate_manage", "dialogue_manage", "inventory_manage",
+        "d3_manage", "config_manage",
+        "setup_localization", "add_translation_string",
+        "behavior_tree_generate", "behavior_tree_list_templates",
+        "world_describe",
+        "batch_atomic_edit", "add_nodes_batch", "set_properties_batch",
+        "load_scene_async",
     ],
+    "assets": [
+        "asset_manage",
+        "generate_game_art", "generate_game_art_flux", "apply_game_art",
+        "generate_3d_asset", "generate_3d_placeholder",
+        "import_asset_manifest", "create_asset_manifest",
+        "download_asset", "import_downloaded_asset",
+        "audio_manage", "music_manage",
+        "generate_audio_sfx", "generate_voice",
+        "shader_manage", "shader_generate", "shader_list_templates",
+        "vfx_manage",
+        "optimize_sprite", "remove_background",
+        "marketplace_search", "marketplace_download",
+        "generate_dungeon_rooms", "dungeon_generate",
+        "terrain_generate", "wave_generate",
+        "juice_apply", "juice_list_presets",
+    ],
+    "runtime": [
+        "runtime_manage",
+        "execute_gdscript_runtime", "capture_game_screenshot", "take_screenshot",
+        "godot_run_project", "godot_stop_project", "godot_wait_for_bridge",
+        "godot_exec", "godot_runtime_info", "godot_screenshot",
+        "godot_custom_command", "godot_list_custom_commands",
+        "get_runtime_state_digest", "capture_runtime_errors",
+        "freeze_game_clock", "unfreeze_game_clock", "step_game_time", "step_until",
+        "effect_probe",
+        "debug_manage",
+        "debugger_set_breakpoint", "debugger_status", "debugger_step",
+        "debugger_get_stack", "debugger_get_variables",
+        "test_manage",
+        "run_gut_tests", "run_scripted_tests", "regression_test", "smoke_test",
+        "run_verification_pipeline", "run_stress_test",
+        "assert_node_exists",
+        "game_bridge_manage",
+        "game_http_request", "game_multiplayer",
+        "game_call_method", "game_spawn_node", "game_raycast", "game_get_camera",
+        "game_play_animation", "game_find_nodes_by_class", "game_await_signal",
+        "game_pause", "game_performance", "game_window", "game_input_state",
+        "game_serialize_state",
+        "inject_input_event", "simulate_input_sequence",
+        "watch_signal", "watch_state_start", "watch_state_collect",
+        "record_gameplay_gif", "start_recording", "stop_recording",
+        "addon_connect", "addon_disconnect", "addon_ping", "addon_is_available",
+        "addon_get_scene_tree", "addon_take_screenshot",
+        "addon_create_node", "addon_delete_node", "addon_set_property",
+        "addon_duplicate_node", "addon_reparent_node", "addon_batch_edit",
+        "read_console_output",
+        "profile_frame", "profile_memory", "auto_screenshot",
+        "build_csharp", "export_manage",
+        "playtest_manage",
+    ],
+    "analysis": [
+        "analysis_manage",
+        "query_classdb", "search_classdb", "godot_class_ref",
+        "list_valid_node_types",
+        "validate_project_refs", "find_usages",
+        "audit_input_map", "audit_autoloads", "audit_scene_reachability",
+        "audit_uid_consistency", "audit_save_compatibility",
+        "analyze_signal_flow",
+        "gdscript_diagnostics", "gdscript_references", "gdscript_definition",
+        "gdscript_hover", "gdscript_rename", "gdscript_symbols",
+        "gdscript_lsp_connect", "gdscript_lsp_disconnect", "gdscript_sync_file",
+        "resource_dependency_graph",
+        "find_unused_resources",
+        "estimate_tool_tokens",
+        "dps_calculator", "balance_analyze",
+        "vision_manage",
+        "localization_manage",
+    ],
+    "orchestration": [
+        "ping", "health_check", "self_test", "bootstrap_godot_mcp",
+        "dump_mcp_state",
+        "capture_proof", "verify_proof",
+        "validate_mcp_registry", "validate_mcp_environment", "validate_godot_version",
+        "tool_catalog", "tool_groups",
+        "catalog_search", "describe_tool", "invoke_by_name",
+        "safety_manage",
+        "set_safety_policy", "configure_security", "security_status",
+        "circuit_breaker_status",
+        "get_current_phase", "advance_phase", "get_phase_history",
+        "get_next_step", "resume_session",
+        "get_audit_log", "get_audit_replay",
+        "workflow_handoff", "workflow_snapshot",
+        "set_auto_dismiss",
+        "vibe_coding_mode", "get_vibe_context",
+        "project_progress",
+        "generate_ci_snippet",
+        "install_mcp_addon", "setup_mcp_config",
+        "create_milestone_plan", "get_milestone_plan", "advance_milestone",
+        "set_project_brief", "get_project_brief", "update_project_brief",
+        "gdd_generate",
+        "release_checklist", "deploy_itch",
+        "configure_export_preset",
+    ],
+}
+
+# ── Hierarquia de Namespaces (para tool_groups list) ──────────────
+# Namespace → descrição curta em PT-BR para a IA
+NAMESPACE_INFO = {
+    "project":       "🏗️ Projeto — Cenas, scripts, arquivos, UI, gameplay estrutural",
+    "assets":        "🎨 Assets — Arte, áudio, shaders, VFX, geração procedural",
+    "runtime":       "▶️ Runtime — Execução, debug, testes, bridge, jogo rodando",
+    "analysis":      "🔍 Analysis — Auditoria, qualidade, referências, introspecção",
+    "orchestration": "🎛️ Orchestration — Meta-tools, workflow, governança, segurança",
 }
 
 # ── Aliases PT→EN para buscas em português ──
@@ -146,8 +255,8 @@ def _get_rollup_ops_map() -> dict[str, list[str]]:
 _get_rollup_ops_map._cache = None
 
 
-def tool_catalog(query: str = "", group: str = "", limit: int = 20) -> dict:
-    """Busca tools no catálogo por nome ou grupo.
+def tool_catalog(query: str = "", group: str = "", limit: int = 20, namespace: str = "") -> dict:
+    """Busca tools no catálogo por nome, grupo ou namespace.
 
     Usa scoring ponderado (nome 3pts, ops 2pts, descrição 1pt)
     com aliases PT→EN para buscas em português e bônus de +1
@@ -155,11 +264,12 @@ def tool_catalog(query: str = "", group: str = "", limit: int = 20) -> dict:
 
     Args:
         query: Texto para buscar. Aceita português ou inglês.
-        group: Filtrar por grupo (core, scene, runtime, lsp, etc.).
+        group: (legado) Filtrar por grupo/namespace.
         limit: Máximo de resultados.
+        namespace: Filtrar por namespace semântico (project, assets, runtime, analysis, orchestration).
 
     Returns:
-        dict com tools encontradas e grupos disponíveis.
+        dict com tools encontradas, grupos disponíveis e namespaces.
     """
     from server import _tool_defs
     tools = _tool_defs()
@@ -170,9 +280,6 @@ def tool_catalog(query: str = "", group: str = "", limit: int = 20) -> dict:
         query = _expand_query(query)
 
     # ── Scoring por token ──
-    # 3 pts → nome, 2 pts → ops, 1 pt → descrição/params.
-    # +1 bônus para rollups (ferramentas agregadoras recomendadas).
-    # Soma ponderada, depois ordenada desc.
     _rollup_ops = {}
     if query:
         _rollup_ops = _get_rollup_ops_map()
@@ -208,14 +315,19 @@ def tool_catalog(query: str = "", group: str = "", limit: int = 20) -> dict:
         scored.sort(key=lambda x: (x[1], x[0].name in _rollup_ops), reverse=True)
         tools = [t for t, _ in scored]
 
+    # ── Resolver namespace da tool via _meta ──
+    def _get_tool_namespace(t) -> str:
+        meta = getattr(t, 'meta', None) or {}
+        return meta.get("namespace", "")
+
     results = []
     query_tokens = _re.split(r'[\s_]+', query.lower()) if query else []
     for t in tools:
         name = t.name
         desc = (t.description or "")[:100]
+        ns = _get_tool_namespace(t)
 
         # Filtro por query: exige que pelo menos metade dos tokens casem
-        # Matching por token exato (não substring), igual ao scoring.
         if query_tokens:
             combined_tokens = set(_re.split(r'[\s_]+', name.lower()))
             combined_tokens.update(_re.split(r'[\s_]+', desc.lower()))
@@ -224,19 +336,24 @@ def tool_catalog(query: str = "", group: str = "", limit: int = 20) -> dict:
             if matched < max(1, len(query_tokens) // 2):
                 continue
 
-        # Filtro por grupo
-        if group:
-            found = False
-            for gname, gtools in GROUPS.items():
-                if (gname == group or group in gname) and name in gtools:
-                    found = True
-                    break
-            if not found:
-                continue
+        # Filtro por namespace (prioridade sobre group legado)
+        effective_filter = namespace or group
+        if effective_filter:
+            # Correspondência exata ou parcial com o nome do namespace
+            if ns != effective_filter and effective_filter not in ns:
+                # Fallback: busca no GROUPS legado
+                found_in_group = False
+                for gname, gtools in GROUPS.items():
+                    if (gname == effective_filter or effective_filter in gname) and name in gtools:
+                        found_in_group = True
+                        break
+                if not found_in_group:
+                    continue
 
         results.append({
             "name": name,
             "description": desc,
+            "namespace": ns,
             "groups": [g for g, gt in GROUPS.items() if name in gt],
         })
 
@@ -247,22 +364,24 @@ def tool_catalog(query: str = "", group: str = "", limit: int = 20) -> dict:
         "status": "success",
         "query": query,
         "group": group,
+        "namespace": namespace,
         "results": results,
         "total": len(results),
         "available_groups": list(GROUPS.keys()),
+        "namespace_info": NAMESPACE_INFO,
     }
 
 
 def tool_groups(action: str = "list", group: str = "", enabled: bool = True) -> dict:
-    """Gerencia grupos de tools dinâmicos.
+    """Gerencia grupos de tools dinâmicos (5 namespaces semânticos).
 
     Args:
-        action: "list", "activate", "deactivate", "status".
-        group: Nome do grupo.
+        action: "list", "activate", "deactivate", "status", "hierarchy".
+        group: Nome do grupo/namespace.
         enabled: Estado de ativação.
 
     Returns:
-        dict com estado dos grupos.
+        dict com estado dos grupos ou hierarquia de namespaces.
     """
     config = {}
     if GROUPS_FILE.exists():
@@ -271,12 +390,39 @@ def tool_groups(action: str = "list", group: str = "", enabled: bool = True) -> 
 
     groups_state = config.get("groups", {})
 
+    if action == "hierarchy":
+        # ── Visão hierárquica: 5 namespaces → tools ──
+        hierarchy = {}
+        total_tools = 0
+        for ns, tools in GROUPS.items():
+            active = groups_state.get(ns, True)
+            hierarchy[ns] = {
+                "description": NAMESPACE_INFO.get(ns, ""),
+                "active": active,
+                "tool_count": len(tools),
+                "tools": tools if active else [],
+            }
+            if active:
+                total_tools += len(tools)
+        return {
+            "status": "success",
+            "total_namespaces": len(GROUPS),
+            "total_tools_visible": total_tools,
+            "namespaces": hierarchy,
+        }
+
     if action == "list":
         return {
             "status": "success",
             "available_groups": list(GROUPS.keys()),
+            "namespace_info": NAMESPACE_INFO,
             "active_groups": [g for g, v in groups_state.items() if v],
-            "groups_detail": {g: {"active": groups_state.get(g, True), "tools": GROUPS.get(g, [])} for g in GROUPS},
+            "groups_detail": {g: {
+                "active": groups_state.get(g, True),
+                "tool_count": len(GROUPS.get(g, [])),
+                "tools": GROUPS.get(g, []),
+                "description": NAMESPACE_INFO.get(g, ""),
+            } for g in GROUPS},
         }
 
     elif action in ("activate", "deactivate"):

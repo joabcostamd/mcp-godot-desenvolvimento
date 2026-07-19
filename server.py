@@ -37,59 +37,157 @@ from mcp.types import TextContent, Tool, Resource, ResourceTemplate
 # ══════════════════════════════════════════════════════════════
 
 TOOLSETS = {
-    "core": [
-        "ping", "health_check", "self_test", "bootstrap_godot_mcp",
-        "read_file", "write_file", "safe_write_gdscript",
-        "smoke_test", "dump_mcp_state",
-        "capture_proof", "verify_proof",
-        "validate_mcp_registry",
-        # Meta-tools (Fatia 0.15)
-        "catalog_search", "describe_tool", "invoke_by_name",
-    ],
-    "scene_ops": [
-        "scene_manage", "node_manage", "raycast_manage",
-    ],
-    "script_ops": [
+    # ── 5 Namespaces Semânticos (Etapa A1) ──
+    # Reduz ~60 tools visíveis → ≤20 por namespace.
+    # A IA primeiro vê os 5 namespaces, depois explora um por vez.
+    "project": [
+        # Fundação — projeto, cenas, scripts, arquivos, UI
+        "project_manage", "project_status", "project_map",
+        "scene_manage", "node_manage",
         "script_manage", "safe_write_gdscript",
-        "gdscript_diagnostics", "gdscript_references", "gdscript_definition",
+        "file_manage", "read_file", "write_file",
+        "ui_manage",
+        "create_entity", "create_entities",
+        "generate_project_structure",
+        # Gameplay estrutural
+        "physics_manage", "anim_manage", "camera_manage",
+        "tilemap_manage", "navigation_manage",
+        "gamestate_manage", "dialogue_manage", "inventory_manage",
+        "d3_manage",
+        # Configuração
+        "config_manage",
+        "setup_localization", "add_translation_string",
+        "create_animation_tree",
+        "behavior_tree_generate", "behavior_tree_list_templates",
+        "world_describe",
+        # Batch/atômico
+        "batch_atomic_edit", "add_nodes_batch", "set_properties_batch",
+        "load_scene_async",
+        # Templates de gameplay
+        "create_gun_system", "create_bullet_template",
+        "create_parallax_background", "add_parallax_layer", "create_spritesheet",
+        "create_path_2d", "create_patrol_route",
+        "loot_table_generate",
     ],
-    "test_ops": [
-        "run_gut_tests", "effect_probe", "godot_exec",
-        "get_runtime_state_digest", "capture_runtime_errors",
-        "run_scripted_tests", "smoke_test", "regression_test",
-        "dump_mcp_state", "estimate_tool_tokens",
-        "capture_proof", "verify_proof",
-        "test_manage",
+    "assets": [
+        # Assets, arte, áudio, shaders, VFX
+        "asset_manage",
+        "generate_game_art", "generate_game_art_flux", "apply_game_art",
+        "generate_3d_asset", "generate_3d_placeholder",
+        "import_asset_manifest", "create_asset_manifest",
+        "download_asset", "import_downloaded_asset",
+        "audio_manage", "music_manage",
+        "generate_audio_sfx", "generate_voice",
+        "shader_manage", "shader_generate", "shader_list_templates",
+        "read_shader", "edit_shader", "get_shader_params",
+        "vfx_manage",
+        "optimize_sprite", "remove_background",
+        "marketplace_search", "marketplace_download",
+        # Geração procedural de conteúdo
+        "generate_dungeon_rooms", "dungeon_generate",
+        "terrain_generate", "wave_generate",
+        # Juice/Polimento visual
+        "juice_apply", "juice_list_presets",
     ],
-    "runtime_ops": [
-        "execute_gdscript_runtime", "capture_game_screenshot",
-        "godot_screenshot", "godot_runtime_info",
-        "godot_custom_command", "godot_list_custom_commands",
+    "runtime": [
+        # Execução, debug, testes, bridge, jogo rodando
+        "runtime_manage",
+        "execute_gdscript_runtime", "capture_game_screenshot", "take_screenshot",
         "godot_run_project", "godot_stop_project", "godot_wait_for_bridge",
+        "godot_exec", "godot_runtime_info", "godot_screenshot",
+        "godot_custom_command", "godot_list_custom_commands",
+        "godot_keep_alive",
+        "get_runtime_state_digest", "capture_runtime_errors",
+        "freeze_game_clock", "unfreeze_game_clock", "step_game_time", "step_until",
+        "effect_probe",
+        # Debug
+        "debug_manage",
+        "debugger_set_breakpoint", "debugger_status", "debugger_step",
+        "debugger_get_stack", "debugger_get_variables",
+        # Testes
+        "test_manage",
+        "run_gut_tests", "run_scripted_tests", "regression_test", "smoke_test",
+        "run_verification_pipeline", "run_stress_test",
+        "assert_node_exists",
+        # Bridge
+        "game_bridge_manage",
+        "game_http_request", "game_multiplayer",
+        "game_call_method", "game_spawn_node", "game_raycast", "game_get_camera",
+        "game_play_animation", "game_find_nodes_by_class", "game_await_signal",
+        "game_pause", "game_performance", "game_window", "game_input_state",
+        "game_serialize_state",
+        # Input/Recording
+        "inject_input_event", "simulate_input_sequence",
+        "watch_signal", "watch_state_start", "watch_state_collect",
+        "record_gameplay_gif", "start_recording", "stop_recording",
+        # Addon Bridge
+        "addon_connect", "addon_disconnect", "addon_ping", "addon_is_available",
+        "addon_get_scene_tree", "addon_take_screenshot",
+        "addon_create_node", "addon_delete_node", "addon_set_property",
+        "addon_duplicate_node", "addon_reparent_node", "addon_batch_edit",
+        "read_console_output",
+        # Performance
+        "profile_frame", "profile_memory",
+        "auto_screenshot",
+        # Build/Export
+        "build_csharp", "export_manage",
+        # Playtest
+        "playtest_manage",
     ],
-    "git_ops": [
-        "safety_manage",
-        "capture_proof", "verify_proof",
-    ],
-    "refs_ops": [
+    "analysis": [
+        # Análise, auditoria, qualidade, referências, introspecção
+        "analysis_manage",
+        "query_classdb", "search_classdb", "godot_class_ref",
+        "list_valid_node_types",
         "validate_project_refs", "find_usages",
         "audit_input_map", "audit_autoloads", "audit_scene_reachability",
         "audit_uid_consistency", "audit_save_compatibility",
+        "analyze_signal_flow",
+        "gdscript_diagnostics", "gdscript_references", "gdscript_definition",
+        "gdscript_hover", "gdscript_rename", "gdscript_symbols",
+        "gdscript_lsp_connect", "gdscript_lsp_disconnect", "gdscript_sync_file",
+        "resource_dependency_graph",
+        "find_unused_resources",
+        "estimate_tool_tokens",
+        "dps_calculator", "balance_analyze",
+        "vision_manage",
+        "localization_manage",
     ],
-    "asset_ops": [
-        "asset_manage",
-        "generate_game_art", "generate_game_art_flux",
-        "import_asset_manifest", "create_asset_manifest",
-    ],
-    "design_ops": [
-        "project_status", "create_entity",
-        "godot_class_ref",
-        "audit_input_map", "audit_autoloads", "audit_scene_reachability",
-    ],
-    "ui_ops": [
-        "ui_manage",
+    "orchestration": [
+        # Meta-tools, workflow, governança, fase, segurança, bootstrap
+        "ping", "health_check", "self_test", "bootstrap_godot_mcp",
+        "dump_mcp_state",
+        "capture_proof", "verify_proof",
+        "validate_mcp_registry", "validate_mcp_environment", "validate_godot_version",
+        "tool_catalog", "tool_groups",
+        "catalog_search", "describe_tool", "invoke_by_name",
+        "safety_manage",
+        "set_safety_policy", "configure_security", "security_status",
+        "circuit_breaker_status",
+        "get_current_phase", "advance_phase", "get_phase_history",
+        "get_next_step", "resume_session",
+        "get_audit_log", "get_audit_replay",
+        "workflow_handoff", "workflow_snapshot",
+        "set_auto_dismiss",
+        "vibe_coding_mode", "get_vibe_context",
+        "project_progress",
+        "generate_ci_snippet",
+        "install_mcp_addon", "setup_mcp_config",
+        "create_milestone_plan", "get_milestone_plan", "advance_milestone",
+        "set_project_brief", "get_project_brief", "update_project_brief",
+        "gdd_generate",
+        "release_checklist", "deploy_itch",
+        "configure_export_preset",
     ],
 }
+
+# ── TOOL_NAMESPACES: Mapeamento reverso tool_name → namespace ──
+# Derivado automaticamente do TOOLSETS acima.
+# Usado por _tool_defs() para injetar _meta={"namespace": ...} em cada Tool.
+TOOL_NAMESPACES: dict[str, str] = {}
+for _ns, _tools in TOOLSETS.items():
+    for _t in _tools:
+        TOOL_NAMESPACES[_t] = _ns
 
 def parse_toolset_arg() -> set[str] | None:
     """Parse --toolsets argument. Returns None if all tools should be enabled."""
@@ -4627,6 +4725,16 @@ def _tool_defs() -> list[Tool]:
             _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name not in _disabled]
     except Exception:
         pass  # Kill switch não disponível — segue sem filtro
+
+    # ── Etapa A1: injetar namespace semântico via _meta ──────────
+    # Cada Tool recebe _meta={"namespace": "project|assets|runtime|analysis|orchestration"}
+    # baseado no mapeamento TOOL_NAMESPACES derivado do TOOLSETS.
+    # Tools não mapeadas recebem namespace "orchestration" (fallback seguro).
+    for _t in _TOOL_DEFS_CACHE:
+        _ns = TOOL_NAMESPACES.get(_t.name, "orchestration")
+        if _t.meta is None:
+            _t.meta = {}
+        _t.meta["namespace"] = _ns
 
     return _TOOL_DEFS_CACHE
 

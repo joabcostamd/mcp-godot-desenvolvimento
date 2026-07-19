@@ -146,19 +146,19 @@ Ao finalizar:
 | Imports residuais limpos em `server.py` | ✅ |
 | `validate_tool_registry_consistency()` → 0 `tools_sem_handler` | ✅ |
 
-### ⬜ A1 — 5 Namespaces Semânticos (~1.5h)
+### ✅ A1 — 5 Namespaces Semânticos (~1.5h) — CONCLUÍDO 2026-07-19
 
 **Meta:** Reduzir ~60 tools visíveis → ≤20. Resolver C5 (teto de tools).
 **NÃO MEXER:** `tools/deprecated.py`, rollups, handlers
 
-| # | Ação | Arquivo |
-|---|---|---|
-| A1.1 | Criar namespaces: PROJECT, ASSETS, RUNTIME, ANALYSIS, ORCHESTRATION | `server.py` (TOOLSETS) |
-| A1.2 | Adicionar campo `namespace` em cada `Tool()` | `server.py` (_tool_defs) |
-| A1.3 | Criar `tool_groups` hierárquico (namespace → tools) | `server.py` |
-| A1.4 | Testar `--profile dev` — zero perda | — |
+| # | Ação | Arquivo | Status |
+|---|---|---|---|
+| A1.1 | Criar namespaces: PROJECT, ASSETS, RUNTIME, ANALYSIS, ORCHESTRATION | `server.py` (TOOLSETS) | ✅ |
+| A1.2 | Adicionar campo `namespace` em cada `Tool()` | `server.py` (_tool_defs) | ✅ |
+| A1.3 | Criar `tool_groups` hierárquico (namespace → tools) | `server.py`, `tools/dynamic_groups.py` | ✅ |
+| A1.4 | Testar `--profile dev` — zero perda | — | ✅ |
 
-**Gate:** `tool_groups` mostra 5 namespaces. Zero tools perdidas. C5 reduzido.
+**Gate:** `tool_groups` mostra 5 namespaces. Zero tools perdidas. C5 reduzido. ✅
 
 ### ⬜ A2 — ExecutionContext (~2h)
 
@@ -243,12 +243,13 @@ Ao finalizar:
 | 2 — Testes | ✅ 7/7 (2.5 escalada) |
 | 3 — Criação com Fosso | ✅ 16/16 (3.1-3.4 escaladas) |
 | B1 (4.1) — i18n testing | ✅ |
+| B2 (4.2) — CI Verificação | ✅ |
 
-### ⬜ Camada 4 — Extensões de Processo (8 pendentes)
+### ⬜ Camada 4 — Extensões de Processo (7 pendentes)
 
 | Etapa | Nome | Arquivos | ⏱ | Depende |
 |---|---|---|---|---|
-| B2 (4.2) | CI Verificação [AUTO] | `.github/workflows/verification.yml` | 45m | Nenhuma |
+| B2 (4.2) | CI Verificação [AUTO] | `.github/workflows/verification.yml` | 45m | Nenhuma | ✅ |
 | B3 (4.3) | gdtoolkit Gate [SÊNIOR] | `tools/code_quality_ops.py`, `.gdlintrc` | 90m | Nenhuma |
 | B4 (4.4) | Análises Específicas [SÊNIOR] | `tools/code_quality_ops.py` +9 ops | 2h | B3 |
 | B5 (4.5) | Segurança Supply-Chain [SÊNIOR] | `tools/security_ops.py` +3 ops | 1h | Nenhuma |
