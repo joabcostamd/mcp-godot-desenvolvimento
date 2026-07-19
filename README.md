@@ -14,20 +14,21 @@
 
 | Pasta/Arquivo | O que é |
 |---|---|
-| `server.py` | Servidor MCP (~7600 linhas, 191 ferramentas, stdio JSON-RPC 2.0) |
-| `tools/` | 69 módulos Python (cenas, scripts, física, arte IA, som IA, pipeline, verificação, etc.) |
+| `server.py` | Servidor MCP (~7600 linhas, 193 ferramentas, stdio JSON-RPC 2.0) |
+| `tools/` | 74 módulos Python (cenas, scripts, física, arte IA, som IA, pipeline, verificação, etc.) |
 | `resources/` | Game patterns (17 gêneros) + MCP Prompts (11 comandos) |
 | `templates/` | Templates GDScript (Jinja2) |
 | `classdb_cache/` | Cache da API do Godot 4.7 (1074 classes) |
 | `addons/` | Plugins Godot (mcp_addon + mcp_runtime_bridge) |
 | `config.json.example` | Template de configuração |
 | `requirements.txt` | Dependências Python |
-| `MCP_ESTADO_ATUAL.md` | 📄 Documento canônico — TUDO sobre o MCP (arquitetura, 191 tools, protocolos, limitações) |
+| `MCP_ESTADO_ATUAL.md` | 📄 Documento canônico — TUDO sobre o MCP (arquitetura, 193 tools, protocolos, limitações) |
 | `GUIA_CONEXAO.md` | Como usar — passo a passo do zero |
 | `ARQUITETURA_MCP.md` | Como funciona por dentro — 3 camadas, padrões, extensão |
 | `LEARNINGS.md` | 18 regras anti-padrão (R1-R18) |
 | `CHANGELOG.md` | Histórico completo de versões |
-| `pendencias.md` | Bugs ativos e resolvidos |
+| `pendencias.md` | Bugs ativos e resolvidos (legado) |
+| `pendenciasMCP.md` | 📋 **Documento mestre de backlog v2.1.0** — 22 itens, 14 gaps, 8 KPIs, 7 riscos, 7 anti-padrões |
 
 ---
 
