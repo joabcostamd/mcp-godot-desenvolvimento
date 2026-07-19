@@ -136,7 +136,7 @@ def quest_generate(args: dict | None = None) -> dict:
         location = rng.choice(template["location"])
         title += item
         objectives = [obj.format(item=item, location=location, npc=npc_giver, count=rng.randint(3, 8)) for obj in template["objectives"]]
-    elif quest_type in ("kill",):
+    elif quest_type == "kill":
         target = rng.choice(template["targets"])
         location = rng.choice(template["location"])
         title += target
@@ -151,9 +151,15 @@ def quest_generate(args: dict | None = None) -> dict:
         title += location
         objectives = [obj.format(location=location, count=rng.randint(3, 6)) for obj in template["objectives"]]
 
+    # G2/G3: Validar level_range — suporta [min,max], [single], rejeita vazio/None/>2
     if not level_range:
-        return {"status": "error", "message": "level_range nao pode ser vazio."}
-    level = rng.randint(*level_range) if len(level_range) >= 2 else level_range[0]
+        return {"status": "error", "message": "level_range invalido ou vazio — esperado [min, max] ou [single]."}
+    if len(level_range) == 2:
+        level = rng.randint(level_range[0], level_range[1])
+    elif len(level_range) == 1:
+        level = level_range[0]
+    else:
+        return {"status": "error", "message": f"level_range deve ter 1 ou 2 elementos, recebeu {len(level_range)}."}
     rewards = template["rewards"].copy()
     if difficulty == "hard":
         rewards["xp"] = int(rewards["xp"] * 1.5)

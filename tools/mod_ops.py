@@ -107,8 +107,20 @@ def validate_mod_compatibility(args: dict | None = None) -> dict:
     game_version = args.get("game_version", "1.0.0")
     loaded_mods = args.get("loaded_mods", [])
 
-    if not mod_manifest:
-        return {"status": "error", "message": "Forneca mod_manifest (dict ou path)."}
+    # G1: Suportar path string para mod.json
+    if isinstance(mod_manifest, str):
+        import json
+        from pathlib import Path
+        p = Path(mod_manifest)
+        if not p.exists():
+            return {"status": "error", "message": f"Arquivo nao encontrado: {mod_manifest}"}
+        try:
+            mod_manifest = json.loads(p.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, UnicodeDecodeError) as e:
+            return {"status": "error", "message": f"JSON invalido: {e}"}
+
+    if not mod_manifest or not isinstance(mod_manifest, dict):
+        return {"status": "error", "message": "Forneca mod_manifest (dict ou path para mod.json)."}
 
     issues = []
 

@@ -346,7 +346,8 @@ def dialogue_generate_npc_lines(args: dict | None = None) -> dict:
     args = args or {}
     npc_type = args.get("npc_type", "aldeao")
     scenario = args.get("scenario", "greeting")
-    count = min(args.get("count", 3), 10)
+    count = args.get("count")
+    count = min(3 if count is None else count, 10)
     if count < 1:
         return {"status": "error", "message": "count deve ser >= 1."}
     npc_name = args.get("npc_name", "")
