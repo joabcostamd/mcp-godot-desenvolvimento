@@ -518,14 +518,17 @@ def classify_intent(action: str) -> dict[str, Any]:
         }
     """
     action_lower = action.lower().strip()
+    action_clean = action.strip()
 
     best_match = None
     best_score = -1
 
     for pattern, tool, op, param_map, bonus in INTENT_PATTERNS:
-        match = re.search(pattern, action_lower, re.IGNORECASE)
+        # Tentar primeiro no texto ORIGINAL (preserva capitalização nos grupos)
+        match = re.search(pattern, action_clean, re.IGNORECASE)
         if not match:
-            match = re.search(pattern, action, re.IGNORECASE)
+            # Fallback: texto lowercased (útil para padrões com acentos PT)
+            match = re.search(pattern, action_lower, re.IGNORECASE)
         if not match:
             continue
 
