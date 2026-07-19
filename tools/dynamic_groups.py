@@ -127,6 +127,7 @@ GROUPS = {
         "localization_manage",
     ],
     "orchestration": [
+        "godot",
         "ping", "health_check", "self_test", "bootstrap_godot_mcp",
         "dump_mcp_state",
         "capture_proof", "verify_proof",

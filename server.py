@@ -167,6 +167,7 @@ TOOLSETS = {
     ],
     "orchestration": [
         # Meta-tools, workflow, governança, fase, segurança, bootstrap
+        "godot",
         "ping", "health_check", "self_test", "bootstrap_godot_mcp",
         "dump_mcp_state",
         "capture_proof", "verify_proof",
@@ -1370,6 +1371,32 @@ def _tool_defs() -> list[Tool]:
                 "verifique se server.py está em execução no terminal."
             ),
             inputSchema={"type": "object", "properties": {}, "required": []},
+        ),
+        Tool(
+            name="godot",
+            description=(
+                "🎯 INTENT ROUTER — A MELHOR FERRAMENTA DO MCP. "
+                "Descreva o que você quer fazer em linguagem natural (PT-BR ou EN) "
+                "e o sistema automaticamente encontra e chama a ferramenta correta. "
+                "Exemplos: 'criar cena Node2D chamada Level1', "
+                "'adicionar inimigo com patrulha', 'gerar script do player', "
+                "'rodar o jogo', 'criar menu principal', 'importar textura'. "
+                "Quando NÃO usar: se você já sabe exatamente qual tool usar "
+                "(ex: ping, health_check). "
+                "Pré-condições: projeto ativo definido (bootstrap_godot_mcp). "
+                "Exemplo de input: {\"action\": \"criar inimigo com patrulha\"}. "
+                "Erro mais comum: frase muito vaga — seja específico sobre o que quer criar ou fazer."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "action": {
+                        "type": "string",
+                        "description": "O que você quer fazer? Descreva em PT-BR ou EN. Ex: 'criar cena', 'adicionar nó Sprite2D', 'rodar o jogo'."
+                    },
+                },
+                "required": ["action"],
+            },
         ),
         Tool(
             name="validate_mcp_registry",
@@ -5109,6 +5136,8 @@ def _build_handlers() -> dict:
         "catalog_search": _handle_catalog_search,
         "describe_tool": _handle_describe_tool,
         "invoke_by_name": _handle_invoke_by_name,
+        # ── Etapa A4: Intent Router ──
+        "godot": _handle_godot,
     }
 
     # ── Rollups Fase 2A / C1 ───────────────────────────────────────
@@ -5159,6 +5188,7 @@ def _smart_call(handler, arguments: dict):
 
     # ── Feature 10: Session Gate ──────────────────────────────────
 SESSION_ALWAYS_ALLOWED = {
+    "godot",
     "ping", "health_check", "self_test", "bootstrap_godot_mcp",
     "project_manage", "setup_mcp_config", "install_mcp_addon",
     "validate_mcp_environment", "validate_godot_version",
@@ -5384,6 +5414,47 @@ def _handle_invoke_by_name(args: dict) -> dict:
         name=args.get("name", ""),
         arguments=args.get("arguments"),
     )
+
+
+def _handle_godot(args: dict) -> dict:
+    """Handler da tool godot — Intent Router (Etapa A4).
+
+    Roteia linguagem natural para a ferramenta correta automaticamente.
+    Ex: godot(action="criar inimigo com patrulha") → create_entity(enemy, patrol)
+    """
+    action = args.get("action", "")
+    if not action:
+        return {"status": "error", "message": "Parâmetro 'action' é obrigatório. Ex: 'criar cena Node2D'"}
+
+    from core.intent_router import route_intent, invoke_intent
+
+    # 1. Classificar + extrair parâmetros
+    routed = route_intent(action)
+
+    if routed["status"] == "unmatched":
+        # Fallback: sugerir busca no catálogo
+        return {
+            "status": "unmatched",
+            "message": routed["message"],
+            "suggestion": routed.get("suggestion"),
+            "hint": "Tente usar tool_catalog(query='...') para buscar a ferramenta certa.",
+        }
+
+    # 2. Invocar a ferramenta encontrada
+    result = invoke_intent(
+        tool_name=routed["tool"],
+        op=routed.get("op", ""),
+        params=routed.get("params", {}),
+    )
+
+    # 3. Enriquecer resposta com metadados da rota
+    if isinstance(result, dict):
+        result["_routed_by"] = "godot (Intent Router A4)"
+        result["_routed_tool"] = routed["tool"]
+        result["_confidence"] = routed.get("confidence", 0)
+
+    return result
+
 
 def _handle_validate_mcp_registry(args: dict) -> dict:
     """Handler da tool validate_mcp_registry."""
