@@ -41,6 +41,7 @@ def _result_template(fatia_id: str) -> dict:
             "C4_seguranca": {"status": "skipped", "detail": ""},
             "C5_orcamento": {"status": "skipped", "detail": ""},
             "C6_distinguibilidade": {"status": "skipped", "detail": ""},
+            "C7_visual": {"status": "skipped", "detail": ""},
         },
         "errors": [],
     }
@@ -463,6 +464,63 @@ def _run_c6(result: dict, tool_name: str | None) -> bool:
         return False
 
 
+def _run_c7_visual(result: dict, baseline_name: str = "baseline", threshold: float = 1.0) -> bool:
+    """C7 — Regressao Visual: compara screenshot atual contra baseline.
+
+    Usa visual_regression() do runtime_ops. Requer Godot headless
+    e um baseline previamente salvo.
+
+    Returns:
+        True se passou ou baseline foi criado, False se detectou diferenca.
+    """
+    try:
+        from tools.runtime_ops import visual_regression
+        vr = visual_regression({"baseline_name": baseline_name, "threshold": threshold})
+
+        if vr.get("status") == "baseline_saved":
+            result["criteria"]["C7_visual"]["status"] = "baseline_saved"
+            result["criteria"]["C7_visual"]["detail"] = (
+                f"Baseline '{baseline_name}' criado. Execute novamente para comparar."
+            )
+            return True  # baseline criado = ok
+
+        if vr.get("status") != "success":
+            result["criteria"]["C7_visual"]["status"] = "error"
+            result["criteria"]["C7_visual"]["detail"] = vr.get("message", "Erro desconhecido")
+            result["errors"].append(f"C7: {vr.get('message', '')}")
+            return False
+
+        passed = vr.get("passed", False)
+        diff_pct = vr.get("difference_percent", 100.0)
+
+        if passed:
+            result["criteria"]["C7_visual"]["status"] = "pass"
+            result["criteria"]["C7_visual"]["detail"] = (
+                f"Diferença {diff_pct:.2f}% <= {threshold}% — sem regressao visual."
+            )
+            return True
+        else:
+            result["criteria"]["C7_visual"]["status"] = "fail"
+            result["criteria"]["C7_visual"]["detail"] = (
+                f"Diferença {diff_pct:.2f}% > {threshold}% — possivel regressao visual!"
+            )
+            result["errors"].append(
+                f"C7: Regressao visual detectada — {diff_pct:.2f}% > {threshold}%"
+            )
+            return False
+
+    except ImportError as e:
+        result["criteria"]["C7_visual"]["status"] = "error"
+        result["criteria"]["C7_visual"]["detail"] = f"Import falhou: {e}"
+        result["errors"].append(f"C7: import error — {e}")
+        return False
+    except Exception as e:
+        result["criteria"]["C7_visual"]["status"] = "error"
+        result["criteria"]["C7_visual"]["detail"] = f"Erro: {e}"
+        result["errors"].append(f"C7: excecao — {e}")
+        return False
+
+
 # ══════════════════════════════════════════════════════════════════
 # ORQUESTRADOR PRINCIPAL
 # ══════════════════════════════════════════════════════════════════
@@ -476,6 +534,9 @@ def run_audit(
     tool_name: str | None = None,
     output_file: str | None = None,
     skip_c5: bool = False,
+    visual: bool = False,
+    visual_baseline: str = "baseline",
+    visual_threshold: float = 1.0,
 ) -> dict:
     """Executa todos os criterios de autoauditoria.
 
@@ -502,8 +563,14 @@ def run_audit(
 
     c6_ok = _run_c6(result, tool_name)
 
+    # C7 — Regressao Visual (opcional, via --visual)
+    if visual:
+        c7_ok = _run_c7_visual(result, visual_baseline, visual_threshold)
+    else:
+        c7_ok = True  # skipped — nao conta como falha
+
     # Consolida
-    all_ok = all([c1_ok, c2_ok, c3_ok, c4_ok, c5_ok, c6_ok])
+    all_ok = all([c1_ok, c2_ok, c3_ok, c4_ok, c5_ok, c6_ok, c7_ok])
     result["exit_code"] = 0 if all_ok else 1
 
     # Grava resultado
@@ -533,6 +600,12 @@ def main():
     parser.add_argument("--output", help="Arquivo de saida (default: audit_result.json)")
     parser.add_argument("--skip-c5", action="store_true",
                        help="Pular C5 (problema pre-existente documentado)")
+    parser.add_argument("--visual", action="store_true",
+                       help="Executar regressao visual (C7) — requer Godot headless")
+    parser.add_argument("--visual-baseline", default="baseline",
+                       help="Nome do baseline visual (default: baseline)")
+    parser.add_argument("--visual-threshold", type=float, default=1.0,
+                       help="Threshold de diferenca %% para C7 (default: 1.0)")
     args = parser.parse_args()
 
     print("=" * 65)
@@ -564,6 +637,9 @@ def main():
         tool_name=args.tool_name,
         output_file=args.output,
         skip_c5=args.skip_c5,
+        visual=args.visual,
+        visual_baseline=args.visual_baseline,
+        visual_threshold=args.visual_threshold,
     )
 
     # Reporte

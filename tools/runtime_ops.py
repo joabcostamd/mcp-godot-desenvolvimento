@@ -1213,6 +1213,27 @@ def record_gameplay_gif(
 
 
 def visual_regression(args=None):
+    """Compara screenshot atual contra baseline salvo — detecta regressao visual.
+
+    Pipeline: (1) Se baseline nao existe, salva a captura atual como baseline.
+    (2) Captura screenshot atual. (3) Compara via Godot compute_image_metrics().
+    (4) Reporta passed/failed com difference_percent vs threshold.
+
+    Thresholds recomendados:
+      0.0% — identico (pixel-perfect, mesma resolucao/formato)
+      0.5% — quase identico (ruido de render mínimo, mesma placa)
+      1.0% — default (pequenas diferenças de anti-aliasing)
+      2.0% — tolerante (diferentes GPUs, Godot versions próximas)
+      5.0% — muito tolerante (mudanca de resolucao, so pega erros grosseiros)
+
+    Args:
+        scene_path: Cena a capturar (opcional — usa cena ativa).
+        threshold: Limiar de diferença em % (default: 1.0).
+        baseline_name: Nome do baseline (default: "baseline").
+
+    Returns:
+        {"status": "success", "passed": bool, "difference_percent": float, ...}
+    """
     import shutil; from pathlib import Path; args=args or {}
     sp=args.get("scene_path"); th=args.get("threshold",1.0); bn=args.get("baseline_name","baseline")
     proj=_get_active_project(); bd=proj/"captures"/"baselines"; bd.mkdir(parents=True,exist_ok=True); bf=bd/f"{bn}.png"
@@ -1220,7 +1241,7 @@ def visual_regression(args=None):
         cap=capture_game_screenshot(scene_path=sp) if sp else capture_game_screenshot()
         if cap.get("status")!="success": return {"status":"error","message":f"Falha: {cap.get('message','')}"}
         shutil.copy2(str(Path(cap["image_path"])),str(bf))
-        return {"status":"baseline_saved","baseline_path":str(bf),"message":"Baseline salvo."}
+        return {"status":"baseline_saved","baseline_path":str(bf),"message":"Baseline salvo. Execute novamente para comparar."}
     cap=capture_game_screenshot(scene_path=sp) if sp else capture_game_screenshot()
     if cap.get("status")!="success": return {"status":"error","message":f"Falha: {cap.get('message','')}"}
     cp=Path(cap["image_path"]); tb=proj/"captures"/f"_rb_{bn}.png"; tc=proj/"captures"/f"_rc_{bn}.png"
@@ -1230,6 +1251,62 @@ def visual_regression(args=None):
     if cmp.get("status")!="success": return {"status":"error","message":f"Comparação: {cmp.get('message','')}"}
     m=cmp["metrics"]; dp=m.get("difference_percent",100.0); passed=dp<=th
     r={"status":"success","passed":passed,"difference_percent":round(dp,2),"threshold":th,"metrics":m}
-    r["message" if passed else "recommendation"]=f"OK - {dp:.2f}%" if passed else f"Diferença {dp:.1f}% > {th}%."
+    r["message" if passed else "recommendation"]=f"OK - {dp:.2f}%" if passed else f"Diferenca {dp:.1f}% > {th}%. Verifique mudancas visuais."
     return r
+
+
+def manage_visual_baselines(args=None):
+    """Gerencia baselines visuais: listar, aprovar (promover captura atual),
+    remover, inspecionar.
+
+    Operacoes:
+      op="list" — Lista todos os baselines salvos com tamanho e data.
+      op="approve" — Promove a captura mais recente a baseline (sobrescreve).
+      op="delete" — Remove um baseline.
+      op="inspect" — Mostra detalhes de um baseline (dimensoes, tamanho, data).
+
+    Args:
+        op: Operacao (list, approve, delete, inspect). Default: list.
+        baseline_name: Nome do baseline (para approve/delete/inspect).
+
+    Returns:
+        dict com resultado da operacao.
+    """
+    from pathlib import Path; import os; from datetime import datetime; args=args or {}
+    op=args.get("op","list"); bn=args.get("baseline_name")
+    proj=_get_active_project(); bd=proj/"captures"/"baselines"; bd.mkdir(parents=True,exist_ok=True)
+
+    if op=="list":
+        baselines=[]
+        for f in sorted(bd.glob("*.png")):
+            st=f.stat()
+            baselines.append({"name":f.stem,"size_kb":round(st.st_size/1024,1),"modified":datetime.fromtimestamp(st.st_mtime).isoformat()})
+        return {"status":"success","op":"list","total":len(baselines),"baselines":baselines}
+
+    if op in ("approve","delete","inspect") and not bn:
+        return {"status":"error","message":"baseline_name obrigatorio para approve/delete/inspect."}
+
+    bf=bd/f"{bn}.png"
+    if op=="inspect":
+        if not bf.exists(): return {"status":"error","message":f"Baseline '{bn}' nao encontrado."}
+        st=bf.stat()
+        return {"status":"success","op":"inspect","name":bn,"path":str(bf),"size_kb":round(st.st_size/1024,1),"modified":datetime.fromtimestamp(st.st_mtime).isoformat()}
+
+    if op=="delete":
+        if not bf.exists(): return {"status":"error","message":f"Baseline '{bn}' nao encontrado."}
+        bf.unlink()
+        return {"status":"success","op":"delete","name":bn,"message":f"Baseline '{bn}' removido."}
+
+    if op=="approve":
+        # Encontra a captura mais recente e promove a baseline
+        captures_dir=proj/"captures"
+        captures=sorted(captures_dir.glob("*.png"),key=lambda p:p.stat().st_mtime,reverse=True)
+        if not captures and not bf.exists():
+            return {"status":"error","message":"Nenhuma captura encontrada para promover."}
+        if captures:
+            import shutil; shutil.copy2(str(captures[0]),str(bf))
+            return {"status":"success","op":"approve","name":bn,"source":captures[0].name,"message":f"Baseline '{bn}' atualizado com {captures[0].name}."}
+        return {"status":"error","message":f"Sem capturas para promover. Baseline '{bn}' mantido."}
+
+    return {"status":"error","message":f"Operacao desconhecida: {op}. Use list, approve, delete ou inspect."}
 
