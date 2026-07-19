@@ -29,6 +29,9 @@ func _ready() -> void:
 	register_command("add_test_marker", _cmd_add_test_marker)
 	register_command("replace_with_runtime_scene", _cmd_replace_with_runtime_scene)
 	register_command("set_auto_dismiss", _cmd_set_auto_dismiss)
+	register_command("play_audio", _cmd_play_audio)
+	register_command("set_volume", _cmd_set_volume)
+	register_command("stop_audio", _cmd_stop_audio)
 	print("MCPRuntimeBridge: escutando em %s:%d" % [HOST, PORT])
 
 
@@ -253,3 +256,112 @@ func _dismiss_recursive(node: Node) -> void:
 				node.hide()
 	for child in node.get_children():
 		_dismiss_recursive(child)
+
+
+# ── Comandos de Áudio (Fase 6) ──────────────────────────────────
+
+func _cmd_play_audio(args: Dictionary) -> Dictionary:
+	var node_path: String = args.get("node_path", "")
+	var audio_file: String = args.get("audio_file", "")
+	var bus: String = args.get("bus", "Master")
+	var volume_db: float = args.get("volume_db", 0.0)
+	var loop: bool = args.get("loop", false)
+
+	var target: Node = null
+	if node_path != "":
+		target = get_node_or_null(node_path)
+	if target == null:
+		# Procura um AudioStreamPlayer na árvore ou cria um
+		target = _find_audio_player(node_path)
+	if target == null:
+		# Cria um novo AudioStreamPlayer na raiz
+		target = AudioStreamPlayer.new()
+		target.name = "MCP_AudioPlayer"
+		get_tree().root.add_child(target)
+
+	if not target is AudioStreamPlayer:
+		return {"ok": false, "error": "Nó '%s' nao e um AudioStreamPlayer" % node_path}
+
+	var player: AudioStreamPlayer = target as AudioStreamPlayer
+
+	if audio_file != "":
+		var stream = load(audio_file)
+		if stream == null:
+			stream = AudioStreamMP3.new()
+			stream.file = audio_file
+		player.stream = stream
+
+	player.bus = bus
+	player.volume_db = volume_db
+	if loop and player.stream is AudioStream:
+		(player.stream as AudioStream).loop = true
+
+	player.play()
+	return {"ok": true, "node_path": player.get_path(), "action": "play", "bus": bus}
+
+
+func _cmd_set_volume(args: Dictionary) -> Dictionary:
+	var node_path: String = args.get("node_path", "")
+	var bus_name: String = args.get("bus_name", "Master")
+	var volume_db: float = args.get("volume_db", 0.0)
+
+	if node_path != "":
+		var player = get_node_or_null(node_path)
+		if player is AudioStreamPlayer:
+			player.volume_db = volume_db
+			return {"ok": true, "target": "player", "node_path": node_path, "volume_db": volume_db}
+		return {"ok": false, "error": "AudioStreamPlayer nao encontrado: %s" % node_path}
+
+	# Ajusta volume do bus
+	var bus_idx := AudioServer.get_bus_index(bus_name)
+	if bus_idx < 0:
+		return {"ok": false, "error": "Bus nao encontrado: %s" % bus_name}
+	AudioServer.set_bus_volume_db(bus_idx, volume_db)
+	return {"ok": true, "target": "bus", "bus_name": bus_name, "volume_db": volume_db}
+
+
+func _cmd_stop_audio(args: Dictionary) -> Dictionary:
+	var node_path: String = args.get("node_path", "")
+	var stopped := 0
+
+	if node_path != "":
+		var player = get_node_or_null(node_path)
+		if player is AudioStreamPlayer:
+			player.stop()
+			stopped = 1
+	else:
+		_stop_all_audio_recursive(get_tree().root, stopped)
+		# stopped é atualizado por referência via array — vamos usar contagem manual
+		stopped = _count_and_stop_audio(get_tree().root)
+
+	return {"ok": true, "stopped": stopped}
+
+
+func _find_audio_player(hint_path: String) -> Node:
+	var root := get_tree().root
+	for child in root.get_children():
+		if child is AudioStreamPlayer and (hint_path == "" or hint_path in child.get_path()):
+			return child
+	return null
+
+
+func _stop_all_audio_recursive(node: Node, stopped_count: int) -> void:
+	for child in node.get_children():
+		if child is AudioStreamPlayer and child.playing:
+			child.stop()
+			stopped_count += 1
+		_stop_all_audio_recursive(child, stopped_count)
+
+
+func _count_and_stop_audio(node: Node) -> int:
+	var count := 0
+	_count_and_stop_audio_recursive(node, count)
+	return count
+
+
+func _count_and_stop_audio_recursive(node: Node, count: int) -> void:
+	for child in node.get_children():
+		if child is AudioStreamPlayer and child.playing:
+			child.stop()
+			count += 1
+		_count_and_stop_audio_recursive(child, count)

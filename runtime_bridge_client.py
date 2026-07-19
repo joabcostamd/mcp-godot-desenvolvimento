@@ -47,3 +47,76 @@ def send_bridge_command(payload: dict, timeout: float = TIMEOUT_SEC) -> dict:
             f"Nao foi possivel conectar ao MCPRuntimeBridge em {HOST}:{PORT}. "
             f"O jogo esta rodando em modo debug pelo Godot? ({exc})"
         )
+
+
+# ── Comandos de Áudio em Runtime (Fase 6) ───────────────────────
+
+def play_audio(node_path: str, audio_file: str = "", bus: str = "Master",
+               volume_db: float = 0.0, loop: bool = False) -> dict:
+    """Toca um áudio em runtime via AudioStreamPlayer.
+
+    Cria ou reutiliza um AudioStreamPlayer no nó especificado e inicia
+    a reprodução. Útil para tocar SFX ou música durante testes.
+
+    Args:
+        node_path: Caminho do nó onde criar o player (ex: "/root/Game/SFX").
+        audio_file: Caminho do arquivo de áudio (res://). Se vazio, usa
+                    stream já configurado no player existente.
+        bus: Nome do bus de áudio (default: "Master").
+        volume_db: Volume em dB (default: 0.0).
+        loop: Se True, faz loop.
+
+    Returns:
+        {"ok": True, "node_path": "...", "action": "play"}
+    """
+    return send_bridge_command({
+        "cmd": "custom",
+        "name": "play_audio",
+        "args": {
+            "node_path": node_path,
+            "audio_file": audio_file,
+            "bus": bus,
+            "volume_db": volume_db,
+            "loop": loop,
+        },
+    })
+
+
+def set_volume(node_path: str = "", bus_name: str = "Master",
+               volume_db: float = 0.0) -> dict:
+    """Ajusta volume de um AudioStreamPlayer ou bus de áudio em runtime.
+
+    Args:
+        node_path: Caminho do AudioStreamPlayer (se vazio, ajusta o bus).
+        bus_name: Nome do bus de áudio (default: "Master").
+        volume_db: Volume em dB.
+
+    Returns:
+        {"ok": True, "target": "...", "volume_db": float}
+    """
+    return send_bridge_command({
+        "cmd": "custom",
+        "name": "set_volume",
+        "args": {
+            "node_path": node_path,
+            "bus_name": bus_name,
+            "volume_db": volume_db,
+        },
+    })
+
+
+def stop_audio(node_path: str = "") -> dict:
+    """Para a reprodução de áudio em um nó específico ou todos.
+
+    Args:
+        node_path: Caminho do AudioStreamPlayer. Se vazio, para TODOS
+                   os AudioStreamPlayers na árvore.
+
+    Returns:
+        {"ok": True, "stopped": int}
+    """
+    return send_bridge_command({
+        "cmd": "custom",
+        "name": "stop_audio",
+        "args": {"node_path": node_path},
+    })
