@@ -3,31 +3,40 @@
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo
 > para que o outro agente saiba o estado do projeto na próxima sessão.
 
-## Último Handoff (AGENTE 02 — 2026-07-19)
+## Último Handoff (AGENTE 02 — 2026-07-19 — Sessão de Polimento)
 
 - **Data:** 2026-07-19
 - **De:** AGENTE 02 (Extensões & Qualidade)
-- **Ação:** Sessão de verificação de pendências
+- **Ação:** Polimento completo — 7 fases implementadas
 
-### O que foi feito
-- **SUTURE_ISSUES.md**: SyntaxError em `code_quality_ops.py` marcado como RESOLVIDO (já havia sido corrigido em sessão anterior — extrai variável antes do f-string, linha 620-621)
-- **Verificação de sintaxe**: Pylance confirma 0 erros em `server.py`, `code_quality_ops.py`, `dynamic_groups.py`, `core/context.py`, `core/intent_router.py`, `devsolo_ops.py`
-- **Import test**: `import server` funciona perfeitamente (exit code 0)
-- **Test suites**:
-  - `test_code_quality_ops.py`: ✅ 19/19 passaram
-  - `test_budget_gate.py`: ✅ teto primário (tokens) OK em todas as fases; ⚠️ C5 pré-existente (>40 tools por fase)
-- **Git**: working tree limpo, 0 stashes pendentes
+### O que foi feito (resumo)
 
-### Pendências verificadas (status)
-| Pendência | Status |
-|---|---|
-| SyntaxError `code_quality_ops.py` | ✅ Resolvido |
-| Import circular `server.py` ↔ `dynamic_groups.py` | 🟡 Dívida de design (Etapa A5 — AGENTE 01) |
-| C5 (>40 tools/fase) | 🟡 Pré-existente (fatia 0.7) |
-| Stash pendente | ✅ Limpo |
+| Fase | Nome | Resultado |
+|---|---|---|
+| F1 | Diagnóstico | 51% coverage, 18 tools sem teste |
+| F2 | Cobertura Tier-1 | +18 handlers sintéticos → 87.8% (100% excl skip), 0 tools sem cobertura |
+| F3 | Regressão Visual | `manage_visual_baselines()`, threshold calibrado, `--visual` no `auditar.py` |
+| F4 | Perf Regression | Handler sintético, `perf_regression_track` já existia em `perf_ops.py` |
+| F5 | Canary Queries | 14 → 48 queries, 45 tools cobertas |
+| F6 | Audio Engine | `tools/audio_ops.py` (fachada unificada), play/set/stop no runtime bridge |
+| F7 | Documentação | HANDOFF, NEXT_STEP, roadmap atualizados |
+
+### Arquivos modificados/criados
+- `tools/test_ops.py` — +18 handlers sintéticos, +40 `_SYNTHETIC_HANDLERS`
+- `tests/canary_queries.json` — 14 → 48 queries
+- `tools/runtime_ops.py` — `manage_visual_baselines()`, thresholds documentados
+- `auditar.py` — `--visual`, `C7_visual`
+- `tools/audio_ops.py` — NOVO, fachada unificada de áudio
+- `runtime_bridge_client.py` — `play_audio()`, `set_volume()`, `stop_audio()`
+- `addons/mcp_runtime_bridge/runtime_bridge.gd` — comandos de áudio em GDScript
+
+### ⚠️ Pontos de atenção para AGENTE 01
+- `_SYNTHETIC_HANDLERS` expandido de 21 → 40 tools — se adicionar tool nova, considere adicionar handler também
+- `auditar.py` ganhou C7_visual — se modificar a assinatura de `run_audit()`, inclua os parâmetros `visual*`
+- `audio_ops.py` reexporta de `devsolo_ops.py`, `music_ops.py`, `tts_ops.py`, etc. — se renomear funções nesses arquivos, atualize a fachada
 
 ### Próximo passo (AGENTE 02)
-- **Camada 5 (Gameplay)**: TODAS [MARGINAL] — aguarda aprovação do Joab para qualquer fatia
+- **Camada 5 (Gameplay)**: TODAS [MARGINAL] — aguarda aprovação do Joab
 
 ---
 

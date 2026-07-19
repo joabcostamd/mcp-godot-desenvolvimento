@@ -16,4 +16,5 @@
 
 ## Última atualização
 - **Data:** 2026-07-19
-- **Por:** AGENTE 02 (sessão de verificação de pendências — todas resolvidas ou documentadas)
+- **Por:** AGENTE 02 — Sessão de Polimento (7 fases concluídas)
+- **Commits:** e73fb47 (F2), 4967091 (F3), bb45d97 (F4), 35ab82c (F5), 1252f55 (F6)
