@@ -4,18 +4,16 @@
 > O agente lê este arquivo para saber o que fazer na próxima sessão.
 
 ## AGENTE 01 — Próxima etapa
-- **Etapa:** A5 — Refatorações Estruturais
+- **Etapa:** A6 — Qualidade MCP Spec
 - **Status:** ⬜ Pendente
-- **Arquivos:** `core/tool_registry.py` (novo), `core/connection_manager.py` (novo), `server.py`
-- **Gate:** `wc -l server.py` ≤ 3500. `--profile dev` idêntico ao pré-refatoração.
-- ⚠️ Risco moderado com B5/B7/B8 do AGENTE 02
+- **Arquivos:** `server.py`
+- **Gate:** Conformidade MCP Spec 12/14.
 
 ## AGENTE 02 — Próxima etapa
-- **Etapa:** B4 — Análises Específicas (+9 ops em code_quality_ops)
-- **Status:** ⬜ Pendente
-- **Arquivos:** `tools/code_quality_ops.py` (+9 ops incrementais)
-- **Gate:** Cada op com canary (plantar problema → detectar)
-- **Marcação:** [SÊNIOR] — requer revisão humana
+- **Etapa:** ✅ Camada 4 CONCLUIDA (B2-B9)
+- **Status:** 8/8 etapas concluidas
+- **Próximo:** Camada 5 (Gameplay) — TODAS [MARGINAL], requer aprovacao do Joab
+- **Arquivos criados:** `code_quality_ops.py`, `agent_ops.py`, `gamestate_ops.py`, `dialogue_ops.py`, `doc_ops.py`, `.gdlintrc`, `verification.yml`, `test_code_quality_ops.py`
 
 ## Última atualização
 - **Data:** 2026-07-19
