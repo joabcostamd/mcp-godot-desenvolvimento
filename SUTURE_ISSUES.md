@@ -5,7 +5,23 @@
 > O humano (Joab) avalia e decide.
 
 ## Issues Pendentes
-*(nenhuma no momento)*
+
+### [AGENTE 01] — SyntaxError em tools/code_quality_ops.py (AGENTE 02 — B3)
+- **Data:** 2026-07-19
+- **Severidade:** 🔴 Crítica — impede import do server.py
+- **Arquivo:** `tools/code_quality_ops.py`, linha 581
+- **Descrição:** f-string com escape inválido: `f'FAIL ({fmt_result.get(\"unformatted_count\", 0)} arquivos)'`
+  - Dentro de f-string com aspas duplas (`f"..."`), `\"` é inválido.
+  - **Correção sugerida:** usar aspas simples no dict: `fmt_result.get('unformatted_count', 0)` ou extrair para variável.
+- **Impacto:** Qualquer `import server` falha com `SyntaxError`. AGENTE 01 não consegue validar mudanças.
+- **Ação necessária:** AGENTE 02 deve corrigir e commitar.
+
+### [AGENTE 01] — Import circular server.py ↔ tools/dynamic_groups.py
+- **Data:** 2026-07-19
+- **Severidade:** 🟡 Baixa — funcional atualmente, mas frágil
+- **Descrição:** `dynamic_groups.py` importa `from server import _tool_defs`. `server.py` (via handlers) importa `from tools.dynamic_groups import tool_catalog, tool_groups`. Funciona porque `server.py` é o entry point, mas quebraria se `dynamic_groups.py` fosse importado primeiro.
+- **Solução ideal:** Inverter dependência — `dynamic_groups.py` receber `_tool_defs` como parâmetro, ou criar módulo compartilhado `core/tool_index.py`.
+- **Ação:** Refatoração futura (Etapa A5 — Refatorações Estruturais).
 
 ---
 

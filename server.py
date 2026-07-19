@@ -1611,6 +1611,58 @@ def _tool_defs() -> list[Tool]:
             inputSchema={"type":"object","properties":{"query":{"type":"string"},"group":{"type":"string"},"limit":{"type":"integer"}},"required":[]}),
         Tool(name="tool_groups", description="Gerencia grupos dinamicos de tools. Ex: {'action':'activate','group':'art'}.",
             inputSchema={"type":"object","properties":{"action":{"type":"string","enum":["list","activate","deactivate"]},"group":{"type":"string"}},"required":["action"]}),
+        # ── Meta-tools (Fatia 0.15) — descoberta e invocação dinâmica ──
+        Tool(
+            name="catalog_search",
+            description=(
+                "Busca ferramentas por linguagem natural (português ou inglês). "
+                "Use para DESCOBRIR qual tool resolve seu problema. "
+                "Ex: {'query': 'criar cena'} → retorna scene_manage e ferramentas relacionadas. "
+                "Ex: {'query': 'audio', 'namespace': 'assets'} → filtra por namespace."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "O que você quer fazer? (PT ou EN)"},
+                    "namespace": {"type": "string", "enum": ["project", "assets", "runtime", "analysis", "orchestration"], "description": "Filtrar por namespace semântico."},
+                    "limit": {"type": "integer", "description": "Máximo de resultados (default 20)."},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="describe_tool",
+            description=(
+                "Retorna o schema COMPLETO de uma ferramenta específica: descrição, "
+                "parâmetros, hints (readOnly, destructive, idempotent, openWorld) "
+                "e categoria de operação. Use DEPOIS de catalog_search, quando já "
+                "souber qual tool usar. Ex: {'name': 'scene_manage'}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string", "description": "Nome exato da tool (ex: 'scene_manage', 'ping')."},
+                },
+                "required": ["name"],
+            },
+        ),
+        Tool(
+            name="invoke_by_name",
+            description=(
+                "Invoca uma ferramenta pelo nome, passando os argumentos como dict. "
+                "RESPEITA todos os gates (fase, session, kill switch, governador). "
+                "Use como alternativa quando souber exatamente qual tool e quais "
+                "parâmetros usar. Ex: {'name': 'ping', 'arguments': {}}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string", "description": "Nome exato da tool a invocar."},
+                    "arguments": {"type": "object", "description": "Argumentos da tool como dict."},
+                },
+                "required": ["name"],
+            },
+        ),
         Tool(name="game_serialize_state", description="Salva/restaura estado completo do jogo como JSON.",
             inputSchema={"type":"object","properties":{"action":{"type":"string","enum":["save","load"]},"file_name":{"type":"string"}},"required":["action"]}),
         Tool(name="start_recording", description="Inicia gravacao de sessao (inputs/estados).",
@@ -5571,7 +5623,12 @@ def _handle_safe_write_gdscript(args: dict) -> dict:
 
 
 def _handle_tool_catalog(args: dict) -> dict:
-    return tool_catalog(args.get("query",""), args.get("group",""), args.get("limit",20))
+    return tool_catalog(
+        query=args.get("query", ""),
+        group=args.get("group", ""),
+        limit=args.get("limit", 20),
+        namespace=args.get("namespace", ""),
+    )
 
 
 def _handle_tool_groups(args: dict) -> dict:
