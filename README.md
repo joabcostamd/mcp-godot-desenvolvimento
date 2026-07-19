@@ -1,12 +1,36 @@
 # MCP Godot — Desenvolvimento
 
-> **Servidor MCP Godot Agent v3.4.0 — 193 ferramentas para criação de jogos por linguagem natural.**
-> Conecta Godot 4.7 ao VS Code Copilot (DeepSeek V4 Pro) via protocolo MCP stdio.
-> Autocontido — clone, instale dependências e use.
+> **Servidor MCP Godot Agent v3.4.0 — Pipeline autonomo multi-agente para Godot Engine 4.7.**
+> Conecta Godot ao VS Code Copilot via protocolo MCP stdio. CI, qualidade de codigo, seguranca, orquestracao.
 
-**Status:** ✅ 193 tools · 193 handlers · 74 módulos · 23 patches · Bloco 1-4 · proof ledger · subprocess seguro · R$0
+<!-- BADGES_START -->
+![Status](https://img.shields.io/badge/status-active-brightgreen)
+![Godot](https://img.shields.io/badge/Godot-4.7-blue)
+![Python](https://img.shields.io/badge/Python-3.11+-blue)
+![MCP](https://img.shields.io/badge/MCP-2025--11--25-orange)
+![Camada 4](https://img.shields.io/badge/Camada%204-100%25-brightgreen)
+![Última atualização](https://img.shields.io/badge/atualizado-2026--07--19-lightgrey)
+<!-- BADGES_END -->
 
 **GitHub:** `https://github.com/joabcostamd/mcp-godot-desenvolvimento`
+
+---
+
+## 📊 Progresso: Camada 4 — 100% concluída
+
+| Etapa | Nome | Status | Descrição |
+|---|---|---|---|
+| B2 | CI Verificação | ✅ | GitHub Actions, 7 jobs, 295 linhas |
+| B3 | gdtoolkit Gate | ✅ | gdlint 4.5.0 + gdformat + gdradon (19/19 testes) |
+| B4 | Análises Específicas | ✅ | 9 ops: funções não usadas, antipadrões, órfaos, ciclos, naming |
+| B5 | Segurança Supply-Chain | ✅ | Scan de vulnerabilidades + licenças (15+25 testes) |
+| B6 | agent_manage | ✅ | File lock, fila de tarefas, peer review, compare outputs |
+| B7 | Save Schema | ✅ | Geração de schema + migração de saves |
+| B8 | Dead-End Detection | ✅ | Becos sem saída em diálogos e quests |
+| B9 | Documentação Automática | ✅ | Changelog, README, Wiki auto-gerados |
+
+> **AGENTE 01:** A1-A5 concluídas | **AGENTE 02:** B2-B9 concluídas
+> Próximo: Camada 5 (Gameplay) [MARGINAL] — requer aprovação
 
 ---
 
