@@ -5287,10 +5287,19 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
         _exec_ctx = None
 
     def _dispatch_with_context():
-        """Wrapper que injeta contexto thread-local antes do handler."""
+        """Wrapper que injeta contexto thread-local antes do handler.
+
+        IMPORTANTE: usa try/finally para LIMPAR o contexto após o handler.
+        Sem isso, threads do pool reutilizadas carregariam contexto stale
+        da invocação anterior (thread-local leak).
+        """
         if _exec_ctx is not None:
             set_execution_context(_exec_ctx)
-        return _smart_call(handler, arguments)
+        try:
+            return _smart_call(handler, arguments)
+        finally:
+            if _exec_ctx is not None:
+                set_execution_context(None)
 
     handlers = _build_handlers()
     handler = handlers.get(name)
