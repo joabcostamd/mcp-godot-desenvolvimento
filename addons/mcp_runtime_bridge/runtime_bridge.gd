@@ -284,23 +284,32 @@ func _cmd_play_audio(args: Dictionary) -> Dictionary:
 
 	if audio_file != "":
 		var stream: Resource = load(audio_file)
-		# Godot 4.x: AudioStreamMP3 usa .data (PackedByteArray), nao .file
-		# AudioStreamOggVorbis e built-in e recomendado. Suportamos ambos.
+		# Godot 4.x: Fallback quando load() falha (caminho raw/absoluto)
+		# - AudioStreamMP3.data: PackedByteArray (OK)
+		# - AudioStreamWAV.data: PackedByteArray (OK)
+		# - AudioStreamOggVorbis: usar load_from_buffer() static (packet_sequence é OggPacketSequence, não PackedByteArray)
 		if stream == null:
 			var fa := FileAccess.open(audio_file, FileAccess.READ)
 			if fa:
+				var buffer := fa.get_buffer(fa.get_length())
+				fa.close()
 				var ext := audio_file.get_extension().to_lower()
 				if ext == "mp3":
-					stream = AudioStreamMP3.new()
-					if stream:
-						stream.data = fa.get_buffer(fa.get_length())
+					var s := AudioStreamMP3.new()
+					if s:
+						s.data = buffer
+						stream = s
+				elif ext == "wav":
+					var s := AudioStreamWAV.new()
+					if s:
+						s.data = buffer
+						stream = s
 				else:
-					# Fallback: OGG/WAV como AudioStreamOggVorbis
-					stream = AudioStreamOggVorbis.new()
-					if stream:
-						stream.packet_sequence = fa.get_buffer(fa.get_length())
-				fa.close()
-		player.stream = stream
+					# OGG/Vorbis e outros: load_from_buffer cria o OggPacketSequence internamente
+					stream = AudioStreamOggVorbis.load_from_buffer(buffer)
+		# Type-check: garantir que é AudioStream antes de atribuir
+		if stream is AudioStream:
+			player.stream = stream
 
 	player.bus = bus
 	player.volume_db = volume_db

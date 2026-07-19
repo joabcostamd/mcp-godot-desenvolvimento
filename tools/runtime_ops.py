@@ -761,7 +761,7 @@ def capture_game_screenshot(
     Returns:
         {"status": "success", "image_base64": str, "image_path": str}
     """
-    import base64, shutil
+    import base64
     from datetime import datetime
 
     proj = _get_active_project()
@@ -1312,7 +1312,7 @@ def manage_visual_baselines(args=None):
         if not captures and not bf.exists():
             return {"status":"error","message":"Nenhuma captura encontrada para promover."}
         if captures:
-            import shutil; shutil.copy2(str(captures[0]),str(bf))
+            shutil.copy2(str(captures[0]),str(bf))
             return {"status":"success","op":"approve","name":bn,"source":captures[0].name,"message":f"Baseline '{bn}' atualizado com {captures[0].name}."}
         return {"status":"error","message":f"Sem capturas para promover. Baseline '{bn}' mantido."}
 
