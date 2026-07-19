@@ -683,3 +683,59 @@ def addon_is_editor_open() -> dict:
             else "Editor fechado ou addon offline."
         ),
     }
+
+
+# ── Editor Commands (v4.0) ──────────────────────────────────────────
+
+def addon_save_scene() -> dict:
+    """Salva a cena atual no editor Godot.
+
+    Equivalente a Ctrl+S no editor. Use antes de run_scene.
+    """
+    return get_bridge().call("save_scene", {})
+
+
+def addon_save_all_scenes() -> dict:
+    """Salva TODAS as cenas abertas no editor Godot.
+
+    Use antes de run_scene para garantir que todas as alterações
+    sejam persistidas no disco.
+    """
+    return get_bridge().call("save_all_scenes", {})
+
+
+def addon_run_scene() -> dict:
+    """Executa o projeto no Godot (F5 remoto).
+
+    Abre a janela do jogo automaticamente. Use stop_scene para
+    interromper a execução e voltar ao editor.
+    Pré-condições: projeto válido, main_scene configurada no project.godot.
+    """
+    return get_bridge().call("run_scene", {})
+
+
+def addon_stop_scene() -> dict:
+    """Para a execução do projeto no Godot.
+
+    Fecha a janela do jogo e retorna ao editor.
+    """
+    return get_bridge().call("stop_scene", {})
+
+
+def addon_reload_scene() -> dict:
+    """Recarrega a cena atual do disco.
+
+    Útil após modificações externas (ex: git pull) para atualizar
+    a visualização no editor sem reabrir o projeto.
+    """
+    return get_bridge().call("reload_scene", {})
+
+
+def addon_get_editor_state() -> dict:
+    """Retorna o estado completo do editor Godot.
+
+    Inclui: nome do projeto, versão, cena aberta (path + nome),
+    status de execução (is_playing), versão do addon, porta,
+    contador de operações, status de conexão WebSocket.
+    """
+    return get_bridge().call("get_editor_state", {})

@@ -2,8 +2,8 @@
 
 > **Gerado em:** 17/07/2026  
 > **Método:** Extração programática via `inspect.signature()` do Python  
-> **Total de rollups:** 28  
-> **Total de ops:** 115
+> **Total de rollups:** 32  
+> **Total de ops:** 126
 
 ---
 
@@ -16,12 +16,12 @@
 | script_manage | 6 | script_ops.py |
 | file_manage | 3 | file_ops.py |
 | project_manage | 5 | project_ops.py |
-| asset_manage | 8 | asset_ops.py + placeholder_ops.py |
+| asset_manage | 11 | asset_ops.py + placeholder_ops.py + art_ops.py |
 | physics_manage | 4 | physics_ops.py |
 | anim_manage | 4 | devsolo_ops.py |
 | ui_manage | 7 | devsolo_ops.py |
 | tilemap_manage | 4 | devsolo_ops.py |
-| audio_manage | 2 | devsolo_ops.py |
+| audio_manage | 6 | devsolo_ops.py |
 | export_manage | 3 | export_ops.py |
 | d3_manage | 4 | devsolo_ops.py |
 | debug_manage | 3 | devsolo_ops.py |
@@ -39,6 +39,8 @@
 | analysis_manage | 7 | analyze_ops.py |
 | safety_manage | 5 | safety.py |
 | vision_manage | 3 | runtime_ops.py + scene_ops.py |
+| playtest_manage | 3 | playtest_ops.py |
+| localization_manage | 3 | localization_ops.py |
 
 ---
 
@@ -104,8 +106,8 @@
 | `set_main_scene` | `set_main_scene` | `(scene_path: str) -> dict` | scene_path |
 
 ### asset_manage
-**Descrição:** Gerencia assets: importar texturas/sprites/áudio, placeholders, paletas.
-**Arquivos fonte:** tools.asset_ops, tools.placeholder_ops
+**Descrição:** Gerencia assets: importar texturas/sprites/áudio, placeholders, animações de sprite, paletas e validação game-ready.
+**Arquivos fonte:** tools.asset_ops, tools.placeholder_ops, tools.art_ops
 
 | op | Handler | Assinatura REAL | Parâmetros |
 |----|---------|----------------|------------|
@@ -117,6 +119,9 @@
 | `bg_gradient` | `generate_background_gradient` | `(name: str, width: int = 1280, height: int = 720, color_top: str = '#1a1a2e', color_bottom: str = '#16213e', direction: str = 'vertical', save_path: str | None = None) -> dict` | name, width=..., height=..., color_top=..., color_bottom=..., direction=..., save_path=... |
 | `tileset_colors` | `generate_tileset_from_colors` | `(palette_name: str, colors: list[str], tile_width: int = 16, tile_height: int = 16, save_texture_path: str | None = None, save_tileset_path: str | None = None) -> dict` | palette_name, colors, tile_width=..., tile_height=..., save_texture_path=..., save_tileset_path=... |
 | `palette` | `suggest_color_palette` | `(genre: str) -> dict` | genre |
+| `validate_game_ready` | `validate_asset_game_ready` | `(asset_path: str, asset_type: str = 'texture') -> dict` | asset_path, asset_type=... |
+| `sprite_animation` | `generate_sprite_animation` | `(category: str = 'character', anim_type: str = 'idle', num_frames: int = 4, scene_path: str \| None = None, parent_node_path: str = '.', node_name: str = '', fps: float = 8.0, loop: bool = True, frame_width: int = 64, frame_height: int = 64, output_dir: str = 'assets/animations', style_desc: str = '') -> dict` | category=..., anim_type=..., num_frames=..., scene_path=..., parent_node_path=..., node_name=..., fps=..., loop=..., frame_width=..., frame_height=..., output_dir=..., style_desc=... |
+| `license_audit` | `audit_asset_license` | `(asset_path: str, license_str: str = '', project_license: str = 'commercial') -> dict` | asset_path, license_str="CC0"\|"MIT"\|"CC-BY"\|..., project_license="commercial"\|"open_source"\|"personal" |
 
 ### physics_manage
 **Descrição:** Gerencia física: colisões, camadas, materiais, juntas.
@@ -166,13 +171,17 @@
 | `from_noise` | `generate_tilemap_from_noise` | `(scene_path: str, tilemap_layer_path: str, tile_size: int = 32, width: int = 40, height: int = 30, seed: int = 0, threshold: float = 0.5, tile_ground: int = 0, tile_wall: int = 1) -> dict` | scene_path, tilemap_layer_path, tile_size=..., width=..., height=..., seed=..., threshold=..., tile_ground=..., tile_wall=... |
 
 ### audio_manage
-**Descrição:** Gerencia áudio: buses e efeitos.
+**Descrição:** Gerencia áudio: buses, roteamento, efeitos, áudio espacial 3D, varredura de SFX por cena e geração de SFX procedural em lote.
 **Arquivos fonte:** tools.devsolo_ops
 
 | op | Handler | Assinatura REAL | Parâmetros |
 |----|---------|----------------|------------|
 | `config_bus` | `configure_audio_bus` | `(bus_name: str, volume_db: float = 0.0, mute: bool = False, solo: bool = False) -> dict` | bus_name, volume_db=..., mute=..., solo=... |
-| `add_effect` | `add_audio_effect` | `(bus_name: str, effect_type: str = 'reverb') -> dict` | bus_name, effect_type=... |
+| `add_effect` | `add_audio_effect` | `(bus_name: str, effect_type: str = 'reverb', **kwargs) -> dict` | bus_name, effect_type="reverb"\|"eq"\|"compressor"\|"delay"\|"chorus"\|"distortion", +kwargs específicos (room_size, damping, wet, bands, threshold, ratio, etc.) |
+| `route_bus` | `route_audio_bus` | `(bus_name: str, send_to: str = 'Master', send_db: float = 0.0) -> dict` | bus_name, send_to=..., send_db=... |
+| `spatial_player` | `create_spatial_audio_player` | `(scene_path: str, parent_node_path: str = '.', node_name: str = 'AudioStreamPlayer3D', audio_file: str = '', unit_size: float = 10.0, attenuation_model: str = 'inverse_distance', max_distance: float = 30.0, max_db: float = 3.0, panning_strength: float = 1.0, autoplay: bool = False, db_volume: float = 0.0) -> dict` | scene_path, parent_node_path=..., node_name=..., audio_file=..., unit_size=..., attenuation_model="inverse_distance"\|"logarithmic"\|"disabled", max_distance=..., max_db=..., panning_strength=..., autoplay=..., db_volume=... |
+| `scan_sfx_events` | `scan_scene_for_sfx_events` | `(scene_path: str) -> dict` | scene_path |
+| `generate_sfx_batch` | `generate_sfx_batch` | `(events: list[dict] \| None = None, scene_path: str \| None = None, style: str = 'scifi', output_dir: str = 'assets/sfx', max_sfx: int = 50) -> dict` | events=..., scene_path=..., style=..., output_dir=..., max_sfx=... |
 
 ### export_manage
 **Descrição:** Gerencia exportação: listar presets, validar templates, build.
@@ -358,6 +367,27 @@
 
 ---
 
+### localization_manage
+**Descrição:** Testes de internacionalização (i18n): strings faltantes, overflow de texto com locale longo, e contraste texto/fundo (WCAG).
+**Arquivos fonte:** tools.localization_ops
+
+| op | Handler | Assinatura REAL | Parâmetros |
+|----|---------|----------------|------------|
+| `find_missing` | `find_missing_translations` | `(project_path: str \| None = None) -> dict` | project_path=... |
+| `detect_overflow` | `detect_text_overflow` | `(scene_path: str, locale: str = "de", project_path: str \| None = None, font_size: int = 14) -> dict` | scene_path, locale=..., project_path=..., font_size=... |
+| `check_contrast` | `check_text_contrast` | `(scene_path: str, project_path: str \| None = None) -> dict` | scene_path, project_path=... |
+
+
+---
+
 ## Resumo de Erros
 
 Nenhum erro de resolução de handler.
+
+### playtest_manage
+**Descrição:** Playtest autônomo: self_play — agente joga o jogo automaticamente, injeta inputs, captura screenshots e detecta anomalias.
+**Arquivos fonte:** tools.playtest_ops
+
+| op | Handler | Assinatura REAL | Parâmetros |
+|----|---------|----------------|------------|
+| \self_play\ | \self_play\ | \(duration: float = 30.0, inputs: list[dict] \| None = None, max_steps: int = 100, capture_interval: float = 2.0) -> dict\ | duration=..., inputs=..., max_steps=..., capture_interval=... |

@@ -620,5 +620,166 @@
       "tools/rollups.py",
       "requirements.txt"
     ]
+  },
+  "fatia_3.10": {
+    "status": "concluida",
+    "data": "2026-07-19",
+    "tentativa": 1,
+    "resultado": "audio_manage 2→4 ops: add_effect reescrito (stub→AudioEffect real com sub-resources .tres), route_bus (roteamento entre buses com send_db), spatial_player (AudioStreamPlayer3D com atenuacao). +~310 linhas, zero tool nova de topo.",
+    "c1": "pass — 0 breaking, 1 warning (descricao/tags do rollup atualizados)",
+    "c2": "pass — 5/5 canarios: add_effect com AudioEffectReverb real + params, route_bus SFX→Master -3dB, spatial_player erro claro sem projeto, efeito invalido sugere opcoes, atenuacao invalida erro claro",
+    "c3": "pass — smoke_test status=success, zero erros",
+    "c4": "pass — sem rede, sem segredo, checkpoint via safety.py, loopback mantido, upsert idempotente",
+    "c5": "pre_existente — 48 tools, 6 fases >40 (f056aed8). Zero agravamento.",
+    "c6": "pass — nomes route_audio_bus e create_spatial_audio_player unicos, zero colisao",
+    "cross_model": "fraca — [SÊNIOR] requer revisao humana da implementacao dos efeitos .tres e do AudioStreamPlayer3D",
+    "motivo_escalacao": "[SÊNIOR] — revisar: (1) formato sub_resource no .tres para AudioEffect, (2) logica de roteamento send/send_db, (3) criacao de AudioStreamPlayer3D com stream e atenuacao.",
+    "arquivos_modificados": [
+      "tools/devsolo_ops.py (+add_audio_effect reescrito ~150 linhas, +route_audio_bus ~75 linhas, +create_spatial_audio_player ~140 linhas)",
+      "tools/rollups.py (+2 imports, _build_audio_manage atualizado com 4 ops, descricao e tags)"
+    ],
+    "novas_ops": ["route_bus", "spatial_player"],
+    "ops_reescritas": ["add_effect"]
+  },
+  "fatia_3.11": {
+    "status": "concluida",
+    "data": "2026-07-19",
+    "tentativa": 1,
+    "resultado": "audio_manage 4→6 ops: scan_scene_for_sfx_events (parse .tscn, 14 tipos de nó→SFX com duração, detecta AudioStreamPlayer filho, path traversal validado), generate_sfx_batch (SFX em lote, idempotente com skip de existentes, checkpoint, mark_pending_compile, sanitização de nome, limite de duração). +~270 linhas, zero tool nova de topo. 15 gaps da auditoria corrigidos (0 restantes).",
+    "c1": "pass — 0 breaking, 1 warning (descricao/tags do rollup atualizados)",
+    "c2": "pass — 3/3 canarios: scan detecta 2 Buttons (1 com audio, 1 sem) com duracao correta, batch vazio=success/skipped=0, batch via scene_path delega corretamente (SFX falha por numpy mas erro tratado com mensagem clara)",
+    "c3": "pass — smoke_test status=success, zero erros",
+    "c4": "pass — sem rede, sem segredo, operacoes locais, checkpoint adicionado antes de mkdir, output_dir validado contra path traversal, nome de arquivo sanitizado, skip de arquivos existentes (idempotente).",
+    "c5": "pre_existente — 48 tools, 6 fases >40 (f056aed8). Zero agravamento.",
+    "c6": "pass — nomes scan_scene_for_sfx_events e generate_sfx_batch unicos (devsolo_ops.py + rollups.py)",
+    "cross_model": "fraca — [SÊNIOR] requer revisao humana do mapeamento NODE_SFX_MAP (14 tipos de nó→SFX) e da integracao com generate_audio_sfx",
+    "motivo_escalacao": "[SÊNIOR] — revisar: (1) mapeamento NODE_SFX_MAP (14 tipos de nó→evento→SFX), (2) qualidade dos SFX gerados (depende de numpy instalado), (3) nomes sugeridos para arquivos de SFX",
+    "arquivos_modificados": [
+      "tools/devsolo_ops.py (+scan_scene_for_sfx_events ~95 linhas, +generate_sfx_batch ~80 linhas, +tool_defs, +handler_map)",
+      "tools/rollups.py (+2 imports, _build_audio_manage 4→6 ops)",
+      "INVENTARIO_OPS_ROLLUPS.md (audio_manage 4→6 ops, total 117→119)"
+    ],
+    "novas_ops": ["scan_sfx_events", "generate_sfx_batch"]
+  },
+  "fatia_3.12": {
+    "status": "concluida",
+    "data": "2026-07-19",
+    "tentativa": 1,
+    "resultado": "asset_manage 9→10 ops: generate_sprite_animation gera N frames consistentes (mesmo personagem/esqueleto via prompt engineering), monta spritesheet, cria .tres de SpriteFrames e opcionalmente configura AnimatedSprite2D na cena. 8 tipos de animação (idle/walk/attack/death/fire/run/spawn/hit). Fallback procedural via Pillow. +~210 linhas, zero tool nova de topo.",
+    "c1": "pass — 0 breaking, 1 warning (descricao/tags do rollup atualizados)",
+    "c2": "pass — 6/6 canarios: idle 3 frames→spritesheet+tres+3 frame_paths, path traversal bloqueado, anim_type inválido=erro, num_frames<2=erro, num_frames>16=erro, output_dir traversal bloqueado",
+    "c3": "pass — smoke_test status=success",
+    "c4": "pass — sem rede, sem segredo, path traversal validado, mark_pending_compile, fallback procedural sem dependência externa obrigatória",
+    "c5": "pre_existente — 48 tools, 6 fases >40 (f056aed8). Zero agravamento.",
+    "c6": "pass — nome generate_sprite_animation único (art_ops.py + rollups.py)",
+    "cross_model": "fraca — [SÊNIOR] requer revisao humana da qualidade dos frames gerados e do mapeamento de anim_types",
+    "motivo_escalacao": "[SÊNIOR] — revisar: (1) qualidade dos prompts de esqueleto por anim_type, (2) fallback procedural via Pillow, (3) integração com generate_game_art para arte real",
+    "arquivos_modificados": [
+      "tools/art_ops.py (+generate_sprite_animation ~130 linhas, +_save_frame_from_result ~25 linhas, +_generate_placeholder_frame ~25 linhas)",
+      "tools/rollups.py (+1 import, _build_asset_manage 9→10 ops)",
+      "INVENTARIO_OPS_ROLLUPS.md (asset_manage 8→10 ops, total 119→120)"
+    ],
+    "novas_ops": ["sprite_animation"]
+  },
+  "fatia_3.13": {
+    "status": "concluida",
+    "data": "2026-07-19",
+    "tentativa": 1,
+    "resultado": "asset_manage 10→11 ops: audit_asset_license classifica 18 licenças (CC0/MIT→pass, CC-BY→warn, CC-BY-NC/proprietary→block) contra política do projeto (commercial/open_source/personal). Gate automático. Registra rastreabilidade em asset_licenses.json. +~130 linhas, zero tool nova.",
+    "c1": "pass — 0 breaking, 1 warning (descricao/tags)",
+    "c2": "pass — 7/7 canarios: CC0→pass, CC-BY-NC→block, proprietary→block, MIT→pass, vazia→erro, desconhecida→block+sugestoes, asset_manage 11 ops",
+    "c3": "pass — smoke_test success",
+    "c4": "pass — sem rede, sem segredo, arquivo local (asset_licenses.json), idempotente (upsert por asset_path)",
+    "c5": "pre_existente — 48 tools (f056aed8)",
+    "c6": "pass — nome audit_asset_license único",
+    "cross_model": "fraca — [SÊNIOR] requer revisao humana do mapa LICENSE_COMPAT e das regras de gate",
+    "motivo_escalacao": "[SÊNIOR] — revisar: (1) mapeamento LICENSE_COMPAT (18 licenças), (2) regras de gate por project_license, (3) fluxo de uso (IA deve chamar license_audit após cada import)",
+    "arquivos_modificados": [
+      "tools/asset_ops.py (+audit_asset_license ~130 linhas)",
+      "tools/rollups.py (+1 import, _build_asset_manage 10→11 ops)",
+      "INVENTARIO_OPS_ROLLUPS.md (asset_manage 10→11 ops, total 120→121)"
+    ],
+    "novas_ops": ["license_audit"]
+  },
+  "fatia_3.14": {
+    "status": "concluida",
+    "data": "2026-07-19",
+    "tentativa": 1,
+    "resultado": "Novo rollup playtest_manage: self_play compila→lança→injeta inputs→captura screenshots→detecta anomalias (crash/softlock/tela preta/timeout). Inputs padrão alternam 7 teclas de gameplay. +~120 linhas em playtest_ops.py.",
+    "c1": "pass — +1 rollup (31 total), 0 breaking",
+    "c2": "pass — self_play importa, default_inputs gera 10 steps, playtest_manage registrado",
+    "c3": "pass — smoke_test success",
+    "c4": "pass — sem rede, sem segredo, orquestra tools existentes, idempotente (via runtime_ops)",
+    "c5": "pre_existente — 48 tools (f056aed8)",
+    "c6": "pass — nome self_play único",
+    "cross_model": "fraca — [SÊNIOR] requer revisao humana do loop de playtest e detecção de anomalias",
+    "motivo_escalacao": "[SÊNIOR] — revisar: (1) integração real com Godot (compilar+lançar+injetar), (2) heurística de tela preta, (3) sequência de inputs padrão",
+    "arquivos_modificados": [
+      "tools/playtest_ops.py (+self_play ~100 linhas, +_default_play_inputs ~15 linhas)",
+      "tools/rollups.py (+1 import, +_build_playtest_manage, +1 builder)",
+      "INVENTARIO_OPS_ROLLUPS.md (28→29 rollups, 121→122 ops)"
+    ],
+    "novas_ops": ["self_play"]
+  },
+  "fatia_3.15": {
+    "status": "concluida",
+    "data": "2026-07-19",
+    "tentativa": 1,
+    "resultado": "playtest_manage 1→2 ops: regression_from_recording grava inputs+screenshots (hash SHA256) em recordings/<session>.json e reproduz comparando frame a frame com tolerância configurável. Detecta regressões visuais. +~140 linhas.",
+    "c1": "pass — 0 breaking, +1 op no rollup existente",
+    "c2": "pass — mode inválido=erro, replay sem sessão=erro, playtest_manage 2 ops",
+    "c3": "pass — smoke_test success",
+    "c4": "pass — sem rede, sem segredo, arquivos locais em recordings/, tolerância configurável",
+    "c5": "pre_existente — 48 tools (f056aed8)",
+    "c6": "pass — nome regression_from_recording único",
+    "cross_model": "fraca — [SÊNIOR] requer revisao humana do algoritmo de comparação de hash e tolerância",
+    "motivo_escalacao": "[SÊNIOR] — revisar: (1) comparação por hash SHA256 de base64 (sensível a encoding), (2) tolerância de 5% adequada, (3) integração com Godot real",
+    "arquivos_modificados": [
+      "tools/playtest_ops.py (+regression_from_recording ~140 linhas)",
+      "tools/rollups.py (+1 import, _build_playtest_manage 1→2 ops)",
+      "INVENTARIO_OPS_ROLLUPS.md (playtest_manage 1→2, total 122→123)"
+    ],
+    "novas_ops": ["regression_from_recording"]
+  },
+  "fatia_3.16": {
+    "status": "concluida",
+    "data": "2026-07-19",
+    "tentativa": 1,
+    "resultado": "playtest_manage 2→3 ops: difficulty_curve roda N sessões de self_play, coleta métricas (steps, anomalias, crash/softlock/completed), compila curva de dificuldade com tendência e interpretação textual. +~100 linhas. Última fatia da Camada 3 concluída.",
+    "c1": "pass — 0 breaking, +1 op",
+    "c2": "pass — sessions=0→erro, curve 1 sessão→summary com métricas, playtest_manage 3 ops",
+    "c3": "pass — smoke_test success",
+    "c4": "pass — sem rede, sem segredo, orquestra self_play existente",
+    "c5": "pre_existente — 48 tools (f056aed8)",
+    "c6": "pass — nome difficulty_curve único",
+    "cross_model": "fraca — [SÊNIOR] requer revisao humana da interpretação da curva e métricas",
+    "motivo_escalacao": "[SÊNIOR] — revisar: (1) algoritmo de tendência (improving/degrading/flat), (2) thresholds de interpretação, (3) integração com balance_analyze",
+    "arquivos_modificados": [
+      "tools/playtest_ops.py (+difficulty_curve ~80 linhas, +_interpret_curve ~30 linhas)",
+      "tools/rollups.py (+1 import, _build_playtest_manage 2→3 ops)",
+      "INVENTARIO_OPS_ROLLUPS.md (playtest_manage 2→3)"
+    ],
+    "novas_ops": ["difficulty_curve"]
+  },
+  "fatia_4.1": {
+    "status": "concluida",
+    "data": "2026-07-19",
+    "tentativa": 1,
+    "resultado": "i18n testing: 3 funções em localization_ops.py (find_missing_translations, detect_text_overflow, check_text_contrast) registradas como ops do novo rollup localization_manage. Reutiliza capture_ui_snapshot (1.3). Zero tools de topo novas. +~380 linhas.",
+    "c1": "pass — 0 breaking, 1 warning (descricao/tags do rollup)",
+    "c2": "pass — 6/6 canarios: 3 erro esperado (sem CSV, cena inexistente) + 3 positivo (missing strings, overflow NarrowLabel 36.5%%, contraste 4 controles)",
+    "c3": "pass — smoke_test status=success",
+    "c4": "pass — sem rede, sem segredo, file-only, rollup (localization_manage), idempotente (read-only)",
+    "c5": "pre_existente — 48 tools, 6 fases >40 (f056aed8). Zero agravamento.",
+    "c6": "pass — todos os nomes unicos, zero colisao (find_missing_translations, detect_text_overflow, check_text_contrast, localization_manage)",
+    "cross_model": "fraca — [SÊNIOR] requer revisao humana das heuristicas de estimativa de texto (charset-dependente) e thresholds WCAG",
+    "motivo_escalacao": "[SÊNIOR] — revisar: (1) heuristica _estimate_text_width (CJK vs latim vs cirilico), (2) deteccao de cores theme_override no .tscn (regex pode nao capturar todos formatos), (3) thresholds de severidade de overflow e WCAG",
+    "arquivos_modificados": [
+      "tools/localization_ops.py (novo — 3 funções ~380 linhas)",
+      "tools/rollups.py (+1 import, +_build_localization_manage, +1 builder)",
+      "INVENTARIO_OPS_ROLLUPS.md (30→31 rollups, 123→126 ops)",
+      "temp_art/test_i18n.tscn (cena sintetica de teste)"
+    ],
+    "novas_ops": ["find_missing", "detect_overflow", "check_contrast"]
   }
 }

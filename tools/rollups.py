@@ -65,6 +65,10 @@ from tools.asset_ops import (
     import_sprite_sheet,
     import_audio,
     validate_asset_game_ready,
+    audit_asset_license,
+)
+from tools.art_ops import (
+    generate_sprite_animation,
 )
 from tools.placeholder_ops import (
     generate_placeholder_sprite,
@@ -109,6 +113,10 @@ from tools.devsolo_ops import (
     add_state_transition,
     configure_audio_bus,
     add_audio_effect,
+    route_audio_bus,
+    create_spatial_audio_player,
+    scan_scene_for_sfx_events,
+    generate_sfx_batch,
     setup_camera_2d,
     setup_camera_follow,
     setup_camera_shake,
@@ -150,6 +158,8 @@ from tools.stress_test_ops import run_stress_test
 from tools.test_ops import test_coverage_report, generate_test_cases_from_gdd, run_canary_queries
 from tools.perf_ops import perf_regression_track
 from tools.music_ops import generate_music, make_seamless_loop, place_and_normalize, bind_to_event
+from tools.playtest_ops import self_play, regression_from_recording, difficulty_curve
+from tools.localization_ops import find_missing_translations, detect_text_overflow, check_text_contrast
 
 # ── Playmode (assert) ─────────────────────────────────────────
 
@@ -321,21 +331,16 @@ def _build_project_manage():
 
 
 def _build_asset_manage():
-    """asset_manage: 9 operações de assets."""
+    """asset_manage: 11 operações de assets."""
     return create_manage_tool(
         tool_name="asset_manage",
         description=(
             "Gerencia assets do jogo: importar texturas, spritesheets e áudio, "
             "gerar placeholders procedurais (sprites, fundos, tilesets), "
+            "criar animações de sprite com esqueleto consistente (sprite_animation), "
+            "auditar licenças de assets (license_audit — gate automático), "
             "sugerir paletas de cores e validar se um asset importado está "
             "game-ready (escala, colisão, material, polycount, rig). "
-            "Use para povoar o jogo com recursos visuais e sonoros. "
-            "Quando NÃO usar: para arte gerada por IA (use generate_game_art "
-            "— named tool) ou modelos 3D (use import_3d_model — named tool). "
-            "Pré-condições: projeto ativo definido. Para imports, "
-            "o arquivo fonte deve existir. "
-            "Erro mais comum: formato de arquivo não suportado — "
-            "verifique os formatos aceitos pelo Godot."
         ),
         ops={
             "import_texture": import_texture,
@@ -347,10 +352,12 @@ def _build_asset_manage():
             "tileset_colors": generate_tileset_from_colors,
             "palette": suggest_color_palette,
             "validate_game_ready": validate_asset_game_ready,
+            "sprite_animation": generate_sprite_animation,
+            "license_audit": audit_asset_license,
         },
         tool_hints={"destructiveHint": True, "idempotentHint": False, "openWorldHint": True},
         title="Gerenciar Assets",
-        tags=["asset", "textura", "áudio", "placeholder"],
+        tags=["asset", "textura", "áudio", "placeholder", "animação", "sprite", "licença"],
     )
 
 
@@ -428,17 +435,21 @@ def _build_tilemap_manage():
 
 
 def _build_audio_manage():
-    """audio_manage: 2 operações de áudio."""
+    """audio_manage: 6 operações de áudio."""
     return create_manage_tool(
         tool_name="audio_manage",
-        description="Gerencia áudio: configurar buses e adicionar efeitos.",
+        description="Gerencia áudio: configurar buses, rotear entre buses, adicionar efeitos (reverb/EQ/compressor/delay/chorus/distortion), criar AudioStreamPlayer3D com áudio espacial, escanear cenas por eventos sem SFX e gerar SFX em lote.",
         ops={
             "config_bus": configure_audio_bus,
             "add_effect": add_audio_effect,
+            "route_bus": route_audio_bus,
+            "spatial_player": create_spatial_audio_player,
+            "scan_sfx_events": scan_scene_for_sfx_events,
+            "generate_sfx_batch": generate_sfx_batch,
         },
         tool_hints={"destructiveHint": True, "idempotentHint": False, "openWorldHint": True},
         title="Gerenciar Áudio",
-        tags=["áudio", "sfx", "mixagem"],
+        tags=["áudio", "sfx", "mixagem", "efeitos", "espacial", "3D", "lote"],
     )
 
 
@@ -760,6 +771,32 @@ def _build_music_manage():
         tags=["música", "áudio", "api", "loop", "cena", "eventos"],
     )
 
+def _build_playtest_manage():
+    """playtest_manage: 3 operações (Fatias 3.14-3.16)."""
+    return create_manage_tool(
+        tool_name="playtest_manage",
+        description="Playtest autônomo: self_play, regression_from_recording, difficulty_curve.",
+        ops={"self_play": self_play, "regression_from_recording": regression_from_recording,
+             "difficulty_curve": difficulty_curve},
+        tool_hints={"destructiveHint": False, "idempotentHint": False, "openWorldHint": True},
+        title="Playtest Autônomo",
+        tags=["playtest", "self-play", "regressão", "dificuldade", "automação"],
+    )
+
+
+def _build_localization_manage():
+    """localization_manage: 3 operações (Fatia 4.1)."""
+    return create_manage_tool(
+        tool_name="localization_manage",
+        description="Testes de internacionalização (i18n): strings faltantes, overflow de texto e contraste WCAG.",
+        ops={"find_missing": find_missing_translations,
+             "detect_overflow": detect_text_overflow,
+             "check_contrast": check_text_contrast},
+        tool_hints={"destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
+        title="Testes de i18n",
+        tags=["i18n", "localização", "tradução", "acessibilidade", "wcag"],
+    )
+
 def _build_vision_manage():
     return create_manage_tool(
         tool_name="vision_manage",
@@ -813,6 +850,9 @@ _ROLLUP_BUILDERS = [
     # Etapa 5: game bridge (consolidação FATIA 0.7a)
     _build_game_bridge_manage,
     _build_music_manage,
+    _build_playtest_manage,
+    # Etapa 6: i18n (FATIA 4.1)
+    _build_localization_manage,
 ]
 
 # Cache interno — garante que cada builder só executa UMA vez.

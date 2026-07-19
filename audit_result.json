@@ -1,11 +1,11 @@
 {
-  "fatia": "3.5",
-  "timestamp": "2026-07-19T12:27:35.931927+00:00",
+  "fatia": "4.1",
+  "timestamp": "2026-07-19T17:05:03.859438+00:00",
   "exit_code": 1,
   "criteria": {
     "C1_contrato": {
       "status": "pass",
-      "detail": "0 mudancas: 0 breaking, 0 warning, 0 cosmetic"
+      "detail": "1 mudancas: 0 breaking, 1 warning, 0 cosmetic"
     },
     "C2_canary": {
       "status": "skipped",
@@ -24,8 +24,8 @@
       "detail": "Status: failure. Total tools: 48. Fases com overflow: 6 | FASE 'IDEIA' tem 48 tools (limite: 40); FASE 'DESIGN' tem 51 tools (limite: 40); FASE 'PROTOTIPO' tem 82 tools (limite: 40); FASE 'CONTEUDO' tem 65 tools (limite: 40); FASE 'POLIMENTO' tem 60 tools (limite: 40); FASE 'PRONTO_PARA_LANCAR' tem 48 tools (limite: 40)"
     },
     "C6_distinguibilidade": {
-      "status": "pass",
-      "detail": "Nome 'validate_game_ready' — sem colisao detectada (modo textual reduzido)"
+      "status": "skipped",
+      "detail": "Nenhum nome de tool fornecido (--tool-name ausente)"
     }
   },
   "errors": [

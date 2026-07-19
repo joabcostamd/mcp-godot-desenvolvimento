@@ -2,9 +2,13 @@
 
 Fase 2: import_texture, import_sprite_sheet, import_audio.
 Fatia 3.8: presets de import por categoria (pixel, 3d, ui).
+Fatia 3.13: license_audit — gate de licença no import.
 """
 
+import json
+import re
 import shutil
+from datetime import datetime
 from pathlib import Path
 
 from tools.project_ops import _get_active_project, _check_path_traversal
@@ -1081,4 +1085,145 @@ def run_art_pipeline(
         "asset_path": asset_path,
         "pipeline": pipeline_log,
         "message": f"Pipeline arte concluido: {len(pipeline_log)} etapas, asset em {asset_path}",
+    }
+
+
+def audit_asset_license(
+    asset_path: str,
+    license_str: str = "",
+    project_license: str = "commercial",
+) -> dict:
+    """Audita a licença de um asset e registra rastreabilidade.
+
+    Gate automático: classifica licenças como pass (compatível),
+    warn (requer atribuição) ou block (incompatível). Registra
+    no arquivo asset_licenses.json para rastreabilidade futura.
+
+    Args:
+        asset_path: Caminho relativo do asset no projeto.
+        license_str: Identificador da licença (CC0, MIT, CC-BY, CC-BY-SA,
+                     CC-BY-NC, GPL, proprietary, BSD, MPL, Unlicense, etc.).
+        project_license: Tipo de licença do projeto (commercial, open_source,
+                         personal).
+
+    Returns:
+        {"status": "success", "gate": "pass"|"warn"|"block",
+         "license": str, "category": str, "reason": str}
+    """
+    proj = _get_active_project()
+
+    # ── Validar asset_path contra path traversal ────────────
+    violation = _check_path_traversal(asset_path, proj)
+    if violation:
+        return {"status": "error", "message": violation}
+
+    # ── Validar project_license ─────────────────────────────
+    VALID_PROJECT = {"commercial", "open_source", "personal"}
+    if project_license not in VALID_PROJECT:
+        return {
+            "status": "error",
+            "message": f"project_license '{project_license}' inválida. Use: {sorted(VALID_PROJECT)}.",
+        }
+
+    # ── Mapa de compatibilidade ─────────────────────────────
+    LICENSE_COMPAT = {
+        "CC0": {"category": "public_domain", "commercial": "pass", "open_source": "pass", "personal": "pass"},
+        "CC0 1.0": {"category": "public_domain", "commercial": "pass", "open_source": "pass", "personal": "pass"},
+        "PD": {"category": "public_domain", "commercial": "pass", "open_source": "pass", "personal": "pass"},
+        "Unlicense": {"category": "public_domain", "commercial": "pass", "open_source": "pass", "personal": "pass"},
+        "MIT": {"category": "permissive", "commercial": "pass", "open_source": "pass", "personal": "pass"},
+        "Apache 2.0": {"category": "permissive", "commercial": "pass", "open_source": "pass", "personal": "pass"},
+        "BSD": {"category": "permissive", "commercial": "pass", "open_source": "pass", "personal": "pass"},
+        "BSD 2-Clause": {"category": "permissive", "commercial": "pass", "open_source": "pass", "personal": "pass"},
+        "BSD 3-Clause": {"category": "permissive", "commercial": "pass", "open_source": "pass", "personal": "pass"},
+        "MPL 2.0": {"category": "weak_copyleft", "commercial": "pass", "open_source": "pass", "personal": "pass"},
+        "CC-BY": {"category": "attribution", "commercial": "warn", "open_source": "pass", "personal": "pass"},
+        "CC-BY 4.0": {"category": "attribution", "commercial": "warn", "open_source": "pass", "personal": "pass"},
+        "CC-BY-SA": {"category": "copyleft", "commercial": "warn", "open_source": "warn", "personal": "pass"},
+        "CC-BY-SA 4.0": {"category": "copyleft", "commercial": "warn", "open_source": "warn", "personal": "pass"},
+        "GPL": {"category": "copyleft", "commercial": "warn", "open_source": "pass", "personal": "pass"},
+        "GPL 3.0": {"category": "copyleft", "commercial": "warn", "open_source": "pass", "personal": "pass"},
+        "CC-BY-NC": {"category": "non_commercial", "commercial": "block", "open_source": "warn", "personal": "pass"},
+        "CC-BY-NC 4.0": {"category": "non_commercial", "commercial": "block", "open_source": "warn", "personal": "pass"},
+        "CC-BY-NC-SA": {"category": "non_commercial", "commercial": "block", "open_source": "warn", "personal": "pass"},
+        "CC-BY-ND": {"category": "no_derivatives", "commercial": "warn", "open_source": "warn", "personal": "pass"},
+        "proprietary": {"category": "proprietary", "commercial": "block", "open_source": "block", "personal": "warn"},
+        "all_rights_reserved": {"category": "proprietary", "commercial": "block", "open_source": "block", "personal": "warn"},
+        "unity_asset_store": {"category": "proprietary", "commercial": "warn", "open_source": "block", "personal": "warn"},
+    }
+
+    # ── Normalizar licença ─────────────────────────────────
+    if not license_str or not license_str.strip():
+        return {
+            "status": "error",
+            "message": "Informe a licença do asset. Ex: CC0, MIT, CC-BY, proprietary.",
+            "sugestoes": sorted(LICENSE_COMPAT.keys()),
+        }
+
+    # Normalizar: remover hífens, underscores, múltiplos espaços
+    license_norm = license_str.strip()
+    license_search = re.sub(r'[-_\s]+', ' ', license_norm).strip()
+
+    # Busca: exata → normalizada → fuzzy (prefixo ou substring, min 3 chars)
+    compat = LICENSE_COMPAT.get(license_norm) or LICENSE_COMPAT.get(license_search)
+    if not compat:
+        lower = license_search.lower()
+        for key, val in LICENSE_COMPAT.items():
+            key_lower = key.lower()
+            key_norm = re.sub(r'[-_\s]+', ' ', key_lower).strip()
+            if key_norm == lower or (len(lower) >= 3 and (key_norm.startswith(lower) or lower.startswith(key_norm))):
+                compat = val
+                license_norm = key
+                break
+
+    if not compat:
+        return {
+            "status": "error",
+            "gate": "block",
+            "message": f"Licença '{license_str}' não reconhecida. Use uma das licenças conhecidas ou verifique manualmente.",
+            "sugestoes": sorted(LICENSE_COMPAT.keys()),
+        }
+
+    gate = compat.get(project_license, "warn")
+    category = compat.get("category", "unknown")
+
+    # ── Motivo do gate ─────────────────────────────────────
+    reasons = {
+        "pass": f"Licença {license_norm} ({category}) compatível com projeto {project_license}.",
+        "warn": f"Licença {license_norm} ({category}) requer atenção para projeto {project_license}. Verifique obrigações de atribuição/copyleft.",
+        "block": f"Licença {license_norm} ({category}) INCOMPATÍVEL com projeto {project_license}. NÃO use este asset sem autorização explícita.",
+    }
+
+    # ── Registrar no manifesto ─────────────────────────────
+    manifest_path = proj / "asset_licenses.json"
+    manifest = {}
+    if manifest_path.exists():
+        try:
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except Exception:
+            manifest = {}
+
+    if "assets" not in manifest:
+        manifest["assets"] = {}
+    manifest["assets"][asset_path] = {
+        "license": license_norm,
+        "category": category,
+        "gate": gate,
+        "project_license": project_license,
+        "audited_at": datetime.now().isoformat(),
+    }
+    manifest["updated_at"] = datetime.now().isoformat()
+
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    checkpoint(str(manifest_path.relative_to(proj)), proj)
+    manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    return {
+        "status": "success",
+        "gate": gate,
+        "license": license_norm,
+        "category": category,
+        "asset_path": asset_path,
+        "reason": reasons.get(gate, f"Classificação: {gate}"),
+        "manifest": str(manifest_path.relative_to(proj)) if manifest_path.is_relative_to(proj) else str(manifest_path),
     }

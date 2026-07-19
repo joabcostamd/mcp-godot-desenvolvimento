@@ -1,103 +1,92 @@
-# Copilot Instructions — MCP Godot Agent
+# MCP Godot Agent — AGENTE 01 (Arquitetura & Core)
 
-Este arquivo contém instruções permanentes para a IA agêntica (VS Code Copilot / DeepSeek V4 Pro)
-que opera neste repositório e nos projetos Godot conectados via MCP.
-
-Este documento é o equivalente ao `00-mestre.md` do Cline, adaptado para o Copilot nativo.
-O fluxo de trabalho usa os comandos `/plan` (planejar fatia) e `/act` (implementar + auditar).
+> **Versão:** 3.0.0 | **Sistema:** ROADMAP_UNIFICADO.md v3.0
+> **Agente:** AGENTE 01 — Copilot DeepSeek V4 Pro
+> **Foco:** `server.py`, `core/*`, `tools/deprecated.py`, `tools/registry_validation.py`, `tools/rollups.py`
 
 ---
 
 ## ⚡ ATIVAÇÃO DE GRUPOS VIRTUAIS (INÍCIO DE SESSÃO)
 
-> **Regra fixa:** No início de **toda sessão de trabalho**, antes de qualquer outra ação,
-> verifique se existem tools com prefixo `activate_` visíveis no chat (ex: `activate_scene`,
-> `activate_script`, `activate_art`, etc.). Essas tools são stubs de grupos virtuais criados
-> pelo VS Code Copilot quando o número total de tools do servidor MCP `godot-agent` excede o
-> threshold de 128 — as tools reais do grupo ficam **inacessíveis** até que o stub seja chamado.
->
-> **Procedimento:**
-> 1. Liste as tools disponíveis e identifique TODAS as que começam com `activate_`.
-> 2. Chame **todas** elas, uma por uma, sem exceção.
-> 3. Só então prossiga com o bootstrap normal da sessão (leitura de docs, auditoria, etc.).
->
-> **Exemplo:**
-> ```
-> # Se existirem activate_scene, activate_script, activate_art:
-> 1. Chamar activate_scene → grupo scene expandido
-> 2. Chamar activate_script → grupo script expandido
-> 3. Chamar activate_art → grupo art expandido
-> # Agora as tools reais (scene_manage, safe_write_gdscript, generate_game_art, etc.)
-> # estão acessíveis e a sessão pode prosseguir normalmente.
-> ```
->
-> **Se NÃO existirem tools `activate_*`:** O threshold de virtualização não foi atingido
-> (total de tools ≤ 128 ou o mecanismo não está ativo nesta versão do Copilot).
-> Prossiga com o bootstrap normal — **não invente tools que não existem.**
+> No início de **toda sessão**, verifique se existem tools com prefixo `activate_`.
+> Se existirem, chame TODAS antes de prosseguir.
 
 ---
 
-## 📋 FLUXO DE TRABALHO: /plan → /act
+## 🔄 WORKFLOW AUTÔNOMO
 
-Toda implementação segue dois comandos:
+Quando o humano digitar `/seguir-roadmap`:
 
-| Comando | O que faz | Regra de ouro |
+1. Leia `ROADMAP_UNIFICADO.md` → identifique a PRÓXIMA etapa ⬜ da sua zona (🅰️ AGENTE 01)
+2. Leia `HANDOFF.md` → contexto da sessão anterior
+3. Leia `SUTURE_ISSUES.md` → conflitos pendentes
+4. **Planeje** (modo Agent): pesquise arquivos, confirme escopo, verifique matriz de conflito
+5. **Implemente** EXATAMENTE 1 etapa — edite apenas seus arquivos exclusivos
+6. **Audite**: `validate_tool_registry_consistency()` — se FAIL, corrija (máx 3 tentativas)
+7. **Handoff**: atualize ROADMAP, HANDOFF.md, NEXT_STEP.md
+8. **Commit**: `feat(agente-01-etapa-AX): descrição em português`
+
+---
+
+## 🗂️ ARQUIVOS EXCLUSIVOS (NUNCA EDITAR FORA DESTA LISTA)
+
+| Arquivo | AGENTE 01 |
+|---|---|
+| `server.py` | ✅ Meu |
+| `core/*` | ✅ Meu |
+| `tools/deprecated.py` | ✅ Meu (Sutura — cuidado) |
+| `tools/registry_validation.py` | ✅ Meu |
+| `tools/rollups.py` | ✅ Meu |
+| `tools/*_ops.py` (todos) | ❌ AGENTE 02 |
+| `.github/*` | ❌ AGENTE 02 |
+| `docs/*`, `tests/*` | ❌ AGENTE 02 |
+
+---
+
+## 🏗 REGRAS DE OURO
+
+1. NUNCA remova funções com `# INTERNAL: usado por <rollup>`
+2. NUNCA edite arquivos da Zona de Sutura sem registrar em `SUTURE_ISSUES.md`
+3. Use apenas `addon_bridge.py` (:9082) ou `runtime_bridge_client.py` (:8790)
+4. Rode `validate_tool_registry_consistency()` após QUALQUER mudança em tools
+5. `server.py` deve chegar a ≤ 3500 linhas ao final da Etapa A5
+6. 1 commit por etapa. NUNCA acumular +2 etapas sem commit
+7. Se encontrar conflito → `SUTURE_ISSUES.md`. NUNCA resolva sozinho
+
+---
+
+## 📋 ETAPAS DO AGENTE 01 (em ordem)
+
+| Etapa | Nome | Status |
 |---|---|---|
-| `/plan` | Lê roadmap, verifica suposições, monta plano, **NÃO edita código** | Termina com: "Plano pronto. Digite `/act` para implementar." |
-| `/act` | Implementa, audita (C1-C6), cross-model, grava progresso, fecha ou escala | "Pronto" é o que o portão (`auditar.py`) retornou |
-
-**Regra:** Nunca implemente sem plano. Se o usuário pedir implementação direta, ofereça rodar `/plan` primeiro.
+| A0 | Limpeza Imediata | ✅ |
+| A1 | 5 Namespaces Semânticos | ⬜ |
+| A2 | ExecutionContext | ⬜ |
+| A3 | DATA_CONTRACTS.md | ⬜ |
+| A4 | Intent Router `godot(action)` | ⬜ |
+| A5 | Refatorações Estruturais | ⬜ |
+| A6 | Qualidade MCP Spec | ⬜ |
 
 ---
 
-## 🏗 REGRAS DE TETO DE FERRAMENTAS (TOOL BUDGET)
-
-O servidor MCP tem limite prático de tools visíveis. Estas regras mantêm o projeto dentro do orçamento:
+## 🔒 SEGURANÇA
 
 | Regra | Descrição |
 |---|---|
-| **Rollup-first** | Toda nova capacidade entra como **op dentro de um rollup existente**, NÃO como tool de topo. Só crie tool de topo com justificativa explícita. |
-| **Consolidar** | Se uma fase tem >40 tools visíveis, agrupe atômicas relacionadas em rollups. |
-| **Gate de orçamento** | Teste `test_budget_gate.py` no CI: fase ≤ 40 tools, total ≤ 70. |
-| **Perfil lean** | Modo padrão carrega ferramental base + tools da fase atual. Use `catalog_search` para encontrar tools fora do perfil ativo. |
-| **Meta-tools** | `catalog_search`, `describe_tool`, `invoke_by_name` permitem acesso sob demanda sem poluir o namespace. |
+| **Loopback** | Bridges bindam em `127.0.0.1` — nunca `0.0.0.0` |
+| **Checkpoint ≠ commit** | Checkpoint é rede de segurança. Commit só com aprovação |
+| **Segredos** | Nunca escreva API keys/tokens em arquivos |
+| **Sem auto-aprovar** | Quem aprova é `validate_tool_registry_consistency()` + Joab |
 
 ---
 
-## 🔒 REGRAS DE SEGURANÇA
+## 📏 NOMENCLATURA
 
-| Regra | Descrição |
-|---|---|
-| **Loopback** | Todos os bridges e servidores bindam em `127.0.0.1` — nunca em `0.0.0.0`. |
-| **Checkpoint ≠ commit** | Checkpoint (`git stash`/branch) é rede de segurança automática. Commit só com aprovação humana. |
-| **Nunca commitar sozinho** | Propor commit com mensagem, aguardar confirmação. |
-| **Segredos** | Nunca escreva API keys, tokens ou segredos em arquivos. Use variáveis de ambiente. |
-| **Sem auto-aprovar** | A IA não aprova o próprio código. Quem aprova é o portão (`auditar.py`) + humano. |
+- Tools: snake_case com `_manage` para rollups
+- Funções depreciadas: `# INTERNAL: usado por <rollup>_manage`
+- Commits: `feat(agente-01-etapa-AX): descrição em português`
+- Anotações obrigatórias: `destructiveHint`, `idempotentHint`, `openWorldHint`
 
----
-
-## 📊 CRITÉRIOS DE AUTOAUDITORIA (C1–C6)
-
-Estes 6 critérios são o portão de qualidade. Toda fatia implementada passa por eles:
-
-| # | Nome | O que verifica | Como rodar |
-|---|---|---|---|
-| **C1** | Contrato | Schema não driftou — só a tool/op nova aparece no diff | `auditar.py --c1-before <antes> --c1-after <depois>` |
-| **C2** | Canary | 2-3 chamadas conhecidas com entrada/saída esperada | `auditar.py --canary <arquivo.json>` |
-| **C3** | Regressão | `smoke_test` — nada que passava antes quebrou | `auditar.py` (roda smoke_test internamente) |
-| **C4** | Segurança | Loopback, checkpoint feito, sem segredo, passou por rollup, idempotente | `auditar.py --c4-checklist <json>` |
-| **C5** | Orçamento | Teto de tools ≤ 40/fase, ≤ 70 total | `python tests/test_budget_gate.py` |
-| **C6** | Distinguibilidade | Tool nova não se confunde com nenhuma existente | `auditar.py --tool-name <nome>` |
-
-**Portão completo:** `python auditar.py --fatia <N>`
-
-### Critérios Progressivos (antes do `auditar.py` existir)
-
-Se a Fatia 0.0.5 (`auditar.py`) ainda não foi concluída, execute os critérios manualmente:
-
-- **C1:** Comparar `tools/list` antes/depois manualmente
-- **C2:** Executar canaries manualmente e comparar saída
-- **C3:** Rodar `smoke_test` e verificar resultado
 - **C4:** Checklist manual de segurança
 - **C5:** Contar tools visíveis por fase
 - **C6:** Buscar colisão de nome com `grep_search`

@@ -7,6 +7,7 @@ UI Templates, World Environment.
 import json
 import re
 import subprocess
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -73,7 +74,6 @@ def setup_camera_2d(
     lines = content.splitlines(keepends=True)
 
     # Gerar UID único
-    import uuid
     uid = str(uuid.uuid4()).replace("-", "")[:16]
 
     # Construir nó Camera2D
@@ -1909,7 +1909,6 @@ def add_parallax_layer(
     content = full_path.read_text(encoding="utf-8")
     lines = content.splitlines(keepends=True)
 
-    import uuid
     uid = str(uuid.uuid4()).replace("-", "")[:8]
     if not layer_name:
         layer_name = f"ParallaxLayer_{uid}"
@@ -3993,6 +3992,24 @@ application/icon="{icon_path}"
 # 11.6 — ÁUDIO AVANÇADO
 # ══════════════════════════════════════════════════════════════════════
 
+def _find_tres_dict_end(text: str, start: int) -> int:
+    """Encontra o fim de um dict Godot-style contando brackets balanceados.
+    
+    Dado um texto e a posição da primeira '{', retorna o índice após a '}' 
+    que fecha o dict. Robusto contra dicts aninhados dentro de valores.
+    """
+    depth = 0
+    i = start
+    while i < len(text):
+        if text[i] == '{':
+            depth += 1
+        elif text[i] == '}':
+            depth -= 1
+            if depth == 0:
+                return i + 1
+        i += 1
+    return len(text)
+
 def configure_audio_bus(
     bus_name: str,
     volume_db: float = 0.0,
@@ -4008,8 +4025,11 @@ def configure_audio_bus(
         solo: Modo solo.
 
     Returns:
-        {{"status": "success"}}
+        {"status": "success"}
     """
+    if not bus_name or not bus_name.strip():
+        return {"status": "error", "message": "bus_name não pode ser vazio."}
+
     proj = _get_active_project()
     layout_path = proj / "default_bus_layout.tres"
 
@@ -4027,43 +4047,711 @@ buses = [{{
 '''
         checkpoint("default_bus_layout.tres", proj)
         layout_path.write_text(tres_content, encoding="utf-8")
-    else:
-        content = layout_path.read_text(encoding="utf-8")
-        if bus_name not in content:
-            content = content.replace('buses = [', f'buses = [{{"name": "{bus_name}", "volume_db": {volume_db}, "mute": {'true' if mute else 'false'}}}, ')
-            checkpoint("default_bus_layout.tres", proj)
-            layout_path.write_text(content, encoding="utf-8")
+        mark_pending_compile()
+        return {"status": "success", "bus": bus_name, "volume_db": volume_db, "mute": mute, "solo": solo}
 
-    return {"status": "success", "bus": bus_name, "volume_db": volume_db}
+    content = layout_path.read_text(encoding="utf-8")
+    checkpoint("default_bus_layout.tres", proj)
+
+    if bus_name not in content:
+        content = content.replace(
+            'buses = [',
+            f'buses = [{{"name": "{bus_name}", "volume_db": {volume_db}, '
+            f'"mute": {'true' if mute else 'false'}, '
+            f'"solo": {'true' if solo else 'false'}, '
+            f'"send": "Master"}}, '
+        )
+        layout_path.write_text(content, encoding="utf-8")
+        mark_pending_compile()
+        return {"status": "success", "bus": bus_name, "volume_db": volume_db, "mute": mute, "solo": solo}
+
+    # Bus já existe — atualiza parâmetros
+    bus_start = content.index(f'"name": "{bus_name}"')
+    brace_start = content.rfind('{', 0, bus_start)
+    bus_end = _find_tres_dict_end(content, brace_start)
+    bus_segment = content[bus_start:bus_end]
+    bus_segment_new = bus_segment
+    bus_segment_new = re.sub(r'"volume_db":\s*-?\d+\.?\d*', f'"volume_db": {volume_db}', bus_segment_new)
+    bus_segment_new = re.sub(r'"mute":\s*(true|false)', f'"mute": {'true' if mute else 'false'}'.lower(), bus_segment_new)
+    if '"solo"' in bus_segment_new:
+        bus_segment_new = re.sub(r'"solo":\s*(true|false)', f'"solo": {'true' if solo else 'false'}'.lower(), bus_segment_new)
+    else:
+        bus_segment_new = bus_segment_new.rstrip() + f',\n"solo": {'true' if solo else 'false'}\n'
+    content = content[:bus_start] + bus_segment_new + content[bus_end:]
+    layout_path.write_text(content, encoding="utf-8")
+    mark_pending_compile()
+    return {"status": "success", "bus": bus_name, "volume_db": volume_db, "mute": mute, "solo": solo,
+            "updated": True, "note": f"Bus '{bus_name}' atualizado."}
 
 
 def add_audio_effect(
     bus_name: str,
     effect_type: str = "reverb",
+    **kwargs,
 ) -> dict:
-    """Adiciona efeito de áudio a um bus.
+    """Adiciona efeito de áudio real a um bus no default_bus_layout.tres.
+
+    Grava sub-resources de AudioEffect no arquivo .tres com parâmetros
+    configuráveis. Suporta efeitos: reverb, eq, compressor, delay, chorus,
+    distortion.
 
     Args:
-        bus_name: Nome do bus.
-        effect_type: "reverb", "delay", "chorus", "distortion", "eq".
+        bus_name: Nome do bus (Master, SFX, Music, Voice, etc.).
+        effect_type: Tipo de efeito — "reverb", "eq", "compressor",
+                     "delay", "chorus", "distortion".
+        **kwargs: Parâmetros específicos do efeito:
+            reverb: room_size (0-1), damping (0-1), wet (0-1)
+            eq: bands (list[dict{type, freq, gain, bandwidth}])
+            compressor: threshold (-60-0), ratio (1-20), attack_us (20-2000)
+            delay: feedback (0-1), tap1_ms (50-2000)
+            chorus: depth (0-1), rate (0.1-10), mix (0-1)
+            distortion: drive (0-1), keep_hf (0-1)
 
     Returns:
-        {{"status": "success"}}
+        {"status": "success", "bus": str, "effect": str, "effect_id": str}
     """
-    effect_map = {
-        "reverb": "AudioEffectReverb",
-        "delay": "AudioEffectDelay",
-        "chorus": "AudioEffectChorus",
-        "distortion": "AudioEffectDistortion",
-        "eq": "AudioEffectEQ",
+    proj = _get_active_project()
+    layout_path = proj / "default_bus_layout.tres"
+
+    # ── Mapa de classes e parâmetros padrão ──────────────────
+    effect_configs = {
+        "reverb": {
+            "class": "AudioEffectReverb",
+            "defaults": {"room_size": 0.8, "damping": 0.5, "wet": 0.7},
+        },
+        "eq": {
+            "class": "AudioEffectEQ",
+            "defaults": {"bands": [{"type": "lowshelf", "freq": 200.0, "gain": 0.0, "bandwidth": 1.0}]},
+        },
+        "compressor": {
+            "class": "AudioEffectCompressor",
+            "defaults": {"threshold": -12.0, "ratio": 4.0, "attack_us": 1000},
+        },
+        "delay": {
+            "class": "AudioEffectDelay",
+            "defaults": {"feedback": 0.3, "tap1_ms": 300},
+        },
+        "chorus": {
+            "class": "AudioEffectChorus",
+            "defaults": {"depth": 0.5, "rate": 1.5, "mix": 0.5},
+        },
+        "distortion": {
+            "class": "AudioEffectDistortion",
+            "defaults": {"drive": 0.5, "keep_hf": 0.5},
+        },
     }
-    effect_class = effect_map.get(effect_type, "AudioEffectReverb")
+
+    if effect_type not in effect_configs:
+        near = [k for k in effect_configs if k.startswith(effect_type[:2])] or list(effect_configs.keys())
+        return {
+            "status": "error",
+            "message": f"Efeito '{effect_type}' não reconhecido. Disponíveis: {', '.join(sorted(effect_configs.keys()))}.",
+            "sugestões": near,
+        }
+
+    cfg = effect_configs[effect_type]
+    effect_class = cfg["class"]
+    params = {**cfg["defaults"], **kwargs}
+    effect_id = f"{effect_class}_{uuid.uuid4().hex[:8]}"
+
+    # ── Monta linhas do sub_resource ──────────────────────────
+    sub_resource_lines = [f'\n[sub_resource type="{effect_class}" id="{effect_id}"]\n']
+    for key, value in params.items():
+        if key == "bands" and isinstance(value, list):
+            # EQ bands: formato Godot array de dicionários
+            bands_str = []
+            for b in value:
+                bands_str.append(
+                    f'{{"type": "{b.get("type", "lowshelf")}", '
+                    f'"freq": {b.get("freq", 200.0)}, '
+                    f'"gain": {b.get("gain", 0.0)}, '
+                    f'"bandwidth": {b.get("bandwidth", 1.0)}}}'
+                )
+            sub_resource_lines.append(f"bands = [{', '.join(bands_str)}]\n")
+        elif isinstance(value, bool):
+            sub_resource_lines.append(f"{key} = {'true' if value else 'false'}\n")
+        elif isinstance(value, (int, float)):
+            sub_resource_lines.append(f"{key} = {value}\n")
+        elif isinstance(value, str):
+            sub_resource_lines.append(f'{key} = "{value}"\n')
+
+    sub_resource_block = "".join(sub_resource_lines)
+
+    if not layout_path.exists():
+        # ── Criar layout novo com bus + efeito ──────────────
+        checkpoint("default_bus_layout.tres", proj)
+        load_steps = 2  # 1 resource + 1 sub_resource
+        tres_content = (
+            f'[gd_resource type="AudioBusLayout" load_steps={load_steps} format=3 uid=""]\n'
+            f'{sub_resource_block}'
+            f'\n[resource]\n'
+            f'buses = [{{\n'
+            f'"name": "{bus_name}",\n'
+            f'"volume_db": 0.0,\n'
+            f'"send": "Master",\n'
+            f'"effects": [SubResource("{effect_id}")]\n'
+            f'}}]\n'
+        )
+        layout_path.write_text(tres_content, encoding="utf-8")
+        mark_pending_compile()
+        return {"status": "success", "bus": bus_name, "effect": effect_type, "effect_id": effect_id,
+                "note": f"Layout criado com bus '{bus_name}' + {effect_class}."}
+
+    # ── Layout existe — adicionar efeito ao bus ─────────────
+    content = layout_path.read_text(encoding="utf-8")
+    checkpoint("default_bus_layout.tres", proj)
+
+    # Busca o bus pelo nome
+    bus_pattern = re.compile(r'"name":\s*"' + re.escape(bus_name) + r'"')
+    if not bus_pattern.search(content):
+        # Bus não existe — adicionar
+        content = content.replace(
+            'buses = [',
+            f'buses = [{{\n"name": "{bus_name}",\n"volume_db": 0.0,\n"send": "Master",\n'
+            f'"effects": [SubResource("{effect_id}")]\n}}, '
+        )
+    else:
+        # Bus existe — encontrar limites com bracket-counting robusto
+        bus_match = bus_pattern.search(content)
+        bus_start = bus_match.start()
+        # Encontra a '{' que abre o dict do bus
+        brace_start = content.rfind('{', 0, bus_start)
+        bus_end = _find_tres_dict_end(content, brace_start)
+
+        # Extrai o trecho do bus
+        bus_segment = content[bus_start:bus_end]
+
+        if "effects" in bus_segment:
+            # Já tem effects — adiciona ao array existente
+            bus_segment_new = re.sub(
+                r'"effects":\s*\[([^\]]*)\]',
+                rf'"effects": [\1, SubResource("{effect_id}")]',
+                bus_segment,
+            )
+        else:
+            # Adiciona effects depois de send
+            bus_segment_new = bus_segment.rstrip() + f',\n"effects": [SubResource("{effect_id}")]\n'
+
+        content = content[:bus_start] + bus_segment_new + content[bus_end:]
+
+    # Atualiza load_steps e insere sub_resource antes do [resource]
+    current_steps = int(re.search(r'load_steps=(\d+)', content).group(1))
+    new_steps = current_steps + 1
+    content = re.sub(r'load_steps=\d+', f'load_steps={new_steps}', content, count=1)
+
+    # Insere sub_resource antes da seção [resource]
+    if f'id="{effect_id}"' not in content:
+        content = content.replace('\n[resource]', f'{sub_resource_block}\n[resource]', 1)
+
+    layout_path.write_text(content, encoding="utf-8")
+    mark_pending_compile()
+    return {"status": "success", "bus": bus_name, "effect": effect_type, "effect_id": effect_id,
+            "note": f"{effect_class} adicionado ao bus '{bus_name}' com parâmetros configurados."}
+
+
+def route_audio_bus(
+    bus_name: str,
+    send_to: str = "Master",
+    send_db: float = 0.0,
+) -> dict:
+    """Configura roteamento entre buses de áudio.
+
+    Define para qual bus o áudio de `bus_name` será enviado (send).
+    Permite criar hierarquias: SFX → Master, Music → Master,
+    Voice → Master, ou qualquer combinação.
+
+    Args:
+        bus_name: Nome do bus de origem (ex: "SFX").
+        send_to: Nome do bus de destino (ex: "Master").
+        send_db: Nível de envio em decibéis (ex: -3.0).
+
+    Returns:
+        {"status": "success", "bus": str, "send_to": str, "send_db": float}
+    """
+    proj = _get_active_project()
+    layout_path = proj / "default_bus_layout.tres"
+
+    if not layout_path.exists():
+        # Cria layout com o bus roteado
+        checkpoint("default_bus_layout.tres", proj)
+        tres_content = (
+            f'[gd_resource type="AudioBusLayout" load_steps=1 format=3 uid=""]\n'
+            f'\n[resource]\n'
+            f'buses = [{{\n'
+            f'"name": "{bus_name}",\n'
+            f'"volume_db": 0.0,\n'
+            f'"send": "{send_to}",\n'
+            f'"send_db": {send_db}\n'
+            f'}}]\n'
+        )
+        layout_path.write_text(tres_content, encoding="utf-8")
+        mark_pending_compile()
+        return {"status": "success", "bus": bus_name, "send_to": send_to, "send_db": send_db,
+                "note": f"Layout criado: '{bus_name}' → '{send_to}' ({send_db:+}dB)."}
+
+    content = layout_path.read_text(encoding="utf-8")
+    checkpoint("default_bus_layout.tres", proj)
+
+    # Verifica se o bus de origem existe
+    bus_pattern = re.compile(r'"name":\s*"' + re.escape(bus_name) + r'"')
+    if not bus_pattern.search(content):
+        # Adiciona o bus com roteamento
+        content = content.replace(
+            'buses = [',
+            f'buses = [{{\n"name": "{bus_name}",\n"volume_db": 0.0,\n'
+            f'"send": "{send_to}",\n"send_db": {send_db}\n}}, '
+        )
+        layout_path.write_text(content, encoding="utf-8")
+        mark_pending_compile()
+        return {"status": "success", "bus": bus_name, "send_to": send_to, "send_db": send_db,
+                "note": f"Bus '{bus_name}' adicionado com roteamento para '{send_to}'."}
+
+    # Bus existe — atualiza send com bracket-counting robusto
+    bus_match = bus_pattern.search(content)
+    bus_start = bus_match.start()
+    brace_start = content.rfind('{', 0, bus_start)
+    bus_end = _find_tres_dict_end(content, brace_start)
+    bus_segment = content[bus_start:bus_end]
+
+    # Atualiza ou adiciona send e send_db
+    if '"send"' in bus_segment:
+        bus_segment_new = re.sub(r'"send":\s*"[^"]*"', f'"send": "{send_to}"', bus_segment)
+    else:
+        bus_segment_new = bus_segment.rstrip() + f',\n"send": "{send_to}"\n'
+
+    if '"send_db"' in bus_segment_new:
+        bus_segment_new = re.sub(r'"send_db":\s*-?\d+\.?\d*', f'"send_db": {send_db}', bus_segment_new)
+    else:
+        bus_segment_new = bus_segment_new.rstrip() + f',\n"send_db": {send_db}\n'
+
+    content = content[:bus_start] + bus_segment_new + content[bus_end:]
+    layout_path.write_text(content, encoding="utf-8")
+    mark_pending_compile()
+    return {"status": "success", "bus": bus_name, "send_to": send_to, "send_db": send_db,
+            "note": f"Roteamento atualizado: '{bus_name}' → '{send_to}' ({send_db:+}dB)."}
+
+
+def create_spatial_audio_player(
+    scene_path: str,
+    parent_node_path: str = ".",
+    node_name: str = "AudioStreamPlayer3D",
+    audio_file: str = "",
+    unit_size: float = 10.0,
+    attenuation_model: str = "inverse_distance",
+    max_distance: float = 30.0,
+    max_db: float = 3.0,
+    panning_strength: float = 1.0,
+    autoplay: bool = False,
+    db_volume: float = 0.0,
+) -> dict:
+    """Cria um AudioStreamPlayer3D com áudio espacial configurado.
+
+    Adiciona um nó AudioStreamPlayer3D a uma cena existente com
+    parâmetros de atenuação 3D. Suporta os modelos: inverse_distance,
+    logarithmic, disabled. Se audio_file for informado, configura
+    o stream com o arquivo de áudio.
+
+    Args:
+        scene_path: Caminho relativo da cena (.tscn).
+        parent_node_path: Caminho do nó pai ("." = raiz).
+        node_name: Nome do nó.
+        audio_file: Caminho do arquivo de áudio (.mp3, .ogg, .wav).
+        unit_size: Tamanho de 1 unidade no espaço 3D (afeta atenuação).
+        attenuation_model: "inverse_distance", "logarithmic", "disabled".
+        max_distance: Distância máxima em unidades onde o som é audível.
+        max_db: Ganho máximo em dB (volume no ponto mais próximo).
+        panning_strength: Força do panning estéreo (0-3, default 1.0).
+        autoplay: Iniciar automaticamente ao entrar na cena.
+        db_volume: Volume base em dB.
+
+    Returns:
+        {"status": "success", "node_path": str, "spatial": dict}
+    """
+    violation = _check_path(scene_path)
+    if violation:
+        return {"status": "error", "message": violation}
+
+    proj = _get_active_project()
+    full_path = proj / scene_path
+
+    if not full_path.exists():
+        return {"status": "error", "message": f"Cena '{scene_path}' não encontrada."}
+
+    # Valida attenuation_model
+    valid_models = {"inverse_distance": 0, "logarithmic": 1, "disabled": 2}
+    if attenuation_model not in valid_models:
+        return {
+            "status": "error",
+            "message": f"attenuation_model '{attenuation_model}' inválido. Use: {', '.join(valid_models.keys())}.",
+        }
+    atten_enum = valid_models[attenuation_model]
+
+    uid = uuid.uuid4().hex[:12]
+
+    # Lê a cena
+    content = full_path.read_text(encoding="utf-8")
+    lines = content.splitlines(keepends=True)
+
+    # Encontra ponto de inserção após o nó pai
+    insert_line = len(lines)
+    parent_found = parent_node_path == "."
+    for i, line in enumerate(lines):
+        if not parent_found and f'name="{parent_node_path}"' in line and "type=" in line:
+            parent_found = True
+            # Procura o fim do escopo do pai
+            depth = 0
+            for j in range(i, len(lines)):
+                if lines[j].strip().startswith("[node "):
+                    if j > i:
+                        insert_line = j
+                        break
+                insert_line = j + 1
+            break
+
+    if not parent_found and parent_node_path != ".":
+        return {
+            "status": "error",
+            "message": f"Nó pai '{parent_node_path}' não encontrado na cena.",
+        }
+
+    checkpoint(scene_path, proj)
+
+    # Monta nó AudioStreamPlayer3D
+    parent_attr = f' parent="{parent_node_path}"' if parent_node_path != "." else ""
+    node_lines = [
+        f'\n[node name="{node_name}" type="AudioStreamPlayer3D"{parent_attr}]\n',
+        f'editor_description = "AudioStreamPlayer3D via MCP - UID:{uid}"\n',
+        f"unit_size = {unit_size}\n",
+        f"attenuation_model = {atten_enum}\n",
+        f"max_db = {max_db}\n",
+        f"max_distance = {max_distance}\n",
+        f"panning_strength = {panning_strength}\n",
+        f"autoplay = {'true' if autoplay else 'false'}\n",
+        f"volume_db = {db_volume}\n",
+    ]
+
+    # Configura stream se audio_file informado
+    if audio_file:
+        audio_path = Path(audio_file)
+        suffix = audio_path.suffix.lower()
+        if suffix == ".mp3":
+            stream_type = "AudioStreamMP3"
+        elif suffix == ".ogg":
+            stream_type = "AudioStreamOggVorbis"
+        elif suffix == ".wav":
+            stream_type = "AudioStreamWAV"
+        else:
+            return {"status": "error",
+                    "message": f"Formato de áudio '{suffix}' não suportado. Use .mp3, .ogg ou .wav."}
+
+        stream_uid = f"{stream_type}_{uuid.uuid4().hex[:8]}"
+        node_lines.append(f'stream = ExtResource("{stream_uid}")\n')
+
+        # Adiciona [ext_resource] no topo do .tscn (após [gd_scene ...])
+        if f'id="{stream_uid}"' not in content:
+            header_end = re.search(r'\[gd_scene[^\]]*\]', content)
+            if header_end:
+                insert_pos = header_end.end()
+                ext_resource_block = (
+                    f'\n[ext_resource type="{stream_type}" path="{audio_file}" id="{stream_uid}"]\n'
+                )
+                content = content[:insert_pos] + ext_resource_block + content[insert_pos:]
+                # Re-parse lines após inserção do ext_resource
+                lines = content.splitlines(keepends=True)
+                # Recalcula insert_line após mudança no arquivo
+                if parent_node_path == ".":
+                    insert_line = len(lines)
+                else:
+                    insert_line = len(lines)
+                    for i2, line2 in enumerate(lines):
+                        if f'name="{parent_node_path}"' in line2 and "type=" in line2:
+                            for j2 in range(i2, len(lines)):
+                                if lines[j2].strip().startswith("[node "):
+                                    if j2 > i2:
+                                        insert_line = j2
+                                        break
+                                insert_line = j2 + 1
+                            break
+
+    for i, line in enumerate(node_lines):
+        lines.insert(insert_line + i, line)
+
+    # Deduplica e salva
+    seen = set()
+    deduped = []
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("[node "):
+            key = stripped
+            if key in seen:
+                continue
+            seen.add(key)
+        deduped.append(line)
+
+    full_path.write_text("".join(deduped), encoding="utf-8")
+    mark_pending_compile()
+
+    result = {
+        "status": "success",
+        "node_path": f"{scene_path}::{node_name}",
+        "spatial": {
+            "unit_size": unit_size,
+            "attenuation_model": attenuation_model,
+            "max_distance": max_distance,
+            "max_db": max_db,
+            "panning_strength": panning_strength,
+        },
+    }
+    if audio_file:
+        result["audio_file"] = audio_file
+    return result
+
+
+def scan_scene_for_sfx_events(
+    scene_path: str,
+) -> dict:
+    """Varre uma cena .tscn e lista eventos que precisam de SFX.
+
+    Analisa nós comuns que tipicamente emitem som (Button, Area2D,
+    AnimationPlayer, CharacterBody2D, etc.) e verifica se já possuem
+    AudioStreamPlayer associado. Retorna lista de eventos sem som.
+
+    Args:
+        scene_path: Caminho relativo da cena (.tscn).
+
+    Returns:
+        {"status": "success", "events": [...], "total": int,
+         "has_audio": int, "missing_audio": int}
+    """
+    violation = _check_path(scene_path)
+    if violation:
+        return {"status": "error", "message": violation}
+
+    proj = _get_active_project()
+    full_path = proj / scene_path
+
+    if not full_path.exists():
+        return {"status": "error", "message": f"Cena '{scene_path}' não encontrada."}
+
+    content = full_path.read_text(encoding="utf-8")
+
+    # ── Mapa: tipo de nó → evento, SFX e duração sugeridos ──
+    NODE_SFX_MAP = {
+        "Button": {"event": "pressed", "sfx_type": "ui_click", "label": "clique de botão", "duration": 0.08},
+        "CheckButton": {"event": "toggled", "sfx_type": "ui_click", "label": "toggle", "duration": 0.08},
+        "CheckBox": {"event": "toggled", "sfx_type": "ui_click", "label": "checkbox", "duration": 0.08},
+        "OptionButton": {"event": "item_selected", "sfx_type": "ui_click", "label": "dropdown", "duration": 0.08},
+        "Slider": {"event": "value_changed", "sfx_type": "ui_hover", "label": "slider", "duration": 0.1},
+        "Area2D": {"event": "body_entered", "sfx_type": "impact", "label": "área de colisão", "duration": 0.3},
+        "Area3D": {"event": "body_entered", "sfx_type": "impact", "label": "área 3D", "duration": 0.3},
+        "AnimationPlayer": {"event": "animation_finished", "sfx_type": "magic", "label": "animação", "duration": 0.8},
+        "CharacterBody2D": {"event": "damage", "sfx_type": "hit", "label": "dano personagem", "duration": 0.3},
+        "CharacterBody3D": {"event": "damage", "sfx_type": "hit", "label": "dano personagem 3D", "duration": 0.3},
+        "RigidBody2D": {"event": "body_entered", "sfx_type": "impact", "label": "corpo rígido", "duration": 0.3},
+        "RigidBody3D": {"event": "body_entered", "sfx_type": "impact", "label": "corpo rígido 3D", "duration": 0.3},
+        "Timer": {"event": "timeout", "sfx_type": "ui_notification", "label": "timer", "duration": 0.2},
+        "PathFollow2D": {"event": "loop", "sfx_type": "engine", "label": "movimento", "duration": 1.0},
+    }
+
+    # ── Encontra todos os nós e seus tipos ──────────────────
+    node_pattern = re.compile(r'\[node name="([^"]+)" type="([^"]+)"')
+    nodes = [(m.group(1), m.group(2)) for m in node_pattern.finditer(content)]
+
+    # ── Encontra AudioStreamPlayers com parent ──────────────
+    audio_players = set()
+    audio_parents = set()
+    audio_pattern = re.compile(
+        r'\[node name="([^"]+)" type="(AudioStreamPlayer\w*)"[^\]]*parent="([^"]+)"'
+    )
+    for m in audio_pattern.finditer(content):
+        audio_players.add(m.group(1))
+        audio_parents.add(m.group(3))
+    # Captura AudioStreamPlayers SEM parent (raiz da cena) via negative lookahead
+    audio_no_parent = re.compile(
+        r'\[node name="([^"]+)" type="(AudioStreamPlayer\w*)"(?![^\]]*parent=)[^\]]*\]'
+    )
+    for m in audio_no_parent.finditer(content):
+        if m.group(1) not in audio_players:
+            audio_players.add(m.group(1))
+
+    # ── Analisa cada nó ─────────────────────────────────────
+    events = []
+    for node_name, node_type in nodes:
+        if node_type not in NODE_SFX_MAP:
+            continue
+
+        info = NODE_SFX_MAP[node_type]
+
+        # Verifica se tem AudioStreamPlayer como filho DIRETO
+        has_audio = node_name in audio_parents
+
+        events.append({
+            "node": node_name,
+            "type": node_type,
+            "event": info["event"],
+            "sfx_type": info["sfx_type"],
+            "label": info["label"],
+            "has_audio": has_audio,
+            "duration": info.get("duration", 0.3),
+            "frequency": 440.0,
+            "suggested_name": f"sfx_{node_name}_{info['sfx_type']}".replace("/", "_").replace("\\", "_"),
+        })
+
+    missing = [e for e in events if not e["has_audio"]]
+    note = (f"{len(missing)} de {len(events)} eventos sem SFX detectado. "
+            f"Use generate_sfx_batch para gerar.")
+    if missing:
+        note += (" Atencao: apenas AudioStreamPlayers como FILHOS DIRETOS sao detectados. "
+                 "Players em nos netos serao reportados como 'sem audio'.")
+    return {
+        "status": "success",
+        "events": events,
+        "total": len(events),
+        "has_audio": len(events) - len(missing),
+        "missing_audio": len(missing),
+        "missing": missing,
+        "note": note,
+    }
+
+
+def generate_sfx_batch(
+    events: list[dict] | None = None,
+    scene_path: str | None = None,
+    style: str = "scifi",
+    output_dir: str = "assets/sfx",
+    max_sfx: int = 50,
+    max_duration: float = 5.0,
+) -> dict:
+    """Gera SFX em lote para uma lista de eventos.
+
+    Para cada evento sem som, gera um SFX procedural usando
+    generate_audio_sfx() e retorna o resultado consolidado.
+    Pula arquivos que já existem (idempotente).
+
+    Args:
+        events: Lista de eventos [{sfx_type, suggested_name, ...}].
+                Se None, usa scan_scene_for_sfx_events(scene_path).
+        scene_path: Caminho da cena (usado se events=None).
+        style: Estilo sonoro (scifi, fantasia, retro, realista).
+        output_dir: Diretório de saída relativo ao projeto.
+        max_sfx: Máximo de SFX a gerar (segurança).
+        max_duration: Duração máxima por SFX em segundos (segurança).
+
+    Returns:
+        {"status": "success", "total": int, "generated": int,
+         "failed": int, "skipped": int, "results": [...]}
+    """
+    proj = _get_active_project()
+
+    # ── Obter eventos se não fornecidos ─────────────────────
+    if events is None:
+        if scene_path is None:
+            return {"status": "error", "message": "Informe 'events' ou 'scene_path'."}
+        scan_result = scan_scene_for_sfx_events(scene_path)
+        if scan_result["status"] != "success":
+            return scan_result
+        events = scan_result.get("missing", [])
+
+    if not events:
+        return {"status": "success", "total": 0, "generated": 0, "failed": 0, "skipped": 0,
+                "results": [], "note": "Nenhum evento sem som encontrado."}
+
+    # ── Validar output_dir contra path traversal ────────────
+    violation = _check_path_traversal(output_dir, proj)
+    if violation:
+        return {"status": "error", "message": violation}
+
+    # ── Garantir diretório de saída ─────────────────────────
+    sfx_dir = proj / output_dir
+    sfx_dir.mkdir(parents=True, exist_ok=True)
+    checkpoint(str(sfx_dir), proj)
+
+    # ── Gerar SFX para cada evento ──────────────────────────
+    from tools.placeholder_ops import generate_audio_sfx
+
+    results = []
+    generated = 0
+    failed = 0
+    skipped = 0
+    limit = min(len(events), max_sfx)
+
+    for i, event in enumerate(events[:limit]):
+        sfx_type = event.get("sfx_type", "beep")
+        name = event.get("suggested_name", f"sfx_{sfx_type}_{i}")
+        # Sanitizar nome contra path traversal
+        name = str(name).replace("/", "_").replace("\\", "_").replace("..", "_")
+        save_path = f"{output_dir}/{name}.wav"
+
+        # Idempotente: pular se arquivo já existe
+        if (proj / save_path).exists():
+            skipped += 1
+            results.append({
+                "node": event.get("node", ""),
+                "event": event.get("event", ""),
+                "sfx_type": sfx_type,
+                "saved_to": save_path,
+                "status": "skipped",
+                "note": "Arquivo já existe.",
+            })
+            continue
+
+        # Limitar duração por segurança
+        duration = min(event.get("duration", 0.3), max_duration)
+
+        try:
+            r = generate_audio_sfx(
+                name=name,
+                sfx_type=sfx_type,
+                duration=duration,
+                frequency=event.get("frequency", 440.0),
+                style=style,
+                save_path=save_path,
+            )
+            if r.get("status") == "success":
+                generated += 1
+            else:
+                failed += 1
+            results.append({
+                "node": event.get("node", ""),
+                "event": event.get("event", ""),
+                "sfx_type": sfx_type,
+                "saved_to": r.get("saved_to", save_path),
+                "status": r.get("status", "error"),
+                "error": r.get("message", ""),
+            })
+        except ImportError:
+            failed += 1
+            results.append({
+                "node": event.get("node", ""),
+                "event": event.get("event", ""),
+                "sfx_type": sfx_type,
+                "saved_to": save_path,
+                "status": "error",
+                "error": "numpy nao instalado. SFX procedural requer numpy. Instale com: pip install numpy",
+            })
+        except Exception as e:
+            failed += 1
+            results.append({
+                "node": event.get("node", ""),
+                "event": event.get("event", ""),
+                "sfx_type": sfx_type,
+                "saved_to": save_path,
+                "status": "error",
+                "error": f"{type(e).__name__}: {e}",
+            })
+
+    if generated > 0:
+        mark_pending_compile()
 
     return {
         "status": "success",
-        "bus": bus_name,
-        "effect": effect_type,
-        "note": f"Configure manualmente o {effect_class} no editor de áudio do Godot. A API de AudioEffect via arquivo é limitada.",
+        "total": limit,
+        "generated": generated,
+        "failed": failed,
+        "skipped": skipped,
+        "style": style,
+        "output_dir": output_dir,
+        "results": results,
     }
 
 
@@ -4762,8 +5450,28 @@ def get_tool_defs() -> list[dict]:
         },
         {
             "name": "add_audio_effect",
-            "description": "Adiciona efeito de áudio a um bus: reverb, delay, chorus, distortion, eq.",
-            "inputSchema": {"type": "object", "properties": {"bus_name": {"type": "string"}, "effect_type": {"type": "string", "enum": ["reverb", "delay", "chorus", "distortion", "eq"]}}, "required": ["bus_name", "effect_type"]},
+            "description": "Adiciona efeito de áudio real a um bus: reverb, eq, compressor, delay, chorus, distortion. Grava AudioEffect como sub-resource no default_bus_layout.tres com parâmetros configuráveis.",
+            "inputSchema": {"type": "object", "properties": {"bus_name": {"type": "string"}, "effect_type": {"type": "string", "enum": ["reverb", "delay", "chorus", "distortion", "eq", "compressor"]}, "room_size": {"type": "number"}, "damping": {"type": "number"}, "wet": {"type": "number"}, "threshold": {"type": "number"}, "ratio": {"type": "number"}}, "required": ["bus_name", "effect_type"]},
+        },
+        {
+            "name": "route_audio_bus",
+            "description": "Configura roteamento entre buses de áudio. Define para qual bus o áudio será enviado e com qual nível (send_db). Permite criar hierarquias: SFX→Master, Music→Master.",
+            "inputSchema": {"type": "object", "properties": {"bus_name": {"type": "string", "description": "Nome do bus de origem (ex: 'SFX')."}, "send_to": {"type": "string", "description": "Nome do bus de destino (ex: 'Master')."}, "send_db": {"type": "number", "description": "Nível de envio em dB."}}, "required": ["bus_name"]},
+        },
+        {
+            "name": "create_spatial_audio_player",
+            "description": "Cria um AudioStreamPlayer3D com áudio espacial configurado. Suporta atenuação (inverse_distance, logarithmic, disabled), distância máxima, panning e vinculação de arquivo de áudio.",
+            "inputSchema": {"type": "object", "properties": {"scene_path": {"type": "string", "description": "Caminho da cena (.tscn)."}, "parent_node_path": {"type": "string", "description": "Caminho do nó pai."}, "node_name": {"type": "string", "description": "Nome do nó."}, "audio_file": {"type": "string", "description": "Caminho do arquivo de áudio (.mp3, .ogg, .wav)."}, "unit_size": {"type": "number", "description": "Tamanho de 1 unidade 3D."}, "attenuation_model": {"type": "string", "enum": ["inverse_distance", "logarithmic", "disabled"]}, "max_distance": {"type": "number", "description": "Distância máxima audível."}, "max_db": {"type": "number", "description": "Ganho máximo em dB."}, "panning_strength": {"type": "number", "description": "Força do panning."}, "autoplay": {"type": "boolean"}, "db_volume": {"type": "number", "description": "Volume base em dB."}}, "required": ["scene_path"]},
+        },
+        {
+            "name": "scan_scene_for_sfx_events",
+            "description": "Varre uma cena .tscn e lista todos os nós que precisam de SFX mas não têm som associado (Button, Area2D, AnimationPlayer, CharacterBody2D, etc.). Retorna lista de eventos com sfx_type sugerido.",
+            "inputSchema": {"type": "object", "properties": {"scene_path": {"type": "string", "description": "Caminho da cena (.tscn)."}}, "required": ["scene_path"]},
+        },
+        {
+            "name": "generate_sfx_batch",
+            "description": "Gera SFX em lote para uma lista de eventos (ou varredura automática de cena). Usa generate_audio_sfx internamente. Suporta 23 tipos de SFX procedural. Ideal para popular um jogo inteiro com sons.",
+            "inputSchema": {"type": "object", "properties": {"events": {"type": "array", "items": {"type": "object"}, "description": "Lista de eventos [{sfx_type, suggested_name, ...}]."}, "scene_path": {"type": "string", "description": "Caminho da cena (alternativa a events)."}, "style": {"type": "string", "description": "Estilo: scifi, fantasia, retro, realista."}, "output_dir": {"type": "string", "description": "Diretório de saída."}, "max_sfx": {"type": "integer", "description": "Máximo de SFX a gerar."}}, "required": []},
         },
         # G.1 — Visual Feedback Loop
         {
@@ -4831,6 +5539,10 @@ def get_handler_map() -> dict:
         "configure_export_preset": configure_export_preset,
         "configure_audio_bus": configure_audio_bus,
         "add_audio_effect": add_audio_effect,
+        "route_audio_bus": route_audio_bus,
+        "create_spatial_audio_player": create_spatial_audio_player,
+        "scan_scene_for_sfx_events": scan_scene_for_sfx_events,
+        "generate_sfx_batch": generate_sfx_batch,
         # G.1 — Visual Feedback Loop
         "visual_feedback_check": visual_feedback_check,
     }

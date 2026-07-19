@@ -903,8 +903,8 @@ def _anim_description(category: str, anim_type: str, frames: int) -> str:
 def _build_sprite_frames_tres(
     frame_paths: list[str], anim_name: str, fps: float, loop: bool
 ) -> str:
-    """Constroi arquivo SpriteFrames .tres."""
-    lines = ['[gd_resource type="SpriteFrames" load_steps={} format=2]'.format(
+    """Constroi arquivo SpriteFrames .tres (Godot 4.x format=3)."""
+    lines = ['[gd_resource type="SpriteFrames" load_steps={} format=3 uid=""]'.format(
         len(frame_paths) + 1), ""]
 
     # ExtResources
@@ -933,3 +933,252 @@ def _build_sprite_frames_tres(
 def _get_style(category: str) -> str:
     """Estilo visual por categoria."""
     return "scifi"
+
+
+def generate_sprite_animation(
+    category: str = "character",
+    anim_type: str = "idle",
+    num_frames: int = 4,
+    scene_path: str | None = None,
+    parent_node_path: str = ".",
+    node_name: str = "",
+    fps: float = 8.0,
+    loop: bool = True,
+    frame_width: int = 64,
+    frame_height: int = 64,
+    output_dir: str = "assets/animations",
+    style_desc: str = "",
+) -> dict:
+    """Gera animação de sprite com frames consistentes (esqueleto).
+
+    Gera N frames de arte mantendo o mesmo personagem/esqueleto entre
+    frames, monta spritesheet, cria arquivo .tres de SpriteFrames e
+    opcionalmente configura um AnimatedSprite2D na cena.
+
+    Args:
+        category: Categoria do asset (character, enemy, torre, etc.).
+        anim_type: Tipo de animação (idle, walk, attack, death, fire, run, spawn, hit).
+        num_frames: Número de frames (2-16).
+        scene_path: Cena onde criar AnimatedSprite2D (None = só gera arquivos).
+        parent_node_path: Nó pai na cena.
+        node_name: Nome do AnimatedSprite2D (auto-gerado se vazio).
+        fps: Frames por segundo da animação.
+        loop: Se a animação repete.
+        frame_width: Largura de cada frame.
+        frame_height: Altura de cada frame.
+        output_dir: Diretório de saída relativo ao projeto.
+        style_desc: Descrição de estilo visual (usa style_lock se vazio).
+
+    Returns:
+        {"status": "success", "spritesheet": str, "tres_file": str,
+         "total_frames": int, "node_path": str (se scene_path)}
+    """
+    from tools.runtime_ops import mark_pending_compile
+    from tools.safety import checkpoint
+    from tools.art_postprocess import create_spritesheet
+
+    proj = _get_active_project()
+
+    # ── Validar parâmetros ──────────────────────────────────
+    if num_frames < 2 or num_frames > 16:
+        return {"status": "error", "message": "num_frames deve ser entre 2 e 16."}
+
+    valid_anims = {"idle", "walk", "attack", "death", "fire", "run", "spawn", "hit"}
+    if anim_type not in valid_anims:
+        return {"status": "error",
+                "message": f"anim_type '{anim_type}' inválido. Use: {', '.join(sorted(valid_anims))}."}
+
+    violation = _check_path_traversal(output_dir, proj)
+    if violation:
+        return {"status": "error", "message": violation}
+
+    # ── Resolver style ──────────────────────────────────────
+    if not style_desc:
+        try:
+            from tools.project_brief_ops import get_project_brief
+            br = get_project_brief()
+            if br.get("configured") and br.get("brief"):
+                sl = br["brief"].get("style_lock", {})
+                style_desc = sl.get("reference", "") or sl.get("art_type", "") or ""
+        except Exception:
+            pass
+    if not style_desc:
+        style_desc = "pixel art game sprite" if frame_width <= 64 else "2D game art"
+
+    # ── Estilo de arte por anim_type ────────────────────────
+    ANIM_PROMPTS = {
+        "idle": f"same character, same skeleton, subtle idle pose, gentle motion, frame {{n}} of {num_frames}",
+        "walk": f"same character, same skeleton, walk cycle, frame {{n}} of {num_frames}",
+        "attack": f"same character, same skeleton, attack swing, frame {{n}} of {num_frames}",
+        "death": f"same character, same skeleton, death animation, frame {{n}} of {num_frames}",
+        "fire": f"same character, same skeleton, firing weapon, frame {{n}} of {num_frames}",
+        "run": f"same character, same skeleton, running cycle, frame {{n}} of {num_frames}",
+        "spawn": f"same character, same skeleton, spawn/appear, frame {{n}} of {num_frames}",
+        "hit": f"same character, same skeleton, hit reaction, frame {{n}} of {num_frames}",
+    }
+
+    uid = uuid.uuid4().hex[:8]
+    anim_dir = proj / output_dir / f"{category}_{anim_type}_{uid}"
+    anim_dir.mkdir(parents=True, exist_ok=True)
+    checkpoint(str(anim_dir), proj)
+
+    # ── Gerar frames ────────────────────────────────────────
+    frame_paths = []
+    for n in range(1, num_frames + 1):
+        frame_prompt = ANIM_PROMPTS.get(anim_type, ANIM_PROMPTS["idle"]).format(n=n)
+        full_prompt = f"{style_desc}, {category}, {frame_prompt}"
+
+        # Tentar generate_game_art (API externa)
+        try:
+            result = generate_game_art(
+                category=category,
+                description=full_prompt,
+                style=style_desc,
+                frames=1,
+                width=frame_width,
+                height=frame_height,
+            )
+        except Exception:
+            result = {"status": "error", "message": "generate_game_art falhou"}
+
+        if result.get("status") == "success":
+            # Salvar frame do base64 ou usar placeholder
+            saved = _save_frame_from_result(result, anim_dir, n, frame_width, frame_height)
+            if saved:
+                frame_paths.append(str(saved.relative_to(proj)))
+                continue
+
+        # Fallback: placeholder procedural
+        placeholder = _generate_placeholder_frame(anim_dir, n, frame_width, frame_height, category)
+        frame_paths.append(str(placeholder.relative_to(proj)))
+
+    # ── Montar spritesheet ──────────────────────────────────
+    spritesheet_path = f"{output_dir}/{category}_{anim_type}_{uid}/spritesheet.png"
+    sheet_result = create_spritesheet(
+        frame_paths=frame_paths,
+        output_path=spritesheet_path,
+        frame_width=frame_width,
+        frame_height=frame_height,
+        columns=num_frames,
+    )
+
+    # ── Gerar .tres de SpriteFrames ─────────────────────────
+    tres_path = f"{output_dir}/{category}_{anim_type}_{uid}/sprite_frames.tres"
+    tres_content = _build_sprite_frames_tres(
+        frame_paths=frame_paths,
+        anim_name=anim_type,
+        fps=fps,
+        loop=loop,
+    )
+    (proj / tres_path).write_text(tres_content, encoding="utf-8")
+
+    result = {
+        "status": "success",
+        "spritesheet": spritesheet_path if sheet_result.get("status") == "success" else None,
+        "tres_file": tres_path,
+        "total_frames": num_frames,
+        "frame_paths": frame_paths,
+    }
+
+    # ── Criar AnimatedSprite2D na cena (opcional) ───────────
+    if scene_path:
+        node = node_name or f"Anim{category.title()}{anim_type.title()}"
+        try:
+            from tools.scene_ops import add_node, set_node_property
+            node_result = add_node(
+                scene_path=scene_path,
+                parent_node_path=parent_node_path,
+                node_name=node,
+                node_type="AnimatedSprite2D",
+            )
+            if node_result.get("status") == "success":
+                set_node_property(
+                    scene_path=scene_path,
+                    node_path=node_result.get("node_path", node),
+                    property_name="sprite_frames",
+                    value=f"res://{tres_path}",
+                )
+                result["node_path"] = node_result.get("node_path", f"{scene_path}::{node}")
+                result["node_name"] = node
+        except Exception:
+            result["node_note"] = "Falha ao criar AnimatedSprite2D na cena."
+
+    mark_pending_compile()
+    return result
+
+
+def _save_frame_from_result(result: dict, out_dir, n: int, w: int, h: int) -> "Path | None":
+    """Salva frame a partir do resultado de generate_game_art."""
+    out_dir = Path(out_dir)
+
+    # 1) Tentar base64 (DALL-E direto, Recraft, etc.)
+    b64 = result.get("image_base64", "") or result.get("image", "")
+    if b64:
+        try:
+            data = base64.b64decode(b64)
+            fp = out_dir / f"frame_{n:03d}.png"
+            fp.write_bytes(data)
+            return fp
+        except Exception:
+            pass
+
+    # 2) Tentar frames gerados por generate_game_art (lista de paths)
+    frames = result.get("frames", [])
+    if frames:
+        frame_path = Path(str(frames[0]))
+        if frame_path.exists():
+            fp = out_dir / f"frame_{n:03d}.png"
+            shutil.copy2(str(frame_path), str(fp))
+            return fp
+
+    # 3) Tentar sprite_sheet (extrair frame do grid)
+    sprite_sheet = result.get("sprite_sheet") or result.get("spritesheet")
+    if sprite_sheet and Path(str(sprite_sheet)).exists():
+        try:
+            from PIL import Image
+            grid = result.get("grid", [1, 1])
+            fw = result.get("frame_width", w)
+            fh = result.get("frame_height", h)
+            sheet = Image.open(str(sprite_sheet))
+            col = (n - 1) % grid[0]
+            row = (n - 1) // grid[0]
+            x, y = col * fw, row * fh
+            frame = sheet.crop((x, y, x + fw, y + fh))
+            fp = out_dir / f"frame_{n:03d}.png"
+            frame.save(fp, "PNG")
+            return fp
+        except Exception:
+            pass
+
+    # 4) Tentar saved_to / file_path / save_path (legado)
+    for key in ("saved_to", "file_path", "save_path"):
+        path_str = result.get(key, "")
+        if path_str and Path(str(path_str)).exists():
+            fp = out_dir / f"frame_{n:03d}.png"
+            shutil.copy2(str(path_str), str(fp))
+            return fp
+
+    return None
+
+
+def _generate_placeholder_frame(out_dir, n: int, w: int, h: int, category: str) -> "Path":
+    """Gera frame placeholder procedural via Pillow."""
+    out_dir = Path(out_dir)
+    try:
+        from PIL import Image, ImageDraw
+        img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(img)
+        colors = [(255, 100, 100), (100, 255, 100), (100, 100, 255), (255, 255, 100)]
+        c = colors[(n - 1) % len(colors)]
+        margin = 4
+        draw.rectangle([margin, margin, w - margin, h - margin], fill=c, outline=(255, 255, 255))
+        # Número do frame
+        draw.text((w // 2 - 8, h // 2 - 8), str(n), fill=(0, 0, 0))
+        fp = out_dir / f"frame_{n:03d}.png"
+        img.save(fp, "PNG")
+        return fp
+    except ImportError:
+        # Fallback mínimo sem Pillow
+        fp = out_dir / f"frame_{n:03d}.png"
+        fp.write_bytes(b"")
+        return fp

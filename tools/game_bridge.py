@@ -1,6 +1,6 @@
 """game_bridge — Cliente TCP para comunicação com o jogo em execução.
 
-Conecta ao mcp_runtime_bridge (autoload, runtime_bridge.gd) via TCP localhost:9081/8790.
+Conecta ao MCPRuntimeBridge (autoload, runtime_bridge.gd) via TCP localhost:8790.
 Protocolo: JSON-RPC 2.0 line-delimited.
 Usado por inject_input_event, execute_gdscript_runtime, watch_signal.
 """
@@ -16,16 +16,16 @@ ROOT = Path(__file__).resolve().parent.parent
 
 _socket = None
 _connected: bool = False
-PORT: int = 9081
+PORT: int = 8790
 
 
 def _get_port() -> int:
     """Lê a porta do game bridge da configuração."""
     try:
         from tools.config_loader import load_config
-        return load_config().get("game_port", 9081)
+        return load_config().get("game_port", 8790)
     except Exception:
-        return 9081
+        return 8790
 
 
 def _get_timeout() -> int:
