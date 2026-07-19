@@ -1327,11 +1327,16 @@ def _apply_hints(tools: list) -> list:
 # ══════════════════════════════════════════════════════════════
 
 def _compact_description(description: str, max_chars: int = 120) -> str:
-    """Encurta descricao mantendo a informacao essencial."""
+    """Encurta descricao mantendo a informacao essencial.
+
+    NUNCA retorna string vazia — se a compactacao falhar, retorna o original.
+    """
     import re
     if not description or len(description) <= max_chars:
         return description
     first_sentence = re.split(r'[.]\s+(?:Quando|Pré|Pre|Exemplo|Erro)', description)[0].strip()
+    if not first_sentence:
+        return description  # fallback: nao retorna vazio
     if len(first_sentence) > max_chars:
         parts = first_sentence.split('. ')
         result = ''
@@ -1341,17 +1346,19 @@ def _compact_description(description: str, max_chars: int = 120) -> str:
             else:
                 break
         first_sentence = result.strip()
+    if not first_sentence:
+        return description  # fallback
     if first_sentence and first_sentence[-1] not in '.!?':
         first_sentence += '.'
     return first_sentence[:max_chars]
 
 
 def _compact_all_tool_descriptions(tools: list) -> list:
-    """Encurta descricoes de todas as tools."""
+    """Encurta descricoes de todas as tools. Nunca zera uma descricao."""
     for tool in tools:
         original = tool.description or ""
         compact = _compact_description(original)
-        if len(compact) < len(original):
+        if compact and len(compact) < len(original):
             tool.description = compact
     return tools
 
