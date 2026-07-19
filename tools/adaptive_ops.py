@@ -8,7 +8,6 @@ Ferramentas para ajuste dinâmico de gameplay:
 """
 
 from pathlib import Path
-from typing import Any
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -152,7 +151,9 @@ def quest_generate(args: dict | None = None) -> dict:
         title += location
         objectives = [obj.format(location=location, count=rng.randint(3, 6)) for obj in template["objectives"]]
 
-    level = rng.randint(*level_range) if len(level_range) == 2 else level_range[0]
+    if not level_range:
+        return {"status": "error", "message": "level_range nao pode ser vazio."}
+    level = rng.randint(*level_range) if len(level_range) >= 2 else level_range[0]
     rewards = template["rewards"].copy()
     if difficulty == "hard":
         rewards["xp"] = int(rewards["xp"] * 1.5)

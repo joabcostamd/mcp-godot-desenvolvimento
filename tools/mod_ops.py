@@ -7,7 +7,6 @@ Ferramentas para criar e validar sistemas de modding:
 """
 
 from pathlib import Path
-from typing import Any
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -116,8 +115,8 @@ def validate_mod_compatibility(args: dict | None = None) -> dict:
     # Validação de versão (semver simplificado)
     mod_min = mod_manifest.get("target_game_version", "0.0.0")
     try:
-        mod_parts = [int(x) for x in mod_min.split(".")]
-        game_parts = [int(x) for x in game_version.split(".")]
+        mod_parts = ([int(x) for x in mod_min.split(".")] + [0, 0, 0])[:3]
+        game_parts = ([int(x) for x in game_version.split(".")] + [0, 0, 0])[:3]
         if game_parts < mod_parts:
             issues.append({
                 "severity": "error",

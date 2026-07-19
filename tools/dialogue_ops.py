@@ -9,7 +9,6 @@ Modela dialogo/quest como grafo direcionado e aplica DFS.
 """
 
 import json
-import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -348,6 +347,8 @@ def dialogue_generate_npc_lines(args: dict | None = None) -> dict:
     npc_type = args.get("npc_type", "aldeao")
     scenario = args.get("scenario", "greeting")
     count = min(args.get("count", 3), 10)
+    if count < 1:
+        return {"status": "error", "message": "count deve ser >= 1."}
     npc_name = args.get("npc_name", "")
 
     if npc_type not in _NPC_PERSONALITIES:
