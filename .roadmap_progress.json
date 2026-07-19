@@ -153,7 +153,23 @@
     "0.7b+": "consolidar godot_* e outras fases",
     "Camada_1": "CONCLUIDA (16/16)",
     "Camada_2_proximo": "2.5 Regressao visual [ESCALADA] — Camada 2 completa (2.2 concluida)",
-    "Camada_3_proximo": "3.9 Asset placement [SENIOR] (3.1-3.4 escaladas, 3.5-3.8 concluidas)"
+    "Camada_3_proximo": "3.10 Audio engine [SENIOR] (3.1-3.9 concluidas/escaladas)"
+  },
+  "fatia_3.9": {
+    "status": "concluida",
+    "data": "2026-07-19",
+    "tentativa": 1,
+    "resultado": "CATEGORY_NODE_MAP: 30+ categorias mapeadas para tipo de no Godot (AnimatedSprite2D, Sprite2D, TileMapLayer, TextureRect, GPUParticles2D). _resolve_asset_node(category) retorna tipo automatico. apply_game_art ganhou category= param; se informado, retorna suggested_node. Default: Sprite2D para categorias nao mapeadas. +69 linhas.",
+    "c1": "pass — 48 tools, zero mudanca",
+    "c2": "pass — 6/6 mapeamentos corretos, category param presente, smoke OK",
+    "c3": "pass — smoke_test 5/5",
+    "c4": "pass — sem rede, sem segredo, modulo interno, idempotente",
+    "c5": "pre_existente — 48 tools",
+    "c6": "pass — sem tool nova",
+    "cross_model": "fraca — [SENIOR] requer revisao humana do mapeamento",
+    "arquivos_modificados": [
+      "tools/art_ops.py (+CATEGORY_NODE_MAP, +_resolve_asset_node, +category param — +69 linhas)"
+    ]
   },
   "fatia_3.7": {
     "status": "concluida",

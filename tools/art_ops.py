@@ -401,6 +401,62 @@ def generate_game_art(
 # APLICACAO NO GODOT
 # ══════════════════════════════════════════════════════════════════
 
+# ── Fatia 3.9: Asset placement inteligente ────────────
+
+CATEGORY_NODE_MAP: dict[str, str] = {
+    # Personagens e entidades animadas
+    "personagem": "AnimatedSprite2D",
+    "character": "AnimatedSprite2D",
+    "inimigo": "AnimatedSprite2D",
+    "enemy": "AnimatedSprite2D",
+    "boss": "AnimatedSprite2D",
+    "npc": "AnimatedSprite2D",
+    # Torres/estruturas
+    "torre": "Sprite2D",
+    "tower": "Sprite2D",
+    "estrutura": "Sprite2D",
+    "structure": "Sprite2D",
+    # Ambiente e tiles
+    "bioma": "TileMapLayer",
+    "biome": "TileMapLayer",
+    "tile": "TileMapLayer",
+    "ambiente": "TileMapLayer",
+    "environment": "TileMapLayer",
+    "chao": "TileMapLayer",
+    "ground": "TileMapLayer",
+    # UI / HUD
+    "ui": "TextureRect",
+    "hud": "TextureRect",
+    "menu": "TextureRect",
+    "icon": "TextureRect",
+    "icone": "TextureRect",
+    "botao": "TextureButton",
+    "button": "TextureButton",
+    # Projéteis / VFX
+    "projetil": "Sprite2D",
+    "projectile": "Sprite2D",
+    "vfx": "Sprite2D",
+    "particula": "GPUParticles2D",
+    # Fundo
+    "fundo": "TextureRect",
+    "background": "TextureRect",
+}
+
+
+def _resolve_asset_node(category: str) -> str:
+    """Retorna o tipo de no Godot para uma categoria de asset (Fatia 3.9).
+
+    Args:
+        category: Categoria do asset (personagem, torre, ui, etc).
+
+    Returns:
+        Nome do tipo de no Godot (ex: 'AnimatedSprite2D', 'Sprite2D').
+        Default: 'Sprite2D' para categorias nao mapeadas.
+    """
+    cat = category.strip().lower().replace(" ", "_").replace("-", "_")
+    return CATEGORY_NODE_MAP.get(cat, "Sprite2D")
+
+
 def apply_game_art(
     frame_paths: list[str],
     scene_path: str,
@@ -408,21 +464,24 @@ def apply_game_art(
     anim_name: str = "default",
     fps: float = 10.0,
     loop: bool = True,
+    category: str = "",
 ) -> dict:
-    """Aplica a arte gerada num AnimatedSprite2D do Godot.
+    """Aplica a arte gerada num AnimatedSprite2D do Godot (Fatia 3.9: placement automatico).
 
     Importa cada frame, cria/atualiza SpriteFrames e configura a animacao.
 
     Args:
         frame_paths: Lista de caminhos relativos dos frames no projeto.
         scene_path: Caminho da cena (.tscn).
-        node_path: Caminho do no AnimatedSprite2D.
+        node_path: Caminho do no destino.
         anim_name: Nome da animacao.
         fps: Frames por segundo da animacao.
         loop: Se a animacao faz loop.
+        category: Categoria do asset (Fatia 3.9). Se informada, _resolve_asset_node()
+                  sugere o tipo de no automaticamente (ex: 'personagem' → AnimatedSprite2D).
 
     Returns:
-        {"status": "success", "anim_name": str, "frame_count": int}
+        {"status": "success", "anim_name": str, "frame_count": int, "suggested_node": str|None}
     """
     from tools.asset_ops import import_texture
     from tools.scene_ops import set_node_property
@@ -459,13 +518,19 @@ def apply_game_art(
     set_node_property(scene_path, node_path, "animation", anim_name)
     set_node_property(scene_path, node_path, "playing", True)
 
-    return {
+    result = {
         "status": "success",
         "anim_name": anim_name,
         "frame_count": len(imported),
         "sprite_frames_path": sf_path,
         "message": f"Animacao '{anim_name}' com {len(imported)} frames aplicada em {node_path}",
     }
+
+    # ── Fatia 3.9: sugerir tipo de no ──────────────────
+    if category:
+        result["suggested_node"] = _resolve_asset_node(category)
+
+    return result
 
 
 # ══════════════════════════════════════════════════════════════════
