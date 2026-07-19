@@ -250,20 +250,26 @@ Nota: Meta original ≤3500 — faltam 211 linhas. Extração inviável sem queb
 | 3 — Criação com Fosso | ✅ 16/16 (3.1-3.4 escaladas) |
 | B1 (4.1) — i18n testing | ✅ |
 | B2 (4.2) — CI Verificação | ✅ |
-| B3 (4.3) — gdtoolkit Gate | 🔶 |
+| B3 (4.3) — gdtoolkit Gate | ✅ |
+| B4 (4.4) — Análises Específicas | ✅ |
+| B5 (4.5) — Segurança Supply-Chain | ✅ |
+| B6 (4.6) — agent_manage | ✅ |
+| B7 (4.7) — Save Schema + Migração | ✅ |
+| B8 (4.8) — Dead-End Detection | ✅ |
+| B9 (4.9) — Documentação Automática | ✅ |
 
-### ⬜ Camada 4 — Extensões de Processo (6 pendentes)
+### ✅ Camada 4 — Extensões de Processo (9/9 concluída)
 
 | Etapa | Nome | Arquivos | ⏱ | Depende |
 |---|---|---|---|---|
 | B2 (4.2) | CI Verificação [AUTO] | `.github/workflows/verification.yml` | 45m | Nenhuma | ✅ |
-| B3 (4.3) | gdtoolkit Gate [SÊNIOR] | `tools/code_quality_ops.py`, `.gdlintrc` | 90m | Nenhuma | 🔶 |
-| B4 (4.4) | Análises Específicas [SÊNIOR] | `tools/code_quality_ops.py` +9 ops | 2h | B3 |
-| B5 (4.5) | Segurança Supply-Chain [SÊNIOR] | `tools/security_ops.py` +3 ops | 1h | Nenhuma |
-| B6 (4.6) | agent_manage [SÊNIOR] | `tools/agent_ops.py` novo | 2h | Nenhuma |
-| B7 (4.7) | Save Schema + Migração [SÊNIOR] | `tools/devsolo_ops.py` +2 ops | 1.5h | Nenhuma |
-| B8 (4.8) | Dead-End Quest/Diálogo [SÊNIOR] | `tools/devsolo_ops.py` +2 ops | 1.5h | Nenhuma |
-| B9 (4.9) | Documentação Automática [AUTO] | Rollup novo/docs | 45m | Nenhuma |
+| B3 (4.3) | gdtoolkit Gate [SÊNIOR] | `tools/code_quality_ops.py`, `.gdlintrc` | 90m | Nenhuma | ✅ |
+| B4 (4.4) | Análises Específicas [SÊNIOR] | `tools/code_quality_ops.py` +9 ops | 2h | B3 | ✅ |
+| B5 (4.5) | Segurança Supply-Chain [SÊNIOR] | `tools/security_ops.py` +3 ops | 1h | Nenhuma | ✅ |
+| B6 (4.6) | agent_manage [SÊNIOR] | `tools/agent_ops.py` novo | 2h | Nenhuma | ✅ |
+| B7 (4.7) | Save Schema + Migração [SÊNIOR] | `tools/gamestate_ops.py` novo | 1.5h | Nenhuma | ✅ |
+| B8 (4.8) | Dead-End Detection [SÊNIOR] | `tools/dialogue_ops.py` novo | 1.5h | Nenhuma | ✅ |
+| B9 (4.9) | Documentação Automática [AUTO] | `tools/doc_ops.py` novo | 45m | Nenhuma | ✅ |
 
 ### Camadas 5-7 (Futuro — só com aprovação do Joab)
 

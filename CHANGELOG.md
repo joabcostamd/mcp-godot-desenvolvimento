@@ -1,5 +1,40 @@
 # CHANGELOG — mcp-godot-desenvolvimento
 
+## v3.4.0 (2026-07-19) — Camada 4: Extensões de Processo (AGENTE 02)
+
+### B2 — CI Verificação
+- `.github/workflows/verification.yml` — pipeline com 7 jobs (budget, snapshot, governor, syntax, regressão, audit, summary)
+- Permissions com menor privilégio, concurrency, timeout-minutes, cache pip
+
+### B3 — gdtoolkit Gate
+- `tools/code_quality_ops.py` — gdlint 4.5.0 + gdformat + gdradon integrados como gate no `run_verification_pipeline`
+- `.gdlintrc` — configuração YAML com limiares (80 linhas/função, CC≤10, god_class detection)
+- `requirements.txt` — `gdtoolkit>=4.0,<5.0`
+- 19/19 testes automatizados
+
+### B4 — Análises Específicas (9 ops)
+- `find_unused_functions`, `detect_gdscript_antipatterns`, `find_orphan_signals_nodes`, `check_naming_convention`
+- `find_duplicate_code_blocks`, `detect_scene_reference_cycles`, `check_import_settings_consistency`
+- `semantic_code_search`, `suggest_refactor`
+
+### B5 — Segurança Supply-Chain
+- `tools/security_ops.py` — `scan_addon_vulnerabilities` (12 padrões), `check_addon_license` (19 tipos, regex)
+- 15 edge case + 25 license accuracy tests
+
+### B6 — agent_manage
+- `tools/agent_ops.py` — 8 funções: file lock, task queue, peer review, compare outputs, context pack, onboarding
+
+### B7 — Save Schema + Migração
+- `tools/gamestate_ops.py` — `generate_save_schema`, `migrate_save` (rename, add, remove, transform)
+
+### B8 — Dead-End Detection
+- `tools/dialogue_ops.py` — `find_dialogue_dead_ends` (DFS, ciclos), `validate_quest_completion`
+
+### B9 — Documentação Automática
+- `tools/doc_ops.py` — `generate_changelog`, `generate_project_readme`, `generate_project_wiki`
+
+---
+
 ## v3.3.1 (2026-07-14) — Blocos 1-3 + Smoke Test
 
 ### Bloco 1 — Auditoria de Wiring (3 ferramentas)
