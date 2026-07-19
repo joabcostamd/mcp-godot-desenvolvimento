@@ -68,6 +68,13 @@ TOOLSETS = {
         "create_parallax_background", "add_parallax_layer", "create_spritesheet",
         "create_path_2d", "create_patrol_route",
         "loot_table_generate",
+        # Operações atômicas de cena (complementam os rollups)
+        "raycast_manage",
+        "add_raycast_2d", "add_shapecast_2d",
+        "create_joint_2d",
+        "create_light_2d", "create_light_3d",
+        "create_navigation_agent_2d", "create_navigation_region_2d",
+        "setup_camera_2d",
     ],
     "assets": [
         # Assets, arte, áudio, shaders, VFX
@@ -88,6 +95,11 @@ TOOLSETS = {
         "terrain_generate", "wave_generate",
         # Juice/Polimento visual
         "juice_apply", "juice_list_presets",
+        # Operações atômicas de assets (complementam os rollups)
+        "configure_particles_2d", "create_particles_2d", "create_particles_3d",
+        "configure_standard_material_3d",
+        "generate_shader_2d",
+        "import_3d_model",
     ],
     "runtime": [
         # Execução, debug, testes, bridge, jogo rodando
