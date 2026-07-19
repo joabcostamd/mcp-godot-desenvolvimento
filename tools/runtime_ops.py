@@ -27,6 +27,23 @@ _buffer_lock = threading.Lock()
 
 _pending_compile: bool = False
 
+# ── Não-intrusão (Fatia 1.6) ──────────────────────────────────────
+# Default: modo silencioso. Todas as tools têm intrusiveHint=False.
+# Subprocessos usam SW_HIDE por padrão. Só run_game pode ser intrusivo.
+
+def _get_startup_info(silent: bool = True):
+    """Retorna STARTUPINFO com SW_HIDE (silencioso) ou SW_MINIMIZE (visível).
+
+    Fatia 1.6: modo silencioso é o default — consistente com
+    intrusiveHint=False em todas as 45 tools.
+    """
+    if os.name != "nt":
+        return None
+    startup = subprocess.STARTUPINFO()
+    startup.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+    startup.wShowWindow = 0 if silent else 6  # SW_HIDE : SW_MINIMIZE
+    return startup
+
 
 def mark_pending_compile() -> None:
     """Marca que o projeto precisa de compilação (UID, import, etc).
@@ -262,11 +279,7 @@ def run_game(scene_path: str | None = None, wait_for_bridge: bool = True) -> dic
 
     try:
         # ── Modo invisível: não rouba foco, não atrapalha o usuário ──
-        startup = None
-        if os.name == "nt":  # Windows
-            startup = subprocess.STARTUPINFO()
-            startup.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-            startup.wShowWindow = 6  # SW_MINIMIZE — minimizado na barra de tarefas
+        startup = _get_startup_info(silent=True)
 
         _game_process = subprocess.Popen(
             cmd,
@@ -610,12 +623,36 @@ def is_editor_open() -> bool:
     return _editor_open
 
 
+# ── Debounce re-import (Fatia 1.7) ────────────────────────────────
+_debounce_timer: threading.Timer | None = None
+_DEBOUNCE_MS = 0.5  # 500ms
+
+
 def notify_file_change(file_path: str) -> None:
-    """Notifica editor sobre mudança (regra coexistência A/B)."""
+    """Notifica editor sobre mudanca com debounce de 500ms.
+
+    Acumula chamadas e so dispara rescan_filesystem apos 500ms
+    de inatividade — evita re-imports excessivos em edicoes em lote.
+    """
+    global _debounce_timer
     if not _editor_open:
         return
-    from tools.editor_bridge import rescan_filesystem
-    rescan_filesystem()
+
+    # Cancela timer anterior e reinicia
+    if _debounce_timer is not None:
+        _debounce_timer.cancel()
+    _debounce_timer = threading.Timer(_DEBOUNCE_MS, _do_rescan)
+    _debounce_timer.daemon = True
+    _debounce_timer.start()
+
+
+def _do_rescan() -> None:
+    """Executa o rescan_filesystem (chamado pelo timer de debounce)."""
+    try:
+        from tools.editor_bridge import rescan_filesystem
+        rescan_filesystem()
+    except Exception:
+        pass
 
 
 # ── Fase 6: Game Bridge (runtime) ────────────────────────────────────
@@ -1174,4 +1211,25 @@ def record_gameplay_gif(
                 "note": "PIL nao instalado — retornando frames PNG em vez de GIF. Instale Pillow para GIF: pip install Pillow",
             }
 
+
+def visual_regression(args=None):
+    import shutil; from pathlib import Path; args=args or {}
+    sp=args.get("scene_path"); th=args.get("threshold",1.0); bn=args.get("baseline_name","baseline")
+    proj=_get_active_project(); bd=proj/"captures"/"baselines"; bd.mkdir(parents=True,exist_ok=True); bf=bd/f"{bn}.png"
+    if not bf.exists():
+        cap=capture_game_screenshot(scene_path=sp) if sp else capture_game_screenshot()
+        if cap.get("status")!="success": return {"status":"error","message":f"Falha: {cap.get('message','')}"}
+        shutil.copy2(str(Path(cap["image_path"])),str(bf))
+        return {"status":"baseline_saved","baseline_path":str(bf),"message":"Baseline salvo."}
+    cap=capture_game_screenshot(scene_path=sp) if sp else capture_game_screenshot()
+    if cap.get("status")!="success": return {"status":"error","message":f"Falha: {cap.get('message','')}"}
+    cp=Path(cap["image_path"]); tb=proj/"captures"/f"_rb_{bn}.png"; tc=proj/"captures"/f"_rc_{bn}.png"
+    shutil.copy2(str(bf),str(tb)); shutil.copy2(str(cp),str(tc))
+    cmp=compare_screenshots(before_path=f"captures/_rb_{bn}.png",after_path=f"captures/_rc_{bn}.png")
+    tb.unlink(missing_ok=True); tc.unlink(missing_ok=True)
+    if cmp.get("status")!="success": return {"status":"error","message":f"Comparação: {cmp.get('message','')}"}
+    m=cmp["metrics"]; dp=m.get("difference_percent",100.0); passed=dp<=th
+    r={"status":"success","passed":passed,"difference_percent":round(dp,2),"threshold":th,"metrics":m}
+    r["message" if passed else "recommendation"]=f"OK - {dp:.2f}%" if passed else f"Diferença {dp:.1f}% > {th}%."
+    return r
 

@@ -156,6 +156,7 @@ TOOL_PROFILES = {
         "import_asset_manifest", "create_asset_manifest",
         # ── Phase management (Feature 8: tool_list_changed) ──
         "get_current_phase", "advance_phase", "get_phase_history",
+        "get_next_step", "resume_session",
     ],
     "lean": [
         "ping", "health_check", "self_test", "bootstrap_godot_mcp",
@@ -164,6 +165,7 @@ TOOL_PROFILES = {
         "catalog_search", "describe_tool", "invoke_by_name",
         # ── Phase management ──
         "get_current_phase", "advance_phase", "get_phase_history",
+        "get_next_step", "resume_session",
     ],
     "full": [],  # vazio = sem filtro (todas as tools)
 }
@@ -332,6 +334,7 @@ PHASE_ORDER_FILTER = ["IDEIA", "DESIGN", "PROTOTIPO", "CONTEUDO", "POLIMENTO", "
 PHASE_TOOLS_CORE = {
     "ping", "health_check", "self_test", "bootstrap_godot_mcp",
     "get_current_phase", "advance_phase", "get_phase_history",
+    "get_next_step", "resume_session",
     "read_file", "write_file", "file_manage",
     "safe_write_gdscript", "script_manage",
     "project_manage", "project_status",
@@ -341,6 +344,7 @@ PHASE_TOOLS_CORE = {
     "scene_manage", "node_manage",
     "validate_project_refs", "find_usages",
     "create_entity", "create_entities",
+    "project_progress",
 }
 
 
@@ -976,8 +980,8 @@ from tools.shader_editor_ops import read_shader, edit_shader, get_shader_params
 from tools.vfx_ops import create_particles_2d
 
 # ── Fase 1 do Roadmap: Máquina de Estados ───────────────────────
-from tools.phase_ops import get_current_phase, advance_phase, get_phase_history, get_next_step, set_cache_invalidator
-from tools.milestone_ops import create_milestone_plan, advance_milestone, get_milestone_plan
+from tools.phase_ops import get_current_phase, advance_phase, get_phase_history, get_next_step, resume_session, set_cache_invalidator
+from tools.milestone_ops import create_milestone_plan, advance_milestone, get_milestone_plan, project_progress
 
 # Feature 8: registrar callback de invalidação de cache
 set_cache_invalidator(_invalidate_tool_caches)
@@ -1193,6 +1197,10 @@ def _apply_hints(tools: list) -> list:
                 name in _HINT_RULES["openWorld"]["exact"]
             )
             ann['openWorldHint'] = is_openworld
+
+        # intrusiveHint (Fatia 1.6) — default: modo silencioso
+        if 'intrusiveHint' not in ann:
+            ann['intrusiveHint'] = False
 
         tool.annotations = ann
 
@@ -3828,6 +3836,20 @@ def _tool_defs() -> list[Tool]:
             ),
             inputSchema={"type": "object", "properties": {}},
         ),
+        # ── Fatia 1.8: resume_session ──────────────────────────
+        Tool(
+            name="resume_session",
+            description=(
+                "Recuperacao de sessao: le o estado persistente do projeto "
+                "(fase, milestone, roadmap de fatias) e devolve um resumo "
+                "unificado de onde voce parou + qual o proximo passo. "
+                "Use no inicio de sessao para retomar contexto sem precisar "
+                "colar documentos manualmente. Combina get_next_step (fase) "
+                "+ roadmap de fatias (.roadmap_progress.json) + milestone atual. "
+                "Somente leitura — nao altera estado. GRATIS."
+            ),
+            inputSchema={"type": "object", "properties": {}},
+        ),
         # ── Feature 5: Project Brief ────────────────────────────
         Tool(
             name="set_project_brief",
@@ -3910,6 +3932,14 @@ def _tool_defs() -> list[Tool]:
         Tool(
             name="get_milestone_plan",
             description="Mostra o plano completo de milestones + progresso (total, concluidos, pendentes, %). GRATIS.",
+            inputSchema={"type": "object", "properties": {}},
+        ),
+        # ── Fatia 1.14: project_progress ─────────────────────
+        Tool(
+            name="project_progress",
+            description="Termometro visual do milestone atual: barra de progresso ASCII, "
+                        "percentual, mensagem motivacional e proximo milestone pendente. "
+                        "Use para ver 'quanto falta' e manter motivacao. GRATIS.",
             inputSchema={"type": "object", "properties": {}},
         ),
         Tool(
@@ -4895,10 +4925,12 @@ def _build_handlers() -> dict:
         "advance_phase": advance_phase,
         "get_phase_history": get_phase_history,
         "get_next_step": get_next_step,
+        "resume_session": resume_session,
         # Fase 1 do Roadmap: Milestone Plan
         "create_milestone_plan": create_milestone_plan,
         "advance_milestone": advance_milestone,
         "get_milestone_plan": get_milestone_plan,
+        "project_progress": project_progress,
         # Feature 5: Project Brief
         "set_project_brief": set_project_brief,
         "get_project_brief": get_project_brief,
@@ -5038,7 +5070,7 @@ SESSION_ALWAYS_ALLOWED = {
     "safety_manage", "dump_mcp_state",
     "tool_catalog", "tool_groups",
     "get_current_phase", "get_phase_history",
-    "get_next_step",
+    "get_next_step", "resume_session",
 }
 
 

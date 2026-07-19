@@ -184,3 +184,29 @@ def profile_memory(track_objects: bool = True) -> dict:
         result["message"] = f"Erro ao coletar metricas: {e}. O jogo esta rodando?"
 
     return result
+
+
+def perf_regression_track(args=None):
+    args=args or {}
+    action=args.get("action","compare"); bn=args.get("baseline_name","perf_baseline")
+    th=args.get("thresholds",{}); ft=th.get("fps_pct",0.85); mt=th.get("memory_pct",1.20); dt=th.get("draw_calls_pct",1.30)
+    bd=ROOT/"captures"/"baselines"; bd.mkdir(parents=True,exist_ok=True); bf=bd/f"{bn}.json"
+    if action=="save_baseline":
+        try: frame=profile_frame(sample_frames=60); mem=profile_memory(track_objects=False)
+        except Exception as e: return {"status":"error","message":f"Falha: {e}"}
+        bl={"fps_avg":frame.get("fps",{}).get("avg",0),"fps_min":frame.get("fps",{}).get("min",0),"draw_calls":frame.get("draw_calls",0),"memory_mb":frame.get("memory_mb",0),"static_memory_mb":mem.get("memory",{}).get("static_mb",0),"grade":frame.get("grade","?"),"timestamp":__import__("datetime").datetime.now().isoformat()}
+        bf.write_text(_json.dumps(bl,ensure_ascii=False,indent=2),encoding="utf-8")
+        return {"status":"baseline_saved","baseline_path":str(bf),"metrics":bl,"message":"Baseline salvo."}
+    if not bf.exists(): return {"status":"error","message":"Rode action='save_baseline'."}
+    try: bl=_json.loads(bf.read_text(encoding="utf-8")); frame=profile_frame(sample_frames=60); mem=profile_memory(track_objects=False)
+    except Exception as e: return {"status":"error","message":f"Falha: {e}"}
+    cur={"fps_avg":frame.get("fps",{}).get("avg",0),"fps_min":frame.get("fps",{}).get("min",0),"draw_calls":frame.get("draw_calls",0),"memory_mb":frame.get("memory_mb",0),"static_memory_mb":mem.get("memory",{}).get("static_mb",0),"grade":frame.get("grade","?")}
+    regs=[]
+    bfps,cfps=bl.get("fps_avg",0),cur.get("fps_avg",0)
+    if bfps>0 and cfps<bfps*ft: regs.append({"metric":"fps_avg","baseline":bfps,"current":cfps,"change_pct":round((cfps-bfps)/bfps*100,1)})
+    bm,cm=bl.get("memory_mb",0),cur.get("memory_mb",0)
+    if bm>0 and cm>bm*mt: regs.append({"metric":"memory_mb","baseline":bm,"current":cm,"change_pct":round((cm-bm)/bm*100,1)})
+    bd2,cd2=bl.get("draw_calls",0),cur.get("draw_calls",0)
+    if bd2>0 and cd2>bd2*dt: regs.append({"metric":"draw_calls","baseline":bd2,"current":cd2,"change_pct":round((cd2-bd2)/bd2*100,1)})
+    passed=len(regs)==0
+    return {"status":"success","passed":passed,"regressions":regs,"baseline_metrics":bl,"current_metrics":cur,"thresholds":{"fps_pct":ft,"memory_pct":mt,"draw_calls_pct":dt},"message":"Sem regressões." if passed else f"{len(regs)} regressões."}

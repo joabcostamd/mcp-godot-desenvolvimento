@@ -131,6 +131,66 @@ def is_any_connected() -> bool:
     return _editor_connected or _game_connected
 
 
+# ══════════════════════════════════════════════════════════════════════
+# Dispatch "Editor-Aberto-Primeiro" (Fatia 1.1)
+# ══════════════════════════════════════════════════════════════════════
+
+def dispatch_operation(editor_fn, headless_fn, *args, **kwargs):
+    """Política de dispatch: editor aberto → bridge vivo; fechado → headless.
+
+    Esta é a implementação formal do dispatch "editor-aberto-primeiro"
+    da Fatia 1.1. Centraliza a decisão de roteamento para todas as
+    operações de cena/nó/entidade.
+
+    Args:
+        editor_fn: Função a chamar quando editor está aberto (via bridge).
+        headless_fn: Função a chamar quando editor está fechado (headless/arquivo).
+        *args, **kwargs: Argumentos repassados para a função escolhida.
+
+    Returns:
+        Resultado da função escolhida, com metadado de dispatch.
+    """
+    # Verifica editor bridge primeiro (modo direto, sem reiniciar processo)
+    if is_editor_connected():
+        result = editor_fn(*args, **kwargs)
+        if isinstance(result, dict):
+            result["_dispatch"] = "editor-bridge"
+        return result
+
+    # Verifica addon bridge como segunda opção
+    try:
+        from tools.addon_bridge import get_bridge
+        addon = get_bridge()
+        if addon.is_editor_open():
+            result = editor_fn(*args, **kwargs)
+            if isinstance(result, dict):
+                result["_dispatch"] = "addon-bridge"
+            return result
+    except Exception:
+        pass
+
+    # Fallback: headless/arquivo
+    result = headless_fn(*args, **kwargs)
+    if isinstance(result, dict):
+        result["_dispatch"] = "headless"
+    return result
+
+
+def should_use_bridge() -> bool:
+    """Verifica se alguma bridge está disponível para modo direto.
+
+    Returns:
+        True se editor ou addon bridge estão conectados.
+    """
+    if is_editor_connected():
+        return True
+    try:
+        from tools.addon_bridge import get_bridge
+        return get_bridge().is_editor_open()
+    except Exception:
+        return False
+
+
 # ── Low-Level Send ───────────────────────────────────────────────────
 
 # B18 FIX: Buffer de acumulacao para mensagens TCP fragmentadas

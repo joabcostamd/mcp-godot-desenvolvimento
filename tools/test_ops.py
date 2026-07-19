@@ -1068,3 +1068,87 @@ def _capture_state() -> dict:
         state["git"] = {"error": "git indisponível"}
 
     return state
+
+
+_RECURSION_GUARD = {"smoke_test","regression_test","run_scripted_tests","dump_mcp_state","estimate_tool_tokens","run_verification_pipeline","debugger_status","debugger_get_stack","debugger_get_variables","debugger_set_breakpoint","debugger_step"}
+_SMOKE_SKIP_HEAVY = {"create_entity","create_entities","safe_write_gdscript","capture_proof","verify_proof","deploy_itch","build_csharp","export_manage","read_console_output"}
+_MINIMAL_ARGS: dict[str, dict | None] = {"read_file":{"path":"project.godot"},"write_file":{"path":"_smoke_test.txt","content":"smoke","mode":"create"},"validate_gdscript_syntax":{"code":"extends Node\nfunc _ready():\n    pass\n"},"godot_class_ref":{"class_name":"Node"},"gdd_generate":{"concept":"test","game_type":"tower_defense"},"advance_phase":{"force":True,"reason":"smoke test"},"scene_manage":{"op":"load_tree"},"node_manage":{"op":"get_property","node_path":".","property_name":"name"},"script_manage":{"op":"validate","script_path":"scripts/_smoke.gd"},"file_manage":{"op":"read","path":"project.godot"},"project_manage":{"op":"status"},"safety_manage":{"op":"list_backups"},"validate_project_refs":{},"find_usages":{"target":"project.godot"},"tool_groups":{"action":"list"},"bootstrap_godot_mcp":{"target":"validate_only"},"configure_export_preset":{},"release_checklist":{},"create_asset_manifest":{},"generate_project_structure":{},"create_milestone_plan":{"genero":"tower_defense","force":True},"addon_connect":None,"addon_disconnect":None,"addon_ping":None,"addon_is_available":None,"addon_get_scene_tree":None,"addon_take_screenshot":None,"addon_create_node":None,"addon_delete_node":None,"addon_set_property":None,"addon_reparent_node":None,"addon_duplicate_node":None,"addon_batch_edit":None,"set_project_brief":{"genre":"tower_defense","art_style":"scifi","force":True}}
+_SYNTHETIC_HANDLERS = {"ping","health_check","self_test","validate_gdscript_syntax","write_file","safe_write_gdscript","run_gut_tests","git_commit_checkpoint","godot_class_ref","compile_test","read_file","dump_mcp_state","godot_screenshot","godot_runtime_info","audit_uid_consistency","audit_save_compatibility","audit_input_map","audit_autoloads","audit_scene_reachability","capture_proof","verify_proof"}
+_TIER1_MAP = {"scene_manage":"success","node_manage":"success","script_manage":"error","file_manage":"success","project_manage":"success","asset_manage":"success","audio_manage":"success","anim_manage":"success","tilemap_manage":"success","safety_manage":"success","create_entity":"success"}
+
+def test_coverage_report(args=None):
+    args=args or {}
+    try: from server import _tool_defs; tools=_tool_defs()
+    except Exception as e: return {"status":"error","message":str(e)}
+    t1,ss,sr=[],[],[]; sm,sh,nc=[],[],[]
+    for tool in tools:
+        n=tool.name
+        if n in _RECURSION_GUARD: sm.append(n); continue
+        if n in _SMOKE_SKIP_HEAVY: sh.append(n); continue
+        if n in _TIER1_MAP: t1.append(n); continue
+        if n in _SYNTHETIC_HANDLERS: ss.append(n); continue
+        if n in _MINIMAL_ARGS and _MINIMAL_ARGS[n] is not None: sr.append(n); continue
+        nc.append(n)
+    total=len(tools); cov=len(t1)+len(ss)+len(sr); sk=len(sm)+len(sh); ts=total-sk
+    p=round(cov/max(total,1)*100,1); pe=round(cov/max(ts,1)*100,1)
+    ls=[f"Cobertura: {p}% ({cov}/{total})",f"Excl. skip: {pe}% ({cov}/{ts})","",f"Tier-1: {len(t1)} | Sint: {len(ss)} | Real: {len(sr)}",f"Sem: {len(nc)}"]
+    if nc: ls.append(f"  -> {', '.join(sorted(nc))}")
+    return {"status":"success","total_tools":total,"coverage_percent":p,"coverage_percent_excluding_skipped":pe,"coverage":{"tier1":{"count":len(t1),"tools":sorted(t1)},"smoke_synthetic":{"count":len(ss),"tools":sorted(ss)},"smoke_real":{"count":len(sr),"tools":sorted(sr)},"skipped_meta":{"count":len(sm),"tools":sorted(sm)},"skipped_heavy":{"count":len(sh),"tools":sorted(sh)},"none":{"count":len(nc),"tools":sorted(nc)}},"summary":"\n".join(ls)}
+
+def generate_test_cases_from_gdd(args=None):
+    args=args or {}; gdd=args.get("gdd"); concept=args.get("concept",""); game_type=args.get("game_type","tower_defense")
+    if gdd is None:
+        if not concept:
+            from tools.project_brief_ops import get_project_brief; br=get_project_brief()
+            if br.get("configured") and br.get("brief"): concept=br["brief"].get("concept",""); game_type=br["brief"].get("game_type",game_type)
+        if not concept: return {"status":"error","message":"Forneça concept+game_type, gdd, ou project_brief."}
+        from tools.balance_ops import gdd_generate; gdd_r=gdd_generate(concept=concept,game_type=game_type)
+        if gdd_r.get("status")!="success": return {"status":"error","message":f"GDD: {gdd_r.get('message','')}"}
+        gdd=gdd_r["gdd"]; source="gdd_generated"
+    else: source="gdd_provided"
+    tc=[]; gp=gdd.get("gameplay",{}); wl=gdd.get("win_lose",{}); bal=gdd.get("balance",{}); ct=gdd.get("content_scope",{}); tec=gdd.get("technical",{})
+    mech=gp.get("mechanics",[])
+    if isinstance(mech,str): mech=[mech]
+    elif not isinstance(mech,list): mech=[]
+    met=bal.get("metrics",[])
+    if isinstance(met,str): met=[met]
+    elif not isinstance(met,list): met=[]
+    try: from resources.game_patterns import GAME_PATTERNS; gk=game_type.lower().strip().replace(" ","_").replace("-","_"); pat=GAME_PATTERNS.get(gk,{})
+    except: pat={}
+    gn=pat.get("description",f"jogo de {game_type}"); gi=pat.get("inputs",["interação padrão"]); cb=pat.get("common_bugs",[])
+    ctrs={"funcional":0,"vitoria":0,"derrota":0,"balanceamento":0,"integracao":0,"escopo":0,"tecnico":0,"regressao":0}
+    def _id(c): ctrs[c]+=1; px={"funcional":"FUNC","vitoria":"VIT","derrota":"DER","balanceamento":"BAL","integracao":"INT","escopo":"ESC","tecnico":"TEC","regressao":"REG"}; return f"TC-{px.get(c,c[:3].upper())}-{ctrs[c]:03d}"
+    def _a(c,r,w,i,e,p="medium",pr=""): tc.append({"id":_id(c),"category":c,"priority":p,"requirement":r,"what_to_verify":w,"preconditions":pr or "Jogo iniciado.","input":i,"expected_output":e})
+    h=gi[0] if gi else "interação"
+    for m in mech: _a("funcional",m,f"'{m}' em {gn}.",f"{m} com {h}.",f"'{m}' OK.","critical")
+    win=wl.get("win",""); lose=wl.get("lose","")
+    if win: _a("vitoria",f"Vitória: {win}",f"Verificar: {win}.",f"Jogar: {win}.","Vitória OK.","high")
+    if lose: _a("derrota",f"Derrota: {lose}",f"Verificar: {lose}.",f"Jogar: {lose}.","Derrota OK.","high")
+    for mt in met: _a("balanceamento",f"Métrica: {mt}",f"Balancear '{mt}'.",f"Variar '{mt}'.",f"'{mt}' OK.","medium")
+    cl=gp.get("core_loop","")
+    if cl: _a("integracao",f"Core: {cl}","Loop sem quebras.",f"Partida: {cl}.","Transições OK.","high","Nova partida.")
+    for k,(lb,wh,ip,pr) in {"estimated_levels":("Níveis",f"~{ct.get('estimated_levels','?')}","Contar.","medium"),"enemy_types":("Inimigos",f"{ct.get('enemy_types','?')}","Listar.","medium"),"bosses":("Chefões",f"{ct.get('bosses','?')}","Listar.","low"),"items_powerups":("Itens",f"{ct.get('items_powerups','?')}","Listar.","low"),"estimated_playtime":("Playtime",f"{ct.get('estimated_playtime','?')}","Cronometrar.","low")}.items():
+        v=ct.get(k)
+        if v: _a("escopo",f"Escopo — {lb}: {v}",wh,ip,f"{lb} OK.",pr)
+    fps=tec.get("target_fps")
+    if fps: _a("tecnico",f"FPS: {fps}",f"≥{fps} FPS.","Build release.",f"≥{fps} FPS.","high","Build release.")
+    res=tec.get("resolution","")
+    if res: _a("tecnico",f"Res: {res}",f"Render {res}.",f"Iniciar {res}.","OK.","medium")
+    for bug in cb: _a("regressao",f"Bug: {bug}",f"'{bug}' NÃO ocorre.",f"Cenário: {bug}.",f"'{bug}' ausente.","high","Build recente.")
+    return {"status":"success","gdd_title":gdd.get("title",concept or "GDD"),"gdd_genre":gdd.get("genre",game_type),"source":source,"test_case_count":len(tc),"categories":sorted(set(t["category"] for t in tc)),"test_cases":tc,"message":f"{len(tc)} casos ({len(ctrs)} categorias)."}
+
+def run_canary_queries(args=None):
+    args=args or {}; cp=Path(str(args.get("canary_file",str(ROOT/"tests"/"canary_queries.json"))))
+    if not cp.exists(): return {"status":"error","message":f"Arquivo não encontrado: {cp}"}
+    try: data=_json.loads(cp.read_text(encoding="utf-8")); canaries=data.get("canaries",[])
+    except Exception as e: return {"status":"error","message":f"Erro: {e}"}
+    if not canaries: return {"status":"error","message":"Nenhuma canary."}
+    results=[]
+    for c in canaries:
+        tool=c.get("tool","???"); cargs=c.get("args",{}); exp=c.get("expect",{})
+        try: actual=_invoke_tool_synthetic(tool,cargs)
+        except Exception as e: results.append({"tool":tool,"passed":False,"expected":exp,"actual":{"status":"crash","error":str(e)[:200]}}); continue
+        passed,failures=_validate_result(actual,exp)
+        results.append({"tool":tool,"passed":passed,"expected":exp,"actual":actual,"failures":failures})
+    pc=sum(1 for r in results if r["passed"]); fc=len(results)-pc
+    return {"status":"success","total":len(results),"passed":pc,"failed":fc,"results":results,"summary":f"Canaries: {pc}/{len(results)}."+(f" Falhas: {[r['tool'] for r in results if not r['passed']]}" if fc else "")}

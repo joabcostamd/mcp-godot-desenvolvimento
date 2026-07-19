@@ -216,3 +216,472 @@ def game_world_settings(
         return {"status":"success","gravity_2d":ProjectSettings.get_setting('physics/2d/default_gravity'),"physics_fps":Engine.physics_ticks_per_second}
         """
     return _run(code)
+
+
+# ══════════════════════════════════════════════════════════════════════
+# Fatia 1.3 — capture_ui_snapshot (dump de Control + Rect2)
+# ══════════════════════════════════════════════════════════════════════
+
+_control_types_cache: set[str] | None = None
+
+
+def _get_control_types() -> set[str]:
+    """Retorna o set de todos os tipos que herdam de Control."""
+    global _control_types_cache
+    if _control_types_cache is not None:
+        return _control_types_cache
+    base_controls = {
+        "Control", "Button", "Label", "LineEdit", "TextEdit",
+        "Panel", "PanelContainer", "VBoxContainer", "HBoxContainer",
+        "GridContainer", "MarginContainer", "ScrollContainer",
+        "TabContainer", "SplitContainer", "ColorRect", "TextureRect",
+        "TextureButton", "CheckBox", "CheckButton", "OptionButton",
+        "PopupMenu", "Popup", "PopupPanel", "Window",
+        "AcceptDialog", "ConfirmationDialog", "FileDialog",
+        "GraphEdit", "GraphNode", "ItemList", "Tree", "RichTextLabel",
+        "ProgressBar", "Slider", "SpinBox", "TabBar", "MenuBar",
+        "MenuButton", "LinkButton", "ColorPicker", "ColorPickerButton",
+        "SubViewport", "SubViewportContainer",
+        "Container", "Range", "BaseButton", "AspectRatioContainer",
+        "CenterContainer", "FlowContainer", "NinePatchRect",
+        "ReferenceRect", "Separator", "HSlider", "VSlider",
+        "HSplitContainer", "VSplitContainer", "HScrollBar", "VScrollBar",
+    }
+    _control_types_cache = base_controls
+    return _control_types_cache
+
+
+def capture_ui_snapshot(
+    scene_path: str | None = None,
+    project_path: str | None = None,
+) -> dict:
+    """Captura dump estruturado de todos os nós Control com Rect2.
+
+    Percorre a árvore da cena e coleta nome, caminho, tipo, Rect2 global
+    (posicao + tamanho), visibilidade e z_index de cada no Control.
+
+    Modo bridge (editor/jogo vivo): usa get_scene_tree() do editor/addon.
+    Modo file-based (fallback): parseia o arquivo .tscn.
+
+    Args:
+        scene_path: Caminho da cena .tscn. Se None, tenta via bridge.
+        project_path: Caminho do projeto (auto-detecta se None).
+
+    Returns:
+        {"status": "success", "controls": [{"name","path","type",
+         "rect2":{"x","y","w","h"},"visible":bool,"z_index":int}],
+         "total": int, "mode": "bridge"|"file"}
+    """
+    from pathlib import Path as _Path
+    from tools.project_ops import _get_active_project as _gap
+
+    # ── Modo 1: Bridge (editor/jogo vivo) ──────────────────────────
+    try:
+        from tools.addon_bridge import get_bridge
+        bridge = get_bridge()
+        if bridge.is_available():
+            result = bridge.call("get_scene_tree", {})
+            if result.get("status") == "success":
+                tree = result.get("tree", result)
+                controls = _extract_controls_from_tree(tree)
+                return {
+                    "status": "success",
+                    "controls": controls,
+                    "total": len(controls),
+                    "mode": "bridge",
+                }
+    except Exception:
+        pass
+
+    # ── Modo 2: File-based (parse .tscn) ───────────────────────────
+    if scene_path is None:
+        return {
+            "status": "error",
+            "message": "Nenhum bridge disponivel e scene_path nao informado. "
+                       "Informe o caminho da cena .tscn ou conecte ao editor.",
+        }
+
+    proj = _Path(project_path) if project_path else _Path(_gap())
+    full_path = proj / scene_path
+    if not full_path.exists():
+        return {"status": "error", "message": f"Cena '{scene_path}' nao encontrada."}
+
+    try:
+        import godot_parser as gp
+        scene = gp.load(str(full_path))
+    except Exception as e:
+        return {"status": "error", "message": f"Erro ao parsear cena: {e}"}
+
+    control_types = _get_control_types()
+    controls = []
+    nodes = scene.get_nodes() if hasattr(scene, 'get_nodes') else []
+
+    for node in nodes:
+        node_type = getattr(node, 'type', '') or ''
+        if node_type not in control_types:
+            try:
+                from tools.classdb import get_class_hierarchy
+                hierarchy = get_class_hierarchy(node_type)
+                if "Control" not in hierarchy:
+                    continue
+            except Exception:
+                continue
+
+        props = {}
+        if hasattr(node, 'properties'):
+            props = dict(node.properties)
+        elif hasattr(node, 'get'):
+            for key in ["offset_left", "offset_top", "offset_right", "offset_bottom",
+                        "visible", "z_index", "position", "size"]:
+                try:
+                    val = node.get(key)
+                    if val is not None:
+                        props[key] = val
+                except Exception:
+                    pass
+
+        rect2 = _compute_control_rect(props)
+        name = getattr(node, 'name', '') or props.get('name', '')
+        parent = getattr(node, 'parent', '') or ''
+
+        controls.append({
+            "name": str(name),
+            "path": f"{parent}/{name}" if parent else str(name),
+            "type": str(node_type),
+            "rect2": rect2,
+            "visible": _parse_bool(props.get("visible", "true")),
+            "z_index": int(props.get("z_index", 0)),
+        })
+
+    # Normaliza paths: "./Child" -> "RootName/Child"
+    root_name = ""
+    for c in controls:
+        if not c["path"].startswith("./") and "/" not in c["path"]:
+            root_name = c["path"]
+            break
+    if root_name:
+        for c in controls:
+            if c["path"].startswith("./"):
+                c["path"] = root_name + "/" + c["path"][2:]
+
+    return {
+        "status": "success",
+        "controls": controls,
+        "total": len(controls),
+        "mode": "file",
+        "scene": scene_path,
+    }
+
+
+def _compute_control_rect(props: dict) -> dict:
+    """Calcula Rect2 {x, y, w, h} a partir de propriedades de Control."""
+    left = float(props.get("offset_left", 0))
+    top = float(props.get("offset_top", 0))
+    right = float(props.get("offset_right", left + 100))
+    bottom = float(props.get("offset_bottom", top + 100))
+    return {
+        "x": round(left, 1),
+        "y": round(top, 1),
+        "w": round(right - left, 1),
+        "h": round(bottom - top, 1),
+    }
+
+
+def _parse_bool(value) -> bool:
+    """Converte valor de .tscn para bool."""
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        return value.lower() in ("true", "1", "yes")
+    return bool(value)
+
+
+def _extract_controls_from_tree(tree: dict, prefix: str = "") -> list[dict]:
+    """Extrai nos Control de uma arvore retornada pelo bridge."""
+    controls = []
+    if not isinstance(tree, dict):
+        return controls
+
+    node_type = tree.get("type", "")
+    name = tree.get("name", "")
+    path = f"{prefix}/{name}" if prefix else name
+
+    if node_type and (
+            "Control" in node_type or "Button" in node_type or
+            "Label" in node_type or "Panel" in node_type or
+            "Container" in node_type or "Bar" in node_type or
+            "Edit" in node_type or "Rect" in node_type or
+            "Popup" in node_type or "Window" in node_type):
+        props = tree.get("properties", {})
+        rect2 = _compute_control_rect(props)
+        controls.append({
+            "name": name,
+            "path": path,
+            "type": node_type,
+            "rect2": rect2,
+            "visible": _parse_bool(props.get("visible", True) if isinstance(props, dict) else True),
+            "z_index": int(props.get("z_index", 0) if isinstance(props, dict) else 0),
+        })
+
+    for child in tree.get("children", []):
+        controls.extend(_extract_controls_from_tree(child, path))
+
+    return controls
+
+
+# ══════════════════════════════════════════════════════════════════════
+# Fatia 1.4 — detect_ui_overlaps (sobreposicao geometrica de UI)
+# ══════════════════════════════════════════════════════════════════════
+
+def _rects_intersect(a: dict, b: dict) -> dict | None:
+    """Verifica se dois retangulos se intersectam.
+
+    Args:
+        a, b: dicts com rect2: {x, y, w, h}
+
+    Returns:
+        dict com area de intersecao {x, y, w, h} ou None se nao intersectam.
+    """
+    ax1 = a["rect2"]["x"]
+    ay1 = a["rect2"]["y"]
+    ax2 = ax1 + a["rect2"]["w"]
+    ay2 = ay1 + a["rect2"]["h"]
+
+    bx1 = b["rect2"]["x"]
+    by1 = b["rect2"]["y"]
+    bx2 = bx1 + b["rect2"]["w"]
+    by2 = by1 + b["rect2"]["h"]
+
+    ix = max(ax1, bx1)
+    iy = max(ay1, by1)
+    iw = min(ax2, bx2) - ix
+    ih = min(ay2, by2) - iy
+
+    if iw <= 0 or ih <= 0:
+        return None
+
+    area = iw * ih
+    area_a = a["rect2"]["w"] * a["rect2"]["h"]
+    area_b = b["rect2"]["w"] * b["rect2"]["h"]
+
+    return {
+        "x": round(ix, 1),
+        "y": round(iy, 1),
+        "w": round(iw, 1),
+        "h": round(ih, 1),
+        "intersection_pct_a": round(area / area_a * 100, 1) if area_a > 0 else 0,
+        "intersection_pct_b": round(area / area_b * 100, 1) if area_b > 0 else 0,
+    }
+
+
+def _is_parent_child(a: dict, b: dict) -> bool:
+    """Verifica se a e b tem relacao pai-filho (aninhamento intencional).
+
+    No Godot, um Control pai contem seus filhos — isso nao e sobreposicao
+    indevida. Verificamos pelo path: se o path de um e prefixo do outro.
+    """
+    path_a = a.get("path", "")
+    path_b = b.get("path", "")
+    if not path_a or not path_b:
+        return False
+    return path_b.startswith(path_a + "/") or path_a.startswith(path_b + "/")
+
+
+def detect_ui_overlaps(
+    scene_path: str,
+    project_path: str | None = None,
+    min_overlap_pct: float = 5.0,
+) -> dict:
+    """Detecta sobreposicao indevida entre elementos de UI.
+
+    Usa capture_ui_snapshot para obter todos os Control nodes com Rect2
+    e compara geometricamente cada par. Filtra relacoes pai-filho
+    (aninhamento intencional). Retorna apenas sobreposicoes entre irmaos
+    ou elementos sem relacao hierarquica direta.
+
+    Args:
+        scene_path: Caminho da cena .tscn.
+        project_path: Caminho do projeto (auto-detecta se None).
+        min_overlap_pct: Percentual minimo de sobreposicao para reportar
+                        (default 5%, evita falsos positivos por bordas).
+
+    Returns:
+        {"status": "success", "overlaps": [{"control_a","control_b",
+         "intersection": {"x","y","w","h","intersection_pct_a","intersection_pct_b"},
+         "severity": "high"|"medium"|"low"}], "total_controls": int,
+         "total_overlaps": int}
+    """
+    snapshot = capture_ui_snapshot(scene_path, project_path)
+    if snapshot.get("status") != "success":
+        return snapshot
+
+    controls = snapshot.get("controls", [])
+    visible_controls = [c for c in controls if c.get("visible", True)]
+
+    overlaps = []
+    for i in range(len(visible_controls)):
+        for j in range(i + 1, len(visible_controls)):
+            a = visible_controls[i]
+            b = visible_controls[j]
+
+            # Pula relacoes pai-filho
+            if _is_parent_child(a, b):
+                continue
+
+            intersection = _rects_intersect(a, b)
+            if intersection is None:
+                continue
+
+            # Filtra sobreposicoes minusculas
+            max_pct = max(intersection["intersection_pct_a"],
+                         intersection["intersection_pct_b"])
+            if max_pct < min_overlap_pct:
+                continue
+
+            # Classifica severidade
+            if max_pct > 50:
+                severity = "high"
+            elif max_pct > 20:
+                severity = "medium"
+            else:
+                severity = "low"
+
+            overlaps.append({
+                "control_a": {"name": a["name"], "path": a["path"], "type": a["type"]},
+                "control_b": {"name": b["name"], "path": b["path"], "type": b["type"]},
+                "intersection": intersection,
+                "severity": severity,
+            })
+
+    return {
+        "status": "success",
+        "overlaps": overlaps,
+        "total_controls": len(controls),
+        "visible_controls": len(visible_controls),
+        "total_overlaps": len(overlaps),
+    }
+
+
+# ══════════════════════════════════════════════════════════════════════
+# Fatia 1.5 — generate_ui_overlay (Set-of-Marks)
+# ══════════════════════════════════════════════════════════════════════
+
+# Cores para o Set-of-Marks (paleta distinguivel)
+_MARKER_COLORS = [
+    (255, 50, 50), (50, 150, 255), (50, 200, 80), (255, 180, 30),
+    (200, 60, 220), (30, 200, 200), (255, 120, 60), (120, 80, 255),
+    (80, 200, 120), (255, 60, 180), (180, 180, 40), (60, 120, 255),
+]
+
+
+def generate_ui_overlay(
+    scene_path: str,
+    project_path: str | None = None,
+    width: int = 1280,
+    height: int = 720,
+    bg_color: str = "#1a1a2e",
+    line_width: int = 3,
+    font_size: int = 18,
+) -> dict:
+    """Gera overlay Set-of-Marks: caixas numeradas sobre cada Control.
+
+    Cria uma imagem com retangulos coloridos e numeros para cada elemento
+    de UI visivel. A IA pode referenciar elementos como "elemento #3"
+    para dar feedback preciso de layout.
+
+    Args:
+        scene_path: Caminho da cena .tscn.
+        project_path: Caminho do projeto (auto-detecta se None).
+        width: Largura da imagem (default 1280).
+        height: Altura da imagem (default 720).
+        bg_color: Cor de fundo em hex (default azul escuro).
+        line_width: Espessura da borda em px (default 3).
+        font_size: Tamanho da fonte dos numeros (default 18).
+
+    Returns:
+        {"status": "success", "image_base64": str,
+         "markers": [{"id": int, "name", "type", "rect2": {...}}],
+         "total_markers": int}
+    """
+    import base64
+    from io import BytesIO
+
+    snapshot = capture_ui_snapshot(scene_path, project_path)
+    if snapshot.get("status") != "success":
+        return snapshot
+
+    controls = snapshot.get("controls", [])
+    visible = [c for c in controls if c.get("visible", True)]
+
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+    except ImportError:
+        return {
+            "status": "error",
+            "message": "Pillow nao instalado. Execute: pip install Pillow",
+        }
+
+    # Converte bg_color hex → RGB
+    hex_color = bg_color.lstrip("#")
+    bg_rgb = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+
+    img = Image.new("RGB", (width, height), bg_rgb)
+    draw = ImageDraw.Draw(img)
+
+    # Tenta carregar fonte, fallback para default
+    try:
+        font = ImageFont.truetype("arial.ttf", font_size)
+    except Exception:
+        try:
+            font = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", font_size)
+        except Exception:
+            font = ImageFont.load_default()
+
+    markers = []
+    for idx, control in enumerate(visible):
+        r = control["rect2"]
+        x1 = max(0, int(r["x"]))
+        y1 = max(0, int(r["y"]))
+        x2 = min(width, int(r["x"] + r["w"]))
+        y2 = min(height, int(r["y"] + r["h"]))
+
+        # Pula controles fora da tela
+        if x2 <= 0 or y2 <= 0 or x1 >= width or y1 >= height:
+            continue
+
+        color = _MARKER_COLORS[(idx + 1) % len(_MARKER_COLORS)]
+        marker_id = idx + 1
+
+        # Retangulo com padding
+        draw.rectangle([x1, y1, x2, y2], outline=color, width=line_width)
+
+        # Etiqueta com fundo
+        label = str(marker_id)
+        bbox = draw.textbbox((0, 0), label, font=font)
+        tw = bbox[2] - bbox[0] + 8
+        th = bbox[3] - bbox[1] + 4
+        label_x = x1 + 2
+        label_y = max(0, y1 - th - 2)
+
+        draw.rectangle([label_x, label_y, label_x + tw, label_y + th], fill=color)
+        draw.text((label_x + 4, label_y + 2), label, fill=(255, 255, 255), font=font)
+
+        markers.append({
+            "id": marker_id,
+            "name": control["name"],
+            "type": control["type"],
+            "path": control.get("path", ""),
+            "rect2": r,
+        })
+
+    buf = BytesIO()
+    img.save(buf, format="PNG")
+    b64 = base64.b64encode(buf.getvalue()).decode("ascii")
+
+    return {
+        "status": "success",
+        "image_base64": b64,
+        "markers": markers,
+        "total_markers": len(markers),
+        "image_size": f"{width}x{height}",
+    }

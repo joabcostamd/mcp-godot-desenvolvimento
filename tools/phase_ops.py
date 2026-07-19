@@ -476,3 +476,210 @@ def get_next_step() -> dict:
         "session_started": True,
         "server_pid": os.getpid(),
     }
+
+
+def resume_session() -> dict:
+    """Fatia 1.8: resume_session — recuperacao de sessao.
+
+    Le o estado persistente de todas as fontes (fase, milestone, roadmap)
+    e devolve um resumo unificado: "voce parou aqui, o proximo passo e X".
+
+    Fontes consultadas:
+    1. .roadmap_progress.json (raiz do MCP) — progresso das fatias
+    2. PhaseState (phase_ops) — fase atual do projeto de jogo
+    3. MilestonePlan (milestone_ops) — milestone pendente/em andamento
+
+    Tool MCP: resume_session
+    """
+    import json as _json
+    from pathlib import Path as _Path
+
+    result = {
+        "status": "success",
+        "projeto_jogo": {},
+        "roadmap_mcp": {},
+        "proximo_passo": "",
+    }
+
+    # ── 1. Roadmap MCP ──────────────────────────────────────
+    roadmap_path = _Path(__file__).resolve().parent.parent / ".roadmap_progress.json"
+    fatia_atual = None
+    fatia_atual_status = None
+    if roadmap_path.exists():
+        try:
+            roadmap = _json.loads(roadmap_path.read_text(encoding="utf-8"))
+            # Encontrar a proxima fatia nao concluida
+            fatias_pendentes = []
+            fatia_atual = None
+            fatia_atual_status = None
+
+            # Ordenar fatias por numero: prioridade Camada 0, depois 1, etc.
+            # Extrair todos os registros que comecam com "fatia_"
+            fatias = {}
+            for key, value in roadmap.items():
+                if key.startswith("fatia_") and isinstance(value, dict):
+                    fatias[key] = value
+
+            # Verificar pendentes explicitos
+            pendentes = roadmap.get("pendentes", {})
+
+            result["roadmap_mcp"] = {
+                "total_fatias_registradas": len(fatias),
+                "fatias_concluidas": sum(1 for v in fatias.values() if v.get("status") == "concluida"),
+                "fatias_bloqueadas": sum(1 for v in fatias.values() if v.get("status") == "bloqueada"),
+                "pendentes_explicitos": pendentes,
+            }
+
+            # ── Parse numerico de chave "fatia_X.Y[sufixo]" ──
+            import re as _re
+
+            def _parse_fatia_key(key: str) -> tuple:
+                """Converte 'fatia_1.8' → (1, 8, ''), 'fatia_0.7b' → (0, 7, 'b')."""
+                m = _re.match(r'fatia_(\d+)\.(\d+)([a-z]*)$', key)
+                if m:
+                    return (int(m.group(1)), int(m.group(2)), m.group(3))
+                return (999, 0, key)  # nao-parseaveis vao para o fim
+
+            # Ordenacao numerica: camada, sub, sufixo alfabetico
+            fatias_ordenadas = sorted(fatias.keys(), key=_parse_fatia_key)
+
+            # 1) Priorizar pendentes explicitos do roadmap
+            fatia_atual = None
+            fatia_atual_status = None
+            proxima_sugerida = None
+
+            for pend_key in ["Camada_1_proximo", "Camada_0_proximo"]:
+                if pend_key in pendentes and isinstance(pendentes[pend_key], str):
+                    # Extrai numero da fatia do texto (ex: "1.8 resume_session")
+                    m = _re.match(r'(\d+\.\d+[a-z]*)', pendentes[pend_key])
+                    if m:
+                        proxima_sugerida = f"fatia_{m.group(1)}"
+                        break
+
+            # 2) Se pendentes aponta para uma fatia conhecida e nao-concluida, usa ela
+            if proxima_sugerida and proxima_sugerida in fatias:
+                st = fatias[proxima_sugerida].get("status")
+                if st != "concluida":
+                    fatia_atual = proxima_sugerida
+                    fatia_atual_status = st
+
+            # 3) Fallback: percorrer em ordem numerica, pular concluidas E bloqueadas
+            if not fatia_atual:
+                for fkey in fatias_ordenadas:
+                    st = fatias[fkey].get("status")
+                    if st == "concluida":
+                        continue
+                    if st == "bloqueada":
+                        # Registra bloqueadores mas nao para neles
+                        if "bloqueadores" not in result["roadmap_mcp"]:
+                            result["roadmap_mcp"]["bloqueadores"] = []
+                        result["roadmap_mcp"]["bloqueadores"].append({
+                            "fatia": fkey,
+                            "motivo": fatias[fkey].get("resultado", "")[:120],
+                        })
+                        continue
+                    fatia_atual = fkey
+                    fatia_atual_status = st
+                    break
+
+            # 4) Se so tem bloqueadas, reportar a primeira delas
+            if not fatia_atual:
+                for fkey in fatias_ordenadas:
+                    if fatias[fkey].get("status") == "bloqueada":
+                        fatia_atual = fkey
+                        fatia_atual_status = "bloqueada"
+                        break
+
+            if fatia_atual:
+                result["roadmap_mcp"]["fatia_atual"] = fatia_atual
+                result["roadmap_mcp"]["fatia_status"] = fatia_atual_status
+                result["roadmap_mcp"]["detalhe"] = fatias[fatia_atual].get("resultado", "")
+            elif pendentes:
+                result["roadmap_mcp"]["proximo"] = str(pendentes)
+
+            # Montar proximo_passo inteligente
+            if fatia_atual and fatia_atual_status == "bloqueada":
+                bloqueadores = result["roadmap_mcp"].get("bloqueadores", [])
+                if bloqueadores:
+                    nomes = [b["fatia"] for b in bloqueadores]
+                    result["proximo_passo"] = (
+                        f"Bloqueado: {', '.join(nomes)}. "
+                        f"Resolver bloqueio antes de prosseguir."
+                    )
+                else:
+                    result["proximo_passo"] = f"Fatia {fatia_atual} (bloqueada) — resolver bloqueio."
+            elif fatia_atual:
+                result["proximo_passo"] = f"Fatia {fatia_atual} ({fatia_atual_status})"
+            elif pendentes:
+                result["proximo_passo"] = f"Verificar pendentes: {pendentes}"
+            else:
+                result["proximo_passo"] = "Verificar roadmap"
+        except Exception as e:
+            result["roadmap_mcp"] = {"status": "error", "message": f"Erro ao ler roadmap: {e}"}
+            result["proximo_passo"] = "Erro ao ler roadmap. Verificar .roadmap_progress.json."
+    else:
+        result["roadmap_mcp"] = {"status": "ausente", "message": ".roadmap_progress.json nao encontrado na raiz do MCP."}
+        result["proximo_passo"] = "Roadmap ausente. Criar ou verificar configuracao do projeto."
+
+    # ── 1.5. Passos intra-fatia (step_tracker) ─────────────
+    try:
+        from tools.step_tracker import get_step_tracker
+        st = get_step_tracker()
+        if fatia_atual and fatia_atual_status not in ("bloqueada", "concluida"):
+            progress = st.get_progress(fatia_atual)
+            next_step = st.get_next_pending_step(fatia_atual)
+            result["passos_fatia"] = {
+                "fatia": fatia_atual,
+                "passos_concluidos": progress["passos_concluidos"],
+                "total_concluidos": progress["total_concluidos"],
+                "proximo_passo_fatia": next_step,
+            }
+            if next_step:
+                result["proximo_passo"] = (
+                    f"{result['proximo_passo']} | Passo {next_step} pendente"
+                )
+    except Exception:
+        pass  # Step tracker e opcional — se falhar, segue sem ele
+
+    # ── 2. Projeto de jogo: fase ───────────────────────────
+    try:
+        phase_info = get_current_phase()
+        if phase_info.get("status") == "success":
+            result["projeto_jogo"]["fase"] = phase_info.get("phase")
+            result["projeto_jogo"]["fase_label"] = phase_info.get("phase_label")
+            result["projeto_jogo"]["pode_avancar"] = phase_info.get("pode_avancar")
+            result["projeto_jogo"]["criterio_para_avancar"] = phase_info.get("criterio_para_avancar")
+        else:
+            result["projeto_jogo"]["fase"] = None
+            result["projeto_jogo"]["nota"] = "Sem projeto de jogo ativo ou erro ao consultar fase."
+    except Exception as e:
+        result["projeto_jogo"]["fase"] = None
+        result["projeto_jogo"]["erro"] = str(e)
+
+    # ── 3. Projeto de jogo: milestone ──────────────────────
+    next_ms = None
+    try:
+        from tools.milestone_ops import _milestone_plan
+        next_ms = _milestone_plan.get_next_milestone()
+        progress = _milestone_plan.progress_summary()
+        result["projeto_jogo"]["milestone_atual"] = next_ms
+        result["projeto_jogo"]["milestone_progresso"] = progress
+    except Exception as e:
+        result["projeto_jogo"]["milestone_atual"] = None
+        result["projeto_jogo"]["milestone_erro"] = str(e)
+
+    # ── 4. Montar proximo passo unificado ──────────────────
+    partes = []
+    if result["projeto_jogo"].get("fase"):
+        partes.append(f"Fase: {result['projeto_jogo'].get('fase_label', result['projeto_jogo']['fase'])}")
+    if fatia_atual:
+        partes.append(f"Roadmap: {fatia_atual} ({fatia_atual_status})")
+    if next_ms:
+        partes.append(f"Milestone: {next_ms.get('titulo', next_ms.get('id', '?'))} ({next_ms.get('status', '?')})")
+
+    if partes:
+        result["resumo"] = " | ".join(partes)
+    else:
+        result["resumo"] = "Nenhum estado encontrado. Use project_manage para selecionar um projeto."
+
+    return result

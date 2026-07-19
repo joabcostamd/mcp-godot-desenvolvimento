@@ -23,10 +23,31 @@ from tools.safety import checkpoint, push_undo
 def _editor_bridge_available() -> bool:
     """Verifica se o editor bridge está conectado (Modo Direto)."""
     try:
-        from tools.editor_bridge import is_connected
-        return is_connected()
+        from tools.bridge import is_editor_connected
+        return is_editor_connected()
     except Exception:
         return False
+
+
+def _addon_bridge_available() -> bool:
+    """Verifica se o addon bridge está conectado (Modo Addon)."""
+    try:
+        from tools.addon_bridge import get_bridge
+        return get_bridge().is_editor_open()
+    except Exception:
+        return False
+
+
+def _should_use_bridge() -> bool:
+    """Dispatch gate: True se qualquer bridge está disponível.
+
+    Prioridade: editor bridge → addon bridge → headless.
+    """
+    try:
+        from tools.bridge import should_use_bridge
+        return should_use_bridge()
+    except Exception:
+        return _editor_bridge_available() or _addon_bridge_available()
 
 
 def _game_bridge_available() -> bool:

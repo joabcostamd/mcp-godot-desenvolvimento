@@ -234,6 +234,10 @@ class AddonBridge:
         self._request_id = 0
         self._connected = False
         self._fallback_enabled = True
+        # ── Heartbeat ──
+        self._heartbeat_thread: threading.Thread | None = None
+        self._heartbeat_running = False
+        self._heartbeat_interval = 30.0  # segundos
 
     # ── Conexão ─────────────────────────────────────────────────
 
@@ -251,6 +255,125 @@ class AddonBridge:
             except Exception:
                 self._connected = False
                 return False
+
+    def reconnect_with_backoff(self, max_attempts: int = 6,
+                               base_delay: float = 1.0,
+                               max_delay: float = 60.0) -> dict:
+        """Reconecta com backoff exponencial (1s → 2s → 4s → ... → 60s).
+
+        Tenta reconectar até max_attempts vezes, dobrando o delay a cada
+        tentativa. Se esgotar as tentativas, retorna erro.
+
+        Returns:
+            {"status": "success", "attempts": N, "total_wait": S}
+            ou {"status": "error", "message": str}
+        """
+        self.stop_heartbeat()
+        total_wait = 0.0
+        for attempt in range(1, max_attempts + 1):
+            delay = min(base_delay * (2 ** (attempt - 1)), max_delay)
+            time.sleep(delay)
+            total_wait += delay
+            if self.connect():
+                # Reconectado — reinicia heartbeat
+                self.start_heartbeat()
+                return {
+                    "status": "success",
+                    "attempts": attempt,
+                    "total_wait": round(total_wait, 1),
+                    "message": f"Reconectado após {attempt} tentativa(s) em {total_wait:.1f}s.",
+                }
+        return {
+            "status": "error",
+            "attempts": max_attempts,
+            "total_wait": round(total_wait, 1),
+            "message": (
+                f"Falha ao reconectar após {max_attempts} tentativas "
+                f"({total_wait:.1f}s). Addon não está respondendo."
+            ),
+        }
+
+    # ── Heartbeat ───────────────────────────────────────────────
+
+    def start_heartbeat(self, interval: float = 30.0) -> dict:
+        """Inicia heartbeat ping/pong em thread separada.
+
+        Envia ping a cada `interval` segundos. Se o pong falhar,
+        dispara reconexão automática com backoff.
+
+        Args:
+            interval: Intervalo entre pings em segundos.
+
+        Returns:
+            {"status": "success"} ou {"status": "error"}
+        """
+        with self._lock:
+            if self._heartbeat_running:
+                return {
+                    "status": "success",
+                    "message": "Heartbeat já está ativo.",
+                    "idempotent": True,
+                }
+            if not self._connected:
+                return {
+                    "status": "error",
+                    "message": "Não conectado. Conecte antes de iniciar heartbeat.",
+                }
+            self._heartbeat_interval = interval
+            self._heartbeat_running = True
+            self._heartbeat_thread = threading.Thread(
+                target=self._heartbeat_loop,
+                daemon=True,
+                name="addon-heartbeat",
+            )
+            self._heartbeat_thread.start()
+            return {
+                "status": "success",
+                "message": f"Heartbeat iniciado (intervalo: {interval}s).",
+            }
+
+    def stop_heartbeat(self) -> dict:
+        """Para o heartbeat."""
+        with self._lock:
+            self._heartbeat_running = False
+            # Não faz join (evita deadlock) — a thread é daemon
+            self._heartbeat_thread = None
+            return {"status": "success", "message": "Heartbeat parado."}
+
+    def _heartbeat_loop(self) -> None:
+        """Loop de heartbeat: ping → espera → repete.
+
+        Se o ping falhar, tenta reconexão automática com backoff.
+        """
+        consecutive_failures = 0
+        while self._heartbeat_running:
+            time.sleep(self._heartbeat_interval)
+            if not self._heartbeat_running:
+                break
+            try:
+                result = self.call("ping", {}, timeout=5.0)
+                if result.get("status") == "success":
+                    consecutive_failures = 0
+                else:
+                    consecutive_failures += 1
+                    self._connected = False
+            except Exception:
+                consecutive_failures += 1
+                self._connected = False
+
+            # Após 3 falhas consecutivas, tenta reconexão
+            if consecutive_failures >= 3:
+                if self._heartbeat_running:
+                    self.reconnect_with_backoff()
+                    consecutive_failures = 0
+
+    def is_editor_open(self) -> bool:
+        """Verifica se o editor Godot está aberto com addon conectado.
+
+        É o dispatch gate: se True, operações devem usar o addon;
+        se False, usar modo headless/arquivo.
+        """
+        return self.is_available()
 
     def disconnect(self) -> None:
         """Desconecta do addon."""
@@ -520,3 +643,43 @@ def addon_get_scene_tree() -> dict:
 def addon_ping() -> dict:
     """Verifica se o addon está respondendo (ping)."""
     return get_bridge().call("ping", {})
+
+
+def addon_start_heartbeat(interval: float = 30.0) -> dict:
+    """Inicia heartbeat ping/pong automático para manter conexão viva.
+
+    Args:
+        interval: Intervalo entre pings em segundos (default: 30).
+    """
+    return get_bridge().start_heartbeat(interval)
+
+
+def addon_stop_heartbeat() -> dict:
+    """Para o heartbeat automático."""
+    return get_bridge().stop_heartbeat()
+
+
+def addon_reconnect() -> dict:
+    """Reconecta ao addon com backoff exponencial (1s→60s).
+
+    Tenta até 6 vezes, dobrando o delay a cada tentativa.
+    """
+    return get_bridge().reconnect_with_backoff()
+
+
+def addon_is_editor_open() -> dict:
+    """Verifica se o editor Godot está aberto com addon conectado.
+
+    Dispatch gate: True → usar addon; False → headless/arquivo.
+    """
+    bridge = get_bridge()
+    editor_open = bridge.is_editor_open()
+    return {
+        "status": "success",
+        "editor_open": editor_open,
+        "message": (
+            "Editor Godot aberto com addon conectado."
+            if editor_open
+            else "Editor fechado ou addon offline."
+        ),
+    }

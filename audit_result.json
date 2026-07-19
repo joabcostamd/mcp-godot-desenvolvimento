@@ -1,0 +1,34 @@
+{
+  "fatia": "3.5",
+  "timestamp": "2026-07-19T12:27:35.931927+00:00",
+  "exit_code": 1,
+  "criteria": {
+    "C1_contrato": {
+      "status": "pass",
+      "detail": "0 mudancas: 0 breaking, 0 warning, 0 cosmetic"
+    },
+    "C2_canary": {
+      "status": "skipped",
+      "detail": "Nenhuma canary fornecida (--canary ausente)"
+    },
+    "C3_regressao": {
+      "status": "pass",
+      "detail": "smoke_test concluido — status: success ({'status': 'success', 'scenarios': [{'name': 'SMOKE-01: Pipeline core', 'description': 'Valida que ping, health_check, self_test e ClassDB respondem c)"
+    },
+    "C4_seguranca": {
+      "status": "skipped",
+      "detail": "Nenhuma checklist fornecida (--c4-checklist ausente)"
+    },
+    "C5_orcamento": {
+      "status": "fail",
+      "detail": "Status: failure. Total tools: 48. Fases com overflow: 6 | FASE 'IDEIA' tem 48 tools (limite: 40); FASE 'DESIGN' tem 51 tools (limite: 40); FASE 'PROTOTIPO' tem 82 tools (limite: 40); FASE 'CONTEUDO' tem 65 tools (limite: 40); FASE 'POLIMENTO' tem 60 tools (limite: 40); FASE 'PRONTO_PARA_LANCAR' tem 48 tools (limite: 40)"
+    },
+    "C6_distinguibilidade": {
+      "status": "pass",
+      "detail": "Nome 'validate_game_ready' — sem colisao detectada (modo textual reduzido)"
+    }
+  },
+  "errors": [
+    "C5: 6 fases estouraram o teto"
+  ]
+}

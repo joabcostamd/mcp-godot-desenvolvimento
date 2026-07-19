@@ -119,6 +119,53 @@ _milestone_plan = MilestonePlan()
 _milestone_plan.load()
 
 
+def project_progress() -> dict:
+    """Termometro de progresso do milestone atual (Fatia 1.14).
+
+    Retorna percentual, barra visual ASCII e mensagem motivacional.
+    Usa os dados do MilestonePlan ja carregado.
+
+    Tool MCP: project_progress
+    """
+    summary = _milestone_plan.progress_summary()
+    total = summary["total"]
+    concluidos = summary["concluidos"]
+    percentual = summary["percentual"]
+
+    # Barra visual ASCII (10 chars)
+    cheio = min(10, round(percentual / 10))
+    vazio = 10 - cheio
+    barra = "\u2588" * cheio + "\u2591" * vazio
+
+    # Mensagem motivacional
+    if total == 0:
+        mensagem = "Nenhum milestone ainda. Crie um plano com create_milestone_plan!"
+        proximo = None
+    elif percentual >= 100:
+        mensagem = "Milestone concluido! Avance para o proximo com advance_milestone()."
+        proximo = _milestone_plan.get_next_milestone()
+    elif percentual >= 75:
+        mensagem = f"Quase la! {concluidos}/{total} concluidos. Foco na reta final!"
+        proximo = _milestone_plan.get_next_milestone()
+    elif percentual >= 50:
+        mensagem = f"Metade do caminho! {concluidos}/{total} concluidos."
+        proximo = _milestone_plan.get_next_milestone()
+    elif percentual > 0:
+        mensagem = f"Comecando bem! {concluidos}/{total} concluidos."
+        proximo = _milestone_plan.get_next_milestone()
+    else:
+        mensagem = f"Nenhum item concluido ainda. Comece pelo primeiro milestone!"
+        proximo = _milestone_plan.get_next_milestone()
+
+    return {
+        "status": "success",
+        "milestone_progresso": summary,
+        "termometro": f"{barra} {percentual:.1f}%",
+        "mensagem": mensagem,
+        "proximo_milestone": proximo,
+    }
+
+
 def _generate_milestones_from_gdd(gdd: dict, num: int, scope: str = "medio") -> list[dict]:
     """Gera milestones a partir do GDD e scope, distribuídos por fase.
 

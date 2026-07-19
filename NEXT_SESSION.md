@@ -1,27 +1,44 @@
 # NEXT_SESSION.md — MCP Godot Agent
 
-**Última sessão:** 2026-07-17 (Fase 1 completa e validada)
-**Estado atual:** v3.4.0 — 212 tools, Fase 1 (10/10) testada end-to-end com Godot real
-**Interface:** Cline (VS Code) — substitui DeepSeek V4 Copilot
+**Sessao:** 2026-07-19 (S12) | **48 tools, 30 rollups**
 
-## 📋 INICIALIZAÇÃO RÁPIDA (Cline)
+## Progresso
 
-```bash
-cd "c:\Users\joabc\OneDrive\Documentos\VS CODE\mcp-godot-desenvolvimento"
-.venv\Scripts\Activate.ps1
-python server.py
+| Camada | Status |
+|---|---|
+| C1 (Exp Dev) | ✅ 16/16 |
+| C2 (Testes) | 6/7 (2.5 escalada) |
+| C3 (Criacao) | 4/16 (3.1-3.4 escaladas) |
+
+## music_manage (4 ops)
+- `generate` — API MiniMax
+- `make_seamless_loop` — WAV loop
+- `place_and_normalize` — cena + bus + volume
+- `bind_to_event` — 8 eventos de jogo
+
+## ⚠️ PROBLEMA CRÍTICO: OneDrive reverte arquivos
+
+O projeto está em `OneDrive\Documentos\...`. O OneDrive sincroniza com a nuvem
+e RESTAURA versões antigas dos arquivos .py, .json e .md após cada edição.
+
+**Solução:** Mover o projeto para `C:\Users\joabc\Dev\projetos\mcp-godot-desenvolvimento`
+( fora do OneDrive). Isso elimina 100% das reversões.
+
+## Comandos
+```powershell
+.\\.venv\\Scripts\\Activate.ps1
+python auditar.py --fatia <N> --skip-c5
 ```
+```
+- `CONTEXTO_PROJETO_MCP_GODOT.md` — visão geral completa
+- `SESSION_SUMMARY_2026-07-17.md` — resumo histórico da sessão anterior
 
-> **Godot:** `C:\Godot\Godot_v4.7-stable_win64.exe`
-> **Projeto de teste limpo:** `C:\Users\joabc\OneDrive\Documentos\VS CODE\NUCLEO\projetos\breakout_test`
-> **Projeto principal:** `C:\Users\joabc\OneDrive\Documentos\VS CODE\NUCLEO\projetos\shardbreaker-nodebuster-like`
+### Comandos Disponíveis
 
-## 📄 DOCUMENTOS PARA COLAR NO CHAT NOVO
-
-1. **`CONTEXTO_PROJETO_MCP_GODOT.md`** — documento completo do projeto (13 seções, histórico desde 12/07, Fase 1 status, pendências)
-2. **`SESSION_SUMMARY_2026-07-17.md`** — resumo detalhado desta sessão (ordem cronológica, resultados, decisões)
-
-Colocar AMBOS no início do chat com Cline.
+| Comando | Função |
+|---|---|
+| `/plan` | Planejar próxima fatia (lê roadmap, verifica suposições, monta plano) |
+| `/act` | Implementar fatia (executa plano, audita C1-C6, grava progresso) |
 
 ## ⚡ RESUMO DO ESTADO ATUAL
 
