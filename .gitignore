@@ -43,5 +43,5 @@ workflow_logs/
 .vscode/
 .mcp_proof/
 
-# Roadmap progress (Governador 4.8 - nao versionar, append-only)
-.roadmap_progress.json
+# config.json removido do gitignore — versionado para setup multiplataforma
+# .roadmap_progress.json removido do gitignore — versionado para setup multiplataforma

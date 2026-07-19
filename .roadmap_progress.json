@@ -1,0 +1,156 @@
+{
+  "fatia_0.0": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "bootstrap concluido, arquivos movidos para .clinerules/"
+  },
+  "fatia_0.0.1": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "6/6 diagnosticos OK, ambiente aprovado"
+  },
+  "fatia_0.0.5": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "auditar.py implementado, 9/10 criterios passaram (C5 pre-existente)"
+  },
+  "fatia_0.14": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "governador confirmado, 7/7 testes passaram"
+  },
+  "rebalanceamento": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "resultado": "0.4: [SENIOR]->[AUTO], demais mantidas"
+  },
+  "fatia_0.1": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "INVENTARIO_OPS_ROLLUPS.md ja existia, 28 rollups, 115 ops confirmados"
+  },
+  "fatia_0.2": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "0 referencias a -32002, MCP spec nao afeta"
+  },
+  "fatia_0.3": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "Roo Code 3.54, /plan e /act funcionam"
+  },
+  "fatia_0.4": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "verify_loopback.py: 0 violacoes"
+  },
+  "fatia_0.5": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "_auto_checkpoint() ja existia em safety.py"
+  },
+  "fatia_0.6": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "scan_secrets(): 0 segredos"
+  },
+  "fatia_0.8": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "tests/test_budget_gate.py funcional"
+  },
+  "fatia_0.10": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "tools/schema_migration.py existe"
+  },
+  "fatia_0.11": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "tests/contract_snapshot.py funcional (296 linhas)"
+  },
+  "fatia_0.12": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "tools/kill_switch.py existe"
+  },
+  "fatia_0.13": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "tools/idempotency_audit.py existe"
+  },
+  "fatia_0.15": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "catalog_search, describe_tool, invoke_by_name no core + handlers"
+  },
+  "fatia_0.7a": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "game_bridge_manage: 14 game_* -> 1 rollup. PROTOTIPO: 92->79 visiveis"
+  },
+  "fatia_0.9": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "external_client.py — cliente HTTP compartilhado com rate-limit+retry+idempotencia"
+  },
+  "fatia_0.16": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "test_budget_gate.py estendido: estimate_definition_tokens(), test_token_budget(), flags --lean e --plant. Teto primario (tokens) verde — todas as fases dentro do orcamento. C5 (contagem >40) pre-existente confirmado (f056aed8). C1/C2/C3/C4/C6 ok.",
+    "criteria_level": "Nivel 1 (sem ferramental novo)",
+    "cross_model": "fraca (Flash via subtarefa no mesmo /act)",
+    "c1": "pass — diff mostra so test_budget_gate.py modificado",
+    "c2": "pass — python tests/test_budget_gate.py (tokens ok), --lean (ok), --plant (overflow detectado)",
+    "c3": "pass — smoke_test status=success",
+    "c4": "pass — sem rede, sem operacao destrutiva, sem segredo, rollup nao se aplica (e teste, nao tool de topo)",
+    "c5": "pre_existente — 6 fases >40 tools (documentado no inicio do projeto, commit f056aed8)",
+    "c6": "pass — nao cria tool/op nova",
+    "auditar_py": {
+      "rodado": true,
+      "c1": "pass",
+      "c2": "skipped (sem --canary)",
+      "c3": "pass",
+      "c4": "skipped (sem --c4-checklist)",
+      "c5": "fail (pre-existente)",
+      "c6": "skipped (sem --tool-name)"
+    }
+  },
+  "fatia_0.7b": {
+    "status": "bloqueada",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "resultado": "suposicao falsa: 7/9 godot_* sao handlers inline, nao importaveis. Pulando para 0.9.",
+    "motivo": "requer extracao previa de funcoes inline para modulos — trabalho nao planejado. Retomar apos refatoracao."
+  },
+  "C5_status": {
+    "diagnostico": "problema real de teto — 6 fases >40 tools visiveis",
+    "origem": "pre-existente (commit f056aed8, 12/07/2026, 6 dias antes do bootstrap)",
+    "nao_resolvido": true,
+    "fatura_responsavel": "0.7 (Consolidar PROTOTIPO) + extensoes para outras fases",
+    "progresso": "0.7a: PROTOTIPO 92->79. 0.7b bloqueada (godot_* sao inline). Demais fases a planejar."
+  },
+  "pendentes": {
+    "0.7b+": "consolidar godot_* e outras fases — retomar apos refatoracao",
+    "Camada_1": "iniciar apos push da 0.16"
+  }
+}
