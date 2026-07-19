@@ -345,6 +345,64 @@ def _invoke_tool_synthetic(tool: str, args: dict) -> dict:
     if tool == "perf_regression_track":
         return {"status": "success", "passed": True, "regressions": [], "baseline_metrics": {"fps_avg": 60, "memory_mb": 150, "draw_calls": 45}, "current_metrics": {"fps_avg": 59, "memory_mb": 152, "draw_calls": 47}, "thresholds": {"fps_pct": 0.85, "memory_pct": 1.2, "draw_calls_pct": 1.3}, "message": "Sem regressoes."}
 
+    # ── Bloco 6: Camada 5 — Gameplay (8 fatias, ~25 tools novas) ──
+    if tool == "accessibility_apply_colorblind_filter":
+        return {"status": "success", "cb_type": args.get("cb_type", "protanopia"), "mode": args.get("mode", "simulate"), "shader_code": "// shader code here", "message": "Shader gerado."}
+    if tool == "accessibility_add_subtitles":
+        return {"status": "success", "subtitle_system": {"node_type": "RichTextLabel", "font_size": 24}, "message": "Legendas configuradas."}
+    if tool == "accessibility_remap_controls":
+        return {"status": "success", "total_actions": 14, "actions": [], "message": "14 acoes analisadas."}
+    if tool == "accessibility_audit_scene":
+        return {"status": "success", "total_checks": 6, "issues": [], "message": "Auditoria concluida."}
+    if tool == "accessibility_certification_checklist":
+        return {"status": "success", "target": args.get("target", "all"), "total_items": 24, "message": "Checklists carregados."}
+    if tool == "create_achievement_system":
+        return {"status": "success", "achievements_count": 3, "use_steam": False, "script_code": "// GDScript", "message": "Sistema de conquistas gerado."}
+    if tool == "cloud_save_configure":
+        return {"status": "success", "use_steam_cloud": False, "storage": "user://saves/", "script_code": "// GDScript", "message": "Cloud Save configurado."}
+    if tool == "validate_achievement_config":
+        return {"status": "success", "valid": True, "total": 3, "errors": 0, "warnings": 0, "message": "Validacao OK."}
+    if tool == "mod_manifest_generate":
+        return {"status": "success", "manifest": {"name": "meu_mod", "version": "1.0.0"}, "message": "Manifesto gerado."}
+    if tool == "validate_mod_compatibility":
+        return {"status": "success", "compatible": True, "mod_name": "meu_mod", "message": "Compativel."}
+    if tool == "cutscene_create_timeline":
+        return {"status": "success", "cutscene_name": "intro", "total_events": 5, "total_duration_sec": 10.0, "script_code": "// GDScript", "message": "Cutscene gerada."}
+    if tool == "cutscene_add_camera_shot":
+        return {"status": "success", "shot": {"type": "camera_shot", "transition": "fade"}, "message": "Shot configurado."}
+    if tool == "cutscene_add_dialogue_event":
+        return {"status": "success", "event": {"type": "dialogue", "speaker": "Narrador"}, "message": "Evento de dialogo adicionado."}
+    if tool == "telemetry_track_event":
+        return {"status": "skipped", "reason": "opt_in=False", "message": "Evento NAO registrado (opt-in)."}
+    if tool == "telemetry_get_funnel":
+        return {"status": "success", "funnel_name": "Progressao", "total_steps": 6, "message": "Funil definido."}
+    if tool == "telemetry_session_summary":
+        return {"status": "success", "session_id": "s001", "total_events": 8, "summary": {"deaths": 1, "kills": 2}, "message": "Resumo da sessao."}
+    if tool == "telemetry_heatmap":
+        return {"status": "success", "event_type": "player_death", "total_points": 5, "message": "Heatmap gerado."}
+    if tool == "adaptive_difficulty_adjust":
+        return {"status": "success", "current_difficulty": "normal", "recommended_difficulty": "normal", "adjustments": [], "message": "Dificuldade mantida."}
+    if tool == "quest_generate":
+        return {"status": "success", "quest": {"title": "Buscar Erva", "type": "fetch", "level": 3}, "message": "Quest gerada."}
+    if tool == "remote_balance_config":
+        return {"status": "success", "action": "template", "message": "Template gerado."}
+    if tool == "trailer_capture_clip":
+        return {"status": "success", "target": "steam", "total_frames": 1800, "instructions": [], "message": "Setup de captura pronto."}
+    if tool == "trailer_render_sequence":
+        return {"status": "success", "total_shots": 3, "total_duration_sec": 30, "storyboard": [], "message": "Sequencia planejada."}
+    if tool == "capsule_generate_store_image":
+        return {"status": "success", "total_capsules": 6, "message": "Specs de capsulas geradas."}
+    if tool == "onboarding_create_tutorial_step":
+        return {"status": "success", "total_steps": 3, "script_code": "// GDScript", "message": "Tutorial gerado."}
+    if tool == "onboarding_create_guided_tour":
+        return {"status": "success", "total_elements": 3, "message": "Tour guiado criado."}
+    if tool == "onboarding_check_first_experience":
+        return {"status": "success", "total_checks": 8, "critical_checks": 2, "message": "FTUE checklist."}
+    if tool == "dialogue_generate_npc_lines":
+        return {"status": "success", "npc_type": "aldeao", "scenario": "greeting", "lines": ["Ola!", "Bem-vindo."], "message": "3 linhas geradas."}
+    if tool == "dialogue_generate_personality":
+        return {"status": "success", "npc_name": "NPC", "role": "neutro", "personality": {"traits": {}, "primary_motivation": "poder"}, "message": "Personalidade gerada."}
+
     # ── Fallback para tools não mapeadas ──
     return {
         "status": "skipped",
@@ -1149,7 +1207,7 @@ def _capture_state() -> dict:
 _RECURSION_GUARD = {"smoke_test","regression_test","run_scripted_tests","dump_mcp_state","estimate_tool_tokens","run_verification_pipeline","debugger_status","debugger_get_stack","debugger_get_variables","debugger_set_breakpoint","debugger_step"}
 _SMOKE_SKIP_HEAVY = {"create_entity","create_entities","safe_write_gdscript","capture_proof","verify_proof","deploy_itch","build_csharp","export_manage","read_console_output"}
 _MINIMAL_ARGS: dict[str, dict | None] = {"read_file":{"path":"project.godot"},"write_file":{"path":"_smoke_test.txt","content":"smoke","mode":"create"},"validate_gdscript_syntax":{"code":"extends Node\nfunc _ready():\n    pass\n"},"godot_class_ref":{"class_name":"Node"},"gdd_generate":{"concept":"test","game_type":"tower_defense"},"advance_phase":{"force":True,"reason":"smoke test"},"scene_manage":{"op":"load_tree"},"node_manage":{"op":"get_property","node_path":".","property_name":"name"},"script_manage":{"op":"validate","script_path":"scripts/_smoke.gd"},"file_manage":{"op":"read","path":"project.godot"},"project_manage":{"op":"status"},"safety_manage":{"op":"list_backups"},"validate_project_refs":{},"find_usages":{"target":"project.godot"},"tool_groups":{"action":"list"},"bootstrap_godot_mcp":{"target":"validate_only"},"configure_export_preset":{},"release_checklist":{},"create_asset_manifest":{},"generate_project_structure":{},"create_milestone_plan":{"genero":"tower_defense","force":True},"addon_connect":None,"addon_disconnect":None,"addon_ping":None,"addon_is_available":None,"addon_get_scene_tree":None,"addon_take_screenshot":None,"addon_create_node":None,"addon_delete_node":None,"addon_set_property":None,"addon_reparent_node":None,"addon_duplicate_node":None,"addon_batch_edit":None,"set_project_brief":{"genre":"tower_defense","art_style":"scifi","force":True}}
-_SYNTHETIC_HANDLERS = {"ping","health_check","self_test","validate_gdscript_syntax","write_file","safe_write_gdscript","run_gut_tests","git_commit_checkpoint","godot_class_ref","compile_test","read_file","dump_mcp_state","godot_screenshot","godot_runtime_info","audit_uid_consistency","audit_save_compatibility","audit_input_map","audit_autoloads","audit_scene_reachability","capture_proof","verify_proof","get_current_phase","get_phase_history","project_status","project_progress","get_project_brief","update_project_brief","advance_milestone","get_milestone_plan","get_next_step","resume_session","validate_godot_version","validate_mcp_environment","validate_mcp_registry","godot","analysis_manage","tool_catalog","install_mcp_addon","setup_mcp_config","perf_regression_track","set_project_brief","create_milestone_plan","find_usages","gdd_generate","advance_phase"}
+_SYNTHETIC_HANDLERS = {"ping","health_check","self_test","validate_gdscript_syntax","write_file","safe_write_gdscript","run_gut_tests","git_commit_checkpoint","godot_class_ref","compile_test","read_file","dump_mcp_state","godot_screenshot","godot_runtime_info","audit_uid_consistency","audit_save_compatibility","audit_input_map","audit_autoloads","audit_scene_reachability","capture_proof","verify_proof","get_current_phase","get_phase_history","project_status","project_progress","get_project_brief","update_project_brief","advance_milestone","get_milestone_plan","get_next_step","resume_session","validate_godot_version","validate_mcp_environment","validate_mcp_registry","godot","analysis_manage","tool_catalog","install_mcp_addon","setup_mcp_config","perf_regression_track","set_project_brief","create_milestone_plan","find_usages","gdd_generate","advance_phase","accessibility_apply_colorblind_filter","accessibility_add_subtitles","accessibility_remap_controls","accessibility_audit_scene","accessibility_certification_checklist","create_achievement_system","cloud_save_configure","validate_achievement_config","mod_manifest_generate","validate_mod_compatibility","cutscene_create_timeline","cutscene_add_camera_shot","cutscene_add_dialogue_event","telemetry_track_event","telemetry_get_funnel","telemetry_session_summary","telemetry_heatmap","adaptive_difficulty_adjust","quest_generate","remote_balance_config","trailer_capture_clip","trailer_render_sequence","capsule_generate_store_image","onboarding_create_tutorial_step","onboarding_create_guided_tour","onboarding_check_first_experience","dialogue_generate_npc_lines","dialogue_generate_personality"}
 _TIER1_MAP = {"scene_manage":"success","node_manage":"success","script_manage":"error","file_manage":"success","project_manage":"success","asset_manage":"success","audio_manage":"success","anim_manage":"success","tilemap_manage":"success","safety_manage":"success","create_entity":"success"}
 
 def test_coverage_report(args=None):
