@@ -1,6 +1,7 @@
 """asset_ops — Operações de importação de assets (texturas, áudio).
 
 Fase 2: import_texture, import_sprite_sheet, import_audio.
+Fatia 3.8: presets de import por categoria (pixel, 3d, ui).
 """
 
 import shutil
@@ -10,15 +11,94 @@ from tools.project_ops import _get_active_project, _check_path_traversal
 from tools.scene_ops import _run_compile_test
 
 
-def import_texture(source_path: str, target_res_path: str) -> dict:
-    """Importa uma textura para o projeto.
+# ── Fatia 3.8: Presets de import ──────────────────────────
+
+IMPORT_PRESETS = {
+    "pixel": {
+        "compress/mode": "0",           # Lossless
+        "mipmaps/generate": "false",
+        "process/fix_alpha_border": "false",
+        "roughness/mode": "0",
+    },
+    "3d": {
+        "compress/mode": "2",           # VRAM Compressed
+        "mipmaps/generate": "true",
+        "detect_3d/compress_to": "1",   # BC1/BC3
+    },
+    "ui": {
+        "compress/mode": "0",           # Lossless
+        "mipmaps/generate": "false",
+        "process/fix_alpha_border": "true",
+        "roughness/mode": "0",
+    },
+}
+
+CATEGORY_TO_PRESET = {
+    "pixel": "pixel", "pixel_art": "pixel", "pixelart": "pixel",
+    "3d": "3d", "realistic": "3d", "realista": "3d", "low_poly": "3d",
+    "ui": "ui", "hud": "ui", "menu": "ui", "icon": "ui", "icone": "ui",
+}
+
+
+def _detect_preset(category: str) -> str | None:
+    """Mapeia uma categoria para o nome do preset."""
+    cat = category.strip().lower().replace(" ", "_").replace("-", "_")
+    return CATEGORY_TO_PRESET.get(cat)
+
+
+def _apply_import_preset(target_res_path: str, preset_name: str) -> dict:
+    """Cria/atualiza o arquivo .import com as configuracoes do preset.
+
+    Godot 4 cria <arquivo>.import ao lado do asset com parametros de importacao.
+    Esta funcao grava o .import com as configuracoes corretas para o preset.
+
+    Args:
+        target_res_path: Caminho relativo da textura (ex: 'assets/sprites/player.png').
+        preset_name: Nome do preset ('pixel', '3d', 'ui').
+
+    Returns:
+        {"status": "success", "preset": str} ou {"status": "error"}
+    """
+    preset = IMPORT_PRESETS.get(preset_name)
+    if not preset:
+        return {"status": "error", "message": f"Preset '{preset_name}' invalido. Validos: {list(IMPORT_PRESETS.keys())}"}
+
+    proj = _get_active_project()
+    import_path = proj / (target_res_path + ".import")
+
+    # Monta conteudo do .import no formato Godot 4
+    params = "\n".join(f"{k}={v}" for k, v in preset.items())
+    content = f"""[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+
+[deps]
+
+source_file="res://{target_res_path}"
+dest_files=[]
+
+[params]
+
+{params}
+"""
+    import_path.parent.mkdir(parents=True, exist_ok=True)
+    import_path.write_text(content, encoding="utf-8")
+
+    return {"status": "success", "preset": preset_name}
+
+
+def import_texture(source_path: str, target_res_path: str, category: str = "") -> dict:
+    """Importa uma textura para o projeto com preset automatico (Fatia 3.8).
 
     Args:
         source_path: Caminho absoluto do arquivo fonte (fora do projeto).
         target_res_path: Caminho relativo no projeto (ex: 'assets/sprites/player.png').
+        category: Categoria do asset ('pixel', '3d', 'ui', etc). Usado para aplicar
+                  o preset de import correto automaticamente.
 
     Returns:
-        {"status": "success", "res_path": str}
+        {"status": "success", "res_path": str, "preset": str|None}
     """
     proj = _get_active_project()
 
@@ -38,18 +118,31 @@ def import_texture(source_path: str, target_res_path: str) -> dict:
     dst.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(src, dst)
 
+    # ── Fatia 3.8: Aplicar preset de import ─────────────────
+    preset_applied = None
+    if category:
+        preset_name = _detect_preset(category)
+        if preset_name:
+            pr = _apply_import_preset(target_res_path, preset_name)
+            if pr["status"] == "success":
+                preset_applied = preset_name
+
     # Marca para reimport pendente (executado em compile_test/run_game)
     from tools.runtime_ops import mark_pending_compile
     mark_pending_compile()
 
-    return {"status": "success", "res_path": target_res_path}
+    result = {"status": "success", "res_path": target_res_path}
+    if preset_applied:
+        result["preset"] = preset_applied
+    return result
 
 
 def import_sprite_sheet(
     source_path: str, target_res_path: str,
     frame_width: int, frame_height: int,
     target_scene_path: str, target_node_path: str,
-    animations: list[dict]
+    animations: list[dict],
+    category: str = "",
 ) -> dict:
     """Importa uma sprite sheet e configura animações em um AnimatedSprite2D.
 
@@ -76,7 +169,7 @@ def import_sprite_sheet(
         return {"status": "error", "message": violation2}
 
     # Importa textura primeiro
-    r = import_texture(source_path, target_res_path)
+    r = import_texture(source_path, target_res_path, category=category)
     if r["status"] != "success":
         return r
 

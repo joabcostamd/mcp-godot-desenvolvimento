@@ -153,7 +153,23 @@
     "0.7b+": "consolidar godot_* e outras fases",
     "Camada_1": "CONCLUIDA (16/16)",
     "Camada_2_proximo": "2.5 Regressao visual [ESCALADA] — Camada 2 completa (2.2 concluida)",
-    "Camada_3_proximo": "3.8 Preset de import [SENIOR] (3.1-3.4 escaladas, 3.5-3.6 concluidas)"
+    "Camada_3_proximo": "3.7 Pipeline de arte travado [SENIOR] (3.1-3.4 escaladas, 3.5-3.6-3.8 concluidas)"
+  },
+  "fatia_3.8": {
+    "status": "concluida",
+    "data": "2026-07-19",
+    "tentativa": 1,
+    "resultado": "3 presets de import: pixel (Nearest, sem mipmap, lossless), 3d (VRAM compressed, mipmap on), ui (lossless, fix alpha border). Funcao _apply_import_preset() cria .import Godot 4. _detect_preset() mapeia 11 categorias. Integrado em import_texture(category=) e import_sprite_sheet. 1 arquivo, +99 linhas.",
+    "c1": "pass — 48 tools, zero mudanca",
+    "c2": "pass — 3/3 canaries: deteccao pixel/3d/ui/low_poly, presets corretos, preset invalido=error",
+    "c3": "pass — smoke_test 5/5",
+    "c4": "pass — sem rede, sem segredo, so arquivo local, idempotente, sem tool nova",
+    "c5": "pre_existente — 48 tools",
+    "c6": "pass — sem tool nova",
+    "cross_model": "fraca — [SENIOR] requer revisao humana dos presets",
+    "arquivos_modificados": [
+      "tools/asset_ops.py (+IMPORT_PRESETS, +_detect_preset, +_apply_import_preset, +category em import_texture/sprite_sheet — +99 linhas)"
+    ]
   },
   "fatia_2.2": {
     "status": "concluida",
