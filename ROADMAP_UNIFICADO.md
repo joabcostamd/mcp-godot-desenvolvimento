@@ -205,19 +205,19 @@ Ao finalizar:
 
 **Gate:** `godot(action="criar inimigo com patrulha")` funciona. ≥95% cobertura. ✅ (100%)
 
-### ⬜ A5 — Refatorações Estruturais (~4h)
+### 🔄 A5 — Refatorações Estruturais (~4h) — EM PROGRESSO
 
 **Meta:** `server.py` ≤ 3500 linhas. Código modular e testável.
 ⚠️ Risco moderado com Etapas B5/B7/B8 do AGENTE 02
 
-| # | Ação | Arquivo |
-|---|---|---|
-| A5.1 | Extrair `ToolRegistry` (~2800 linhas) | `core/tool_registry.py` (novo) |
-| A5.2 | Extrair `MCPConnectionManager` | `core/connection_manager.py` (novo) |
-| A5.3 | Migrar `server.py` → imports das novas classes | `server.py` |
-| A5.4 | `validate_tool_registry_consistency()` — zero regressão | — |
+| # | Ação | Arquivo | Status |
+|---|---|---|---|
+| A5.1 | Extrair definições Tool() (3011 linhas) | `core/tool_definitions.py` (novo) | ✅ |
+| A5.2 | Extrair `MCPConnectionManager` | `core/connection_manager.py` (novo) | ⬜ Pendente |
+| A5.3 | Migrar `server.py` → imports das novas classes | `server.py` | 🔄 Parcial (tool_defs importado) |
+| A5.4 | `validate_tool_registry_consistency()` — zero regressão | — | ✅ (profile dev idêntico) |
 
-**Gate:** `wc -l server.py` ≤ 3500. `--profile dev` idêntico ao pré-refatoração.
+**Progresso:** `server.py` 6722 → 3711 linhas (meta: ≤3500, faltam ~211)
 
 ### ⬜ A6 — Qualidade MCP Spec (~3h)
 
