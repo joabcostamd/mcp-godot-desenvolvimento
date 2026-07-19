@@ -4,10 +4,11 @@
 > O agente lê este arquivo para saber o que fazer na próxima sessão.
 
 ## AGENTE 01 — Próxima etapa
-- **Etapa:** A4 — Intent Router
+- **Etapa:** A5 — Refatorações Estruturais
 - **Status:** ⬜ Pendente
-- **Arquivos:** `core/intent_router.py` (novo), `server.py`
-- **Gate:** `godot(action="criar inimigo com patrulha")` funciona. ≥95% cobertura.
+- **Arquivos:** `core/tool_registry.py` (novo), `core/connection_manager.py` (novo), `server.py`
+- **Gate:** `wc -l server.py` ≤ 3500. `--profile dev` idêntico ao pré-refatoração.
+- ⚠️ Risco moderado com B5/B7/B8 do AGENTE 02
 
 ## AGENTE 02 — Próxima etapa
 - **Etapa:** B4 — Análises Específicas (+9 ops em code_quality_ops)
@@ -18,5 +19,5 @@
 
 ## Última atualização
 - **Data:** 2026-07-19
-- **Por:** AGENTE 01 (Etapa A3 concluída — DATA_CONTRACTS.md)
+- **Por:** AGENTE 01 (Etapa A4 concluída — Intent Router, 100% cobertura)
 - **Por:** AGENTE 01 (Etapa A1 concluída — 5 Namespaces Semânticos)

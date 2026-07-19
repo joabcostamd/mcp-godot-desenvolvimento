@@ -191,19 +191,19 @@ Ao finalizar:
 - Cobre fluxo completo: definição → filtros → dispatch → pós-processamento
 - Inclui contratos das Etapas A1 (Namespaces) e A2 (ExecutionContext)
 
-### ⬜ A4 — Intent Router (~4h)
+### ✅ A4 — Intent Router (~4h) — CONCLUÍDO 2026-07-19
 
 **Meta:** `godot(action="criar inimigo")` — 1 chamada resolve tudo.
 
-| # | Ação | Arquivo |
-|---|---|---|
-| A4.1 | ~100 regex PT+EN | `core/intent_router.py` (novo) |
-| A4.2 | Pipeline: `classify → route → extract → invoke` | `core/intent_router.py` |
-| A4.3 | Handler `godot()` | `server.py` |
-| A4.4 | Fallback `tool_catalog` | `server.py` |
-| A4.5 | Testar 20 intenções variadas | — |
+| # | Ação | Arquivo | Status |
+|---|---|---|---|
+| A4.1 | ~100 regex PT+EN | `core/intent_router.py` (novo) | ✅ (74 padrões cobrindo 35+ ferramentas) |
+| A4.2 | Pipeline: `classify → route → extract → invoke` | `core/intent_router.py` | ✅ |
+| A4.3 | Handler `godot()` | `server.py` | ✅ |
+| A4.4 | Fallback `tool_catalog` | `server.py` | ✅ |
+| A4.5 | Testar 20 intenções variadas | — | ✅ (20/20 = 100%) |
 
-**Gate:** `godot(action="criar inimigo com patrulha")` funciona. ≥95% cobertura.
+**Gate:** `godot(action="criar inimigo com patrulha")` funciona. ≥95% cobertura. ✅ (100%)
 
 ### ⬜ A5 — Refatorações Estruturais (~4h)
 
