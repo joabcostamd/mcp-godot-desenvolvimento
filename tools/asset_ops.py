@@ -207,3 +207,683 @@ def preview_asset(asset_path: str) -> dict:
 
     return {"status": "error", "message": f"Preview nao suportado para '{suffix}'."}
 
+
+# ═══════════════════════════════════════════════════════════════════════
+# FATIA 3.5 — validate_asset_game_ready (op do rollup asset_manage)
+# ═══════════════════════════════════════════════════════════════════════
+
+# Orçamentos de polycount por plataforma (conservador)
+_POLYCOUNT_BUDGETS = {
+    "mobile_low":   {"character": 1000, "prop": 500,  "environment": 5000},
+    "mobile_high":  {"character": 2000, "prop": 1000, "environment": 10000},
+    "desktop_mid":  {"character": 8000, "prop": 3000, "environment": 20000},
+    "desktop_high": {"character": 20000,"prop": 8000, "environment": 50000},
+    "console":      {"character": 20000,"prop": 8000, "environment": 50000},
+}
+
+# Resolução máxima de textura por plataforma (pixels no lado maior)
+_IMAGE_RESOLUTION_BUDGETS = {
+    "mobile_low":   512,
+    "mobile_high":  1024,
+    "desktop_mid":  2048,
+    "desktop_high": 4096,
+    "console":      4096,
+}
+
+# Tipos de nó de colisão a detectar no .tscn
+_COLLISION_NODE_TYPES = {
+    "CollisionShape2D", "CollisionShape3D",
+    "StaticBody2D", "StaticBody3D",
+    "RigidBody2D", "RigidBody3D",
+    "CharacterBody2D", "CharacterBody3D",
+    "Area2D", "Area3D",
+}
+
+# Tipos de nó indicando rig
+_RIG_INDICATORS = {"Skeleton3D", "Skeleton2D", "BoneAttachment3D"}
+
+
+def validate_asset_game_ready(args: dict | None = None) -> dict:
+    """Valida se um asset importado atende aos critérios game-ready.
+
+    Verifica 5 critérios: escala, colisão, material, polycount, rig.
+    Usa 3 camadas de inspeção: Python offline → .import → Runtime Bridge.
+
+    Args:
+        asset_path: Caminho do asset no projeto (ex: 'res://assets/player.glb').
+        asset_type: 'character'|'environment'|'prop'|'ui'|'auto' (default: 'auto').
+        platform: 'mobile_low'|'mobile_high'|'desktop_mid'|'desktop_high'|'console'
+                  (default: 'desktop_mid').
+
+    Returns:
+        dict com status, checks por categoria, all_pass, game_ready, issues, suggestions.
+    """
+    if args is None:
+        args = {}
+
+    asset_path = args.get("asset_path", "")
+    asset_type = args.get("asset_type", "auto")
+    platform = args.get("platform", "desktop_mid")
+
+    # ── Validação de entrada ──────────────────────────────────────────
+    if not asset_path:
+        return {"status": "error", "message": "asset_path é obrigatório."}
+
+    proj = _get_active_project()
+
+    # Resolve caminho: aceita res:// ou relativo
+    if asset_path.startswith("res://"):
+        rel_path = asset_path[6:]
+    else:
+        rel_path = asset_path.lstrip("/")
+
+    full_path = proj / rel_path
+
+    if not full_path.exists():
+        return {
+            "status": "error",
+            "asset_path": asset_path,
+            "message": f"Asset não encontrado: {full_path}",
+        }
+
+    if platform not in _POLYCOUNT_BUDGETS:
+        return {
+            "status": "error",
+            "asset_path": asset_path,
+            "message": f"Plataforma inválida: '{platform}'. Use: {list(_POLYCOUNT_BUDGETS.keys())}",
+        }
+
+    valid_types = {"auto", "character", "environment", "prop", "ui"}
+    if asset_type not in valid_types:
+        return {
+            "status": "error",
+            "asset_path": asset_path,
+            "message": f"asset_type inválido: '{asset_type}'. Use: {list(valid_types)}",
+        }
+
+    # ── Camada 1: Inspeção offline (Python) ───────────────────────────
+    suffix = full_path.suffix.lower()
+    glb_info = {}
+    image_info = {}
+    tscn_info = {"nodes": []}
+    method = "file_only"
+
+    if suffix in (".glb", ".gltf"):
+        glb_info = _parse_glb_info(str(full_path))
+    elif suffix in (".png", ".jpg", ".jpeg", ".bmp", ".webp"):
+        image_info = _parse_image_info(str(full_path))
+    elif suffix == ".tscn":
+        tscn_info = _parse_tscn_for_validation(str(full_path), proj)
+
+    # ── Camada 2: Parse do .import ────────────────────────────────────
+    import_info = _parse_import_file(str(full_path))
+
+    # ── Detecção automática de asset_type ─────────────────────────────
+    if asset_type == "auto":
+        asset_type = _detect_asset_type(suffix, glb_info, tscn_info)
+    # Normaliza environment → usa mesmo budget que environment
+    display_type = asset_type
+
+    # ── Camada 3: Runtime Bridge (opcional) ───────────────────────────
+    bridge_info = _inspect_via_bridge(rel_path, proj)
+    if bridge_info:
+        method = "hybrid"
+        # Merge: bridge info complementa (não sobrescreve) o offline
+        if not glb_info and bridge_info.get("glb_info"):
+            glb_info = bridge_info["glb_info"]
+        if bridge_info.get("tscn_nodes"):
+            tscn_info["nodes"].extend(bridge_info["tscn_nodes"])
+
+    # ── 5 Checks ──────────────────────────────────────────────────────
+    scale_check = _check_scale(glb_info, import_info, tscn_info)
+    collision_check = _check_collision(tscn_info, asset_type)
+    material_check = _check_material(glb_info, import_info, tscn_info, suffix)
+    polycount_check = _check_polycount(glb_info, image_info, platform, asset_type)
+    rig_check = _check_rig(glb_info, tscn_info, asset_type)
+
+    checks = {
+        "scale": scale_check,
+        "collision": collision_check,
+        "material": material_check,
+        "polycount": polycount_check,
+        "rig": rig_check,
+    }
+
+    # ── Consolidação ──────────────────────────────────────────────────
+    all_pass = all(
+        c.get("pass", True) or not c.get("applicable", True)
+        for c in checks.values()
+    )
+    issues = []
+    suggestions = []
+
+    for name, check in checks.items():
+        if not check.get("pass", True) and check.get("applicable", True):
+            issues.append(check.get("message", f"Falha em {name}"))
+        if check.get("suggestion"):
+            suggestions.append(check["suggestion"])
+
+    status = "success" if all_pass else "warning"
+
+    return {
+        "status": status,
+        "asset_path": asset_path,
+        "asset_type": display_type,
+        "platform": platform,
+        "checks": checks,
+        "all_pass": all_pass,
+        "game_ready": all_pass,
+        "issues": issues,
+        "suggestions": suggestions,
+        "method": method,
+        "message": (
+            "✅ Asset game-ready: todos os checks passaram."
+            if all_pass
+            else f"⚠️ Asset NÃO está game-ready: {len(issues)} de 5 checks falharam."
+        ),
+    }
+
+
+# ── Funções auxiliares ──────────────────────────────────────────────────
+
+def _parse_glb_info(file_path: str) -> dict:
+    """Parse offline de GLB/glTF com pygltflib.
+
+    Returns:
+        dict com: triangles, vertices, materials, has_skin, has_skeleton,
+                  bounding_box {min: [x,y,z], max: [x,y,z]}, node_count, mesh_count.
+        dict vazio se o parse falhar.
+    """
+    try:
+        import pygltflib
+        gltf = pygltflib.GLTF2().load(file_path)
+
+        total_triangles = 0
+        total_vertices = 0
+        mesh_count = len(gltf.meshes or [])
+
+        for mesh in (gltf.meshes or []):
+            for primitive in (mesh.primitives or []):
+                # Conta triângulos via indices
+                if primitive.indices is not None:
+                    accessor = gltf.accessors[primitive.indices]
+                    total_triangles += accessor.count // 3
+                # Conta vértices via POSITION
+                if primitive.attributes and hasattr(primitive.attributes, 'POSITION') and primitive.attributes.POSITION is not None:
+                    pos_accessor = gltf.accessors[primitive.attributes.POSITION]
+                    total_vertices += pos_accessor.count
+                elif primitive.indices is not None:
+                    # Fallback: se tem indices mas não POSITION explícito, estima
+                    accessor = gltf.accessors[primitive.indices]
+                    total_vertices += accessor.count
+
+        # Materiais
+        material_count = len(gltf.materials or [])
+        material_names = [m.name or f"material_{i}" for i, m in enumerate(gltf.materials or [])]
+
+        # Rig: skins
+        has_skin = len(gltf.skins or []) > 0
+        skin_joints = sum(len(s.joints) for s in (gltf.skins or []))
+
+        # Bounding box (min/max dos vértices)
+        bbox_min = [float("inf")] * 3
+        bbox_max = [float("-inf")] * 3
+
+        for mesh in (gltf.meshes or []):
+            for primitive in (mesh.primitives or []):
+                if primitive.attributes and hasattr(primitive.attributes, 'POSITION') and primitive.attributes.POSITION is not None:
+                    pos_acc = gltf.accessors[primitive.attributes.POSITION]
+                    # Tenta ler buffer de vértices
+                    try:
+                        if hasattr(pos_acc, 'min') and pos_acc.min is not None:
+                            for i in range(3):
+                                bbox_min[i] = min(bbox_min[i], pos_acc.min[i])
+                                bbox_max[i] = max(bbox_max[i], pos_acc.max[i])
+                    except Exception:
+                        pass
+
+        # Se não conseguiu bounding box, usa defaults
+        if bbox_min[0] == float("inf"):
+            bbox_min = [0.0, 0.0, 0.0]
+            bbox_max = [1.0, 1.0, 1.0]
+
+        return {
+            "triangles": total_triangles,
+            "vertices": total_vertices,
+            "material_count": material_count,
+            "material_names": material_names,
+            "has_skin": has_skin,
+            "skin_joints": skin_joints,
+            "mesh_count": mesh_count,
+            "node_count": len(gltf.nodes or []),
+            "bounding_box": {
+                "min": bbox_min,
+                "max": bbox_max,
+            },
+            "size": {
+                "x": bbox_max[0] - bbox_min[0],
+                "y": bbox_max[1] - bbox_min[1],
+                "z": bbox_max[2] - bbox_min[2],
+            },
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def _parse_image_info(file_path: str) -> dict:
+    """Parse de imagem com Pillow.
+
+    Returns:
+        dict com: width, height, mode, format, size_bytes.
+        dict vazio se falhar.
+    """
+    try:
+        from PIL import Image
+        img = Image.open(file_path)
+        w, h = img.size
+        return {
+            "width": w,
+            "height": h,
+            "max_dimension": max(w, h),
+            "mode": img.mode,
+            "format": img.format,
+            "size_bytes": Path(file_path).stat().st_size,
+        }
+    except Exception:
+        return {}
+
+
+def _parse_tscn_for_validation(tscn_path: str, proj: Path) -> dict:
+    """Parse de .tscn focado em validação: nós de colisão, rig, material.
+
+    Reusa _parse_tscn_content de scene_ops.py se disponível.
+    """
+    result = {"nodes": [], "has_collision": False, "has_rig": False, "has_material_override": False}
+
+    try:
+        from tools.scene_ops import _parse_tscn_content
+        _, parsed_nodes = _parse_tscn_content(tscn_path, proj)
+    except Exception:
+        # Fallback: parse manual com regex
+        content = Path(tscn_path).read_text(encoding="utf-8", errors="replace")
+        parsed_nodes = []
+        for m in __import__("re").finditer(
+            r'\[node\s+name="([^"]*)"(?:\s+type="([^"]*)")?(?:\s+parent="([^"]*)")?',
+            content,
+        ):
+            parsed_nodes.append({
+                "name": m.group(1),
+                "type": m.group(2) or "Node",
+                "parent": m.group(3) or ".",
+            })
+
+    for node in parsed_nodes:
+        node_type = node.get("type", "")
+        result["nodes"].append({"name": node.get("name", ""), "type": node_type})
+
+        if node_type in _COLLISION_NODE_TYPES:
+            result["has_collision"] = True
+        if node_type in _RIG_INDICATORS or node_type == "ImporterMeshInstance3D":
+            result["has_rig"] = True
+        # Verifica material_override no corpo do nó
+        props = node.get("properties", {})
+        if "material_override" in props or "surface_material_override" in props:
+            result["has_material_override"] = True
+
+    # Verificação extra: busca por skeleton_path no conteúdo bruto
+    if not result["has_rig"]:
+        try:
+            content = Path(tscn_path).read_text(encoding="utf-8", errors="replace")
+            if 'skeleton_path = NodePath("../Skeleton3D")' in content or 'skeleton_path = NodePath("' in content:
+                result["has_rig"] = True
+        except Exception:
+            pass
+
+    return result
+
+
+def _parse_import_file(asset_path: str) -> dict:
+    """Parse do arquivo .import do Godot (formato INI-like).
+
+    Returns:
+        dict com sections [remap], [deps], [params].
+        dict vazio se o .import não existir.
+    """
+    import_path = asset_path + ".import"
+    import_file = Path(import_path)
+    result = {}
+
+    if not import_file.exists():
+        return result
+
+    try:
+        import configparser
+        cp = configparser.ConfigParser()
+        cp.read(str(import_file), encoding="utf-8")
+
+        for section in cp.sections():
+            result[section] = dict(cp.items(section))
+
+        # Extrai campos chave dos params
+        params = result.get("params", {})
+        if "meshes/import_scale" in params:
+            result["import_scale"] = float(params["meshes/import_scale"])
+        if "meshes/compress" in params:
+            result["mesh_compress"] = params["meshes/compress"]
+        if "meshes/generate_lods" in params:
+            result["generate_lods"] = params["meshes/generate_lods"].lower() == "true"
+        if "skins/use_named_skins" in params:
+            result["use_named_skins"] = params["skins/use_named_skins"].lower() == "true"
+        if "animation/import" in params:
+            result["animation_import"] = params["animation/import"].lower() == "true"
+
+        # Importer type
+        if "importer" in params:
+            result["importer_type"] = params["importer"]
+
+    except Exception:
+        pass
+
+    return result
+
+
+def _inspect_via_bridge(rel_path: str, proj: Path) -> dict | None:
+    """Tenta inspecionar o asset via Runtime Bridge (GDScript).
+
+    Returns:
+        dict com glb_info, tscn_nodes se o bridge estiver disponível.
+        None se o bridge não estiver disponível.
+    """
+    try:
+        from tools.bridge import dispatch_operation
+
+        # GDScript para inspecionar o asset
+        gdscript = f'''
+var result = {{}}
+var res = load("res://{rel_path}")
+if res is PackedScene:
+    var instance = res.instantiate()
+    var nodes = []
+    _inspect_node(instance, nodes)
+    result["tscn_nodes"] = nodes
+    result["node_count"] = nodes.size()
+    instance.queue_free()
+return JSON.stringify(result)
+'''
+        response = dispatch_operation("execute_gdscript", {"code": gdscript})
+        if response and response.get("status") == "success":
+            import json
+            return json.loads(response.get("result", "{}"))
+    except Exception:
+        pass
+
+    return None
+
+
+def _detect_asset_type(suffix: str, glb_info: dict, tscn_info: dict) -> str:
+    """Detecta automaticamente o tipo de asset."""
+    # GLB com rig → character
+    if glb_info and glb_info.get("has_skin"):
+        return "character"
+    if tscn_info.get("has_rig"):
+        return "character"
+
+    # GLB sem rig → environment ou prop (baseado em tamanho)
+    if glb_info:
+        bbox = glb_info.get("bounding_box", {})
+        size = bbox.get("size", {"x": 1, "y": 1, "z": 1})
+        max_dim = max(size.get("x", 1), size.get("y", 1), size.get("z", 1))
+        if max_dim > 10.0:
+            return "environment"
+        return "prop"
+
+    # TSCN → analisa tipos de nós
+    if tscn_info.get("nodes"):
+        node_types = {n.get("type", "") for n in tscn_info["nodes"]}
+        if node_types & {"Control", "TextureRect", "Button", "Label", "Panel"}:
+            return "ui"
+        if node_types & {"TileMap", "TileMapLayer", "NavigationRegion3D"}:
+            return "environment"
+        if node_types & {"CharacterBody2D", "CharacterBody3D", "AnimatedSprite2D", "AnimatedSprite3D"}:
+            return "character"
+
+    # Imagem → ui por padrão
+    if suffix in (".png", ".jpg", ".jpeg", ".bmp", ".webp"):
+        return "ui"
+
+    return "prop"
+
+
+def _check_scale(glb_info: dict, import_info: dict, tscn_info: dict) -> dict:
+    """Verifica se a escala do asset é plausível (0.01–100.0 unidades Godot)."""
+    MIN_SCALE = 0.01
+    MAX_SCALE = 100.0
+    scale_value = 1.0
+    source = "default"
+
+    # Prioridade 1: .import params
+    if import_info.get("import_scale") is not None:
+        scale_value = import_info["import_scale"]
+        source = ".import file"
+
+    # Prioridade 2: bounding box do GLB
+    elif glb_info and glb_info.get("size"):
+        size = glb_info["size"]
+        # Usa a maior dimensão como referência
+        max_dim = max(size.get("x", 1), size.get("y", 1), size.get("z", 1))
+        scale_value = max_dim
+        source = "GLB bounding box"
+
+    if scale_value < MIN_SCALE:
+        return {
+            "pass": False,
+            "applicable": True,
+            "value": scale_value,
+            "unit": "godot_units",
+            "source": source,
+            "message": f"Escala muito pequena ({scale_value:.6f}). Mínimo: {MIN_SCALE}",
+            "suggestion": f"Aumente o Root Scale no import para ≥ {MIN_SCALE}",
+        }
+    elif scale_value > MAX_SCALE:
+        return {
+            "pass": False,
+            "applicable": True,
+            "value": scale_value,
+            "unit": "godot_units",
+            "source": source,
+            "message": f"Escala muito grande ({scale_value:.1f}). Máximo: {MAX_SCALE}",
+            "suggestion": f"Reduza o Root Scale no import para ≤ {MAX_SCALE} ou normalize no Blender",
+        }
+    else:
+        return {
+            "pass": True,
+            "applicable": True,
+            "value": scale_value,
+            "unit": "godot_units",
+            "source": source,
+            "message": f"Escala dentro do range plausível ({MIN_SCALE}–{MAX_SCALE})",
+        }
+
+
+def _check_collision(tscn_info: dict, asset_type: str) -> dict:
+    """Verifica presença de colisão no asset."""
+    # Tipos que precisam de colisão
+    if asset_type in ("character", "environment"):
+        applicable = True
+    elif asset_type == "prop":
+        applicable = True  # recomendado, mas não obrigatório
+    else:
+        return {"pass": True, "applicable": False, "message": "Colisão não se aplica a assets de UI."}
+
+    has_collision = tscn_info.get("has_collision", False)
+
+    if has_collision:
+        return {
+            "pass": True,
+            "applicable": True,
+            "message": "Colisão detectada (CollisionShape/StaticBody/RigidBody presente).",
+        }
+
+    if asset_type == "character":
+        return {
+            "pass": False,
+            "applicable": True,
+            "message": "Nenhum nó de colisão encontrado. Personagem precisa de CollisionShape + CharacterBody/StaticBody.",
+            "suggestion": "Adicione um CollisionShape2D/3D ao corpo do personagem.",
+        }
+    elif asset_type == "environment":
+        return {
+            "pass": False,
+            "applicable": True,
+            "message": "Nenhum nó de colisão encontrado. Ambiente precisa de StaticBody + CollisionShape.",
+            "suggestion": "Adicione um StaticBody3D com CollisionShape3D à cena.",
+        }
+    else:
+        # prop: recomendado mas não bloqueia
+        return {
+            "pass": True,
+            "applicable": True,
+            "message": "Nenhum nó de colisão encontrado. Props geralmente têm colisão (recomendado).",
+            "suggestion": "Considere adicionar um StaticBody com CollisionShape.",
+        }
+
+
+def _check_material(glb_info: dict, import_info: dict, tscn_info: dict, suffix: str) -> dict:
+    """Verifica compatibilidade de materiais."""
+    # Apenas para assets 3D
+    if suffix not in (".glb", ".gltf"):
+        return {"pass": True, "applicable": False, "message": "Verificação de material aplica-se apenas a modelos 3D."}
+
+    material_count = glb_info.get("material_count", 0)
+    material_names = glb_info.get("material_names", [])
+
+    if material_count == 0:
+        return {
+            "pass": False,
+            "applicable": True,
+            "materials_found": 0,
+            "message": "Nenhum material encontrado no modelo 3D.",
+            "suggestion": "Adicione pelo menos um StandardMaterial3D ao modelo no Blender/software 3D.",
+        }
+
+    # Verifica materiais suspeitos (nomes que indicam shader problemático)
+    incompatible = []
+    for name in material_names:
+        if name.lower().startswith("shader") or "custom" in name.lower():
+            incompatible.append(name)
+
+    if incompatible:
+        return {
+            "pass": False,
+            "applicable": True,
+            "materials_found": material_count,
+            "incompatible": incompatible,
+            "message": f"{len(incompatible)} material(is) potencialmente incompatível(is): {', '.join(incompatible)}. Prefira StandardMaterial3D ou ORMMaterial3D.",
+            "suggestion": "Substitua ShaderMaterial por StandardMaterial3D para compatibilidade com a luz da cena.",
+        }
+
+    return {
+        "pass": True,
+        "applicable": True,
+        "materials_found": material_count,
+        "incompatible": [],
+        "message": f"{material_count} material(is) encontrado(s) — compatível(is) com o pipeline PBR do Godot.",
+    }
+
+
+def _check_polycount(glb_info: dict, image_info: dict, platform: str, asset_type: str) -> dict:
+    """Verifica polycount/resolução contra o orçamento da plataforma."""
+    budgets = _POLYCOUNT_BUDGETS.get(platform, _POLYCOUNT_BUDGETS["desktop_mid"])
+    budget = budgets.get(asset_type, budgets.get("prop", 5000))
+
+    # Caso GLB/3D
+    if glb_info and glb_info.get("triangles", 0) > 0:
+        triangles = glb_info["triangles"]
+        vertices = glb_info.get("vertices", triangles * 3)
+        if triangles <= budget:
+            pct = (triangles / budget) * 100 if budget > 0 else 0
+            return {
+                "pass": True,
+                "applicable": True,
+                "triangles": triangles,
+                "vertices": vertices,
+                "budget": budget,
+                "platform": platform,
+                "message": f"{triangles:,}/{budget:,} tris ({pct:.1f}%) — dentro do orçamento.",
+            }
+        else:
+            pct = (triangles / budget) * 100 if budget > 0 else 0
+            return {
+                "pass": False,
+                "applicable": True,
+                "triangles": triangles,
+                "vertices": vertices,
+                "budget": budget,
+                "platform": platform,
+                "message": f"{triangles:,}/{budget:,} tris ({pct:.1f}%) — EXCEDE o orçamento de {platform}.",
+                "suggestion": f"Reduza o polycount para ≤ {budget:,} tris (decimate no Blender ou use LODs).",
+            }
+
+    # Caso imagem/2D
+    if image_info and image_info.get("max_dimension", 0) > 0:
+        max_dim = image_info["max_dimension"]
+        img_budget = _IMAGE_RESOLUTION_BUDGETS.get(platform, 2048)
+        if max_dim <= img_budget:
+            return {
+                "pass": True,
+                "applicable": True,
+                "max_dimension": max_dim,
+                "budget": img_budget,
+                "platform": platform,
+                "message": f"Resolução {image_info.get('width',0)}×{image_info.get('height',0)}px — dentro do orçamento ({img_budget}px).",
+            }
+        else:
+            return {
+                "pass": False,
+                "applicable": True,
+                "max_dimension": max_dim,
+                "budget": img_budget,
+                "platform": platform,
+                "message": f"Resolução {image_info.get('width',0)}×{image_info.get('height',0)}px — EXCEDE o orçamento de {img_budget}px.",
+                "suggestion": f"Redimensione a textura para ≤ {img_budget}px no lado maior.",
+            }
+
+    # Sem dados → não aplica
+    return {"pass": True, "applicable": False, "message": "Sem dados de polycount/resolução para verificar."}
+
+
+def _check_rig(glb_info: dict, tscn_info: dict, asset_type: str) -> dict:
+    """Verifica presença de rig (Skeleton + Skin) para personagens."""
+    if asset_type != "character":
+        return {"pass": True, "applicable": False, "message": "Rig só é obrigatório para personagens."}
+
+    has_skin = glb_info.get("has_skin", False)
+    skin_joints = glb_info.get("skin_joints", 0)
+    has_rig_tscn = tscn_info.get("has_rig", False)
+
+    if has_skin:
+        return {
+            "pass": True,
+            "applicable": True,
+            "bones": skin_joints,
+            "has_skin": True,
+            "message": f"Skeleton3D com {skin_joints} bones + Skin weights detectado.",
+        }
+
+    if has_rig_tscn:
+        return {
+            "pass": True,
+            "applicable": True,
+            "has_skin": False,
+            "message": "Skeleton3D detectado na cena importada.",
+        }
+
+    return {
+        "pass": False,
+        "applicable": True,
+        "has_skin": False,
+        "bones": 0,
+        "message": "Nenhum rig/Skeleton detectado. Personagem precisa de rig para animação.",
+        "suggestion": "Adicione um Armature + Skin no Blender/software 3D antes de exportar o GLB.",
+    }
+

@@ -64,6 +64,7 @@ from tools.asset_ops import (
     import_texture,
     import_sprite_sheet,
     import_audio,
+    validate_asset_game_ready,
 )
 from tools.placeholder_ops import (
     generate_placeholder_sprite,
@@ -146,6 +147,9 @@ from tools.devsolo_ops import add_raycast_2d, add_shapecast_2d
 # ── Stress Test ───────────────────────────────────────────────
 
 from tools.stress_test_ops import run_stress_test
+from tools.test_ops import test_coverage_report, generate_test_cases_from_gdd, run_canary_queries
+from tools.perf_ops import perf_regression_track
+from tools.music_ops import generate_music, make_seamless_loop, place_and_normalize, bind_to_event
 
 # ── Playmode (assert) ─────────────────────────────────────────
 
@@ -154,14 +158,8 @@ from tools.playmode_ops import assert_node_exists
 # ── Runtime, Analysis, Safety ──────────────────────────────────
 
 from tools.runtime_ops import (
-    compile_test,
-    run_game,
-    stop_game,
-    smart_restart,
-    launch_editor,
-    close_editor,
-    compare_screenshots,
-    detect_empty_screen,
+    compile_test, run_game, stop_game, smart_restart, launch_editor, close_editor,
+    compare_screenshots, detect_empty_screen, visual_regression,
 )
 # detect_offscreen_elements está em scene_ops (já importado acima)
 from tools.analyze_ops import (
@@ -323,13 +321,14 @@ def _build_project_manage():
 
 
 def _build_asset_manage():
-    """asset_manage: 8 operações de assets."""
+    """asset_manage: 9 operações de assets."""
     return create_manage_tool(
         tool_name="asset_manage",
         description=(
             "Gerencia assets do jogo: importar texturas, spritesheets e áudio, "
-            "além de gerar placeholders procedurais (sprites, fundos, tilesets) "
-            "e sugerir paletas de cores. "
+            "gerar placeholders procedurais (sprites, fundos, tilesets), "
+            "sugerir paletas de cores e validar se um asset importado está "
+            "game-ready (escala, colisão, material, polycount, rig). "
             "Use para povoar o jogo com recursos visuais e sonoros. "
             "Quando NÃO usar: para arte gerada por IA (use generate_game_art "
             "— named tool) ou modelos 3D (use import_3d_model — named tool). "
@@ -347,6 +346,7 @@ def _build_asset_manage():
             "bg_gradient": generate_background_gradient,
             "tileset_colors": generate_tileset_from_colors,
             "palette": suggest_color_palette,
+            "validate_game_ready": validate_asset_game_ready,
         },
         tool_hints={"destructiveHint": True, "idempotentHint": False, "openWorldHint": True},
         title="Gerenciar Assets",
@@ -476,15 +476,12 @@ def _build_3d_manage():
 
 
 def _build_debug_manage():
-    """debug_manage: 3 operações de debug."""
+    """debug_manage: 4 operações."""
     return create_manage_tool(
         tool_name="debug_manage",
-        description="Gerencia debug: performance, visualização de colisões e navegação.",
-        ops={
-            "perf_stats": get_performance_stats,
-            "collision_debug": enable_debug_collisions,
-            "nav_debug": enable_debug_navigation,
-        },
+        description="Gerencia debug: performance, colisões, navegação e regressão de performance.",
+        ops={"perf_stats": get_performance_stats, "collision_debug": enable_debug_collisions,
+            "nav_debug": enable_debug_navigation, "perf_regression": perf_regression_track},
         tool_hints={"destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
         title="Gerenciar Debug",
         tags=["debug", "diagnóstico", "visualização"],
@@ -655,11 +652,10 @@ def _build_raycast_manage():
 def _build_test_manage():
     return create_manage_tool(
         tool_name="test_manage",
-        description="Gerencia testes automatizados: assert_node_exists para verificar nós em cena e run_stress_test para teste de performance.",
-        ops={
-            "assert_node": assert_node_exists,
-            "stress_test": run_stress_test,
-        },
+        description="Gerencia testes: assert_node, stress_test, coverage_report, generate_test_cases, canary.",
+        ops={"assert_node": assert_node_exists, "stress_test": run_stress_test,
+            "coverage_report": test_coverage_report, "generate_test_cases": generate_test_cases_from_gdd,
+            "canary": run_canary_queries},
         tool_hints={"destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
         title="Gerenciar Testes",
         tags=["teste", "assert", "stress", "performance"],
@@ -752,16 +748,24 @@ def _build_game_bridge_manage():
         tags=["game", "runtime", "bridge", "multiplayer", "input"],
     )
 
+def _build_music_manage():
+    """music_manage: 4 operações (Fatias 3.1-3.4)."""
+    return create_manage_tool(
+        tool_name="music_manage",
+        description="Gerencia música: generate (API), make_seamless_loop (WAV), place_and_normalize (cena), bind_to_event (eventos).",
+        ops={"generate": generate_music, "make_seamless_loop": make_seamless_loop,
+            "place_and_normalize": place_and_normalize, "bind_to_event": bind_to_event},
+        tool_hints={"destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
+        title="Gerenciar Música",
+        tags=["música", "áudio", "api", "loop", "cena", "eventos"],
+    )
 
 def _build_vision_manage():
     return create_manage_tool(
         tool_name="vision_manage",
-        description="Gerencia visão computacional: comparar screenshots, detectar tela vazia/offscreen.",
-        ops={
-            "compare": compare_screenshots,
-            "detect_empty": detect_empty_screen,
-            "detect_offscreen": detect_offscreen_elements,
-        },
+        description="Gerencia visão: comparar screenshots, detectar tela vazia/offscreen e regressão visual.",
+        ops={"compare": compare_screenshots, "detect_empty": detect_empty_screen,
+            "detect_offscreen": detect_offscreen_elements, "regression": visual_regression},
         tool_hints={"destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
         title="Gerenciar Visão",
         tags=["visão", "screenshot", "diagnóstico"],
@@ -808,6 +812,7 @@ _ROLLUP_BUILDERS = [
     _build_test_manage,
     # Etapa 5: game bridge (consolidação FATIA 0.7a)
     _build_game_bridge_manage,
+    _build_music_manage,
 ]
 
 # Cache interno — garante que cada builder só executa UMA vez.
