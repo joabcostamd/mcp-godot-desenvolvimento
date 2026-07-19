@@ -980,3 +980,105 @@ def _check_rig(glb_info: dict, tscn_info: dict, asset_type: str) -> dict:
         "suggestion": "Adicione um Armature + Skin no Blender/software 3D antes de exportar o GLB.",
     }
 
+# ── Fatia 3.7: Pipeline de arte travado ──────────────────
+
+def run_art_pipeline(
+    description: str,
+    category: str = "torre",
+    style: str = "scifi",
+    save_dir: str | None = None,
+) -> dict:
+    """Pipeline completo de arte com gate de validacao (Fatia 3.7).
+
+    Orquestra 5 etapas sequenciais com trava no final:
+    1. generate_game_art     — gera arte (com style_lock do brief)
+    2. remove_background     — remove fundo
+    3. optimize_sprite       — otimiza
+    4. import_texture        — importa com preset da categoria (Fatia 3.8)
+    5. validate_asset_game_ready — GATE: se falhar, bloqueia e reporta
+
+    Args:
+        description: Descricao em linguagem natural do asset.
+        category: Categoria (torre, inimigo, personagem, bioma, etc).
+        style: Estilo visual (scifi, fantasia, pixel, etc).
+        save_dir: Diretorio para salvar (opcional).
+
+    Returns:
+        {"status": "success", "pipeline": [...], "asset_path": str}
+        ou {"status": "error", "stage": str, "message": str, "pipeline": [...]}
+    """
+    pipeline_log = []
+    asset_path = None
+
+    def _log(stage: str, result: dict):
+        pipeline_log.append({"stage": stage, "status": result.get("status", "?"), "detail": str(result)[:200]})
+
+    # ── Etapa 1: Gerar arte ──────────────────────────
+    try:
+        from tools.art_ops import generate_game_art
+        gen = generate_game_art(description=description, category=category, style=style, save_dir=save_dir)
+        _log("1.generate", gen)
+        if gen.get("status") != "success":
+            return {"status": "error", "stage": "1.generate", "message": gen.get("message", "Falha na geracao"), "pipeline": pipeline_log}
+        # Extrai caminho do asset gerado
+        asset_path = gen.get("sprite_sheet", "") or gen.get("res_path", "")
+        if not asset_path:
+            return {"status": "error", "stage": "1.generate", "message": "Geracao OK mas sem caminho de asset", "pipeline": pipeline_log}
+    except Exception as e:
+        _log("1.generate", {"status": "error", "message": str(e)})
+        return {"status": "error", "stage": "1.generate", "message": f"Excecao: {e}", "pipeline": pipeline_log}
+
+    # ── Etapa 2: Remover fundo ────────────────────────
+    try:
+        from tools.art_postprocess import remove_background
+        bg = remove_background(image_path=asset_path)
+        _log("2.remove_background", bg)
+        if bg.get("status") == "success":
+            asset_path = bg.get("output_path", asset_path)
+    except Exception as e:
+        _log("2.remove_background", {"status": "warning", "message": f"rembg pode nao estar instalado: {e}"})
+        # remove_background e opcional — continua sem ele
+
+    # ── Etapa 3: Otimizar sprite ──────────────────────
+    try:
+        from tools.art_postprocess import optimize_sprite
+        opt = optimize_sprite(image_path=asset_path)
+        _log("3.optimize", opt)
+    except Exception as e:
+        _log("3.optimize", {"status": "warning", "message": str(e)})
+
+    # ── Etapa 4: Importar com preset ──────────────────
+    try:
+        res_path = f"assets/{category}/{Path(asset_path).name}" if asset_path else f"assets/{category}/generated.png"
+        imp = import_texture(source_path=asset_path, target_res_path=res_path, category=category)
+        _log("4.import", imp)
+        if imp.get("status") != "success":
+            return {"status": "error", "stage": "4.import", "message": imp.get("message", "Falha no import"), "pipeline": pipeline_log}
+        asset_path = res_path
+    except Exception as e:
+        _log("4.import", {"status": "error", "message": str(e)})
+        return {"status": "error", "stage": "4.import", "message": f"Excecao: {e}", "pipeline": pipeline_log}
+
+    # ── Etapa 5: GATE — validar game-ready ────────────
+    try:
+        val = validate_asset_game_ready({"res_path": asset_path, "category": category})
+        _log("5.validate", val)
+        if val.get("status") not in ("success", "ok", "valid"):
+            return {
+                "status": "error",
+                "stage": "5.validate",
+                "message": f"Asset nao passou na validacao game-ready: {val.get('message', val.get('summary', 'Ver detalhes'))}",
+                "validation": val,
+                "pipeline": pipeline_log,
+            }
+    except Exception as e:
+        _log("5.validate", {"status": "error", "message": str(e)})
+        return {"status": "error", "stage": "5.validate", "message": f"Excecao na validacao: {e}", "pipeline": pipeline_log}
+
+    # ── Sucesso ───────────────────────────────────────
+    return {
+        "status": "success",
+        "asset_path": asset_path,
+        "pipeline": pipeline_log,
+        "message": f"Pipeline arte concluido: {len(pipeline_log)} etapas, asset em {asset_path}",
+    }

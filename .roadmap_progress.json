@@ -153,7 +153,23 @@
     "0.7b+": "consolidar godot_* e outras fases",
     "Camada_1": "CONCLUIDA (16/16)",
     "Camada_2_proximo": "2.5 Regressao visual [ESCALADA] — Camada 2 completa (2.2 concluida)",
-    "Camada_3_proximo": "3.7 Pipeline de arte travado [SENIOR] (3.1-3.4 escaladas, 3.5-3.6-3.8 concluidas)"
+    "Camada_3_proximo": "3.9 Asset placement [SENIOR] (3.1-3.4 escaladas, 3.5-3.8 concluidas)"
+  },
+  "fatia_3.7": {
+    "status": "concluida",
+    "data": "2026-07-19",
+    "tentativa": 1,
+    "resultado": "run_art_pipeline() — pipeline travado 5 etapas: generate_game_art → remove_background → optimize_sprite → import_texture (c/ preset 3.8) → validate_asset_game_ready (GATE). Se validacao falha, bloqueia e reporta o que corrigir. remove_background e opcional (try/except). Pipeline log rastreia cada etapa. +102 linhas, zero tool nova.",
+    "c1": "pass — 48 tools, zero mudanca",
+    "c2": "pass — 3/3 canaries: pipeline funcional, signature correta, smoke OK",
+    "c3": "pass — smoke_test 5/5",
+    "c4": "pass — sem rede, sem segredo, modulo interno, idempotente",
+    "c5": "pre_existente — 48 tools",
+    "c6": "pass — sem tool nova",
+    "cross_model": "fraca — [SENIOR] requer revisao humana do fluxo do pipeline",
+    "arquivos_modificados": [
+      "tools/asset_ops.py (+run_art_pipeline — 5 etapas com gate — +102 linhas)"
+    ]
   },
   "fatia_3.8": {
     "status": "concluida",
