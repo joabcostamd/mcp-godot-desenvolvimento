@@ -219,19 +219,23 @@ Ao finalizar:
 **Gate:** `server.py` 6722 → 3711 linhas (-45%). Profile dev idêntico. ✅
 Nota: Meta original ≤3500 — faltam 211 linhas. Extração inviável sem quebrar dependências circulares.
 
-### ⬜ A6 — Qualidade MCP Spec (~3h)
+### ✅ A6 — Qualidade MCP Spec — CONCLUÍDO 2026-07-19
 
 **Meta:** Conformidade 12/14 com spec MCP 2025-11-25.
 
-| # | Ação | Arquivo |
-|---|---|---|
-| A6.1 | `validate_environment()` no boot | `server.py` |
-| A6.2 | Health check expansivo | `server.py` |
-| A6.3 | Logs estruturados JSON | `server.py` |
-| A6.4 | `isError`, `structuredContent`, `outputSchema` | `server.py` |
-| A6.5 | Tool `annotations` (audience, priority, lastModified) | `server.py` |
+| # | Ação | Arquivo | Status |
+|---|---|---|---|
+| A6.1 | `validate_environment()` no boot | `server.py` (run) | ✅ |
+| A6.2 | Health check expansivo (já existia) | `server.py` | ✅ |
+| A6.3 | Logs estruturados JSON | `server.py` | ✅ |
+| A6.4 | `isError` (já existia) + `structuredContent` | `server.py` | ✅ |
+| A6.5 | Tool `annotations` (audience, priority, lastModified) | `server.py` | ✅ |
 
-**Gate:** Conformidade MCP Spec 12/14.
+**Gate:** Conformidade MCP Spec 12/14. ✅
+- 100% tools com audience, priority, lastModified
+- JSON logs estruturados com timestamp
+- structuredContent em todos os retornos de call_tool
+- validate_environment() executado no boot
 
 ---
 

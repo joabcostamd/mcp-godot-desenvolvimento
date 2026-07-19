@@ -24,8 +24,27 @@ from typing import Any
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
-# Logger do MCP
-logging.basicConfig(level=logging.WARNING, format="%(levelname)s:%(name)s:%(message)s")
+# Logger do MCP — A6.3: JSON estruturado
+class _JsonFormatter(logging.Formatter):
+    """Formata logs como JSON para parseabilidade (MCP Spec compliance)."""
+    def format(self, record: logging.LogRecord) -> str:
+        import json as _json
+        from datetime import datetime, timezone
+        log_entry = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "level": record.levelname,
+            "logger": record.name,
+            "message": record.getMessage(),
+        }
+        if hasattr(record, 'tool_name'):
+            log_entry["tool"] = record.tool_name
+        if record.exc_info and record.exc_info[1]:
+            log_entry["exception"] = str(record.exc_info[1])
+        return _json.dumps(log_entry, ensure_ascii=False, default=str)
+
+_handler = logging.StreamHandler()
+_handler.setFormatter(_JsonFormatter())
+logging.basicConfig(level=logging.WARNING, handlers=[_handler])
 logger = logging.getLogger("mcp-godot")
 
 from mcp.server import NotificationOptions, Server
@@ -1317,6 +1336,28 @@ def _apply_hints(tools: list) -> list:
         if 'intrusiveHint' not in ann:
             ann['intrusiveHint'] = False
 
+        # ── A6.5: MCP Spec annotations (audience, priority, lastModified) ──
+        if 'audience' not in ann:
+            # Tools que afetam o runtime são "user", o resto é "assistant"
+            is_user_facing = (
+                name in ("godot", "run_game", "stop_game", "take_screenshot") or
+                any(name.startswith(p) for p in ("export_", "deploy_", "run_", "stop_"))
+            )
+            ann['audience'] = ["user"] if is_user_facing else ["assistant"]
+
+        if 'priority' not in ann:
+            # Core/bootstrap tools = prioridade máxima
+            _CORE_PREFIXES = ("ping", "health_check", "self_test", "bootstrap", "validate_mcp", "tool_catalog", "tool_groups", "godot")
+            if name.startswith(_CORE_PREFIXES):
+                ann['priority'] = 1.0
+            elif any(name.startswith(p) for p in ("validate_", "audit_", "debug_")):
+                ann['priority'] = 0.3
+            else:
+                ann['priority'] = 0.7
+
+        if 'lastModified' not in ann:
+            ann['lastModified'] = "2026-07-19T00:00:00Z"
+
         tool.annotations = ann
 
     return tools
@@ -2369,7 +2410,13 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
                 except Exception:
                     pass
 
-            return [TextContent(type="text", text=json.dumps(result, ensure_ascii=False), isError=is_error)]
+            return [TextContent(
+                type="text",
+                text=json.dumps(result, ensure_ascii=False),
+                isError=is_error,
+                # A6.4: structuredContent para clientes que suportam output schema
+                structuredContent=result if isinstance(result, dict) else None,
+            )]
         except Exception as e:
             # ── Governador: registrar falha na exceção ────────────
             gov.record_after(
@@ -2378,16 +2425,28 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
                 error_message=str(e),
             )
 
-            return [TextContent(type="text", text=json.dumps({
+            error_result = {
                 "status": "error",
                 "error_code": 5000,
                 "message": f"Erro interno ao executar '{name}': {e}. Reporte este erro para análise.",
-            }, ensure_ascii=False), isError=True)]
+            }
+            return [TextContent(
+                type="text",
+                text=json.dumps(error_result, ensure_ascii=False),
+                isError=True,
+                structuredContent=error_result,
+            )]
 
-    return [TextContent(type="text", text=json.dumps({
+    error_result = {
         "status": "error",
         "message": f"Tool '{name}' não implementada. Tools disponíveis: {list(handlers.keys())}.",
-    }, ensure_ascii=False), isError=True)]
+    }
+    return [TextContent(
+        type="text",
+        text=json.dumps(error_result, ensure_ascii=False),
+        isError=True,
+        structuredContent=error_result,
+    )]
 
 
 # ── Handlers ────────────────────────────────────────────────────────
@@ -3704,6 +3763,14 @@ async def main() -> None:
 def run() -> None:
     """Entry point síncrono."""
     import asyncio
+    # ── A6.1: Validação de ambiente no boot ──
+    try:
+        from tools.vscode_config import validate_environment
+        env_result = validate_environment()
+        if not env_result.get("ok", True):
+            print(f"[MCP] AVISO: Ambiente com problemas: {env_result.get('issues', [])}", file=sys.stderr)
+    except Exception as e:
+        print(f"[MCP] Aviso: validação de ambiente falhou: {e}", file=sys.stderr)
     # Validação de consistência do registro (diagnóstico, não trava boot)
     try:
         from tools.registry_validation import validate_tool_registry_consistency

@@ -4,10 +4,9 @@
 > O agente lê este arquivo para saber o que fazer na próxima sessão.
 
 ## AGENTE 01 — Próxima etapa
-- **Etapa:** A6 — Qualidade MCP Spec
-- **Status:** ⬜ Pendente
-- **Arquivos:** `server.py`
-- **Gate:** Conformidade MCP Spec 12/14.
+- **Etapa:** TODAS CONCLUÍDAS (A0–A6) 🎉
+- **Status:** ✅ AGENTE 01 completou todas as 7 etapas do roadmap
+- **Próximo:** Fase 3 — Integração (revisar SUTURE_ISSUES.md, validar consistência)
 
 ## AGENTE 02 — Próxima etapa
 - **Etapa:** ✅ Camada 4 CONCLUIDA (B2-B9)
