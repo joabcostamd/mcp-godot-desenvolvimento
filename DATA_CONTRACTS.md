@@ -193,9 +193,9 @@ O dispatch `_smart_call()` detecta automaticamente a assinatura:
 # _smart_call() inspeciona a assinatura na primeira chamada e cacheia o modo
 sig = inspect.signature(handler)
 params = list(sig.parameters.keys())
-if not params:           → modo 0
-elif params[0] == "args": → modo 1
-else:                     → modo 2
+if not params:                        → modo 0  (handler())
+elif params[0] in ("args", "arguments"): → modo 1  (handler(args: dict))
+else:                                  → modo 2  (handler(**kwargs))
 ```
 
 ### 2.3 Contrato de Resposta do Handler
@@ -226,19 +226,20 @@ Todo handler DEVE retornar um `dict` com:
 ┌─────────────────────────────────────────────────────────────────────┐
 │                    PIPELINE DE REGISTRO (_tool_defs)                 │
 │                                                                      │
-│  1. Lista hardcoded de Tool()              [~linha 1366]             │
-│  2. outputSchema aplicado                  [~linha 4759]             │
-│  3. Filtro: deprecated                     [~linha 4767]             │
-│  4. Filtro: --toolsets                     [~linha 4772]             │
-│  5. Filtro: --profile                      [~linha 4777]             │
-│  6. Filtro: fase do projeto                [~linha 4784]             │
-│  7. _apply_hints()                         [~linha 4790]             │
-│  8. _compact_all_tool_descriptions()       [~linha 4793]             │
-│  9. Filtro: kill switch                    [~linha 4797]             │
-│ 10. _meta.namespace injetado (A1)          [~linha 4600]             │
-│ 11. Rollups append (get_rollup_tool_defs)  [~linha 4610]             │
-│ 12. operationCategory (B6)                 [~linha 4615]             │
-│ 13. deferLoading (M3)                      [~linha 4620]             │
+│  1. Lista hardcoded de Tool()              [linha ~1360]             │
+│  2. outputSchema aplicado                  [linha ~4662]             │
+│  3. Filtro: deprecated                     [após outputSchema]       │
+│  4. Filtro: --toolsets                     [após deprecated]         │
+│  5. Filtro: --profile                      [após toolsets]           │
+│  6. Filtro: fase do projeto                [após profile]            │
+│  7. _apply_hints()                         [linha ~1262]             │
+│  8. _compact_all_tool_descriptions()       [linha ~1344]             │
+│  9. Pós-processamento (B6/M3/tags/titles)  [linhas ~4595-4607]       │
+│ 10. Rollups append (get_rollup_tool_defs)  [linha ~4612]             │
+│ 11. B6 Read/Write Split (p/ rollups)       [linha ~4618]             │
+│ 12. M3 deferLoading (p/ rollups)           [linha ~4629]             │
+│ 13. Filtro: kill switch                    [linha ~4785]             │
+│ 14. _meta.namespace injetado (A1)          [linha ~4793]             │
 │                                                                      │
 │  Resultado: _TOOL_DEFS_CACHE (list[Tool])                            │
 └─────────────────────────────────────────────────────────────────────┘
@@ -272,8 +273,8 @@ A ordem garante que:
 3. **Profile** antes de fase — profile é mais restritivo que fase
 4. **Fase** depois de profile — fase é cumulativa com CORE
 5. **Hints** depois dos filtros — só tools visíveis recebem hints
-6. **Namespace** antes dos rollups — rollups também herdam namespace
-7. **Rollups** no final — adicionam tools após todos os filtros
+6. **Rollups** depois dos hints — rollups já trazem hints próprios
+7. **Namespace** por ÚLTIMO (após rollups e kill switch) — garante que TODAS as tools (incluindo rollups) recebam namespace
 
 ### 3.3 Sistema de Namespaces (Etapa A1)
 
@@ -335,6 +336,45 @@ ctx = get_execution_context()
 | `core` | ~15 | Essenciais para bootstrap |
 | `dev` | ~40 | Desenvolvimento completo |
 | `full` | ~239 | Todas as tools (sem filtro) |
+
+### 3.7 Cache e Invalidação
+
+**_TOOL_DEFS_CACHE**: Cache global da lista de tools. Só é recalculado quando invalidado.
+
+```python
+_TOOL_DEFS_CACHE: list[Tool] | None = None  # None = não calculado
+
+def _invalidate_tool_caches() -> None:
+    """Invalidado por advance_phase quando a fase muda."""
+    global _TOOL_DEFS_CACHE, _HANDLERS_CACHE
+    _TOOL_DEFS_CACHE = None
+    _HANDLERS_CACHE = None
+```
+
+**Quando invalidar:**
+- Após `advance_phase` (muda tools visíveis)
+- Após adicionar/remover tools em `_tool_defs()`
+- Após modificar `TOOLSETS` ou `PHASE_TOOLSETS`
+
+**_REGISTRY_VALIDATION_UNFILTERED**: Flag que desabilita TODOS os filtros para validação.
+
+```python
+_REGISTRY_VALIDATION_UNFILTERED: bool = False
+# Quando True, _tool_defs() retorna TODAS as tools sem filtro algum.
+# Usado apenas por validate_mcp_registry para auditoria completa.
+```
+
+### 3.8 Notificações de Mudança
+
+**`tools/list_changed`**: Quando a lista de tools muda (ex: `advance_phase`), o servidor notifica o cliente:
+
+```python
+if name == "advance_phase" and not is_error:
+    from mcp.server.lowlevel.server import request_ctx
+    # Envia notificação tools/list_changed
+```
+
+**Contrato:** Qualquer handler que modifique tools visíveis (fase, perfil, kill switch) DEVE notificar `tools/list_changed`.
 
 ---
 
