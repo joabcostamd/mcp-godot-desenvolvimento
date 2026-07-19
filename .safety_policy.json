@@ -1,7 +1,0 @@
-{
-  "enabled": true,
-  "allowlist": [],
-  "blocklist": [],
-  "confirm_destructive": true,
-  "max_file_size_kb": 1024
-}
