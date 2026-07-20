@@ -275,6 +275,7 @@ func _handle_message(raw: String) -> void:
 		"batch_edit": _batch_edit(req_id, params)
 		"take_screenshot": _take_screenshot(req_id, params)
 		"get_scene_tree": _get_scene_tree(req_id, params)
+		"check_file_modified": _check_file_modified(req_id, params)
 		_:
 			_send_error(-32601, "Method not found: " + method, req_id)
 			_update_stats(method, false)
@@ -441,3 +442,72 @@ func _build_tree(node: Node) -> Dictionary:
 	for c in node.get_children():
 		r.children.append(_build_tree(c))
 	return r
+
+
+func _check_file_modified(id, params: Dictionary) -> void:
+	# Fatia 0.H — Protocolo anti-conflito MCP ↔ editor Godot
+	# Verifica se um arquivo tem alteracoes nao salvas no editor.
+	var filepath: String = params.get("path", "")
+	if filepath.is_empty():
+		_send_result(id, {"modified": false, "message": "Caminho vazio — sem conflito."})
+		return
+
+	var ei := get_editor_interface()
+	if not ei:
+		_send_result(id, {"modified": false, "message": "EditorInterface indisponivel."})
+		return
+
+	# 1. Verificar cenas abertas (fonte mais confiavel de conflito)
+	if ei.has_method("get_open_scenes"):
+		var open_scenes: Array = ei.get_open_scenes()
+		if filepath in open_scenes:
+			var is_playing := false
+			if ei.has_method("is_playing_scene"):
+				is_playing = ei.is_playing_scene()
+			if not is_playing:
+				_send_result(id, {
+					"modified": true,
+					"message": "Cena aberta no editor — pode ter alteracoes nao salvas. Salve (Ctrl+S) antes de modificar externamente.",
+					"file_type": "scene",
+				})
+				return
+
+	# 2. Verificar scripts abertos com alteracoes (EditorFileSystem)
+	var efs := ei.get_resource_filesystem()
+	if efs and efs.has_method("get_file_type"):
+		# Verifica se o arquivo existe no filesystem do editor
+		var ft := efs.get_file_type(filepath)
+		if ft != "":
+			# Arquivo conhecido pelo editor — verificar se ha recurso aberto
+			var script_editor := ei.get_script_editor()
+			if script_editor and script_editor.has_method("get_open_script_editors"):
+				var open_editors: Array = script_editor.get_open_script_editors()
+				for se in open_editors:
+					var res: Resource = se if se is Resource else null
+					if res and res.resource_path == filepath:
+						# Script esta aberto — verificar modificacao via base editor
+						if se.has_method("get_base_editor"):
+							var base := se.get_base_editor()
+							if base and base is CodeEdit:
+								# CodeEdit tem versao de documento para detectar mudancas
+								if base.has_method("get_version"):
+									_send_result(id, {
+										"modified": true,
+										"message": "Script com edicoes nao salvas no editor.",
+										"file_type": "script",
+									})
+									return
+						# Fallback: script aberto = potencialmente modificado
+						_send_result(id, {
+							"modified": true,
+							"message": "Script aberto no editor — pode ter alteracoes nao salvas.",
+							"file_type": "script",
+						})
+						return
+
+	# 3. Nenhum conflito detectado
+	_send_result(id, {
+		"modified": false,
+		"message": "Arquivo sem alteracoes detectadas no editor.",
+	})
+

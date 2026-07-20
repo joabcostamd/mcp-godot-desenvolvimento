@@ -3030,6 +3030,33 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
         except Exception as e:
             logger.warning("Auto-checkpoint exception (fail-open): %s", e)
 
+    # ── Fatia 0.H: Protocolo anti-conflito MCP ↔ editor Godot ──
+    # Antes de escrever, verifica se o arquivo tem alterações não salvas.
+    if name in _DESTRUCTIVE_TOOLS:
+        _target_file = (
+            arguments.get("scene_path")
+            or arguments.get("script_path")
+            or arguments.get("file_path")
+            or arguments.get("path")
+            or ""
+        )
+        if _target_file:
+            try:
+                from tools.editor_safety import check_editor_conflict
+                conflict = check_editor_conflict(_target_file)
+                if conflict.get("blocked"):
+                    return [TextContent(
+                        type="text",
+                        text=json.dumps({
+                            "status": "error",
+                            "message": conflict.get("message", "Conflito com editor Godot."),
+                            "editor_conflict": True,
+                        }, ensure_ascii=False),
+                        isError=True,
+                    )]
+            except Exception as e:
+                logger.warning("Editor safety check falhou (fail-open): %s", e)
+
     # ── Rate Limiting (Onda 6) ──────────────────────────────────
     from tools.rate_limiter import check_rate_limit
     allowed, rate_info = check_rate_limit()
