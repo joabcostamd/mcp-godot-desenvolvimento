@@ -1,26 +1,33 @@
-# ARSENAL DEFINITIVO DE BEHAVIORS — Catálogo Completo v4.0
+# ARSENAL DEFINITIVO DE BEHAVIORS — Catálogo Completo v5.0
 
-**Versão:** 4.0 | **Data:** 2026-07-20
+**Versão:** 5.0 | **Data:** 2026-07-20
 **Local:** `behaviors/` | **Formato:** `behavior.schema.json` v2.0
-**Total:** 120+ behaviors em 18 categorias + 7 sub-bibliotecas catalogadas
+**Total:** 148 behaviors em 20 categorias + 8 sub-bibliotecas catalogadas
+**Formato do catálogo:** Storybook-inspired (Props, Signals, Dependencies, Edge Cases, Composition Example)
 
 ---
 
-## 📚 FONTES DE PESQUISA (2 rodadas)
+## 📚 FONTES DE PESQUISA (3 rodadas)
 
 | Rodada | Fonte | Conteúdo |
 |--------|-------|----------|
-| 1 | **Nodot** | 113 componentes em 25 categorias (biblioteca referência) |
+| 1 | **Nodot** | 113 componentes em 25 categorias |
 | 1 | **Game Programming Patterns** | 17 padrões de design (Robert Nystrom) |
-| 1 | **Godot Demo Projects** | 41 demos oficiais 2D (cada um = um sistema) |
-| 1 | **Awesome Godot** | 50+ plugins/addons com componentes reutilizáveis |
-| 2 | **Beehave** | 28 nós de Behavior Tree (GDScript) |
-| 2 | **LimboAI** | ~40 tarefas BT + HSM (C++/GDExtension) |
-| 2 | **Phantom Camera** | 14 comportamentos de câmera (Cinemachine-like) |
-| 2 | **Juicee** | 99 efeitos de game-feel + 12 presets |
-| 2 | **Health/Hitbox/Hurtbox** | 7 componentes + 3 resources (cluttered-code) |
-| 2 | **Shaker** | 7 tipos de shake + 7 componentes (Emitter/Receiver) |
-| 2 | **Godot Best Practices** | SOLID, DI, scene organization (docs oficial) |
+| 1 | **Godot Demo Projects** | 41 demos oficiais 2D |
+| 1 | **Awesome Godot** | 50+ plugins/addons |
+| 2 | **Beehave** | 28 nós BT (GDScript) |
+| 2 | **LimboAI** | ~40 tarefas BT+HSM (C++) |
+| 2 | **Phantom Camera** | 14 comp. câmera |
+| 2 | **Juicee** | 99 efeitos + 12 presets |
+| 2 | **Health/Hitbox/Hurtbox** | 7 comp. + 3 resources |
+| 2 | **Shaker** | 7 shake types + 7 comp. |
+| 2 | **Godot Best Practices** | SOLID, DI, scene org |
+| 3 | **Godot Exports Docs** | @export_group, @export_category, @export_storage, @export_tool_button, @export_flags, @export_custom |
+| 3 | **Godot Autoload Docs** | Quando usar Autoload vs Regular Node vs Resource vs static |
+| 3 | **Godot Data Preferences** | Array vs Dictionary vs Object, Enum int vs string |
+| 3 | **Storybook** | Formato ideal de catálogo: Props, Args, Variants, Edge Cases, Stories |
+| 3 | **Godot Asset Library** | 5.223 assets — categorias populares, formato de listagem |
+| 3 | **MkDocs** | Melhor ferramenta para documentação estática (Markdown → HTML) |
 
 ---
 
@@ -56,6 +63,65 @@ behaviors/<nome>/
 14. **Single Responsibility (SOLID)** — Um behavior = UMA responsabilidade
 15. **Scenes > Scripts** — `.tscn` carrega mais rápido
 16. **BT como sub-biblioteca** — 28+ nós com Blackboard
+17. **@export_group / @export_category** — Agrupar propriedades no inspetor para behaviors complexos
+18. **@export_storage** — Propriedades serializadas mas ocultas no editor (evita poluição visual)
+19. **@export_tool_button** — Botões clicáveis no inspetor para ações do behavior
+20. **Resource > Autoload** — Preferir Resources para dados compartilhados; Autoload só para sistemas de escopo amplo
+
+---
+
+## 📐 FORMATO IDEAL DO CATÁLOGO (Storybook-inspired)
+
+Cada behavior no catálogo segue esta estrutura de documentação:
+
+```
+## 🏷️ nome_do_behavior
+> Categoria | Godot Node | Versão | Status
+
+### 📝 Descrição
+PT: ... | EN: ...
+
+### 🎯 Quando Usar
+- Cenário 1: ...
+- Cenário 2: ...
+
+### ⚡ Quick Start
+```gdscript
+var comp = NomeBehavior.new()
+comp.property = value
+add_child(comp)
+```
+
+### 🔧 Propriedades
+| Nome | Tipo | Range | Default | Descrição |
+|------|------|-------|---------|-----------|
+
+### 📡 Sinais
+| Nome | Params | Quando Emitido |
+
+### 🔗 Dependências
+- behavior_x (obrigatório)
+- behavior_y (recomendado)
+
+### ⚠️ Edge Cases
+- O que acontece se X for null?
+- O que acontece se Y for 0?
+
+### 🧩 Exemplo de Composição
+```
+Entidade (CharacterBody2D)
+  ├── health
+  ├── hitbox
+  └── enemy_chase
+```
+
+### ✅ Cobertura de Testes
+- test_a: ...
+- test_b: ...
+
+### 📚 Fonte
+- Plugin X, Demo Y, Pattern Z
+```
 
 ---
 
@@ -299,6 +365,47 @@ behaviors/<nome>/
 | 135 | `debug_arrow` | Node2D | color, length, direction | — | — | Nodot DebugArrowMesh | ⬜ |
 | 136 | `debug_console` | Control | max_lines, auto_scroll, command_history | command_entered | — | Developer Console | ⬜ |
 | 137 | `fps_counter` | Control | show_min, show_max, show_avg, update_interval | — | — | Padrão debug | ⬜ |
+
+### 👤 PERSONAGEM / CUSTOMIZAÇÃO
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 138 | `character_stats` | Node | strength, dexterity, intelligence, vitality | stat_changed, stats_loaded | save_load | RPG pattern | ⬜ |
+| 139 | `skill_tree` | Node | nodes, connections, unlock_cost, points | node_unlocked, tree_reset, points_changed | character_stats, currency | RPG, Path of Exile | ⬜ |
+| 140 | `status_effect` | Node | effect_type, duration, stacks, tick_interval | applied, tick, expired, refreshed | health, character_stats | RPG buff/debuff | ⬜ |
+| 141 | `element_system` | Node | elements, weaknesses, resistances, multipliers | damage_modified | health | RPG element wheel | ⬜ |
+| 142 | `equipment_slot` | Node | slot_type, equipped_item, slot_bonus | equipped, unequipped, bonus_applied | inventory, character_stats | RPG gear | ⬜ |
+| 143 | `character_creator` | Control | customizable_parts, color_palette, presets | part_changed, saved, loaded | save_load | Char creation | ⬜ |
+
+### 🏪 SOCIAL / ONLINE
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 144 | `leaderboard` | Node | entries, score_type, time_scope | score_submitted, rankings_loaded | network_sync | Online pattern | ⬜ |
+| 145 | `daily_reward` | Node | rewards, streak_bonus, reset_time | claimed, streak_updated, missed | save_load | Mobile/gacha | ⬜ |
+| 146 | `achievement_tracker` | Node | achievements, secret_flags, progress | unlocked, progress_updated, all_completed | save_load | Xbox/Steam style | ⬜ |
+
+### 🎬 CINEMÁTICA / NARRATIVA
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 147 | `cutscene` | Node | timeline, skippable, pause_game | started, finished, skipped | input_manager | Godot AnimationPlayer | ⬜ |
+| 148 | `camera_sequence` | Node | shots, transitions, duration | shot_changed, sequence_finished | camera_follow, cutscene | Cinemachine | ⬜ |
+
+### ♿ ACESSIBILIDADE
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 149 | `color_blind_mode` | Node | mode (protanopia/deuteranopia/tritanopia), intensity | mode_changed | — | GATO toolkit | ⬜ |
+| 150 | `subtitle` | Node | text, speaker, duration, style | shown, hidden | dialogue | AAA accessibility | ⬜ |
+| 151 | `controller_remap` | Control | actions, rebindable, presets | rebound, reset, preset_loaded | input_manager | Godot Input Map | ⬜ |
+
+### 🌍 LOCALIZAÇÃO
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 152 | `localization` | Node | locale, fallback, csv_file, auto_detect | locale_changed | — | Godot TranslationServer | ⬜ |
+| 153 | `tutorial_overlay` | Control | steps, highlights, skip_enabled | step_completed, tutorial_finished, skipped | input_manager, save_load | Mobile/console | ⬜ |
 
 ---
 
