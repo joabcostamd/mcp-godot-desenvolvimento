@@ -26,12 +26,15 @@ Princípios:
 import argparse
 import json
 import os
+import re
 import shutil
 import socket
 import subprocess
 import sys
 import textwrap
 import time
+import urllib.request
+import zipfile
 from pathlib import Path
 
 # ══════════════════════════════════════════════════════════════════════
@@ -62,6 +65,9 @@ WS_PORT = 9082
 POLL_INTERVAL = 0.5
 POLL_TIMEOUT_LSP = 30.0   # Godot pode demorar para abrir
 POLL_TIMEOUT_WS = 30.0    # Addon inicia após importar assets do projeto
+
+
+TEMPLATE_BASE_URL = "https://github.com/godotengine/godot-builds/releases/download"
 
 
 # ══════════════════════════════════════════════════════════════════════
@@ -188,6 +194,38 @@ def get_godot_version(godot_path: str) -> str | None:
         return v.strip()
     except Exception:
         return None
+
+
+def get_godot_version_short(godot_path: str) -> str | None:
+    """Extrai a versão curta do Godot (ex: '4.7' ou '4.7.1') para paths."""
+    full = get_godot_version(godot_path)
+    if full:
+        # "4.7.stable.official.5b4e0cb0f" → "4.7"
+        # "4.7.1.stable.official.xxx" → "4.7.1"
+        parts = full.split(".")
+        if len(parts) >= 3 and parts[2] == "stable":
+            # 4.7.stable → "4.7"
+            return f"{parts[0]}.{parts[1]}"
+        elif len(parts) >= 4 and parts[3] == "stable":
+            # 4.7.1.stable → "4.7.1"
+            return f"{parts[0]}.{parts[1]}.{parts[2]}"
+        elif len(parts) >= 2:
+            return f"{parts[0]}.{parts[1]}"
+    return None
+
+
+def get_godot_version_tag(godot_path: str) -> str | None:
+    """Extrai a tag de release do Godot (ex: '4.7-stable' ou '4.7.1-stable')."""
+    full = get_godot_version(godot_path)
+    if full:
+        # "4.7.stable.official.5b4e0cb0f" → "4.7-stable"
+        # "4.7.1.stable.official.xxx" → "4.7.1-stable"
+        parts = full.split(".")
+        for i, p in enumerate(parts):
+            if p == "stable":
+                base = ".".join(parts[:i])
+                return f"{base}-stable"
+    return None
 
 
 def is_cloud_synced(path: Path) -> bool:
@@ -334,8 +372,7 @@ def step2_venv(root: Path, python_path: str) -> Path:
     if venv_dir.exists():
         print_step(4, "Ambiente virtual", True,
                    f"pasta existe mas está incompleta — recriando: {venv_dir}")
-        import shutil as _shutil
-        _shutil.rmtree(venv_dir, ignore_errors=True)
+        shutil.rmtree(venv_dir, ignore_errors=True)
 
     try:
         subprocess.run(
@@ -472,8 +509,7 @@ def step4_install_addon(project_dir: Path) -> None:
             content += f"\n[editor_plugins]\nenabled=PackedStringArray(\"{plugin_path}\")\n"
         else:
             # Já tem plugins: mescla na PackedStringArray existente
-            import re as _re
-            match = _re.search(
+            match = re.search(
                 r'enabled\s*=\s*PackedStringArray\(([^)]*)\)',
                 content
             )
@@ -563,6 +599,135 @@ def step5_verify_connection() -> bool:
     return True
 
 
+def step_templates(godot_path: str, skip: bool = False) -> bool:
+    """Verifica e instala templates de exportação do Godot.
+
+    Detecta a versão exata do Godot, verifica se os templates estão
+    instalados em %APPDATA%/Godot/export_templates/<versão>/ e,
+    se ausentes, baixa e extrai do site oficial.
+
+    Args:
+        godot_path: Caminho do executável do Godot.
+        skip: Se True, pula a verificação (--no-templates).
+
+    Returns:
+        True se templates estão OK ou foram instalados, False se falhou.
+    """
+    if skip:
+        print_step(14, "Templates de exportação", True, "pulados (--no-templates)")
+        return True
+
+    # ── Obter versão exata ──
+    full_version = get_godot_version(godot_path)
+    if not full_version:
+        print_step(14, "Templates de exportação", False,
+                   "Não foi possível detectar a versão do Godot.")
+        return False
+
+    # Validação antecipada: confirma que conseguimos parsear a versão
+    short_version = get_godot_version_short(godot_path)  # noqa: F841 — validação
+    if not short_version:
+        print_step(14, "Templates de exportação", False,
+                   f"Versão não reconhecida: {full_version}")
+        return False
+
+    # ── Pasta de templates ──
+    appdata = os.environ.get("APPDATA", "")
+    templates_root = Path(appdata) / "Godot" / "export_templates" if appdata else Path.home() / "AppData" / "Roaming" / "Godot" / "export_templates"
+    templates_dir = templates_root / full_version
+
+    # Verifica se já existem (pasta com version.txt = instalação completa)
+    version_marker = templates_dir / "version.txt"
+    if version_marker.exists():
+        print_step(14, "Templates de exportação", True,
+                   f"já instalados: {templates_dir}")
+        return True
+
+    # Se a pasta existe sem version.txt, pode estar corrompida — remove
+    if templates_dir.exists():
+        shutil.rmtree(templates_dir, ignore_errors=True)
+
+    # ── Download ──
+    # URL: https://github.com/godotengine/godot-builds/releases/download/4.7-stable/Godot_v4.7-stable_export_templates.tpz
+    tag = get_godot_version_tag(godot_path)
+    if not tag:
+        print_step(14, "Templates de exportação", False,
+                   f"Não foi possível determinar a tag de release: {full_version}")
+        return False
+
+    url = f"{TEMPLATE_BASE_URL}/{tag}/Godot_v{tag}_export_templates.tpz"
+    print_step(14, "Baixando templates de exportação", True,
+               f"versão: {full_version}\n"
+               f"         url: {url}\n"
+               f"         (~800MB, isso pode levar alguns minutos...)")
+
+    tpz_path = templates_root / f"Godot_v{tag}_export_templates.tpz"
+    templates_root.mkdir(parents=True, exist_ok=True)
+
+    try:
+        # Download com barra de progresso e timeout
+        def _progress(count: int, block_size: int, total_size: int):
+            mb_done = count * block_size / (1024 * 1024)
+            if total_size > 0:
+                pct = min(int(count * block_size * 100 / total_size), 100)
+                mb_total = total_size / (1024 * 1024)
+                print(f"\r         {pct}% ({mb_done:.0f}/{mb_total:.0f} MB)", end="", flush=True)
+            else:
+                print(f"\r         {mb_done:.0f} MB...", end="", flush=True)
+
+        urllib.request.urlretrieve(url, str(tpz_path), reporthook=_progress)
+        print()  # nova linha após barra de progresso
+
+        # ── Extrair (com proteção anti-path-traversal) ──
+        print_step(15, "Extraindo templates", True, f"para {templates_dir}")
+        templates_dir.mkdir(parents=True, exist_ok=True)
+
+        with zipfile.ZipFile(tpz_path, "r") as zf:
+            for member in zf.infolist():
+                # Proteção Zip Slip: rejeita paths que escapam do diretório alvo
+                member_path = templates_dir / member.filename
+                resolved = member_path.resolve()
+                if not str(resolved).startswith(str(templates_dir.resolve())):
+                    print_step(15, "Extraindo templates", False,
+                               f"Path inseguro no .tpz: {member.filename}")
+                    return False
+            zf.extractall(str(templates_dir))
+
+        # Limpa o .tpz (não é mais necessário)
+        tpz_path.unlink(missing_ok=True)
+
+        # Verifica se extraiu corretamente (version.txt é o marcador oficial)
+        if (templates_dir / "version.txt").exists():
+            print_step(16, "Templates de exportação", True,
+                       f"instalados com sucesso em {templates_dir}")
+            return True
+        else:
+            print_step(16, "Templates de exportação", False,
+                       "Extração concluída mas version.txt não encontrado.\n"
+                       "         O arquivo .tpz pode estar corrompido.")
+            return False
+
+    except urllib.error.URLError as e:
+        print_step(15, "Download de templates", False,
+                   f"Erro de rede: {e}\n"
+                   "         Verifique sua conexão e tente novamente.\n"
+                   "         Você pode baixar manualmente em:\n"
+                   f"         {url}")
+        return False
+    except urllib.error.HTTPError as e:
+        print_step(15, "Download de templates", False,
+                   f"Erro HTTP {e.code}: {e.reason}\n"
+                   f"         URL: {url}\n"
+                   "         Verifique se a versão do Godot é suportada.")
+        return False
+    except Exception as e:
+        print_step(15, "Download de templates", False,
+                   f"Erro: {e}\n"
+                   "         Você pode baixar manualmente em:\n"
+                   f"         {url}")
+        return False
+
+
 def create_godot_project(project_dir: Path, project_name: str) -> bool:
     """Cria um projeto Godot mínimo se não existir."""
     godot_file = project_dir / "project.godot"
@@ -628,7 +793,6 @@ config/name="{safe_project_name}"
 def normalize_project_name(name: str) -> str:
     """Normaliza nome de projeto: sem acento, sem espaço, minúsculo, só [a-z0-9_]."""
     import unicodedata
-    import re
 
     # NFKD: decompõe acentos
     normalized = unicodedata.normalize("NFKD", name)
@@ -671,6 +835,7 @@ def main():
     parser.add_argument("--silent", "-s", action="store_true", help="Modo silencioso (sem perguntas)")
     parser.add_argument("--verbose", "-v", action="store_true", help="Mostrar stack traces em erros")
     parser.add_argument("--no-verify", action="store_true", help="Pular verificação de conexão (bridge polling)")
+    parser.add_argument("--no-templates", action="store_true", help="Pular download de templates de exportação")
     args = parser.parse_args()
 
     if not args.silent:
@@ -746,7 +911,12 @@ def main():
     step3_mcp_config(project_dir, venv_python)
 
     # ══════════════════════════════════════════════════════════════════
-    # ETAPA 7: Abrir Godot
+    # ETAPA 7: Templates de exportação
+    # ══════════════════════════════════════════════════════════════════
+    step_templates(godot_path, skip=args.no_templates)
+
+    # ══════════════════════════════════════════════════════════════════
+    # ETAPA 8: Abrir Godot
     # ══════════════════════════════════════════════════════════════════
     # Verificar se já tem Godot rodando
     godot_ja_aberto = _is_port_open(LSP_HOST, LSP_PORT, timeout=0.5)
@@ -780,7 +950,7 @@ def main():
     # ETAPA 8: Verificar conectividade (bridge polling)
     # ══════════════════════════════════════════════════════════════════
     if not args.no_verify:
-        connected = step5_verify_connection()
+        step5_verify_connection()  # resultado informativo, efeito colateral via print
     else:
         print_step(11, "Verificação de conexão", True, "pulada (--no-verify)")
 

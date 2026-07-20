@@ -1,4 +1,12 @@
 {
+  "fatia_1.B": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "72ecdc2",
+    "resultado": "Templates de exportacao no init.py. step_templates(): detecta versao (full+short+tag), verifica version.txt em %APPDATA%/Godot/export_templates/, download via GitHub Releases com barra de progresso, extracao .tpz com protecao Zip Slip, --no-templates. 7 bugs corrigidos: URL (tuxfamily→GitHub), deteccao por version.txt, versao patch, Zip Slip, HTTPError, progresso sem Content-Length, pasta corrompida."
+  },
   "fatia_1.A": {
     "status": "concluida",
     "data": "2026-07-20",
