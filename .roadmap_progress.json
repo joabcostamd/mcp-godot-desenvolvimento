@@ -1,4 +1,12 @@
 {
+  "fatia_0.G": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "4bcda9d",
+    "resultado": "Caminhos pessoais removidos de docs/arquitetura.md. 5 paths substituidos por placeholders. grep C:/Users e OneDrive retorna vazio fora de journal/."
+  },
   "fatia_0.F": {
     "status": "concluida",
     "data": "2026-07-20",

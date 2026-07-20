@@ -159,11 +159,11 @@ python server.py --toolsets "core,scene_ops,script_ops"
 
 ```json
 {
-  "godot_path": "C:\\Godot\\Godot_v4.7-stable_win64.exe",
-  "godot_console_path": "C:\\Godot\\Godot_v4.7-stable_win64_console.exe",
-  "python_path": "C:\\Users\\...\\Python\\Python314\\python.exe",
-  "projects_root": "C:\\...\\NUCLEO\\projetos",
-  "default_project": "C:\\...\\NUCLEO\\projetos\\star-colony",
+  "godot_path": "<CAMINHO_DO_GODOT>",
+  "godot_console_path": "<CAMINHO_DO_GODOT_CONSOLE>",
+  "python_path": "<CAMINHO_DO_PYTHON>",
+  "projects_root": "<PASTA_DE_PROJETOS>",
+  "default_project": "<PROJETO_PADRAO>",
   "addon_port": 9080,
   "game_port": 9081,
   "timeouts": { "fast": 15, "compile": 60, "export": 300 },
