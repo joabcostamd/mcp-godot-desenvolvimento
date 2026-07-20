@@ -1,4 +1,12 @@
 {
+  "fatia_1.H": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "ef46141",
+    "resultado": "Manual do usuario gerado por codigo. scripts/gerar_manual.py (270 linhas): importa _tool_defs(), blueprints/*.json, behaviors/**/behavior.json, FRIENDLY_MAP. Gera 10 arquivos em docs/manual/. Zero numero hardcoded. 2 bugs corrigidos (params list vs dict, synonyms dict vs list). Seções 02 e 08 sao placeholders honestos (dependem de 1.J e build_export). C3 smoke_test: PASS."
+  },
   "fatia_1.G": {
     "status": "concluida",
     "data": "2026-07-20",
