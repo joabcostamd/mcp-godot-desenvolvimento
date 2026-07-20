@@ -1,4 +1,20 @@
 {
+  "fatia_0.B": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "5c611de",
+    "resultado": "Fatia 0.9 auditada: 3/3 provas verificadas. Rate-limit implementado (RateLimiter.check). Retry com backoff exponencial + jitter implementado (linhas 230-240). Zero chaves API no codigo. Implementacao robusta — mock de backoff registrado como melhoria futura (nao bloqueante)."
+  },
+  "fatia_0.9": {
+    "status": "concluida",
+    "data": "2026-07-18",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "auditada_em": "2026-07-20",
+    "resultado": "Cliente HTTP compartilhado (308 linhas). Rate-limit, retry com backoff exp + jitter, idempotencia, cache, rastreio de custo. 3/3 provas da escalacao original verificadas. Pendencia: mock de backoff (teste unitario sem espera real) — melhoria futura, nao bloqueia fechamento."
+  },
   "fatia_0.A": {
     "status": "concluida",
     "data": "2026-07-20",
