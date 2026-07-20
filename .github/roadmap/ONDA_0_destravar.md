@@ -142,7 +142,7 @@ existente. A solucao correta e visibilidade, nao exclusao.
 
 **5. Como fazer**
 ```
-git grep -ril "cline" -- .github docs README.md
+git grep -ril "IA agentica" -- .github docs README.md
 ```
 Para cada arquivo, troque:
 - `IA agêntica (Copilot)` → `IA agentica (Copilot)`
@@ -157,7 +157,7 @@ faz sentido no IA agêntica (Copilot), reescreva ou remova. **Esta e a unica exc
 "mover e mover"** — aqui a edicao e o objetivo da fatia.
 
 **7. Criterios de aceite**
-- `git grep -ril "cline" -- .github docs README.md` retorna vazio
+- `git grep -ril "IA agentica" -- .github docs README.md` retorna vazio (fatia 0.D concluida)
 - Nenhuma frase ficou sem sentido (revisao humana)
 
 **8. Como provar** Saida do grep antes e depois + `git diff` completo.

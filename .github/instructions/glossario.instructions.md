@@ -166,9 +166,9 @@ Confiabilidade/regressão MCP: digitalapplied.com (100-server stress test; SLO f
 
 Organização de código: Scony/godot-gdscript-toolkit (gdtoolkit), godot asset library (gdlint).
 
-Teto de ferramentas: cline discussions #8855, startdebugging.net (tool search), glama.ai (MCP Gateway), demiliani.com.
+Teto de ferramentas: discussions #8855, startdebugging.net (tool search), glama.ai (MCP Gateway), demiliani.com.
 
-Autonomia/self-critique: Kamoi et al. TACL 2024, Huang et al. ICLR 2024, arxiv 2606.20093 (self-preference), datasciencedojo.com (loop engineering), nexgismo.com/bmdpat.com (budget guards), cline docs (memory bank).
+Autonomia/self-critique: Kamoi et al. TACL 2024, Huang et al. ICLR 2024, arxiv 2606.20093 (self-preference), datasciencedojo.com (loop engineering), nexgismo.com/bmdpat.com (budget guards), documentacao de IA agentica (memory bank).
 
 DeepSeek V4: mindstudio.ai, skywork.ai, techjacksolutions.com (overreliance risk).
 

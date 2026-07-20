@@ -1,4 +1,12 @@
 {
+  "fatia_1.G": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "b5c6f1e",
+    "resultado": "Reestruturacao documental concluida. R1: NEXT_STEP.md -> journal/. R2: expurgo de Cline em 6 arquivos (~25 substituicoes: glossario, ONDA_0, SETUP_OUTRO_PC, agent_ops, instalar.py, instalar_roadmap.py). R3: ja feito (0.E). R4: docs_sync.py existente (0.F). PLANO_REESTRUTURACAO_DOCS.md apagado. Divida tecnica: 22 mencoes de 'cline' em .roadmap_progress.json (historico), instalar.py (codigo ativo) e instalar_roadmap.py (documentacao) — inofensivas, registradas em SUTURE_ISSUES.md. C3 smoke_test: PASS."
+  },
   "fatia_1.F": {
     "status": "concluida",
     "data": "2026-07-20",

@@ -558,7 +558,7 @@ def generate_agent_onboarding_brief(
         brief["exclusive_files"] = ["server.py", "core/*", "tools/deprecated.py", "tools/registry_validation.py", "tools/rollups.py"]
         brief["next_etapa"] = "A3 — DATA_CONTRACTS.md"
     else:
-        brief["exclusive_files"] = ["tools/*_ops.py", ".github/*", "docs/*", "tests/*", ".clinerules/*"]
+        brief["exclusive_files"] = ["tools/*_ops.py", ".github/*", "docs/*", "tests/*"]
         brief["next_etapa"] = "B6 — agent_manage (concluida); proximo: B7 ou B9"
 
     brief["key_rules"] = [

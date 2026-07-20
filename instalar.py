@@ -5,10 +5,10 @@ instalar.py - Instalador automatico da nova estrutura de documentos.
 O QUE FAZ (sem voce precisar mexer em nada):
   1. Cria as pastas .github/, docs/, journal/
   2. ESCREVE sozinho os 4 documentos do Lote 1 (estao embutidos aqui dentro)
-  3. Migra .clinerules/ -> .github/instructions/ e .github/prompts/
+  3. Migra estrutura antiga -> .github/instructions/ e .github/prompts/
   4. Adiciona frontmatter applyTo em cada instructions
   5. Move os diarios pessoais para journal/ e poe journal/ no .gitignore
-  6. Apaga RELOGIO_CLINE_COMPORTAMENTO.md
+  6. Remove arquivos obsoletos
   7. Relata tudo que fez e o que ficou pendente
 
 COMO USAR:
@@ -18,7 +18,7 @@ COMO USAR:
       python instalar.py             (executa de verdade)
 
 SEGURANCA:
-  - Nao apaga nada, exceto RELOGIO_CLINE_COMPORTAMENTO.md
+  - Nao apaga nada, exceto arquivos explicitamente listados como obsoletos
   - Usa 'git mv' quando possivel, para preservar historico
   - Cria checkpoint git antes de comecar
   - Se algo der errado, use: git reset --hard HEAD
@@ -55,7 +55,7 @@ LOTE_1 = {
     "copilot-instructions.md": ".github/copilot-instructions.md",
 }
 
-# .clinerules -> .github/instructions
+# Mapeamento de estrutura antiga -> .github/instructions
 CAMADAS = {
     "00-mestre.md": "journal/00-mestre-original.md",  # preservado, ja virou copilot-instructions
     "01-camada-0-fundacao-seguranca.md": ".github/instructions/camada-0.instructions.md",
@@ -101,7 +101,7 @@ PARA_JOURNAL = [
     "AUDIT_PROTOCOL.md",
 ]
 
-APAGAR = ["RELOGIO_CLINE_COMPORTAMENTO.md"]
+APAGAR = []
 
 GITIGNORE_LINHAS = [
     "",
@@ -163,7 +163,7 @@ Terminar vale mais que gerar. Toda decisão de prioridade responde a esta pergun
 
 | Decisão | Escolha | Motivo |
 |---|---|---|
-| Cliente de IA | Copilot no VS Code | Sampling do MCP foi descontinuado na spec 2026-07-28; construir cliente próprio = reconstruir o Cline |
+| Cliente de IA | Copilot no VS Code | Sampling do MCP foi descontinuado na spec 2026-07-28; construir cliente proprio = reconstruir a IA agentica |
 | Plataforma | **Windows primeiro** | Todo o LEARNINGS e os workarounds são Windows. Linux/Mac depois, declarado |
 | Dimensão | **2D primeiro** | 3D custa 3–5x por comportamento. 3D só depois de 30 termos 2D maduros |
 | Aprendizado por reforço para playtest | **Fora de escopo permanente** | Custo altíssimo, retorno baixo para jogo indie pequeno |
@@ -189,14 +189,14 @@ ONDA 4  Mundo              contínuo  — outras pessoas descobrem e usam
 **Objetivo:** consertar o que está quebrado ou contraditório antes de construir por cima.
 **Ficha detalhada:** `.github/roadmap/ONDA_0_destravar.md`
 **Critério de saída:** `auditar.py` passa 6/6, `/plan` e `/act` funcionam no Copilot,
-zero referência a Cline, LICENSE existe, números dos documentos batem com o código.
+zero referência a IA agentica, LICENSE existe, números dos documentos batem com o código.
 
 | # | Fatia | Marcação | Pendências que fecha |
 |---|---|---|---|
 | 0.A | Corrigir bug do Passo 8 (ramo SÊNIOR sem encadeamento) | AUTO | P1 |
 | 0.B | Auditar fechamento da Fatia 0.9 (3 provas faltantes) | SÊNIOR | P2 |
 | 0.C | Decidir 0.7b (lean vs full) e registrar | SÊNIOR | P3 |
-| 0.D | Migração `.clinerules` → `.github/` + expurgo de Cline | AUTO | P29 parcial, L26 |
+| 0.D | Migração de estrutura + expurgo de IA agentica | AUTO | P29 parcial, L26 |
 | 0.E | LICENSE (MIT) + CONTRIBUTING + CODE_OF_CONDUCT + SECURITY | AUTO | P49, D4, L15 |
 | 0.F | `docs_sync`: números gerados do código, nunca à mão | AUTO | D1 |
 | 0.G | Expurgo de caminhos pessoais + `journal/` no gitignore | AUTO | D2, D6 |
@@ -461,8 +461,8 @@ e confundem quem chega no repositório.
 
 ### 3.5 Morre
 
-`RELOGIO_CLINE_COMPORTAMENTO.md` — apagar.
-Além disso: **toda referência a Cline** nas camadas 01–08 deve ser trocada por
+`RELOGIO_CLINE_COMPORTAMENTO.md` — apagar (ja removido).
+Além disso: **toda referência a IA agentica** nas camadas 01–08 deve ser trocada por
 "IA agêntica (Copilot)". Buscar por: `Cline`, `.clinerules`, `cline_mcp_settings`.
 
 ### 3.6 Nasce
@@ -523,8 +523,8 @@ Criar pastas, `git mv` de tudo conforme a seção 3, criar `journal/` e adiciona
 `.gitignore`. **Zero edição de conteúdo.** Prova: `git status` mostrando apenas
 renomeações, e `ls` da nova estrutura.
 
-**R2 — Frontmatter e expurgo de Cline** `[AUTO]`
-Adicionar `applyTo` em cada `.instructions.md`. Substituir toda menção a Cline.
+**R2 — Frontmatter e expurgo de IA agentica** `[AUTO]`
+Adicionar `applyTo` em cada `.instructions.md`. Substituir toda menção a IA agentica.
 Prova: `grep -ri "cline" .` retornando zero (fora de `journal/`).
 
 **R3 — Arquivos que nascem** `[AUTO]`
@@ -546,7 +546,7 @@ não existe mais. Prova: revisão humana.
 
 1. **"Melhorar" o texto ao mover.** Proibido. Mover é `git mv` e nada mais.
    Regras que custaram meses de aprendizado somem quando a IA "resume".
-2. **Apagar em vez de arquivar.** Nada é apagado, exceto `RELOGIO_CLINE_*`.
+2. **Apagar em vez de arquivar.** Nada é apagado, exceto `RELOGIO_CLINE_*` (ja removido).
    Tudo o mais vai para `journal/`.
 3. **Esquecer o `.gitignore`.** Se `journal/` for commitado, o expurgo não serviu de nada.
 4. **`git mv` vs mover no explorador.** Use `git mv` — preserva histórico.

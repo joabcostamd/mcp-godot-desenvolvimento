@@ -6,6 +6,13 @@
 
 ## Issues Pendentes
 
+### [AGENTE 01] — 22 menções residuais de "cline" pós-1.G
+- **Data:** 2026-07-20
+- **Severidade:** 🟢 Baixa — inofensivo, sem impacto no usuário
+- **Descrição:** Após expurgo da Fatia 1.G, restam 22 menções de "cline" em: `.roadmap_progress.json` (3x, registros históricos), `instalar.py` (15x, código ativo + docs embutidos), `instalar_roadmap.py` (4x, documentação)
+- **Motivo para não corrigir agora:** `.roadmap_progress.json` é histórico (editar = falsificar). `instalar.py` tem código ativo com guarda idempotente e função `passo_8_verificar_cline()` que verifica justamente estas menções.
+- **Ação:** Revisitar quando `instalar.py` for refatorado. Nenhum usuário final vê "Cline".
+
 ### [AGENTE 01] — Import circular server.py ↔ tools/dynamic_groups.py
 - **Data:** 2026-07-19
 - **Severidade:** 🟡 Baixa — funcional atualmente, mas frágil

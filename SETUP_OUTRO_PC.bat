@@ -36,7 +36,7 @@ echo.
 
 REM ── 3. Limpar arquivos obsoletos ─────────────────────────────
 echo [3/7] Removendo documentos obsoletos...
-set "OBSOLETOS=pendenciasMCP.md NEXT_SESSION.md SESSION_NEXT.md MCP_ESTADO_ATUAL.md pendencias.md SESSION_SUMMARY_2026-07-17.md RELOGIO_CLINE_COMPORTAMENTO.md"
+set "OBSOLETOS=pendenciasMCP.md NEXT_SESSION.md SESSION_NEXT.md MCP_ESTADO_ATUAL.md pendencias.md SESSION_SUMMARY_2026-07-17.md"
 for %%f in (%OBSOLETOS%) do (
     if exist "%%f" (
         del "%%f" >nul 2>&1

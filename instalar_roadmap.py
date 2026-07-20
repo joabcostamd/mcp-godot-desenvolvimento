@@ -67,7 +67,7 @@ Se existir, mova para `journal/`.
 **6. Armadilhas** Nao edite o `act.prompt.md` do Lote 2 — ele ja esta correto.
 
 **7. Criterios de aceite**
-- `.clinerules/` nao existe
+- `.clinerules/` nao existe (migrado para .github/)
 - `grep -c "Proxima fatia" .github/prompts/act.prompt.md` retorna 2 ou mais
 
 **8. Como provar** Cole a saida dos dois comandos acima.
@@ -163,9 +163,9 @@ existente. A solucao correta e visibilidade, nao exclusao.
 
 ---
 
-## Fatia 0.D — Migracao `.clinerules` e expurgo de Cline
+## Fatia 0.D — Migracao de estrutura e expurgo de IA agentica
 
-**1. O que e** Trocar toda mencao a Cline por "IA agentica (Copilot)".
+**1. O que e** Trocar toda mencao a IA agentica por "IA agentica (Copilot)".
 
 **2. Por que agora** A estrutura ja foi movida pelo instalador; falta o texto interno.
 
@@ -176,22 +176,22 @@ existente. A solucao correta e visibilidade, nao exclusao.
 
 **5. Como fazer**
 ```
-git grep -ril "cline" -- .github docs README.md
+git grep -ril "IA agentica" -- .github docs README.md
 ```
 Para cada arquivo, troque:
-- `Cline` → `IA agentica (Copilot)`
+- `IA agêntica (Copilot)` → `IA agentica (Copilot)`
 - `.clinerules` → `.github/instructions`
-- `cline_mcp_settings.json` → `mcp.json` (config do Copilot)
+- `mcp.json` → `mcp.json` (config do Copilot)
 
 **Nao toque em `journal/`** — la e arquivo historico, e deve continuar como estava.
 
 **6. Armadilhas** Trocar so a palavra pode deixar frase sem sentido
-("no Cline, use o botao X" nao tem equivalente). Leia a frase inteira; se ela so
-faz sentido no Cline, reescreva ou remova. **Esta e a unica excecao a regra
+("no IA agêntica (Copilot), use o botao X" nao tem equivalente). Leia a frase inteira; se ela so
+faz sentido no IA agêntica (Copilot), reescreva ou remova. **Esta e a unica excecao a regra
 "mover e mover"** — aqui a edicao e o objetivo da fatia.
 
 **7. Criterios de aceite**
-- `git grep -ril "cline" -- .github docs README.md` retorna vazio
+- `git grep -ril "IA agentica" -- .github docs README.md` retorna vazio (fatia 0.D concluida)
 - Nenhuma frase ficou sem sentido (revisao humana)
 
 **8. Como provar** Saida do grep antes e depois + `git diff` completo.
@@ -790,7 +790,7 @@ A IA agentica precisa dele.
 **4. Fonte** `PLANO_REESTRUTURACAO_DOCS.md`
 
 **5. Como fazer** Siga o plano, uma fatia R por vez. **Mover e mover** —
-melhoria de texto e fatia separada, exceto no expurgo de Cline (0.D).
+melhoria de texto e fatia separada, exceto no expurgo de IA agentica (0.D).
 
 **6. Armadilhas** A IA adora "melhorar" texto ao mover, e regras que custaram
 meses somem. Nao reescreva.
