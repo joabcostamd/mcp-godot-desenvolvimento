@@ -1,9 +1,9 @@
-# ARSENAL DEFINITIVO DE BEHAVIORS — Catálogo Completo v7.0
+# ARSENAL DEFINITIVO DE BEHAVIORS — Catálogo Completo v8.0
 
-**Versão:** 7.0 | **Data:** 2026-07-20
+**Versão:** 8.0 | **Data:** 2026-07-20
 **Local:** `behaviors/` | **Formato:** `behavior.schema.json` v2.0
-**Total:** 173 behaviors em 23 categorias + Behavior Lifecycle + SemVer + CHANGELOG
-**Pesquisas:** 5 rodadas | **Fontes:** 25+ | **Princípios:** 30
+**Total:** 211 behaviors em 25 categorias + Behavior Lifecycle + SemVer + CHANGELOG
+**Pesquisas:** 6 rodadas | **Fontes:** 31+ | **Princípios:** 37
 
 ---
 
@@ -34,10 +34,19 @@
 | 4 | **npm Package System** | package.json ↔ behavior.json, dependency resolution, registry |
 | 4 | **Godot Plugin Lifecycle** | plugin.cfg, @tool, autoload, sub-plugins, enable/disable |
 | 4 | **Production Pipeline** | Export, CI/CD, registry, signing, analytics, migration | |
+| 5 | **Game Accessibility Guidelines** | 3 tiers (Basic/Intermediate/Advanced), ~45 guidelines motor/cognitive/vision/hearing/speech | |
+| 5 | **AbleGamers APX** | 22 Accessible Player Experience patterns (12 Access + 10 Challenge) | |
+| 5 | **Godot Input System Deep** | InputEvent types, InputMap, dead zones, controller vibration, touch events, SDL 3 gamepad DB | |
+| 5 | **Godot ConfigFile + Binary Serialization** | INI-style settings, AES-256 encrypted saves, binary Var serialization spec (29 types) | |
+| 5 | **Godot Export/Modding Pipeline** | PCK/ZIP, delta patching, resource packs, mod isolation, cryptographic signing | |
+| 5 | **Godot Editor Plugin System** | plugin.cfg, EditorPlugin, docks, autoloads, sub-plugins, custom node registration | |
+| 6 | **Godot Profiling/Debug** | Built-in Profiler, Debugger, Custom Monitors, ObjectDB, External C++ profilers | |
+| 6 | **GodotSteam Ecosystem** | Achievements, Leaderboards, Cloud Saves, Lobbies, Workshop, Rich Presence, Voice, Networking | |
+| 6 | **Godot GPU/CPU Optimization** | 2D/3D batching, draw calls, fill rate, tile-based rendering (mobile), texture compression, LOD | |
 
 ---
 
-## 🏗️ PRINCÍPIOS DE DESIGN (16 regras)
+## 🏗️ PRINCÍPIOS DE DESIGN (37 regras)
 
 ### Regra de Ouro
 Composição > Herança. Todo behavior é um **nó filho independente**.
@@ -83,6 +92,13 @@ behaviors/<nome>/
 28. **Dependency ranges** — Dependências no behavior.json usam ranges semver (^1.0.0, ~1.2.3, >=2.0.0 <3.0.0)
 29. **Deprecation warnings** — Comportamento deprecated emite ⚠️ no editor e warning no console por 1 MINOR version antes de ser removido
 30. **Behavior lifecycle** — Discover → Install → Enable → Use → Update → Migrate → Disable → Remove. Cada etapa tem hook methods.
+31. **Accessibility-first** — Nenhuma informação essencial transmitida só por cor ou só por som. Todo behavior com feedback visual DEVE ter alternativa auditiva (e vice-versa). Controles devem suportar remapeamento.
+32. **Save integrity** — Todo save system deve incluir: checksum de integridade, versionamento do schema, opção de criptografia (AES-256), caminho de migração entre versões.
+33. **Input abstraction** — Behaviors de input funcionam com qualquer dispositivo (teclado, mouse, controle, touch, switch). InputMap é a camada de abstração. Nunca hardcode Key ou Button.
+34. **Mod-friendly architecture** — Behaviors devem ser compatíveis com PCK loading e resource pack override. Dados de mod não devem corromper saves base.
+35. **Performance budget** — Behaviors com >1% de frame time devem oferecer modo "light" (desabilitar features caras) ou usar Server API (RenderingServer/PhysicsServer).
+36. **Plugin compatibility** — Todo behavior deve funcionar como: nó filho (add_child), cena instanciada (.tscn), e recurso de plugin (plugin.cfg). Zero dependências de caminho absoluto.
+37. **Observability** — Behaviors complexos (>5 parâmetros) devem expor custom performance monitors e logs categorizados. Use `print_debug()`, não `print()`.
 
 ---
 
@@ -207,12 +223,14 @@ Entidade (CharacterBody2D)
 | # | Behavior | Godot Node | Parâmetros Chave | Sinais | Dependências | Fonte | Status |
 |---|----------|------------|------------------|--------|-------------|-------|--------|
 | 38 | `save_load` | Node | save_slot, auto_save_interval | saved, loaded, save_error | — | Nodot SaveManager | ⬜ |
+| 38a | — | — | **Avançado:** `encrypted_save` (#186), `auto_save` (#187), `save_slots` (#188), `save_integrity` (#189), `save_migration` (#190), `cloud_save` (#191), `cross_save` (#192) | — | — | — | — |
 | 39 | `pause` | Node | pause_mode, time_scale_on_pause | paused, resumed | — | Nodot Pause | ⬜ |
 | 40 | `main_menu` | Control | scene_refs, transition_type | play_pressed, settings_pressed, quit_pressed | scene_transition | Template menu_main.tscn | 📋 |
 | 41 | `settings` | Control | audio_bus, resolution, fullscreen, language | setting_changed | save_load, audio_manager | Padrão Godot | ⬜ |
 | 42 | `scene_transition` | Node | transition_type, duration, loading_screen | transition_started, transition_finished | — | Padrão Godot | ⬜ |
 | 43 | `audio_manager` | Node | music_bus, sfx_bus, master_volume | — | — | Nodot AudioManager | ⬜ |
 | 44 | `input_manager` | Node | action_map, device_type | device_changed, action_rebound | — | Nodot InputManager | ⬜ |
+| 44a | — | — | **Avançado:** `touch_gestures` (#177), `virtual_joystick` (#178), `input_buffer` (#179), `combo_detector` (#180), `dead_zone_config` (#181), `aim_assist` (#182), `haptic_manager` (#183), `gyro_aim` (#184), `steam_input` (#185) | — | — | — | — |
 | 45 | `time_scale` | Node | scale, duration, easing | scale_changed | — | Nodot TimeScale | ⬜ |
 | 46 | `checkpoint` | Area2D | spawn_scene, active | checkpoint_activated, player_respawned | save_load | Padrão plataforma | ⬜ |
 | 47 | `object_pool` | Node | pool_size, prefab, expandable | object_taken, object_returned, pool_empty | — | Nodot NodePool | ⬜ |
@@ -408,13 +426,38 @@ Entidade (CharacterBody2D)
 | 147 | `cutscene` | Node | timeline, skippable, pause_game | started, finished, skipped | input_manager | Godot AnimationPlayer | ⬜ |
 | 148 | `camera_sequence` | Node | shots, transitions, duration | shot_changed, sequence_finished | camera_follow, cutscene | Cinemachine | ⬜ |
 
-### ♿ ACESSIBILIDADE
+### ♿ ACESSIBILIDADE (Game Accessibility Guidelines + AbleGamers APX)
 
 | # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
 |---|----------|------------|------------------|--------|-------|--------|
-| 149 | `color_blind_mode` | Node | mode (protanopia/deuteranopia/tritanopia), intensity | mode_changed | — | GATO toolkit | ⬜ |
-| 150 | `subtitle` | Node | text, speaker, duration, style | shown, hidden | dialogue | AAA accessibility | ⬜ |
-| 151 | `controller_remap` | Control | actions, rebindable, presets | rebound, reset, preset_loaded | input_manager | Godot Input Map | ⬜ |
+| 149 | `color_blind_mode` | Node | mode (protanopia/deuteranopia/tritanopia), intensity, filter_strength | mode_changed | — | GAG Basic, GATO | ⬜ |
+| 150 | `subtitle` | Node | text, speaker, duration, style, background_opacity, position | shown, hidden | dialogue | GAG Basic, AAA | ⬜ |
+| 151 | `controller_remap` | Control | actions, rebindable, presets, per_device_profiles | rebound, reset, preset_loaded | input_manager | GAG Basic #1 | ⬜ |
+| 152 | `text_size` | Node | scale_multiplier, min_font_size, apply_to_all | size_changed | — | GAG Basic, APX Clear Text | ⬜ |
+| 153 | `high_contrast` | Node | contrast_level, override_colors, ui_only | contrast_changed | — | GAG Basic, APX Flexible Displays | ⬜ |
+| 154 | `audio_visualizer` | Node | frequency_bands, direction_indicator, show_subtitles_for_sounds | sound_detected | audio_manager | GAG Basic (no essential info by sound alone) | ⬜ |
+| 155 | `screen_shake_toggle` | Node | enabled, intensity_multiplier | toggled | screen_shake | GAG Basic (motion sickness) | ⬜ |
+| 156 | `hold_alternative` | Node | hold_action, alternative_action, hold_threshold | alternative_triggered | — | GAG Intermediate | ⬜ |
+| 157 | `button_mash_protection` | Node | mash_action, auto_repeat, hold_instead | protection_activated | — | GAG Intermediate | ⬜ |
+| 158 | `game_speed_control` | Node | speed_multiplier, min_speed, max_speed, increment | speed_changed | time_scale | GAG Intermediate, APX Slow It Down | ⬜ |
+| 159 | `assist_mode` | Node | assist_type, strength, auto_enable_threshold | assist_activated, assist_deactivated | — | GAG Intermediate, APX Helping Hand | ⬜ |
+| 160 | `practice_mode` | Node | enabled, infinite_resources, no_damage, reset_on_death | mode_changed | — | GAG Intermediate, APX Training Ground | ⬜ |
+| 161 | `difficulty_adjust` | Node | difficulty_levels, adaptive_threshold, player_skill_tracking | difficulty_changed | — | GAG Intermediate, APX House Rules | ⬜ |
+| 162 | `auto_aim` | Node | strength, target_priority, aim_cone_angle | aim_adjusted | — | GAG Intermediate | ⬜ |
+| 163 | `stereo_to_mono` | Node | enabled | — | audio_manager | GAG Intermediate | ⬜ |
+| 164 | `screenreader_support` | Node | enabled, read_ui_elements, read_game_events | text_spoken | — | GAG Advanced, APX Second Channel | ⬜ |
+| 165 | `font_size_global` | Node | size_scale, override_theme, apply_all_controls | size_changed | — | GAG Advanced | ⬜ |
+| 166 | `blood_gore_toggle` | Node | enabled, replacement_effects | toggled | — | GAG Advanced | ⬜ |
+| 167 | `profile_manager` | Node | profiles, active_profile, import_export | profile_switched, profile_saved | save_load | GAG Advanced (settings profiles) | ⬜ |
+| 168 | `input_cooldown` | Node | cooldown_seconds, per_action_config | cooldown_active, cooldown_ready | — | GAG Advanced (post-acceptance delay) | ⬜ |
+| 169 | `quick_time_alternative` | Node | qte_action, alternative_mode, skip_enabled | qte_skipped, alternative_used | — | GAG Advanced (timing alternatives) | ⬜ |
+| 170 | `narrative_replay` | Node | replay_last, replay_all, transcript | replayed | dialogue | GAG Advanced (replay narrative) | ⬜ |
+| 171 | `interface_resize` | Control | scale_x, scale_y, anchor_presets, min_size | resized | — | GAG Intermediate, APX Personal Interface | ⬜ |
+| 172 | `interface_rearrange` | Control | layout_presets, draggable_elements, save_layout | rearranged, layout_saved | — | GAG Intermediate, APX Personal Interface | ⬜ |
+| 173 | `safe_space` | Node | trigger_types, content_warnings, skip_content | warning_shown, content_skipped | — | APX Safe Space (trauma-sensitive) | ⬜ |
+| 174 | `bypass_gate` | Node | gate_type, bypass_condition, cooldown | gate_bypassed | — | APX Bypass | ⬜ |
+| 175 | `undo_redo` | Node | history_size, tracked_actions, merge_interval | undone, redone, history_cleared | — | APX Undo Redo | ⬜ |
+| 176 | `flexible_text_entry` | Control | input_methods, prediction, speech_to_text | text_submitted | — | APX Flexible Text Entry | ⬜ |
 
 ### 🌍 LOCALIZAÇÃO
 
@@ -457,6 +500,71 @@ Entidade (CharacterBody2D)
 | 171 | `hot_reload` | Node | watched_files, reload_strategy | reloaded, reload_failed | — | Godot @tool, live edit | ⬜ |
 | 172 | `error_boundary` | Node | fallback_behavior, max_errors, cooldown | error_caught, fallback_activated, recovered | — | React Error Boundary | ⬜ |
 | 173 | `behavior_sandbox` | Node | allowed_methods, resource_limits, timeout | sandbox_violation, timeout | — | Godot sandbox, Lua | ⬜ |
+
+### 🎮 INPUT AVANÇADO (Touch, Gestos, Buffer)
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 177 | `touch_gestures` | Node | swipe_threshold, pinch_sensitivity, long_press_duration, double_tap_window | swiped, pinched, long_pressed, double_tapped | — | Godot InputEventScreenTouch/ScreenDrag | ⬜ |
+| 178 | `virtual_joystick` | Control | radius, dead_zone, auto_center, fixed_position | joystick_moved, joystick_released | — | Godot TouchScreenButton, AssetLib | ⬜ |
+| 179 | `input_buffer` | Node | buffer_window, max_queue, cancel_on_hitstun | buffered, executed, cancelled | — | Fighting games (Street Fighter) | ⬜ |
+| 180 | `combo_detector` | Node | combo_sequence, time_window, leniency | combo_started, combo_advanced, combo_finished, combo_dropped | input_buffer | Fighting games, DMC, Bayonetta | ⬜ |
+| 181 | `dead_zone_config` | Node | dead_zone_per_action, circular_vs_square, raw_input_passthrough | zone_calibrated | — | Godot Input.get_vector() deadzone | ⬜ |
+| 182 | `aim_assist` | Node | friction, magnetism, bullet_bend, target_priority | assist_activated | — | Controller FPS/TPS | ⬜ |
+| 183 | `haptic_manager` | Node | vibration_patterns, intensity_curve, device_specific | vibration_started, vibration_ended | — | Godot Input.start_joy_vibration() | ⬜ |
+| 184 | `gyro_aim` | Node | sensitivity, axis_invert, smoothing, always_on | gyro_active | — | SDL 3, Switch/PS5 gyroscope | ⬜ |
+| 185 | `steam_input` | Node | action_set, analog_emulation, touch_menu_config | action_set_changed | — | GodotSteam Input | ⬜ |
+
+### 💾 SAVE SYSTEM AVANÇADO
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 186 | `encrypted_save` | Node | encryption_key, algorithm (AES-256), salt, pbkdf2_iterations | encrypted, decrypted, key_rotated | save_load | Godot ConfigFile.save_encrypted() | ⬜ |
+| 187 | `auto_save` | Node | interval_seconds, save_on_scene_change, save_on_quit, min_delta | auto_saved, save_queued | save_load | GAG Intermediate, padrão RPG | ⬜ |
+| 188 | `save_slots` | Node | slot_count, slot_metadata, thumbnail_capture, quick_save_slot | slot_created, slot_deleted, slot_overwritten | save_load, auto_save | Padrão universal | ⬜ |
+| 189 | `save_integrity` | Node | checksum_algorithm, version_stamp, corruption_detection | integrity_verified, corruption_detected, repaired | save_load | Software pattern (CRC32, SHA-256) | ⬜ |
+| 190 | `save_migration` | Node | from_version, to_version, migration_map, backup_before | migration_started, migration_complete, migration_failed | save_load, save_integrity | ActiveRecord, SemVer | ⬜ |
+| 191 | `cloud_save` | Node | provider (Steam/Google/iCloud), conflict_resolution, sync_on_focus | synced, conflict_detected, sync_failed | save_load | GodotSteam Remote Storage, platform APIs | ⬜ |
+| 192 | `cross_save` | Node | platforms, shared_schema, platform_specific_data, merge_strategy | cross_synced, merge_conflict | save_load, cloud_save | Multi-platform games | ⬜ |
+
+### 🧩 MODDING
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 193 | `mod_loader` | Node | mod_directory, load_order, dependency_check, auto_discover | mod_loaded, mod_failed, all_mods_loaded | — | Godot ProjectSettings.load_resource_pack() | ⬜ |
+| 194 | `patch_system` | Node | base_pack, patch_packs, delta_enabled, verify_signature | patch_applied, patch_failed, version_mismatch | mod_loader | Godot Export Patching (delta encoding) | ⬜ |
+| 195 | `resource_override` | Node | override_map, priority, fallback_to_base | resource_overridden, override_cleared | mod_loader | Godot resource pack priority | ⬜ |
+| 196 | `mod_sandbox` | Node | allowed_paths, blocked_methods, resource_quota | sandbox_violation, mod_disabled | mod_loader, error_boundary | Godot security, cryptographic signing | ⬜ |
+| 197 | `mod_store` | Node | store_url, categories, ratings, auto_update | mod_downloaded, mod_rated, mod_reported | mod_loader, behavior_registry | Steam Workshop, Godot Asset Library | ⬜ |
+| 198 | `mod_config` | Node | mod_metadata, dependencies, compatibility_range, load_priority | config_validated, conflict_detected | mod_loader | package.json pattern | ⬜ |
+
+### 🔌 PLUGIN SYSTEM
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 199 | `plugin_creator` | Node | plugin_name, description, version, author, features | plugin_created, plugin_built | — | Godot EditorPlugin, plugin.cfg | ⬜ |
+| 200 | `autoload_manager` | Node | singletons, load_order, enable_disable_per_scene | singleton_added, singleton_removed | — | Godot add_autoload_singleton() | ⬜ |
+| 201 | `editor_dock` | Control | dock_title, dock_slot, content_scene, available_layouts | dock_added, dock_removed | — | Godot EditorPlugin.add_dock() | ⬜ |
+| 202 | `sub_plugin` | Node | parent_plugin, enabled, dependencies | sub_enabled, sub_disabled | plugin_creator | Godot EditorInterface.set_plugin_enabled() | ⬜ |
+| 203 | `custom_node` | Node | class_name, icon, category, tool_script | node_registered, node_unregistered | — | Godot @tool, class_name, add_custom_type() | ⬜ |
+
+### 📊 OBSERVABILIDADE / TELEMETRIA
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 204 | `performance_monitor` | Node | tracked_metrics, sample_rate, history_size | metric_recorded, threshold_exceeded | — | Godot Performance, custom monitors | ⬜ |
+| 205 | `profiler_hook` | Node | auto_start, categories, burn_in_frames, export_report | profiling_started, profiling_stopped, report_ready | — | Godot Profiler, Debugger panel | ⬜ |
+| 206 | `crash_reporter` | Node | dsn_url, capture_screenshots, attach_log, user_consent | crash_captured, report_sent, report_failed | — | Sentry SDK, Forge Logger | ⬜ |
+| 207 | `analytics_tracker` | Node | events, user_properties, session_id, batch_interval, gdpr_compliant | event_tracked, batch_sent, consent_changed | — | Firebase, GameAnalytics, Framedash | ⬜ |
+| 208 | `debug_overlay` | Control | show_fps, show_memory, show_draw_calls, show_network, toggle_key | — | — | Godot debug, custom monitors | ⬜ |
+| 209 | `logger` | Node | log_levels, categories, file_output, remote_output, max_file_size | log_written, log_rotated | — | Godot print_debug, LogStream, file logging | ⬜ |
+
+### ⚡ PERFORMANCE AVANÇADO
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 210 | `draw_call_optimizer` | Node | batching_threshold, material_atlas, texture_atlas | optimized, atlas_rebuilt | — | Godot 2D batching, GPU optimization | ⬜ |
+| 211 | `physics_tick_optimizer` | Node | tick_rate, interpolation_enabled, sleep_threshold, max_objects | tick_rate_changed, objects_slept, objects_woke | — | Godot physics interpolation, fixed timestep | ⬜ |
 
 ---
 
