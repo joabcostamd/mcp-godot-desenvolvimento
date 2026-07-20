@@ -4,7 +4,7 @@
 - **Projeto:** mcp-godot-desenvolvimento | Tipo: Python | Godot 4.7
 - **Versao:** v3.5.0 | Nota QG: A
 - **Repo:** joabcostamd/mcp-godot-desenvolvimento | Branch: main
-- **Ultimo commit:** b6727f3 — "docs(v3.5.0): atualizacao documental completa"
+- **Ultimo commit:** 390aebe — "feat(agente-01-camada5): registrar 28 tools de gameplay no server.py"
 
 ## 🎯 Progresso das Camadas
 
@@ -15,27 +15,35 @@
 | 2 — Testes | ✅ 7/7 |
 | 3 — Criacao com Fosso | ✅ 16/16 |
 | 4 — Extensoes | ✅ 9/9 |
-| 5 — Gameplay | ✅ 8/8 |
+| 5 — Gameplay | ✅ 8/8 + 28 tools registradas |
 | 6 — Profundidade Engine | ⬜ [MARGINAL] |
 | 7 — Polimento | ⬜ [MARGINAL] |
 
 ## 📊 Metricas atuais
-- **Tools:** 240 (49 ativas no perfil full)
+- **Tools:** 268 (28 novas da Camada 5 registradas)
 - **Rollups:** 32 | **Ops:** 126
 - **Namespaces:** 5 (project, assets, runtime, analysis, orchestration)
 - **Cobertura:** 100% (49/49 tools ativas)
+- **Validacao:** 268/268/268 — 0 inconsistencias
 - **Canary queries:** 48 (45 tools)
 - **Arquivos Python:** 115 modulos em tools/
 
+## ✅ Pendencias resolvidas
+- **28 tools Camada 5:** ✅ REGISTRADAS (commit 390aebe)
+  - `core/tool_definitions.py`: +28 definicoes Tool()
+  - `server.py`: +28 handlers + TOOLSETS + imports
+  - `tools/dynamic_groups.py`: +28 nomes no GROUPS
+  - Distribuicao: project=16, analysis=10, assets=3, orchestration=1
+  - NAO adicionadas ao PHASE_TOOLSETS (aparecem via --profile full)
+
 ## ⚠️ Pendencias
 - **1 stash:** checkpoint-fatia-4.1 (revisar ou descartar)
-- **28 tools Camada 5:** implementadas mas NAO registradas no server.py (AGENTE 01)
 - **GitHub API:** descricao NAO atualizada (HTTP 503)
 
 ## 🎮 Para o HUMANO
 1. Execute `git stash list` — verifique o stash checkpoint-fatia-4.1
-2. Execute `python tests/test_code_quality_ops.py` para verificar o gate
-3. Decida se avanca para Camada 6 [MARGINAL] ou Camada 7 [MARGINAL]
+2. Decida se avanca para Camada 6 [MARGINAL] ou Camada 7 [MARGINAL]
+3. Se avancar Camada 6, o AGENTE 02 precisa ativar as 28 tools no PHASE_TOOLSETS
 
 ## 🔧 Regras do projeto
 - NUNCA edite arquivos do outro agente (matriz de conflito)
