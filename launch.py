@@ -192,6 +192,16 @@ def main():
     godot_path = cfg.get("godot_path", "")
     project = args.project or cfg.get("default_project", "")
 
+    # ── Fatia 0.I: Detectar pasta sincronizada (aviso não-bloqueante) ──
+    check_path = project or str(ROOT)
+    try:
+        from tools.cloud_sync_detector import detect_cloud_sync, warn_cloud_sync
+        cloud_result = detect_cloud_sync(check_path)
+        if cloud_result.get("synced"):
+            warn_cloud_sync(cloud_result)
+    except Exception:
+        pass  # fail-open
+
     print(f"\n{B}🔌 MCP IA DEV — Lançador{X}\n")
 
     # Passo 1: Abrir Godot

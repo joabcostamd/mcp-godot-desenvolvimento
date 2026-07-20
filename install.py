@@ -229,6 +229,15 @@ def main():
 
     target_dir = Path(args.dir) if args.dir else Path("C:/MCP-Godot-IA-Dev")
 
+    # ── Fatia 0.I: Detectar pasta sincronizada (aviso não-bloqueante) ──
+    try:
+        from tools.cloud_sync_detector import detect_cloud_sync, warn_cloud_sync
+        cloud_result = detect_cloud_sync(str(target_dir))
+        if cloud_result.get("synced"):
+            warn_cloud_sync(cloud_result)
+    except Exception:
+        pass  # fail-open: detector não pode travar instalação
+
     # Passo 1: Detectar Godot
     godot_path = find_godot()
     if not godot_path:

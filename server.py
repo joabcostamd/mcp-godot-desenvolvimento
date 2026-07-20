@@ -4588,6 +4588,14 @@ def run() -> None:
             print(f"[MCP] AVISO: Ambiente com problemas: {env_result.get('issues', [])}", file=sys.stderr)
     except Exception as e:
         print(f"[MCP] Aviso: validação de ambiente falhou: {e}", file=sys.stderr)
+    # ── Fatia 0.I: Detecção de pasta sincronizada em nuvem ──
+    try:
+        from tools.cloud_sync_detector import detect_cloud_sync, warn_cloud_sync
+        cloud_result = detect_cloud_sync()
+        if cloud_result.get("synced"):
+            warn_cloud_sync(cloud_result)
+    except Exception as e:
+        print(f"[MCP] Aviso: detecção de nuvem falhou: {e}", file=sys.stderr)
     # Validação de consistência do registro (diagnóstico, não trava boot)
     try:
         from tools.registry_validation import validate_tool_registry_consistency
