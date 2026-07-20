@@ -1,4 +1,4 @@
-# 🗺️ ROADMAP UNIFICADO — MCP Godot Agent v3.4+
+# 🗺️ ROADMAP UNIFICADO — MCP Godot Agent v3.5.0
 
 > **Versão:** 3.0.0 | **Criado em:** 2026-07-19 | **Atualizado:** 2026-07-19 (automação)
 >

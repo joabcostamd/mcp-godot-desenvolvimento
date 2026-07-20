@@ -1,7 +1,7 @@
 # 🧠 LEARNINGS.md — Anti-Padrões e Regras de Prevenção
 
 > **Leia este arquivo no início de CADA sessão.**
-> **Ordem de leitura**: AUTORUN.md → AGENTS.md → **LEARNINGS.md** → NEXTFEATURES.md
+> **Ordem de leitura sugerida**: ROADMAP_UNIFICADO.md → DATA_CONTRACTS.md → **LEARNINGS.md** → HANDOFF.md
 >
 > Aqui estão listados apenas os problemas que JÁ ocorreram em produção.
 > Para cada um: o padrão que quebra, por que quebra, e a REGRA para nunca mais repetir.

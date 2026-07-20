@@ -1,8 +1,8 @@
-# GUIA DE INSTALAÇÃO — MCP Godot Agent v3.2.1
+# GUIA DE INSTALACAO — MCP Godot Agent v3.5.0
 
 > **Para a IA agêntica (DeepSeek, Claude, Copilot, etc.):**
 > Siga cada passo na ordem. Não pule nada. Ao final, o MCP estará conectado
-> ao VS Code e pronto para construir o Star Colony.
+> ao VS Code e pronto para construir jogos com o Shardbreaker/Nodebuster-like.
 
 ---
 

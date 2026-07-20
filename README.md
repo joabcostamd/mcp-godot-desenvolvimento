@@ -1,6 +1,6 @@
 # MCP Godot — Desenvolvimento
 
-> **Servidor MCP Godot Agent v3.4.0 — Pipeline autonomo multi-agente para Godot Engine 4.7.**
+> **Servidor MCP Godot Agent v3.5.0 — Pipeline autonomo multi-agente para Godot Engine 4.7.**
 > Conecta Godot ao VS Code Copilot via protocolo MCP stdio. CI, qualidade de codigo, seguranca, orquestracao.
 
 <!-- BADGES_START -->
@@ -29,8 +29,8 @@
 | B8 | Dead-End Detection | ✅ | Becos sem saída em diálogos e quests |
 | B9 | Documentação Automática | ✅ | Changelog, README, Wiki auto-gerados |
 
-> **AGENTE 01:** A1-A5 concluídas | **AGENTE 02:** B2-B9 concluídas
-> Próximo: Camada 5 (Gameplay) [MARGINAL] — requer aprovação
+> **AGENTE 01:** A0-A6 concluidas | **AGENTE 02:** Camadas 0-5 concluidas
+> Próximo: Camada 5 CONCLUIDA | Camada 6 (Profundidade de Engine) [MARGINAL]
 
 ---
 
@@ -38,21 +38,19 @@
 
 | Pasta/Arquivo | O que é |
 |---|---|
-| `server.py` | Servidor MCP (~7600 linhas, 193 ferramentas, stdio JSON-RPC 2.0) |
-| `tools/` | 74 módulos Python (cenas, scripts, física, arte IA, som IA, pipeline, verificação, etc.) |
+| `server.py` | Servidor MCP (~3700 linhas, 240 ferramentas, stdio JSON-RPC 2.0) |
+| `tools/` | 115 modulos Python (cenas, scripts, fisica, arte IA, som IA, pipeline, verificacao, gameplay, etc.) |
 | `resources/` | Game patterns (17 gêneros) + MCP Prompts (11 comandos) |
 | `templates/` | Templates GDScript (Jinja2) |
 | `classdb_cache/` | Cache da API do Godot 4.7 (1074 classes) |
 | `addons/` | Plugins Godot (mcp_addon + mcp_runtime_bridge) |
 | `config.json.example` | Template de configuração |
 | `requirements.txt` | Dependências Python |
-| `MCP_ESTADO_ATUAL.md` | 📄 Documento canônico — TUDO sobre o MCP (arquitetura, 193 tools, protocolos, limitações) |
+| `MCP_ESTADO_ATUAL.md` | 📄 **Substituido** por ROADMAP_UNIFICADO.md + DATA_CONTRACTS.md |
 | `GUIA_CONEXAO.md` | Como usar — passo a passo do zero |
 | `ARQUITETURA_MCP.md` | Como funciona por dentro — 3 camadas, padrões, extensão |
-| `LEARNINGS.md` | 18 regras anti-padrão (R1-R18) |
-| `CHANGELOG.md` | Histórico completo de versões |
-| `pendencias.md` | Bugs ativos e resolvidos (legado) |
-| `pendenciasMCP.md` | 📋 **Documento mestre de backlog v2.1.0** — 22 itens, 14 gaps, 8 KPIs, 7 riscos, 7 anti-padrões |
+| `LEARNINGS.md` | 20 regras anti-padrao (R1-R20) |
+| `CHANGELOG.md` | Historico completo de versoes |
 
 ---
 

@@ -1,6 +1,6 @@
 # AUDIT_PROTOCOL.md — Protocolo de Auditoria do MCP Godot Agent
 
-> **Versão:** 1.0 | **Data:** 2026-07-14 | **MCP:** godot-mcp-agent v3.3.0
+> **Versao:** 1.1 | **Data:** 2026-07-19 | **MCP:** godot-mcp-agent v3.5.0
 
 Documento de referência para o protocolo de auditoria estática de projetos Godot via MCP. Descreve cadência, escopo e regras de segurança das ferramentas de detecção de wiring.
 

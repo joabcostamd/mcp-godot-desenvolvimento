@@ -1,6 +1,32 @@
 # CHANGELOG — mcp-godot-desenvolvimento
 
-## v3.4.0 (2026-07-19) — Camada 4: Extensões de Processo (AGENTE 02)
+## v3.5.0 (2026-07-19) — Sessao de Polimento + Camada 5 Gameplay (AGENTE 02)
+
+### Polimento (F1-F7)
+- **F1 — Diagnostico:** 51% coverage, 18 tools sem teste
+- **F2 — Cobertura Tier-1:** +18 handlers sinteticos, 87.8% → 100% coverage (0 tools sem cobertura)
+- **F3 — Regressao Visual:** `manage_visual_baselines()`, threshold calibrado, `--visual` no `auditar.py`
+- **F4 — Perf Regression:** Handler sintetico para `perf_regression_track`
+- **F5 — Canary Queries:** 14 → 48 queries, 45 tools cobertas
+- **F6 — Audio Engine:** `tools/audio_ops.py` (fachada unificada), play/set/stop no runtime bridge GDScript
+- **F7 — Documentacao:** HANDOFF, NEXT_STEP, roadmap atualizados
+
+### Camada 5 — Gameplay (8 fatias, 28 funcoes)
+- **5.1 — Conquistas + Cloud Save:** `tools/achievement_ops.py` (3 funcoes)
+- **5.2 — Suporte a Mods:** `tools/mod_ops.py` (2 funcoes)
+- **5.3 — Cutscene/Cinematica:** `tools/cutscene_ops.py` (3 funcoes)
+- **5.4 — Telemetria + Replay:** `tools/telemetry_ops.py` (4 funcoes)
+- **5.5 — Dificuldade + Quest + Balance:** `tools/adaptive_ops.py` (3 funcoes)
+- **5.6 — Acessibilidade:** `tools/accessibility_ops.py` (5 funcoes)
+- **5.7 — Trailer + Onboarding:** `tools/trailer_ops.py` + `tools/onboarding_ops.py` (6 funcoes)
+- **5.8 — Dialogo NPC:** `tools/dialogue_ops.py` expandido (2 funcoes)
+
+### Auditorias (3 ciclos)
+- 5 CRITICAL corrigidos (C1: _json→json, C2-C5: GDScript audio)
+- 4 HIGH corrigidos (H1: 5 tools faltantes, H2-H4: validacoes)
+- 5 gaps fechados (G1-G5: semver, level_range, count, imports)
+
+## v3.4.0 (2026-07-19) — Camada 4: Extensoes de Processo (AGENTE 02)
 
 ### B2 — CI Verificação
 - `.github/workflows/verification.yml` — pipeline com 7 jobs (budget, snapshot, governor, syntax, regressão, audit, summary)

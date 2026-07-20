@@ -1,4 +1,4 @@
-# ARQUITETURA MCP — Godot Agent v3.2.1
+# ARQUITETURA MCP — Godot Agent v3.5.0
 
 > **Leia este documento para ENTENDER o MCP por dentro.** Não é um tutorial de uso
 > (para isso veja `GUIA_CONEXAO.md`). É o mapa do código: como as peças se encaixam,
@@ -12,7 +12,7 @@
 ## 1. VISÃO GERAL — O que o MCP faz
 
 O MCP (Model Context Protocol) é uma ponte entre **linguagem natural** e **Godot Engine**.
-Ele expõe 191 ferramentas que uma IA pode chamar para criar jogos completos —
+Ele expoe 240 ferramentas que uma IA pode chamar para criar jogos completos —
 cenas, scripts, física, UI, áudio, partículas, exportação — sem que o usuário
 precise abrir o editor Godot ou escrever uma linha de código.
 
@@ -52,16 +52,16 @@ Isso reduz erros, acelera a construção e mantém a coerência.
 │  • Cache de tool definitions e handlers          │
 │  • Error codes + friendly error messages         │
 │  • Perfis (--profile core/dev/full)              │
-│  • Toolsets (--toolsets com 10 grupos)           │
+│  • 5 namespaces semanticos                        │
 └────────────────────┬────────────────────────────┘
                      │
 ┌────────────────────▼────────────────────────────┐
 │  CAMADA 2 — Tool Definitions + Handlers          │
 │  ─────────────────────────────────────────────  │
-│  • 191 tools com schema JSON completo            │
-│  • 27 rollups (<domain>_manage)                  │
-│  • 3 perfis (core=31, dev=80, full=191)          │
-│  • 10 toolsets por domínio                       │
+│  • 240 tools com schema JSON completo            │
+│  • 32 rollups (<domain>_manage)                  │
+│  • 3 perfis (core=31, dev=80, full=240)          │
+│  • 5 namespaces (project, assets, runtime, analysis, orchestration) │
 │  • Annotations: readOnlyHint, destructiveHint    │
 │  • Títulos em português (PT-BR)                  │
 │  • Tags por domínio (2D, 3D, física, UI...)     │
@@ -71,7 +71,7 @@ Isso reduz erros, acelera a construção e mantém a coerência.
 ┌────────────────────▼────────────────────────────┐
 │  CAMADA 3 — Implementações (tools/*.py)          │
 │  ─────────────────────────────────────────────  │
-│  • 69 módulos de operações reais                 │
+│  • 115 modulos de operacoes reais                 │
 │  • Cada tool tem UMA função exportada            │
 │  • Operações no sistema de arquivos (.tscn, .gd) │
 │  • Comunicação TCP/WebSocket com Godot           │

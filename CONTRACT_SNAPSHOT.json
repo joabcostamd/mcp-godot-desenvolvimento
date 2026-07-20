@@ -2,6 +2,7 @@
   "generated_at": "2026-07-19T12:27:35.340852+00:00",
   "hash": "cb6dd1fe0153c89eaaa76d69f7e90fb39c8501292ebf8c514a1898163f3cff96",
   "tool_count": 48,
+  "_note": "Snapshot parcial — 48/240 tools (fase CORE). O catalogo completo tem 240 tools em 5 namespaces.",
   "tools": {
     "advance_milestone": {
       "description": "Conclui um milestone. Sem ID, avanca o proximo pendente automaticamente. GRATIS.",

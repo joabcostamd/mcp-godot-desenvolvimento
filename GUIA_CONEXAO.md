@@ -1,4 +1,4 @@
-# GUIA DE CONEXÃO — Godot 4.7 + MCP v3.2.1 (do zero)
+# GUIA DE CONEXAO — Godot 4.7 + MCP v3.5.0 (do zero)
 
 > **Leia este arquivo primeiro.** Ele contém TUDO que você precisa para conectar o
 > Godot 4.7 ao servidor MCP e começar a criar jogos por linguagem natural.
@@ -12,13 +12,13 @@
 ┌──────────────────────────────────────────────────────────────┐
 │  SERVIDOR MCP (Python)                                       │
 │  mcp-godot-desenvolvimento/server.py                         │
-│  ├── tools/      ← 64 módulos, 189 ferramentas              │
+│  ├── tools/      ← 115 modulos, 240 ferramentas              │
 │  ├── templates/  ← templates GDScript (Jinja2)              │
 │  ├── resources/  ← game patterns (18 gêneros) + prompts     │
 │  ├── classdb_cache/ ← API do Godot 4.7 (1074 classes)      │
 │  └── config.json ← caminhos do Godot + projeto padrão       │
 │                                                              │
-│  Perfis: --profile core (16 tools) / dev (31) / full (189)  │
+│  Perfis: --profile core (31 tools) / dev (80) / full (240)  │
 │  O servidor recebe comandos em linguagem natural,            │
 │  traduz para operações no Godot, e aplica via TCP/WS.        │
 └──────┬───────────┬──────────┬────────────┬──────────────────┘
@@ -41,8 +41,9 @@
                          ▼
               ┌─────────────────────┐
               │  PROJETO GODOT      │
-              │  (star-colony ou    │
-              │   qualquer outro)   │
+              │  (shardbreaker-    │
+              │   nodebuster-like  │
+              │   ou qualquer outro)│
               └─────────────────────┘
 ```
 
@@ -280,14 +281,14 @@ python -m venv .venv
 .venv\Scripts\pip install -r requirements.txt
 
 # 2. Copiar addons para o projeto Godot
-xcopy /E /I "addons\mcp_addon" "..\NUCLEO\projetos\star-colony\addons\mcp_addon"
-xcopy /E /I "addons\mcp_runtime_bridge" "..\NUCLEO\projetos\star-colony\addons\mcp_runtime_bridge"
+xcopy /E /I "addons\mcp_addon" "..\NUCLEO\projetos\shardbreaker-nodebuster-like\addons\mcp_addon"
+xcopy /E /I "addons\mcp_runtime_bridge" "..\NUCLEO\projetos\shardbreaker-nodebuster-like\addons\mcp_runtime_bridge"
 
 # 3. Iniciar servidor (toda vez que for trabalhar)
 .venv\Scripts\python server.py --profile dev
 
 # 4. Godot (em outro terminal)
-& "C:\Godot\Godot_v4.7-stable_win64.exe" --path "C:\Users\joabc\OneDrive\Documentos\VS CODE\NUCLEO\projetos\star-colony" --editor
+& "C:\Godot\Godot_v4.7-stable_win64.exe" --path "C:\Users\joabc\OneDrive\Documentos\VS CODE\NUCLEO\projetos\shardbreaker-nodebuster-like" --editor
 ```
 
 ---

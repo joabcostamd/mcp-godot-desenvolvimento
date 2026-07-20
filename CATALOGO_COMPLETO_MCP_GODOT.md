@@ -1,6 +1,6 @@
 # CATÁLOGO COMPLETO — MCP Godot Agent
 
-> Gerado em 17/07/2026 a partir dos arquivos reais (server.py, tools/*.py).
+> Gerado em 19/07/2026 a partir dos arquivos reais (server.py, tools/*.py).
 > **Precisão:** nomes, descrições, handlers, inputSchemas e fases extraídos diretamente do código fonte.
 
 ---

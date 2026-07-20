@@ -1,6 +1,6 @@
 # Inventário de Ops por Rollup — CORRIGIDO (assinaturas reais)
 
-> **Gerado em:** 17/07/2026  
+> **Gerado em:** 19/07/2026  
 > **Método:** Extração programática via `inspect.signature()` do Python  
 > **Total de rollups:** 32  
 > **Total de ops:** 126

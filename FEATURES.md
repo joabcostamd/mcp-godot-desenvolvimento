@@ -1,8 +1,8 @@
 # FEATURES.md — Registro de Wiring do Projeto Shardbreaker
 
 > **Projeto:** Shardbreaker (nodebuster-like)
-> **Data da última auditoria:** 2026-07-14
-> **MCP:** godot-mcp-agent v3.3.0
+> **Data da ultima auditoria:** 2026-07-19
+> **MCP:** godot-mcp-agent v3.5.0
 > **Ferramentas utilizadas:** audit_input_map, audit_autoloads, audit_scene_reachability, audit_uid_consistency, audit_save_compatibility
 
 ---
