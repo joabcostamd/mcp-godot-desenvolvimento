@@ -3,23 +3,18 @@
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo
 > para que o outro agente saiba o estado do projeto na próxima sessão.
 
-## Último Handoff (AGENTE 01 — 2026-07-20 — ONDA 0: ✅ 12/12)
+## Último Handoff (AGENTE 01 — 2026-07-20 — ONDA 1: 1/17)
 
 - **Data:** 2026-07-20
 - **De:** AGENTE 01 (Arquitetura & Core)
-- **Ação:** Fatias 0.I, 0.J, 0.K, 0.L + correções cross-cutting + `/auditar` turbinado
+- **Ação:** ONDA 0 (12/12) + Fatia 1.A — Instalador de 1 comando
 
-### O que foi feito
+### 1.A — init.py (760+ linhas, NOVO)
 
-| Fatia | Descrição | Arquivo |
-|---|---|---|
-| 0.I | Cloud sync detector (3 camadas) | `tools/cloud_sync_detector.py` (NOVO) |
-| 0.J | Name normalizer (NFKD+ASCII) | `tools/name_utils.py` (NOVO) |
-| 0.K | IP guard (80+ franquias) | `tools/ip_guard.py` (NOVO) |
-| **0.L** | **Bug set/get_node_property** | `tools/scene_ops.py` (FIX) |
-| — | Handler factory (38→1) | `server.py` (refactor) |
-| — | C1 bug fix (indentação) | `server.py` (fix) |
-| — | `/auditar` 12 fases auto | user-level prompt (modificado) |
+Instalador standalone (só stdlib): detecta Godot/Python/VS Code, cria venv,
+gera `.vscode/mcp.json` com merge, cria projeto Godot + addon, abre editor,
+faz bridge polling (LSP :6005 + WS :9082, timeout 30s). Idempotente.
+Mensagens em português. `--silent`, `--no-verify`, `--verbose`.
 
 ### 0.L — Detalhe técnico
 
@@ -35,20 +30,20 @@ que têm o padrão completo: checkpoint → modificar → deduplicar → **write
 
 - **Total tools:** 274 (sem alteração)
 - **Handlers:** 295 (sem alteração)
-- **Novos arquivos:** cloud_sync_detector.py, name_utils.py, ip_guard.py
+- **Novos arquivos:** init.py, cloud_sync_detector.py, name_utils.py, ip_guard.py
 - **Arquivos expandidos:** server.py, project_ops.py, project_brief_ops.py, art_ops.py, tool_definitions.py, scene_ops.py
-- **ONDA 0:** ✅ 12/12 CONCLUÍDA
+- **ONDA 0:** ✅ 12/12
+- **ONDA 1:** 1/17 (1.A concluída)
 
-### ⚠️ Pontos de atenção para AGENTE 02
+### ⚠️ Pontos de atenção
 
-- `_make_import_handler()` substituiu 38 handlers Camada 6 — se adicionar tool nova nesse domínio, use a factory
-- IP guard é fail-open: nunca bloqueia o servidor
-- Cloud sync detector integrado em server.py, install.py, launch.py
-- C1 do auditar.py mostra 7 breaking (falso positivo da factory)
-- **ONDA 0 fechada.** Próximo: ONDA 1 — Acessibilidade (fatia 1.A: instalador de um comando)
+- init.py é standalone (só stdlib) — não importa tools/
+- mcp.json usa merge: servidores existentes preservados
+- Bridge WS :9082 timeout se outro projeto Godot já ocupa a porta
+- C1/C5 do auditar.py: pré-existentes (7 breaking, 8 fases overflow)
 
-### Próximo passo (AGENTE 01)
-- **ONDA 1 — 1.A: Instalador de um comando (`init`)** [SÊNIOR]
+### Próximo passo
+- **1.B — Instalar templates de export** [AUTO]
 
 ---
 

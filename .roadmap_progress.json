@@ -1,4 +1,12 @@
 {
+  "fatia_1.A": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "4539503",
+    "resultado": "init.py (760+ linhas): instalador de 1 comando. 6/6 criterios de aceite. Detecta Godot/Python/VS Code, cria venv, gera .vscode/mcp.json (merge), cria projeto Godot com addon + main.tscn/main.gd, abre editor, bridge polling (LSP :6005 + WS :9082) com timeout 30s. Idempotente. Normalizacao de nome. Mensagens em portugues. Deteccao de editor ja aberto. --no-verify para pular polling."
+  },
   "fatia_0.L": {
     "status": "concluida",
     "data": "2026-07-20",
