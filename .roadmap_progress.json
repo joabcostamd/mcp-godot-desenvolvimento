@@ -237,12 +237,13 @@
       "c6": "skipped (sem --tool-name)"
     }
   },
-  "fatia_0.7b": {
-    "status": "bloqueada",
-    "data": "2026-07-18",
+  "fatia_0.D": {
+    "status": "concluida",
+    "data": "2026-07-20",
     "tentativa": 1,
-    "resultado": "suposicao falsa: 7/9 godot_* sao handlers inline, nao importaveis. Pulando para 0.9.",
-    "motivo": "requer extracao previa de funcoes inline para modulos — trabalho nao planejado. Retomar apos refatoracao."
+    "agente": "AGENTE 01",
+    "checkpoint": "33a745c",
+    "resultado": "Expurgo de Cline concluido. Zero Cline maiusculo restante. ROADMAP_UNIFICADO.md arquivado em journal/."
   },
   "C5_status": {
     "diagnostico": "problema real de teto — 6 fases >40 tools visiveis",
