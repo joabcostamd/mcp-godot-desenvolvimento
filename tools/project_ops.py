@@ -203,15 +203,27 @@ def create_project(name: str, path: str, renderer: str = "forward_plus") -> dict
     """Cria um novo projeto Godot vazio.
 
     Args:
-        name: Nome do projeto.
+        name: Nome do projeto (rotulo — ex: "Meu Jogo Legal").
+              O diretorio usa a versao normalizada (ex: "meu_jogo_legal").
         path: Caminho onde criar o projeto (absoluto ou relativo ao workspace).
         renderer: "forward_plus", "mobile", ou "compatibility".
 
     Returns:
-        {"status": "success", "project_path": str}
+        {"status": "success", "project_path": str, "label": str, "slug": str}
         ou {"status": "error", "message": str}
     """
+    from tools.name_utils import normalize_identifier
+
+    # Normaliza o nome para o diretorio (slug seguro)
+    slug = normalize_identifier(name)
+    label = name  # rotulo original preservado
+
     proj = _resolve_project_path(path)
+
+    # Se a pasta destino termina com o nome original, usa o slug no lugar
+    # Ex: C:/Projetos/Meu Jogo Legal → C:/Projetos/meu_jogo_legal
+    if proj.name != slug:
+        proj = proj.parent / slug
 
     if proj.exists() and any(proj.iterdir()):
         return {
@@ -283,7 +295,21 @@ renderer/rendering_method="{rendering_method}"
     global _active_project
     _active_project = proj
 
-    return {"status": "success", "project_path": str(proj.resolve())}
+    result = {
+        "status": "success",
+        "project_path": str(proj.resolve()),
+        "label": label,
+        "slug": slug,
+    }
+
+    # Avisa se o nome foi normalizado (rotulo != slug)
+    if label != slug:
+        result["message"] = (
+            f"Projeto criado como '{slug}' (pasta segura). "
+            f"O nome do jogo continua '{label}'."
+        )
+
+    return result
 
 
 def get_project_settings(section: str | None = None) -> dict:

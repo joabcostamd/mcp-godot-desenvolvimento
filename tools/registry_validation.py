@@ -47,7 +47,7 @@ def validate_tool_registry_consistency() -> dict[str, Any]:
         server._REGISTRY_VALIDATION_UNFILTERED = True
         server._ENABLED_TOOLS = None
         server._PROFILE_TOOLS = None
-        server._get_phase_tools = lambda: None  # type: ignore[assignment]
+        server._get_phase_tools = lambda: server.PHASE_TOOLS_CORE  # type: ignore[assignment]
 
         # ── Invalidar caches para forçar rebuild ──────────────────
         server._invalidate_tool_caches()
