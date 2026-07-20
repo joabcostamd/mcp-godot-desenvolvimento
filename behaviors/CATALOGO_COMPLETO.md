@@ -1,9 +1,9 @@
-# ARSENAL DEFINITIVO DE BEHAVIORS — Catálogo Completo v8.0
+# ARSENAL DEFINITIVO DE BEHAVIORS — Catálogo Completo v9.0
 
-**Versão:** 8.0 | **Data:** 2026-07-20
+**Versão:** 9.0 | **Data:** 2026-07-20
 **Local:** `behaviors/` | **Formato:** `behavior.schema.json` v2.0
-**Total:** 211 behaviors em 25 categorias + Behavior Lifecycle + SemVer + CHANGELOG
-**Pesquisas:** 6 rodadas | **Fontes:** 31+ | **Princípios:** 37
+**Total:** 224 behaviors em 27 categorias + Behavior Lifecycle + SemVer + CHANGELOG
+**Pesquisas:** 7 rodadas | **Fontes:** 35+ | **Princípios:** 40
 
 ---
 
@@ -43,10 +43,14 @@
 | 6 | **Godot Profiling/Debug** | Built-in Profiler, Debugger, Custom Monitors, ObjectDB, External C++ profilers | |
 | 6 | **GodotSteam Ecosystem** | Achievements, Leaderboards, Cloud Saves, Lobbies, Workshop, Rich Presence, Voice, Networking | |
 | 6 | **Godot GPU/CPU Optimization** | 2D/3D batching, draw calls, fill rate, tile-based rendering (mobile), texture compression, LOD | |
+| 7 | **Godot AnimationTree System** | AnimationNode types (BlendTree, BlendSpace1D/2D, StateMachine), root motion, sync modes, OneShot, filters | |
+| 7 | **Godot TileMap/TileMapLayer** | TileMap deprecated → TileMapLayer, tile shapes (Square/Isometric/Hex), terrains, autotiling, patterns, proxies | |
+| 7 | **Godot Custom Resources** | Resource inheritance, .tres (VCS) vs .res (binary), resource_local_to_scene, DataTable/CurveTable patterns | |
+| 7 | **MCP Protocol Specification** | JSON-RPC 2.0, lifecycle (initialize→initialized), tool annotations, outputSchema, structuredContent, security best practices | |
 
 ---
 
-## 🏗️ PRINCÍPIOS DE DESIGN (37 regras)
+## 🏗️ PRINCÍPIOS DE DESIGN (40 regras)
 
 ### Regra de Ouro
 Composição > Herança. Todo behavior é um **nó filho independente**.
@@ -99,6 +103,9 @@ behaviors/<nome>/
 35. **Performance budget** — Behaviors com >1% de frame time devem oferecer modo "light" (desabilitar features caras) ou usar Server API (RenderingServer/PhysicsServer).
 36. **Plugin compatibility** — Todo behavior deve funcionar como: nó filho (add_child), cena instanciada (.tscn), e recurso de plugin (plugin.cfg). Zero dependências de caminho absoluto.
 37. **Observability** — Behaviors complexos (>5 parâmetros) devem expor custom performance monitors e logs categorizados. Use `print_debug()`, não `print()`.
+38. **Data-driven design** — Prefira Custom Resources a hardcoded data. Tabelas de dano, curvas de progressão, drop tables → Resources, não Dictionaries inline. Resources são serializáveis, inspecionáveis no editor, e version-control friendly (.tres = texto).
+39. **Animation as data** — Animação não é código. Use AnimationPlayer + AnimationTree para controlar estados visuais. Separe lógica de jogo (state_machine behavior) de lógica de animação (animation_state_machine behavior).
+40. **MCP tool design** — Tools devem ter: descrição curta e distinguível, inputSchema com tipos e required explícitos, outputSchema para validação, annotations (readOnlyHint, destructiveHint). Tools destrutivas exigem confirmação humana.
 
 ---
 
@@ -565,6 +572,37 @@ Entidade (CharacterBody2D)
 |---|----------|------------|------------------|--------|-------|--------|
 | 210 | `draw_call_optimizer` | Node | batching_threshold, material_atlas, texture_atlas | optimized, atlas_rebuilt | — | Godot 2D batching, GPU optimization | ⬜ |
 | 211 | `physics_tick_optimizer` | Node | tick_rate, interpolation_enabled, sleep_threshold, max_objects | tick_rate_changed, objects_slept, objects_woke | — | Godot physics interpolation, fixed timestep | ⬜ |
+
+### 🎞️ ANIMAÇÃO (AnimationTree + AnimationPlayer)
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 212 | `animation_blender` | AnimationTree | anim_player, tree_root_type, advance_expression_base | animation_player_changed | — | Godot AnimationTree, TPS Demo | ⬜ |
+| 213 | `sprite_animator` | AnimatedSprite2D | sprite_frames, animation, speed_scale, playing | animation_finished, animation_changed | — | Godot AnimatedSprite2D + SpriteFrames | ⬜ |
+| 214 | `animation_state_machine` | AnimationNodeStateMachine | states, transitions, start_state, advance_expressions | state_changed, transition_started | animation_blender | Godot AnimationNodeStateMachine (≠ game state machine) | ⬜ |
+| 215 | `blend_space_2d` | AnimationNodeBlendSpace2D | blend_position, sync_mode, blend_mode, points | — | animation_blender | Godot BlendSpace2D (locomotion) | ⬜ |
+| 216 | `blend_space_1d` | AnimationNodeBlendSpace1D | blend_position, sync_mode, points | — | animation_blender | Godot BlendSpace1D | ⬜ |
+| 217 | `root_motion_controller` | Node | root_motion_track, apply_position, apply_rotation, apply_scale | motion_applied | animation_blender | Godot AnimationTree root motion | ⬜ |
+| 218 | `one_shot_animation` | AnimationNodeOneShot | fade_in_time, fade_out_time, auto_restart | shot_played, shot_finished | animation_blender | Godot OneShot node | ⬜ |
+| 219 | `animation_layer` | Node | filter_tracks, blend_amount, layer_name | layer_enabled, layer_disabled | animation_blender | Godot track filters, layered animation | ⬜ |
+| 220 | `animation_curve_table` | Resource | curves, interpolation_types, sample_points | — | — | Godot Curve/Curve2D resources | ⬜ |
+| 221 | `skeleton_ik` | Node | ik_target, bone_chain, iterations, tolerance | ik_solved | — | Godot Skeleton2D, SkeletonIK3D | ⬜ |
+
+### 🗺️ TILEMAP (TileMapLayer + TileSet)
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 222 | `tilemap_layer_manager` | TileMapLayer | tile_set, layer_count, z_index_base, y_sort | layer_added, layer_removed | — | Godot TileMapLayer (TileMap deprecated) | ⬜ |
+| 223 | `terrain_autotiler` | Node | terrain_set, terrain_mode, match_corners, match_sides | terrain_painted, auto_tiled | tilemap_layer_manager | Godot TileSet terrains, autotiling | ⬜ |
+| 224 | `tile_pattern_stamper` | Node | pattern_library, stamp_mode, random_rotation, scattering | pattern_stamped, pattern_saved | tilemap_layer_manager | Godot TileMapPattern | ⬜ |
+
+### 📦 CUSTOM RESOURCES (Data-Driven Design)
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| — | `data_table` | Resource | columns, rows, default_values, export_format | data_changed, row_added, row_removed | — | Godot Custom Resource, Unity ScriptableObject | ⬜ |
+| — | `curve_table` | Resource | curves, domains, sample_points, interpolation | curve_updated | — | Godot Curve, Unreal CurveTable | ⬜ |
+| — | `resource_factory` | Node | template_resource, override_properties, auto_register | resource_created, resource_cached | — | Godot ResourceLoader, ResourceSaver | ⬜ |
 
 ---
 
