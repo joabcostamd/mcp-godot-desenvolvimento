@@ -103,7 +103,39 @@ TOOLSETS = {
         "dialogue_generate_npc_lines", "dialogue_generate_personality",
         "accessibility_apply_colorblind_filter", "accessibility_add_subtitles", "accessibility_remap_controls",
         "onboarding_create_tutorial_step", "onboarding_create_guided_tour",
-    ],
+    
+        "skeleton_get_bone_pose",
+        "skeleton_set_bone_pose",
+        "skeleton_list_bones",
+        "skeleton_create_bone",
+        "skeleton_create_ik_chain",
+        "skeleton_get_info",
+        "csg_create_node",
+        "gi_create_node",
+        "scene_fx_create_node",
+        "sky_create_procedural",
+        "camera_configure_attributes",
+        "multimesh_create_instance",
+        "physics_create_joint",
+        "physics_configure_body",
+        "ui_create_widget",
+        "ui_create_tab_with_content",
+        "ui_configure_focus_nav",
+        "ui_set_tooltip",
+        "ui_set_anchor_preset",
+        "network_setup_multiplayer",
+        "network_create_rpc",
+        "network_create_websocket",
+        "network_configure_dedicated_server",
+        "network_create_lobby",
+        "render_get_settings",
+        "render_set_antialiasing",
+        "render_set_scaling",
+        "render_set_quality",
+        "csharp_scaffold_project",
+        "csharp_generate_script",
+        "csharp_build_project",
+],
     "assets": [
         # Assets, arte, áudio, shaders, VFX
         "asset_manage",
@@ -175,7 +207,13 @@ TOOLSETS = {
         "build_csharp", "export_manage",
         # Playtest
         "playtest_manage",
-    ],
+    
+        "physics_query_area_overlap",
+        "physics_raycast_query",
+        "runtime_connect_signal",
+        "runtime_disconnect_signal",
+        "runtime_emit_signal",
+],
     "analysis": [
         # Análise, auditoria, qualidade, referências, introspecção
         "analysis_manage",
@@ -200,7 +238,10 @@ TOOLSETS = {
         "adaptive_difficulty_adjust",
         "accessibility_audit_scene", "accessibility_certification_checklist",
         "onboarding_check_first_experience",
-    ],
+    
+        "runtime_list_signals",
+        "runtime_watch_signal",
+],
     "orchestration": [
         # Meta-tools, workflow, governança, fase, segurança, bootstrap
         "godot",
@@ -380,7 +421,19 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "behavior_tree_generate", "behavior_tree_list_templates",
         "generate_project_structure",
         "world_describe",
-    },
+    
+        "skeleton_get_bone_pose",
+        "skeleton_list_bones",
+        "skeleton_get_info",
+        "ui_create_widget",
+        "ui_create_tab_with_content",
+        "ui_configure_focus_nav",
+        "ui_set_tooltip",
+        "ui_set_anchor_preset",
+        "render_get_settings",
+        "csharp_scaffold_project",
+        "csharp_generate_script",
+},
     "PROTOTIPO": {
         "runtime_manage",
         "godot_run_project", "godot_stop_project", "godot_wait_for_bridge",
@@ -414,7 +467,25 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "watch_signal", "watch_state_start", "watch_state_collect",
         "record_gameplay_gif", "start_recording", "stop_recording",
         "analyze_signal_flow",
-    },
+    
+        "skeleton_set_bone_pose",
+        "skeleton_create_bone",
+        "skeleton_create_ik_chain",
+        "csg_create_node",
+        "gi_create_node",
+        "scene_fx_create_node",
+        "sky_create_procedural",
+        "camera_configure_attributes",
+        "multimesh_create_instance",
+        "physics_create_joint",
+        "physics_configure_body",
+        "physics_query_area_overlap",
+        "physics_raycast_query",
+        "runtime_connect_signal",
+        "runtime_disconnect_signal",
+        "runtime_emit_signal",
+        "runtime_watch_signal",
+},
     "CONTEUDO": {
         "tilemap_manage",
         "navigation_manage",
@@ -437,7 +508,16 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "setup_localization", "add_translation_string",
         "generate_voice",
         "find_unused_resources",
-    },
+    
+        "network_setup_multiplayer",
+        "network_create_rpc",
+        "network_create_websocket",
+        "network_configure_dedicated_server",
+        "network_create_lobby",
+        "render_set_antialiasing",
+        "render_set_scaling",
+        "render_set_quality",
+},
     "POLIMENTO": {
         "run_gut_tests", "run_scripted_tests",
         "regression_test", "smoke_test",
@@ -460,7 +540,9 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "set_auto_dismiss",
         "test_manage",
         "vibe_coding_mode", "get_vibe_context",
-    },
+    
+        "runtime_list_signals",
+},
     "PRONTO_PARA_LANCAR": {
         "export_manage",
         "build_csharp",
@@ -474,7 +556,9 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "addon_duplicate_node", "addon_reparent_node",
         "addon_batch_edit",
         "read_console_output",
-    },
+    
+        "csharp_build_project",
+},
 }
 
 PHASE_ORDER_FILTER = ["IDEIA", "DESIGN", "PROTOTIPO", "CONTEUDO", "POLIMENTO", "PRONTO_PARA_LANCAR"]
@@ -1701,7 +1785,539 @@ def _tool_defs() -> list[Tool]:
             t.annotations["deferLoading"] = True
     # ── Fim pós-processamento ──────────────────────────────────────
 
-    # ── Rollups Fase 2A / C1 ───────────────────────────────────────
+    
+def _handle_skeleton_get_bone_pose(scene_path=None, skeleton_path=None, bone_name=None):
+    """Handler para skeleton_get_bone_pose (Camada 6)."""
+    import json
+    try:
+        from tools.skeleton_ops import skeleton_get_bone_pose as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_skeleton_set_bone_pose(scene_path=None, skeleton_path=None, bone_name=None, position=None, rotation=None, scale=None):
+    """Handler para skeleton_set_bone_pose (Camada 6)."""
+    import json
+    try:
+        from tools.skeleton_ops import skeleton_set_bone_pose as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_skeleton_list_bones(scene_path=None, skeleton_path=None):
+    """Handler para skeleton_list_bones (Camada 6)."""
+    import json
+    try:
+        from tools.skeleton_ops import skeleton_list_bones as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_skeleton_create_bone(scene_path=None, skeleton_path=None, bone_name=None, parent_bone=None, position=None, rotation=None):
+    """Handler para skeleton_create_bone (Camada 6)."""
+    import json
+    try:
+        from tools.skeleton_ops import skeleton_create_bone as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_skeleton_create_ik_chain(scene_path=None, skeleton_path=None, bone_name=None, target_node_path=None, chain_length=None, iterations=None):
+    """Handler para skeleton_create_ik_chain (Camada 6)."""
+    import json
+    try:
+        from tools.skeleton_ops import skeleton_create_ik_chain as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_skeleton_get_info(scene_path=None, skeleton_path=None):
+    """Handler para skeleton_get_info (Camada 6)."""
+    import json
+    try:
+        from tools.skeleton_ops import skeleton_get_info as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_csg_create_node(scene_path=None, parent_node_path=None, csg_type=None, node_name=None, operation=None, width=None, height=None, depth=None, radius=None, position=None):
+    """Handler para csg_create_node (Camada 6)."""
+    import json
+    try:
+        from tools.devsolo_ops import csg_create_node as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_gi_create_node(scene_path=None, gi_type=None, parent_node_path=None, node_name=None, subdiv=None, extents=None, bake_mode=None):
+    """Handler para gi_create_node (Camada 6)."""
+    import json
+    try:
+        from tools.devsolo_ops import gi_create_node as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_scene_fx_create_node(scene_path=None, fx_type=None, parent_node_path=None, node_name=None, properties=None):
+    """Handler para scene_fx_create_node (Camada 6)."""
+    import json
+    try:
+        from tools.devsolo_ops import scene_fx_create_node as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_sky_create_procedural(scene_path=None, sky_type=None, parent_node_path=None, sun_color=None, ground_color=None, sky_energy=None):
+    """Handler para sky_create_procedural (Camada 6)."""
+    import json
+    try:
+        from tools.devsolo_ops import sky_create_procedural as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_camera_configure_attributes(scene_path=None, camera_path=None, dof_enabled=None, dof_distance=None, dof_blur=None, exposure_enabled=None, exposure_value=None, auto_exposure=None, near=None, far=None, fov=None):
+    """Handler para camera_configure_attributes (Camada 6)."""
+    import json
+    try:
+        from tools.devsolo_ops import camera_configure_attributes as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_multimesh_create_instance(scene_path=None, parent_node_path=None, mesh_resource=None, instance_count=None, node_name=None):
+    """Handler para multimesh_create_instance (Camada 6)."""
+    import json
+    try:
+        from tools.devsolo_ops import multimesh_create_instance as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_physics_create_joint(scene_path=None, parent_node_path=None, joint_type=None, joint_name=None, node_a=None, node_b=None, stiffness=None, damping=None, bias=None, disable_collision=None):
+    """Handler para physics_create_joint (Camada 6)."""
+    import json
+    try:
+        from tools.physics_ops import physics_create_joint as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_physics_configure_body(scene_path=None, node_path=None, mass=None, friction=None, bounce=None, gravity_scale=None, linear_damp=None, angular_damp=None, freeze=None, freeze_mode=None):
+    """Handler para physics_configure_body (Camada 6)."""
+    import json
+    try:
+        from tools.physics_ops import physics_configure_body as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_physics_query_area_overlap(scene_path=None, area_path=None, query_type=None):
+    """Handler para physics_query_area_overlap (Camada 6)."""
+    import json
+    try:
+        from tools.physics_ops import physics_query_area_overlap as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_physics_raycast_query(scene_path=None, raycast_path=None):
+    """Handler para physics_raycast_query (Camada 6)."""
+    import json
+    try:
+        from tools.physics_ops import physics_raycast_query as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_ui_create_widget(scene_path=None, parent_node_path=None, widget_type=None, widget_name=None, properties=None):
+    """Handler para ui_create_widget (Camada 6)."""
+    import json
+    try:
+        from tools.devsolo_ops import ui_create_widget as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_ui_create_tab_with_content(scene_path=None, tab_container_path=None, tab_title=None, content_type=None, tab_name=None):
+    """Handler para ui_create_tab_with_content (Camada 6)."""
+    import json
+    try:
+        from tools.devsolo_ops import ui_create_tab_with_content as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_ui_configure_focus_nav(scene_path=None, node_path=None, focus_neighbor_top=None, focus_neighbor_bottom=None, focus_neighbor_left=None, focus_neighbor_right=None, focus_neighbor_next=None, focus_neighbor_prev=None, focus_mode=None):
+    """Handler para ui_configure_focus_nav (Camada 6)."""
+    import json
+    try:
+        from tools.devsolo_ops import ui_configure_focus_nav as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_ui_set_tooltip(scene_path=None, node_path=None, tooltip_text=None):
+    """Handler para ui_set_tooltip (Camada 6)."""
+    import json
+    try:
+        from tools.devsolo_ops import ui_set_tooltip as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_ui_set_anchor_preset(scene_path=None, node_path=None, preset=None):
+    """Handler para ui_set_anchor_preset (Camada 6)."""
+    import json
+    try:
+        from tools.devsolo_ops import ui_set_anchor_preset as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_network_setup_multiplayer(scene_path=None, mode=None, port=None, max_players=None, server_address=None):
+    """Handler para network_setup_multiplayer (Camada 6)."""
+    import json
+    try:
+        from tools.network_ops import network_setup_multiplayer as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_network_create_rpc(script_path=None, method_name=None, params=None, rpc_mode=None, call_local=None, method_body=None):
+    """Handler para network_create_rpc (Camada 6)."""
+    import json
+    try:
+        from tools.network_ops import network_create_rpc as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_network_create_websocket(script_path=None, url=None, protocols=None):
+    """Handler para network_create_websocket (Camada 6)."""
+    import json
+    try:
+        from tools.network_ops import network_create_websocket as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_network_configure_dedicated_server(export_preset_name=None, port=None, enable_upnp=None):
+    """Handler para network_configure_dedicated_server (Camada 6)."""
+    import json
+    try:
+        from tools.network_ops import network_configure_dedicated_server as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_network_create_lobby(scene_path=None, max_players=None, lobby_name=None):
+    """Handler para network_create_lobby (Camada 6)."""
+    import json
+    try:
+        from tools.network_ops import network_create_lobby as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_runtime_connect_signal(source_node_path=None, signal_name=None, target_node_path=None, method_name=None, flags=None):
+    """Handler para runtime_connect_signal (Camada 6)."""
+    import json
+    try:
+        from tools.runtime_ops import runtime_connect_signal as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_runtime_disconnect_signal(source_node_path=None, signal_name=None, target_node_path=None, method_name=None):
+    """Handler para runtime_disconnect_signal (Camada 6)."""
+    import json
+    try:
+        from tools.runtime_ops import runtime_disconnect_signal as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_runtime_emit_signal(node_path=None, signal_name=None, args=None):
+    """Handler para runtime_emit_signal (Camada 6)."""
+    import json
+    try:
+        from tools.runtime_ops import runtime_emit_signal as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_runtime_list_signals(script_path=None):
+    """Handler para runtime_list_signals (Camada 6)."""
+    import json
+    try:
+        from tools.runtime_ops import runtime_list_signals as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_runtime_watch_signal(signal_name=None, node_path=None, duration=None):
+    """Handler para runtime_watch_signal (Camada 6)."""
+    import json
+    try:
+        from tools.runtime_ops import runtime_watch_signal as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_render_get_settings(project_path=None):
+    """Handler para render_get_settings (Camada 6)."""
+    import json
+    try:
+        from tools.render_ops import render_get_settings as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_render_set_antialiasing(project_path=None, msaa=None, fxaa=None, taa=None, screen_space_aa=None):
+    """Handler para render_set_antialiasing (Camada 6)."""
+    import json
+    try:
+        from tools.render_ops import render_set_antialiasing as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_render_set_scaling(project_path=None, mode=None, scale=None, stretch_mode=None, stretch_aspect=None):
+    """Handler para render_set_scaling (Camada 6)."""
+    import json
+    try:
+        from tools.render_ops import render_set_scaling as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_render_set_quality(project_path=None, preset=None, shadows=None, gi=None, reflections=None, particles=None):
+    """Handler para render_set_quality (Camada 6)."""
+    import json
+    try:
+        from tools.render_ops import render_set_quality as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_csharp_scaffold_project(project_path=None, dotnet_version=None, create_solution=None):
+    """Handler para csharp_scaffold_project (Camada 6)."""
+    import json
+    try:
+        from tools.csharp_ops import csharp_scaffold_project as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_csharp_generate_script(script_path=None, class_name=None, parent_class=None, namespace=None, template=None):
+    """Handler para csharp_generate_script (Camada 6)."""
+    import json
+    try:
+        from tools.csharp_ops import csharp_generate_script as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+
+def _handle_csharp_build_project(project_path=None, configuration=None):
+    """Handler para csharp_build_project (Camada 6)."""
+    import json
+    try:
+        from tools.csharp_ops import csharp_build_project as _fn
+        kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
+        result = _fn(**kwargs)
+        if isinstance(result, dict):
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        return str(result)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
+# ── Rollups Fase 2A / C1 ───────────────────────────────────────
     # Domain rollups: colapsam múltiplas tools em <domain>_manage.
     # Adicionados APÓS o pós-processamento pois já trazem seus próprios hints.
     try:
@@ -2236,6 +2852,45 @@ def _build_handlers() -> dict:
         "onboarding_check_first_experience": _handle_onboarding_check_first_experience,
         "dialogue_generate_npc_lines": _handle_dialogue_generate_npc_lines,
         "dialogue_generate_personality": _handle_dialogue_generate_personality,
+
+        "skeleton_get_bone_pose": _handle_skeleton_get_bone_pose,
+        "skeleton_set_bone_pose": _handle_skeleton_set_bone_pose,
+        "skeleton_list_bones": _handle_skeleton_list_bones,
+        "skeleton_create_bone": _handle_skeleton_create_bone,
+        "skeleton_create_ik_chain": _handle_skeleton_create_ik_chain,
+        "skeleton_get_info": _handle_skeleton_get_info,
+        "csg_create_node": _handle_csg_create_node,
+        "gi_create_node": _handle_gi_create_node,
+        "scene_fx_create_node": _handle_scene_fx_create_node,
+        "sky_create_procedural": _handle_sky_create_procedural,
+        "camera_configure_attributes": _handle_camera_configure_attributes,
+        "multimesh_create_instance": _handle_multimesh_create_instance,
+        "physics_create_joint": _handle_physics_create_joint,
+        "physics_configure_body": _handle_physics_configure_body,
+        "physics_query_area_overlap": _handle_physics_query_area_overlap,
+        "physics_raycast_query": _handle_physics_raycast_query,
+        "ui_create_widget": _handle_ui_create_widget,
+        "ui_create_tab_with_content": _handle_ui_create_tab_with_content,
+        "ui_configure_focus_nav": _handle_ui_configure_focus_nav,
+        "ui_set_tooltip": _handle_ui_set_tooltip,
+        "ui_set_anchor_preset": _handle_ui_set_anchor_preset,
+        "network_setup_multiplayer": _handle_network_setup_multiplayer,
+        "network_create_rpc": _handle_network_create_rpc,
+        "network_create_websocket": _handle_network_create_websocket,
+        "network_configure_dedicated_server": _handle_network_configure_dedicated_server,
+        "network_create_lobby": _handle_network_create_lobby,
+        "runtime_connect_signal": _handle_runtime_connect_signal,
+        "runtime_disconnect_signal": _handle_runtime_disconnect_signal,
+        "runtime_emit_signal": _handle_runtime_emit_signal,
+        "runtime_list_signals": _handle_runtime_list_signals,
+        "runtime_watch_signal": _handle_runtime_watch_signal,
+        "render_get_settings": _handle_render_get_settings,
+        "render_set_antialiasing": _handle_render_set_antialiasing,
+        "render_set_scaling": _handle_render_set_scaling,
+        "render_set_quality": _handle_render_set_quality,
+        "csharp_scaffold_project": _handle_csharp_scaffold_project,
+        "csharp_generate_script": _handle_csharp_generate_script,
+        "csharp_build_project": _handle_csharp_build_project,
     }
 
     # ── Rollups Fase 2A / C1 ───────────────────────────────────────

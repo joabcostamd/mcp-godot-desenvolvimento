@@ -363,3 +363,281 @@ def create_joint_2d(
     return {"status": "success", "joint_node_path": f"{scene_path}::{joint_name}",
             "joint_type": godot_type}
 
+
+# ══════════════════════════════════════════════════════════════════════
+# CAMADA 6.3 — JOINTS & BODY CONFIG
+# ══════════════════════════════════════════════════════════════════════
+
+def create_physics_joint(
+    scene_path: str,
+    parent_node_path: str,
+    joint_type: str,
+    joint_name: str = "",
+    node_a: str = "",
+    node_b: str = "",
+    stiffness: float = 0.0,
+    damping: float = 0.0,
+    bias: float = 0.0,
+    disable_collision: bool = True,
+) -> dict:
+    """Cria um joint físico entre dois corpos (Pin, Spring, Hinge, etc.).
+    
+    Args:
+        scene_path: Caminho da cena .tscn
+        parent_node_path: Nó pai
+        joint_type: Tipo de joint ("PinJoint2D", "DampedSpringJoint2D",
+            "GrooveJoint2D", "HingeJoint2D", "ConeJoint2D", "SliderJoint2D")
+        joint_name: Nome do nó (auto-gerado se vazio)
+        node_a: Path para o nó A
+        node_b: Path para o nó B
+        stiffness: Rigidez da mola (DampedSpring)
+        damping: Amortecimento (DampedSpring)
+        bias: Bias de restituição
+        disable_collision: Desabilita colisão entre A e B
+    
+    Returns:
+        dict com status e caminho do nó
+    """
+    try:
+        valid_joints = {
+            "PinJoint2D", "DampedSpringJoint2D", "GrooveJoint2D",
+            "HingeJoint2D", "ConeJoint2D", "SliderJoint2D",
+            "PinJoint3D", "HingeJoint3D", "ConeJoint3D", "SliderJoint3D",
+            "Generic6DOFJoint3D",
+        }
+        if joint_type not in valid_joints:
+            return {
+                "ok": False,
+                "error": f"Tipo '{joint_type}' não suportado. Use: {', '.join(sorted(valid_joints))}",
+            }
+        
+        name = joint_name or f"{joint_type}_{node_a.replace('/', '_')}"
+        
+        from tools.scene_ops import _read_tscn, _write_tscn, _generate_uid
+        
+        content = _read_tscn(scene_path)
+        uid = _generate_uid()
+        
+        node_block = f'''
+[node name="{name}" type="{joint_type}" parent="{parent_node_path}"]
+disable_collision = {str(disable_collision).lower()}
+'''
+        if node_a:
+            node_block += f'node_a = NodePath("{node_a}")\n'
+        if node_b:
+            node_block += f'node_b = NodePath("{node_b}")\n'
+        if stiffness:
+            node_block += f'stiffness = {stiffness}\n'
+        if damping:
+            node_block += f'damping = {damping}\n'
+        if bias:
+            node_block += f'bias = {bias}\n'
+        
+        node_block += f'_import_path = NodePath("")\nunique_name_in_owner = false\nuid = "uid://{uid}"\n'
+        
+        import re
+        insert_pos = content.rfind('\n')
+        new_content = content[:insert_pos] + node_block + content[insert_pos:]
+        _write_tscn(scene_path, new_content)
+        
+        return {
+            "ok": True,
+            "joint_type": joint_type,
+            "joint_name": name,
+            "node_a": node_a,
+            "node_b": node_b,
+            "message": f"Joint {joint_type} '{name}' criado entre '{node_a}' e '{node_b}'",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao criar joint: {e}"}
+
+
+def configure_physics_body(
+    scene_path: str,
+    node_path: str,
+    mass: float | None = None,
+    friction: float | None = None,
+    bounce: float | None = None,
+    gravity_scale: float | None = None,
+    linear_damp: float | None = None,
+    angular_damp: float | None = None,
+    freeze: bool | None = None,
+    freeze_mode: str | None = None,
+) -> dict:
+    """Configura propriedades físicas de um corpo (RigidBody2D/3D, CharacterBody).
+    
+    Args:
+        scene_path: Caminho da cena .tscn
+        node_path: Caminho do nó na cena
+        mass: Massa do corpo (kg)
+        friction: Atrito
+        bounce: Restituição (bounciness)
+        gravity_scale: Escala de gravidade
+        linear_damp: Amortecimento linear
+        angular_damp: Amortecimento angular
+        freeze: Congela o corpo
+        freeze_mode: "static" ou "kinematic"
+    
+    Returns:
+        dict com mudanças aplicadas
+    """
+    try:
+        import re
+        content = Path(scene_path).read_text(encoding="utf-8")
+        
+        node_name = node_path.split("/")[-1]
+        node_pattern = rf'\[node\s+name="{re.escape(node_name)}"[^\]]*\]'
+        match = re.search(node_pattern, content)
+        
+        if not match:
+            return {"ok": False, "error": f"Nó '{node_name}' não encontrado na cena"}
+        
+        node_start = match.start()
+        next_node = re.search(r'\n\[node\b', content[node_start + 1:])
+        node_end = node_start + 1 + next_node.start() if next_node else len(content)
+        node_block = content[node_start:node_end]
+        changes = []
+        
+        props = {}
+        if mass is not None:
+            props["mass"] = str(mass)
+            changes.append(f"mass={mass}")
+        if friction is not None:
+            props["friction"] = str(friction)
+            changes.append(f"friction={friction}")
+        if bounce is not None:
+            props["bounce"] = str(bounce)
+            changes.append(f"bounce={bounce}")
+        if gravity_scale is not None:
+            props["gravity_scale"] = str(gravity_scale)
+            changes.append(f"gravity_scale={gravity_scale}")
+        if linear_damp is not None:
+            props["linear_damp"] = str(linear_damp)
+            changes.append(f"linear_damp={linear_damp}")
+        if angular_damp is not None:
+            props["angular_damp"] = str(angular_damp)
+            changes.append(f"angular_damp={angular_damp}")
+        if freeze is not None:
+            props["freeze"] = str(freeze).lower()
+            changes.append(f"freeze={freeze}")
+        if freeze_mode is not None:
+            props["freeze_mode"] = freeze_mode
+            changes.append(f"freeze_mode={freeze_mode}")
+        
+        for key, value in props.items():
+            pattern = rf'{re.escape(key)}\s*=\s*\S+'
+            replacement = f'{key} = {value}'
+            if re.search(pattern, node_block):
+                node_block = re.sub(pattern, replacement, node_block)
+            else:
+                node_block = node_block.rstrip() + f'\n{replacement}'
+        
+        new_content = content[:node_start] + node_block + content[node_end:]
+        Path(scene_path).write_text(new_content, encoding="utf-8")
+        
+        return {
+            "ok": True,
+            "node_path": node_path,
+            "changes": changes,
+            "message": f"Física configurada em '{node_name}': {', '.join(changes)}",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao configurar corpo físico: {e}"}
+
+
+def query_area_overlap(
+    scene_path: str,
+    area_path: str,
+    query_type: str = "bodies",
+) -> dict:
+    """Verifica corpos/áreas sobrepostos a uma Area2D/Area3D.
+    
+    NOTA: Esta operação só funciona em runtime (jogo rodando).
+    Fornece o código GDScript para executar a query.
+    
+    Args:
+        scene_path: Caminho da cena
+        area_path: Caminho do nó Area2D/Area3D
+        query_type: "bodies" ou "areas"
+    
+    Returns:
+        dict com código GDScript pronto para runtime
+    """
+    try:
+        import re
+        content = Path(scene_path).read_text(encoding="utf-8")
+        
+        area_name = area_path.split("/")[-1]
+        area_pattern = rf'\[node\s+name="{re.escape(area_name)}"[^\]]*type="(Area\w+)"[^\]]*\]'
+        area_match = re.search(area_pattern, content)
+        
+        if not area_match:
+            return {"ok": False, "error": f"Area '{area_name}' não encontrada"}
+        
+        area_type = area_match.group(1)
+        is_3d = "3D" in area_type
+        
+        query_method = f"get_overlapping_{query_type}" if hasattr(object, f"get_overlapping_{query_type}") else f"get_overlapping_{query_type}"
+        
+        gdscript = f'''# Runtime Query: {area_type} ({area_name})
+# Execute via execute_gdscript_runtime
+
+var area = get_node("{area_path}")
+var overlapping = area.{query_method}()
+print("[Query] {area_name} overlapping {query_type}: ", overlapping.size())
+for body in overlapping:
+    print("  - ", body.name)
+return overlapping.size()
+'''
+        
+        return {
+            "ok": True,
+            "area_type": area_type,
+            "query_type": query_type,
+            "gdscript": gdscript,
+            "message": f"Query de overlap para {area_type} '{area_name}' — use execute_gdscript_runtime com o código acima",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao preparar query: {e}"}
+
+
+def raycast_query(
+    scene_path: str,
+    raycast_path: str,
+) -> dict:
+    """Prepara código para executar raycast em runtime.
+    
+    Args:
+        scene_path: Caminho da cena
+        raycast_path: Caminho do nó RayCast2D/3D
+    
+    Returns:
+        dict com código GDScript
+    """
+    try:
+        ray_name = raycast_path.split("/")[-1]
+        
+        gdscript = f'''var ray = get_node("{raycast_path}")
+ray.force_raycast_update()
+if ray.is_colliding():
+    var collider = ray.get_collider()
+    var point = ray.get_collision_point()
+    var normal = ray.get_collision_normal()
+    print("[RayCast] Colidiu com: ", collider.name)
+    print("  Ponto: ", point)
+    print("  Normal: ", normal)
+    return {{"collider": collider.name, "point": str(point), "normal": str(normal)}}
+else:
+    print("[RayCast] Nenhuma colisão")
+    return {{"collider": null}}
+'''
+        
+        return {
+            "ok": True,
+            "raycast_path": raycast_path,
+            "gdscript": gdscript,
+            "message": f"Código de raycast pronto para '{ray_name}' — use execute_gdscript_runtime",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao preparar raycast: {e}"}
+

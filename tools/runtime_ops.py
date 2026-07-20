@@ -1318,3 +1318,226 @@ def manage_visual_baselines(args=None):
 
     return {"status":"error","message":f"Operacao desconhecida: {op}. Use list, approve, delete ou inspect."}
 
+
+# ══════════════════════════════════════════════════════════════════════
+# CAMADA 6.6 — RUNTIME SIGNALS (connect/disconnect/emit/watch)
+# ══════════════════════════════════════════════════════════════════════
+
+def connect_runtime_signal(
+    source_node_path: str,
+    signal_name: str,
+    target_node_path: str,
+    method_name: str = "",
+    flags: int = 0,
+) -> dict:
+    """Gera código GDScript para conectar sinais em runtime.
+    
+    Args:
+        source_node_path: Nó que emite o sinal
+        signal_name: Nome do sinal
+        target_node_path: Nó que recebe o sinal
+        method_name: Método callback (auto-gerado se vazio)
+        flags: Flags de conexão (0 = default, 1 = deferred, 4 = one_shot)
+    
+    Returns:
+        dict com código GDScript pronto para runtime
+    """
+    try:
+        method = method_name or f"_on_{source_node_path.split('/')[-1]}_{signal_name}"
+        
+        connect_call = f'{source_node_path}.{signal_name}.connect({target_node_path}.{method_name})'
+        if flags:
+            connect_call = f'{source_node_path}.{signal_name}.connect({target_node_path}.{method_name}, {flags})'
+        
+        gdscript = f'''# Runtime Signal Connection
+# Emitido por: {source_node_path} ({signal_name})
+# Recebido por: {target_node_path} ({method})
+
+func _connect_signals():
+    {source_node_path}.{signal_name}.connect(_on_{source_node_path.split("/")[-1]}_{signal_name})
+
+func {method}():
+    print("[Signal] {signal_name} recebido de {source_node_path.split("/")[-1]}")
+    # Adicione sua lógica aqui
+    pass
+'''
+        
+        return {
+            "ok": True,
+            "source": source_node_path,
+            "signal": signal_name,
+            "target": target_node_path,
+            "method": method,
+            "gdscript": gdscript,
+            "message": f"Sinal '{signal_name}' conectado: {source_node_path} → {target_node_path}.{method}",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao conectar sinal: {e}"}
+
+
+def disconnect_runtime_signal(
+    source_node_path: str,
+    signal_name: str,
+    target_node_path: str,
+    method_name: str,
+) -> dict:
+    """Gera código GDScript para desconectar um sinal em runtime.
+    
+    Args:
+        source_node_path: Nó emissor
+        signal_name: Nome do sinal
+        target_node_path: Nó receptor
+        method_name: Método callback
+    
+    Returns:
+        dict com código GDScript
+    """
+    try:
+        gdscript = f'''# Runtime Signal Disconnect
+{source_node_path}.{signal_name}.disconnect({target_node_path}.{method_name})
+print("[Signal] {signal_name} desconectado: {source_node_path.split("/")[-1]} -> {target_node_path.split("/")[-1]}.{method_name}")
+'''
+        
+        return {
+            "ok": True,
+            "source": source_node_path,
+            "signal": signal_name,
+            "target": target_node_path,
+            "method": method_name,
+            "gdscript": gdscript,
+            "message": f"Sinal '{signal_name}' desconectado de {target_node_path}.{method_name}",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao desconectar sinal: {e}"}
+
+
+def emit_runtime_signal(
+    node_path: str,
+    signal_name: str,
+    args: list | None = None,
+) -> dict:
+    """Gera código GDScript para emitir um sinal em runtime.
+    
+    Args:
+        node_path: Nó que emite
+        signal_name: Nome do sinal
+        args: Lista de argumentos para o sinal
+    
+    Returns:
+        dict com código GDScript
+    """
+    try:
+        signal_args = ", ".join(str(a) for a in args) if args else ""
+        
+        gdscript = f'''# Runtime Signal Emit
+{node_path}.emit_signal("{signal_name}"{", " + signal_args if signal_args else ""})
+print("[Signal] Emitido: {signal_name} de {node_path.split("/")[-1]}")
+'''
+        
+        return {
+            "ok": True,
+            "node": node_path,
+            "signal": signal_name,
+            "args": args or [],
+            "gdscript": gdscript,
+            "message": f"Sinal '{signal_name}' emitido por '{node_path.split('/')[-1]}'",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao emitir sinal: {e}"}
+
+
+def list_runtime_signals(
+    script_path: str,
+) -> dict:
+    """Lista todos os sinais definidos num script GDScript.
+    
+    Args:
+        script_path: Caminho do script .gd
+    
+    Returns:
+        dict com lista de sinais
+    """
+    try:
+        import re
+        from pathlib import Path
+        
+        sp = Path(script_path)
+        if not sp.exists():
+            return {"ok": False, "error": f"Script não encontrado: {script_path}"}
+        
+        content = sp.read_text(encoding="utf-8")
+        
+        signals = []
+        for match in re.finditer(r'^signal\s+(\w+)(\([^)]*\))?', content, re.MULTILINE):
+            sig_name = match.group(1)
+            sig_args = match.group(2) or "()"
+            signals.append({"name": sig_name, "args": sig_args})
+        
+        # Também procura emit_signal no código
+        emits = []
+        for match in re.finditer(r'\.emit_signal\("(\w+)"', content):
+            emits.append(match.group(1))
+        
+        return {
+            "ok": True,
+            "script": str(sp),
+            "defined_signals": signals,
+            "defined_count": len(signals),
+            "emitted_signals": list(set(emits)),
+            "emitted_count": len(set(emits)),
+            "message": f"{len(signals)} sinais definidos, {len(set(emits))} emitidos em {script_path}",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao listar sinais: {e}"}
+
+
+def watch_runtime_signal(
+    signal_name: str,
+    node_path: str = "",
+    duration: float = 5.0,
+) -> dict:
+    """Gera código para monitorar (watch) um sinal durante runtime.
+    
+    Args:
+        signal_name: Nome do sinal a monitorar
+        node_path: Nó do sinal (vazio = qualquer nó)
+        duration: Duração do monitoramento em segundos
+    
+    Returns:
+        dict com código GDScript
+    """
+    try:
+        target = node_path if node_path else "get_tree().root"
+        
+        gdscript = f'''# Runtime Signal Watcher: {signal_name}
+# Duração: {duration}s
+var _watch_count = 0
+var _watch_timer = {duration}
+
+func _start_watching():
+    if not {target}.has_signal("{signal_name}"):
+        print("[Watch] Sinal '{signal_name}' não encontrado em {target.split('/')[-1]}")
+        return
+    
+    {target}.{signal_name}.connect(_on_watched_signal)
+    print("[Watch] Monitorando '{signal_name}' por {duration}s...")
+    await get_tree().create_timer({duration}).timeout
+    {target}.{signal_name}.disconnect(_on_watched_signal)
+    print("[Watch] Fim. '{signal_name}' ocorreu {{_watch_count}} vezes em {duration}s")
+
+func _on_watched_signal():
+    _watch_count += 1
+    print("[Watch] {signal_name} #", _watch_count)
+'''
+        
+        return {
+            "ok": True,
+            "signal": signal_name,
+            "node": target,
+            "duration": duration,
+            "gdscript": gdscript,
+            "message": f"Watcher para '{signal_name}' gerado — {duration}s de monitoramento",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao criar watcher: {e}"}
+

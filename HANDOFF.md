@@ -3,6 +3,49 @@
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo
 > para que o outro agente saiba o estado do projeto na próxima sessão.
 
+## Último Handoff (AGENTE 01 — 2026-07-19 — Camada 6 COMPLETA)
+
+- **Data:** 2026-07-19
+- **De:** AGENTE 01 (Arquitetura & Core)
+- **Ação:** Implementação COMPLETA da Camada 6 — Profundidade de Engine (8/8 fatias)
+
+### O que foi feito
+
+| Fatia | Descrição | Arquivo |
+|---|---|---|
+| 6.1 | Skeleton IK / Bone Pose (6 ops) | `tools/skeleton_ops.py` (NOVO) |
+| 6.2 | 3D Depth — CSG, GI, Decal, Sky, Camera, MultiMesh (6 ops) | `tools/devsolo_ops.py` (expandido) |
+| 6.3 | Física — Joints, Body Config, Area Query, Raycast (4 ops) | `tools/physics_ops.py` (expandido) |
+| 6.4 | UI Granular — Widgets, Tabs, Focus Nav, Tooltip, Anchors (5 ops) | `tools/devsolo_ops.py` (expandido) |
+| 6.5 | Rede — Multiplayer, RPC, WebSocket, Lobby (5 ops) | `tools/network_ops.py` (NOVO) |
+| 6.6 | Runtime Signals — Connect, Disconnect, Emit, List, Watch (5 ops) | `tools/runtime_ops.py` (expandido) |
+| 6.7 | Render Settings — AA, Scaling, Quality Presets (4 ops) | `tools/render_ops.py` (NOVO) |
+| 6.8 | C#/.NET Scaffold — Project, Script Templates, Build (3 ops) | `tools/csharp_ops.py` (NOVO) |
+
+### Métricas
+
+- **Total tools:** 268 → 274 (+6)
+- **Handlers:** 295 → 306 (+11, incluindo rollups)
+- **Novos arquivos:** `skeleton_ops.py`, `network_ops.py`, `render_ops.py`, `csharp_ops.py`
+- **Arquivos expandidos:** `devsolo_ops.py`, `physics_ops.py`, `runtime_ops.py`
+- **Validação:** 274 tools, 306 handlers, 0 inconsistencias (32 extras = rollups)
+
+### Distribuição por namespace
+- **project** (31): skeleton (6), 3D depth (6), physics joints/body (2), UI granular (5), network (5), render (4), csharp (3)
+- **runtime** (5): physics queries (2), runtime signals connect/disconnect/emit (3)
+- **analysis** (2): runtime signal list/watch (2)
+
+### ⚠️ Pontos de atenção para AGENTE 02
+- `skeleton_ops.py` opera por parsing de arquivos .tscn — se mudar formato de scene, revise
+- `network_ops.py` e `csharp_ops.py` geram código GDScript/C# — templates podem precisar de ajuste
+- Handlers usam dispatch dinâmico por prefixo (ex: `skeleton_*` → `skeleton_ops`) — se renomear funções, mantenha consistência
+- Camada 6 é [MARGINAL] — risco de scope creep. Documentado como "Campo A" no roadmap.
+
+### Próximo passo (AGENTE 01)
+- **Camada 7 (Polimento)**: [MARGINAL] — aguarda aprovação do Joab
+
+---
+
 ## Último Handoff (AGENTE 01 — 2026-07-19 — Registro Camada 5)
 
 - **Data:** 2026-07-19

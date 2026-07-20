@@ -5546,3 +5546,746 @@ def get_handler_map() -> dict:
         # G.1 — Visual Feedback Loop
         "visual_feedback_check": visual_feedback_check,
     }
+
+
+# ══════════════════════════════════════════════════════════════════════
+# CAMADA 6.2 — 3D DEPTH (CSG, GI, Decal, Sky, Camera)
+# ══════════════════════════════════════════════════════════════════════
+
+def create_csg_node(
+    scene_path: str,
+    parent_node_path: str,
+    csg_type: str,
+    node_name: str = "",
+    operation: str = "union",
+    width: float = 1.0,
+    height: float = 1.0,
+    depth: float = 1.0,
+    radius: float = 0.5,
+    position: list[float] | None = None,
+) -> dict:
+    """Cria um nó CSG (Constructive Solid Geometry) para prototipagem 3D.
+    
+    Args:
+        scene_path: Caminho da cena .tscn
+        parent_node_path: Nó pai
+        csg_type: "CSGBox3D", "CSGSphere3D", "CSGCylinder3D", "CSGTorus3D",
+            "CSGPolygon3D", "CSGCombiner3D"
+        node_name: Nome do nó
+        operation: "union", "subtraction", "intersection"
+        width/height/depth: Dimensões para box
+        radius: Raio para sphere/cylinder
+        position: [x, y, z]
+    
+    Returns:
+        dict com status
+    """
+    try:
+        import uuid
+        from pathlib import Path
+        
+        content = Path(scene_path).read_text(encoding="utf-8")
+        name = node_name or f"{csg_type}_{uuid.uuid4().hex[:6]}"
+        uid = uuid.uuid4().hex[:16]
+        pos = position or [0.0, 0.0, 0.0]
+        op_map = {"union": "0", "subtraction": "1", "intersection": "2"}
+        
+        node_block = f'''
+[node name="{name}" type="{csg_type}" parent="{parent_node_path}"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, {pos[0]}, {pos[1]}, {pos[2]})
+operation = {op_map.get(operation, "0")}
+'''
+        if "Box" in csg_type:
+            node_block += f'size = Vector3({width}, {height}, {depth})\n'
+        elif "Sphere" in csg_type:
+            node_block += f'radius = {radius}\n'
+        elif "Cylinder" in csg_type:
+            node_block += f'radius = {radius}\nheight = {height}\n'
+        elif "Torus" in csg_type:
+            node_block += f'inner_radius = {radius * 0.5}\nouter_radius = {radius}\n'
+        
+        node_block += f'_import_path = NodePath("")\nunique_name_in_owner = false\nuid = "uid://{uid}"\n'
+        
+        insert_pos = content.rfind('\n')
+        new_content = content[:insert_pos] + node_block + content[insert_pos:]
+        Path(scene_path).write_text(new_content, encoding="utf-8")
+        
+        return {
+            "ok": True,
+            "csg_type": csg_type,
+            "node_name": name,
+            "operation": operation,
+            "message": f"CSG {csg_type} '{name}' criado ({operation})",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao criar CSG: {e}"}
+
+
+def create_gi_node(
+    scene_path: str,
+    gi_type: str,
+    parent_node_path: str = ".",
+    node_name: str = "",
+    subdiv: int = 128,
+    extents: list[float] | None = None,
+    bake_mode: str = "static",
+) -> dict:
+    """Cria/configura Global Illumination (VoxelGI ou LightmapGI).
+    
+    Args:
+        scene_path: Caminho da cena
+        gi_type: "VoxelGI" ou "LightmapGI"
+        parent_node_path: Nó pai
+        node_name: Nome do nó
+        subdiv: Subdivisões (VoxelGI)
+        extents: [x, y, z] extensão (VoxelGI)
+        bake_mode: "static" ou "dynamic"
+    
+    Returns:
+        dict com status
+    """
+    try:
+        import uuid
+        from pathlib import Path
+        
+        content = Path(scene_path).read_text(encoding="utf-8")
+        name = node_name or gi_type
+        uid = uuid.uuid4().hex[:16]
+        ext = extents or [10.0, 10.0, 10.0]
+        
+        node_block = f'''
+[node name="{name}" type="{gi_type}" parent="{parent_node_path}"]
+'''
+        if gi_type == "VoxelGI":
+            node_block += (
+                f'subdiv = {subdiv}\n'
+                f'extents = Vector3({ext[0]}, {ext[1]}, {ext[2]})\n'
+                f'data_bias = 1.5\n'
+                f'propagation = 0.7\n'
+            )
+        
+        node_block += f'_import_path = NodePath("")\nunique_name_in_owner = false\nuid = "uid://{uid}"\n'
+        
+        insert_pos = content.rfind('\n')
+        new_content = content[:insert_pos] + node_block + content[insert_pos:]
+        Path(scene_path).write_text(new_content, encoding="utf-8")
+        
+        return {
+            "ok": True,
+            "gi_type": gi_type,
+            "node_name": name,
+            "message": f"GI '{gi_type}' criado como '{name}'",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao criar GI: {e}"}
+
+
+def create_scene_fx_node(
+    scene_path: str,
+    fx_type: str,
+    parent_node_path: str = ".",
+    node_name: str = "",
+    properties: dict | None = None,
+) -> dict:
+    """Cria nós de efeito de cena: ReflectionProbe, Decal, FogVolume.
+    
+    Args:
+        scene_path: Caminho da cena
+        fx_type: "ReflectionProbe", "Decal", "FogVolume"
+        parent_node_path: Nó pai
+        node_name: Nome do nó
+        properties: Dicionário de propriedades específicas
+    
+    Returns:
+        dict com status
+    """
+    try:
+        import uuid
+        from pathlib import Path
+        
+        content = Path(scene_path).read_text(encoding="utf-8")
+        name = node_name or f"{fx_type}_{uuid.uuid4().hex[:4]}"
+        uid = uuid.uuid4().hex[:16]
+        props = properties or {}
+        
+        node_block = f'''
+[node name="{name}" type="{fx_type}" parent="{parent_node_path}"]
+'''
+        for key, value in props.items():
+            if isinstance(value, str):
+                node_block += f'{key} = "{value}"\n'
+            elif isinstance(value, bool):
+                node_block += f'{key} = {str(value).lower()}\n'
+            else:
+                node_block += f'{key} = {value}\n'
+        
+        node_block += f'_import_path = NodePath("")\nunique_name_in_owner = false\nuid = "uid://{uid}"\n'
+        
+        insert_pos = content.rfind('\n')
+        new_content = content[:insert_pos] + node_block + content[insert_pos:]
+        Path(scene_path).write_text(new_content, encoding="utf-8")
+        
+        return {
+            "ok": True,
+            "fx_type": fx_type,
+            "node_name": name,
+            "message": f"Efeito de cena '{fx_type}' criado como '{name}'",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao criar efeito: {e}"}
+
+
+def create_procedural_sky(
+    scene_path: str,
+    sky_type: str = "procedural",
+    parent_node_path: str = ".",
+    sun_color: str = "#ffffff",
+    ground_color: str = "#444444",
+    sky_energy: float = 1.0,
+) -> dict:
+    """Cria um céu procedural/físico numa cena 3D.
+    
+    Args:
+        scene_path: Caminho da cena
+        sky_type: "procedural" (Sky) ou "physical" (PhysicalSky)
+        parent_node_path: Nó pai
+        sun_color: Cor do sol (hex)
+        ground_color: Cor do chão (hex)
+        sky_energy: Intensidade do céu
+    
+    Returns:
+        dict com status
+    """
+    try:
+        import uuid
+        from pathlib import Path
+        
+        content = Path(scene_path).read_text(encoding="utf-8")
+        godot_type = "Sky" if sky_type == "procedural" else "PhysicalSky"
+        name = f"{godot_type}_{uuid.uuid4().hex[:4]}"
+        uid = uuid.uuid4().hex[:16]
+        
+        node_block = f'''
+[node name="{name}" type="{godot_type}" parent="{parent_node_path}"]
+sky_energy = {sky_energy}
+'''
+        if sky_type == "procedural":
+            node_block += (
+                f'sky_top_color = Color({_hex_to_color(sun_color)})\n'
+                f'sky_horizon_color = Color({_hex_to_color(ground_color)})\n'
+                f'ground_horizon_color = Color({_hex_to_color(ground_color)})\n'
+                f'ground_bottom_color = Color({_hex_to_color(ground_color)})\n'
+            )
+        
+        node_block += f'_import_path = NodePath("")\nunique_name_in_owner = false\nuid = "uid://{uid}"\n'
+        
+        insert_pos = content.rfind('\n')
+        new_content = content[:insert_pos] + node_block + content[insert_pos:]
+        Path(scene_path).write_text(new_content, encoding="utf-8")
+        
+        return {
+            "ok": True,
+            "sky_type": godot_type,
+            "node_name": name,
+            "message": f"Céu {godot_type} criado como '{name}'",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao criar céu: {e}"}
+
+
+def configure_camera_attributes(
+    scene_path: str,
+    camera_path: str,
+    dof_enabled: bool | None = None,
+    dof_distance: float | None = None,
+    dof_blur: float | None = None,
+    exposure_enabled: bool | None = None,
+    exposure_value: float | None = None,
+    auto_exposure: bool | None = None,
+    near: float | None = None,
+    far: float | None = None,
+    fov: float | None = None,
+) -> dict:
+    """Configura atributos de câmera 3D (DOF, exposição, near/far, FOV).
+    
+    Args:
+        scene_path: Caminho da cena
+        camera_path: Caminho do nó Camera3D
+        dof_enabled: Habilita Depth of Field
+        dof_distance: Distância focal DOF
+        dof_blur: Intensidade do blur DOF
+        exposure_enabled: Habilita controle de exposição
+        exposure_value: Valor de exposição (EV)
+        auto_exposure: Exposição automática
+        near: Near clip plane
+        far: Far clip plane
+        fov: Field of view (graus)
+    
+    Returns:
+        dict com mudanças
+    """
+    try:
+        import re
+        from pathlib import Path
+        
+        content = Path(scene_path).read_text(encoding="utf-8")
+        camera_name = camera_path.split("/")[-1]
+        cam_pattern = rf'\[node\s+name="{re.escape(camera_name)}"[^\]]*type="Camera3D"[^\]]*\]'
+        match = re.search(cam_pattern, content)
+        
+        if not match:
+            return {"ok": False, "error": f"Camera3D '{camera_name}' não encontrada"}
+        
+        node_start = match.start()
+        next_node = re.search(r'\n\[node\b', content[node_start + 1:])
+        node_end = node_start + 1 + next_node.start() if next_node else len(content)
+        node_block = content[node_start:node_end]
+        changes = []
+        
+        cam_attrs = {}
+        if dof_enabled is not None:
+            cam_attrs["attributes/DOFBlurFarEnabled"] = str(dof_enabled).lower()
+            changes.append(f"dof={dof_enabled}")
+        if dof_distance is not None:
+            cam_attrs["attributes/DOFBlurFarDistance"] = str(dof_distance)
+            changes.append(f"dof_distance={dof_distance}")
+        if dof_blur is not None:
+            cam_attrs["attributes/DOFBlurFarAmount"] = str(dof_blur)
+            changes.append(f"dof_blur={dof_blur}")
+        if exposure_enabled is not None:
+            cam_attrs["attributes/ExposureEnabled"] = str(exposure_enabled).lower()
+            changes.append(f"exposure={exposure_enabled}")
+        if exposure_value is not None:
+            cam_attrs["attributes/ExposureValue"] = str(exposure_value)
+            changes.append(f"exposure_value={exposure_value}")
+        if auto_exposure is not None:
+            cam_attrs["attributes/AutoExposureEnabled"] = str(auto_exposure).lower()
+            changes.append(f"auto_exposure={auto_exposure}")
+        if near is not None:
+            cam_attrs["near"] = str(near)
+            changes.append(f"near={near}")
+        if far is not None:
+            cam_attrs["far"] = str(far)
+            changes.append(f"far={far}")
+        if fov is not None:
+            cam_attrs["fov"] = str(fov)
+            changes.append(f"fov={fov}")
+        
+        for key, value in cam_attrs.items():
+            pattern = rf'{re.escape(key)}\s*=\s*\S+'
+            replacement = f'{key} = {value}'
+            if re.search(pattern, node_block):
+                node_block = re.sub(pattern, replacement, node_block)
+            else:
+                node_block = node_block.rstrip() + f'\n{replacement}'
+        
+        new_content = content[:node_start] + node_block + content[node_end:]
+        Path(scene_path).write_text(new_content, encoding="utf-8")
+        
+        return {
+            "ok": True,
+            "camera": camera_name,
+            "changes": changes,
+            "message": f"Atributos da câmera '{camera_name}' atualizados: {', '.join(changes)}",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao configurar câmera: {e}"}
+
+
+def create_multimesh_instance(
+    scene_path: str,
+    parent_node_path: str,
+    mesh_resource: str,
+    instance_count: int = 100,
+    node_name: str = "",
+) -> dict:
+    """Cria um MultiMeshInstance3D para renderizar muitos objetos idênticos.
+    
+    Args:
+        scene_path: Caminho da cena
+        parent_node_path: Nó pai
+        mesh_resource: Caminho do recurso mesh (ex: "res://meshes/tree.obj")
+        instance_count: Número de instâncias
+        node_name: Nome do nó
+    
+    Returns:
+        dict com status
+    """
+    try:
+        import uuid
+        from pathlib import Path
+        
+        content = Path(scene_path).read_text(encoding="utf-8")
+        name = node_name or f"MultiMeshInstance3D_{uuid.uuid4().hex[:4]}"
+        uid = uuid.uuid4().hex[:16]
+        
+        node_block = f'''
+[node name="{name}" type="MultiMeshInstance3D" parent="{parent_node_path}"]
+multimesh = SubResource("Multimesh_{uid}")
+_import_path = NodePath("")
+unique_name_in_owner = false
+uid = "uid://{uid}"
+'''
+        
+        insert_pos = content.rfind('\n')
+        new_content = content[:insert_pos] + node_block + content[insert_pos:]
+        Path(scene_path).write_text(new_content, encoding="utf-8")
+        
+        return {
+            "ok": True,
+            "node_name": name,
+            "mesh_resource": mesh_resource,
+            "instance_count": instance_count,
+            "message": f"MultiMeshInstance3D '{name}' criado com {instance_count} instâncias (mesh: {mesh_resource})",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao criar MultiMesh: {e}"}
+
+
+# ══════════════════════════════════════════════════════════════════════
+# CAMADA 6.4 — UI GRANULAR (Tree, Tabs, Menu, Widgets)
+# ══════════════════════════════════════════════════════════════════════
+
+def create_ui_widget(
+    scene_path: str,
+    parent_node_path: str,
+    widget_type: str,
+    widget_name: str = "",
+    properties: dict | None = None,
+) -> dict:
+    """Cria um widget de UI granular numa cena.
+    
+    Args:
+        scene_path: Caminho da cena .tscn
+        parent_node_path: Nó pai
+        widget_type: Tipo do widget — "Tree", "ItemList", "OptionButton",
+            "TabContainer", "TabBar", "PopupMenu", "MenuBar",
+            "ProgressBar", "HSlider", "VSlider", "SpinBox", "ColorPicker",
+            "LineEdit", "TextEdit", "RichTextLabel", "Popup", "Window",
+            "AcceptDialog", "ConfirmationDialog", "FileDialog",
+            "CheckBox", "CheckButton"
+        widget_name: Nome do nó (auto-gerado se vazio)
+        properties: Dicionário de propriedades extras
+    
+    Returns:
+        dict com status
+    """
+    try:
+        import uuid
+        from pathlib import Path
+        
+        valid = {
+            "Tree", "ItemList", "OptionButton",
+            "TabContainer", "TabBar", "PopupMenu", "MenuBar",
+            "ProgressBar", "HSlider", "VSlider", "SpinBox", "ColorPicker",
+            "LineEdit", "TextEdit", "RichTextLabel", "Popup", "Window",
+            "AcceptDialog", "ConfirmationDialog", "FileDialog",
+            "CheckBox", "CheckButton",
+        }
+        if widget_type not in valid:
+            return {"ok": False, "error": f"Tipo '{widget_type}' não suportado. Use: {', '.join(sorted(valid))}"}
+        
+        content = Path(scene_path).read_text(encoding="utf-8")
+        name = widget_name or f"{widget_type}_{uuid.uuid4().hex[:4]}"
+        uid = uuid.uuid4().hex[:16]
+        props = properties or {}
+        
+        node_block = f'''
+[node name="{name}" type="{widget_type}" parent="{parent_node_path}"]
+'''
+        for key, value in props.items():
+            if isinstance(value, str):
+                node_block += f'{key} = "{value}"\n'
+            elif isinstance(value, bool):
+                node_block += f'{key} = {str(value).lower()}\n'
+            else:
+                node_block += f'{key} = {value}\n'
+        
+        node_block += f'offset_right = 200.0\noffset_bottom = 44.0\n'
+        node_block += f'_import_path = NodePath("")\nunique_name_in_owner = false\nuid = "uid://{uid}"\n'
+        
+        insert_pos = content.rfind('\n')
+        new_content = content[:insert_pos] + node_block + content[insert_pos:]
+        Path(scene_path).write_text(new_content, encoding="utf-8")
+        
+        return {
+            "ok": True,
+            "widget_type": widget_type,
+            "widget_name": name,
+            "message": f"Widget {widget_type} '{name}' criado",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao criar widget UI: {e}"}
+
+
+def create_tab_with_content(
+    scene_path: str,
+    tab_container_path: str,
+    tab_title: str,
+    content_type: str = "Control",
+    tab_name: str = "",
+) -> dict:
+    """Adiciona uma tab com conteúdo a um TabContainer existente.
+    
+    Args:
+        scene_path: Caminho da cena
+        tab_container_path: Caminho do TabContainer
+        tab_title: Título da tab
+        content_type: Tipo do nó de conteúdo
+        tab_name: Nome do nó da tab
+    
+    Returns:
+        dict com status
+    """
+    try:
+        import uuid
+        from pathlib import Path
+        
+        content = Path(scene_path).read_text(encoding="utf-8")
+        tc_name = tab_container_path.split("/")[-1]
+        name = tab_name or f"Tab_{tab_title.replace(' ', '_')}"
+        uid = uuid.uuid4().hex[:16]
+        
+        node_block = f'''
+[node name="{name}" type="{content_type}" parent="{tc_name}"]
+metadata/_tab_title = "{tab_title}"
+_import_path = NodePath("")
+unique_name_in_owner = false
+uid = "uid://{uid}"
+'''
+        
+        insert_pos = content.rfind('\n')
+        new_content = content[:insert_pos] + node_block + content[insert_pos:]
+        Path(scene_path).write_text(new_content, encoding="utf-8")
+        
+        return {
+            "ok": True,
+            "tab_title": tab_title,
+            "tab_name": name,
+            "message": f"Tab '{tab_title}' adicionada ao TabContainer '{tc_name}'",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao criar tab: {e}"}
+
+
+def configure_ui_focus_and_nav(
+    scene_path: str,
+    node_path: str,
+    focus_neighbor_top: str = "",
+    focus_neighbor_bottom: str = "",
+    focus_neighbor_left: str = "",
+    focus_neighbor_right: str = "",
+    focus_neighbor_next: str = "",
+    focus_neighbor_prev: str = "",
+    focus_mode: str | None = None,
+) -> dict:
+    """Configura navegação por foco/controle entre widgets UI.
+    
+    Args:
+        scene_path: Caminho da cena
+        node_path: Caminho do nó UI
+        focus_neighbor_*: Paths para vizinhos de foco
+        focus_mode: "none", "click", "all"
+    
+    Returns:
+        dict com mudanças
+    """
+    try:
+        import re
+        from pathlib import Path
+        
+        content = Path(scene_path).read_text(encoding="utf-8")
+        node_name = node_path.split("/")[-1]
+        node_pattern = rf'\[node\s+name="{re.escape(node_name)}"[^\]]*\]'
+        match = re.search(node_pattern, content)
+        
+        if not match:
+            return {"ok": False, "error": f"Nó '{node_name}' não encontrado"}
+        
+        node_start = match.start()
+        next_node = re.search(r'\n\[node\b', content[node_start + 1:])
+        node_end = node_start + 1 + next_node.start() if next_node else len(content)
+        node_block = content[node_start:node_end]
+        changes = []
+        
+        neighbors = {
+            "focus_neighbor_top": focus_neighbor_top,
+            "focus_neighbor_bottom": focus_neighbor_bottom,
+            "focus_neighbor_left": focus_neighbor_left,
+            "focus_neighbor_right": focus_neighbor_right,
+            "focus/next": focus_neighbor_next,
+            "focus/prev": focus_neighbor_prev,
+        }
+        
+        for key, value in neighbors.items():
+            if value:
+                pattern = rf'{re.escape(key)}\s*=\s*\S+'
+                replacement = f'{key} = NodePath("{value}")'
+                if re.search(pattern, node_block):
+                    node_block = re.sub(pattern, replacement, node_block)
+                else:
+                    node_block = node_block.rstrip() + f'\n{replacement}'
+                changes.append(f"{key}={value}")
+        
+        if focus_mode is not None:
+            mode_map = {"none": "0", "click": "1", "all": "2"}
+            mode_value = mode_map.get(focus_mode, "1")
+            pattern = r'focus_mode\s*=\s*\S+'
+            replacement = f'focus_mode = {mode_value}'
+            if re.search(pattern, node_block):
+                node_block = re.sub(pattern, replacement, node_block)
+            else:
+                node_block = node_block.rstrip() + f'\n{replacement}'
+            changes.append(f"focus_mode={focus_mode}")
+        
+        new_content = content[:node_start] + node_block + content[node_end:]
+        Path(scene_path).write_text(new_content, encoding="utf-8")
+        
+        return {
+            "ok": True,
+            "node_name": node_name,
+            "changes": changes,
+            "message": f"Navegação de foco configurada para '{node_name}'",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao configurar foco: {e}"}
+
+
+def set_tooltip(
+    scene_path: str,
+    node_path: str,
+    tooltip_text: str,
+) -> dict:
+    """Define o tooltip de um nó Control.
+    
+    Args:
+        scene_path: Caminho da cena
+        node_path: Caminho do nó
+        tooltip_text: Texto do tooltip
+    
+    Returns:
+        dict com status
+    """
+    try:
+        import re
+        from pathlib import Path
+        
+        content = Path(scene_path).read_text(encoding="utf-8")
+        node_name = node_path.split("/")[-1]
+        node_pattern = rf'\[node\s+name="{re.escape(node_name)}"[^\]]*\]'
+        match = re.search(node_pattern, content)
+        
+        if not match:
+            return {"ok": False, "error": f"Nó '{node_name}' não encontrado"}
+        
+        node_start = match.start()
+        next_node = re.search(r'\n\[node\b', content[node_start + 1:])
+        node_end = node_start + 1 + next_node.start() if next_node else len(content)
+        node_block = content[node_start:node_end]
+        
+        pattern = r'tooltip_text\s*=\s*"[^"]*"'
+        replacement = f'tooltip_text = "{tooltip_text}"'
+        if re.search(pattern, node_block):
+            node_block = re.sub(pattern, replacement, node_block)
+        else:
+            node_block = node_block.rstrip() + f'\n{replacement}'
+        
+        new_content = content[:node_start] + node_block + content[node_end:]
+        Path(scene_path).write_text(new_content, encoding="utf-8")
+        
+        return {
+            "ok": True,
+            "node_name": node_name,
+            "tooltip": tooltip_text,
+            "message": f"Tooltip definido para '{node_name}'",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao definir tooltip: {e}"}
+
+
+def set_anchor_preset(
+    scene_path: str,
+    node_path: str,
+    preset: str = "full_rect",
+) -> dict:
+    """Define anchor preset de um nó Control.
+    
+    Args:
+        scene_path: Caminho da cena
+        node_path: Caminho do nó Control
+        preset: "top_left", "top_wide", "top_right",
+            "left_wide", "center", "right_wide",
+            "bottom_left", "bottom_wide", "bottom_right",
+            "left_tall", "center_tall", "right_tall",
+            "full_rect", "hcenter_wide", "vcenter_tall"
+    
+    Returns:
+        dict com mudanças
+    """
+    try:
+        import re
+        from pathlib import Path
+        
+        presets = {
+            "top_left":       (0, 0, 0, 0),
+            "top_wide":       (0, 0, 1, 0),
+            "top_right":      (1, 0, 1, 0),
+            "left_wide":      (0, 0, 0, 1),
+            "center":         (0.5, 0.5, 0.5, 0.5),
+            "right_wide":     (1, 0, 1, 1),
+            "bottom_left":    (0, 1, 0, 1),
+            "bottom_wide":    (0, 1, 1, 1),
+            "bottom_right":   (1, 1, 1, 1),
+            "left_tall":      (0, 0, 0, 1),
+            "center_tall":    (0.5, 0, 0.5, 1),
+            "right_tall":     (1, 0, 1, 1),
+            "full_rect":      (0, 0, 1, 1),
+            "hcenter_wide":   (0.5, 0, 0.5, 0),
+            "vcenter_tall":   (0, 0.5, 0, 0.5),
+        }
+        
+        if preset not in presets:
+            return {"ok": False, "error": f"Preset '{preset}' não suportado. Use: {', '.join(presets.keys())}"}
+        
+        l, t, r, b = presets[preset]
+        
+        content = Path(scene_path).read_text(encoding="utf-8")
+        node_name = node_path.split("/")[-1]
+        node_pattern = rf'\[node\s+name="{re.escape(node_name)}"[^\]]*\]'
+        match = re.search(node_pattern, content)
+        
+        if not match:
+            return {"ok": False, "error": f"Nó '{node_name}' não encontrado"}
+        
+        node_start = match.start()
+        next_node = re.search(r'\n\[node\b', content[node_start + 1:])
+        node_end = node_start + 1 + next_node.start() if next_node else len(content)
+        node_block = content[node_start:node_end]
+        
+        anchors = {
+            "anchor_left": str(l),
+            "anchor_top": str(t),
+            "anchor_right": str(r),
+            "anchor_bottom": str(b),
+        }
+        
+        for key, value in anchors.items():
+            pattern = rf'{key}\s*=\s*\S+'
+            replacement = f'{key} = {value}'
+            if re.search(pattern, node_block):
+                node_block = re.sub(pattern, replacement, node_block)
+            else:
+                node_block = node_block.rstrip() + f'\n{replacement}'
+        
+        new_content = content[:node_start] + node_block + content[node_end:]
+        Path(scene_path).write_text(new_content, encoding="utf-8")
+        
+        return {
+            "ok": True,
+            "node_name": node_name,
+            "preset": preset,
+            "anchors": {"left": l, "top": t, "right": r, "bottom": b},
+            "message": f"Anchor '{preset}' aplicado a '{node_name}'",
+        }
+    except Exception as e:
+        return {"ok": False, "error": f"Erro ao definir anchor: {e}"}

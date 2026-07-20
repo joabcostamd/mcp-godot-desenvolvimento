@@ -4,9 +4,9 @@
 > O agente lê este arquivo para saber o que fazer na próxima sessão.
 
 ## AGENTE 01 — Próxima etapa
-- **Etapa:** Camada 5 — Registro de tools CONCLUÍDO ✅
-- **Status:** ✅ 28 tools de gameplay registradas (268 tools totais, 0 inconsistências)
-- **Próximo:** Camada 6 (Profundidade de Engine) [MARGINAL] ou Camada 7 (Polimento) [MARGINAL] — aguarda aprovação do Joab
+- **Etapa:** Camada 6 — Profundidade de Engine CONCLUÍDA ✅
+- **Status:** ✅ 8/8 fatias implementadas (274 tools totais, 0 inconsistências)
+- **Próximo:** Camada 7 (Polimento) [MARGINAL] — aguarda aprovação do Joab
 
 ## AGENTE 02 — Próxima etapa
 - **Etapa:** ✅ Camada 4 CONCLUIDA (B2-B9) + Polimento F1-F7 ✅

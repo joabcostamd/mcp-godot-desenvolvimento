@@ -3537,5 +3537,683 @@ def _raw_tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
+
+
+        Tool(
+            name="skeleton_get_bone_pose",
+            description=(
+                "Obtém a pose (transform) de um osso específico num Skeleton3D. Quando usar: para inspecionar posição/rotação de um osso antes de animar. Pré-condições: cena com nó Skeleton3D e bones definidos. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "skeleton_path": {"type": "string", "description": "skeleton_path (str)"},
+                    "bone_name": {"type": "string", "description": "bone_name (str)"}
+                },
+                "required": ["scene_path", "skeleton_path"],
+            },
+        ),
+        Tool(
+            name="skeleton_set_bone_pose",
+            description=(
+                "Define a pose (transform) de um osso num Skeleton3D. Quando usar: para posicionar ossos para animação ou correção de rig. Pré-condições: cena com Skeleton3D e osso existente. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "skeleton_path": {"type": "string", "description": "skeleton_path (str)"},
+                    "bone_name": {"type": "string", "description": "bone_name (str)"},
+                    "position": {"type": "string", "description": "position (list[float])"},
+                    "rotation": {"type": "string", "description": "rotation (list[float])"},
+                    "scale": {"type": "string", "description": "scale (list[float])"}
+                },
+                "required": ["scene_path", "skeleton_path"],
+            },
+        ),
+        Tool(
+            name="skeleton_list_bones",
+            description=(
+                "Lista todos os ossos de um Skeleton3D com índices, nomes e hierarquia. Quando usar: para conhecer a estrutura do esqueleto antes de criar animações ou IK. Pré-condições: cena com Skeleton3D. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "skeleton_path": {"type": "string", "description": "skeleton_path (str)"}
+                },
+                "required": ["scene_path", "skeleton_path"],
+            },
+        ),
+        Tool(
+            name="skeleton_create_bone",
+            description=(
+                "Cria um novo osso num Skeleton3D existente. Quando usar: para adicionar ossos extras a um rig (ex: osso de arma, acessório). Pré-condições: cena com Skeleton3D. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "skeleton_path": {"type": "string", "description": "skeleton_path (str)"},
+                    "bone_name": {"type": "string", "description": "bone_name (str)"},
+                    "parent_bone": {"type": "string", "description": "parent_bone (str|int)"},
+                    "position": {"type": "string", "description": "position (list[float])"},
+                    "rotation": {"type": "string", "description": "rotation (list[float])"}
+                },
+                "required": ["scene_path", "skeleton_path"],
+            },
+        ),
+        Tool(
+            name="skeleton_create_ik_chain",
+            description=(
+                "Cria/configura uma chain SkeletonIK3D vinculada a um osso. Quando usar: para adicionar IK procedural (ex: pés no chão, mão alcançando objeto). Pré-condições: Skeleton3D com osso alvo. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "skeleton_path": {"type": "string", "description": "skeleton_path (str)"},
+                    "bone_name": {"type": "string", "description": "bone_name (str)"},
+                    "target_node_path": {"type": "string", "description": "target_node_path (str)"},
+                    "chain_length": {"type": "string", "description": "chain_length (int)"},
+                    "iterations": {"type": "string", "description": "iterations (int)"}
+                },
+                "required": ["scene_path", "skeleton_path"],
+            },
+        ),
+        Tool(
+            name="skeleton_get_info",
+            description=(
+                "Obtém informações completas de um Skeleton3D: bones, IK chains, estrutura. Quando usar: visão geral do rig antes de modificações. Pré-condições: cena com Skeleton3D. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "skeleton_path": {"type": "string", "description": "skeleton_path (str)"}
+                },
+                "required": ["scene_path", "skeleton_path"],
+            },
+        ),
+        Tool(
+            name="csg_create_node",
+            description=(
+                "Cria nó CSG (Constructive Solid Geometry) para prototipagem 3D: box, sphere, cylinder, torus. Quando usar: para blockout/prototipagem rápida de níveis 3D sem modelos. Pré-condições: cena 3D. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "parent_node_path": {"type": "string", "description": "parent_node_path (str)"},
+                    "csg_type": {"type": "string", "description": "csg_type (str)"},
+                    "node_name": {"type": "string", "description": "node_name (str)"},
+                    "operation": {"type": "string", "description": "operation (str)"},
+                    "width": {"type": "string", "description": "width (float)"},
+                    "height": {"type": "string", "description": "height (float)"},
+                    "depth": {"type": "string", "description": "depth (float)"},
+                    "radius": {"type": "string", "description": "radius (float)"},
+                    "position": {"type": "string", "description": "position (list[float])"}
+                },
+                "required": ["scene_path", "parent_node_path"],
+            },
+        ),
+        Tool(
+            name="gi_create_node",
+            description=(
+                "Cria nó de Global Illumination (VoxelGI ou LightmapGI) para iluminação indireta 3D. Quando usar: para melhorar qualidade de iluminação em cenas 3D. Pré-condições: cena 3D. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "gi_type": {"type": "string", "description": "gi_type (str)"},
+                    "parent_node_path": {"type": "string", "description": "parent_node_path (str)"},
+                    "node_name": {"type": "string", "description": "node_name (str)"},
+                    "subdiv": {"type": "string", "description": "subdiv (int)"},
+                    "extents": {"type": "string", "description": "extents (list[float])"},
+                    "bake_mode": {"type": "string", "description": "bake_mode (str)"}
+                },
+                "required": ["scene_path", "gi_type"],
+            },
+        ),
+        Tool(
+            name="scene_fx_create_node",
+            description=(
+                "Cria nó de efeito de cena: ReflectionProbe, Decal, FogVolume. Quando usar: para adicionar reflexos, decalques ou neblina volumétrica. Pré-condições: cena 3D. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "fx_type": {"type": "string", "description": "fx_type (str)"},
+                    "parent_node_path": {"type": "string", "description": "parent_node_path (str)"},
+                    "node_name": {"type": "string", "description": "node_name (str)"},
+                    "properties": {"type": "string", "description": "properties (dict)"}
+                },
+                "required": ["scene_path", "fx_type"],
+            },
+        ),
+        Tool(
+            name="sky_create_procedural",
+            description=(
+                "Cria um céu procedural ou físico (Sky/PhysicalSky) numa cena 3D. Quando usar: para configurar o céu e iluminação ambiente. Pré-condições: cena 3D com WorldEnvironment ou direcional light. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "sky_type": {"type": "string", "description": "sky_type (str)"},
+                    "parent_node_path": {"type": "string", "description": "parent_node_path (str)"},
+                    "sun_color": {"type": "string", "description": "sun_color (str)"},
+                    "ground_color": {"type": "string", "description": "ground_color (str)"},
+                    "sky_energy": {"type": "string", "description": "sky_energy (float)"}
+                },
+                "required": ["scene_path", "sky_type"],
+            },
+        ),
+        Tool(
+            name="camera_configure_attributes",
+            description=(
+                "Configura atributos de câmera 3D: DOF, exposição, near/far, FOV. Quando usar: para ajustar profundidade de campo, exposição ou clipping da câmera. Pré-condições: nó Camera3D na cena. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "camera_path": {"type": "string", "description": "camera_path (str)"},
+                    "dof_enabled": {"type": "string", "description": "dof_enabled (bool)"},
+                    "dof_distance": {"type": "string", "description": "dof_distance (float)"},
+                    "dof_blur": {"type": "string", "description": "dof_blur (float)"},
+                    "exposure_enabled": {"type": "string", "description": "exposure_enabled (bool)"},
+                    "exposure_value": {"type": "string", "description": "exposure_value (float)"},
+                    "auto_exposure": {"type": "string", "description": "auto_exposure (bool)"},
+                    "near": {"type": "string", "description": "near (float)"},
+                    "far": {"type": "string", "description": "far (float)"},
+                    "fov": {"type": "string", "description": "fov (float)"}
+                },
+                "required": ["scene_path", "camera_path"],
+            },
+        ),
+        Tool(
+            name="multimesh_create_instance",
+            description=(
+                "Cria um MultiMeshInstance3D para renderizar muitos objetos idênticos com performance. Quando usar: para árvores, pedras, grama — centenas de instâncias do mesmo mesh. Pré-condições: recurso mesh disponível. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "parent_node_path": {"type": "string", "description": "parent_node_path (str)"},
+                    "mesh_resource": {"type": "string", "description": "mesh_resource (str)"},
+                    "instance_count": {"type": "string", "description": "instance_count (int)"},
+                    "node_name": {"type": "string", "description": "node_name (str)"}
+                },
+                "required": ["scene_path", "parent_node_path"],
+            },
+        ),
+        Tool(
+            name="physics_create_joint",
+            description=(
+                "Cria um joint físico entre dois corpos: PinJoint2D, Spring, Hinge, Cone, Slider. Quando usar: para conectar corpos rígidos (ex: portas, pontes, cordas, ragdolls). Pré-condições: dois RigidBody na cena. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "parent_node_path": {"type": "string", "description": "parent_node_path (str)"},
+                    "joint_type": {"type": "string", "description": "joint_type (str)"},
+                    "joint_name": {"type": "string", "description": "joint_name (str)"},
+                    "node_a": {"type": "string", "description": "node_a (str)"},
+                    "node_b": {"type": "string", "description": "node_b (str)"},
+                    "stiffness": {"type": "string", "description": "stiffness (float)"},
+                    "damping": {"type": "string", "description": "damping (float)"},
+                    "bias": {"type": "string", "description": "bias (float)"},
+                    "disable_collision": {"type": "string", "description": "disable_collision (bool)"}
+                },
+                "required": ["scene_path", "parent_node_path"],
+            },
+        ),
+        Tool(
+            name="physics_configure_body",
+            description=(
+                "Configura propriedades físicas de um corpo: massa, atrito, bounce, damping, freeze. Quando usar: para ajustar comportamento físico de RigidBody ou CharacterBody. Pré-condições: nó com física na cena. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "node_path": {"type": "string", "description": "node_path (str)"},
+                    "mass": {"type": "string", "description": "mass (float)"},
+                    "friction": {"type": "string", "description": "friction (float)"},
+                    "bounce": {"type": "string", "description": "bounce (float)"},
+                    "gravity_scale": {"type": "string", "description": "gravity_scale (float)"},
+                    "linear_damp": {"type": "string", "description": "linear_damp (float)"},
+                    "angular_damp": {"type": "string", "description": "angular_damp (float)"},
+                    "freeze": {"type": "string", "description": "freeze (bool)"},
+                    "freeze_mode": {"type": "string", "description": "freeze_mode (str)"}
+                },
+                "required": ["scene_path", "node_path"],
+            },
+        ),
+        Tool(
+            name="physics_query_area_overlap",
+            description=(
+                "Prepara código para verificar corpos/áreas sobrepostos a uma Area2D/Area3D em runtime. Quando usar: para detectar se algo entrou numa área de trigger. Pré-condições: nó Area2D/Area3D na cena. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "area_path": {"type": "string", "description": "area_path (str)"},
+                    "query_type": {"type": "string", "description": "query_type (str)"}
+                },
+                "required": ["scene_path", "area_path"],
+            },
+        ),
+        Tool(
+            name="physics_raycast_query",
+            description=(
+                "Prepara código para executar raycast em runtime via nó RayCast2D/3D. Quando usar: para detectar colisões em linha reta (tiro, visão, ground check). Pré-condições: nó RayCast2D/3D na cena. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "raycast_path": {"type": "string", "description": "raycast_path (str)"}
+                },
+                "required": ["scene_path", "raycast_path"],
+            },
+        ),
+        Tool(
+            name="ui_create_widget",
+            description=(
+                "Cria widget de UI granular: Tree, ItemList, OptionButton, TabContainer, PopupMenu, ProgressBar, Slider, SpinBox, ColorPicker, LineEdit, TextEdit, RichTextLabel, etc. Quando usar: para construir interfaces complexas além do básico. Pré-condições: cena com raiz Control. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "parent_node_path": {"type": "string", "description": "parent_node_path (str)"},
+                    "widget_type": {"type": "string", "description": "widget_type (str)"},
+                    "widget_name": {"type": "string", "description": "widget_name (str)"},
+                    "properties": {"type": "string", "description": "properties (dict)"}
+                },
+                "required": ["scene_path", "parent_node_path"],
+            },
+        ),
+        Tool(
+            name="ui_create_tab_with_content",
+            description=(
+                "Adiciona uma tab com conteúdo a um TabContainer existente. Quando usar: para criar interfaces com abas (configurações, inventário). Pré-condições: TabContainer na cena. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "tab_container_path": {"type": "string", "description": "tab_container_path (str)"},
+                    "tab_title": {"type": "string", "description": "tab_title (str)"},
+                    "content_type": {"type": "string", "description": "content_type (str)"},
+                    "tab_name": {"type": "string", "description": "tab_name (str)"}
+                },
+                "required": ["scene_path", "tab_container_path"],
+            },
+        ),
+        Tool(
+            name="ui_configure_focus_nav",
+            description=(
+                "Configura navegação por foco entre widgets (gamepad/teclado). Quando usar: para navegação fluida em menus com controle ou teclado. Pré-condições: nós Control na cena. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "node_path": {"type": "string", "description": "node_path (str)"},
+                    "focus_neighbor_top": {"type": "string", "description": "focus_neighbor_top (str)"},
+                    "focus_neighbor_bottom": {"type": "string", "description": "focus_neighbor_bottom (str)"},
+                    "focus_neighbor_left": {"type": "string", "description": "focus_neighbor_left (str)"},
+                    "focus_neighbor_right": {"type": "string", "description": "focus_neighbor_right (str)"},
+                    "focus_neighbor_next": {"type": "string", "description": "focus_neighbor_next (str)"},
+                    "focus_neighbor_prev": {"type": "string", "description": "focus_neighbor_prev (str)"},
+                    "focus_mode": {"type": "string", "description": "focus_mode (str)"}
+                },
+                "required": ["scene_path", "node_path"],
+            },
+        ),
+        Tool(
+            name="ui_set_tooltip",
+            description=(
+                "Define o texto de tooltip de um nó Control. Quando usar: para adicionar dicas de interface. Pré-condições: nó Control na cena. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "node_path": {"type": "string", "description": "node_path (str)"},
+                    "tooltip_text": {"type": "string", "description": "tooltip_text (str)"}
+                },
+                "required": ["scene_path", "node_path"],
+            },
+        ),
+        Tool(
+            name="ui_set_anchor_preset",
+            description=(
+                "Define anchor preset de um nó Control para layout responsivo. Quando usar: para posicionar elementos UI que se adaptam a diferentes resoluções. Pré-condições: nó Control na cena. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "node_path": {"type": "string", "description": "node_path (str)"},
+                    "preset": {"type": "string", "description": "preset (str)"}
+                },
+                "required": ["scene_path", "node_path"],
+            },
+        ),
+        Tool(
+            name="network_setup_multiplayer",
+            description=(
+                "Configura multiplayer peer (ENet ou WebSocket) gerando script de setup. Quando usar: para adicionar multiplayer ao jogo. Pré-condições: projeto Godot com cena. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "mode": {"type": "string", "description": "mode (str)"},
+                    "port": {"type": "string", "description": "port (int)"},
+                    "max_players": {"type": "string", "description": "max_players (int)"},
+                    "server_address": {"type": "string", "description": "server_address (str)"}
+                },
+                "required": ["scene_path", "mode"],
+            },
+        ),
+        Tool(
+            name="network_create_rpc",
+            description=(
+                "Adiciona um método RPC (@rpc) a um script GDScript. Quando usar: para criar funções que rodam remotamente em multiplayer. Pré-condições: script .gd existente. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "script_path": {"type": "string", "description": "script_path (str)"},
+                    "method_name": {"type": "string", "description": "method_name (str)"},
+                    "params": {"type": "string", "description": "params (list[str])"},
+                    "rpc_mode": {"type": "string", "description": "rpc_mode (str)"},
+                    "call_local": {"type": "string", "description": "call_local (bool)"},
+                    "method_body": {"type": "string", "description": "method_body (str)"}
+                },
+                "required": ["script_path", "method_name"],
+            },
+        ),
+        Tool(
+            name="network_create_websocket",
+            description=(
+                "Adiciona código de WebSocket client a um script GDScript. Quando usar: para comunicação com servidores externos (APIs, chat, matchmaking). Pré-condições: script .gd existente. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "script_path": {"type": "string", "description": "script_path (str)"},
+                    "url": {"type": "string", "description": "url (str)"},
+                    "protocols": {"type": "string", "description": "protocols (list[str])"}
+                },
+                "required": ["script_path", "url"],
+            },
+        ),
+        Tool(
+            name="network_configure_dedicated_server",
+            description=(
+                "Configura parâmetros de servidor dedicado para exportação. Quando usar: para preparar build headless de servidor. Pré-condições: projeto Godot. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "export_preset_name": {"type": "string", "description": "export_preset_name (str)"},
+                    "port": {"type": "string", "description": "port (int)"},
+                    "enable_upnp": {"type": "string", "description": "enable_upnp (bool)"}
+                },
+                "required": ["export_preset_name", "port"],
+            },
+        ),
+        Tool(
+            name="network_create_lobby",
+            description=(
+                "Cria sistema de lobby básico para multiplayer: salas, join/ready, transição. Quando usar: para implementar tela de espera antes de partida multiplayer. Pré-condições: projeto com cena. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scene_path": {"type": "string", "description": "scene_path (str)"},
+                    "max_players": {"type": "string", "description": "max_players (int)"},
+                    "lobby_name": {"type": "string", "description": "lobby_name (str)"}
+                },
+                "required": ["scene_path", "max_players"],
+            },
+        ),
+        Tool(
+            name="runtime_connect_signal",
+            description=(
+                "Gera código GDScript para conectar sinais em runtime. Quando usar: para wiring dinâmico de callbacks (ex: botão criado em código). Pré-condições: nós existentes na cena. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "source_node_path": {"type": "string", "description": "source_node_path (str)"},
+                    "signal_name": {"type": "string", "description": "signal_name (str)"},
+                    "target_node_path": {"type": "string", "description": "target_node_path (str)"},
+                    "method_name": {"type": "string", "description": "method_name (str)"},
+                    "flags": {"type": "string", "description": "flags (int)"}
+                },
+                "required": ["source_node_path", "signal_name"],
+            },
+        ),
+        Tool(
+            name="runtime_disconnect_signal",
+            description=(
+                "Gera código GDScript para desconectar sinais em runtime. Quando usar: para limpar conexões que não são mais necessárias. Pré-condições: sinal previamente conectado. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "source_node_path": {"type": "string", "description": "source_node_path (str)"},
+                    "signal_name": {"type": "string", "description": "signal_name (str)"},
+                    "target_node_path": {"type": "string", "description": "target_node_path (str)"},
+                    "method_name": {"type": "string", "description": "method_name (str)"}
+                },
+                "required": ["source_node_path", "signal_name"],
+            },
+        ),
+        Tool(
+            name="runtime_emit_signal",
+            description=(
+                "Gera código GDScript para emitir sinal em runtime. Quando usar: para disparar eventos customizados programaticamente. Pré-condições: script com signal definido. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "node_path": {"type": "string", "description": "node_path (str)"},
+                    "signal_name": {"type": "string", "description": "signal_name (str)"},
+                    "args": {"type": "string", "description": "args (list)"}
+                },
+                "required": ["node_path", "signal_name"],
+            },
+        ),
+        Tool(
+            name="runtime_list_signals",
+            description=(
+                "Lista todos os sinais definidos e emitidos num script GDScript. Quando usar: para inspecionar a API de sinais de um script. Pré-condições: script .gd existente. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "script_path": {"type": "string", "description": "script_path (str)"}
+                },
+                "required": ["script_path"],
+            },
+        ),
+        Tool(
+            name="runtime_watch_signal",
+            description=(
+                "Gera código para monitorar (watch) um sinal durante runtime com contagem e duração. Quando usar: para debugar frequência de sinais (ex: quantas vezes 'body_entered' dispara). Pré-condições: sinal existente. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "signal_name": {"type": "string", "description": "signal_name (str)"},
+                    "node_path": {"type": "string", "description": "node_path (str)"},
+                    "duration": {"type": "string", "description": "duration (float)"}
+                },
+                "required": ["signal_name", "node_path"],
+            },
+        ),
+        Tool(
+            name="render_get_settings",
+            description=(
+                "Obtém configurações atuais de rendering do project.godot. Quando usar: para auditar qualidade gráfica antes de modificar. Pré-condições: project.godot acessível. Exemplo: {} (sem argumentos — usa projeto ativo) "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "project_path (str)"}
+                },
+                "required": ["project_path"],
+            },
+        ),
+        Tool(
+            name="render_set_antialiasing",
+            description=(
+                "Configura antialiasing: MSAA (2x/4x/8x), FXAA, TAA. Quando usar: para melhorar qualidade de bordas ou performance. Pré-condições: project.godot acessível. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "project_path (str)"},
+                    "msaa": {"type": "string", "description": "msaa (str)"},
+                    "fxaa": {"type": "string", "description": "fxaa (bool)"},
+                    "taa": {"type": "string", "description": "taa (bool)"},
+                    "screen_space_aa": {"type": "string", "description": "screen_space_aa (str)"}
+                },
+                "required": ["project_path", "msaa"],
+            },
+        ),
+        Tool(
+            name="render_set_scaling",
+            description=(
+                "Configura modo de scaling/resolução: modo, escala, stretch. Quando usar: para configurar como o jogo se adapta a diferentes resoluções. Pré-condições: project.godot acessível. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "project_path (str)"},
+                    "mode": {"type": "string", "description": "mode (str)"},
+                    "scale": {"type": "string", "description": "scale (float)"},
+                    "stretch_mode": {"type": "string", "description": "stretch_mode (str)"},
+                    "stretch_aspect": {"type": "string", "description": "stretch_aspect (str)"}
+                },
+                "required": ["project_path", "mode"],
+            },
+        ),
+        Tool(
+            name="render_set_quality",
+            description=(
+                "Configura qualidade de rendering por preset (low/balanced/high/ultra) ou manual. Quando usar: para otimizar performance ou maximizar qualidade. Pré-condições: project.godot acessível. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "project_path (str)"},
+                    "preset": {"type": "string", "description": "preset (str)"},
+                    "shadows": {"type": "string", "description": "shadows (str)"},
+                    "gi": {"type": "string", "description": "gi (str)"},
+                    "reflections": {"type": "string", "description": "reflections (str)"},
+                    "particles": {"type": "string", "description": "particles (str)"}
+                },
+                "required": ["project_path", "preset"],
+            },
+        ),
+        Tool(
+            name="csharp_scaffold_project",
+            description=(
+                "Cria/scaffolda um projeto C# Godot: .csproj, .sln, script exemplo. Quando usar: para iniciar desenvolvimento C# no Godot. Pré-condições: projeto Godot existente, .NET SDK instalado. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "project_path (str)"},
+                    "dotnet_version": {"type": "string", "description": "dotnet_version (str)"},
+                    "create_solution": {"type": "string", "description": "create_solution (bool)"}
+                },
+                "required": ["project_path", "dotnet_version"],
+            },
+        ),
+        Tool(
+            name="csharp_generate_script",
+            description=(
+                "Gera script C# a partir de templates: basic, player, enemy, pickup, ui. Quando usar: para criar rapidamente scripts C# com boilerplate. Pré-condições: projeto C# scaffoldado. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "script_path": {"type": "string", "description": "script_path (str)"},
+                    "class_name": {"type": "string", "description": "class_name (str)"},
+                    "parent_class": {"type": "string", "description": "parent_class (str)"},
+                    "namespace": {"type": "string", "description": "namespace (str)"},
+                    "template": {"type": "string", "description": "template (str)"}
+                },
+                "required": ["script_path", "class_name"],
+            },
+        ),
+        Tool(
+            name="csharp_build_project",
+            description=(
+                "Compila o projeto C# do Godot via dotnet build. Quando usar: para verificar erros de compilação em scripts C#. Pré-condições: projeto C# scaffoldado, .NET SDK instalado. Exemplo: veja documentacao. "
+                "Exemplo de input: veja documentação da tool."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "project_path": {"type": "string", "description": "project_path (str)"},
+                    "configuration": {"type": "string", "description": "configuration (str)"}
+                },
+                "required": ["project_path", "configuration"],
+            },
+        ),
     ]
 
