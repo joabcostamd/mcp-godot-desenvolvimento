@@ -1,9 +1,9 @@
-# ARSENAL DEFINITIVO DE BEHAVIORS — Catálogo Completo v5.0
+# ARSENAL DEFINITIVO DE BEHAVIORS — Catálogo Completo v6.0
 
-**Versão:** 5.0 | **Data:** 2026-07-20
+**Versão:** 6.0 | **Data:** 2026-07-20
 **Local:** `behaviors/` | **Formato:** `behavior.schema.json` v2.0
-**Total:** 148 behaviors em 20 categorias + 8 sub-bibliotecas catalogadas
-**Formato do catálogo:** Storybook-inspired (Props, Signals, Dependencies, Edge Cases, Composition Example)
+**Total:** 166 behaviors em 22 categorias + 9 sub-bibliotecas catalogadas
+**Pesquisas:** 4 rodadas | **Fontes:** 20+ | **Princípios:** 25
 
 ---
 
@@ -26,8 +26,12 @@
 | 3 | **Godot Autoload Docs** | Quando usar Autoload vs Regular Node vs Resource vs static |
 | 3 | **Godot Data Preferences** | Array vs Dictionary vs Object, Enum int vs string |
 | 3 | **Storybook** | Formato ideal de catálogo: Props, Args, Variants, Edge Cases, Stories |
-| 3 | **Godot Asset Library** | 5.223 assets — categorias populares, formato de listagem |
-| 3 | **MkDocs** | Melhor ferramenta para documentação estática (Markdown → HTML) |
+| 3 | **Godot Servers API** | RenderingServer, PhysicsServer2D — bypass nodes para 10k+ objetos |
+| 3 | **GDQuest PCG** | RandomWalker, DungeonGen, WorldMap, InfiniteWorld, ModularWeapons |
+| 3 | **GPU Instancing** | MultiMeshInstance + vertex shader para milhares de objetos animados |
+| 4 | **Data-Oriented Design** | Cache locality, contiguous arrays, packed data, hot/cold splitting, entity-as-ID |
+| 4 | **Godex ECS** | Entity Component System nativo para Godot (1.4k stars) |
+| 4 | **ECS Patterns** | System processing, component storage, archetype queries, world queries | |
 
 ---
 
@@ -67,6 +71,11 @@ behaviors/<nome>/
 18. **@export_storage** — Propriedades serializadas mas ocultas no editor (evita poluição visual)
 19. **@export_tool_button** — Botões clicáveis no inspetor para ações do behavior
 20. **Resource > Autoload** — Preferir Resources para dados compartilhados; Autoload só para sistemas de escopo amplo
+21. **Cache-friendly data layout** — Arrays contíguos em vez de pointer chasing. Dados processados juntos = armazenados juntos (Data Locality)
+22. **Hot/cold splitting** — Separar dados acessados todo frame (hot) dos dados raros (cold). Ex: loot drop info não deve poluir cache da AI
+23. **Entity as ID** — Entidade não é classe, é um número. Componentes sabem seu entity ID. Elimina ponteiros e melhora cache
+24. **Server API for hot paths** — Behaviors de alta performance (partículas, bullets) usam RenderingServer/PhysicsServer direto, bypassando nós
+25. **Branch prediction** — Ordenar entidades por estado ativo (ativas primeiro) para evitar branch misprediction no loop de update
 
 ---
 
@@ -407,6 +416,29 @@ Entidade (CharacterBody2D)
 | 152 | `localization` | Node | locale, fallback, csv_file, auto_detect | locale_changed | — | Godot TranslationServer | ⬜ |
 | 153 | `tutorial_overlay` | Control | steps, highlights, skip_enabled | step_completed, tutorial_finished, skipped | input_manager, save_load | Mobile/console | ⬜ |
 
+### 🎲 GERAÇÃO PROCEDURAL
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 154 | `random_walker` | Node | grid_size, steps, room_templates, seed | generation_started, step_placed, generation_finished | — | GDQuest PCG, Spelunky | ⬜ |
+| 155 | `dungeon_generator` | Node | room_count, min_size, max_size, corridor_width, seed | generation_started, room_placed, corridors_done, finished | — | GDQuest PCG | ⬜ |
+| 156 | `world_map_generator` | Node | width, height, biomes, rivers, seed | biome_generated, river_placed, map_finished | — | GDQuest PCG | ⬜ |
+| 157 | `infinite_world` | Node | chunk_size, view_distance, noise_params, seed | chunk_loaded, chunk_unloaded | object_pool | GDQuest PCG, Minecraft-like | ⬜ |
+| 158 | `modular_weapon` | Node | barrel, stock, magazine, scope, modifier | weapon_assembled, stat_recalculated | inventory | Binding of Isaac, Gungeon | ⬜ |
+| 159 | `l_system` | Node2D | axiom, rules, iterations, angle, length | generation_finished | — | L-System (plantas, fractais) | ⬜ |
+| 160 | `noise_generator` | Node | noise_type, frequency, amplitude, seed, octaves | — | — | Perlin, Simplex, Voronoi | ⬜ |
+
+### ⚡ PERFORMANCE / OTIMIZAÇÃO
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 161 | `batch_renderer` | Node | max_instances, mesh, material, cull_distance | batch_full, instance_added | — | MultiMeshInstance, GPU instancing | ⬜ |
+| 162 | `server_sprite` | Node | texture, position, scale, modulate | — | — | RenderingServer (bypass nodes) | ⬜ |
+| 163 | `server_physics` | Node | shape, body_mode, collision_layer | body_moved | — | PhysicsServer2D (bypass nodes) | ⬜ |
+| 164 | `lod_controller` | Node | lod_levels, distances, current_lod | lod_changed | — | Level of Detail | ⬜ |
+| 165 | `dirty_flag` | Node | tracked_properties | dirty, clean | — | Game Prog Patterns (ch.12) | ⬜ |
+| 166 | `spatial_hash` | Node | cell_size, world_bounds | — | — | Spatial partitioning | ⬜ |
+
 ---
 
 ## 🧠 BEHAVIOR TREE — Sub-biblioteca (Beehave + LimboAI)
@@ -528,23 +560,51 @@ time_scale ← hit_stop, freeze_frame, pause
 
 ---
 
+## 🏛️ ARQUITETURA ECS (Entity Component System)
+
+Nossos behaviors seguem o padrão ECS indiretamente. Documentar isso é crucial:
+
+### ECS vs Nossa Arquitetura
+
+| Conceito ECS | Nosso Equivalente |
+|-------------|-------------------|
+| **Entity** | Nó Godot (CharacterBody2D, Node2D) — o "dono" dos behaviors |
+| **Component** | Behavior (`health`, `projectile`) — nó filho com dados + sinais |
+| **System** | Game loop do Godot (`_process`, `_physics_process`) — processa componentes |
+
+### Princípios ECS aplicados
+- **Composição sobre Herança** — Entidade ganha comportamento adicionando behaviors como filhos
+- **Dados + Comportamento juntos** — Diferente do ECS puro, nossos componentes têm lógica (GDScript)
+- **Comunicação por sinais** — Components não se referenciam diretamente; usam signals (Observer pattern)
+- **Processamento por domínio** — Systems processam componentes por tipo (AI → Physics → Render)
+
+### Quando usar ECS puro (Godex)
+- 10.000+ entidades simultâneas
+- Precisam de processamento multithreaded
+- Dados precisam de layout cache-friendly extremo
+
+---
+
 ## 📅 ROADMAP DE IMPLEMENTAÇÃO
 
 | Fase | Behaviors | Meta | Status |
 |------|-----------|------|--------|
 | **1. Core Loop** | health, projectile, hitbox, hurtbox, player_controller, enemy_chase, state_machine, fire_rate | 8 | 2/8 ✅ |
 | **2. Combate** | knockback, homing_projectile, area_damage, damage_over_time, critical_hit, hitscan | 6 | ⬜ |
-| **3. IA/Mundo** | enemy_patrol, line_of_sight, spawner_wave, turret_aim, flee, flocking | 6 | ⬜ |
-| **4. Progressão** | inventory, collectable, currency, xp_level, upgrade, save_load | 6 | ⬜ |
-| **5. Sistema/Feedback** | pause, scene_transition, screen_shake, floating_text, hit_stop, particle_impact, camera_follow, camera_shake | 8 | ⬜ |
-| **6. BT + Avançado** | behavior_tree, bt_sequence, bt_selector, bt_cooldown, pathfinding, object_pool | 6 | ⬜ |
-| **7. Áudio + UI** | audio_manager, sfx_player, music_playlist, settings, crosshair | 5 | ⬜ |
-| **8. Polimento** | chromatic_aberration, freeze_frame, recoil, spread, checkpoint, destructible, teleport | 7 | ⬜ |
+| **3. IA/Mundo** | enemy_patrol, line_of_sight, spawner_wave, turret_aim, flee, flocking, stealth | 7 | ⬜ |
+| **4. Progressão** | inventory, collectable, currency, xp_level, upgrade, save_load, quest, achievement, shop, crafting | 10 | ⬜ |
+| **5. Feedback** | screen_shake, floating_text, particle_impact, hit_stop, screen_flash, camera_follow, camera_shake, trail, tween_player, health_bar | 10 | ⬜ |
+| **6. Sistema** | pause, scene_transition, audio_manager, sfx_player, settings, checkpoint, object_pool, timer, time_scale, day_night_cycle, dialogue | 11 | ⬜ |
+| **7. PCG + Perf** | random_walker, dungeon_generator, infinite_world, noise_generator, batch_renderer, lod_controller, dirty_flag, spatial_hash, modular_weapon | 9 | ⬜ |
+| **8. Gêneros** | card, deck, dialogue, rhythm_timing, idle_generator, match3_grid, racing_lap, fishing_cast, farming_plot, stealth, character_stats, skill_tree, status_effect | 13 | ⬜ |
+| **9. Multiplayer + Social** | network_sync, lobby, authority, rpc_bridge, leaderboard, daily_reward, achievement_tracker | 7 | ⬜ |
+| **10. Acessibilidade + Localização** | color_blind_mode, subtitle, controller_remap, localization, tutorial_overlay, character_creator, cutscene, camera_sequence | 8 | ⬜ |
 
 ---
 
 ## 🎯 MÉTRICAS DE SUCESSO
 
-- **30 behaviors → ONDA 2 completa** (taxa de correção < 15% em jogo novo)
-- **50 behaviors → 90% dos gêneros 2D cobertos**
-- **93 behaviors → biblioteca mais completa do ecossistema Godot 2D**
+- **30 behaviors → ONDA 2 completa** (taxa de correção < 15%)
+- **50 behaviors → 90% dos gêneros 2D**
+- **100 behaviors → Biblioteca líder do ecossistema Godot 2D**
+- **166 behaviors → Arsenal planetário — produção, performance, gêneros, acessibilidade**
