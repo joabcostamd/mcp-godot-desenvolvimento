@@ -1,172 +1,386 @@
 ---
-description: 'Protocolo de encerramento de sessão do MCP Godot Agent. Audita, documenta, commita, sincroniza e prepara o projeto para a próxima sessão sem perda de contexto.'
+description: 'Encerramento profissional de sessão. Audita, documenta, commita e prepara qualquer projeto para a próxima sessão sem perda de contexto. Universal — adapta-se automaticamente à estrutura do projeto.'
 mode: 'agent'
 tools: ['read', 'search', 'edit', 'terminal', 'runSubagent']
 agentMode: true
 user-invocable: true
 ---
 
-# /encerrar — Encerramento do MCP Godot Agent
+# /encerrar — Protocolo Universal de Encerramento
 
-Pipeline de 10 fases para finalizar a sessão. Cada fase só avança se a
-anterior concluir. Erro crítico → registre e continue com fases independentes.
+Pipeline de 15 fases. Cada fase: pré-condições → execução → validação → tratamento de erro. Uma fase só avança se a anterior concluir. Erro crítico registra e segue nas fases independentes.
 
-**Regras:** idempotente · fail-safe · rastreável · nada de ficção.
+**Universal:** funciona em qualquer projeto — Python, JS, Godot, Rust, Go, web, CLI. Sem caminho fixo, sem nome fixo, sem suposição.
 
 ---
 
-## 🔍 FASE 1 — AUDITORIA DA SESSÃO
+## ⚡ REGRAS UNIVERSAIS
 
-```bash
-git --no-pager log --oneline -10
-git --no-pager diff --stat HEAD~1 HEAD 2>/dev/null
-git status --porcelain
+1. **Descubra, não suponha.** Toda informação vem de varredura real do workspace.
+2. **Idempotente.** Rodar 2x não duplica nada. Verifique antes de criar.
+3. **Fail-safe.** Erro em fase X não corrompe o projeto nem bloqueia fases independentes.
+4. **Nada de ficção.** Zero dado inventado. Se não sabe, escreva "não disponível".
+5. **Aprovação humana para destruir.** Commit, push e delete exigem confirmação.
+
+---
+
+## 🔍 FASE 1 — DESCOBERTA
+
+**Pré-condição:** workspace aberto.
+
+**Execução:**
+```
+1. Liste a raiz: dir/ls
+2. Detecte arquivos-chave: package.json, Cargo.toml, go.mod, requirements.txt, pyproject.toml, project.godot, CMakeLists.txt, Makefile, Dockerfile
+3. Detecte pastas: src/, lib/, app/, pkg/, cmd/, internal/, tools/, scripts/, .github/, docs/, tests/
+4. Detecte docs: README*, CHANGELOG*, TODO*, ROADMAP*, BACKLOG*, CONTRIBUTING*, LICENSE*
+5. Detecte memória: /memories/, .session/, journal/, .vscode/, .cursor/
+6. Detecte CI/CD: .github/workflows/, .gitlab-ci.yml, Jenkinsfile, azure-pipelines.yml
+7. Detecte MCPs/Prompts: .github/prompts/, .github/agents/, .cursor/rules/, .windsurf/
 ```
 
-Monte a tabela do que mudou: arquivos criados/modificados/removidos, features,
-bugs corrigidos, pendências, decisões arquiteturais.
+**Saída obrigatória:** tabela com Linguagem, Framework, Build System, Test Runner, Linter, Docs, CI/CD.
 
-**Validação:** tabela cobre todas as categorias. **Erro:** use `dir`/`ls`.
+**Validação:** pelo menos Linguagem e Framework preenchidos.
+
+**Erro:** workspace vazio → registre, execute apenas fases sem dependência de código.
 
 ---
 
-## ✅ FASE 2 — VALIDAÇÃO
+## 🔎 FASE 2 — AUDITORIA
 
-```bash
-python auditar.py --fatia 0.H --skip-c5 2>/dev/null || echo "auditar.py OK"
-.\.venv\Scripts\python.exe -c "
-import py_compile
-for f in ['server.py','core/tool_definitions.py','scripts/docs_sync.py']:
-    py_compile.compile(f, doraise=True)
-print('sintaxe OK')
-"
-.\.venv\Scripts\python.exe -c "
-import sys; sys.path.insert(0,'.')
-import server
-print(f'{len(server._raw_tool_defs())} tools, {len(server._build_handlers())} handlers')
-"
-python scripts/docs_sync.py
+**Pré-condição:** Fase 1 OK.
+
+**Execução:**
+```
+git --no-pager log --oneline -10 2>/dev/null || echo "git indisponivel"
+git --no-pager diff --stat HEAD~1 HEAD 2>/dev/null || echo "sem diff"
+git status --porcelain 2>/dev/null || dir / ls -la
 ```
 
-**Validação:** 274 tools, 295 handlers, docs_sync idempotente.
+**Saída obrigatória:** tabela com:
+- Arquivos criados / modificados / removidos
+- Funcionalidades novas, bugs corrigidos, bugs conhecidos
+- TODOs, dívida técnica, limitações
+- Decisões arquiteturais tomadas na sessão
+- Dependências novas/removidas, breaking changes
+- Pendências e próximos passos
 
-**Erro:** ferramenta ausente → pule. Erro crítico → registre, não corrija.
+**Validação:** tabela cobre todas as categorias.
+
+**Erro:** sem git → use comparação manual de timestamps.
 
 ---
 
-## 📝 FASE 3 — DOCUMENTAÇÃO
+## ✅ FASE 3 — VALIDAÇÃO
 
-Para cada doc, verifique e atualize se necessário:
+**Pré-condição:** Fase 1 OK.
 
-| Doc | Atualizar se... |
+**Execução:**
+Detecte e execute APENAS o que existir:
+
+| Detectado | Execute |
 |---|---|
-| `README.md` | DOCS_SYNC desatualizado |
-| `HANDOFF.md` | nova fatia concluída |
-| `NEXT_STEP.md` | progresso alterado |
-| `.roadmap_progress.json` | fatias novas |
-| `.session/SESSION_NEXT.md` | estado alterado |
-| `docs/arquitetura.md` | novos módulos |
+| `package.json` + `"test"` script | `npm test` |
+| `Cargo.toml` | `cargo test`, `cargo clippy` |
+| `go.mod` | `go test ./...`, `go vet ./...` |
+| `requirements.txt` / `pyproject.toml` | `pytest` ou `python -m pytest` |
+| `project.godot` | `godot --headless --quit` |
+| `.eslintrc*` / `eslint.config.*` | `eslint .` |
+| `ruff.toml` / `pyproject.toml[tool.ruff]` | `ruff check .` |
+| `py_compile` (sempre disponível em Python) | Compile os .py modificados |
+| `tsconfig.json` | `tsc --noEmit` |
+| `Makefile` com target `test` | `make test` |
 
-Use `python scripts/docs_sync.py` para números. Atualize manualmente o resto.
+**Regra:** passar = ✅. Falha segura = corrija. Falha crítica = registre, NÃO corrija.
 
-**Validação:** docs_sync roda sem mudanças. **Erro:** doc bloqueado → registre.
+**Validação:** cada ferramenta detectada foi executada e seu resultado registrado.
 
-**IMPORTANTE:** se um doc NÃO mudou, informe explicitamente: "X.md — não precisou
-de atualização". NUNCA pule esta verificação.
-
----
-
-## 🧠 FASE 4 — MEMÓRIA
-
-```bash
-memory view /memories/
-```
-
-Atualize:
-- `/memories/repo/status.md` — versão, módulos, tools, estado atual
-- `/memories/repo/decisions.md` — novas decisões da sessão
-
-**Validação:** pelo menos 1 arquivo verificado. **Erro:** indisponível → continue.
+**Erro:** ferramenta não instalada → registre "não disponível", continue.
 
 ---
 
-## 🔒 FASE 5 — SEGURANÇA
+## 📝 FASE 4 — DOCUMENTAÇÃO
 
-```bash
-Select-String -Path "tools\*.py","server.py" -Pattern "sk-|api.key\s*=\s*[\x22\x27]|password\s*=\s*[\x22\x27]|secret\s*=\s*[\x22\x27]" -AllMatches 2>$null
-```
+**Pré-condição:** Fases 1 e 2 OK.
 
-Verifique `.gitignore` contém: `journal/`, `__pycache__/`, `*.pyc`, `.env`.
+**Execução:**
+Para CADA documento encontrado na Fase 1:
 
-**Validação:** zero segredos, .gitignore OK.
+| Documento | Atualize se... |
+|---|---|
+| README | versão, badges, números, comandos mudaram |
+| CHANGELOG | novas features, fixes, breaking changes |
+| ROADMAP | itens concluídos, progresso alterado |
+| TODO / BACKLOG | itens feitos ou novos pendentes |
+| docs/arquitetura | novos módulos, mudanças estruturais |
+| docs/api | endpoints, parâmetros alterados |
+| docs/instalacao | dependências novas, passos alterados |
+| journal/ | resumo da sessão, decisões, handoff |
+| .github/ | instruções, agentes, prompts alterados |
 
-**Erro:** segredo encontrado → BLOQUEIE commit, alerte.
+**Use o gerador de docs se existir** (`docs_sync.py`, `generate-docs`, etc).
+
+**Validação:** cada doc que mudou foi atualizado OU registrado como "não precisou".
+
+**Erro:** arquivo bloqueado → registre, continue.
 
 ---
 
-## 📦 FASE 6 — GIT
+## 🧠 FASE 5 — MEMÓRIA
 
-```bash
-git status --porcelain
+**Pré-condição:** Fases 1 e 2 OK.
+
+**Execução:**
+1. Verifique `/memories/`:
+   ```
+   memory view /memories/
+   ```
+2. Atualize/crie:
+   - `/memories/repo/status.md` — versão, módulos, estado atual
+   - `/memories/repo/decisions.md` — novas decisões da sessão
+   - `/memories/session/` — resumo da sessão
+3. Se `.session/` ou `journal/` existir, atualize com o estado real
+
+**Validação:** pelo menos 1 arquivo de memória verificado/atualizado.
+
+**Erro:** sistema indisponível → registre, continue.
+
+---
+
+## 🧹 FASE 6 — QUALIDADE
+
+**Pré-condição:** Fase 1 OK.
+
+**Execução:**
+Varredura:
+- Arquivos temporários: `*.tmp`, `*.bak`, `*.pyc`, `__pycache__`, `.DS_Store`, `Thumbs.db`
+- Imports inválidos (compile os modificados)
+- Links quebrados em Markdown
+- Referências de arquivo inexistentes
+- Dependências não usadas (npm: `depcheck`, Python: `pip check`, Rust: `cargo udeps`)
+
+**Corrija automaticamente:** remover temporários, imports inválidos óbvios.
+
+**NÃO corrija:** dependências — apenas registre.
+
+**Validação:** varredura concluída, correções seguras aplicadas.
+
+**Erro:** correção arriscada → apenas registre.
+
+---
+
+## 🔒 FASE 7 — SEGURANÇA
+
+**Pré-condição:** Fase 1 OK.
+
+**Execução:**
+```
+git grep -nE "sk-or-v1-|sk-[a-zA-Z0-9]{20,}|api[_-]?key\s*=\s*['\"][a-zA-Z0-9_\-]{8,}|password\s*=\s*['\"][^'\"]+['\"]|secret\s*=\s*['\"][^'\"]+['\"]" -- ':!journal/' ':!.git/' ':!node_modules/' ':!.venv/' 2>/dev/null
 ```
 
-Se houver mudanças:
-1. Agrupe por tema (feat, fix, docs, chore)
-2. Para cada grupo, proponha commit Conventional Commits
-3. **NUNCA commite sozinho — aguarde aprovação**
+Se encontrar → **NÃO commite.** Liste no relatório com arquivo e linha.
 
-Após TODOS aprovados: `git add <arquivos> ; git commit -m "<mensagem>"`
+Verifique `.gitignore`: cobre `__pycache__/`, `.env`, `node_modules/`, `journal/`?
+
+**Validação:** scan executado, .gitignore verificado.
+
+**Erro:** segredo encontrado → bloqueie commit, alerte.
+
+---
+
+## 📦 FASE 8 — GIT
+
+**Pré-condição:** Fases 2 e 7 OK. Zero segredos.
+
+**Execução:**
+1. `git status --porcelain`
+2. Se houver mudanças:
+   - Agrupe por tema (docs, feat, fix, chore, refactor, test)
+   - Proponha 1 commit por grupo com mensagem Conventional Commits
+   - **PARE e aguarde aprovação**
+3. Após aprovação: `git add <arquivos>` + `git commit -m "<mensagem>"`
 
 **Validação:** `git status --porcelain` limpo.
 
-**Erro:** sem aprovação → registre pendência.
+**Erro:** sem aprovação → registre pendência, NÃO commite.
 
 ---
 
-## ☁️ FASE 7 — GITHUB
+## ☁️ FASE 9 — REMOTO
 
-```bash
-git remote -v
-git push origin main 2>&1
-```
+**Pré-condição:** Fase 8 OK.
 
-**Validação:** push executado ou remote ausente. **Erro:** rede → registre.
+**Execução:**
+1. `git remote -v`
+2. Se houver remote: `git push origin <branch>`
+3. Se houver tags novas: `git push --tags`
+
+**Validação:** push executado OU remote ausente registrado.
+
+**Erro:** push falhou (rede, permissão) → registre, não bloqueie.
 
 ---
 
-## 📸 FASE 8 — SNAPSHOT + NEXT SESSION
+## 📸 FASE 10 — SNAPSHOT
 
-Crie `.session/SNAPSHOT_$(date +%Y-%m-%d).json`:
+**Pré-condição:** Fases 2 e 8 OK.
+
+**Execução:**
+Crie `.session/SNAPSHOT_<YYYY-MM-DD>.json`:
 ```json
 {
-  "date": "<ISO 8601>", "version": "<pyproject.toml>",
-  "commit": "<hash>", "branch": "main",
-  "tools": 274, "handlers": 295,
-  "onda_0": ["0.A-0.G concluidas", "0.H escalada"],
-  "files_changed": ["..."], "pending": ["..."],
-  "next": "0.H — aprovar/escalar ou 0.I — /plan"
+  "date": "<ISO 8601>",
+  "project": "<nome>",
+  "version": "<versão>",
+  "commit": "<hash>",
+  "branch": "<branch>",
+  "files_changed": ["..."],
+  "features": ["..."],
+  "bugs_fixed": ["..."],
+  "pending": ["..."],
+  "risks": ["..."],
+  "next_priorities": ["..."]
 }
 ```
 
-Atualize `.session/SESSION_NEXT.md` com resumo, pendências, fluxo sugerido.
+**Validação:** JSON válido, arquivo criado.
 
-**Validação:** ambos criados/atualizados.
+**Erro:** pasta inacessível → use `journal/` como fallback.
 
 ---
 
-## 📊 FASE 9 — RELATÓRIO FINAL
+## 🔜 FASE 11 — NEXT SESSION
 
+**Pré-condição:** Fases 2 e 8 OK.
+
+**Execução:**
+Crie/atualize `.session/NEXT_SESSION.md`:
 ```markdown
-# 📊 ENCERRAMENTO — <data> <hora>
+# 🔄 PRÓXIMA SESSÃO
+
+## Resumo
+(2-3 linhas do que foi feito)
+
+## Estado
+- Versão: X | Módulos: Y | Progresso: Z%
+
+## Última tarefa
+- Nome e breve descrição
+
+## Pendências
+- [ ] Item 1 (prioridade: alta/média/baixa)
+- [ ] Item 2
+
+## Arquivos-chave
+- path/importante.py
+
+## Fluxo sugerido
+1. Leia NEXT_SESSION.md e decisions.md
+2. Rode validação (testes, lint)
+3. Continue de <ponto específico>
+
+## Decisões da sessão
+- Decisão → motivo (1 linha)
+
+## ⚠️ Atenção
+- Bugs conhecidos, armadilhas, restrições
+```
+
+**Validação:** todas as seções preenchidas (mesmo que com "nada a declarar").
+
+**Erro:** arquivo inacessível → registre.
+
+---
+
+## 📋 FASE 12 — PROMPT INICIAL
+
+**Pré-condição:** Fases 10 e 11 OK.
+
+**Execução:**
+Gere um bloco pronto para colar no chat da próxima sessão:
+```
+Continue o desenvolvimento. Último commit: <hash> — <msg>.
+Estado: <1 linha>. Próximo: <tarefa>. Rode /plan.
+```
+
+**Validação:** contém commit, estado e próxima ação.
+
+**Erro:** dados faltando → use "não disponível".
+
+---
+
+## 📊 FASE 13 — MÉTRICAS
+
+**Pré-condição:** Fases 1 e 2 OK.
+
+**Execução:**
+Atualize com números REAIS (medidos, não digitados):
+- Itens concluídos / total
+- Bugs corrigidos / bugs conhecidos
+- Cobertura de testes (se disponível)
+- Dívida técnica (TODOs, FIXMEs, HACKs)
+- Performance (se benchmark existir)
+
+**Validação:** todo número veio de medição.
+
+**Erro:** métrica não mensurável → "não disponível".
+
+---
+
+## 🔗 FASE 14 — CONSISTÊNCIA
+
+**Pré-condição:** Fases 4 a 13 OK.
+
+**Execução:**
+Revise a conversa. Para cada decisão tomada:
+1. O que foi decidido?
+2. Está documentado em arquivo?
+3. Se NÃO → documente AGORA em `journal/decisions.md` ou equivalente
+
+**Validação:** zero decisões órfãs.
+
+**Erro:** não sabe onde documentar → registre no journal genérico.
+
+---
+
+## 📄 FASE 15 — RELATÓRIO FINAL
+
+**Pré-condição:** Fases 1 a 14 executadas.
+
+**Execução:**
+```markdown
+# 📊 RELATÓRIO DE ENCERRAMENTO — <data> <hora>
 
 ## 🎯 Resumo
+(3-5 linhas)
+
 ## 📁 Arquivos alterados
-## 📝 Documentação atualizada
-## 🧠 Memória
+| Arquivo | Ação |
+|---|---|
+
+## ✅ Validação
+| Ferramenta | Resultado |
+|---|---|
+
+## 📝 Documentação
+| Arquivo | Atualizado? |
+|---|---|
+
 ## 📦 Commits
-## ☁️ GitHub
-## ⚠️ Pendências
-## 🔜 Próxima: /plan para <fatia>
+| Hash | Mensagem |
+|---|---|
+
+## ☁️ Remote
+(push OK / sem remote / falhou)
+
+## ⚠️ Problemas
+| Problema | Status |
+|---|---|
+
+## 🔜 Recomendações
+1. ...
+2. ...
 ```
 
 **Validação:** todas as seções preenchidas.
@@ -175,6 +389,9 @@ Atualize `.session/SESSION_NEXT.md` com resumo, pendências, fluxo sugerido.
 
 ## 🚫 NUNCA
 
-- Commitar sem aprovação · Inventar métricas · Apagar histórico
-- Deixar segredo exposto · Pular fase sem registrar · Ignorar erro crítico
-- Encerrar sessão com documento desatualizado
+- Commitar ou fazer push sem aprovação
+- Inventar métricas, dados ou documentação
+- Apagar histórico (.git, changelog, journal)
+- Deixar segredo em commit
+- Deixar projeto em estado inconsistente
+- Pular fase sem registrar motivo
