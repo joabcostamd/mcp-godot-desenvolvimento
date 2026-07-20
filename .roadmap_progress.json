@@ -1,4 +1,12 @@
 {
+  "fatia_0.A": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "a2207ce",
+    "resultado": "Bug do Passo 8 confirmado como corrigido: 3 mencoes a 'Proxima fatia' no act.prompt.md, .clinerules/ nao existe, journal/act-original.md preservado. 3/3 criterios."
+  },
   "camada_6_completa": {
     "status": "concluida",
     "data": "2026-07-19",

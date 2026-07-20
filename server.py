@@ -1790,7 +1790,7 @@ def _handle_skeleton_get_bone_pose(scene_path=None, skeleton_path=None, bone_nam
     """Handler para skeleton_get_bone_pose (Camada 6)."""
     import json
     try:
-        from tools.skeleton_ops import skeleton_get_bone_pose as _fn
+        from tools.skeleton_ops import get_bone_pose as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -1804,7 +1804,7 @@ def _handle_skeleton_set_bone_pose(scene_path=None, skeleton_path=None, bone_nam
     """Handler para skeleton_set_bone_pose (Camada 6)."""
     import json
     try:
-        from tools.skeleton_ops import skeleton_set_bone_pose as _fn
+        from tools.skeleton_ops import set_bone_pose as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -1818,7 +1818,7 @@ def _handle_skeleton_list_bones(scene_path=None, skeleton_path=None):
     """Handler para skeleton_list_bones (Camada 6)."""
     import json
     try:
-        from tools.skeleton_ops import skeleton_list_bones as _fn
+        from tools.skeleton_ops import list_bones as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -1832,7 +1832,7 @@ def _handle_skeleton_create_bone(scene_path=None, skeleton_path=None, bone_name=
     """Handler para skeleton_create_bone (Camada 6)."""
     import json
     try:
-        from tools.skeleton_ops import skeleton_create_bone as _fn
+        from tools.skeleton_ops import create_bone as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -1846,7 +1846,7 @@ def _handle_skeleton_create_ik_chain(scene_path=None, skeleton_path=None, bone_n
     """Handler para skeleton_create_ik_chain (Camada 6)."""
     import json
     try:
-        from tools.skeleton_ops import skeleton_create_ik_chain as _fn
+        from tools.skeleton_ops import create_ik_chain as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -1860,7 +1860,7 @@ def _handle_skeleton_get_info(scene_path=None, skeleton_path=None):
     """Handler para skeleton_get_info (Camada 6)."""
     import json
     try:
-        from tools.skeleton_ops import skeleton_get_info as _fn
+        from tools.skeleton_ops import get_skeleton_info as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -1874,7 +1874,7 @@ def _handle_csg_create_node(scene_path=None, parent_node_path=None, csg_type=Non
     """Handler para csg_create_node (Camada 6)."""
     import json
     try:
-        from tools.devsolo_ops import csg_create_node as _fn
+        from tools.devsolo_ops import create_csg_node as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -1888,7 +1888,7 @@ def _handle_gi_create_node(scene_path=None, gi_type=None, parent_node_path=None,
     """Handler para gi_create_node (Camada 6)."""
     import json
     try:
-        from tools.devsolo_ops import gi_create_node as _fn
+        from tools.devsolo_ops import create_gi_node as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -1902,7 +1902,7 @@ def _handle_scene_fx_create_node(scene_path=None, fx_type=None, parent_node_path
     """Handler para scene_fx_create_node (Camada 6)."""
     import json
     try:
-        from tools.devsolo_ops import scene_fx_create_node as _fn
+        from tools.devsolo_ops import create_scene_fx_node as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -1916,7 +1916,7 @@ def _handle_sky_create_procedural(scene_path=None, sky_type=None, parent_node_pa
     """Handler para sky_create_procedural (Camada 6)."""
     import json
     try:
-        from tools.devsolo_ops import sky_create_procedural as _fn
+        from tools.devsolo_ops import create_procedural_sky as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -1930,7 +1930,7 @@ def _handle_camera_configure_attributes(scene_path=None, camera_path=None, dof_e
     """Handler para camera_configure_attributes (Camada 6)."""
     import json
     try:
-        from tools.devsolo_ops import camera_configure_attributes as _fn
+        from tools.devsolo_ops import configure_camera_attributes as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -1944,7 +1944,7 @@ def _handle_multimesh_create_instance(scene_path=None, parent_node_path=None, me
     """Handler para multimesh_create_instance (Camada 6)."""
     import json
     try:
-        from tools.devsolo_ops import multimesh_create_instance as _fn
+        from tools.devsolo_ops import create_multimesh_instance as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -1958,7 +1958,7 @@ def _handle_physics_create_joint(scene_path=None, parent_node_path=None, joint_t
     """Handler para physics_create_joint (Camada 6)."""
     import json
     try:
-        from tools.physics_ops import physics_create_joint as _fn
+        from tools.physics_ops import create_physics_joint as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -1972,7 +1972,7 @@ def _handle_physics_configure_body(scene_path=None, node_path=None, mass=None, f
     """Handler para physics_configure_body (Camada 6)."""
     import json
     try:
-        from tools.physics_ops import physics_configure_body as _fn
+        from tools.physics_ops import configure_physics_body as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -1986,7 +1986,7 @@ def _handle_physics_query_area_overlap(scene_path=None, area_path=None, query_ty
     """Handler para physics_query_area_overlap (Camada 6)."""
     import json
     try:
-        from tools.physics_ops import physics_query_area_overlap as _fn
+        from tools.physics_ops import query_area_overlap as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2000,7 +2000,7 @@ def _handle_physics_raycast_query(scene_path=None, raycast_path=None):
     """Handler para physics_raycast_query (Camada 6)."""
     import json
     try:
-        from tools.physics_ops import physics_raycast_query as _fn
+        from tools.physics_ops import raycast_query as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2014,7 +2014,7 @@ def _handle_ui_create_widget(scene_path=None, parent_node_path=None, widget_type
     """Handler para ui_create_widget (Camada 6)."""
     import json
     try:
-        from tools.devsolo_ops import ui_create_widget as _fn
+        from tools.devsolo_ops import create_ui_widget as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2028,7 +2028,7 @@ def _handle_ui_create_tab_with_content(scene_path=None, tab_container_path=None,
     """Handler para ui_create_tab_with_content (Camada 6)."""
     import json
     try:
-        from tools.devsolo_ops import ui_create_tab_with_content as _fn
+        from tools.devsolo_ops import create_tab_with_content as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2042,7 +2042,7 @@ def _handle_ui_configure_focus_nav(scene_path=None, node_path=None, focus_neighb
     """Handler para ui_configure_focus_nav (Camada 6)."""
     import json
     try:
-        from tools.devsolo_ops import ui_configure_focus_nav as _fn
+        from tools.devsolo_ops import configure_ui_focus_and_nav as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2056,7 +2056,7 @@ def _handle_ui_set_tooltip(scene_path=None, node_path=None, tooltip_text=None):
     """Handler para ui_set_tooltip (Camada 6)."""
     import json
     try:
-        from tools.devsolo_ops import ui_set_tooltip as _fn
+        from tools.devsolo_ops import set_tooltip as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2070,7 +2070,7 @@ def _handle_ui_set_anchor_preset(scene_path=None, node_path=None, preset=None):
     """Handler para ui_set_anchor_preset (Camada 6)."""
     import json
     try:
-        from tools.devsolo_ops import ui_set_anchor_preset as _fn
+        from tools.devsolo_ops import set_anchor_preset as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2084,7 +2084,7 @@ def _handle_network_setup_multiplayer(scene_path=None, mode=None, port=None, max
     """Handler para network_setup_multiplayer (Camada 6)."""
     import json
     try:
-        from tools.network_ops import network_setup_multiplayer as _fn
+        from tools.network_ops import setup_multiplayer_peer as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2098,7 +2098,7 @@ def _handle_network_create_rpc(script_path=None, method_name=None, params=None, 
     """Handler para network_create_rpc (Camada 6)."""
     import json
     try:
-        from tools.network_ops import network_create_rpc as _fn
+        from tools.network_ops import create_rpc_method as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2112,7 +2112,7 @@ def _handle_network_create_websocket(script_path=None, url=None, protocols=None)
     """Handler para network_create_websocket (Camada 6)."""
     import json
     try:
-        from tools.network_ops import network_create_websocket as _fn
+        from tools.network_ops import create_websocket_client as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2126,7 +2126,7 @@ def _handle_network_configure_dedicated_server(export_preset_name=None, port=Non
     """Handler para network_configure_dedicated_server (Camada 6)."""
     import json
     try:
-        from tools.network_ops import network_configure_dedicated_server as _fn
+        from tools.network_ops import configure_dedicated_server as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2140,7 +2140,7 @@ def _handle_network_create_lobby(scene_path=None, max_players=None, lobby_name=N
     """Handler para network_create_lobby (Camada 6)."""
     import json
     try:
-        from tools.network_ops import network_create_lobby as _fn
+        from tools.network_ops import create_lobby_system as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2154,7 +2154,7 @@ def _handle_runtime_connect_signal(source_node_path=None, signal_name=None, targ
     """Handler para runtime_connect_signal (Camada 6)."""
     import json
     try:
-        from tools.runtime_ops import runtime_connect_signal as _fn
+        from tools.runtime_ops import connect_runtime_signal as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2168,7 +2168,7 @@ def _handle_runtime_disconnect_signal(source_node_path=None, signal_name=None, t
     """Handler para runtime_disconnect_signal (Camada 6)."""
     import json
     try:
-        from tools.runtime_ops import runtime_disconnect_signal as _fn
+        from tools.runtime_ops import disconnect_runtime_signal as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2182,7 +2182,7 @@ def _handle_runtime_emit_signal(node_path=None, signal_name=None, args=None):
     """Handler para runtime_emit_signal (Camada 6)."""
     import json
     try:
-        from tools.runtime_ops import runtime_emit_signal as _fn
+        from tools.runtime_ops import emit_runtime_signal as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2196,7 +2196,7 @@ def _handle_runtime_list_signals(script_path=None):
     """Handler para runtime_list_signals (Camada 6)."""
     import json
     try:
-        from tools.runtime_ops import runtime_list_signals as _fn
+        from tools.runtime_ops import list_runtime_signals as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2210,7 +2210,7 @@ def _handle_runtime_watch_signal(signal_name=None, node_path=None, duration=None
     """Handler para runtime_watch_signal (Camada 6)."""
     import json
     try:
-        from tools.runtime_ops import runtime_watch_signal as _fn
+        from tools.runtime_ops import watch_runtime_signal as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2224,7 +2224,7 @@ def _handle_render_get_settings(project_path=None):
     """Handler para render_get_settings (Camada 6)."""
     import json
     try:
-        from tools.render_ops import render_get_settings as _fn
+        from tools.render_ops import get_render_settings as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2238,7 +2238,7 @@ def _handle_render_set_antialiasing(project_path=None, msaa=None, fxaa=None, taa
     """Handler para render_set_antialiasing (Camada 6)."""
     import json
     try:
-        from tools.render_ops import render_set_antialiasing as _fn
+        from tools.render_ops import set_antialiasing as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2252,7 +2252,7 @@ def _handle_render_set_scaling(project_path=None, mode=None, scale=None, stretch
     """Handler para render_set_scaling (Camada 6)."""
     import json
     try:
-        from tools.render_ops import render_set_scaling as _fn
+        from tools.render_ops import set_scaling_mode as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2266,7 +2266,7 @@ def _handle_render_set_quality(project_path=None, preset=None, shadows=None, gi=
     """Handler para render_set_quality (Camada 6)."""
     import json
     try:
-        from tools.render_ops import render_set_quality as _fn
+        from tools.render_ops import set_render_quality as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2280,7 +2280,7 @@ def _handle_csharp_scaffold_project(project_path=None, dotnet_version=None, crea
     """Handler para csharp_scaffold_project (Camada 6)."""
     import json
     try:
-        from tools.csharp_ops import csharp_scaffold_project as _fn
+        from tools.csharp_ops import scaffold_csharp_project as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2294,7 +2294,7 @@ def _handle_csharp_generate_script(script_path=None, class_name=None, parent_cla
     """Handler para csharp_generate_script (Camada 6)."""
     import json
     try:
-        from tools.csharp_ops import csharp_generate_script as _fn
+        from tools.csharp_ops import generate_csharp_script as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):
@@ -2308,7 +2308,7 @@ def _handle_csharp_build_project(project_path=None, configuration=None):
     """Handler para csharp_build_project (Camada 6)."""
     import json
     try:
-        from tools.csharp_ops import csharp_build_project as _fn
+        from tools.csharp_ops import build_csharp_project as _fn
         kwargs = {k: v for k, v in locals().items() if k not in ('json', '_fn') and v is not None}
         result = _fn(**kwargs)
         if isinstance(result, dict):

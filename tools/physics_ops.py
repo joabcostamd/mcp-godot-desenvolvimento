@@ -411,12 +411,12 @@ def create_physics_joint(
                 "error": f"Tipo '{joint_type}' não suportado. Use: {', '.join(sorted(valid_joints))}",
             }
         
+        import uuid as _uuid
+        
         name = joint_name or f"{joint_type}_{node_a.replace('/', '_')}"
         
-        from tools.scene_ops import _read_tscn, _write_tscn, _generate_uid
-        
-        content = _read_tscn(scene_path)
-        uid = _generate_uid()
+        content = Path(scene_path).read_text(encoding='utf-8')
+        uid = _uuid.uuid4().hex[:16]
         
         node_block = f'''
 [node name="{name}" type="{joint_type}" parent="{parent_node_path}"]
@@ -435,10 +435,9 @@ disable_collision = {str(disable_collision).lower()}
         
         node_block += f'_import_path = NodePath("")\nunique_name_in_owner = false\nuid = "uid://{uid}"\n'
         
-        import re
         insert_pos = content.rfind('\n')
         new_content = content[:insert_pos] + node_block + content[insert_pos:]
-        _write_tscn(scene_path, new_content)
+        Path(scene_path).write_text(new_content, encoding='utf-8')
         
         return {
             "ok": True,
@@ -577,7 +576,7 @@ def query_area_overlap(
         area_type = area_match.group(1)
         is_3d = "3D" in area_type
         
-        query_method = f"get_overlapping_{query_type}" if hasattr(object, f"get_overlapping_{query_type}") else f"get_overlapping_{query_type}"
+        query_method = f"get_overlapping_{query_type}"
         
         gdscript = f'''# Runtime Query: {area_type} ({area_name})
 # Execute via execute_gdscript_runtime
