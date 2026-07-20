@@ -1,0 +1,4 @@
+# .gdignore — Impede que o Godot parseie os arquivos desta pasta.
+# Os templates usam tags Jinja2/Liquid ({% raw %}, {{ var }}) que são
+# processadas pelo motor de templates do MCP antes de virarem scripts
+# GDScript válidos. O Godot não deve tentar compilar os templates crus.
