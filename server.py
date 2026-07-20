@@ -2496,13 +2496,15 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
     gov = get_governor()
     allowed, reason = gov.check_before(name, arguments or {})
     if not allowed:
+        from tools.friendly_errors import make_error_response
         return [TextContent(
             type="text",
-            text=json.dumps({
-                "status": "error",
-                "message": reason,
-                "governor_blocked": True,
-            }, ensure_ascii=False),
+            text=json.dumps(make_error_response(
+                message=reason,
+                tool_name=name,
+                error_code=4003,
+                extra={"governor_blocked": True},
+            ), ensure_ascii=False),
             isError=True,
         )]
 
@@ -2543,13 +2545,15 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
                 from tools.editor_safety import check_editor_conflict
                 conflict = check_editor_conflict(_target_file)
                 if conflict.get("blocked"):
+                    from tools.friendly_errors import make_error_response
                     return [TextContent(
                         type="text",
-                        text=json.dumps({
-                            "status": "error",
-                            "message": conflict.get("message", "Conflito com editor Godot."),
-                            "editor_conflict": True,
-                        }, ensure_ascii=False),
+                        text=json.dumps(make_error_response(
+                            message=conflict.get("message", "Conflito com editor Godot."),
+                            tool_name=name,
+                            error_code=4004,
+                            extra={"editor_conflict": True},
+                        ), ensure_ascii=False),
                         isError=True,
                     )]
             except Exception as e:
@@ -2559,14 +2563,19 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
     from tools.rate_limiter import check_rate_limit
     allowed, rate_info = check_rate_limit()
     if not allowed:
+        rate_msg = (
+            f"Rate limit excedido. Tente novamente em {rate_info['retry_after']}s. "
+            f"Limite: {rate_info['limit']} req/{rate_info['window_seconds']}s."
+        )
+        from tools.friendly_errors import make_error_response
         return [TextContent(
             type="text",
-            text=json.dumps({
-                "status": "error",
-                "message": f"Rate limit excedido. Tente novamente em {rate_info['retry_after']}s. "
-                           f"Limite: {rate_info['limit']} req/{rate_info['window_seconds']}s.",
-                "retry_after": rate_info["retry_after"],
-            }, ensure_ascii=False),
+            text=json.dumps(make_error_response(
+                message=rate_msg,
+                tool_name=name,
+                error_code=4002,
+                extra={"retry_after": rate_info["retry_after"]},
+            ), ensure_ascii=False),
             isError=True,
         )]
 
@@ -2575,9 +2584,14 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
         try:
             ok, msg = _check_session_gate()
             if not ok:
+                from tools.friendly_errors import make_error_response
                 return [TextContent(
                     type="text",
-                    text=json.dumps({"status": "error", "message": msg}, ensure_ascii=False),
+                    text=json.dumps(make_error_response(
+                        message=msg,
+                        tool_name=name,
+                        error_code=4001,
+                    ), ensure_ascii=False),
                     isError=True,
                 )]
         except Exception as e:
@@ -2626,7 +2640,7 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
             # ── Tradução amigável de erro ────────────────────────
             if is_error and "friendly" not in result:
                 from tools.friendly_errors import translate_error
-                result["friendly"] = translate_error(result.get("message", ""))
+                result["friendly"] = translate_error(result.get("message", ""), tool_name=name)
             # ── Feature 8: notificar cliente sobre mudança na lista de tools ──
             if name == "advance_phase" and not is_error:
                 try:
@@ -2653,16 +2667,20 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
                 from tools.budget_ops import track_tool_cost
                 budget_block = track_tool_cost(name, arguments, result)
                 if budget_block:
+                    from tools.friendly_errors import make_error_response
                     return [TextContent(
                         type="text",
-                        text=json.dumps({
-                            "status": "error",
-                            "message": budget_block["message"],
-                            "budget_exceeded": True,
-                            "session_cost_brl": budget_block["session_cost_brl"],
-                            "limit_brl": budget_block["limit_brl"],
-                            "pct_used": budget_block["pct_used"],
-                        }, ensure_ascii=False),
+                        text=json.dumps(make_error_response(
+                            message=budget_block["message"],
+                            tool_name=name,
+                            error_code=4005,
+                            extra={
+                                "budget_exceeded": True,
+                                "session_cost_brl": budget_block["session_cost_brl"],
+                                "limit_brl": budget_block["limit_brl"],
+                                "pct_used": budget_block["pct_used"],
+                            },
+                        ), ensure_ascii=False),
                         isError=True,
                     )]
             except Exception:
@@ -2681,16 +2699,22 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
                 error_message=str(e),
             )
 
-            return [TextContent(type="text", text=json.dumps({
-                "status": "error",
-                "error_code": 5000,
-                "message": f"Erro interno ao executar '{name}': {e}. Reporte este erro para analise.",
-            }, ensure_ascii=False), isError=True)]
+            from tools.friendly_errors import make_error_response
+            exc_name = type(e).__name__
+            exc_msg = str(e)[:500]
+            return [TextContent(type="text", text=json.dumps(make_error_response(
+                message=f"Erro interno ao executar '{name}': {exc_name} — {exc_msg[:200]}",
+                tool_name=name,
+                error_code=5000,
+                extra={"internal_error": exc_msg},
+            ), ensure_ascii=False), isError=True)]
 
-    return [TextContent(type="text", text=json.dumps({
-        "status": "error",
-        "message": f"Tool '{name}' nao implementada. Tools disponiveis: {list(handlers.keys())}.",
-    }, ensure_ascii=False), isError=True)]
+    from tools.friendly_errors import make_error_response
+    return [TextContent(type="text", text=json.dumps(make_error_response(
+        message=f"Tool '{name}' nao implementada.",
+        tool_name=name,
+        error_code=4000,
+    ), ensure_ascii=False), isError=True)]
 
 
 # ── Handlers ────────────────────────────────────────────────────────

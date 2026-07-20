@@ -1,4 +1,12 @@
 {
+  "fatia_1.F": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "52e785b",
+    "resultado": "Erro amigavel universal. friendly_errors.py reescrito com formato 3 partes (o que aconteceu / o que significa / o que fazer). +7 padroes de sistema. make_error_response() como ponto unico de saida. 7 pontos em call_tool() unificados. Auditoria revelou 2 bugs (translate_error sem tool_name, handler exception perdia str(e)) — corrigidos. 9 cenarios testados, todos passam. C3 smoke_test: PASS."
+  },
   "fatia_1.D": {
     "status": "concluida",
     "data": "2026-07-20",
