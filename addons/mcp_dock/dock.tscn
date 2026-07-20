@@ -1,0 +1,140 @@
+[gd_scene load_steps=2 format=3 uid="uid://mcpdock000000000001"]
+
+[ext_resource type="Script" path="res://addons/mcp_dock/dock.gd" id="1_dock"]
+
+[node name="MCPDock" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dock")
+
+[node name="MainVBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="StatusLabel" type="Label" parent="MainVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Desconectado"
+horizontal_alignment = 1
+
+[node name="HSeparatorTop" type="HSeparator" parent="MainVBox"]
+layout_mode = 2
+
+; ── ZONA 1: TOPO — nome, fase, progresso, próximo passo ──────────────────────
+
+[node name="Zone1Panel" type="PanelContainer" parent="MainVBox"]
+layout_mode = 2
+
+[node name="Zone1VBox" type="VBoxContainer" parent="MainVBox/Zone1Panel"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="ProjectLabel" type="Label" parent="MainVBox/Zone1Panel/Zone1VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "—"
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+
+[node name="PhaseLabel" type="Label" parent="MainVBox/Zone1Panel/Zone1VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "—"
+theme_override_font_sizes/font_size = 12
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="MainVBox/Zone1Panel/Zone1VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+value = 0.0
+
+[node name="NextStepLabel" type="Label" parent="MainVBox/Zone1Panel/Zone1VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Conectando ao MCP..."
+autowrap_mode = 2
+
+; ── ZONA 2: MEIO — semáforo + erros ──────────────────────────────────────────
+
+[node name="Zone2Panel" type="PanelContainer" parent="MainVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Zone2VBox" type="VBoxContainer" parent="MainVBox/Zone2Panel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TrafficHBox" type="HBoxContainer" parent="MainVBox/Zone2Panel/Zone2VBox"]
+layout_mode = 2
+
+[node name="TrafficRect" type="ColorRect" parent="MainVBox/Zone2Panel/Zone2VBox/TrafficHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(16, 16)
+
+[node name="TrafficLabel" type="Label" parent="MainVBox/Zone2Panel/Zone2VBox/TrafficHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "ERRO"
+theme_override_font_sizes/font_size = 12
+
+[node name="ErrorScroll" type="ScrollContainer" parent="MainVBox/Zone2Panel/Zone2VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ErrorContainer" type="VBoxContainer" parent="MainVBox/Zone2Panel/Zone2VBox/ErrorScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+; ── ZONA 3: RODAPÉ — 4 botões ────────────────────────────────────────────────
+
+[node name="Zone3Panel" type="PanelContainer" parent="MainVBox"]
+layout_mode = 2
+
+[node name="Zone3VBox" type="VBoxContainer" parent="MainVBox/Zone3Panel"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="BtnRun" type="Button" parent="MainVBox/Zone3Panel/Zone3VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "▶ Rodar"
+theme_override_font_sizes/font_size = 14
+
+[node name="BtnTest" type="Button" parent="MainVBox/Zone3Panel/Zone3VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "✓ Testar"
+theme_override_font_sizes/font_size = 14
+
+[node name="BtnApprove" type="Button" parent="MainVBox/Zone3Panel/Zone3VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "★ Aprovar"
+theme_override_font_sizes/font_size = 14
+
+[node name="RevertHBox" type="HBoxContainer" parent="MainVBox/Zone3Panel/Zone3VBox"]
+layout_mode = 2
+
+[node name="BtnRevert" type="Button" parent="MainVBox/Zone3Panel/Zone3VBox/RevertHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "↺ Reverter"
+theme_override_font_sizes/font_size = 14
+size_flags_horizontal = 3
+
+[node name="RevertLabel" type="Label" parent="MainVBox/Zone3Panel/Zone3VBox/RevertHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "—"

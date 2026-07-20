@@ -2,6 +2,10 @@
 ##
 ## RigidBody2D que quica mantendo velocidade constante.
 ## Use para bola de Pong, Breakout, ou projeteis fisicos.
+##
+## @behavior: bouncing_ball
+## @genres: puzzle, platformer
+## @tutorial: templates/bouncing_ball.gd
 
 class_name BouncingBall
 {% raw %}extends RigidBody2D

@@ -2,6 +2,10 @@
 ##
 ## Autoload global para score, vidas e high score.
 ## Configure como autoload: nome "GameManager".
+##
+## @behavior: game_manager
+## @genres: generic
+## @tutorial: templates/game_manager_singleton.gd
 
 class_name GameManager
 {% raw %}extends Node
@@ -34,4 +38,6 @@ func lose_life() -> void:
 func reset_game() -> void:
 	score = 0
 	lives = 3
+	score_changed.emit(score)
+	lives_changed.emit(lives)
 	get_tree().paused = false

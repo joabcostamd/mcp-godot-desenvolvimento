@@ -1,0 +1,43 @@
+{
+  "genre": "platformer",
+  "display_name_pt": "Plataforma 2D",
+  "display_name_en": "2D Platformer",
+  "description_pt": "Jogo de plataforma 2D com scroll lateral. O jogador corre, pula e enfrenta obstáculos e inimigos para chegar ao fim da fase. Gênero clássico: acessível para iniciantes, profundo para veteranos.",
+  "description_en": "Side-scrolling 2D platformer. Player runs, jumps, and faces obstacles and enemies to reach the end of the level. Classic genre: accessible for beginners, deep for veterans.",
+  "core_loop": "Mover → Pular sobre obstáculos → Derrotar/evitar inimigos → Coletar itens → Chegar ao fim da fase",
+  "systems": [
+    "health",
+    "player_controller"
+  ],
+  "victory_condition": "Chegar ao fim da fase (portal, bandeira, porta).",
+  "defeat_condition": "HP chega a 0 ou cair em um abismo.",
+  "progression": "Fases com dificuldade crescente (mais inimigos, plataformas menores, novos obstáculos). Power-ups e checkpoints a cada 3–5 fases.",
+  "recommended_behaviors": [
+    "enemy_patrol",
+    "coin_collect",
+    "checkpoint",
+    "moving_platform",
+    "spike_trap"
+  ],
+  "optional_behaviors": [
+    "double_jump",
+    "dash",
+    "wall_jump",
+    "power_up",
+    "boss_fight",
+    "screen_shake"
+  ],
+  "example_games": [
+    {"title": "Super Mario Bros.", "year": 1985, "developer": "Nintendo", "note": "Define o gênero: física, power-ups, design de fases."},
+    {"title": "Celeste", "year": 2018, "developer": "Maddy Makes Games", "note": "Plataforma de precisão com dash e assist mode."},
+    {"title": "Hollow Knight", "year": 2017, "developer": "Team Cherry", "note": "Plataforma + metroidvania com combate fluido."}
+  ],
+  "scene_structure": {
+    "required_scenes": ["main_menu", "game", "game_over", "victory"],
+    "optional_scenes": ["level_select", "settings", "credits"]
+  },
+  "camera_setup": "side-scroll",
+  "viewport_base": "480x270",
+  "difficulty_preset": "easy",
+  "version": "1.0.0"
+}

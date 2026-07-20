@@ -2,6 +2,10 @@
 ##
 ## CharacterBody2D com movimento horizontal, pulo e gravidade.
 ## Use com Input Map: move_left, move_right, jump.
+##
+## @behavior: player_controller
+## @genres: platformer, metroidvania
+## @tutorial: templates/player_2d_controller.gd
 
 class_name PlayerController
 {% raw %}extends CharacterBody2D

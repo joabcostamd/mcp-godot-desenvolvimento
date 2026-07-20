@@ -2,6 +2,10 @@
 ##
 ## CharacterBody2D com movimento vertical (tipo Pong).
 ## Use com Input Map: move_up, move_down.
+##
+## @behavior: paddle
+## @genres: puzzle
+## @tutorial: templates/paddle.gd
 
 class_name PaddleController
 {% raw %}extends CharacterBody2D
