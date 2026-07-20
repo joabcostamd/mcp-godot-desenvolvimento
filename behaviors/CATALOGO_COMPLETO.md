@@ -1,9 +1,9 @@
-# ARSENAL DEFINITIVO DE BEHAVIORS — Catálogo Completo v6.0
+# ARSENAL DEFINITIVO DE BEHAVIORS — Catálogo Completo v7.0
 
-**Versão:** 6.0 | **Data:** 2026-07-20
+**Versão:** 7.0 | **Data:** 2026-07-20
 **Local:** `behaviors/` | **Formato:** `behavior.schema.json` v2.0
-**Total:** 166 behaviors em 22 categorias + 9 sub-bibliotecas catalogadas
-**Pesquisas:** 4 rodadas | **Fontes:** 20+ | **Princípios:** 25
+**Total:** 173 behaviors em 23 categorias + Behavior Lifecycle + SemVer + CHANGELOG
+**Pesquisas:** 5 rodadas | **Fontes:** 25+ | **Princípios:** 30
 
 ---
 
@@ -30,8 +30,10 @@
 | 3 | **GDQuest PCG** | RandomWalker, DungeonGen, WorldMap, InfiniteWorld, ModularWeapons |
 | 3 | **GPU Instancing** | MultiMeshInstance + vertex shader para milhares de objetos animados |
 | 4 | **Data-Oriented Design** | Cache locality, contiguous arrays, packed data, hot/cold splitting, entity-as-ID |
-| 4 | **Godex ECS** | Entity Component System nativo para Godot (1.4k stars) |
-| 4 | **ECS Patterns** | System processing, component storage, archetype queries, world queries | |
+| 4 | **SemVer + Keep a Changelog** | Semantic Versioning 2.0.0 para behaviors, CHANGELOG.md por behavior |
+| 4 | **npm Package System** | package.json ↔ behavior.json, dependency resolution, registry |
+| 4 | **Godot Plugin Lifecycle** | plugin.cfg, @tool, autoload, sub-plugins, enable/disable |
+| 4 | **Production Pipeline** | Export, CI/CD, registry, signing, analytics, migration | |
 
 ---
 
@@ -76,6 +78,11 @@ behaviors/<nome>/
 23. **Entity as ID** — Entidade não é classe, é um número. Componentes sabem seu entity ID. Elimina ponteiros e melhora cache
 24. **Server API for hot paths** — Behaviors de alta performance (partículas, bullets) usam RenderingServer/PhysicsServer direto, bypassando nós
 25. **Branch prediction** — Ordenar entidades por estado ativo (ativas primeiro) para evitar branch misprediction no loop de update
+26. **SemVer obrigatório** — Todo behavior segue MAJOR.MINOR.PATCH. Breaking change = MAJOR bump. Nova feature compatível = MINOR. Bug fix = PATCH.
+27. **CHANGELOG por behavior** — Cada behavior tem CHANGELOG.md no formato Keep a Changelog (Added, Changed, Deprecated, Removed, Fixed, Security)
+28. **Dependency ranges** — Dependências no behavior.json usam ranges semver (^1.0.0, ~1.2.3, >=2.0.0 <3.0.0)
+29. **Deprecation warnings** — Comportamento deprecated emite ⚠️ no editor e warning no console por 1 MINOR version antes de ser removido
+30. **Behavior lifecycle** — Discover → Install → Enable → Use → Update → Migrate → Disable → Remove. Cada etapa tem hook methods.
 
 ---
 
@@ -438,6 +445,76 @@ Entidade (CharacterBody2D)
 | 164 | `lod_controller` | Node | lod_levels, distances, current_lod | lod_changed | — | Level of Detail | ⬜ |
 | 165 | `dirty_flag` | Node | tracked_properties | dirty, clean | — | Game Prog Patterns (ch.12) | ⬜ |
 | 166 | `spatial_hash` | Node | cell_size, world_bounds | — | — | Spatial partitioning | ⬜ |
+
+### 🔄 LIFECYCLE / PRODUÇÃO
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 167 | `behavior_registry` | Node | registry_url, cache_dir, auto_update | installed, updated, removed, conflict_detected | — | npm, Godot Asset Library | ⬜ |
+| 168 | `migration_runner` | Node | from_version, to_version, migration_steps | migration_started, step_completed, migration_failed | save_load | SemVer, ActiveRecord | ⬜ |
+| 169 | `deprecation_watcher` | Node | deprecated_methods, warning_level | deprecation_warning | — | Python warnings, Godot | ⬜ |
+| 170 | `behavior_analytics` | Node | tracking_id, events, batch_interval | event_tracked, batch_sent | save_load, network_sync | Firebase, GameAnalytics | ⬜ |
+| 171 | `hot_reload` | Node | watched_files, reload_strategy | reloaded, reload_failed | — | Godot @tool, live edit | ⬜ |
+| 172 | `error_boundary` | Node | fallback_behavior, max_errors, cooldown | error_caught, fallback_activated, recovered | — | React Error Boundary | ⬜ |
+| 173 | `behavior_sandbox` | Node | allowed_methods, resource_limits, timeout | sandbox_violation, timeout | — | Godot sandbox, Lua | ⬜ |
+
+---
+
+## 🔄 BEHAVIOR LIFECYCLE (npm-inspired)
+
+```
+┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
+│ DISCOVER │───▶│ INSTALL  │───▶│  ENABLE  │───▶│   USE    │
+│ (search) │    │ (download)│   │ (activate)│   │ (runtime) │
+└──────────┘    └──────────┘    └──────────┘    └──────────┘
+                                                     │
+                                              ┌──────▼──────┐
+                                              │   UPDATE    │
+                                              │ (semver)    │
+                                              └──────┬──────┘
+                                                     │
+┌──────────┐    ┌──────────┐                  ┌──────▼──────┐
+│  REMOVE  │◀───│ DISABLE  │◀─────────────────│   MIGRATE   │
+│ (cleanup)│    │(deactivate)│                │ (data)      │
+└──────────┘    └──────────┘                  └─────────────┘
+```
+
+### SemVer para Behaviors
+
+| Versão | Quando usar | Exemplo |
+|--------|------------|---------|
+| **MAJOR** (X.0.0) | API quebrou: sinal removido, parâmetro renomeado, tipo mudou | `health` 2.0.0: `take_damage()` → `apply_damage()` |
+| **MINOR** (x.Y.0) | Nova feature compatível: novo sinal, novo parâmetro, novo método | `health` 1.1.0: +`damageable`, +`first_hit` |
+| **PATCH** (x.y.Z) | Bug fix: correção de lógica, performance, documentação | `health` 1.1.1: corrige `_start_invulnerability()` null crash |
+
+### Dependency Resolution (npm-like)
+```json
+{
+  "dependencies": {
+    "health": "^1.1.0",        // >=1.1.0 <2.0.0
+    "projectile": "~1.0.0",   // >=1.0.0 <1.1.0
+    "object_pool": ">=1.0.0"  // qualquer versão >=1.0.0
+  }
+}
+```
+
+### CHANGELOG por behavior
+```markdown
+# CHANGELOG — health
+
+## [1.1.0] - 2026-07-20
+### Added
+- Booleans de controle: damageable, healable, killable, revivable
+- Sinais: first_hit, full, damage_blocked, heal_blocked
+- Multiplier em take_damage() e heal()
+### Changed
+- take_damage() e heal() agora aceitam multiplier como 2º param
+
+## [1.0.0] - 2026-07-20
+### Added
+- Lançamento inicial: max_hp, current_hp, invulnerable_time
+- Sinais: died, damage_taken, healed, hp_changed
+```
 
 ---
 
