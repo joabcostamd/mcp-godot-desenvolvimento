@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://mcpdock000000000001"]
+[gd_scene load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://addons/mcp_dock/dock.gd" id="1_dock"]
 
@@ -12,6 +12,7 @@ grow_vertical = 2
 script = ExtResource("1_dock")
 
 [node name="MainVBox" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,12 +20,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 8
-
-[node name="StatusLabel" type="Label" parent="MainVBox"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Desconectado"
-horizontal_alignment = 1
 
 [node name="HSeparatorTop" type="HSeparator" parent="MainVBox"]
 layout_mode = 2

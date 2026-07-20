@@ -30,6 +30,8 @@ func _enter_tree() -> void:
 	_undo_redo = get_undo_redo()
 	_start_server()
 	_create_dock()
+	# P3: Sub-plugin — auto-ativa o MCP Dock
+	_enable_sub_plugins()
 	print("[MCP Addon] v", VERSION, " - Dock iniciado na porta ", PORT)
 
 func _exit_tree() -> void:
@@ -37,7 +39,23 @@ func _exit_tree() -> void:
 	if _dock:
 		remove_control_from_bottom_panel(_dock)
 		_dock.queue_free()
+	# P3: Desativa sub-plugins ao desabilitar
+	_disable_sub_plugins()
 	print("[MCP Addon] Encerrado")
+
+
+# ── P3: Sub-plugins ──────────────────────────────────────────────────
+
+func _enable_sub_plugins() -> void:
+	# Ativa o MCP Dock automaticamente quando o MCP Addon e ativado
+	if EditorInterface:
+		EditorInterface.set_plugin_enabled("mcp_dock", true)
+
+
+func _disable_sub_plugins() -> void:
+	# Desativa o MCP Dock quando o MCP Addon e desativado
+	if EditorInterface:
+		EditorInterface.set_plugin_enabled("mcp_dock", false)
 
 func _process(_delta: float) -> void:
 	if not _server:
