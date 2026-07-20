@@ -12,6 +12,9 @@
 ![Última atualização](https://img.shields.io/badge/atualizado-2026--07--19-lightgrey)
 <!-- BADGES_END -->
 
+> 📊 **Versão:** <!--DOCS_SYNC:version-->3.2.1<!--/DOCS_SYNC:version--> | **Tools:** <!--DOCS_SYNC:tools-->274<!--/DOCS_SYNC:tools--> | **Handlers:** <!--DOCS_SYNC:handlers-->295<!--/DOCS_SYNC:handlers--> | **Rollups:** <!--DOCS_SYNC:rollups-->32<!--/DOCS_SYNC:rollups-->
+> ⚠️ Números acima são gerados por `scripts/docs_sync.py` — não edite manualmente.
+
 **GitHub:** `https://github.com/joabcostamd/mcp-godot-desenvolvimento`
 
 ---
