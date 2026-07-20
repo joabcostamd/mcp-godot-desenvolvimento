@@ -2050,6 +2050,7 @@ def _build_handlers() -> dict:
     _HANDLERS_CACHE = {
         "ping": _handle_ping,
         "validate_godot_version": _handle_validate_godot_version,
+        "budget_manage": _handle_budget_manage,
         "read_file": _handle_read_file,
         "write_file": _handle_write_file,
         # Fase 2: ClassDB (com cache Onda 5)
@@ -2647,6 +2648,26 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
                 except Exception:
                     pass
 
+            # ── Fatia 1.D: Rastrear custo de tokens ──────────────
+            try:
+                from tools.budget_ops import track_tool_cost
+                budget_block = track_tool_cost(name, arguments, result)
+                if budget_block:
+                    return [TextContent(
+                        type="text",
+                        text=json.dumps({
+                            "status": "error",
+                            "message": budget_block["message"],
+                            "budget_exceeded": True,
+                            "session_cost_brl": budget_block["session_cost_brl"],
+                            "limit_brl": budget_block["limit_brl"],
+                            "pct_used": budget_block["pct_used"],
+                        }, ensure_ascii=False),
+                        isError=True,
+                    )]
+            except Exception:
+                pass  # fail-open: tracking nao pode bloquear
+
             # A6.4: isError + resultado (structuredContent requer SDK update)
             return [TextContent(
                 type="text",
@@ -2849,6 +2870,16 @@ def _handle_ping(args: dict) -> dict:
 
 def _handle_validate_godot_version(args: dict) -> dict:
     return validate_godot_version()
+
+
+def _handle_budget_manage(args: dict) -> dict:
+    """Handler da tool budget_manage (Fatia 1.D)."""
+    from tools.budget_ops import budget_manage
+    return budget_manage(
+        op=args.get("op", "status"),
+        limit_brl=args.get("limit_brl", 0),
+        force=args.get("force", False),
+    )
 
 
 def _handle_read_file(args: dict) -> dict:

@@ -1,4 +1,12 @@
 {
+  "fatia_1.D": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "c413aec",
+    "resultado": "budget_ops.py (220 linhas): rollup budget_manage(op, limit_brl, force). Hook track_tool_cost() em call_tool() (fail-open). Tool registrada (275 tools). Testado: status/set_limit/reset, bloqueio teto (144.7%% → hard-stop), warn 80% (86.3%%), estimativa ~4 chars/token, estado .mcp_budget_state.json por projeto. C3 smoke_test: PASS."
+  },
   "fatia_1.C": {
     "status": "concluida",
     "data": "2026-07-20",
