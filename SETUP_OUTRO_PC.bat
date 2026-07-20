@@ -34,8 +34,20 @@ if %ERRORLEVEL% neq 0 (
 echo    OK — branch main, commit mais recente
 echo.
 
-REM ── 3. Criar ambiente virtual ─────────────────────────────────
-echo [3/6] Criando ambiente virtual Python (.venv)...
+REM ── 3. Limpar arquivos obsoletos ─────────────────────────────
+echo [3/7] Removendo documentos obsoletos...
+set "OBSOLETOS=pendenciasMCP.md NEXT_SESSION.md SESSION_NEXT.md MCP_ESTADO_ATUAL.md pendencias.md SESSION_SUMMARY_2026-07-17.md RELOGIO_CLINE_COMPORTAMENTO.md"
+for %%f in (%OBSOLETOS%) do (
+    if exist "%%f" (
+        del "%%f" >nul 2>&1
+        echo    Removido: %%f
+    )
+)
+echo    OK
+echo.
+
+REM ── 4. Criar ambiente virtual ─────────────────────────────────
+echo [4/7] Criando ambiente virtual Python (.venv)...
 python --version >nul 2>&1
 if %ERRORLEVEL% neq 0 (
     echo    [ERRO] Python nao encontrado. Instale Python 3.12+ e adicione ao PATH.
@@ -50,8 +62,8 @@ if exist ".venv" (
 echo    OK
 echo.
 
-REM ── 4. Instalar dependencias ──────────────────────────────────
-echo [4/6] Instalando dependencias Python...
+REM ── 5. Instalar dependencias ──────────────────────────────────
+echo [5/7] Instalando dependencias Python...
 call .venv\Scripts\activate.bat
 pip install --upgrade pip --quiet
 pip install -r requirements.txt
@@ -63,8 +75,8 @@ if %ERRORLEVEL% neq 0 (
 echo    OK
 echo.
 
-REM ── 5. Configurar config.json ─────────────────────────────────
-echo [5/6] Configurando config.json...
+REM ── 6. Configurar config.json ─────────────────────────────────
+echo [6/7] Configurando config.json...
 if not exist "config.json" (
     copy config.json.example config.json >nul
     echo    config.json CRIADO do config.json.example.
@@ -82,8 +94,8 @@ if not exist "config.json" (
 echo    OK
 echo.
 
-REM ── 6. Verificacao final ──────────────────────────────────────
-echo [6/6] Verificando instalacao...
+REM ── 7. Verificacao final ──────────────────────────────────────
+echo [7/7] Verificando instalacao...
 .venv\Scripts\python.exe -c "import server; print('  ✅ MCP Godot Agent OK'); print(f'  Tools: {len(server._raw_tool_defs())} (raw)'); print(f'  Handlers: {len(server._build_handlers())}')"
 if %ERRORLEVEL% neq 0 (
     echo    [ERRO] Verificacao falhou. Verifique Python e dependencias.

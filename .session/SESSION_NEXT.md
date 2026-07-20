@@ -4,7 +4,17 @@
 - **Projeto:** mcp-godot-desenvolvimento | Tipo: Python | Godot 4.7
 - **Versao:** v3.5.0 | Nota QG: A
 - **Repo:** joabcostamd/mcp-godot-desenvolvimento | Branch: main
-- **Ultimo commit:** 390aebe — "feat(agente-01-camada5): registrar 28 tools de gameplay no server.py"
+- **Ultimo commit:** d4b1779 — "fix(setup): atualizar SETUP_OUTRO_PC.bat"
+
+## 🧹 ANTES DE TUDO — Limpeza (execute primeiro)
+Se esta e a PRIMEIRA sessao neste PC ou se o repo ja existia antes,
+delete estes arquivos obsoletos ANTES de prosseguir:
+
+```powershell
+Remove-Item -ErrorAction SilentlyContinue pendenciasMCP.md,NEXT_SESSION.md,SESSION_NEXT.md,MCP_ESTADO_ATUAL.md,pendencias.md,SESSION_SUMMARY_2026-07-17.md,RELOGIO_CLINE_COMPORTAMENTO.md
+```
+
+> Estes arquivos foram substituidos pelo ROADMAP_UNIFICADO.md v3.0 e nao servem mais.
 
 ## 🎯 Progresso das Camadas
 
