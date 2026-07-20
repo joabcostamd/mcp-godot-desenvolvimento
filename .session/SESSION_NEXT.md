@@ -1,51 +1,44 @@
 # 🔄 PROXIMA SESSAO — MCP Godot Agent
 
 ## 📋 Onde paramos
-- **Projeto:** mcp-godot-desenvolvimento | Tipo: Python
-- **Agente:** AGENTE 02 (Extensoes & Qualidade)
-- **Camada 4:** 8/8 etapas concluidas (B2-B9)
-- **Ultimo commit:** 8ec5c90 — "chore(agente-02-camada-4): B2-B9 concluidas"
+- **Projeto:** mcp-godot-desenvolvimento | Tipo: Python | Godot 4.7
+- **Versao:** v3.5.0 | Nota QG: A
+- **Repo:** joabcostamd/mcp-godot-desenvolvimento | Branch: main
+- **Ultimo commit:** b6727f3 — "docs(v3.5.0): atualizacao documental completa"
 
-## 🎯 Proximo passo
-- **Camada 5 — Gameplay** (fatias 5.1–5.8)
-- **Marcacao:** TODAS [MARGINAL] — requer aprovacao explicita do Joab
-- **Descricao:** Features de gameplay: combate, inimigos, power-ups, UI, feedback
+## 🎯 Progresso das Camadas
 
-## 📊 Progresso da Camada 4
+| Camada | Status |
+|---|---|
+| 0 — Fundacao | ✅ 16/16 |
+| 1 — Experiencia Dev | ✅ 16/16 |
+| 2 — Testes | ✅ 7/7 |
+| 3 — Criacao com Fosso | ✅ 16/16 |
+| 4 — Extensoes | ✅ 9/9 |
+| 5 — Gameplay | ✅ 8/8 |
+| 6 — Profundidade Engine | ⬜ [MARGINAL] |
+| 7 — Polimento | ⬜ [MARGINAL] |
 
-| Etapa | Nome | Status |
-|---|---|---|
-| B2 | CI Verificacao | ✅ |
-| B3 | gdtoolkit Gate | ✅ (19/19 testes) |
-| B4 | Analises Especificas (9 ops) | ✅ |
-| B5 | Seguranca Supply-Chain | ✅ (40 testes) |
-| B6 | agent_manage | ✅ (36/37 testes) |
-| B7 | Save Schema + Migracao | ✅ |
-| B8 | Dead-End Detection | ✅ |
-| B9 | Documentacao Automatica | ✅ |
-
-## 📂 Novos arquivos criados
-- `.github/workflows/verification.yml` — CI pipeline (295 linhas)
-- `.gdlintrc` — config gdlint 4.5.0 YAML
-- `tools/code_quality_ops.py` — 13 funcoes (~1200 linhas)
-- `tools/agent_ops.py` — 8 funcoes (~550 linhas)
-- `tools/gamestate_ops.py` — 2 funcoes
-- `tools/dialogue_ops.py` — 2 funcoes
-- `tools/doc_ops.py` — 3 funcoes
-- `tests/test_code_quality_ops.py` — 19 testes
+## 📊 Metricas atuais
+- **Tools:** 240 (49 ativas no perfil full)
+- **Rollups:** 32 | **Ops:** 126
+- **Namespaces:** 5 (project, assets, runtime, analysis, orchestration)
+- **Cobertura:** 100% (49/49 tools ativas)
+- **Canary queries:** 48 (45 tools)
+- **Arquivos Python:** 115 modulos em tools/
 
 ## ⚠️ Pendencias
-- 1 checkpoint stash pendente (AGENTE 01)
-- Camadas 5, 6, 7 sao [MARGINAL] — precisam de aprovacao
+- **1 stash:** checkpoint-fatia-4.1 (revisar ou descartar)
+- **28 tools Camada 5:** implementadas mas NAO registradas no server.py (AGENTE 01)
+- **GitHub API:** descricao NAO atualizada (HTTP 503)
+
+## 🎮 Para o HUMANO
+1. Execute `git stash list` — verifique o stash checkpoint-fatia-4.1
+2. Execute `python tests/test_code_quality_ops.py` para verificar o gate
+3. Decida se avanca para Camada 6 [MARGINAL] ou Camada 7 [MARGINAL]
 
 ## 🔧 Regras do projeto
-- NUNCA edite arquivos do outro agente (ver matriz de conflito)
+- NUNCA edite arquivos do outro agente (matriz de conflito)
 - Respeite `# INTERNAL:` — funcoes usadas por rollups
 - 1 commit por etapa. Auditoria apos cada implementacao
 - Conflitos em `SUTURE_ISSUES.md`, nao resolva sozinho
-
-## 🎮 Para o HUMANO
-1. Revise os arquivos criados em `tools/`
-2. Execute `python tests/test_code_quality_ops.py` para verificar o gate
-3. Execute `python tests/test_budget_gate.py` para verificar orcamento
-4. Decida se avanca para Camada 5 [MARGINAL]
