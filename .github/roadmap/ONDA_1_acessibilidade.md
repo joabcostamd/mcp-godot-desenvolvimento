@@ -281,7 +281,7 @@ A IA agentica precisa dele.
 **4. Fonte** `PLANO_REESTRUTURACAO_DOCS.md`
 
 **5. Como fazer** Siga o plano, uma fatia R por vez. **Mover e mover** —
-melhoria de texto e fatia separada, exceto no expurgo de Cline (0.D).
+melhoria de texto e fatia separada, exceto no expurgo de IA agêntica (Copilot) (0.D).
 
 **6. Armadilhas** A IA adora "melhorar" texto ao mover, e regras que custaram
 meses somem. Nao reescreva.

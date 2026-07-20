@@ -39,7 +39,7 @@ Terminar vale mais que gerar. Toda decisão de prioridade responde a esta pergun
 
 | Decisão | Escolha | Motivo |
 |---|---|---|
-| Cliente de IA | Copilot no VS Code | Sampling do MCP foi descontinuado na spec 2026-07-28; construir cliente próprio = reconstruir o Cline |
+| Cliente de IA | Copilot no VS Code | Sampling do MCP foi descontinuado na spec 2026-07-28; construir cliente próprio = reconstruir o IA agêntica (Copilot) |
 | Plataforma | **Windows primeiro** | Todo o LEARNINGS e os workarounds são Windows. Linux/Mac depois, declarado |
 | Dimensão | **2D primeiro** | 3D custa 3–5x por comportamento. 3D só depois de 30 termos 2D maduros |
 | Aprendizado por reforço para playtest | **Fora de escopo permanente** | Custo altíssimo, retorno baixo para jogo indie pequeno |
@@ -65,14 +65,14 @@ ONDA 4  Mundo              contínuo  — outras pessoas descobrem e usam
 **Objetivo:** consertar o que está quebrado ou contraditório antes de construir por cima.
 **Ficha detalhada:** `.github/roadmap/ONDA_0_destravar.md`
 **Critério de saída:** `auditar.py` passa 6/6, `/plan` e `/act` funcionam no Copilot,
-zero referência a Cline, LICENSE existe, números dos documentos batem com o código.
+zero referência a IA agêntica (Copilot), LICENSE existe, números dos documentos batem com o código.
 
 | # | Fatia | Marcação | Pendências que fecha |
 |---|---|---|---|
 | 0.A | Corrigir bug do Passo 8 (ramo SÊNIOR sem encadeamento) | AUTO | P1 |
 | 0.B | Auditar fechamento da Fatia 0.9 (3 provas faltantes) | SÊNIOR | P2 |
 | 0.C | Decidir 0.7b (lean vs full) e registrar | SÊNIOR | P3 |
-| 0.D | Migração `.clinerules` → `.github/` + expurgo de Cline | AUTO | P29 parcial, L26 |
+| 0.D | Migração `.github/instructions` → `.github/` + expurgo de IA agêntica (Copilot) | AUTO | P29 parcial, L26 |
 | 0.E | LICENSE (MIT) + CONTRIBUTING + CODE_OF_CONDUCT + SECURITY | AUTO | P49, D4, L15 |
 | 0.F | `docs_sync`: números gerados do código, nunca à mão | AUTO | D1 |
 | 0.G | Expurgo de caminhos pessoais + `journal/` no gitignore | AUTO | D2, D6 |

@@ -63,25 +63,25 @@ Lembrete permanente: rode o fluxo da seção 7 do mestre em toda fatia (definir 
 
 ---
 
-## FATIA 0.3 — Comportamento do Cline (list_changed + hooks) **[SÊNIOR]**
+## FATIA 0.3 — Comportamento do IA agêntica (Copilot) (list_changed + hooks) **[SÊNIOR]**
 
-**Objetivo:** confirmar dois comportamentos do Cline que afetam o funcionamento do MCP.
+**Objetivo:** confirmar dois comportamentos do IA agêntica (Copilot) que afetam o funcionamento do MCP.
 
 **Por quê:**
-1. O filtro dinâmico de tools por fase (PHASE_TOOLSETS) só funciona se o cliente **re-lê** a lista de tools quando ela muda (`notifications/tools/list_changed`). Se o Cline cacheia a lista e só lê uma vez na conexão, o filtro de fase não atualiza no meio da sessão — o dev vê lista velha.
-2. O hook Stop do EARS (Feature 7) disparava no Claude Code; o Cline tem outro ciclo. O session gate (Feature 10) é server-side e sobrevive; o Stop hook pode não disparar.
+1. O filtro dinâmico de tools por fase (PHASE_TOOLSETS) só funciona se o cliente **re-lê** a lista de tools quando ela muda (`notifications/tools/list_changed`). Se o IA agêntica (Copilot) cacheia a lista e só lê uma vez na conexão, o filtro de fase não atualiza no meio da sessão — o dev vê lista velha.
+2. O hook Stop do EARS (Feature 7) disparava no Claude Code; o IA agêntica (Copilot) tem outro ciclo. O session gate (Feature 10) é server-side e sobrevive; o Stop hook pode não disparar.
 
 **O que fazer:**
-1. Testar na prática: mudar de fase no meio de uma sessão Cline e verificar se a lista de tools visível muda sem reiniciar.
-2. Verificar se o Cline honra `list_changed`. Se não honrar, documentar o workaround (ex.: instruir reconexão, ou aceitar que a curadoria de fase é por-sessão).
-3. Verificar se o hook Stop do EARS dispara no Cline. Se não, documentar que o gate real é o session gate server-side.
+1. Testar na prática: mudar de fase no meio de uma sessão IA agêntica (Copilot) e verificar se a lista de tools visível muda sem reiniciar.
+2. Verificar se o IA agêntica (Copilot) honra `list_changed`. Se não honrar, documentar o workaround (ex.: instruir reconexão, ou aceitar que a curadoria de fase é por-sessão).
+3. Verificar se o hook Stop do EARS dispara no IA agêntica (Copilot). Se não, documentar que o gate real é o session gate server-side.
 4. Reportar as duas respostas com evidência (o que aconteceu no teste real).
 
 **Critério de aceite específico:**
-- Prova: descrição do teste real feito + resultado observado (não teoria). Ex.: "mudei IDEIA→DESIGN, a lista no Cline [mudou / não mudou] sem reiniciar."
+- Prova: descrição do teste real feito + resultado observado (não teoria). Ex.: "mudei IDEIA→DESIGN, a lista no IA agêntica (Copilot) [mudou / não mudou] sem reiniciar."
 - Não toca em código do MCP necessariamente — pode ser só diagnóstico. Se exigir workaround em código, C1/C3 se aplicam.
 
-**Marcação:** [SÊNIOR] — decide como o filtro de fase e o EARS funcionam no Cline; revisar.
+**Marcação:** [SÊNIOR] — decide como o filtro de fase e o EARS funcionam no IA agêntica (Copilot); revisar.
 
 ---
 
@@ -157,7 +157,7 @@ Lembrete permanente: rode o fluxo da seção 7 do mestre em toda fatia (definir 
 
 **Objetivo:** baixar a fase PROTOTIPO de ~92 tools visíveis para ~50, consolidando tools atômicas em rollups.
 
-**Por quê:** PROTOTIPO já passou da zona segura (precisão de escolha de tool cai depois de 30–50). Adicionar features nela sem consolidar antes piora a escolha de tool do Cline. Regra 2 do teto (mestre 2).
+**Por quê:** PROTOTIPO já passou da zona segura (precisão de escolha de tool cai depois de 30–50). Adicionar features nela sem consolidar antes piora a escolha de tool do IA agêntica (Copilot). Regra 2 do teto (mestre 2).
 
 **Candidatos a consolidar (confirmar com o inventário da 0.1):**
 - Os ~18 `game_*` (freeze_game_clock, step_game_time, game_call_method, game_await_signal, game_raycast, etc.) → um rollup `game_bridge_manage` com ops.
@@ -384,7 +384,7 @@ Depois disso, dentro da Camada 0:
 1. **0.14** (governador) — **primeiro**, porque a 0.1 é uma varredura grande e deve rodar já protegida pelos freios (teto de iteração, anti-spiral, não-progresso).
 2. **0.1** (inventário) — destrava o planejamento de todas as camadas seguintes.
 3. **0.4, 0.6** (bind loopback, segredo) — segurança rápida, [AUTO].
-4. **0.2, 0.3** (spec MCP, Cline) — diagnósticos com prazo.
+4. **0.2, 0.3** (spec MCP, IA agêntica (Copilot)) — diagnósticos com prazo.
 5. **0.5, 0.13** (git safety, idempotência) — segurança de cadeia.
 6. **0.11, 0.12, 0.10, 0.8** (contract snapshot, kill switch, migração, gate de orçamento) — o ferramental de auditoria.
 7. **0.15** (perfil lean + meta-tools) — a solução real do teto; priorizado, não deixado para o fim.

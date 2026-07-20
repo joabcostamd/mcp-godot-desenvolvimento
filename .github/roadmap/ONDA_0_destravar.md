@@ -6,7 +6,7 @@ applyTo: '**'
 
 **Objetivo:** consertar o que esta quebrado ou contraditorio antes de construir por cima.
 **Criterio de saida:** `auditar.py` passa, `/plan` e `/act` funcionam, zero referencia a
-Cline fora de `journal/`, LICENSE existe, numeros dos documentos batem com o codigo.
+IA agêntica (Copilot) fora de `journal/`, LICENSE existe, numeros dos documentos batem com o codigo.
 
 Cada fatia abaixo ja vem com o campo 5 (**Como fazer**) resolvido. A IA nao improvisa
 arquitetura — ela executa a decisao ja tomada. Se a fonte contradisser a ficha,
@@ -27,13 +27,13 @@ confirma que o arquivo antigo nao esta mais em uso.
 
 **5. Como fazer**
 Confirme que `.github/prompts/act.prompt.md` existe e que o PASSO 8 tem o encadeamento
-nos **dois** ramos. Confirme que nao existe mais `.clinerules/workflows/act.md`.
+nos **dois** ramos. Confirme que nao existe mais `.github/instructions/workflows/act.md`.
 Se existir, mova para `journal/`.
 
 **6. Armadilhas** Nao edite o `act.prompt.md` do Lote 2 — ele ja esta correto.
 
 **7. Criterios de aceite**
-- `.clinerules/` nao existe
+- `.github/instructions/` nao existe
 - `grep -c "Proxima fatia" .github/prompts/act.prompt.md` retorna 2 ou mais
 
 **8. Como provar** Cole a saida dos dois comandos acima.
@@ -129,9 +129,9 @@ existente. A solucao correta e visibilidade, nao exclusao.
 
 ---
 
-## Fatia 0.D — Migracao `.clinerules` e expurgo de Cline
+## Fatia 0.D — Migracao `.github/instructions` e expurgo de IA agêntica (Copilot)
 
-**1. O que e** Trocar toda mencao a Cline por "IA agentica (Copilot)".
+**1. O que e** Trocar toda mencao a IA agêntica (Copilot) por "IA agentica (Copilot)".
 
 **2. Por que agora** A estrutura ja foi movida pelo instalador; falta o texto interno.
 
@@ -145,15 +145,15 @@ existente. A solucao correta e visibilidade, nao exclusao.
 git grep -ril "cline" -- .github docs README.md
 ```
 Para cada arquivo, troque:
-- `Cline` → `IA agentica (Copilot)`
-- `.clinerules` → `.github/instructions`
-- `cline_mcp_settings.json` → `mcp.json` (config do Copilot)
+- `IA agêntica (Copilot)` → `IA agentica (Copilot)`
+- `.github/instructions` → `.github/instructions`
+- `mcp.json` → `mcp.json` (config do Copilot)
 
 **Nao toque em `journal/`** — la e arquivo historico, e deve continuar como estava.
 
 **6. Armadilhas** Trocar so a palavra pode deixar frase sem sentido
-("no Cline, use o botao X" nao tem equivalente). Leia a frase inteira; se ela so
-faz sentido no Cline, reescreva ou remova. **Esta e a unica excecao a regra
+("no IA agêntica (Copilot), use o botao X" nao tem equivalente). Leia a frase inteira; se ela so
+faz sentido no IA agêntica (Copilot), reescreva ou remova. **Esta e a unica excecao a regra
 "mover e mover"** — aqui a edicao e o objetivo da fatia.
 
 **7. Criterios de aceite**

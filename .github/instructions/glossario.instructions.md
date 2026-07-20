@@ -180,4 +180,4 @@ Inventário interno: CATALOGO_COMPLETO_MCP_GODOT.md (aprovado 17/07/2026), CONTE
 
 ---
 
-*Fim do glossário. Este é o último documento de referência. O prompt de início para o Cline é entregue separadamente.*
+*Fim do glossário. Este é o último documento de referência. O prompt de início para o IA agêntica (Copilot) é entregue separadamente.*
