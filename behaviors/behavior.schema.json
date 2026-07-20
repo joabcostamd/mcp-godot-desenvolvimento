@@ -160,6 +160,39 @@
       "description": "Tags para categorização e busca.",
       "items": {"type": "string"},
       "uniqueItems": true
+    },
+    "control_booleans": {
+      "type": "array",
+      "description": "Booleans de controle que ligam/desligam funcionalidades (ex: damageable, killable).",
+      "items": {
+        "type": "object",
+        "required": ["name", "type", "default"],
+        "properties": {
+          "name": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+          "type": {"type": "string", "enum": ["bool"]},
+          "description_pt": {"type": "string", "maxLength": 200},
+          "default": {"type": "boolean"}
+        }
+      }
+    },
+    "presets": {
+      "type": "array",
+      "description": "Presets pré-configurados — o usuário usa pronto, sem configurar parâmetros.",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+          "description_pt": {"type": "string", "maxLength": 200},
+          "params_override": {"type": "object", "description": "Parâmetros diferentes do padrão para este preset."}
+        }
+      }
+    },
+    "extends_node": {
+      "type": "string",
+      "description": "Tipo de nó Godot que o behavior estende. Ex: Node, Area2D, CharacterBody2D.",
+      "enum": ["Node", "Node2D", "Area2D", "CharacterBody2D", "RigidBody2D", "Control", "Sprite2D"],
+      "default": "Node"
     }
   }
 }

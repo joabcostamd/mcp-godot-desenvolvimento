@@ -1,7 +1,7 @@
 {
   "name": "health",
-  "description_pt": "Componente de vida com dano, cura e sinal de morte. Plugável em qualquer nó (inimigo, player, destrutível).",
-  "description_en": "Health component with damage, healing, and death signal. Plug into any node (enemy, player, destructible).",
+  "description_pt": "Componente de vida com dano, cura, sinal de morte e controle fino (damageable, healable, killable, revivable). Plugável em qualquer nó.",
+  "description_en": "Health component with damage, healing, death signal, and fine-grained control (damageable, healable, killable, revivable). Plug into any node.",
   "synonyms": {
     "pt": ["vida", "hp", "pontos de vida", "dano", "cura", "morrer", "resistência"],
     "en": ["life", "hp", "hit points", "damage", "heal", "death", "durability"]
@@ -10,7 +10,7 @@
     {
       "name": "max_hp",
       "type": "int",
-      "description_pt": "Vida máxima do personagem.",
+      "description_pt": "Vida máxima.",
       "range": {"min": 1, "max": 9999},
       "default": 100
     },
@@ -24,47 +24,32 @@
     {
       "name": "invulnerable_time",
       "type": "float",
-      "description_pt": "Tempo de invulnerabilidade após tomar dano (0 = sem invulnerabilidade).",
+      "description_pt": "Tempo de invulnerabilidade após tomar dano (0 = sem).",
       "range": {"min": 0.0, "max": 10.0},
       "default": 0.0,
       "unit": "s"
     }
   ],
+  "control_booleans": [
+    {"name": "damageable", "type": "bool", "description_pt": "Se false, ignora todo dano.", "default": true},
+    {"name": "healable", "type": "bool", "description_pt": "Se false, ignora toda cura.", "default": true},
+    {"name": "killable", "type": "bool", "description_pt": "Se false, HP nunca chega a 0 (1 HP mínimo).", "default": true},
+    {"name": "revivable", "type": "bool", "description_pt": "Se true, permite curar após morte.", "default": true}
+  ],
   "signals": [
-    {
-      "name": "died",
-      "description_pt": "Emitido quando current_hp chega a 0.",
-      "params": []
-    },
-    {
-      "name": "damage_taken",
-      "description_pt": "Emitido ao tomar dano. Passa o dano causado e a vida restante.",
-      "params": [
-        {"name": "amount", "type": "int"},
-        {"name": "remaining", "type": "int"}
-      ]
-    },
-    {
-      "name": "healed",
-      "description_pt": "Emitido ao receber cura. Passa a quantidade curada e a vida atual.",
-      "params": [
-        {"name": "amount", "type": "int"},
-        {"name": "current", "type": "int"}
-      ]
-    },
-    {
-      "name": "hp_changed",
-      "description_pt": "Emitido sempre que current_hp muda. Passa o valor antigo e o novo.",
-      "params": [
-        {"name": "old_hp", "type": "int"},
-        {"name": "new_hp", "type": "int"}
-      ]
-    }
+    {"name": "died", "description_pt": "Emitido quando current_hp chega a 0.", "params": []},
+    {"name": "damage_taken", "description_pt": "Emitido ao tomar dano.", "params": [{"name": "amount", "type": "int"}, {"name": "remaining", "type": "int"}]},
+    {"name": "healed", "description_pt": "Emitido ao receber cura.", "params": [{"name": "amount", "type": "int"}, {"name": "current", "type": "int"}]},
+    {"name": "hp_changed", "description_pt": "Emitido sempre que current_hp muda.", "params": [{"name": "old_hp", "type": "int"}, {"name": "new_hp", "type": "int"}]},
+    {"name": "first_hit", "description_pt": "Emitido no primeiro dano recebido.", "params": []},
+    {"name": "full", "description_pt": "Emitido quando HP atinge o máximo.", "params": []},
+    {"name": "damage_blocked", "description_pt": "Emitido quando dano é bloqueado.", "params": [{"name": "amount", "type": "int"}]},
+    {"name": "heal_blocked", "description_pt": "Emitido quando cura é bloqueada.", "params": [{"name": "amount", "type": "int"}]}
   ],
   "dependencies": [],
   "genres": ["platformer", "topdown_shooter", "rpg", "roguelike", "tower_defense", "fighting", "metroidvania", "bullet_hell", "generic"],
   "conflicts": [],
-  "version": "1.0.0",
+  "version": "1.1.0",
   "godot_version": "4.7",
   "tags": ["combate", "vida", "dano", "cura", "composite"]
 }
