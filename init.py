@@ -416,61 +416,101 @@ def step2_venv(root: Path, python_path: str) -> Path:
     return venv_python
 
 
-def step3_mcp_config(project_dir: Path, venv_python: Path) -> None:
-    """Escreve ou mescla .vscode/mcp.json no projeto Godot."""
-    vscode_dir = project_dir / ".vscode"
-    mcp_json = vscode_dir / "mcp.json"
+def step3_mcp_config(project_dir: Path, venv_python: Path, client: str = "copilot") -> None:
+    """Escreve ou mescla configuração MCP para o cliente de IA escolhido.
 
-    new_server = {
-        "godot-agent": {
-            "type": "stdio",
-            "command": str(venv_python),
-            "args": [str(SERVER_SCRIPT)],
-            "cwd": str(ROOT),
-            "env": {
-                "PYTHONUNBUFFERED": "1",
-                "PYTHONIOENCODING": "utf-8",
-            },
-        }
+    Args:
+        project_dir: Pasta do projeto Godot.
+        venv_python: Caminho do python.exe do venv.
+        client: "copilot" (VS Code), "claude" (Claude Desktop),
+                "cursor" (Cursor IDE), ou "all" (todos).
+    """
+    godot_agent = {
+        "command": str(venv_python),
+        "args": [str(SERVER_SCRIPT)],
+        "cwd": str(ROOT),
     }
 
-    vscode_dir.mkdir(parents=True, exist_ok=True)
+    # ── Definição de clientes: (arquivo, chave raiz, precisa type+env?) ──
+    clients_def = {
+        "copilot": {
+            "rel_path": ".vscode/mcp.json",
+            "root_key": "servers",
+            "server_def": {
+                **godot_agent,
+                "type": "stdio",
+                "env": {"PYTHONUNBUFFERED": "1", "PYTHONIOENCODING": "utf-8"},
+            },
+            "do_merge": True,  # Copilot: merge com servidores existentes
+        },
+        "claude": {
+            "rel_path": "claude_desktop_config.json",
+            "root_key": "mcpServers",
+            "server_def": dict(godot_agent),  # cópia — Claude: sem type, sem env
+            "do_merge": False,
+        },
+        "cursor": {
+            "rel_path": ".cursor/mcp.json",
+            "root_key": "mcpServers",
+            "server_def": dict(godot_agent),  # cópia
+            "do_merge": False,
+        },
+    }
 
-    if mcp_json.exists():
-        # ── MESCLAR, nunca sobrescrever ──
-        try:
-            existing = json.loads(mcp_json.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            print_step(7, "Configuração MCP", False,
-                       f"{mcp_json} existe mas está corrompido.\n"
-                       "         Remova o arquivo manualmente e rode init.py novamente.")
-            return
+    targets = [client] if client != "all" else list(clients_def.keys())
 
-        if not isinstance(existing, dict):
-            print_step(7, "Configuração MCP", False,
-                       f"{mcp_json} não é um objeto JSON válido (esperado: {{}}).\n"
-                       "         Remova o arquivo manualmente e rode init.py novamente.")
-            return
+    for c in targets:
+        if c not in clients_def:
+            print_step(7, f"Config MCP ({c})", False, f"Cliente desconhecido: {c}")
+            continue
 
-        existing_servers = existing.get("servers", {})
-        if not isinstance(existing_servers, dict):
-            existing_servers = {}
+        cfg = clients_def[c]
+        config_path = project_dir / cfg["rel_path"]
+        config_path.parent.mkdir(parents=True, exist_ok=True)
 
-        if "godot-agent" in existing_servers:
-            print_step(7, "Configuração MCP", True,
-                       f"já configurado em {mcp_json}\n"
-                       "         (mantido como estava — merge)")
-            return
+        if cfg["do_merge"] and config_path.exists():
+            # ── MESCLAR (Copilot) ──
+            try:
+                existing = json.loads(config_path.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                print_step(7, f"Config MCP ({c})", False,
+                           f"{config_path} existe mas está corrompido.")
+                continue
 
-        existing["servers"] = {**existing_servers, **new_server}
-        mcp_json.write_text(json.dumps(existing, indent=2, ensure_ascii=False), encoding="utf-8")
-        print_step(7, "Configuração MCP", True,
-                   f"{mcp_json}\n"
-                   f"         (mesclado — servidores existentes preservados)")
-    else:
-        config = {"servers": new_server}
-        mcp_json.write_text(json.dumps(config, indent=2, ensure_ascii=False), encoding="utf-8")
-        print_step(7, "Configuração MCP", True, str(mcp_json))
+            if not isinstance(existing, dict):
+                print_step(7, f"Config MCP ({c})", False,
+                           f"{config_path} não é um objeto JSON válido.")
+                continue
+
+            existing_servers = existing.get(cfg["root_key"], {})
+            if not isinstance(existing_servers, dict):
+                existing_servers = {}
+
+            if "godot-agent" in existing_servers:
+                print_step(7, f"Config MCP ({c})", True,
+                           f"já configurado em {config_path} (mantido)")
+                continue
+
+            existing[cfg["root_key"]] = {**existing_servers, "godot-agent": cfg["server_def"]}
+            config_path.write_text(json.dumps(existing, indent=2, ensure_ascii=False), encoding="utf-8")
+            print_step(7, f"Config MCP ({c})", True,
+                       f"{config_path} (mesclado — servidores preservados)")
+        elif config_path.exists():
+            # ── Já existe, sem merge ──
+            # Verifica se o JSON é válido (avisa se estiver corrompido)
+            try:
+                json.loads(config_path.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                print_step(7, f"Config MCP ({c})", False,
+                           f"{config_path} existe mas está corrompido. Remova e rode novamente.")
+                continue
+            print_step(7, f"Config MCP ({c})", True,
+                       f"já existe em {config_path} (mantido)")
+        else:
+            # ── Novo arquivo ──
+            config = {cfg["root_key"]: {"godot-agent": cfg["server_def"]}}
+            config_path.write_text(json.dumps(config, indent=2, ensure_ascii=False), encoding="utf-8")
+            print_step(7, f"Config MCP ({c})", True, str(config_path))
 
 
 def step4_install_addon(project_dir: Path) -> None:
@@ -836,6 +876,8 @@ def main():
     parser.add_argument("--verbose", "-v", action="store_true", help="Mostrar stack traces em erros")
     parser.add_argument("--no-verify", action="store_true", help="Pular verificação de conexão (bridge polling)")
     parser.add_argument("--no-templates", action="store_true", help="Pular download de templates de exportação")
+    parser.add_argument("--client", "-c", choices=["copilot", "claude", "cursor", "all"],
+                       default="copilot", help="Cliente de IA (default: copilot)")
     args = parser.parse_args()
 
     if not args.silent:
@@ -908,7 +950,7 @@ def main():
     # ══════════════════════════════════════════════════════════════════
     # ETAPA 6: Configurar MCP
     # ══════════════════════════════════════════════════════════════════
-    step3_mcp_config(project_dir, venv_python)
+    step3_mcp_config(project_dir, venv_python, client=args.client)
 
     # ══════════════════════════════════════════════════════════════════
     # ETAPA 7: Templates de exportação
