@@ -1,3 +1,7 @@
+---
+applyTo: '**'
+---
+
 # 07 — CAMADA 6 — PROFUNDIDADE DE ENGINE [MARGINAL / Campo A]
 
 > Lê-se junto com `00-mestre.md`. **AVISO FORTE DA AUDITORIA:** esta é a camada mais perigosa do roadmap — não por risco técnico, mas por risco **estratégico**. É "Campo A": profundidade bruta de engine, onde os MCPs concorrentes (tugcantopaloglu 149 tools, godot-mcp-pro 175 tools) já ganham de você e crescem toda semana. **Perseguir paridade aqui dilui o seu fosso** (ser o único MCP que é dono do processo) e você nunca vence essa corrida — eles têm dezenas de tools só de engine e mais surgem constantemente.

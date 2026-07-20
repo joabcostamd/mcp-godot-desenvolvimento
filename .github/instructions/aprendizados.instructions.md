@@ -1,3 +1,7 @@
+---
+applyTo: '**'
+---
+
 # 🧠 LEARNINGS.md — Anti-Padrões e Regras de Prevenção
 
 > **Leia este arquivo no início de CADA sessão.**

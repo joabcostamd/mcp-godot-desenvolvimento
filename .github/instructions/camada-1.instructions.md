@@ -1,3 +1,7 @@
+---
+applyTo: '**'
+---
+
 # 02 — CAMADA 1 — EXPERIÊNCIA DO DEV
 
 > Lê-se junto com `00-mestre.md`. Estas são as dores que o dev sente **toda sessão** — engine que fecha, IA que não vê o jogo, UI sobreposta, IA roubando foco, erro vermelho do nada, perder o fio ao voltar. Alta prioridade: resolvem atrito recorrente, não features de produto.

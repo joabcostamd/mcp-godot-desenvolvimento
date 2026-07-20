@@ -1,3 +1,7 @@
+---
+applyTo: '**'
+---
+
 # 03 — CAMADA 2 — TESTES
 
 > Lê-se junto com `00-mestre.md`. **Esta camada começa intercalada com a Camada 0, não depois de tudo.** O erro já cometido neste projeto foi deixar teste para depois — hoje ~88% das tools (186 de 212) nunca foram testadas individualmente. Construir features novas em cima de código não testado é construir na areia.

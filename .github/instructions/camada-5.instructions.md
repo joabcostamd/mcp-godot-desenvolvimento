@@ -1,3 +1,7 @@
+---
+applyTo: '**'
+---
+
 # 06 — CAMADA 5 — GAMEPLAY [MARGINAL]
 
 > Lê-se junto com `00-mestre.md`. **Toda esta camada é [MARGINAL].** A auditoria recomenda questionar cada fatia antes de fazer: são features de gameplay que agregam valor, mas competem por tempo com o que realmente diferencia o MCP (Camadas 3 e 4). O critério de parada do projeto (correção manual < 15–20%) já foi atingido — nada aqui é necessário para o núcleo.

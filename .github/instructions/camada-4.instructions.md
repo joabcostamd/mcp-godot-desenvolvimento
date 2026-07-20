@@ -1,3 +1,7 @@
+---
+applyTo: '**'
+---
+
 # 05 — CAMADA 4 — EXTENSÕES DE PROCESSO
 
 > Lê-se junto com `00-mestre.md`. Camada on-brand (reforça o processo/verificação, sua identidade), esforço médio. Aqui entram: teste de i18n, CI de verificação, **organização de código Godot** (a resposta à sua pergunta sobre gdtoolkit), segurança/supply-chain, orquestração de agentes, save schema, dead-end de quest, e documentação automática.

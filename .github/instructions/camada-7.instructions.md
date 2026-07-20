@@ -1,3 +1,7 @@
+---
+applyTo: '**'
+---
+
 # 08 — CAMADA 7 — POLIMENTO FINO [MARGINAL]
 
 > Lê-se junto com `00-mestre.md`. **Toda esta camada é [MARGINAL] e a orientação é ADIAR.** Corresponde à Fase 4 do roadmap original. São refinamentos e recursos de fim de ciclo / pós-lançamento — só fazem sentido quando o jogo (ou o MCP) está maduro e perto de lançar. Fazer isto cedo é refinamento antes da hora.

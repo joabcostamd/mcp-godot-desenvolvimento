@@ -1,3 +1,7 @@
+---
+applyTo: '**'
+---
+
 # 09 — GLOSSÁRIO E REFERÊNCIAS
 
 > Consulta para a IA e para o dev. Define os termos técnicos usados nos documentos `00`–`08`, para que ninguém dependa da memória da conversa que gerou este roadmap. Se um documento usa um termo, a definição operacional está aqui.

@@ -1,193 +1,135 @@
-# MCP Godot Agent — AGENTE 01 (Arquitetura & Core)
 
-> **Versão:** 3.0.0 | **Sistema:** ROADMAP_UNIFICADO.md v3.0
-> **Agente:** AGENTE 01 — Copilot DeepSeek V4 Pro
-> **Foco:** `server.py`, `core/*`, `tools/deprecated.py`, `tools/registry_validation.py`, `tools/rollups.py`
+# Instruções do projeto — MCP Godot Agent
 
----
-
-## ⚡ ATIVAÇÃO DE GRUPOS VIRTUAIS (INÍCIO DE SESSÃO)
-
-> No início de **toda sessão**, verifique se existem tools com prefixo `activate_`.
-> Se existirem, chame TODAS antes de prosseguir.
+> **Local correto:** `.github/copilot-instructions.md`
+> O VS Code aplica este arquivo automaticamente a todas as requisições de chat
+> deste workspace. Mantenha-o curto: regra que não cabe aqui vai para
+> `.github/instructions/`.
 
 ---
 
-## 🔄 WORKFLOW AUTÔNOMO
+## 1. O QUE É ESTE PROJETO
 
-Quando o humano digitar `/seguir-roadmap`:
+Um servidor MCP em Python que é o **dono do processo** de desenvolvimento de um jogo
+Godot inteiro — da ideia ao lançamento. Não é só uma ponte entre IA e engine: tem
+travas reais (fase, verificação, export, sessão) que impedem pular etapa.
 
-1. Leia `ROADMAP_UNIFICADO.md` → identifique a PRÓXIMA etapa ⬜ da sua zona (🅰️ AGENTE 01)
-2. Leia `HANDOFF.md` → contexto da sessão anterior
-3. Leia `SUTURE_ISSUES.md` → conflitos pendentes
-4. **Planeje** (modo Agent): pesquise arquivos, confirme escopo, verifique matriz de conflito
-5. **Implemente** EXATAMENTE 1 etapa — edite apenas seus arquivos exclusivos
-6. **Audite**: `validate_tool_registry_consistency()` — se FAIL, corrija (máx 3 tentativas)
-7. **Handoff**: atualize ROADMAP, HANDOFF.md, NEXT_STEP.md
-8. **Commit**: `feat(agente-01-etapa-AX): descrição em português`
+O projeto que você edita é o **próprio MCP**, não um jogo.
 
----
+Estado: Godot 4.7, ~204 `Tool()` em `server.py`, máquina de estados de 6 fases
+(IDEIA → DESIGN → PROTOTIPO → CONTEUDO → POLIMENTO → PRONTO_PARA_LANCAR),
+Saga Engine, proof ledger, `auditar.py` como portão fail-closed.
 
-## 🗂️ ARQUIVOS EXCLUSIVOS (NUNCA EDITAR FORA DESTA LISTA)
-
-| Arquivo | AGENTE 01 |
-|---|---|
-| `server.py` | ✅ Meu |
-| `core/*` | ✅ Meu |
-| `tools/deprecated.py` | ✅ Meu (Sutura — cuidado) |
-| `tools/registry_validation.py` | ✅ Meu |
-| `tools/rollups.py` | ✅ Meu |
-| `tools/*_ops.py` (todos) | ❌ AGENTE 02 |
-| `.github/*` | ❌ AGENTE 02 |
-| `docs/*`, `tests/*` | ❌ AGENTE 02 |
+Objetivo final: um não-programador, usando linguagem natural, começa, desenvolve
+e **termina** um jogo indie.
 
 ---
 
-## 🏗 REGRAS DE OURO
+## 2. LEIA NESTA ORDEM, SEMPRE
 
-1. NUNCA remova funções com `# INTERNAL: usado por <rollup>`
-2. NUNCA edite arquivos da Zona de Sutura sem registrar em `SUTURE_ISSUES.md`
-3. Use apenas `addon_bridge.py` (:9082) ou `runtime_bridge_client.py` (:8790)
-4. Rode `validate_tool_registry_consistency()` após QUALQUER mudança em tools
-5. `server.py` deve chegar a ≤ 3500 linhas ao final da Etapa A5
-6. 1 commit por etapa. NUNCA acumular +2 etapas sem commit
-7. Se encontrar conflito → `SUTURE_ISSUES.md`. NUNCA resolva sozinho
+1. `AGENTS.md` — descubra qual agente você é e qual é o seu território
+2. `ROADMAP_DEFINITIVO.md` — a ordem das ondas e fatias
+3. `.github/roadmap/ONDA_*.md` — a ficha da fatia atual
+4. `.github/instructions/aprendizados.instructions.md` — o que já quebrou antes
+5. `.github/instructions/fontes.instructions.md` — onde pesquisar antes de escrever
 
 ---
 
-## 📋 ETAPAS DO AGENTE 01 (em ordem)
+## 3. AS 5 REGRAS ABSOLUTAS
 
-| Etapa | Nome | Status |
-|---|---|---|
-| A0 | Limpeza Imediata | ✅ |
-| A1 | 5 Namespaces Semânticos | ⬜ |
-| A2 | ExecutionContext | ⬜ |
-| A3 | DATA_CONTRACTS.md | ⬜ |
-| A4 | Intent Router `godot(action)` | ⬜ |
-| A5 | Refatorações Estruturais | ⬜ |
-| A6 | Qualidade MCP Spec | ⬜ |
+**1. Uma fatia por vez.** Nunca comece N+1 antes de N estar 100% fechada e aprovada
+pelo humano.
 
----
+**2. Você não decide que está bom.** "Bom" é teste que passa ou falha, nunca a sua
+opinião. Se um critério não vira teste de passa/falha, ele não é auto-avaliável —
+escale para o humano.
 
-## 🔒 SEGURANÇA
+**3. Prova sempre, nunca alegação.**
+- `git diff --no-color` literal, com marcadores `@@` — nunca resumo ou tabela
+- Código real colado em bloco — nunca "Read lines X to Y" (isso é log de ferramenta)
+- Output de teste completo — nunca "passou!" sozinho
+- "É bug pré-existente" / "sem relação com a fatia" exige `git blame` ou `git log -p`
+  com output colado
 
-| Regra | Descrição |
-|---|---|
-| **Loopback** | Bridges bindam em `127.0.0.1` — nunca `0.0.0.0` |
-| **Checkpoint ≠ commit** | Checkpoint é rede de segurança. Commit só com aprovação |
-| **Segredos** | Nunca escreva API keys/tokens em arquivos |
-| **Sem auto-aprovar** | Quem aprova é `validate_tool_registry_consistency()` + Joab |
+**4. Nunca commite sozinha.** Proponha o commit com a mensagem sugerida e pare.
 
----
+**5. Checkpoint antes de qualquer operação destrutiva.** Git é a rede de segurança real.
 
-## 📏 NOMENCLATURA
-
-- Tools: snake_case com `_manage` para rollups
-- Funções depreciadas: `# INTERNAL: usado por <rollup>_manage`
-- Commits: `feat(agente-01-etapa-AX): descrição em português`
-- Anotações obrigatórias: `destructiveHint`, `idempotentHint`, `openWorldHint`
-
-- **C4:** Checklist manual de segurança
-- **C5:** Contar tools visíveis por fase
-- **C6:** Buscar colisão de nome com `grep_search`
-
-### Cross-Model (Verificação por Modelo Diferente)
-
-- **Forte** (recomendado para [SÊNIOR]): Sugerir ao humano abrir chat com outro modelo (Claude, GPT) para revisão independente.
-- **Fraca** (aceitável para [AUTO] triviais): Revisão interna no mesmo chat.
+Se não tiver certeza se pode prosseguir: **pare e escale.** O custo de parar é baixo.
+O custo de prosseguir errado com confiança é alto.
 
 ---
 
-## 🎯 MARCAÇÕES DE AUTONOMIA
+## 4. CONSULTE A FONTE ANTES DE IMPLEMENTAR
 
-Cada fatia do roadmap tem uma marcação que define o nível de autonomia da IA:
+Antes de escrever código de uma feature, leia a fonte correspondente em
+`.github/instructions/fontes.instructions.md` e **cite qual usou** no relatório.
+Sem fonte citada, a fatia não fecha.
 
-| Marcação | Significado | Comportamento no /plan | Comportamento no /act |
-|---|---|---|---|
-| **[AUTO]** | IA pode planejar e executar sozinha | Planeja normalmente | Fecha sozinha se tudo passar |
-| **[SÊNIOR]** | IA planeja, mas não fecha sem humano | Planeja normalmente | Implementa, mas **NÃO fecha** — escala para revisão |
-| **[MARGINAL]** | IA não decide nada | **NÃO planeja** — pergunta ao humano se deve prosseguir | Só executa com confirmação explícita |
-
----
-
-## 🚦 GOVERNADOR DE AUTONOMIA (FREIOS)
-
-Estes limites impedem que a IA entre em loops ou tome decisões irreversíveis:
-
-| Freio | Limite | Ação ao atingir |
-|---|---|---|
-| **Teto de iteração** | Máximo 8 edições de arquivo por fatia | Parar e escalar |
-| **Anti-spiral** | Mesma ação falhar 2x | Parar — não tentar a terceira |
-| **Não-progresso** | 3 passagens sem progresso mensurável | Parar e reportar |
-| **Orçamento** | Definido no `/plan` | Parar se exceder |
-| **"Pronto" pré-definido** | Critérios escritos ANTES de implementar | Não redefinir no meio |
+Motivo: a causa raiz da maioria dos erros neste projeto é a IA inventar API do Godot
+que não existe (regra R9 dos aprendizados).
 
 ---
 
-## 🧾 REGRA DE PROVA
+## 5. TETO DE FERRAMENTAS (nunca violar)
 
-Toda alegação exige evidência concreta:
+A precisão de escolha de tool despenca acima de 30–50 tools visíveis.
 
-- **"Já existia"** → `git blame` ou `git log -p` com output colado
-- **"Não tem relação com a fatia"** → diff mostrando que o arquivo não foi tocado
-- **"Passou no teste"** → output real do teste, não "provavelmente passaria"
-- **Prova enxuta:** afirmação + evidência curta. Nunca colar centenas de linhas sem necessidade.
-
----
-
-## 🗺 ROADMAP RESUMIDO (~70 fatias, 8 camadas)
-
-| Camada | Nome | Fatias | Destaque |
-|---|---|---|---|
-| **0** | Fundação e Segurança | 0.0–0.16 | Infraestrutura, portão, governador |
-| **1** | Experiência do Dev | 1.1–1.16 | Engine, visão, não-intrusão, recuperação |
-| **2** | Testes | 2.1–2.7 | Cobertura, smoke, regressão visual |
-| **3** | Criação com Fosso | 3.1–3.16 | Música, arte game-ready, playtest |
-| **4** | Extensões de Processo | 4.1–4.9 | i18n, CI, code quality, segurança |
-| **5** | Gameplay | 5.1–5.8 | ⚠️ TODAS [MARGINAL] |
-| **6** | Profundidade de Engine | 6.1–6.8 | ⚠️ TODAS [MARGINAL] |
-| **7** | Polimento | 7.1–7.14 | ⚠️ TODAS [MARGINAL] |
-
-**Progresso atual:** Ver `.roadmap_progress.json`. Use `/plan` para identificar a próxima fatia.
-
-### Ordem de Execução
-
-1. Camada 0 (fundação) — obrigatória primeiro
-2. Camada 2 (testes) — intercalada com a Camada 0
-3. Camada 1 (experiência do dev) — após fundação
-4. Camada 3 (criação com fosso) — diferencial do produto
-5. Camada 4 (extensões de processo)
-6. Camadas 5, 6, 7 — [MARGINAL], só com confirmação humana
+- **Rollup-first é lei.** Feature nova entra como `op` dentro de um rollup
+  (`nome_manage` com parâmetro `op`), nunca como tool de topo. Exceção só com
+  justificativa registrada e aprovada.
+- Rollup se cria com a factory `create_manage_tool()` de `_meta_tool.py`.
+  Não invente outro padrão.
+- Registro: `Tool(name=..., description=..., inputSchema=...)` em `_tool_defs()`
+  **e** handler correspondente em `_build_handlers()`.
+- Teto: ~40 tools visíveis por fase, ~70 tools de topo no total.
+- **Distinguibilidade:** nome ou descrição que se confunda com tool existente
+  é falha automática. Tool ambígua degrada a escolha mais que tool a mais.
+- Descrição e schema enxutos. Descrição inchada custa token em toda requisição
+  e piora a escolha.
 
 ---
 
-## ⚙ CONFIGURAÇÃO DO PROJETO
+## 6. PADRÕES TÉCNICOS DO REPOSITÓRIO (fatos, não sugestões)
 
-- **Godot:** `C:\Godot\Godot_v4.7-stable_win64.exe`
-- **Projeto de teste:** `C:\Users\joabc\OneDrive\Documentos\VSCODE\NUCLEO\projetos\breakout_test`
-- **Projeto principal:** `C:\Users\joabc\OneDrive\Documentos\VSCODE\NUCLEO\projetos\shardbreaker-nodebuster-like`
-- **Ambiente Python:** `.venv` na raiz do projeto
-- **Ativar venv:** `.\.venv\Scripts\Activate.ps1` (PowerShell)
+- Estado por projeto vive em `<project_root>/.mcp_<nome>_state.json`,
+  **nunca** em config global do MCP.
+- Escrita concorrente em arquivo compartilhado exige lock via `tools/config_lock.py`.
+- Subprocess sempre por `tools/subprocess_utils.py::run_subprocess_safe()`,
+  com `stdin=DEVNULL` (evita deadlock no Windows).
+- Rede sempre em `127.0.0.1`. Bind em `0.0.0.0` é falha automática.
+- **Visibilidade de tool ≠ bloqueio de execução.** `_tool_defs()` é filtrado por fase;
+  `_build_handlers()` não é. Tool escondida ainda pode ser chamada. Não confunda
+  curadoria com trava real ao avaliar se um gate é de verdade.
+- Provas por `capture_proof` / `verify_proof`, rodadas **antes** do commit
+  (`git_diff` fica vazio depois do commit).
 
 ---
 
-## 📂 DOCUMENTOS DE REFERÊNCIA
+## 7. AMBIENTE (Windows)
 
-Estes arquivos contêm a especificação detalhada. O Copilot **não os lê automaticamente** — use `read_file` quando precisar de detalhes:
+- PowerShell antigo não aceita `&&`. Use `;` ou `cmd /c "a && b"`.
+- `git commit` / `git log` com saída grande sem feedback trava a sessão.
+  Use `--oneline`, `-n`, ou redirecione.
+- Falhas de rede devem ser simuladas por mock, nunca esperando timeout real.
+- `godot --headless --script` e `--check-only` não funcionam no Windows com 4.7
+  (regra R12). Use os workarounds documentados nos aprendizados.
+- Nomes de arquivo e projeto: sem acento e sem espaço nos caminhos.
 
-| Arquivo | Conteúdo |
-|---|---|
-| `.clinerules/00-mestre.md` | Documento mestre original (cline) |
-| `.clinerules/01-camada-0-fundacao-seguranca.md` | Spec detalhada da Camada 0 |
-| `.clinerules/02-camada-1-experiencia-dev.md` | Spec detalhada da Camada 1 |
-| `.clinerules/03-camada-2-testes.md` | Spec detalhada da Camada 2 |
-| `.clinerules/04-camada-3-criacao-com-fosso.md` | Spec detalhada da Camada 3 |
-| `.clinerules/05-camada-4-extensoes-processo.md` | Spec detalhada da Camada 4 |
-| `.clinerules/06-camada-5-gameplay.md` | Spec detalhada da Camada 5 |
-| `.clinerules/07-camada-6-profundidade-engine.md` | Spec detalhada da Camada 6 |
-| `.clinerules/08-camada-7-polimento.md` | Spec detalhada da Camada 7 |
-| `.clinerules/09-glossario-referencias.md` | Glossário de termos técnicos |
-| `CONTEXTO_PROJETO_MCP_GODOT.md` | Visão geral do projeto |
-| `AUDIT_PROTOCOL.md` | Protocolo de auditoria |
-| `.roadmap_progress.json` | Progresso das fatias (append-only) |
+---
+
+## 8. FLUXO
+
+`/plan` → planejo e paro · humano aprova · `/act` → implemento uma fatia, provo,
+proponho commit e paro · humano aprova · `/handoff` → escrevo o resumo.
+
+Nunca pule `/plan`. Nunca faça duas fatias no mesmo `/act`.
+
+---
+
+## 9. LINGUAGEM
+
+Responda ao humano em **português, linguagem simples e direta**. Sem jargão
+desnecessário, sem preâmbulo, sem elogio, sem resumo redundante. Comando pedido
+é comando entregue — sem explicação em volta.
 

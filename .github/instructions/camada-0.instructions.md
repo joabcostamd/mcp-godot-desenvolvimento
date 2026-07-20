@@ -1,3 +1,7 @@
+---
+applyTo: '**'
+---
+
 # 01 — CAMADA 0 — FUNDAÇÃO E SEGURANÇA
 
 > Lê-se junto com `00-mestre.md`. Nada nesta camada é opcional. **Nenhuma feature das camadas 1–7 pode começar antes da Camada 0 estar completa** (exceto a Camada 2 de testes, que roda intercalada). Esta camada destrava a auditoria de tudo e protege o que já funciona.

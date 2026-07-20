@@ -1,3 +1,7 @@
+---
+applyTo: '**'
+---
+
 # 04 — CAMADA 3 — CRIAÇÃO COM FOSSO
 
 > Lê-se junto com `00-mestre.md`. Esta é a camada de **maior diferencial de produto**. A auditoria de mercado (8 rodadas de pesquisa) mostrou: nenhum concorrente faz criação de arte/música **com rigor de processo**. Os MCPs de engine (149–175 tools) geram zero arte/áudio; os geradores de arte/música entregam um arquivo cru e param. Você é o único que pode fazer "gerar → validar game-ready → travar se não passar". Isso é o fosso.
