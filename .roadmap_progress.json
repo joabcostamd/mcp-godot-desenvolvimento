@@ -1,4 +1,12 @@
 {
+  "fatia_0.I": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "6e9351b",
+    "resultado": "Detector de pasta sincronizada em 3 camadas: detecção universal (4 métodos), exclusão auto Dropbox (ADS com.dropbox.ignored), junction .godot/ → %LOCALAPPDATA% (todos providers). 2 auditorias deep-dive, 17 correções. Integrado em server.py, install.py, launch.py. Fail-open."
+  },
   "fatia_0.G": {
     "status": "concluida",
     "data": "2026-07-20",
