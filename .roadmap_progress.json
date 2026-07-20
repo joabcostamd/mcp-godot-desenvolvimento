@@ -1,4 +1,18 @@
 {
+  "fatia_0.C": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "eab6c58",
+    "resultado": "Fatia 0.7b rebaixada para [MARGINAL]. Modo LEAN (CORE + fase atual) confirmado como padrao via _get_phase_tools(). Medicao: IDEIA=67, DESIGN=72, PROTOTIPO=100, CONTEUDO=74, POLIMENTO=62, PRONTO=50 tools efetivas. Pela especificacao, lean como padrao -> rebaixar. Nota: PROTOTIPO com 100 tools merece atencao futura."
+  },
+  "fatia_0.7b": {
+    "status": "marginal",
+    "data": "2026-07-20",
+    "agente": "AGENTE 01",
+    "resultado": "Rebaixada de [BLOQUEANTE] para [MARGINAL] pela Fatia 0.C. Motivo: modo LEAN e o padrao efetivo; tools ja sao filtradas por fase. PROTOTIPO (100 efetivas) e a unica fase acima de 75 — melhoria futura, nao bloqueia ONDA 0."
+  },
   "fatia_0.B": {
     "status": "concluida",
     "data": "2026-07-20",
