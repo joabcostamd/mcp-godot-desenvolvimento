@@ -197,9 +197,8 @@ def _deduplicate_tscn_lines(lines: list[str]) -> list[str]:
         stripped = line.strip()
         if stripped.startswith("[ext_resource"):
             # Extrai path e id
-            import re as _re
-            path_m = _re.search(r'path="([^"]*)"', stripped)
-            id_m = _re.search(r'id="([^"]*)"', stripped)
+            path_m = re.search(r'path="([^"]*)"', stripped)
+            id_m = re.search(r'id="([^"]*)"', stripped)
             if path_m:
                 rpath = path_m.group(1)
                 if rpath in seen_resources:
@@ -249,8 +248,7 @@ def _deduplicate_tscn_lines(lines: list[str]) -> list[str]:
     resource_count = sum(1 for l in result if l.strip().startswith("[ext_resource"))
     for j in range(len(result)):
         if result[j].strip().startswith("[gd_scene"):
-            import re as _re2
-            result[j] = _re2.sub(r'load_steps=\d+', f'load_steps={1 + resource_count}', result[j])
+            result[j] = re.sub(r'load_steps=\d+', f'load_steps={1 + resource_count}', result[j])
             break
 
     return result
@@ -800,6 +798,15 @@ def set_node_property(scene_path: str | None = None, node_path: str = "", proper
     checkpoint(scene_path, proj)
     # B3 FIX: Deduplica antes de escrever
     lines = _deduplicate_tscn_lines(lines)
+
+    full_path.write_text("".join(lines), encoding="utf-8")
+
+    # Invalida cache para que load_scene_tree veja a mudança
+    _tscn_cache.pop(str(full_path), None)
+
+    # Marca para compilação pendente
+    from tools.runtime_ops import mark_pending_compile
+    mark_pending_compile()
 
     return {"status": "success"}
 
