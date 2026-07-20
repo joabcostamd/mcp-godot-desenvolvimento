@@ -22,6 +22,9 @@ Godot que nao existe. Ler a fonte custa minutos. Inventar custa a sessao inteira
 Se o tema nao estiver na tabela: diga isso, proponha uma fonte, e peca aprovacao
 antes de implementar. Nao invente.
 
+**Protocolo de pesquisa:** Para pesquisas mais profundas, use o comando `/pesquise`
+ou consulte `.github/instructions/pesquisa.instructions.md`.
+
 ---
 
 ## Godot — engine e API

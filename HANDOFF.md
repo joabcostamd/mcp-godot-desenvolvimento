@@ -3,7 +3,30 @@
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo
 > para que o outro agente saiba o estado do projeto na próxima sessão.
 
-## Último Handoff (AGENTE 01 — 2026-07-20 — ONDA 1: 1/17)
+## Último Handoff (AGENTE 01 — 2026-07-20 — Comando /pesquise)
+
+- **Data:** 2026-07-20
+- **De:** AGENTE 01 (Arquitetura & Core)
+- **Ação:** Implementação do comando `/pesquise` + protocolo de pesquisa
+
+### O que foi feito
+
+- `.github/instructions/pesquisa.instructions.md` (NOVO) — protocolo canônico de 9 fases
+- `%USERPROFILE%/AppData/Roaming/Code/User/prompts/pesquise.prompt.md` (NOVO) — prompt VS Code
+- `.github/instructions/fontes.instructions.md` — referência ao protocolo
+- `docs/PESQUISA_EXTERNA.md` — índice de pesquisas + referência ao protocolo
+
+### Como usar
+- Digite `/pesquise` no chat → auto-detecta contexto (fatia atual, fase) e pesquisa até saturação
+- `/pesquise [tema]` → pesquisa tema específico
+- O protocolo evolui com o projeto: edite `pesquisa.instructions.md` para refinar
+
+### Próximo passo
+- **1.F — Erro amigável universal** [AUTO] (plano já apresentado, aguardando aprovação)
+
+---
+
+## Handoff anterior (AGENTE 01 — 2026-07-20 — ONDA 1: 1/17)
 
 - **Data:** 2026-07-20
 - **De:** AGENTE 01 (Arquitetura & Core)

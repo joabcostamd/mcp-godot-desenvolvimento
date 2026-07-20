@@ -2,6 +2,17 @@
 
 > Data: 2026-07-20 | Fontes: MCP Spec 2025-03-26, Godot 4.7 Docs, Apple HIG, Material Design 3
 > Objetivo: enriquecer a solução com conhecimento externo validado, sem regressões.
+> **Protocolo canônico:** `.github/instructions/pesquisa.instructions.md`
+> **Comando rápido:** `/pesquise` no chat do VS Code
+
+---
+
+## 0. Índice de pesquisas realizadas
+
+| Data | Tema | Fatia | Resumo |
+|---|---|---|---|
+| 2026-07-20 | MCP Spec, Godot Plugins, GDScript Style | 1.E (Dock v1) | Protocolo, plugins, style guide |
+| — | — | — | — |
 
 ---
 
