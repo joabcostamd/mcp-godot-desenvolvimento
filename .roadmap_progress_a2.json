@@ -1,0 +1,43 @@
+{
+  "agente": "AGENTE 02",
+  "ultima_atualizacao": "2026-07-20",
+  "branch": "agente2/trabalho",
+  "onda_0": "pulado",
+  "fase_1_fundacao": {
+    "status": "concluida",
+    "data_conclusao": "2026-07-20",
+    "resultado": "Worktree agente2/trabalho criado. Pastas behaviors/, blueprints/, seeds/ populadas com README.md. .roadmap_progress_a2.json criado."
+  },
+  "fase_2_behaviors": {
+    "status": "concluida",
+    "data_conclusao": "2026-07-20",
+    "resultado": "behavior.schema.json (JSON Schema 2020-12) criado. Termo health padrão-ouro completo: behavior.json + health.gd + health.tscn + test_health.gd (16 testes) + README.md. CORRIGIDO: _start_invulnerability() com guard is_inside_tree(). CORRIGIDO: test_invulnerability com add_child()."
+  },
+  "fase_3_dock": {
+    "status": "concluida",
+    "data_conclusao": "2026-07-20",
+    "resultado": "Plugin addons/mcp_dock/ completo: plugin.cfg + plugin.gd (EditorPlugin) + dock.gd (3 zonas, WebSocket 9082) + dock.tscn. CORRIGIDO: vazamento de WebSocketPeer no reconnect (close() antes de new). CORRIGIDO: tratamento de STATE_CONNECTING."
+  },
+  "fase_4_blueprints_seeds": {
+    "status": "concluida",
+    "data_conclusao": "2026-07-20",
+    "resultado": "blueprint.schema.json + seed.schema.json criados. 3 blueprints: platformer.json, topdown_shooter.json, puzzle.json. 1 seed: breakout.json."
+  },
+  "fase_5_templates": {
+    "status": "concluida",
+    "data_conclusao": "2026-07-20",
+    "resultado": "5 templates existentes atualizados com metadados. 3 novos: tutorial_01_basics.gd, quick_start_scene.tscn, menu_main.tscn. CORRIGIDO: quick_start_scene.tscn SubResources definidos (PlaceholderTexture2D + RectangleShape2D). CORRIGIDO: _message_timer morto removido."
+  },
+  "fase_6_testes": {
+    "status": "concluida",
+    "data_conclusao": "2026-07-20",
+    "resultado": "tests/behaviors/test_runner.gd + tests/contract_snapshot_behaviors.py. CORRIGIDO: adicionada validação de integridade .tscn (SubResource/ExtResource check). 3 .tscn validados: PASS."
+  },
+  "auditoria": {
+    "data": "2026-07-20",
+    "problemas_encontrados": 7,
+    "corrigidos": 7,
+    "resultado": "100% dos problemas corrigidos. contract_snapshot: TODOS OS CHECKS PASSARAM. merge-tree: LIMPO."
+  },
+  "proximo": "Aguardar merge do Agente 1 na main. Depois: validar health.gd no Godot, instalar GdUnit4 (Fatia 2.B), criar behaviors restantes (2.E-2.Z)."
+}

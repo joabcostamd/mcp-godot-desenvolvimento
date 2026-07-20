@@ -1,0 +1,70 @@
+{
+  "name": "health",
+  "description_pt": "Componente de vida com dano, cura e sinal de morte. Plugável em qualquer nó (inimigo, player, destrutível).",
+  "description_en": "Health component with damage, healing, and death signal. Plug into any node (enemy, player, destructible).",
+  "synonyms": {
+    "pt": ["vida", "hp", "pontos de vida", "dano", "cura", "morrer", "resistência"],
+    "en": ["life", "hp", "hit points", "damage", "heal", "death", "durability"]
+  },
+  "parameters": [
+    {
+      "name": "max_hp",
+      "type": "int",
+      "description_pt": "Vida máxima do personagem.",
+      "range": {"min": 1, "max": 9999},
+      "default": 100
+    },
+    {
+      "name": "current_hp",
+      "type": "int",
+      "description_pt": "Vida atual (começa igual a max_hp).",
+      "range": {"min": 0, "max": 9999},
+      "default": 100
+    },
+    {
+      "name": "invulnerable_time",
+      "type": "float",
+      "description_pt": "Tempo de invulnerabilidade após tomar dano (0 = sem invulnerabilidade).",
+      "range": {"min": 0.0, "max": 10.0},
+      "default": 0.0,
+      "unit": "s"
+    }
+  ],
+  "signals": [
+    {
+      "name": "died",
+      "description_pt": "Emitido quando current_hp chega a 0.",
+      "params": []
+    },
+    {
+      "name": "damage_taken",
+      "description_pt": "Emitido ao tomar dano. Passa o dano causado e a vida restante.",
+      "params": [
+        {"name": "amount", "type": "int"},
+        {"name": "remaining", "type": "int"}
+      ]
+    },
+    {
+      "name": "healed",
+      "description_pt": "Emitido ao receber cura. Passa a quantidade curada e a vida atual.",
+      "params": [
+        {"name": "amount", "type": "int"},
+        {"name": "current", "type": "int"}
+      ]
+    },
+    {
+      "name": "hp_changed",
+      "description_pt": "Emitido sempre que current_hp muda. Passa o valor antigo e o novo.",
+      "params": [
+        {"name": "old_hp", "type": "int"},
+        {"name": "new_hp", "type": "int"}
+      ]
+    }
+  ],
+  "dependencies": [],
+  "genres": ["platformer", "topdown_shooter", "rpg", "roguelike", "tower_defense", "fighting", "metroidvania", "bullet_hell", "generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["combate", "vida", "dano", "cura", "composite"]
+}

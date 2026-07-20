@@ -1,0 +1,35 @@
+{
+  "name": "breakout",
+  "display_name": "Breakout",
+  "genre": "arcade",
+  "blueprint_ref": "blueprints/puzzle.json",
+  "_blueprint_note": "Breakout estende o blueprint puzzle com comportamentos adicionais (bouncing_ball, paddle, brick). O blueprint_ref indica o genero base; a seed pode usar behaviors alem dos listados no blueprint.",
+  "description_pt": "Clone funcional de Breakout/Arkanoid. O jogador controla uma raquete para rebater uma bola e destruir todos os tijolos na tela. Já implementado e testado — serve como referência de projeto completo.",
+  "description_en": "Functional Breakout/Arkanoid clone. Player controls a paddle to bounce a ball and destroy all bricks on screen. Already implemented and tested — serves as a complete project reference.",
+  "scenes": [
+    {"path": "scenes/main.tscn", "purpose": "game", "description": "Cena principal: paddle, bola, tijolos, HUD de score/vidas."},
+    {"path": "scenes/menu.tscn", "purpose": "main_menu", "description": "Menu inicial com título e botão Jogar."},
+    {"path": "scenes/game_over.tscn", "purpose": "game_over", "description": "Tela de fim de jogo com score final e botão Recomeçar."}
+  ],
+  "behaviors_used": [
+    {"name": "bouncing_ball", "purpose": "Bola que quica nas paredes e tijolos."},
+    {"name": "paddle", "purpose": "Raquete controlada pelo jogador."},
+    {"name": "brick", "purpose": "Tijolos destrutíveis com pontos."},
+    {"name": "game_manager", "purpose": "Score, vidas, game over, reset."}
+  ],
+  "assets": [
+    {"path": "assets/ball.png", "type": "texture", "license": "CC0", "source": "kenney.nl"},
+    {"path": "assets/paddle.png", "type": "texture", "license": "CC0", "source": "kenney.nl"},
+    {"path": "assets/brick.png", "type": "texture", "license": "CC0", "source": "kenney.nl"},
+    {"path": "assets/hit.wav", "type": "sound", "license": "CC0", "source": "kenney.nl"}
+  ],
+  "estimated_playtime": 5,
+  "difficulty": "easy",
+  "controls": {
+    "keyboard": "Setas ← → ou A/D para mover a raquete. ESC para pausar.",
+    "gamepad": "Analógico esquerdo ou D-Pad para mover a raquete.",
+    "touch": "Arrastar na horizontal para mover a raquete."
+  },
+  "clone_prompt_pt": "Quero um jogo igual ao Breakout clássico: raquete, bola e tijolos. A raquete segue o mouse. Cada tijolo vale 10 pontos. 3 vidas. Fases com layouts diferentes.",
+  "version": "1.0.0"
+}

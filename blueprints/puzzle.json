@@ -1,0 +1,38 @@
+{
+  "genre": "puzzle",
+  "display_name_pt": "Puzzle 2D",
+  "display_name_en": "2D Puzzle",
+  "description_pt": "Jogo de raciocínio 2D com regras simples e profundidade crescente. O jogador resolve desafios lógicos ou espaciais para avançar. Ideal para mobile e web.",
+  "description_en": "2D puzzle game with simple rules and increasing depth. Player solves logical or spatial challenges to progress. Ideal for mobile and web.",
+  "core_loop": "Observar o tabuleiro → Planejar movimento → Executar ação → Verificar condição de vitória → Próximo nível",
+  "systems": [
+    "grid_manager"
+  ],
+  "victory_condition": "Resolver o puzzle (todas as peças no lugar, todos os blocos destruídos, etc).",
+  "defeat_condition": "Ficar sem movimentos OU tempo esgotado (depende do subgênero).",
+  "progression": "Níveis com complexidade crescente. Novas mecânicas introduzidas a cada 5–10 níveis. Sistema de estrelas/pontuação por eficiência.",
+  "recommended_behaviors": [
+    "save_load",
+    "timer",
+    "score"
+  ],
+  "optional_behaviors": [
+    "hint_system",
+    "undo_move",
+    "particle_celebrate",
+    "screen_transition"
+  ],
+  "example_games": [
+    {"title": "Tetris", "year": 1985, "developer": "Alexey Pajitnov", "note": "Puzzle de encaixe, regras mínimas, profundidade infinita."},
+    {"title": "Sokoban", "year": 1981, "developer": "Hiroyuki Imabayashi", "note": "Empurrar caixas, puzzle espacial puro."},
+    {"title": "Baba Is You", "year": 2019, "developer": "Hempuli", "note": "Puzzle de manipulação de regras, design inovador."}
+  ],
+  "scene_structure": {
+    "required_scenes": ["main_menu", "level", "level_select"],
+    "optional_scenes": ["settings", "credits", "tutorial"]
+  },
+  "camera_setup": "fixed",
+  "viewport_base": "480x270",
+  "difficulty_preset": "easy",
+  "version": "1.0.0"
+}

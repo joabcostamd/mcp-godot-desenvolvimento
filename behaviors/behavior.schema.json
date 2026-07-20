@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mcp-godot-agent/behavior.schema.json",
+  "title": "Behavior — Componente Verificado",
+  "description": "Schema canônico para um comportamento (behavior) plugável no Godot 4.7. Todo diretório em behaviors/ precisa ter um behavior.json que valide contra este schema.",
+  "type": "object",
+  "required": ["name", "description_pt", "description_en", "version"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome único do behavior em snake_case. Ex: health, enemy_patrol, screen_shake.",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "minLength": 2,
+      "maxLength": 40
+    },
+    "description_pt": {
+      "type": "string",
+      "description": "Descrição em português (1–2 frases). Usada para busca semântica.",
+      "minLength": 10,
+      "maxLength": 300
+    },
+    "description_en": {
+      "type": "string",
+      "description": "Descrição em inglês (1–2 frases).",
+      "minLength": 10,
+      "maxLength": 300
+    },
+    "synonyms": {
+      "type": "object",
+      "description": "Sinônimos para busca em linguagem natural.",
+      "properties": {
+        "pt": {
+          "type": "array",
+          "description": "Sinônimos em português.",
+          "items": {"type": "string", "minLength": 2},
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "en": {
+          "type": "array",
+          "description": "Sinônimos em inglês.",
+          "items": {"type": "string", "minLength": 2},
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    },
+    "parameters": {
+      "type": "array",
+      "description": "Parâmetros expostos pelo componente (viram @export no .gd e entrada no .tres).",
+      "items": {
+        "type": "object",
+        "required": ["name", "type", "default"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome do parâmetro em snake_case.",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "type": {
+            "type": "string",
+            "description": "Tipo GDScript do parâmetro.",
+            "enum": ["int", "float", "bool", "String", "Vector2", "Vector3", "Color", "NodePath", "PackedScene", "Resource"]
+          },
+          "description_pt": {
+            "type": "string",
+            "description": "Descrição em português do que o parâmetro controla.",
+            "maxLength": 200
+          },
+          "range": {
+            "type": "object",
+            "description": "Faixa de valores válidos (obrigatório para int e float).",
+            "properties": {
+              "min": {"type": "number"},
+              "max": {"type": "number"},
+              "step": {"type": "number"}
+            }
+          },
+          "default": {
+            "description": "Valor padrão (tipo conforme 'type')."
+          },
+          "unit": {
+            "type": "string",
+            "description": "Unidade opcional (ex: 'px', 's', '%')."
+          }
+        }
+      }
+    },
+    "signals": {
+      "type": "array",
+      "description": "Sinais emitidos pelo componente.",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome do sinal em snake_case.",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "description_pt": {
+            "type": "string",
+            "description": "Quando o sinal é emitido."
+          },
+          "params": {
+            "type": "array",
+            "description": "Parâmetros do sinal.",
+            "items": {
+              "type": "object",
+              "required": ["name", "type"],
+              "properties": {
+                "name": {"type": "string"},
+                "type": {"type": "string", "enum": ["int", "float", "bool", "String", "Vector2", "Node"]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "description": "Behaviors que precisam estar presentes para este funcionar.",
+      "items": {
+        "type": "string",
+        "description": "Nome de outro behavior.",
+        "pattern": "^[a-z][a-z0-9_]*$"
+      },
+      "uniqueItems": true
+    },
+    "genres": {
+      "type": "array",
+      "description": "Gêneros de jogo onde este behavior é aplicável.",
+      "items": {
+        "type": "string",
+        "enum": ["platformer", "topdown_shooter", "puzzle", "rpg", "roguelike", "tower_defense", "racing", "fighting", "metroidvania", "bullet_hell", "idle", "visual_novel", "generic"]
+      },
+      "minItems": 1
+    },
+    "conflicts": {
+      "type": "array",
+      "description": "Behaviors que NÃO podem coexistir com este.",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]*$"
+      },
+      "uniqueItems": true
+    },
+    "version": {
+      "type": "string",
+      "description": "Versão semântica (semver) do behavior.",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "godot_version": {
+      "type": "string",
+      "description": "Versão mínima do Godot. Ex: '4.7'.",
+      "default": "4.7"
+    },
+    "tags": {
+      "type": "array",
+      "description": "Tags para categorização e busca.",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    }
+  }
+}

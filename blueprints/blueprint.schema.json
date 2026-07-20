@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mcp-godot-agent/blueprint.schema.json",
+  "title": "Blueprint — Receita de Gênero",
+  "description": "Schema para definição declarativa de um gênero de jogo. A IA não gera do zero — instancia e parametriza um blueprint verificado.",
+  "type": "object",
+  "required": ["genre", "description_pt", "core_loop", "systems", "victory_condition", "defeat_condition"],
+  "properties": {
+    "genre": {
+      "type": "string",
+      "description": "Nome do gênero em snake_case. Ex: platformer, topdown_shooter.",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "minLength": 2,
+      "maxLength": 30
+    },
+    "display_name_pt": {
+      "type": "string",
+      "description": "Nome de exibição em português. Ex: 'Plataforma 2D'.",
+      "maxLength": 50
+    },
+    "display_name_en": {
+      "type": "string",
+      "description": "Nome de exibição em inglês.",
+      "maxLength": 50
+    },
+    "description_pt": {
+      "type": "string",
+      "description": "Descrição em português (2–4 frases).",
+      "minLength": 20,
+      "maxLength": 500
+    },
+    "description_en": {
+      "type": "string",
+      "description": "Descrição em inglês.",
+      "minLength": 20,
+      "maxLength": 500
+    },
+    "core_loop": {
+      "type": "string",
+      "description": "Ciclo principal em uma frase. Ex: 'Mover → Atirar → Coletar → Melhorar'. Usado para gerar a estrutura base do jogo.",
+      "minLength": 5,
+      "maxLength": 200
+    },
+    "systems": {
+      "type": "array",
+      "description": "Behaviors OBRIGATÓRIOS para este gênero. O jogo não funciona sem eles.",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]*$"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "victory_condition": {
+      "type": "string",
+      "description": "Descrição de como se vence. Ex: 'Chegar ao fim da fase', 'Sobreviver por X minutos'.",
+      "minLength": 5,
+      "maxLength": 200
+    },
+    "defeat_condition": {
+      "type": "string",
+      "description": "Descrição de como se perde. Ex: 'HP chega a 0', 'Tempo esgota'.",
+      "minLength": 5,
+      "maxLength": 200
+    },
+    "progression": {
+      "type": "string",
+      "description": "Como o jogo evolui ao longo do tempo. Ex: 'Fases com dificuldade crescente', 'Ondas mais rápidas'.",
+      "minLength": 5,
+      "maxLength": 300
+    },
+    "recommended_behaviors": {
+      "type": "array",
+      "description": "Behaviors RECOMENDADOS (opcionais, mas típicos do gênero).",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]*$"
+      },
+      "uniqueItems": true
+    },
+    "optional_behaviors": {
+      "type": "array",
+      "description": "Behaviors opcionais comuns de se adicionar.",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]*$"
+      },
+      "uniqueItems": true
+    },
+    "example_games": {
+      "type": "array",
+      "description": "Jogos de referência reais (nome + ano).",
+      "items": {
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": {"type": "string"},
+          "year": {"type": "integer"},
+          "developer": {"type": "string"},
+          "note": {"type": "string", "description": "O que este jogo exemplifica bem no gênero."}
+        }
+      },
+      "minItems": 1
+    },
+    "scene_structure": {
+      "type": "object",
+      "description": "Estrutura típica de cenas do gênero.",
+      "properties": {
+        "required_scenes": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Cenas obrigatórias. Ex: ['main_menu', 'game', 'game_over']."
+        },
+        "optional_scenes": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Cenas opcionais comuns."
+        }
+      }
+    },
+    "camera_setup": {
+      "type": "string",
+      "description": "Configuração típica de câmera. Ex: 'side-scroll', 'top-down', 'fixed'.",
+      "enum": ["side-scroll", "top-down", "fixed", "free", "isometric", "first-person"]
+    },
+    "viewport_base": {
+      "type": "string",
+      "description": "Resolução base recomendada. Ex: '480x270', '1920x1080'.",
+      "default": "480x270"
+    },
+    "difficulty_preset": {
+      "type": "string",
+      "description": "Dificuldade típica para iniciantes neste gênero.",
+      "enum": ["easy", "medium", "hard"]
+    },
+    "version": {
+      "type": "string",
+      "description": "Versão do blueprint (semver).",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "default": "1.0.0"
+    }
+  }
+}

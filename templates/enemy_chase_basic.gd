@@ -2,6 +2,10 @@
 ##
 ## CharacterBody2D que persegue o player (grupo "player").
 ## Adicione o player ao grupo "player" para o inimigo detecta-lo.
+##
+## @behavior: enemy_chase
+## @genres: topdown_shooter, platformer, roguelike, bullet_hell
+## @tutorial: templates/enemy_chase_basic.gd
 
 class_name EnemyChaser
 {% raw %}extends CharacterBody2D

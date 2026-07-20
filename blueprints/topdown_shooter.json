@@ -1,0 +1,43 @@
+{
+  "genre": "topdown_shooter",
+  "display_name_pt": "Tiro Top-Down",
+  "display_name_en": "Top-Down Shooter",
+  "description_pt": "Jogo de tiro com visão superior. O jogador se move livremente pelo mapa, mira e atira em inimigos que vêm de todas as direções. Gênero versátil: de bullet hell a Survivors-like.",
+  "description_en": "Top-down shooter with free movement. Player moves freely around the map, aims and shoots enemies coming from all directions. Versatile genre: from bullet hell to Survivors-like.",
+  "core_loop": "Mover → Mirar → Atirar → Desviar de projéteis → Coletar drops → Sobreviver/eliminar ondas",
+  "systems": [
+    "health",
+    "player_topdown"
+  ],
+  "victory_condition": "Sobreviver por X minutos OU eliminar todas as ondas OU derrotar o chefe.",
+  "defeat_condition": "HP chega a 0.",
+  "progression": "Ondas cada vez mais difíceis (mais inimigos, novos tipos, mais rápidos). Power-ups e upgrades entre ondas. Chefe a cada 5 ondas.",
+  "recommended_behaviors": [
+    "projectile",
+    "enemy_chase",
+    "spawner_wave",
+    "xp_level",
+    "invulnerability"
+  ],
+  "optional_behaviors": [
+    "knockback",
+    "screen_shake",
+    "hit_stop",
+    "particle_impact",
+    "floating_text",
+    "boss_fight"
+  ],
+  "example_games": [
+    {"title": "Vampire Survivors", "year": 2022, "developer": "poncle", "note": "Sobrevivência com auto-ataque, upgrades em massa."},
+    {"title": "Enter the Gungeon", "year": 2016, "developer": "Dodge Roll", "note": "Bullet hell com esquiva, variedade de armas."},
+    {"title": "Hotline Miami", "year": 2012, "developer": "Dennaton Games", "note": "Top-down tático, morte em um hit, ritmo acelerado."}
+  ],
+  "scene_structure": {
+    "required_scenes": ["main_menu", "game", "game_over"],
+    "optional_scenes": ["upgrade", "settings", "credits"]
+  },
+  "camera_setup": "top-down",
+  "viewport_base": "480x270",
+  "difficulty_preset": "medium",
+  "version": "1.0.0"
+}

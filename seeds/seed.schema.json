@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mcp-godot-agent/seed.schema.json",
+  "title": "Seed — Jogo-Semente",
+  "description": "Schema para um jogo mínimo completo, clonável e comentado. Ponto de partida para o modo remix (Fatia 1.K).",
+  "type": "object",
+  "required": ["name", "genre", "blueprint_ref", "description_pt", "scenes", "behaviors_used"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome do jogo-semente em snake_case. Ex: breakout, space_shooter_mini.",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "minLength": 2,
+      "maxLength": 40
+    },
+    "display_name": {
+      "type": "string",
+      "description": "Nome de exibição. Ex: 'Breakout', 'Mini Space Shooter'.",
+      "maxLength": 60
+    },
+    "genre": {
+      "type": "string",
+      "description": "Gênero do jogo (deve referenciar um blueprint existente).",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "blueprint_ref": {
+      "type": "string",
+      "description": "Caminho relativo para o blueprint usado. Ex: 'blueprints/platformer.json'.",
+      "pattern": "^blueprints/[a-z][a-z0-9_]*\\.json$"
+    },
+    "description_pt": {
+      "type": "string",
+      "description": "Descrição do jogo em português (2–4 frases).",
+      "minLength": 20,
+      "maxLength": 500
+    },
+    "description_en": {
+      "type": "string",
+      "description": "Descrição em inglês.",
+      "minLength": 20,
+      "maxLength": 500
+    },
+    "scenes": {
+      "type": "array",
+      "description": "Cenas que compõem o jogo, em ordem de carregamento.",
+      "items": {
+        "type": "object",
+        "required": ["path", "purpose"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Caminho relativo da cena. Ex: 'scenes/main.tscn'."
+          },
+          "purpose": {
+            "type": "string",
+            "description": "Propósito da cena. Ex: 'main_menu', 'game', 'game_over', 'hud'."
+          },
+          "description": {
+            "type": "string",
+            "description": "O que esta cena contém."
+          }
+        }
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "behaviors_used": {
+      "type": "array",
+      "description": "Behaviors instanciados neste jogo-semente.",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome do behavior.",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "purpose": {
+            "type": "string",
+            "description": "Para que serve neste jogo específico."
+          },
+          "params_override": {
+            "type": "object",
+            "description": "Parâmetros diferentes do padrão usados neste jogo."
+          }
+        }
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "assets": {
+      "type": "array",
+      "description": "Assets usados com licença explícita.",
+      "items": {
+        "type": "object",
+        "required": ["path", "type", "license"],
+        "properties": {
+          "path": {"type": "string"},
+          "type": {
+            "type": "string",
+            "enum": ["texture", "sound", "music", "font", "shader", "tileset", "spritesheet"]
+          },
+          "license": {"type": "string", "description": "Licença do asset. Ex: 'CC0', 'MIT', 'CC-BY 4.0'."},
+          "source": {"type": "string", "description": "URL ou nome do autor."},
+          "attribution_required": {"type": "boolean", "default": false}
+        }
+      }
+    },
+    "estimated_playtime": {
+      "type": "integer",
+      "description": "Tempo estimado de jogo em minutos.",
+      "minimum": 1,
+      "maximum": 120
+    },
+    "difficulty": {
+      "type": "string",
+      "description": "Dificuldade do jogo.",
+      "enum": ["easy", "medium", "hard"]
+    },
+    "controls": {
+      "type": "object",
+      "description": "Controles do jogo.",
+      "properties": {
+        "keyboard": {"type": "string", "description": "Descrição dos controles de teclado."},
+        "gamepad": {"type": "string", "description": "Descrição dos controles de gamepad."},
+        "touch": {"type": "string", "description": "Descrição dos controles de toque."}
+      }
+    },
+    "clone_prompt_pt": {
+      "type": "string",
+      "description": "Prompt sugerido para clonar este jogo no modo remix.",
+      "maxLength": 300
+    },
+    "version": {
+      "type": "string",
+      "description": "Versão da seed (semver).",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "default": "1.0.0"
+    }
+  }
+}

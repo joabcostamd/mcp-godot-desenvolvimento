@@ -1,0 +1,64 @@
+[gd_scene load_steps=7 format=3 uid="uid://quickstart00000001"]
+
+[ext_resource type="Script" path="res://templates/player_2d_controller.gd" id="1_player"]
+[ext_resource type="Script" path="res://templates/enemy_chase_basic.gd" id="2_enemy"]
+
+[sub_resource type="PlaceholderTexture2D" id="placeholder_blue"]
+size = Vector2(32, 32)
+
+[sub_resource type="PlaceholderTexture2D" id="placeholder_red"]
+size = Vector2(32, 32)
+
+[sub_resource type="PlaceholderTexture2D" id="placeholder_green"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="rect_shape"]
+size = Vector2(32, 32)
+
+; ── Cena raiz ─────────────────────────────────────────────────────────────────
+
+[node name="QuickStart" type="Node2D"]
+
+; ── Player ────────────────────────────────────────────────────────────────────
+
+[node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
+position = Vector2(100, 200)
+script = ExtResource("1_player")
+speed = 300.0
+
+[node name="PlayerSprite" type="Sprite2D" parent="Player"]
+texture = SubResource("placeholder_blue")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("rect_shape")
+
+; ── Inimigo ───────────────────────────────────────────────────────────────────
+
+[node name="Enemy" type="CharacterBody2D" parent="."]
+position = Vector2(400, 200)
+script = ExtResource("2_enemy")
+speed = 80.0
+
+[node name="EnemySprite" type="Sprite2D" parent="Enemy"]
+texture = SubResource("placeholder_red")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy"]
+shape = SubResource("rect_shape")
+
+; ── Alvo (condição de vitória) ────────────────────────────────────────────────
+
+[node name="Goal" type="Area2D" parent="."]
+position = Vector2(700, 200)
+
+[node name="GoalSprite" type="Sprite2D" parent="Goal"]
+texture = SubResource("placeholder_green")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Goal"]
+shape = SubResource("rect_shape")
+
+; ── Label de instrução ────────────────────────────────────────────────────────
+
+[node name="Instructions" type="Label" parent="."]
+position = Vector2(20, 20)
+text = "Mova-se com ← → e pule com ESPAÇO. Chegue ao quadrado verde!"
+theme_override_font_sizes/font_size = 14
