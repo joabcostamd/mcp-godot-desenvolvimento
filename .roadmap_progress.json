@@ -1,4 +1,20 @@
 {
+  "fatia_0.L": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "8fbaeb0",
+    "resultado": "Bug set_node_property corrigido. Causa raiz: faltavam full_path.write_text(), _tscn_cache.pop() e mark_pending_compile() após modificar lines em memória. Mesmo padrão de add_node e delete_node. B3 adicional: removidos 2x import re redundantes em _deduplicate_tscn_lines. C3 smoke_test: PASS."
+  },
+  "fatia_0.K": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "8fbaeb0",
+    "resultado": "IP Guard implementado. tools/ip_guard.py (295 linhas): 80+ franquias mapeadas com alternativas originais, word-boundary matching, deteccao de nomes pessoais (anti-falso-positivo). Integrado em set_project_brief() e generate_game_art(). Fail-open. 10/10 testes self-test. C3 smoke_test: PASS."
+  },
   "fatia_0.J": {
     "status": "concluida",
     "data": "2026-07-20",
@@ -6,6 +22,14 @@
     "agente": "AGENTE 01",
     "checkpoint": "2779a40",
     "resultado": "Normalizacao de nome implementada. tools/name_utils.py (127 linhas): normalize_identifier() com NFKD+ASCII, resolve_collision() com sufixo numerico. Integrado em project_ops.py::create_project(). 4/4 criterios de aceite: Meu Jogo Legal -> meu_jogo_legal, Coração 2 -> coracao_2, colisao -> _2, rotulo original preservado."
+  },
+  "fatia_0.H": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "6fca7e0",
+    "resultado": "Protocolo anti-conflito MCP/Git ↔ editor Godot. tools/editor_safety.py: check_editor_conflict() via Addon Bridge. Integrado em call_tool() antes de operacoes destrutivas. Timeout 1-2s, fail-open."
   },
   "fatia_0.I": {
     "status": "concluida",

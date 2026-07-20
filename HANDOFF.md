@@ -3,7 +3,54 @@
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo
 > para que o outro agente saiba o estado do projeto na próxima sessão.
 
-## Último Handoff (AGENTE 01 — 2026-07-19 — Camada 6 COMPLETA)
+## Último Handoff (AGENTE 01 — 2026-07-20 — ONDA 0: ✅ 12/12)
+
+- **Data:** 2026-07-20
+- **De:** AGENTE 01 (Arquitetura & Core)
+- **Ação:** Fatias 0.I, 0.J, 0.K, 0.L + correções cross-cutting + `/auditar` turbinado
+
+### O que foi feito
+
+| Fatia | Descrição | Arquivo |
+|---|---|---|
+| 0.I | Cloud sync detector (3 camadas) | `tools/cloud_sync_detector.py` (NOVO) |
+| 0.J | Name normalizer (NFKD+ASCII) | `tools/name_utils.py` (NOVO) |
+| 0.K | IP guard (80+ franquias) | `tools/ip_guard.py` (NOVO) |
+| **0.L** | **Bug set/get_node_property** | `tools/scene_ops.py` (FIX) |
+| — | Handler factory (38→1) | `server.py` (refactor) |
+| — | C1 bug fix (indentação) | `server.py` (fix) |
+| — | `/auditar` 12 fases auto | user-level prompt (modificado) |
+
+### 0.L — Detalhe técnico
+
+**Causa raiz:** `set_node_property()` modificava `lines` em memória mas nunca
+chamava `full_path.write_text()`. Comparado com `add_node()` e `delete_node()`
+que têm o padrão completo: checkpoint → modificar → deduplicar → **write_text**
+→ cache.pop → mark_pending_compile.
+
+**Correção:** +7 linhas após `_deduplicate_tscn_lines()`.
+**B3 extra:** removidos 2x `import re` redundantes dentro de `_deduplicate_tscn_lines`.
+
+### Métricas
+
+- **Total tools:** 274 (sem alteração)
+- **Handlers:** 295 (sem alteração)
+- **Novos arquivos:** cloud_sync_detector.py, name_utils.py, ip_guard.py
+- **Arquivos expandidos:** server.py, project_ops.py, project_brief_ops.py, art_ops.py, tool_definitions.py, scene_ops.py
+- **ONDA 0:** ✅ 12/12 CONCLUÍDA
+
+### ⚠️ Pontos de atenção para AGENTE 02
+
+- `_make_import_handler()` substituiu 38 handlers Camada 6 — se adicionar tool nova nesse domínio, use a factory
+- IP guard é fail-open: nunca bloqueia o servidor
+- Cloud sync detector integrado em server.py, install.py, launch.py
+- C1 do auditar.py mostra 7 breaking (falso positivo da factory)
+- **ONDA 0 fechada.** Próximo: ONDA 1 — Acessibilidade (fatia 1.A: instalador de um comando)
+
+### Próximo passo (AGENTE 01)
+- **ONDA 1 — 1.A: Instalador de um comando (`init`)** [SÊNIOR]
+
+---
 
 - **Data:** 2026-07-19
 - **De:** AGENTE 01 (Arquitetura & Core)

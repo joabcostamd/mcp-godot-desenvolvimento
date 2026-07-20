@@ -110,6 +110,8 @@ def set_project_brief(
     target_platform: str | None = None,
     style_lock: dict | None = None,
     force: bool = False,
+    ip_force: bool = False,
+    ip_reason: str = "",
 ) -> dict:
     """Define/sobrescreve o project brief do projeto ativo.
 
@@ -185,6 +187,31 @@ def set_project_brief(
             brief["target_platform"] = target_platform
         if style_lock is not None:
             brief["style_lock"] = style_lock
+
+        # ── Fatia 0.K: Verificar PI de terceiros ──
+        try:
+            from tools.ip_guard import check_brief_ip, is_ip_previously_accepted, record_ip_decision
+            proj = _get_active_project()
+            ip_result = check_brief_ip(brief)
+            if ip_result["flagged"]:
+                term = ip_result["match"]
+                if ip_force and ip_reason:
+                    # Usuário aceitou o risco — registra e prossegue
+                    record_ip_decision(str(proj), term, True, ip_reason)
+                elif not is_ip_previously_accepted(str(proj), term):
+                    return {
+                        "status": "error",
+                        "ip_concern": True,
+                        "match": term,
+                        "message": ip_result["message"],
+                        "alternative": ip_result["alternative"],
+                        "hint": (
+                            f"Para prosseguir mesmo assim, chame esta tool novamente "
+                            f"com ip_force=True e ip_reason='sua justificativa'."
+                        ),
+                    }
+        except Exception:
+            pass  # fail-open: IP guard nao pode travar criacao de brief
 
         _save_brief_state(brief)
 

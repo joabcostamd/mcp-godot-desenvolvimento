@@ -72,7 +72,7 @@ def resolve_collision(desired: str, existing: set[str]) -> str:
 
     Exemplos:
         resolve_collision("cafe", {"cafe"})      → "cafe_2"
-        resolve_collision("cafe", {"cafe_2"})    → "cafe_2" (desejado ja e unico)
+        resolve_collision("cafe", {"cafe_2"})    → "cafe"   (desejado nao colide)
         resolve_collision("cafe", set())          → "cafe"
     """
     if desired not in existing:
@@ -91,7 +91,7 @@ def is_safe_identifier(value: str) -> bool:
     """
     if not value:
         return False
-    return bool(re.fullmatch(r"[a-z][a-z0-9_]*", value))
+    return bool(re.fullmatch(r"[a-z_][a-z0-9_]*", value))
 
 
 # ══════════════════════════════════════════════════════════════════════

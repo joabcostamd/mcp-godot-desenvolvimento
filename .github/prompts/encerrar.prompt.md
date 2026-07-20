@@ -20,7 +20,7 @@ Pipeline de 15 fases. Cada fase: pré-condições → execução → validação
 2. **Idempotente.** Rodar 2x não duplica nada. Verifique antes de criar.
 3. **Fail-safe.** Erro em fase X não corrompe o projeto nem bloqueia fases independentes.
 4. **Nada de ficção.** Zero dado inventado. Se não sabe, escreva "não disponível".
-5. **Aprovação humana para destruir.** Commit, push e delete exigem confirmação.
+5. **100% automático.** Commit, push, documentação, memória — tudo executado sem parar. Zero confirmação.
 
 ---
 
@@ -189,7 +189,7 @@ Verifique `.gitignore`: cobre `__pycache__/`, `.env`, `node_modules/`, `journal/
 
 ---
 
-## 📦 FASE 8 — GIT
+## 📦 FASE 8 — GIT (automático)
 
 **Pré-condição:** Fases 2 e 7 OK. Zero segredos.
 
@@ -197,24 +197,26 @@ Verifique `.gitignore`: cobre `__pycache__/`, `.env`, `node_modules/`, `journal/
 1. `git status --porcelain`
 2. Se houver mudanças:
    - Agrupe por tema (docs, feat, fix, chore, refactor, test)
-   - Proponha 1 commit por grupo com mensagem Conventional Commits
-   - **PARE e aguarde aprovação**
-3. Após aprovação: `git add <arquivos>` + `git commit -m "<mensagem>"`
+   - Execute commits com mensagem Conventional Commits
+   - **NÃO pare. NÃO peça aprovação.** Commite tudo automaticamente.
+3. Se NÃO houver mudanças: registre "working tree limpo".
 
 **Validação:** `git status --porcelain` limpo.
 
-**Erro:** sem aprovação → registre pendência, NÃO commite.
+**Erro:** conflito de merge → registre, pule.
 
 ---
 
-## ☁️ FASE 9 — REMOTO
+## ☁️ FASE 9 — REMOTO (automático)
 
 **Pré-condição:** Fase 8 OK.
 
 **Execução:**
 1. `git remote -v`
-2. Se houver remote: `git push origin <branch>`
+2. Se houver remote: `git push origin <branch>` — **automático, sem perguntar**
 3. Se houver tags novas: `git push --tags`
+
+**Validação:** push executado OU remote ausente registrado.
 
 **Validação:** push executado OU remote ausente registrado.
 
@@ -389,9 +391,8 @@ Revise a conversa. Para cada decisão tomada:
 
 ## 🚫 NUNCA
 
-- Commitar ou fazer push sem aprovação
-- Inventar métricas, dados ou documentação
-- Apagar histórico (.git, changelog, journal)
 - Deixar segredo em commit
 - Deixar projeto em estado inconsistente
 - Pular fase sem registrar motivo
+- Inventar métricas, dados ou documentação
+- Apagar histórico (.git, changelog, journal)

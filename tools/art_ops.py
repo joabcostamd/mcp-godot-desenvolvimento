@@ -233,6 +233,8 @@ def generate_game_art(
     width: int | None = None,
     height: int | None = None,
     save_dir: str | None = None,
+    ip_force: bool = False,
+    ip_reason: str = "",
 ) -> dict:
     """Gera arte de jogo a partir de descricao em linguagem natural.
 
@@ -259,6 +261,30 @@ def generate_game_art(
         {"status": "success", "frames": [...], "sprite_sheet": str,
          "category": str, "cache_hit": bool}
     """
+    # ── Fatia 0.K: Verificar PI de terceiros no prompt de arte ──
+    try:
+        from tools.ip_guard import check_ip_concern, is_ip_previously_accepted, record_ip_decision
+        from tools.project_ops import _get_active_project
+        ip_result = check_ip_concern(description)
+        if ip_result["flagged"]:
+            proj = _get_active_project()
+            term = ip_result["match"]
+            if ip_force and ip_reason:
+                record_ip_decision(str(proj), term, True, ip_reason)
+            elif not is_ip_previously_accepted(str(proj), term):
+                return {
+                    "status": "error",
+                    "ip_concern": True,
+                    "match": term,
+                    "message": ip_result["message"],
+                    "alternative": ip_result["alternative"],
+                    "hint": (
+                        f"Para prosseguir mesmo assim, chame esta tool novamente "
+                        f"com ip_force=True e ip_reason='sua justificativa'."
+                    ),
+                }
+    except Exception:
+        pass  # fail-open
     proj = _get_active_project()
 
     # Normalizar
