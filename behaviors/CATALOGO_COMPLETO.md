@@ -1,7 +1,8 @@
-# ARSENAL DEFINITIVO DE BEHAVIORS — Catálogo Completo v3.0
+# ARSENAL DEFINITIVO DE BEHAVIORS — Catálogo Completo v4.0
 
-**Versão:** 3.0 | **Data:** 2026-07-20
+**Versão:** 4.0 | **Data:** 2026-07-20
 **Local:** `behaviors/` | **Formato:** `behavior.schema.json` v2.0
+**Total:** 120+ behaviors em 18 categorias + 7 sub-bibliotecas catalogadas
 
 ---
 
@@ -214,6 +215,90 @@ behaviors/<nome>/
 | 91 | `destructible` | Node2D | hits_to_break, destroy_effect, drop_table | damaged, destroyed | health | Nodot Breakable | ⬜ |
 | 92 | `teleport` | Area2D | target_position, target_scene, transition | teleported | scene_transition | Nodot Teleport3D | ⬜ |
 | 93 | `lerp_smooth` | Node | property, target_value, duration, easing | completed | Padrão universal | ⬜ |
+
+### 🤝 INTERAÇÃO
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 94 | `interactable` | Area2D | prompt_text, interaction_range, hold_duration | interacted, focused, unfocused | — | Nodot Interaction3D | ⬜ |
+| 95 | `outline` | Node | color, width, show_on_focus | — | — | Nodot Outline3D | ⬜ |
+| 96 | `ladder` | Area2D | climb_speed, top_exit, bottom_exit | climbing_started, climbing_ended | — | Nodot Ladder3D | ⬜ |
+| 97 | `burnable` | Node | ignition_time, burn_duration, spread_chance | ignited, extinguished, burned_out | health | Nodot Burnable3D | ⬜ |
+
+### 🌐 MULTIPLAYER
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 98 | `network_sync` | Node | sync_properties, sync_interval | synced, desync_detected | — | Nodot NetworkManager | ⬜ |
+| 99 | `lobby` | Node | max_players, game_mode, map | player_joined, player_left, game_started | network_sync | Multiplayer pattern | ⬜ |
+| 100 | `authority` | Node | authority_type, transferable | authority_changed | — | Godot multiplayer | ⬜ |
+| 101 | `rpc_bridge` | Node | rpc_methods, reliable, channel | rpc_sent, rpc_received | — | Nodot, Godot RPC | ⬜ |
+
+### 🖥️ UI
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 102 | `accordion` | Control | sections, collapsed, animation_duration | section_toggled | — | Nodot Accordion | ⬜ |
+| 103 | `tooltip` | Control | text, show_delay, position | — | — | Padrão UI | ⬜ |
+| 104 | `drag_drop` | Control | drag_data, drop_zone, snap | drag_started, dropped, cancelled | — | Padrão UI Godot | ⬜ |
+| 105 | `health_bar` | Node2D | target_health, bar_color, show_text, smooth | — | health | Nodot HealthBar3D | ⬜ |
+
+### 💾 DADOS
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 106 | `storage` | Node | data, persistent, file_path | data_changed, loaded | save_load | Nodot Storage | ⬜ |
+| 107 | `event_bus` | Node | event_registry | event_fired, listener_added | — | Nodot GlobalSignal | ⬜ |
+| 108 | `blackboard` | Node | variables, scopes | var_set, var_erased, trigger_activated | — | LimboAI, Beehave | ⬜ |
+
+### ⚡ FÍSICA
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 109 | `buoyancy` | Area2D | fluid_density, drag_coefficient, surface_level | entered_fluid, exited_fluid | — | Nodot WaterArea3D | ⬜ |
+| 110 | `conveyor_belt` | Area2D | direction, speed | — | — | Padrão física Godot | ⬜ |
+| 111 | `magnet` | Area2D | force, range, target_group, falloff | attracted | — | Padrão física | ⬜ |
+| 112 | `gravity_zone` | Area2D | gravity_direction, gravity_strength, override | entered_zone, exited_zone | — | Padrão física | ⬜ |
+| 113 | `wind_zone` | Area2D | wind_direction, wind_strength, turbulence | — | — | Padrão física | ⬜ |
+| 114 | `spring_joint` | Node | anchor_a, anchor_b, stiffness, damping, rest_length | — | — | Godot PinJoint2D | ⬜ |
+
+### 🎨 SHADERS / VISUAL
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 115 | `outline_shader` | Node | color, width, pattern | — | — | Nodot outline3d.gdshader | ⬜ |
+| 116 | `water_surface` | Node2D | wave_speed, wave_amplitude, color, distortion | — | — | Nodot water.gdshader | ⬜ |
+| 117 | `lava_surface` | Node2D | flow_speed, glow_intensity, color | — | — | Nodot lava.gdshader | ⬜ |
+| 118 | `dissolve` | Node | progress, edge_width, edge_color, noise_texture | dissolve_finished | — | Shader pattern | ⬜ |
+| 119 | `parallax_background` | Node2D | layers, scroll_speed, auto_scroll | — | — | Demo platformer | ⬜ |
+| 120 | `lens_flare` | Node2D | flare_texture, intensity, sun_position | — | — | Nodot lens_flare | ⬜ |
+
+### 🎮 GÊNEROS ESPECÍFICOS
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 121 | `card` | Node | card_data, face_up, draggable, deck_ref | played, drawn, discarded, flipped | deck | Card games | ⬜ |
+| 122 | `deck` | Node | cards, shuffle_on_init, draw_pile, discard_pile | shuffled, card_drawn, empty | card | Card games | ⬜ |
+| 123 | `hand` | Node | max_cards, fan_angle, card_spacing | card_added, card_removed | card, deck | Card games | ⬜ |
+| 124 | `dialogue` | Node | dialogue_tree, speaker, text_speed, choices | line_shown, choice_made, dialogue_ended | — | Dialogic, Dialogue Manager | ⬜ |
+| 125 | `shop` | Node | items, prices, discount, restock_interval | item_bought, item_sold, insufficient_funds | currency, inventory | Shop pattern | ⬜ |
+| 126 | `crafting` | Node | recipes, ingredients, output | crafted, missing_ingredients, recipe_unlocked | inventory | Crafting pattern | ⬜ |
+| 127 | `rhythm_timing` | Node | bpm, tolerance, input_action, beat_offset | perfect, good, miss, beat | audio_manager | Rhythm games | ⬜ |
+| 128 | `idle_generator` | Node | resource_per_second, max_storage, upgrade_cost | generated, storage_full, upgraded | currency, upgrade | Idle/clicker | ⬜ |
+| 129 | `stealth` | Node | visibility, noise_radius, detection_level | detected, alerted, hidden, suspicious | line_of_sight | Stealth games | ⬜ |
+| 130 | `match3_grid` | Node | grid_width, grid_height, gem_types, min_match | match_found, grid_settled, combo | grid_movement | Match-3 games | ⬜ |
+| 131 | `racing_lap` | Node | total_laps, checkpoints, best_time | lap_completed, race_finished, checkpoint_passed | — | Racing games | ⬜ |
+| 132 | `fishing_cast` | Node | cast_power, lure_type, minigame_difficulty | cast, bite, caught, line_broke | — | Fishing games | ⬜ |
+| 133 | `farming_plot` | Node2D | growth_time, stages, water_needed, harvest_yield | planted, stage_changed, ready, harvested | inventory | Farming/life sim | ⬜ |
+
+### 🐛 DEBUG
+
+| # | Behavior | Godot Node | Parâmetros Chave | Sinais | Fonte | Status |
+|---|----------|------------|------------------|--------|-------|--------|
+| 134 | `debug_position` | Node2D | color, size, show_label, label_text | — | — | Nodot DebugPosition | ⬜ |
+| 135 | `debug_arrow` | Node2D | color, length, direction | — | — | Nodot DebugArrowMesh | ⬜ |
+| 136 | `debug_console` | Control | max_lines, auto_scroll, command_history | command_entered | — | Developer Console | ⬜ |
+| 137 | `fps_counter` | Control | show_min, show_max, show_avg, update_interval | — | — | Padrão debug | ⬜ |
 
 ---
 
