@@ -95,6 +95,14 @@ TOOLSETS = {
         "create_light_2d", "create_light_3d",
         "create_navigation_agent_2d", "create_navigation_region_2d",
         "setup_camera_2d",
+        # Camada 5 (Gameplay): project
+        "create_achievement_system", "cloud_save_configure",
+        "mod_manifest_generate",
+        "cutscene_create_timeline", "cutscene_add_camera_shot", "cutscene_add_dialogue_event",
+        "quest_generate",
+        "dialogue_generate_npc_lines", "dialogue_generate_personality",
+        "accessibility_apply_colorblind_filter", "accessibility_add_subtitles", "accessibility_remap_controls",
+        "onboarding_create_tutorial_step", "onboarding_create_guided_tour",
     ],
     "assets": [
         # Assets, arte, áudio, shaders, VFX
@@ -115,6 +123,8 @@ TOOLSETS = {
         "terrain_generate", "wave_generate",
         # Juice/Polimento visual
         "juice_apply", "juice_list_presets",
+        # Camada 5 (Gameplay): assets
+        "trailer_capture_clip", "trailer_render_sequence", "capsule_generate_store_image",
         # Operações atômicas de assets (complementam os rollups)
         "configure_particles_2d", "create_particles_2d", "create_particles_3d",
         "configure_standard_material_3d",
@@ -184,6 +194,12 @@ TOOLSETS = {
         "dps_calculator", "balance_analyze",
         "vision_manage",
         "localization_manage",
+        # Camada 5 (Gameplay): analysis
+        "validate_achievement_config", "validate_mod_compatibility",
+        "telemetry_track_event", "telemetry_get_funnel", "telemetry_session_summary", "telemetry_heatmap",
+        "adaptive_difficulty_adjust",
+        "accessibility_audit_scene", "accessibility_certification_checklist",
+        "onboarding_check_first_experience",
     ],
     "orchestration": [
         # Meta-tools, workflow, governança, fase, segurança, bootstrap
@@ -211,6 +227,8 @@ TOOLSETS = {
         "gdd_generate",
         "release_checklist", "deploy_itch",
         "configure_export_preset",
+        # Camada 5 (Gameplay): orchestration
+        "remote_balance_config",
     ],
 }
 
@@ -1134,6 +1152,17 @@ from tools.pipeline_ops import project_status
 
 # ── Orquestrador Genius (Onda 7) ────────────────────────────────
 from tools.orchestrator import create_entity, circuit_breaker_status
+
+# ── Camada 5 (Gameplay) ─────────────────────────────────────────────
+from tools.achievement_ops import create_achievement_system, cloud_save_configure, validate_achievement_config
+from tools.mod_ops import mod_manifest_generate, validate_mod_compatibility
+from tools.cutscene_ops import cutscene_create_timeline, cutscene_add_camera_shot, cutscene_add_dialogue_event
+from tools.telemetry_ops import telemetry_track_event, telemetry_get_funnel, telemetry_session_summary, telemetry_heatmap
+from tools.adaptive_ops import adaptive_difficulty_adjust, quest_generate, remote_balance_config
+from tools.dialogue_ops import dialogue_generate_npc_lines, dialogue_generate_personality
+from tools.accessibility_ops import accessibility_apply_colorblind_filter, accessibility_add_subtitles, accessibility_remap_controls, accessibility_audit_scene, accessibility_certification_checklist
+from tools.trailer_ops import trailer_capture_clip, trailer_render_sequence, capsule_generate_store_image
+from tools.onboarding_ops import onboarding_create_tutorial_step, onboarding_create_guided_tour, onboarding_check_first_experience
 
 # ── Onda 6: Server Instructions (system prompt do MCP) ──────────────
 
@@ -2178,6 +2207,35 @@ def _build_handlers() -> dict:
         "invoke_by_name": _handle_invoke_by_name,
         # ── Etapa A4: Intent Router ──
         "godot": _handle_godot,
+        # ── Camada 5 (Gameplay): Handlers registrados 2026-07-19 ──
+        "create_achievement_system": _handle_create_achievement_system,
+        "cloud_save_configure": _handle_cloud_save_configure,
+        "validate_achievement_config": _handle_validate_achievement_config,
+        "mod_manifest_generate": _handle_mod_manifest_generate,
+        "validate_mod_compatibility": _handle_validate_mod_compatibility,
+        "cutscene_create_timeline": _handle_cutscene_create_timeline,
+        "cutscene_add_camera_shot": _handle_cutscene_add_camera_shot,
+        "cutscene_add_dialogue_event": _handle_cutscene_add_dialogue_event,
+        "telemetry_track_event": _handle_telemetry_track_event,
+        "telemetry_get_funnel": _handle_telemetry_get_funnel,
+        "telemetry_session_summary": _handle_telemetry_session_summary,
+        "telemetry_heatmap": _handle_telemetry_heatmap,
+        "adaptive_difficulty_adjust": _handle_adaptive_difficulty_adjust,
+        "quest_generate": _handle_quest_generate,
+        "remote_balance_config": _handle_remote_balance_config,
+        "accessibility_apply_colorblind_filter": _handle_accessibility_apply_colorblind_filter,
+        "accessibility_add_subtitles": _handle_accessibility_add_subtitles,
+        "accessibility_remap_controls": _handle_accessibility_remap_controls,
+        "accessibility_audit_scene": _handle_accessibility_audit_scene,
+        "accessibility_certification_checklist": _handle_accessibility_certification_checklist,
+        "trailer_capture_clip": _handle_trailer_capture_clip,
+        "trailer_render_sequence": _handle_trailer_render_sequence,
+        "capsule_generate_store_image": _handle_capsule_generate_store_image,
+        "onboarding_create_tutorial_step": _handle_onboarding_create_tutorial_step,
+        "onboarding_create_guided_tour": _handle_onboarding_create_guided_tour,
+        "onboarding_check_first_experience": _handle_onboarding_check_first_experience,
+        "dialogue_generate_npc_lines": _handle_dialogue_generate_npc_lines,
+        "dialogue_generate_personality": _handle_dialogue_generate_personality,
     }
 
     # ── Rollups Fase 2A / C1 ───────────────────────────────────────
@@ -2503,6 +2561,97 @@ def _handle_godot(args: dict) -> dict:
 def _handle_validate_mcp_registry(args: dict) -> dict:
     """Handler da tool validate_mcp_registry."""
     return validate_mcp_registry_handler(args)
+
+
+# ══════════════════════════════════════════════════════════════
+# Camada 5 (Gameplay): Handlers — registrados 2026-07-19
+# ══════════════════════════════════════════════════════════════
+
+def _handle_create_achievement_system(args: dict) -> dict:
+    return create_achievement_system(args)
+
+def _handle_cloud_save_configure(args: dict) -> dict:
+    return cloud_save_configure(args)
+
+def _handle_validate_achievement_config(args: dict) -> dict:
+    return validate_achievement_config(args)
+
+def _handle_mod_manifest_generate(args: dict) -> dict:
+    return mod_manifest_generate(args)
+
+def _handle_validate_mod_compatibility(args: dict) -> dict:
+    return validate_mod_compatibility(args)
+
+def _handle_cutscene_create_timeline(args: dict) -> dict:
+    return cutscene_create_timeline(args)
+
+def _handle_cutscene_add_camera_shot(args: dict) -> dict:
+    return cutscene_add_camera_shot(args)
+
+def _handle_cutscene_add_dialogue_event(args: dict) -> dict:
+    return cutscene_add_dialogue_event(args)
+
+def _handle_telemetry_track_event(args: dict) -> dict:
+    return telemetry_track_event(args)
+
+def _handle_telemetry_get_funnel(args: dict) -> dict:
+    return telemetry_get_funnel(args)
+
+def _handle_telemetry_session_summary(args: dict) -> dict:
+    return telemetry_session_summary(args)
+
+def _handle_telemetry_heatmap(args: dict) -> dict:
+    return telemetry_heatmap(args)
+
+def _handle_adaptive_difficulty_adjust(args: dict) -> dict:
+    return adaptive_difficulty_adjust(args)
+
+def _handle_quest_generate(args: dict) -> dict:
+    return quest_generate(args)
+
+def _handle_remote_balance_config(args: dict) -> dict:
+    return remote_balance_config(args)
+
+def _handle_accessibility_apply_colorblind_filter(args: dict) -> dict:
+    return accessibility_apply_colorblind_filter(args)
+
+def _handle_accessibility_add_subtitles(args: dict) -> dict:
+    return accessibility_add_subtitles(args)
+
+def _handle_accessibility_remap_controls(args: dict) -> dict:
+    return accessibility_remap_controls(args)
+
+def _handle_accessibility_audit_scene(args: dict) -> dict:
+    return accessibility_audit_scene(args)
+
+def _handle_accessibility_certification_checklist(args: dict) -> dict:
+    return accessibility_certification_checklist(args)
+
+def _handle_trailer_capture_clip(args: dict) -> dict:
+    return trailer_capture_clip(args)
+
+def _handle_trailer_render_sequence(args: dict) -> dict:
+    return trailer_render_sequence(args)
+
+def _handle_capsule_generate_store_image(args: dict) -> dict:
+    return capsule_generate_store_image(args)
+
+def _handle_onboarding_create_tutorial_step(args: dict) -> dict:
+    return onboarding_create_tutorial_step(args)
+
+def _handle_onboarding_create_guided_tour(args: dict) -> dict:
+    return onboarding_create_guided_tour(args)
+
+def _handle_onboarding_check_first_experience(args: dict) -> dict:
+    return onboarding_check_first_experience(args)
+
+
+def _handle_dialogue_generate_npc_lines(args: dict) -> dict:
+    return dialogue_generate_npc_lines(args)
+
+
+def _handle_dialogue_generate_personality(args: dict) -> dict:
+    return dialogue_generate_personality(args)
 
 
 def _handle_ping(args: dict) -> dict:

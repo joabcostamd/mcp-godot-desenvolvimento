@@ -50,6 +50,14 @@ GROUPS = {
         "create_light_2d", "create_light_3d",
         "create_navigation_agent_2d", "create_navigation_region_2d",
         "setup_camera_2d",
+        # Camada 5 (Gameplay): project
+        "create_achievement_system", "cloud_save_configure",
+        "mod_manifest_generate",
+        "cutscene_create_timeline", "cutscene_add_camera_shot", "cutscene_add_dialogue_event",
+        "quest_generate",
+        "dialogue_generate_npc_lines", "dialogue_generate_personality",
+        "accessibility_apply_colorblind_filter", "accessibility_add_subtitles", "accessibility_remap_controls",
+        "onboarding_create_tutorial_step", "onboarding_create_guided_tour",
     ],
     "assets": [
         "asset_manage",
@@ -67,6 +75,8 @@ GROUPS = {
         "generate_dungeon_rooms", "dungeon_generate",
         "terrain_generate", "wave_generate",
         "juice_apply", "juice_list_presets",
+        # Camada 5 (Gameplay): assets
+        "trailer_capture_clip", "trailer_render_sequence", "capsule_generate_store_image",
         # Operações atômicas (complementam rollups)
         "configure_particles_2d", "create_particles_2d", "create_particles_3d",
         "configure_standard_material_3d",
@@ -125,6 +135,12 @@ GROUPS = {
         "dps_calculator", "balance_analyze",
         "vision_manage",
         "localization_manage",
+        # Camada 5 (Gameplay): analysis
+        "validate_achievement_config", "validate_mod_compatibility",
+        "telemetry_track_event", "telemetry_get_funnel", "telemetry_session_summary", "telemetry_heatmap",
+        "adaptive_difficulty_adjust",
+        "accessibility_audit_scene", "accessibility_certification_checklist",
+        "onboarding_check_first_experience",
     ],
     "orchestration": [
         "godot",
@@ -151,6 +167,8 @@ GROUPS = {
         "gdd_generate",
         "release_checklist", "deploy_itch",
         "configure_export_preset",
+        # Camada 5 (Gameplay): orchestration
+        "remote_balance_config",
     ],
 }
 

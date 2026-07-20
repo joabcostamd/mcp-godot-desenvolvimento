@@ -3,6 +3,39 @@
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo
 > para que o outro agente saiba o estado do projeto na próxima sessão.
 
+## Último Handoff (AGENTE 01 — 2026-07-19 — Registro Camada 5)
+
+- **Data:** 2026-07-19
+- **De:** AGENTE 01 (Arquitetura & Core)
+- **Ação:** Registro de 28 tools da Camada 5 (Gameplay) no pipeline de tools
+
+### O que foi feito
+
+| Fase | Descrição | Arquivo |
+|---|---|---|
+| 1 | +28 Tool() definitions | `core/tool_definitions.py` |
+| 2 | +28 handler wrappers | `server.py` (_build_handlers + _handle_*) |
+| 3 | +28 nomes nos namespaces | `server.py` (TOOLSETS), `tools/dynamic_groups.py` (GROUPS) |
+| 4 | Validação | `validate_tool_registry_consistency()` → 268/268 = 0 inconsistências |
+
+### Distribuição por namespace
+- **project** (16): achievements (2), mods (1), cutscenes (3), quest, dialogue (2), accessibility (3), onboarding (2)
+- **analysis** (10): validate_achievement, validate_mod, telemetry (4), adaptive, accessibility_audit, cert, onboarding_check
+- **assets** (3): trailer (3)
+- **orchestration** (1): remote_balance_config
+
+### ⚠️ Pontos de atenção para AGENTE 02
+- **28 tools NÃO estão no PHASE_TOOLSETS** — aparecem apenas via `--profile full` ou `--toolsets` explícito
+- Cabe ao AGENTE 02 decidir em quais fases ativar cada tool
+- Handlers são wrappers finos que delegam para `tools/*_ops.py` — se renomear funções lá, atualize os wrappers
+- `dialogue_generate_npc_lines` e `dialogue_generate_personality` já existiam como funções — foram apenas registradas formalmente
+
+### Próximo passo (AGENTE 01)
+- **Camada 6 (Profundidade de Engine)**: [MARGINAL] — aguarda aprovação do Joab
+- **Camada 7 (Polimento)**: [MARGINAL] — aguarda aprovação do Joab
+
+---
+
 ## Último Handoff (AGENTE 02 — 2026-07-19 — Sessão de Polimento)
 
 - **Data:** 2026-07-19

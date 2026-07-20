@@ -4,17 +4,17 @@
 > O agente lê este arquivo para saber o que fazer na próxima sessão.
 
 ## AGENTE 01 — Próxima etapa
-- **Etapa:** TODAS CONCLUÍDAS (A0–A6) 🎉
-- **Status:** ✅ AGENTE 01 completou todas as 7 etapas do roadmap
-- **Próximo:** Fase 3 — Integração (revisar SUTURE_ISSUES.md, validar consistência)
+- **Etapa:** Camada 5 — Registro de tools CONCLUÍDO ✅
+- **Status:** ✅ 28 tools de gameplay registradas (268 tools totais, 0 inconsistências)
+- **Próximo:** Camada 6 (Profundidade de Engine) [MARGINAL] ou Camada 7 (Polimento) [MARGINAL] — aguarda aprovação do Joab
 
 ## AGENTE 02 — Próxima etapa
-- **Etapa:** ✅ Camada 4 CONCLUIDA (B2-B9)
-- **Status:** 8/8 etapas concluidas
+- **Etapa:** ✅ Camada 4 CONCLUIDA (B2-B9) + Polimento F1-F7 ✅
+- **Status:** 55/96 fatias concluídas
 - **Próximo:** Camada 5 (Gameplay) — TODAS [MARGINAL], requer aprovacao do Joab
-- **Arquivos criados:** `code_quality_ops.py`, `agent_ops.py`, `gamestate_ops.py`, `dialogue_ops.py`, `doc_ops.py`, `.gdlintrc`, `verification.yml`, `test_code_quality_ops.py`
+- **Nota:** 28 tools de gameplay agora registradas no server.py — AGENTE 02 pode ativá-las no PHASE_TOOLSETS
 
 ## Última atualização
 - **Data:** 2026-07-19
-- **Por:** AGENTE 02 — Sessão de Polimento (7 fases concluídas)
-- **Commits:** e73fb47 (F2), 4967091 (F3), bb45d97 (F4), 35ab82c (F5), 1252f55 (F6)
+- **Por:** AGENTE 01 — Registro Camada 5 (28 tools)
+- **Commits:** Pendente

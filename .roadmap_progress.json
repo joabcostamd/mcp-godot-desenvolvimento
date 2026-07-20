@@ -1,4 +1,11 @@
 {
+  "camada_5_registro": {
+    "status": "concluida",
+    "data": "2026-07-19",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "resultado": "28 tools Camada 5 registradas: 268 tool_defs, 268 handlers, 0 inconsistencias. Distribuicao: project=16, analysis=10, assets=3, orchestration=1. NAO adicionadas ao PHASE_TOOLSETS."
+  },
   "polimento_fase_1": {
     "status": "concluida",
     "data": "2026-07-19",
