@@ -2,8 +2,12 @@
 @export var shuffle_on_init: bool = true
 signal shuffled(); signal card_drawn(card: Card); signal empty()
 var _cards: Array[Card] = []; var _discard: Array[Card] = []
+var _initialized: bool = false
 
-func _ready() -> void: if shuffle_on_init: shuffle()
+func _ready() -> void:
+	if _initialized: return
+	if shuffle_on_init: shuffle()
+	_initialized = true
 
 func add_card(card: Card) -> void: _cards.append(card)
 func shuffle() -> void: _cards.shuffle(); shuffled.emit()
