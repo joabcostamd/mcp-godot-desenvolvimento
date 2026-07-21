@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 17,
+    "implementados": 18,
     "lista": [
       {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido"},
       {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido"},
@@ -55,9 +55,10 @@
       {"id": 22, "nome": "enemy_patrol", "versao": "1.0.0", "status": "concluido"},
       {"id": 23, "nome": "line_of_sight", "versao": "1.0.0", "status": "concluido"},
       {"id": 25, "nome": "state_machine", "versao": "1.0.0", "status": "concluido"},
-      {"id": 27, "nome": "flee", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "Node + fuga condicional. 4 params, 3 condições. StateMachine sibling. 14 testes."}
+      {"id": 27, "nome": "flee", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "Node + fuga condicional. 4 params, 3 condições. StateMachine sibling. 14 testes."},
+      {"id": 29, "nome": "turret_aim", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "Node2D + rotação suave. FireRate + Projectile. 10 testes."}
     ]
   },
-  "proximo": "turret_aim (#29) — fire_rate + projectile. Ou object_pool (#47) para destravar spawner_wave."
+  "proximo": "flocking (#28) — sem dependências."
   "proximo": "spawner_wave (#24) — Node + spawn_table, wave_interval, max_active."
 }
