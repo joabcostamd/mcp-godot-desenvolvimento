@@ -1,3 +1,8 @@
+## Behavior save_integrity para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: save_integrity
 @tool class_name SaveIntegrity extends Node
 signal integrity_verified(); signal corruption_detected()
 var _initialized: bool = false

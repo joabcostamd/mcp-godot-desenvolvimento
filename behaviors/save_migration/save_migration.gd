@@ -1,3 +1,8 @@
+## Behavior save_migration para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: save_migration
 @tool class_name SaveMigration extends Node
 @export var from_version: String = "1.0.0"
 @export var to_version: String = "1.1.0"

@@ -1,3 +1,10 @@
+## Behavior Haptic Manager para Godot 4.
+## Generos: generic.
+## Tags: input.
+## Extends: Node.
+## Sinais: vibration_started(), vibration_ended().
+## Dependencias: nenhuma.
+## @behavior: haptic_manager
 @tool class_name HapticManager extends Node
 @export var intensity: float = 1.0: set(v)=intensity=clampf(v,0.0,2.0)
 signal vibration_started(); signal vibration_ended()

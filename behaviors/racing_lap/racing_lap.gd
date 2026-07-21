@@ -1,3 +1,10 @@
+## Node que gerencia voltas de corrida com checkpoints e melhor tempo.
+## Generos: racing.
+## Tags: racing.
+## Extends: Node.
+## Sinais: lap_completed(), race_finished(), checkpoint_passed().
+## Dependencias: nenhuma.
+## @behavior: racing_lap
 @tool class_name RacingLap extends Node
 @export var total_laps: int = 3: set(v)=total_laps=clampi(v,1,20)
 signal lap_completed(lap: int); signal race_finished(best_time: float); signal checkpoint_passed(index: int)

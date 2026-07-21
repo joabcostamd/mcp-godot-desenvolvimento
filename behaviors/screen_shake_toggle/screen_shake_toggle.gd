@@ -1,3 +1,8 @@
+## Behavior screen_shake_toggle para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: screen_shake_toggle
 @tool class_name ScreenShakeToggle extends Node
 @export var enabled: bool = true
 signal toggled()

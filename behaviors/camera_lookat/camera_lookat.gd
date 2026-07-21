@@ -1,3 +1,9 @@
+## Node que faz a Camera2D parent olhar para um alvo com offset e damping.
+## Generos: platformer, generic.
+## Tags: camera, lookat.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: camera_lookat
 @tool class_name CameraLookat extends Node
 @export var target: NodePath: set(v)=target=v
 @export var look_offset: Vector2 = Vector2.ZERO

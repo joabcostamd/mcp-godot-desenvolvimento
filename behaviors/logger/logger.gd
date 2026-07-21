@@ -1,3 +1,8 @@
+## Behavior logger para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: logger
 @tool class_name Logger extends Node
 @export var log_level: String = "info"
 signal log_written(level: String, message: String)

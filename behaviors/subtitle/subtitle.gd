@@ -1,3 +1,10 @@
+## Control que exibe legendas estilizadas com speaker, duração e posição.
+## Generos: generic.
+## Tags: acessibilidade, legenda.
+## Extends: Node.
+## Sinais: shown(), hidden().
+## Dependencias: nenhuma.
+## @behavior: subtitle
 @tool class_name Subtitle extends Control
 @export var subtitle_text: String = "": set(v)=subtitle_text=v; _update_label()
 @export var duration: float = 3.0: set(v)=duration=clampf(v,0.5,30.0)

@@ -1,3 +1,8 @@
+## Behavior autoload_manager para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: autoload_manager
 @tool class_name AutoloadManager extends Node; signal singleton_added(name: String); signal singleton_removed(name: String)
 var _singletons: Dictionary = {}; var _initialized: bool = false
 func _ready() -> void: if _initialized: return; _initialized=true

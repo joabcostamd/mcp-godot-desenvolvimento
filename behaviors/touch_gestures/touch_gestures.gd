@@ -1,3 +1,10 @@
+## Node que detecta gestos touch: swipe, pinch, long press, double tap.
+## Generos: mobile.
+## Tags: touch.
+## Extends: Node.
+## Sinais: swiped(), pinched(), long_pressed(), double_tapped().
+## Dependencias: nenhuma.
+## @behavior: touch_gestures
 @tool class_name TouchGestures extends Node
 @export var swipe_threshold: float = 50.0: set(v)=swipe_threshold=clampf(v,10.0,200.0)
 signal swiped(direction: Vector2); signal pinched(scale: float); signal long_pressed(position: Vector2); signal double_tapped(position: Vector2)

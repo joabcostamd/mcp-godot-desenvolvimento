@@ -1,3 +1,8 @@
+## Behavior tilemap_layer_manager para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: tilemap_layer_manager
 @tool class_name TilemapLayerManager extends Node
 signal layer_added();signal layer_removed()
 var _init:=false

@@ -1,3 +1,9 @@
+## Node que adiciona avoidance (desvio de obstáculos) ao parent CharacterBody2D.
+## Generos: topdown_shooter, rpg, generic.
+## Tags: navegacao, ai.
+## Extends: Node.
+## Dependencias: pathfinding.
+## @behavior: avoidance
 @tool
 class_name Avoidance
 extends Node

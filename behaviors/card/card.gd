@@ -1,3 +1,10 @@
+## Node que representa uma carta de baralho.
+## Generos: card.
+## Tags: card.
+## Extends: Node.
+## Sinais: played(), drawn(), flipped().
+## Dependencias: nenhuma.
+## @behavior: card
 @tool class_name Card extends Node
 @export var face_up: bool = true: set(v): face_up=v; flipped.emit(v)
 signal played(); signal drawn(); signal flipped(face_up: bool)

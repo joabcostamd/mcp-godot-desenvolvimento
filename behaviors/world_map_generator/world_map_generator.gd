@@ -1,3 +1,8 @@
+## Behavior world_map_generator para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: world_map_generator
 @tool class_name WorldMapGenerator extends Node
 @export var width: int = 100: set(v)=width=clampi(v,20,500)
 @export var height: int = 100: set(v)=height=clampi(v,20,500)

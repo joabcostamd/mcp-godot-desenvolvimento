@@ -1,3 +1,10 @@
+## Node que gerencia autoridade de rede (server/client).
+## Generos: multiplayer.
+## Tags: multiplayer, authority.
+## Extends: Node.
+## Sinais: authority_changed().
+## Dependencias: nenhuma.
+## @behavior: authority
 @tool class_name Authority extends Node
 @export var authority_type: String = "server"
 signal authority_changed(new_peer_id: int)

@@ -1,3 +1,9 @@
+## Node2D que desenha uma seta colorida na direção configurada.
+## Generos: generic.
+## Tags: debug.
+## Extends: Node2D.
+## Dependencias: nenhuma.
+## @behavior: debug_arrow
 @tool
 class_name DebugArrow
 extends Node2D

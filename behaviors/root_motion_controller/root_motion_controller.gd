@@ -1,3 +1,8 @@
+## Behavior root_motion_controller para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: root_motion_controller
 @tool class_name RootMotionController extends Node
 signal motion_applied()
 var _init:=false

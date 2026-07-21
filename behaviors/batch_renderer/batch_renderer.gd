@@ -1,3 +1,8 @@
+## Behavior batch_renderer para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: batch_renderer
 @tool class_name BatchRenderer extends Node
 signal batch_full()
 var _init:=false

@@ -1,3 +1,10 @@
+## Control que exibe um console de debug in-game.
+## Generos: generic.
+## Tags: debug, console.
+## Extends: Control.
+## Sinais: command_entered().
+## Dependencias: nenhuma.
+## @behavior: debug_console
 @tool
 class_name DebugConsole
 extends Control

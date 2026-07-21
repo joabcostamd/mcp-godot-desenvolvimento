@@ -1,3 +1,10 @@
+## Behavior Virtual Joystick para Godot 4.
+## Generos: mobile.
+## Tags: touch.
+## Extends: Node.
+## Sinais: joystick_moved().
+## Dependencias: nenhuma.
+## @behavior: virtual_joystick
 @tool class_name VirtualJoystick extends Control
 @export var radius: float = 80.0: set(v)=radius=clampf(v,30.0,300.0)
 @export var dead_zone: float = 10.0: set(v)=dead_zone=clampf(v,0.0,50.0)

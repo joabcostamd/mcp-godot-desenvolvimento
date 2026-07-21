@@ -1,3 +1,8 @@
+## Behavior safe_space para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: safe_space
 @tool class_name SafeSpace extends Node
 signal warning_shown();signal content_skipped()
 var _init:=false

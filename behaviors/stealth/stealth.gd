@@ -1,3 +1,10 @@
+## Node que gerencia estado de furtividade.
+## Generos: stealth.
+## Tags: stealth.
+## Extends: Node.
+## Sinais: detected(), alerted(), hidden().
+## Dependencias: nenhuma.
+## @behavior: stealth
 @tool class_name Stealth extends Node
 @export var visibility: float = 0.5: set(v): visibility=clampf(v,0,1)
 @export var noise_radius: float = 100.0: set(v): noise_radius=clampf(v,0,500)

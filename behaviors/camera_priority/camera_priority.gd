@@ -1,3 +1,10 @@
+## Node que ativa automaticamente a Camera2D parent quando ela tem a maior prioridade entre câmeras irmãs.
+## Generos: platformer, generic.
+## Tags: camera, prioridade.
+## Extends: Node.
+## Sinais: camera_activated().
+## Dependencias: nenhuma.
+## @behavior: camera_priority
 @tool class_name CameraPriority extends Node
 @export var priority: int = 0: set(v): priority=clampi(v,0,100)
 @export var transition_duration: float = 0.5: set(v): transition_duration=clampf(v,0.0,5.0)

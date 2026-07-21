@@ -1,3 +1,9 @@
+## Node que aplica dispersão (spread) a projéteis.
+## Generos: topdown_shooter, generic.
+## Tags: mira, arma.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: spread
 @tool
 class_name Spread
 extends Node

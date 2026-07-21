@@ -1,3 +1,8 @@
+## Behavior cloud_save para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: cloud_save
 @tool class_name CloudSave extends Node
 @export var provider: String = "steam"
 signal synced(); signal sync_failed()

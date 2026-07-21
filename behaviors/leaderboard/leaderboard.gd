@@ -1,3 +1,10 @@
+## Node que gerencia ranking local com pontuações.
+## Generos: arcade, generic.
+## Tags: leaderboard, social.
+## Extends: Node.
+## Sinais: score_submitted().
+## Dependencias: nenhuma.
+## @behavior: leaderboard
 @tool class_name Leaderboard extends Node
 @export var max_entries: int = 10: set(v)=max_entries=clampi(v,3,100)
 signal score_submitted(player_name: String, score: int, rank: int)

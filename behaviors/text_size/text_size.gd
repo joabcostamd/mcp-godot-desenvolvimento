@@ -1,3 +1,10 @@
+## Behavior Text Size para Godot 4.
+## Generos: generic.
+## Tags: acessibilidade.
+## Extends: Node.
+## Sinais: size_changed().
+## Dependencias: nenhuma.
+## @behavior: text_size
 @tool class_name TextSize extends Node
 @export var scale_multiplier: float = 1.0:
 	set(v):

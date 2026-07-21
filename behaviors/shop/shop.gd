@@ -1,3 +1,10 @@
+## Node que gerencia uma loja com itens e preços.
+## Generos: rpg, generic.
+## Tags: loja, economia.
+## Extends: Node.
+## Sinais: item_bought(), item_sold(), insufficient_funds().
+## Dependencias: inventory, currency.
+## @behavior: shop
 @tool
 class_name Shop
 extends Node

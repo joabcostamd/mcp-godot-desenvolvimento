@@ -1,3 +1,10 @@
+## Node que move o parent CharacterBody2D até um alvo usando NavigationAgent2D.
+## Generos: topdown_shooter, roguelike, rpg, generic.
+## Tags: navegacao, ai.
+## Extends: Node.
+## Sinais: path_found(), path_lost(), arrived().
+## Dependencias: nenhuma.
+## @behavior: pathfinding
 @tool
 class_name Pathfinding
 extends Node

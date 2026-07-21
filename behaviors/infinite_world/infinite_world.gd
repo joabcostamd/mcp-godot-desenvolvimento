@@ -1,3 +1,8 @@
+## Behavior infinite_world para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: infinite_world
 @tool class_name InfiniteWorld extends Node
 @export var chunk_size: int = 16: set(v)=chunk_size=clampi(v,8,128)
 @export var view_distance: int = 3: set(v)=view_distance=clampi(v,1,20)

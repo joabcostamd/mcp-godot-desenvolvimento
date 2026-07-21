@@ -1,3 +1,9 @@
+## Node que aplica shader de outline ao parent CanvasItem.
+## Generos: generic.
+## Tags: shader.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: outline_shader
 @tool class_name OutlineShader extends Node
 @export var outline_color: Color = Color(0,1,1,1): set(v): outline_color=v; _update()
 @export var outline_width: float = 1.0: set(v): outline_width=clampf(v,0,5); _update()

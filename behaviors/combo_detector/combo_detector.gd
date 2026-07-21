@@ -1,3 +1,10 @@
+## Behavior Combo Detector para Godot 4.
+## Generos: fighting.
+## Tags: input.
+## Extends: Node.
+## Sinais: combo_started(), combo_advanced(), combo_finished(), combo_dropped().
+## Dependencias: nenhuma.
+## @behavior: combo_detector
 @tool class_name ComboDetector extends Node
 @export var time_window: float = 1.0: set(v)=time_window=clampf(v,0.1,5.0)
 signal combo_started(); signal combo_advanced(step: int); signal combo_finished(sequence: String); signal combo_dropped()

@@ -1,3 +1,10 @@
+## Node que gerencia um baralho de cartas.
+## Generos: card.
+## Tags: card.
+## Extends: Node.
+## Sinais: shuffled(), card_drawn(), empty().
+## Dependencias: nenhuma.
+## @behavior: deck
 @tool class_name Deck extends Node
 @export var shuffle_on_init: bool = true
 signal shuffled(); signal card_drawn(card: Card); signal empty()

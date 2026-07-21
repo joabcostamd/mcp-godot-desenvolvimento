@@ -1,3 +1,10 @@
+## Behavior Aim Assist para Godot 4.
+## Generos: shooter.
+## Tags: input.
+## Extends: Node.
+## Sinais: assist_activated().
+## Dependencias: nenhuma.
+## @behavior: aim_assist
 @tool class_name AimAssist extends Node
 @export var friction: float = 0.3: set(v)=friction=clampf(v,0.0,1.0)
 @export var magnetism: float = 0.5: set(v)=magnetism=clampf(v,0.0,1.0)

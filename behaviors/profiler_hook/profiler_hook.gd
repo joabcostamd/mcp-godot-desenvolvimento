@@ -1,3 +1,8 @@
+## Behavior profiler_hook para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: profiler_hook
 @tool class_name ProfilerHook extends Node
 @export var auto_start: bool = false
 signal profiling_started(); signal profiling_stopped()

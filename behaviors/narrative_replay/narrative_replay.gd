@@ -1,3 +1,8 @@
+## Behavior narrative_replay para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: narrative_replay
 @tool class_name NarrativeReplay extends Node
 signal replayed()
 var _init:=false

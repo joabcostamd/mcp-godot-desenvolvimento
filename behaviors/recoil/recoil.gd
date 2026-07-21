@@ -1,3 +1,9 @@
+## Node que aplica recoil (recuo) ao parent Node2D ao disparar.
+## Generos: topdown_shooter, platformer, generic.
+## Tags: mira, arma.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: recoil
 @tool
 class_name Recoil
 extends Node

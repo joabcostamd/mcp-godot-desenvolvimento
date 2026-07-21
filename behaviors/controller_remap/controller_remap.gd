@@ -1,3 +1,10 @@
+## Behavior Controller Remap para Godot 4.
+## Generos: generic.
+## Tags: acessibilidade.
+## Extends: Node.
+## Sinais: rebound().
+## Dependencias: nenhuma.
+## @behavior: controller_remap
 @tool class_name ControllerRemap extends Control
 @export var actions: Array = []
 signal rebound(action: String)

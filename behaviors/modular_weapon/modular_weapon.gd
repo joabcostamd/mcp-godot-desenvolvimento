@@ -1,3 +1,8 @@
+## Behavior modular_weapon para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: modular_weapon
 @tool class_name ModularWeapon extends Node
 signal weapon_assembled(parts: Dictionary); signal stat_recalculated(stats: Dictionary)
 var _parts: Dictionary = {}; var _initialized: bool = false

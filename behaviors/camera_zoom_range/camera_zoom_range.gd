@@ -1,3 +1,10 @@
+## Node que controla zoom contínuo da Camera2D com limites min/max e velocidade.
+## Generos: generic.
+## Tags: camera, zoom.
+## Extends: Node.
+## Sinais: zoomed().
+## Dependencias: nenhuma.
+## @behavior: camera_zoom_range
 @tool class_name CameraZoomRange extends Node
 @export var zoom_min: Vector2 = Vector2(0.5,0.5): set(v)=zoom_min=Vector2(clampf(v.x,0.1,10),clampf(v.y,0.1,10))
 @export var zoom_max: Vector2 = Vector2(3.0,3.0): set(v)=zoom_max=Vector2(clampf(v.x,0.1,10),clampf(v.y,0.1,10))

@@ -1,3 +1,8 @@
+## Behavior input_cooldown para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: input_cooldown
 @tool class_name InputCooldown extends Node
 signal cooldown_active();signal cooldown_ready()
 var _init:=false

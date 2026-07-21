@@ -1,3 +1,10 @@
+## Behavior Input Buffer para Godot 4.
+## Generos: fighting.
+## Tags: input.
+## Extends: Node.
+## Sinais: buffered(), executed().
+## Dependencias: nenhuma.
+## @behavior: input_buffer
 @tool class_name InputBuffer extends Node
 @export var buffer_window: float = 0.2: set(v)=buffer_window=clampf(v,0.05,1.0)
 @export var max_queue: int = 3: set(v)=max_queue=clampi(v,1,10)

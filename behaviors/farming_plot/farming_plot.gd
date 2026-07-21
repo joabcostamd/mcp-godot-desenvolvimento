@@ -1,3 +1,10 @@
+## Node2D que gerencia plantio com estágios de crescimento e colheita.
+## Generos: farming.
+## Tags: farming.
+## Extends: Node.
+## Sinais: planted(), stage_changed(), ready(), harvested().
+## Dependencias: inventory.
+## @behavior: farming_plot
 @tool class_name FarmingPlot extends Node2D
 @export var growth_time: float = 30.0: set(v)=growth_time=clampf(v,1.0,600.0)
 @export var stages: int = 3: set(v)=stages=clampi(v,1,5)

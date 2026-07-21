@@ -1,3 +1,8 @@
+## Behavior curve_table para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: curve_table
 @tool class_name CurveTable extends Resource
 signal curve_updated()
 var _init:=false

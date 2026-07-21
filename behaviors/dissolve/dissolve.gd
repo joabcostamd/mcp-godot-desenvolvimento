@@ -1,3 +1,10 @@
+## Node que aplica efeito de dissolução via shader ao parent CanvasItem.
+## Generos: generic.
+## Tags: shader, visual.
+## Extends: Node.
+## Sinais: dissolve_finished().
+## Dependencias: nenhuma.
+## @behavior: dissolve
 @tool class_name Dissolve extends Node
 @export var edge_color: Color = Color(1,0.5,0,1): set(v): edge_color=v; _update()
 @export var edge_width: float = 0.1: set(v): edge_width=clampf(v,0,0.5); _update()

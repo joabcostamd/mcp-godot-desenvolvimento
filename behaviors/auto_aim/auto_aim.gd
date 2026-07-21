@@ -1,3 +1,8 @@
+## Behavior auto_aim para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: auto_aim
 @tool class_name AutoAim extends Node
 signal aim_adjusted()
 var _init:=false

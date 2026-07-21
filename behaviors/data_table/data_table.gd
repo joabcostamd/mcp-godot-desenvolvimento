@@ -1,3 +1,8 @@
+## Behavior data_table para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: data_table
 @tool class_name DataTable extends Resource
 signal data_changed()
 var _init:=false

@@ -1,3 +1,10 @@
+## Node que implementa tabela de loot aleatório com pesos de raridade.
+## Generos: rpg, roguelike, generic.
+## Tags: loot, drop, recompensa, estrutura.
+## Extends: Node.
+## Sinais: loot_dropped(), rare_drop().
+## Dependencias: inventory.
+## @behavior: random_loot
 @tool class_name RandomLoot extends Node
 @export var loot_table: Array = []
 signal loot_dropped(item_id: String)

@@ -1,3 +1,8 @@
+## Behavior save_slots para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: save_slots
 @tool class_name SaveSlots extends Node
 @export var slot_count: int = 3: set(v)=slot_count=clampi(v,1,20)
 signal slot_created(slot: int); signal slot_deleted(slot: int)

@@ -1,3 +1,8 @@
+## Behavior tile_pattern_stamper para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: tile_pattern_stamper
 @tool class_name TilePatternStamper extends Node
 signal pattern_stamped();signal pattern_saved()
 var _init:=false

@@ -1,3 +1,8 @@
+## Behavior dungeon_generator para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: dungeon_generator
 @tool class_name DungeonGenerator extends Node
 @export var room_count: int = 10: set(v)=room_count=clampi(v,2,100)
 @export var min_size: Vector2i = Vector2i(6,6): set(v)=min_size=Vector2i(clampi(v.x,3,20),clampi(v.y,3,20))

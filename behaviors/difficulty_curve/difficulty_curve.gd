@@ -1,3 +1,10 @@
+## Node que gerencia curva de dificuldade progressiva.
+## Generos: survivors_like, generic.
+## Tags: dificuldade, curva, estrutura.
+## Extends: Node.
+## Sinais: difficulty_changed().
+## Dependencias: nenhuma.
+## @behavior: difficulty_curve
 @tool class_name DifficultyCurve extends Node
 @export var start_multiplier: float = 1.0: set(v): start_multiplier=clampf(v,0.1,10.0)
 @export var increase_per_minute: float = 0.1: set(v): increase_per_minute=clampf(v,0.0,5.0)

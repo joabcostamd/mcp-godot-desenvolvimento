@@ -1,3 +1,8 @@
+## Behavior terrain_autotiler para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: terrain_autotiler
 @tool class_name TerrainAutotiler extends Node
 signal terrain_painted();signal auto_tiled()
 var _init:=false

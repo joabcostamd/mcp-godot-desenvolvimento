@@ -1,3 +1,10 @@
+## Node que gerencia lobby multiplayer.
+## Generos: multiplayer.
+## Tags: multiplayer, lobby.
+## Extends: Node.
+## Sinais: player_joined(), player_left(), game_started().
+## Dependencias: network_sync.
+## @behavior: lobby
 @tool class_name Lobby extends Node
 @export var max_players: int = 4: set(v)=max_players=clampi(v,2,64)
 @export var game_mode: String = "default"

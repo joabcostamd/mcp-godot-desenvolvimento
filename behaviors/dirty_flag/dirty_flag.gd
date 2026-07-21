@@ -1,3 +1,8 @@
+## Behavior dirty_flag para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: dirty_flag
 @tool class_name DirtyFlag extends Node
 signal dirty();signal clean()
 var _init:=false

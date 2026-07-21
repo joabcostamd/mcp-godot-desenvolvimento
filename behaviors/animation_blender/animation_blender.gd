@@ -1,3 +1,8 @@
+## Behavior animation_blender para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: animation_blender
 @tool class_name AnimationBlender extends Node
 signal animation_player_changed()
 var _init:=false

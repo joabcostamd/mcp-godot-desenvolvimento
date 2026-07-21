@@ -1,3 +1,10 @@
+## Behavior Steam Input para Godot 4.
+## Generos: generic.
+## Tags: input, steam.
+## Extends: Node.
+## Sinais: action_set_changed().
+## Dependencias: nenhuma.
+## @behavior: steam_input
 @tool class_name SteamInput extends Node
 @export var action_set: String = "default"
 signal action_set_changed(new_set: String)

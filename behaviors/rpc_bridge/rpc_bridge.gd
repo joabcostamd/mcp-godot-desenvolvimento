@@ -1,3 +1,10 @@
+## Node que encapsula chamadas RPC multiplayer.
+## Generos: multiplayer.
+## Tags: multiplayer, rpc.
+## Extends: Node.
+## Sinais: rpc_sent(), rpc_received().
+## Dependencias: nenhuma.
+## @behavior: rpc_bridge
 @tool class_name RpcBridge extends Node
 @export var reliable: bool = true
 @export var channel: int = 0: set(v)=channel=clampi(v,0,15)

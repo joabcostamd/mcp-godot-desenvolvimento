@@ -1,3 +1,10 @@
+## Node que faz o parent Node2D patrulhar waypoints sequencialmente.
+## Generos: topdown_shooter, platformer, stealth, generic.
+## Tags: navegacao, ai, patrulha.
+## Extends: Node.
+## Sinais: waypoint_reached(), route_complete().
+## Dependencias: nenhuma.
+## @behavior: patrol_route
 @tool
 class_name PatrolRoute
 extends Node

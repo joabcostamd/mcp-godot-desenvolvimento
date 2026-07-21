@@ -1,3 +1,10 @@
+## Behavior High Contrast para Godot 4.
+## Generos: generic.
+## Tags: acessibilidade.
+## Extends: Node.
+## Sinais: contrast_changed().
+## Dependencias: nenhuma.
+## @behavior: high_contrast
 @tool class_name HighContrast extends Node
 @export var contrast_level: float = 1.0:
 	set(v):

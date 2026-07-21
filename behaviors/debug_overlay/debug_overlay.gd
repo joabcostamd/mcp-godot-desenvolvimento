@@ -1,3 +1,8 @@
+## Behavior debug_overlay para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: debug_overlay
 @tool class_name DebugOverlay extends Control
 @export var show_fps: bool = true
 @export var show_memory: bool = true

@@ -1,3 +1,10 @@
+## Node que rastreia conquistas com progresso e flags secretas.
+## Generos: generic.
+## Tags: achievement, social.
+## Extends: Node.
+## Sinais: unlocked(), progress_updated().
+## Dependencias: achievement.
+## @behavior: achievement_tracker
 @tool class_name AchievementTracker extends Node
 @export var achievements: Array = []
 signal unlocked(achievement_id: String)

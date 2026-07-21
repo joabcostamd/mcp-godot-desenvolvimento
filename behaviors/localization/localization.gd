@@ -1,3 +1,10 @@
+## Node que gerencia localização multi-idioma via TranslationServer.
+## Generos: generic.
+## Tags: localizacao.
+## Extends: Node.
+## Sinais: locale_changed().
+## Dependencias: nenhuma.
+## @behavior: localization
 @tool class_name Localization extends Node
 @export var locale: String = "en": set(v)=locale=v; _apply_locale()
 @export var fallback_locale: String = "en"

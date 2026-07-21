@@ -1,3 +1,8 @@
+## Behavior l_system para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: l_system
 @tool class_name LSystem extends Node2D
 @export var axiom: String = "F": set(v)=axiom=v
 @export var rules: Dictionary = {"F":"F[+F]F[-F]F"}: set(v)=rules=v

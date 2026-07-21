@@ -1,3 +1,10 @@
+## Node que gerencia sequências de cutscene com passos (move, wait, dialog, camera).
+## Generos: generic.
+## Tags: cutscene, cinematica.
+## Extends: Node.
+## Sinais: cutscene_started(), cutscene_ended(), step_executed().
+## Dependencias: nenhuma.
+## @behavior: cutscene
 @tool class_name Cutscene extends Node
 signal cutscene_started()
 signal cutscene_ended()

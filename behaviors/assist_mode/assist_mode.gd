@@ -1,3 +1,8 @@
+## Behavior assist_mode para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: assist_mode
 @tool class_name AssistMode extends Node
 @export var enabled: bool = false
 signal assist_activated()

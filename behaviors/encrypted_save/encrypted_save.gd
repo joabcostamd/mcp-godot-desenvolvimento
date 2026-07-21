@@ -1,3 +1,10 @@
+## Behavior Encrypted Save para Godot 4.
+## Generos: generic.
+## Tags: save.
+## Extends: Node.
+## Sinais: encrypted(), decrypted().
+## Dependencias: nenhuma.
+## @behavior: encrypted_save
 @tool class_name EncryptedSave extends Node
 @export var encryption_key: String = ""
 signal encrypted(); signal decrypted()

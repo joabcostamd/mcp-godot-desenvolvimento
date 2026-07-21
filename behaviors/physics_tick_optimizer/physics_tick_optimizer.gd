@@ -1,3 +1,8 @@
+## Behavior physics_tick_optimizer para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: physics_tick_optimizer
 @tool class_name PhysicsTickOptimizer extends Node
 signal tick_rate_changed(rate:float)
 var _init:=false

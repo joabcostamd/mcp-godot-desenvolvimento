@@ -1,3 +1,10 @@
+## Node que gerencia receitas de crafting.
+## Generos: rpg, survival, generic.
+## Tags: crafting, economia.
+## Extends: Node.
+## Sinais: crafted(), missing_ingredients(), recipe_unlocked().
+## Dependencias: inventory.
+## @behavior: crafting
 @tool
 class_name Crafting
 extends Node

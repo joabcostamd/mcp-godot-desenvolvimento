@@ -1,3 +1,9 @@
+## Node2D que renderiza uma superfície de água animada com shader.
+## Generos: platformer, generic.
+## Tags: agua, shader.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: water_surface
 @tool class_name WaterSurface extends Node2D
 @export var wave_speed: float = 1.0: set(v)=wave_speed=clampf(v,0.1,10.0)
 @export var wave_amplitude: float = 5.0: set(v)=wave_amplitude=clampf(v,0.5,20.0)

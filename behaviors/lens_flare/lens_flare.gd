@@ -1,3 +1,9 @@
+## Node2D que renderiza efeito de lens flare (reflexo de lente) seguindo posição do sol.
+## Generos: generic.
+## Tags: lens_flare, shader.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: lens_flare
 @tool class_name LensFlare extends Node2D
 @export var flare_intensity: float = 1.0: set(v)=flare_intensity=clampf(v,0.0,3.0)
 @export var sun_position: Vector2 = Vector2(0.5,0.2)

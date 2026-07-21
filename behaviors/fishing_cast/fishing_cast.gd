@@ -1,3 +1,10 @@
+## Node que implementa mecânica de pesca com potência de arremesso e minigame.
+## Generos: fishing.
+## Tags: fishing.
+## Extends: Node.
+## Sinais: cast(), bite(), caught().
+## Dependencias: nenhuma.
+## @behavior: fishing_cast
 @tool class_name FishingCast extends Node
 @export var cast_power: float = 1.0: set(v)=cast_power=clampf(v,0.1,10.0)
 @export var minigame_difficulty: float = 1.0: set(v)=minigame_difficulty=clampf(v,0.1,3.0)

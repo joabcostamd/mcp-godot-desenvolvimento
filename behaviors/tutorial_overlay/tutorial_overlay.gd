@@ -1,3 +1,10 @@
+## Control que exibe overlay de tutorial com passos destacados.
+## Generos: generic.
+## Tags: tutorial.
+## Extends: Node.
+## Sinais: step_completed(), tutorial_finished().
+## Dependencias: nenhuma.
+## @behavior: tutorial_overlay
 @tool class_name TutorialOverlay extends Control
 @export var steps: Array = []; @export var skip_enabled: bool = true
 signal step_completed(index: int); signal tutorial_finished()

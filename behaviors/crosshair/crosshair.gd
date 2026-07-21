@@ -1,3 +1,9 @@
+## Node2D que renderiza uma mira (crosshair) na posição do mouse.
+## Generos: topdown_shooter, generic.
+## Tags: mira, ui.
+## Extends: Node2D.
+## Dependencias: nenhuma.
+## @behavior: crosshair
 @tool
 class_name Crosshair
 extends Node2D

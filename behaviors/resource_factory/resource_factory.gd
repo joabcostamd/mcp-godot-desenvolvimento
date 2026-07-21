@@ -1,3 +1,8 @@
+## Behavior resource_factory para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: resource_factory
 @tool class_name ResourceFactory extends Node
 signal resource_created();signal resource_cached()
 var _init:=false

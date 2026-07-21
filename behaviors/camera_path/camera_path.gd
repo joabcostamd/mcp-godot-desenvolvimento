@@ -1,3 +1,10 @@
+## Node que move a Camera2D parent ao longo de um Path2D child.
+## Generos: platformer, generic.
+## Tags: camera, path.
+## Extends: Node.
+## Sinais: waypoint_reached(), path_completed().
+## Dependencias: nenhuma.
+## @behavior: camera_path
 @tool class_name CameraPath extends Node
 @export var speed: float = 100.0: set(v): speed=clampf(v,1.0,1000.0)
 @export var loop: bool = false

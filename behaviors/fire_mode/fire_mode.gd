@@ -1,3 +1,10 @@
+## Node que gerencia modos de disparo (auto, burst, semi).
+## Generos: topdown_shooter, generic.
+## Tags: arma, tiro.
+## Extends: Node.
+## Sinais: mode_changed().
+## Dependencias: fire_rate.
+## @behavior: fire_mode
 @tool
 class_name FireMode
 extends Node

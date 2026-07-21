@@ -1,3 +1,8 @@
+## Behavior lod_controller para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: lod_controller
 @tool class_name LodController extends Node
 signal lod_changed(level:int)
 var _init:=false

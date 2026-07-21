@@ -1,3 +1,8 @@
+## Behavior random_walker para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: random_walker
 @tool class_name RandomWalker extends Node
 @export var grid_size: Vector2i = Vector2i(50,50): set(v)=grid_size=Vector2i(clampi(v.x,10,500),clampi(v.y,10,500))
 @export var steps: int = 100: set(v)=steps=clampi(v,10,10000)

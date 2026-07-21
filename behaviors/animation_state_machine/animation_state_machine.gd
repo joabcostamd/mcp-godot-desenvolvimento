@@ -1,3 +1,8 @@
+## Behavior animation_state_machine para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: animation_state_machine
 @tool class_name AnimationStateMachine extends Node
 signal state_changed(state:String)
 var _init:=false

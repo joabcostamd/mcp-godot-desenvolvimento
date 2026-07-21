@@ -1,3 +1,8 @@
+## Behavior audio_visualizer para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: audio_visualizer
 @tool class_name AudioVisualizer extends Node
 @export var enabled: bool = true
 signal sound_detected()

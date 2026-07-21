@@ -45,6 +45,11 @@
       "status": "concluida",
       "data_conclusao": "2026-07-21",
       "resultado": "15 exports sem setter corrigidos em 6 behaviors antigos (health:5, player_controller:2, projectile:5, hitbox:1, hurtbox:1, dash:1). Numericos com clampf/clampi, strings com validacao de enum, bools com setter simples. audit_behaviors.py: 0 CRITICAL, 0 WARNINGS. validate_gdscript: 6/6 PASS."
+    },
+    "fatia_2c_doc_headers": {
+      "status": "concluida",
+      "data_conclusao": "2026-07-21",
+      "resultado": "142 doc headers ## gerados via scripts/generate_doc_headers.py. 249/249 behaviors com doc header (100%). Headers contem: descricao, generos, tags, extends, sinais, dependencias, @behavior. Script reutilizavel para futuros behaviors. audit_behaviors.py: 0 CRITICAL, 0 WARNINGS. validate_gdscript: 10/10 sample PASS. NOTA: 4 erros pre-existentes (debug_console, particle_impact, player_vehicle, vignette) serao tratados na FATIA 2.D."
     }
   },
   "auditoria": {

@@ -1,3 +1,8 @@
+## Behavior practice_mode para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: practice_mode
 @tool class_name PracticeMode extends Node
 signal mode_changed()
 var _init:=false

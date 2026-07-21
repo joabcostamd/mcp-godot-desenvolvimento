@@ -1,3 +1,8 @@
+## Behavior crash_reporter para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: crash_reporter
 @tool class_name CrashReporter extends Node
 @export var dsn_url: String = ""
 signal crash_captured(error: String); signal report_sent(); signal report_failed()

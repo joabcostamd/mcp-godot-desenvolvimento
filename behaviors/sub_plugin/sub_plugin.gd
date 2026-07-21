@@ -1,3 +1,8 @@
+## Behavior sub_plugin para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: sub_plugin
 @tool class_name SubPlugin extends Node; signal sub_enabled(name: String); signal sub_disabled(name: String)
 var _initialized: bool = false; func _ready() -> void: if _initialized: return; _initialized=true
 func enable(name: String) -> void: sub_enabled.emit(name)

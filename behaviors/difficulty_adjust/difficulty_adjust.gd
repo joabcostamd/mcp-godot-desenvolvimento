@@ -1,3 +1,8 @@
+## Behavior difficulty_adjust para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: difficulty_adjust
 @tool class_name DifficultyAdjust extends Node
 signal difficulty_changed(level:String)
 var _init:=false

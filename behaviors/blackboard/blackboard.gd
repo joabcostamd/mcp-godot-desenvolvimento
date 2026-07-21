@@ -1,3 +1,10 @@
+## Node que funciona como quadro de variáveis compartilhadas.
+## Generos: generic.
+## Tags: dados, contexto.
+## Extends: Node.
+## Sinais: var_set(), trigger_activated().
+## Dependencias: nenhuma.
+## @behavior: blackboard
 @tool
 class_name Blackboard
 extends Node

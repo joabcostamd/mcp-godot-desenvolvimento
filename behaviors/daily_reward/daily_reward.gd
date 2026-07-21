@@ -1,3 +1,10 @@
+## Node que gerencia recompensas diárias com streak bônus.
+## Generos: mobile, gacha, generic.
+## Tags: daily, reward, social.
+## Extends: Node.
+## Sinais: claimed(), streak_updated().
+## Dependencias: save_load.
+## @behavior: daily_reward
 @tool class_name DailyReward extends Node
 @export var rewards: Array = []
 @export var streak_bonus_multiplier: float = 1.5: set(v)=streak_bonus_multiplier=clampf(v,1.0,5.0)

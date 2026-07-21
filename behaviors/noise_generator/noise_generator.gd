@@ -1,3 +1,8 @@
+## Behavior noise_generator para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: noise_generator
 @tool class_name NoiseGenerator extends Node
 @export var noise_type: String = "perlin": set(v)=noise_type=v
 @export var frequency: float = 0.05: set(v)=frequency=clampf(v,0.001,1.0)

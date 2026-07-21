@@ -1,3 +1,9 @@
+## Node2D que renderiza superfície de lava animada com shader.
+## Generos: platformer, generic.
+## Tags: lava, shader.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: lava_surface
 @tool class_name LavaSurface extends Node2D
 @export var flow_speed: float = 0.5: set(v)=flow_speed=clampf(v,0.1,10.0)
 @export var glow_intensity: float = 1.5: set(v)=glow_intensity=clampf(v,0.1,5.0)

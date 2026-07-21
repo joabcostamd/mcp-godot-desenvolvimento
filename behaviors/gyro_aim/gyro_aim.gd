@@ -1,3 +1,10 @@
+## Behavior Gyro Aim para Godot 4.
+## Generos: shooter.
+## Tags: input.
+## Extends: Node.
+## Sinais: gyro_active().
+## Dependencias: nenhuma.
+## @behavior: gyro_aim
 @tool class_name GyroAim extends Node
 @export var sensitivity: float = 1.0: set(v)=sensitivity=clampf(v,0.1,5.0)
 @export var smoothing: float = 0.8: set(v)=smoothing=clampf(v,0.0,1.0)

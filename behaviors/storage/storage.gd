@@ -1,3 +1,10 @@
+## Node que persiste dados em ConfigFile.
+## Generos: generic.
+## Tags: dados, persistencia.
+## Extends: Node.
+## Sinais: data_changed(), loaded().
+## Dependencias: nenhuma.
+## @behavior: storage
 @tool
 class_name Storage
 extends Node

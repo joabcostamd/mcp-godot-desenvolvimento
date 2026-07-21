@@ -1,3 +1,10 @@
+## Node que executa uma árvore de comportamento (BT) simplificada com tick_rate configurável.
+## Generos: generic.
+## Tags: bt, behavior_tree, ia.
+## Extends: Node.
+## Sinais: tree_started(), tree_stopped(), node_executed().
+## Dependencias: blackboard.
+## @behavior: behavior_tree
 @tool class_name BehaviorTree extends Node
 @export var tick_rate: float = 0.1: set(v)=tick_rate=clampf(v,0.01,60.0)
 @export var tree_data: Array = []

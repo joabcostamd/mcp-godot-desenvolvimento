@@ -1,3 +1,8 @@
+## Behavior cross_save para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: cross_save
 @tool class_name CrossSave extends Node
 @export var platforms: Array[String] = ["windows","linux"]
 signal cross_synced(); signal merge_conflict()

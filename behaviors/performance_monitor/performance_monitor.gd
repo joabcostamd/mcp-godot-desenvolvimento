@@ -1,3 +1,8 @@
+## Behavior performance_monitor para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: performance_monitor
 @tool class_name PerformanceMonitor extends Node
 @export var sample_rate: float = 0.5: set(v)=sample_rate=clampf(v,0.1,5.0)
 signal metric_recorded(fps: float, memory_mb: float)

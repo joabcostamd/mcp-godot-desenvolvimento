@@ -1,3 +1,10 @@
+## Node que gerencia timing de ritmo.
+## Generos: rhythm.
+## Tags: rhythm.
+## Extends: Node.
+## Sinais: perfect(), good(), miss(), beat().
+## Dependencias: nenhuma.
+## @behavior: rhythm_timing
 @tool class_name RhythmTiming extends Node
 @export var bpm: float = 120.0: set(v): bpm=clampf(v,30,300)
 @export var tolerance: float = 0.1: set(v): tolerance=clampf(v,0.01,0.5)

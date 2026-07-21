@@ -1,3 +1,10 @@
+## Node que sincroniza propriedades entre peers via multiplayer.
+## Generos: multiplayer.
+## Tags: multiplayer, sync.
+## Extends: Node.
+## Sinais: synced(), desync_detected().
+## Dependencias: nenhuma.
+## @behavior: network_sync
 @tool class_name NetworkSync extends Node
 @export var sync_interval: float = 0.1: set(v)=sync_interval=clampf(v,0.01,5.0)
 signal synced()

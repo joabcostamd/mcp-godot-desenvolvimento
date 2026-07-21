@@ -1,3 +1,8 @@
+## Behavior skeleton_ik para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: skeleton_ik
 @tool class_name SkeletonIk extends Node
 signal ik_solved()
 var _init:=false

@@ -1,3 +1,8 @@
+## Behavior interface_resize para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: interface_resize
 @tool class_name InterfaceResize extends Control
 signal resized()
 var _init:=false

@@ -1,3 +1,8 @@
+## Behavior game_speed_control para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: game_speed_control
 @tool class_name GameSpeedControl extends Node
 @export var speed_multiplier: float = 1.0: set(v)=speed_multiplier=clampf(v,0.25,4.0)
 signal speed_changed()

@@ -1,3 +1,8 @@
+## Behavior bypass_gate para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: bypass_gate
 @tool class_name BypassGate extends Node
 signal gate_bypassed()
 var _init:=false

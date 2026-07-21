@@ -1,3 +1,10 @@
+## Node que gerencia sequência de shots de câmera com transições.
+## Generos: generic.
+## Tags: camera, sequencia, cinematica.
+## Extends: Node.
+## Sinais: shot_changed(), sequence_finished().
+## Dependencias: camera_follow.
+## @behavior: camera_sequence
 @tool class_name CameraSequence extends Node
 @export var shots: Array = []
 signal shot_changed(index: int)

@@ -1,3 +1,8 @@
+## Behavior analytics_tracker para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: analytics_tracker
 @tool class_name AnalyticsTracker extends Node
 @export var tracking_id: String = ""
 signal event_tracked(event_name: String, properties: Dictionary); signal batch_sent()

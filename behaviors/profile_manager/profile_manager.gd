@@ -1,3 +1,8 @@
+## Behavior profile_manager para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: profile_manager
 @tool class_name ProfileManager extends Node
 signal profile_switched(name:String);signal profile_saved(name:String)
 var _init:=false

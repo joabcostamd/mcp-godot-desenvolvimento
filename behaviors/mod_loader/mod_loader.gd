@@ -1,3 +1,8 @@
+## Behavior mod_loader para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: mod_loader
 @tool class_name ModLoader extends Node
 @export var mod_directory: String = "user://mods/"; signal mod_loaded(mod_id: String); signal mod_failed(mod_id: String); signal all_mods_loaded()
 var _mods: Dictionary = {}; var _initialized: bool = false

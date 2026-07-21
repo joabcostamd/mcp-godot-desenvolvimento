@@ -1,3 +1,10 @@
+## Behavior Dead Zone Config para Godot 4.
+## Generos: generic.
+## Tags: input.
+## Extends: Node.
+## Sinais: zone_calibrated().
+## Dependencias: nenhuma.
+## @behavior: dead_zone_config
 @tool class_name DeadZoneConfig extends Node
 @export var dead_zone: float = 0.2: set(v)=dead_zone=clampf(v,0.0,0.9); zone_calibrated.emit()
 signal zone_calibrated()

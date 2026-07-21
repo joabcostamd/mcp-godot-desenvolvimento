@@ -1,3 +1,8 @@
+## Behavior button_mash_protection para Godot 4.
+## Generos: generic.
+## Extends: Node.
+## Dependencias: nenhuma.
+## @behavior: button_mash_protection
 @tool class_name ButtonMashProtection extends Node
 @export var enabled: bool = true
 signal protection_activated()
