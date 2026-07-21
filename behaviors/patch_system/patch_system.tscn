@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://patch_system_v1"][ext_resource type="Script" path="res://behaviors/patch_system/patch_system.gd" id="1_x"][node name="PatchSystem" type="Node"]script=ExtResource("1_x")

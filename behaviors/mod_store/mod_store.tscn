@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://mod_store_v1"][ext_resource type="Script" path="res://behaviors/mod_store/mod_store.gd" id="1_x"][node name="ModStore" type="Node"]script=ExtResource("1_x")

@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 190,
+    "implementados": 201,
     "lista": [
       {
         "nome": "accordion",
@@ -111,6 +111,12 @@
       },
       {
         "nome": "auto_save",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "autoload_manager",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -326,6 +332,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "custom_node",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "cutscene",
         "versao": "1.0.0",
         "status": "concluido",
@@ -435,6 +447,12 @@
       },
       {
         "nome": "dungeon_generator",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "editor_dock",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -758,6 +776,30 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "mod_config",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "mod_loader",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "mod_sandbox",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "mod_store",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "modular_weapon",
         "versao": "1.0.0",
         "status": "concluido",
@@ -818,6 +860,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "patch_system",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "pathfinding",
         "versao": "1.0.0",
         "status": "concluido",
@@ -860,6 +908,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "plugin_creator",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "profiler_hook",
         "versao": "1.0.0",
         "status": "concluido",
@@ -897,6 +951,12 @@
       },
       {
         "nome": "recoil",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "resource_override",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -1041,6 +1101,12 @@
       },
       {
         "nome": "storage",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "sub_plugin",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
