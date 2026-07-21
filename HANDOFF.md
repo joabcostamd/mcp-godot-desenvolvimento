@@ -3,31 +3,43 @@
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo
 > para que o outro agente saiba o estado do projeto na próxima sessão.
 
-## Último Handoff (AGENTE 02 — 2026-07-21 — ONDA 2: 9 behaviors)
+## Último Handoff (AGENTE 02 — 2026-07-21 — ONDA 2: 11 behaviors)
 
 - **Data:** 2026-07-21
 - **De:** AGENTE 02 (Conteúdo — behaviors)
 - **Branch:** `agente2/behaviors-onda2`
-- **Ação:** 9 behaviors implementados — 21/224 total
+- **Ação:** 11 behaviors implementados na sessão — 32/224 total
 
 ### O que foi feito
 
 | # | Behavior | Node | Destaque |
 |---|---|---|---|
-| 19 | `beam_laser` | RayCast2D | Dano contínuo (dps), Line2D, 17 testes |
-| 20 | `hitscan` | RayCast2D | One-shot, flash visual, 18 testes |
-| 22 | `enemy_patrol` | Node | Waypoints, loop/ping_pong, StateMachine, 12 testes |
-| 23 | `line_of_sight` | Area2D | Cone de visão, dot product, oclusão, 15 testes |
-| 27 | `flee` | Node | 3 condições (always/health/on_damage), StateMachine, 14 testes |
-| 28 | `flocking` | Node | Boids: separação/alinhamento/coesão, 9 testes |
-| 29 | `turret_aim` | Node2D | Rotação suave, FireRate+Projectile, 10 testes |
-| 47 | `object_pool` | Node | PackedScene pool, take/return, expandable, 11 testes |
-| 24 | `spawner_wave` | Node | Ondas via ObjectPool, total_waves, 10 testes |
+| 30 | `inventory` | Node | Slots, max_stack, sinais delta, 30 testes v1.0.1 |
+| 31 | `collectable` | Area2D | Auto_pickup, magnet autodetect, cooldown, 19 testes v1.0.1 |
+| 34 | `currency` | Node | add/spend/can_afford, currency_type, 18 testes |
+| 32 | `xp_level` | Node | xp_table, multilevel up, 18 testes |
+| 33 | `upgrade` | Node | Survivors-like, XPLevel.leveled_up, 12 testes |
+| 35 | `quest` | Node | Objectives collect/spend, auto-track, rewards, 13 testes |
+| 38 | `save_load` | Node | ConfigFile, Inventory/Currency/XPLevel, 12 testes v1.0.1 |
+| 36 | `achievement` | Node | collect/currency/level conditions, 9 testes |
+| 37 | `unlockable` | Node | Metaprogression, achievement/level/currency, 7 testes |
+| 39 | `pause_menu` | Node | get_tree().paused, ui_cancel input, 6 testes |
+| 40 | `screen_shake` | Node | Camera2D offset, trigger/duration/decay, 7 testes |
 
 ### Métricas
 
-- **Total:** 21/224 behaviors
-- **Bugs encontrados/corrigidos:** 26
+- **Total:** 32/224 behaviors
+- **Grupos concluídos:** Combate ✅, IA/Mundo ✅, Progressão ✅ (10/10)
+- **Grupos em progresso:** Sistema (2/6: save_load, pause_menu), Feedback (1/4: screen_shake)
+- **Bugs corrigidos na sessão:** 10 (C1-C2-M3-M4-B5 no inventory, C1-M2-B3-B4 no collectable, M1-B2 no save_load)
+- **Commits:** 10
+
+### ⚠️ Pontos de atenção para AGENTE 01
+
+- Nenhum arquivo do território do Agente 1 foi alterado
+- `.roadmap_progress_a2.json` atualizado com 32 behaviors
+- 8 behaviors sem `.uid`: enemy_patrol, flee, flocking, inventory, line_of_sight, object_pool, spawner_wave, turret_aim + novos
+- Próximo: `floating_text` (#41) — Feedback
 - **Padrões registrados:** 23 (em `/memories/repo/padroes-de-bugs-behaviors.md`)
 - **Checklist:** 22 itens de verificação pré-implementação
 - **Commits:** 9

@@ -1,7 +1,40 @@
 # 🔄 PRÓXIMA SESSÃO — Agente 2
 
 ## Resumo
-9 behaviors implementados (beam_laser, hitscan, enemy_patrol, line_of_sight, flee, turret_aim, flocking, object_pool, spawner_wave). 21/224 total. 26 bugs corrigidos. 23 padrões de bugs documentados.
+11 behaviors implementados (inventory, collectable, currency, xp_level, upgrade, quest, save_load, achievement, unlockable, pause_menu, screen_shake). 32/224 total. Grupo Progressão COMPLETO (10/10). 10 bugs corrigidos na sessão.
+
+## Estado
+- Versão: 0.2.0 | Módulos: 32 behaviors | Progresso: 14.3%
+- Branch: agente2/behaviors-onda2 | Commit: 36ffa83
+
+## Última tarefa
+- #40 screen_shake v1.0.0 — Camera2D offset, trigger/duration/decay, 7 testes
+
+## Pendências
+- [ ] #41 floating_text (Feedback) — alta
+- [ ] #42 impact_particles (Feedback) — média
+- [ ] #43 hit_stop (Feedback) — média
+- [ ] #44 main_menu (Sistema) — média
+- [ ] 8+ behaviors sem .uid — baixa (Godot aberto regenera)
+
+## Arquivos-chave
+- .roadmap_progress_a2.json
+- behaviors/CATALOGO_COMPLETO.md
+- .github/roadmap/ONDA_2_fosso.md
+
+## Fluxo sugerido
+1. Leia HANDOFF.md e .roadmap_progress_a2.json
+2. Rode validate_gdscript.py nos 11 behaviors novos
+3. Continue de #41 floating_text (/plan → /act)
+
+## Decisões da sessão
+- Commit automático após /act → /memories/user_preferences.md
+- Cooldown 0.5s anti-flood em sinais de falha
+- Magnet autodetect via get_overlapping_bodies()
+
+## ⚠️ Atenção
+- merge-tree conflitos pré-existentes em .session/ e HANDOFF.md
+- auditar.py C1/C5 falham (bug pré-existente, Agente 1)
 
 ## Estado
 - Versão: 0.2.0 | Branch: agente2/behaviors-onda2 | Commit: 601b97b
