@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 159,
+    "implementados": 165,
     "lista": [
       {
         "nome": "accordion",
@@ -225,7 +225,7 @@
       },
       {
         "nome": "collectable",
-        "versao": "1.0.1",
+        "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
       },
@@ -237,6 +237,12 @@
       },
       {
         "nome": "color_pulse",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "combo_detector",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -501,7 +507,7 @@
       },
       {
         "nome": "health",
-        "versao": "1.1.0",
+        "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
       },
@@ -560,6 +566,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "input_buffer",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "input_manager",
         "versao": "1.0.0",
         "status": "concluido",
@@ -573,7 +585,7 @@
       },
       {
         "nome": "inventory",
-        "versao": "1.0.1",
+        "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
       },
@@ -621,6 +633,12 @@
       },
       {
         "nome": "lobby",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "localization",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -783,7 +801,7 @@
       },
       {
         "nome": "save_load",
-        "versao": "1.0.1",
+        "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
       },
@@ -920,6 +938,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "touch_gestures",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "trail",
         "versao": "1.0.0",
         "status": "concluido",
@@ -933,6 +957,12 @@
       },
       {
         "nome": "turret_aim",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "tutorial_overlay",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -963,6 +993,12 @@
       },
       {
         "nome": "vignette",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "virtual_joystick",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
