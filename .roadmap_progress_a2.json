@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 24,
+    "implementados": 25,
     "lista": [
       {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido"},
       {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido"},
@@ -62,8 +62,9 @@
       {"id": 47, "nome": "object_pool", "versao": "1.0.0", "status": "concluido"},
       {"id": 30, "nome": "inventory", "versao": "1.0.1", "status": "concluido", "data": "2026-07-21", "nota": "Node + slots. add/remove/has/get_count/clear. max_stack. 30 testes. Auditoria: corrigidos C1(_resize_slots perda dados), C2(inventory_full parcial), M3(_set_slot delta), M4(has_item<=0). Fonte: Nodot CollectableInventory."},
       {"id": 31, "nome": "collectable", "versao": "1.0.1", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + auto_pickup/pickup/magnet_range(autodetection). 19 testes. Auditoria: corrigidos C1(auto_pickup setter dinamico), M2(pickup_failed cooldown 0.5s), B3(warning inalcancavel), B4(magnet autodetect). Fonte: Nodot RigidCollectable3D."},
-      {"id": 34, "nome": "currency", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + add/spend/can_afford. currency_type. Sinais gained/spent/insufficient. 18 testes."}
+      {"id": 34, "nome": "currency", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + add/spend/can_afford. currency_type. Sinais gained/spent/insufficient. 18 testes."},
+      {"id": 32, "nome": "xp_level", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + xp_table/add_xp/leveled_up. Multiplos level ups. 18 testes."}
     ]
   },
-  "proximo": "xp_level (#32) — sem dependências. Grupo: Progressão."
+  "proximo": "upgrade (#33) — depende de xp_level (#32). Grupo: Progressão."
 }
