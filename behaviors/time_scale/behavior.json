@@ -1,0 +1,24 @@
+{
+  "name": "time_scale",
+  "description_pt": "Controle global de escala de tempo (bullet-time, slow-motion). Manipula Engine.time_scale com transições suaves via Tween. Restaura 1.0 ao sair da árvore. Apenas um por cena. Mínimo seguro: 0.05.",
+  "description_en": "Global time scale control (bullet-time, slow-motion). Manipulates Engine.time_scale with smooth transitions via Tween. Restores 1.0 on tree exit. One per scene. Safe minimum: 0.05.",
+  "synonyms": {
+    "pt": ["bullet_time", "slow_motion", "camara_lenta", "acelerar", "desacelerar", "tempo"],
+    "en": ["bullet_time", "slow_motion", "speed_up", "slow_down", "time_warp"]
+  },
+  "parameters": [
+    {"name": "default_scale", "type": "float", "description_pt": "Escala de tempo normal (padrão 1.0).", "range": {"min": 0.1, "max": 10.0}, "default": 1.0},
+    {"name": "transition_duration", "type": "float", "description_pt": "Duração padrão da transição entre escalas.", "range": {"min": 0.0, "max": 5.0}, "default": 0.3, "unit": "s"},
+    {"name": "min_scale", "type": "float", "description_pt": "Escala mínima permitida (nunca 0, que congela Tweens).", "range": {"min": 0.01, "max": 0.5}, "default": 0.05},
+    {"name": "max_scale", "type": "float", "description_pt": "Escala máxima permitida.", "range": {"min": 1.0, "max": 100.0}, "default": 10.0}
+  ],
+  "signals": [
+    {"name": "scale_changed", "description_pt": "Emitido ao final de cada transição.", "params": [{"name": "new_scale", "type": "float"}]}
+  ],
+  "dependencies": [],
+  "genres": ["generic"],
+  "conflicts": ["Apenas um TimeScale por cena. Múltiplos competem pelo mesmo Engine.time_scale."],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["sistema", "tempo", "bullet_time", "slow_motion", "engine"]
+}
