@@ -1,0 +1,28 @@
+{
+  "name": "spawner_wave",
+  "description_pt": "Spawner de ondas: cria inimigos em ondas sucessivas via ObjectPool. Define tabela de spawn, intervalo entre ondas e limite de ativos. Base para survivor-like e tower defense.",
+  "description_en": "Wave spawner: creates enemies in successive waves via ObjectPool. Defines spawn table, wave interval, and max active limit. Base for survivor-like and tower defense.",
+  "synonyms": {
+    "pt": ["spawner", "ondas", "horda", "invasão", "nascedouro", "gerador"],
+    "en": ["spawner", "waves", "horde", "invasion", "generator"]
+  },
+  "parameters": [
+    {"name": "spawn_count_per_wave", "type": "int", "description_pt": "Inimigos por onda.", "range": {"min": 1, "max": 500}, "default": 10},
+    {"name": "wave_interval", "type": "float", "description_pt": "Intervalo entre ondas (s).", "range": {"min": 1.0, "max": 300.0}, "default": 10.0, "unit": "s"},
+    {"name": "spawn_delay", "type": "float", "description_pt": "Intervalo entre spawns na mesma onda (s).", "range": {"min": 0.05, "max": 5.0}, "default": 0.5, "unit": "s"},
+    {"name": "max_active", "type": "int", "description_pt": "Máximo de inimigos ativos simultâneos.", "range": {"min": 1, "max": 1000}, "default": 50},
+    {"name": "spawn_radius", "type": "float", "description_pt": "Raio da área de spawn ao redor do spawner (px).", "range": {"min": 10.0, "max": 3000.0}, "default": 300.0, "unit": "px"}
+  ],
+  "signals": [
+    {"name": "wave_started", "description_pt": "Emitido ao iniciar uma onda.", "params": [{"name": "wave_number", "type": "int"}]},
+    {"name": "wave_cleared", "description_pt": "Emitido quando todos os inimigos da onda morreram.", "params": [{"name": "wave_number", "type": "int"}]},
+    {"name": "all_waves_done", "description_pt": "Emitido após a última onda ser concluída.", "params": []},
+    {"name": "enemy_spawned", "description_pt": "Emitido ao spawnar um inimigo.", "params": [{"name": "enemy", "type": "Node"}]}
+  ],
+  "dependencies": ["object_pool", "health"],
+  "genres": ["survivor_like", "tower_defense", "bullet_hell", "topdown_shooter", "generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["spawner", "ondas", "horda", "inimigo", "survivor"]
+}

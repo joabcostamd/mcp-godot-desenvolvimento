@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 20,
+    "implementados": 21,
     "lista": [
       {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido"},
       {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido"},
@@ -54,6 +54,7 @@
       {"id": 21, "nome": "enemy_chase", "versao": "1.0.0", "status": "concluido"},
       {"id": 22, "nome": "enemy_patrol", "versao": "1.0.0", "status": "concluido"},
       {"id": 23, "nome": "line_of_sight", "versao": "1.0.0", "status": "concluido"},
+      {"id": 24, "nome": "spawner_wave", "versao": "1.0.0", "status": "concluido"},
       {"id": 25, "nome": "state_machine", "versao": "1.0.0", "status": "concluido"},
       {"id": 27, "nome": "flee", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "Node + fuga condicional. 4 params, 3 condições. StateMachine sibling. 14 testes."},
       {"id": 28, "nome": "flocking", "versao": "1.0.0", "status": "concluido"},
@@ -61,5 +62,5 @@
       {"id": 47, "nome": "object_pool", "versao": "1.0.0", "status": "concluido"}
     ]
   },
-  "proximo": "spawner_wave (#24) — object_pool destravado."
+  "proximo": "inventory (#30) — sem dependências. Novo grupo: Progressão."
 }

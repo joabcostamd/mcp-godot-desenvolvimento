@@ -40,7 +40,6 @@ var _threat: Node2D
 var _state: String = "safe"  # safe | flee
 var _health: Health
 var _state_machine: StateMachine
-var _was_fleeing: bool = false
 
 
 func _ready() -> void:
