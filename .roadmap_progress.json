@@ -26,10 +26,10 @@
   "fatia_F5.2_ui": {
     "status": "concluida",
     "data": "2026-07-21",
-    "tentativa": 1,
+    "tentativa": 2,
     "agente": "AGENTE 01",
-    "checkpoint": "126047c",
-    "resultado": "F5.2 — Migrar dominio ui. Criado domains/ui/ (manifest.py, handlers.py, schemas.py, examples.py, test_ui_domain.py). Removidas 5 atômicas do wire: ui_create_widget, ui_create_tab_with_content, ui_configure_focus_nav, ui_set_tooltip, ui_set_anchor_preset. 18/18 testes dominio passam. 115/116 regressao (1 pre-existente). C1: 0 breaking. DESIGN: -5 tools."
+    "checkpoint": "f260f3f",
+    "resultado": "F5.2 — CORRIGIDO: handlers.py convertido de re-exports para KW-only wrappers (*), padrao physics. 12 wrappers com type hints completos, lazy imports, chamada posicional. Testes: 9/9 dominio ui, 164/166 regressao (2 pre-existentes: remix). Auditoria: C1 0 breaking, C3 smoke OK, exit 0. DESIGN: -5 tools (mantido)."
   },
   "fatia_F5.1_physics": {
     "status": "concluida",
