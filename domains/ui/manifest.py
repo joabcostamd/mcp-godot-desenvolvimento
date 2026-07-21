@@ -38,5 +38,9 @@ MANIFEST = DomainManifest(
         OpSpec(name="set_tooltip", fn=handlers.set_tooltip, summary="Define tooltip de nó Control", schema={"scene_path": {"type": "string", "required": True}, "node_path": {"type": "string", "required": True}, "tooltip_text": {"type": "string", "required": True}}, examples=[{"scene_path": "scenes/ui.tscn", "node_path": "./PlayBtn", "tooltip_text": "Iniciar jogo"}], rollback="safety_manage(op=undo)"),
         OpSpec(name="set_anchor", fn=handlers.set_anchor_preset, summary="Define anchor preset para layout responsivo", schema={"scene_path": {"type": "string", "required": True}, "node_path": {"type": "string", "required": True}, "preset": {"type": "string", "required": True}}, examples=[{"scene_path": "scenes/ui.tscn", "node_path": "./Panel", "preset": "full_rect"}], rollback="safety_manage(op=undo)"),
     ],
+    aliases=["ui_create_widget", "ui_create_tab_with_content", "ui_configure_focus_nav",
+             "ui_set_tooltip", "ui_set_anchor_preset", "create_ui_widget",
+             "create_tab_with_content", "configure_ui_focus_and_nav",
+             "set_tooltip", "set_anchor_preset"],
     tags=["ui", "interface", "menu", "hud", "widget"],
 )

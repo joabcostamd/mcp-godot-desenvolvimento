@@ -115,5 +115,7 @@ MANIFEST = DomainManifest(
             rollback="safety_manage(op=undo)",
         ),
     ],
+    aliases=["create_joint_2d", "add_raycast_2d", "add_shapecast_2d",
+             "add_collision_shape", "set_collision_layer_mask", "set_physics_material"],
     tags=["física", "colisão", "raycast", "joint", "physics"],
 )
