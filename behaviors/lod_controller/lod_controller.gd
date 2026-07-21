@@ -1,4 +1,4 @@
-@tool class_name LODController extends Node
+@tool class_name LodController extends Node
 signal lod_changed(level:int)
 var _init:=false
 func _ready()->void:if _init:return;_init=true

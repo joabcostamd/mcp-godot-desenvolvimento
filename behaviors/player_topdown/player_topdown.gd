@@ -9,7 +9,7 @@
 ## @tutorial: behaviors/player_topdown/README.md
 
 @tool
-class_name PlayerTopDown
+class_name PlayerTopdown
 extends Node
 
 ## Velocidade máxima (px/s).

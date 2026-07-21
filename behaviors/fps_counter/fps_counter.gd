@@ -1,6 +1,6 @@
-## FPSCounter — Contador de FPS | Godot 4.7.
+## FpsCounter — Contador de FPS | Godot 4.7.
 @tool
-class_name FPSCounter
+class_name FpsCounter
 extends Control
 
 @export var update_interval: float = 0.5: set(v): update_interval=clampf(v,0.1,5)

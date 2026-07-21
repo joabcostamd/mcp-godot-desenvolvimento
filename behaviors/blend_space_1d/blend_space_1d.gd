@@ -1,4 +1,4 @@
-@tool class_name BlendSpace1D extends Node
+@tool class_name BlendSpace1d extends Node
 var _init:=false
 func _ready()->void:if _init:return;_init=true
 func _get_configuration_warnings()->PackedStringArray:return[]

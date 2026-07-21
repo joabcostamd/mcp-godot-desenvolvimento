@@ -1,4 +1,4 @@
-@tool class_name CameraLookAt extends Node
+@tool class_name CameraLookat extends Node
 @export var target: NodePath: set(v)=target=v
 @export var look_offset: Vector2 = Vector2.ZERO
 @export var damping: float = 0.1: set(v)=damping=clampf(v,0.01,1.0)

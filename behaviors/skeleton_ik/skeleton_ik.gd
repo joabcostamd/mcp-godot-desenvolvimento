@@ -1,4 +1,4 @@
-@tool class_name SkeletonIK extends Node
+@tool class_name SkeletonIk extends Node
 signal ik_solved()
 var _init:=false
 func _ready()->void:if _init:return;_init=true

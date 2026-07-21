@@ -1,5 +1,5 @@
 {
-  "name": "timer",
+  "name": "timer_behavior",
   "description_pt": "Timer wrapper com start/stop/restart/pause/resume. Emite timeout ao terminar e tick a cada ciclo (não one-shot). Parâmetros: wait_time, one_shot, auto_start. Base para spawner_wave, round_timer e cooldowns.",
   "description_en": "Timer wrapper with start/stop/restart/pause/resume. Emits timeout on finish and tick every cycle (non-one-shot). Parameters: wait_time, one_shot, auto_start. Base for spawner_wave, round_timer, and cooldowns.",
   "synonyms": {

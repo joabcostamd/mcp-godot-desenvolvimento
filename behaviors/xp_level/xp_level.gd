@@ -9,7 +9,7 @@
 ## @tutorial: behaviors/xp_level/README.md
 
 @tool
-class_name XPLevel
+class_name XpLevel
 extends Node
 
 ## Thresholds de XP por nível. xp_table[n] = XP para nível n+1.

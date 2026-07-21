@@ -33,11 +33,20 @@
     "data_conclusao": "2026-07-20",
     "resultado": "tests/behaviors/test_runner.gd + tests/contract_snapshot_behaviors.py. CORRIGIDO: adicionada validação de integridade .tscn (SubResource/ExtResource check). 3 .tscn validados: PASS."
   },
+  "fase_7_qualidade": {
+    "status": "em_progresso",
+    "data_inicio": "2026-07-21",
+    "fatia_2a_classname_mismatches": {
+      "status": "concluida",
+      "data_conclusao": "2026-07-21",
+      "resultado": "10/10 class_name mismatches corrigidos. 9 renames (BlendSpace1D→BlendSpace1d, BlendSpace2D→BlendSpace2d, CameraLookAt→CameraLookat, FPSCounter→FpsCounter, LODController→LodController, PlayerTopDown→PlayerTopdown, RPCBridge→RpcBridge, SkeletonIK→SkeletonIk, XPLevel→XpLevel). 1 rename de diretorio (timer→timer_behavior) para evitar conflito com Timer built-in. audit_behaviors.py: 0 mismatches. validate_gdscript: 10/10 PASS."
+    }
+  },
   "auditoria": {
-    "data": "2026-07-20",
-    "problemas_encontrados": 7,
-    "corrigidos": 7,
-    "resultado": "100% dos problemas corrigidos. contract_snapshot: TODOS OS CHECKS PASSARAM. merge-tree: LIMPO."
+    "data": "2026-07-21",
+    "problemas_encontrados": 0,
+    "corrigidos": 10,
+    "resultado": "100% class_name mismatches corrigidos. audit_behaviors.py: 0 CRITICAL, 0 WARNINGS. merge-tree: LIMPO."
   },
   "comportamentos": {
     "total_catalogo": 249,
@@ -1418,7 +1427,7 @@
         "data": "2026-07-21"
       },
       {
-        "nome": "timer",
+        "nome": "timer_behavior",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"

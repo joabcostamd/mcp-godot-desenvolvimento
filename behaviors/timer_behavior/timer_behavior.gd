@@ -3,9 +3,9 @@
 ## Node + Timer child com start/stop/restart/pause/resume.
 ## Emite timeout e tick. one_shot e auto_start configuráveis.
 ##
-## @behavior: timer
+## @behavior: timer_behavior
 ## @genres: generic
-## @tutorial: behaviors/timer/README.md
+## @tutorial: behaviors/timer_behavior/README.md
 
 @tool
 class_name TimerBehavior

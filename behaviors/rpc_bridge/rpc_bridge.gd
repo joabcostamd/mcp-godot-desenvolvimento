@@ -1,4 +1,4 @@
-@tool class_name RPCBridge extends Node
+@tool class_name RpcBridge extends Node
 @export var reliable: bool = true
 @export var channel: int = 0: set(v)=channel=clampi(v,0,15)
 signal rpc_sent(method: String)
