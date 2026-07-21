@@ -41,118 +41,938 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 157,
+    "implementados": 155,
     "lista": [
-      {"id": 44, "nome": "input_manager", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + rebinding runtime. InputMap/device detection/save+load ConfigFile. 2 sinais, 13 testes."},
-      {"id": 130, "nome": "match3_grid", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + nucleo match-3. Grade/gemas/deteccao/gravidade/refill/cascata. 3 sinais, 19 testes."},
-      {"id": 71, "nome": "camera_framed", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + dead zone camera. Phantom Camera Framed. damping/soft_zone. 7 testes."},
-      {"id": 70, "nome": "camera_shake", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + tremor sinusoidal. sin() com frequency/amplitude/duration/decay. Distinto de screen_shake (random). 13 testes."},
-      {"id": 128, "nome": "idle_generator", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + geracao idle/clicker. _physics_process, max_storage, upgrade com custo escalavel. 3 sinais, 20 testes."},
-      {"id": 123, "nome": "hand", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + mao de cartas. add/remove/draw_from_deck/play/discard. Fan layout. 24 testes."},
-      {"id": 143, "nome": "character_creator", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + partes customizaveis. add_part/set_part_option/set_part_color. Presets ConfigFile via SaveLoad. 28 testes."},
-      {"id": 69, "nome": "camera_follow", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Camera2D follow. damping, offset, look_ahead. 8 testes."},
-      {"id": 141, "nome": "element_system", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + weakness/resistance table. fire>ice>lightning>water. 11 testes."},
-      {"id": 139, "nome": "skill_tree", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + nos conectados com custo/prereqs. Integra CharacterStats. 16 testes."},
-      {"id": 142, "nome": "equipment_slot", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + equip/unequip. Integra Inventory + CharacterStats. 8 testes."},
-      {"id": 138, "nome": "character_stats", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + STR/DEX/INT/VIT. Derivados fisico/magico/atk_speed. Modifiers. 11 testes."},
-      {"id": 140, "nome": "status_effect", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + DoT/HoT buff/debuff. Stacks, refresh, ticks. Integra Health. 18 testes."},
-      {"id": 82, "nome": "patrol_route", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + waypoints sequenciais. loop, wait_time, add_waypoint. 5 testes."},
-      {"id": 81, "nome": "avoidance", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + NavigationAgent2D. radius/priority/max_speed. 3 testes."},
-      {"id": 80, "nome": "pathfinding", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + NavigationAgent2D. set_target/arrived. move_and_slide. 4 testes."},
-      {"id": 79, "nome": "fire_mode", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + auto/burst/semi. can_fire/reset_semi. 5 testes."},
-      {"id": 78, "nome": "spread", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + angulo aleatorio acumulativo. base/per_shot/max/recovery. 5 testes."},
-      {"id": 77, "nome": "recoil", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + offset position com recovery. apply_recoil(). 4 testes."},
-      {"id": 76, "nome": "crosshair", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node2D + _draw cross/circle/dot. Segue mouse. 5 testes."},
-      {"id": 115, "nome": "outline_shader", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + shader outline. outline_color/width. gdshader incluso."},
-      {"id": 118, "nome": "dissolve", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + shader dissolve. set_progress(0-1). edge_color/width. gdshader."},
-      {"id": 127, "nome": "rhythm_timing", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + BPM/beat detection. perfect/good/miss signals."},
-      {"id": 129, "nome": "stealth", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + visibility/detection_decay. detected/alerted/hidden."},
-      {"id": 122, "nome": "deck", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + card draw/discard/shuffle. Auto-reshuffle."},
-      {"id": 121, "nome": "card", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + flip/play/draw. card_data Dictionary."},
-      {"id": 126, "nome": "crafting", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + recipes com ingredients. craft/can_craft/unlock. Integra Inventory."},
-      {"id": 125, "nome": "shop", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + itens com preco. buy/sell. Integra Inventory + Currency."},
-      {"id": 136, "nome": "debug_console", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + RichTextLabel + LineEdit. Ctrl+Enter toggle. register_command."},
-      {"id": 135, "nome": "debug_arrow", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node2D + _draw seta. Color/length/direction com ponta."},
-      {"id": 108, "nome": "blackboard", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + variaveis compartilhadas. set_var/get_var + triggers."},
-      {"id": 106, "nome": "storage", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + ConfigFile persistence. set_data/get_data/erase. auto_save."},
-      {"id": 107, "nome": "event_bus", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + pub/sub global. register/fire/unregister/clear. 2 testes."},
-      {"id": 137, "nome": "fps_counter", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + Label FPS. min/max/avg com update_interval. 1 teste."},
-      {"id": 134, "nome": "debug_position", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node2D + _draw cruz/circulo. Color/size/show_label. 1 teste."},
-      {"id": 119, "nome": "parallax_background", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node2D + Sprite2D layers com parallax_scale. auto_scroll, follow_camera. 2 testes."},
-      {"id": 114, "nome": "spring_joint", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + 2 anchors. Stiffness/damping/rest_length. 2 testes."},
-      {"id": 113, "nome": "wind_zone", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + wind_direction/strength/turbulence. 1 teste."},
-      {"id": 109, "nome": "buoyancy", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + fluid_density/drag/surface_y. Empuxo e arrasto. 2 testes."},
-      {"id": 110, "nome": "conveyor_belt", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + direction velocity. CharacterBody2D + RigidBody2D. 2 testes."},
-      {"id": 112, "nome": "gravity_zone", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + gravity_direction/strength/override. 2 testes."},
-      {"id": 111, "nome": "magnet", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + attraction force/falloff (const/linear/quad). 3 testes."},
-      {"id": 97, "nome": "burnable", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Health sibling. fire damage ignite, burn DPS, spread. 7 testes."},
-      {"id": 96, "nome": "ladder", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + climbers dict. ui_up/down override gravity. 5 testes."},
-      {"id": 95, "nome": "outline", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + shader outline. Cor/largura/enabled. gdshader incluso. 3 testes."},
-      {"id": 94, "nome": "interactable", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + focus/hold/interact. player_group filter. 6 testes."},
-      {"id": 91, "nome": "destructible", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node2D + Health sibling. destroyed + damaged signals. destroy_effect. 6 testes."},
-      {"id": 93, "nome": "lerp_smooth", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Tween wrapper. move_to/rotate_to/scale_to/modulate_to. 7 testes."},
-      {"id": 88, "nome": "follow_path", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Path2D child. loop, look_along. 4 testes."},
-      {"id": 89, "nome": "look_at_target", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + lerp_angle. set_target/set_target_position. 6 testes."},
-      {"id": 90, "nome": "trigger_zone", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + CollisionShape2D auto. trigger_group, trigger_once, reset_trigger. 11 testes."},
-      {"id": 87, "nome": "counter", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + min/max/step. increment/decrement/add com clamp. Sinais value_changed/min/max_reached. 16 testes."},
-      {"id": 3, "nome": "player_vehicle", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + rotacao + drift. Impulso frontal, turn_rate, max_speed. move_and_slide. 11 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 8, "nome": "grid_movement", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Tween grid snap. move_to_grid, is_moving. Input bloqueado durante animacao. 12 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 7, "nome": "wall_slide", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + RayCast2D left/right. Wall slide limita fall speed. Wall jump ui_accept. 11 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 4, "nome": "moving_platform", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "AnimatableBody2D + Path2D child. Loop/ping-pong, pause_at_ends. 12 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 6, "nome": "double_jump", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + jump_count air jumps + coyote_time. Complementar ao PlayerController. Sinais jumped/jumps_exhausted. 12 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 5, "nome": "dash", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Timer duracao/cooldown. Override velocidade na direcao do input. cancel_dash(). 13 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 1, "nome": "player_controller", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + CharacterBody2D child. Gravidade, pulo (is_on_floor), move_and_slide, kill_plane. 14 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 102, "nome": "accordion", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + VBoxContainer com secoes Button/Control toggle. allow_multiple, collapse_all/expand_all. 14 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 104, "nome": "drag_drop", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + set_drag_forwarding(). Snap grid, drop_group, preview. 3 params, 3 sinais. 12 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 103, "nome": "tooltip", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + PanelContainer/Label flutuante. mouse_entered/mouse_exited + delay. follow_mouse. 12 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 2, "nome": "player_topdown", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + CharacterBody2D child. InputMap 8-dir com aceleracao/friccao. 4 params, sinal velocity_changed. 17 testes. Fonte: Godot 4.7 ClassDB CharacterBody2D/Input/Vector2.move_toward."},
-      {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido"},
-      {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido"},
-      {"id": 11, "nome": "hitbox", "versao": "1.0.0", "status": "concluido"},
-      {"id": 12, "nome": "hurtbox", "versao": "1.0.0", "status": "concluido"},
-      {"id": 13, "nome": "fire_rate", "versao": "1.0.0", "status": "concluido"},
-      {"id": 14, "nome": "knockback", "versao": "1.0.0", "status": "concluido"},
-      {"id": 19, "nome": "beam_laser", "versao": "1.0.0", "status": "concluido"},
-      {"id": 20, "nome": "hitscan", "versao": "1.0.0", "status": "concluido"},
-      {"id": 21, "nome": "enemy_chase", "versao": "1.0.0", "status": "concluido"},
-      {"id": 22, "nome": "enemy_patrol", "versao": "1.0.0", "status": "concluido"},
-      {"id": 23, "nome": "line_of_sight", "versao": "1.0.0", "status": "concluido"},
-      {"id": 24, "nome": "spawner_wave", "versao": "1.0.0", "status": "concluido"},
-      {"id": 25, "nome": "state_machine", "versao": "1.0.0", "status": "concluido"},
-      {"id": 27, "nome": "flee", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "Node + fuga condicional. 4 params, 3 condições. StateMachine sibling. 14 testes."},
-      {"id": 28, "nome": "flocking", "versao": "1.0.0", "status": "concluido"},
-      {"id": 29, "nome": "turret_aim", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "Node2D + rotação suave. FireRate + Projectile. 10 testes."},
-      {"id": 47, "nome": "object_pool", "versao": "1.0.0", "status": "concluido"},
-      {"id": 30, "nome": "inventory", "versao": "1.0.1", "status": "concluido", "data": "2026-07-21", "nota": "Node + slots. add/remove/has/get_count/clear. max_stack. 30 testes. Auditoria: corrigidos C1(_resize_slots perda dados), C2(inventory_full parcial), M3(_set_slot delta), M4(has_item<=0). Fonte: Nodot CollectableInventory."},
-      {"id": 31, "nome": "collectable", "versao": "1.0.1", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + auto_pickup/pickup/magnet_range(autodetection). 19 testes. Auditoria: corrigidos C1(auto_pickup setter dinamico), M2(pickup_failed cooldown 0.5s), B3(warning inalcancavel), B4(magnet autodetect). Fonte: Nodot RigidCollectable3D."},
-      {"id": 34, "nome": "currency", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + add/spend/can_afford. currency_type. Sinais gained/spent/insufficient. 18 testes."},
-      {"id": 32, "nome": "xp_level", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + xp_table/add_xp/leveled_up. Multiplos level ups. 18 testes."},
-      {"id": 33, "nome": "upgrade", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + escuta XPLevel.leveled_up. Opcoes aleatorias, max_level. 12 testes."},
-      {"id": 35, "nome": "quest", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + objectives collect/spend. Auto-detecta Inventory+Currency. Rewards. 13 testes."},
-      {"id": 38, "nome": "save_load", "versao": "1.0.1", "status": "concluido", "data": "2026-07-21", "nota": "Node + ConfigFile. Salva Inventory/Currency/XPLevel. Multiplos slots. Auditoria: M1(save_dir setter), B2(DirAccess null guard). 12 testes."},
-      {"id": 36, "nome": "achievement", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + conditions collect/currency/level. Auto-detecta siblings. 9 testes."},
-      {"id": 37, "nome": "unlockable", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + metaprogression. Conditions achievement/level/currency. 7 testes."},
-      {"id": 39, "nome": "pause_menu", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + get_tree().paused. Input ui_cancel. Sinais paused/resumed. 6 testes."},
-      {"id": 40, "nome": "screen_shake", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Camera2D offset. trigger() com intensity/duration/decay. 7 testes."},
-      {"id": 49, "nome": "floating_text", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node2D + Label subida+fade. show_text(text,color). 5 params, sinal text_shown. 16 testes. Fonte: Nodot TextEmitter + Godot docs Label/Tween."},
-      {"id": 50, "nome": "particle_impact", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node2D + GPUParticles2D/CpuParticles2D one-shot. emit(pos,color). 4 params, sinal particles_emitted. 13 testes. Fonte: Godot 4.7 ClassDB GPUParticles2D."},
-      {"id": 52, "nome": "screen_flash", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "CanvasLayer + ColorRect fullscreen. flash(color,duration). Fade-in/out + reinício seguro. 15 testes. Fonte: Godot 4.7 ClassDB CanvasLayer/ColorRect/Tween."},
-      {"id": 45, "nome": "time_scale", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Engine.time_scale com Tween. set_scale(target,duration). tree_exiting restaura 1.0. 4 params, sinal scale_changed. 14 testes. Fonte: Godot 4.7 ClassDB + Nodot TimeScale."},
-      {"id": 51, "nome": "hit_stop", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Timer + Engine.time_scale. trigger(duration) freeze momentâneo. Ignora duplo trigger. tree_exiting restaura 1.0. 3 params, sinais hit_stopped/resumed. 11 testes. Fonte: Godot 4.7 ClassDB + Juicee."},
-      {"id": 59, "nome": "freeze_frame", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Timer(ignore_time_scale=true) + Engine.time_scale=0. freeze(duration) total. tree_exiting restaura 1.0. 2 params, sinais frozen/resumed. 11 testes. Fonte: Godot 4.7 ClassDB + Juicee."},
-      {"id": 53, "nome": "camera_zoom", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Camera2D.zoom via Tween. zoom_to(target,duration). Detecta Camera2D parent/viewport. Sem camera = no-op. 2 params, sinais zoom_started/finished. 8 testes. Fonte: Godot 4.7 ClassDB Camera2D/Tween."},
-      {"id": 54, "nome": "color_pulse", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + _process + sin(). Pulsacao de modulate no parent. start/stop com restauracao do original. 4 params, sinal pulsing. 10 testes. Fonte: Godot 4.7 ClassDB modulate/_process."},
-      {"id": 55, "nome": "trail", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Line2D + _process seguindo parent. Acumula pontos historicos com spacing e max_points. Fade via Gradient. 4 params. 8 testes. Fonte: Godot 4.7 ClassDB Line2D/to_local."},
-      {"id": 56, "nome": "tween_player", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Tween wrapper generico. play(node,prop,target,dur,delay). Suporta easing/transition/stop. 4 params, sinais started/finished. 6 testes. Fonte: Godot 4.7 ClassDB Tween."},
-      {"id": 57, "nome": "chromatic_aberration", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + flicker RGB no modulate do parent. trigger(intensity,duration) com Tween oscilando R/G/B. Restaura original. 3 params, sinais started/finished. 7 testes. Fonte: Godot 4.7 ClassDB modulate/Tween."},
-      {"id": 58, "nome": "vignette", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "CanvasLayer + ColorRect + GradientTexture2D radial. trigger(intensity,duration) com Tween. mouse_filter=IGNORE. 3 params, sinais started/finished. 6 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 60, "nome": "glitch", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + deslocamento horizontal aleatorio no parent Node2D. trigger(intensity,duration) com Tween rapido. Restaura position original. 4 params, sinais started/finished. 7 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 42, "nome": "scene_transition", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "CanvasLayer + ColorRect fullscreen. transition_to(scene_path,dur) fade-out -> change_scene_to_file -> fade-in. 2 params, sinais started/finished. 5 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 43, "nome": "audio_manager", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + AudioServer bus control. play_sfx/play_music com auto-limpeza. Volume Master/Music/SFX. 3 params. 6 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 40, "nome": "main_menu", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "CanvasLayer + VBoxContainer + botoes Play/Settings/Quit. Config: play_scene, settings_scene, show_quit, show_settings. 3 sinais. Usa SceneTransition. 7 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 83, "nome": "sfx_player", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + AudioStreamPlayer wrapper one-shot. play/play_stream com auto-limpeza. 5 params, sinais played/finished. 5 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 41, "nome": "settings", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "CanvasLayer + sliders Master/Music/SFX + toggle fullscreen. Integracao SaveLoad. apply(). 5 params, sinal setting_changed. 5 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 84, "nome": "music_playlist", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + array AudioStream com shuffle, crossfade e next/prev. Bus Music. 5 params, sinais track_changed/playlist_finished. 5 testes. Fonte: Godot 4.7 ClassDB."}
+      {
+        "nome": "accordion",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "achievement",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "achievement_tracker",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "ambience_zone",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "area_damage",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "assist_mode",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "audio_manager",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "audio_visualizer",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "authority",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "avoidance",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "beam_laser",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "behavior_tree",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "blackboard",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "buoyancy",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "burnable",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "button_mash_protection",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "camera_follow",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "camera_framed",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "camera_lookat",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "camera_path",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "camera_priority",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "camera_sequence",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "camera_shake",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "camera_zoom",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "card",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "character_creator",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "character_stats",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "checkpoint",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "chromatic_aberration",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "collectable",
+        "versao": "1.0.1",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "color_blind_mode",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "color_pulse",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "controller_remap",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "conveyor_belt",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "counter",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "crafting",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "critical_hit",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "crosshair",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "currency",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "cutscene",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "daily_reward",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "damage_over_time",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "dash",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "day_night_cycle",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "debug_arrow",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "debug_console",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "debug_position",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "deck",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "defeat_condition",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "destructible",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "dialogue",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "difficulty_curve",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "dissolve",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "double_jump",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "drag_drop",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "element_system",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "enemy_chase",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "enemy_patrol",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "equipment_slot",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "event_bus",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "fire_mode",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "fire_rate",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "flee",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "floating_text",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "flocking",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "follow_path",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "fps_counter",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "freeze_frame",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "game_speed_control",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "glitch",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "gravity_zone",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "grid_movement",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "hand",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "health",
+        "versao": "1.1.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "health_bar",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "high_contrast",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "hit_stop",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "hitbox",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "hitscan",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "hold_alternative",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "homing_projectile",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "hurtbox",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "idle_generator",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "input_manager",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "interactable",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "inventory",
+        "versao": "1.0.1",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "knockback",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "ladder",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "lava_surface",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "leaderboard",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "lens_flare",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "lerp_smooth",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "line_of_sight",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "lobby",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "look_at_target",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "magnet",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "main_menu",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "match3_grid",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "moving_platform",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "music_playlist",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "network_sync",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "object_pool",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "outline",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "outline_shader",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "parallax_background",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "particle_impact",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "pathfinding",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "patrol_route",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "pause_menu",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "player_controller",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "player_topdown",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "player_vehicle",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "projectile",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "quest",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "random_loot",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "recoil",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "rhythm_timing",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "round_timer",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "rpc_bridge",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "save_load",
+        "versao": "1.0.1",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "scene_transition",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "score",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "screen_flash",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "screen_shake",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "screen_shake_toggle",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "settings",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "sfx_player",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "shop",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "skill_tree",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "spawner_wave",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "spread",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "spring_joint",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "state_machine",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "status_effect",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "stealth",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "storage",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "subtitle",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "teleport",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "text_size",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "time_scale",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "timer",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "tooltip",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "trail",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "trigger_zone",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "turret_aim",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "tween_player",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "unlockable",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "upgrade",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "victory_condition",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "vignette",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "wall_slide",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "water_surface",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "wave_system",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "wind_zone",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "xp_level",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      }
     ]
   },
   "proximo": "round_timer (#61) — Grupo: ESTRUTURA. Ou camera_priority (#72) — Grupo: CAMERA."

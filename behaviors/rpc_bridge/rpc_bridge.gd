@@ -12,6 +12,7 @@ func send_rpc(method: String, args: Array = []) -> void:
 	if has_method(method): callv(method,args)
 func broadcast_rpc(method: String, args: Array = []) -> void:
 	send_rpc(method,args)
+func receive_rpc(method: String) -> void: rpc_received.emit(method)
 func _get_configuration_warnings() -> PackedStringArray:
 	var w: PackedStringArray=[]
 	if not multiplayer or not multiplayer.multiplayer_peer: w.append("Multiplayer peer não configurado.")

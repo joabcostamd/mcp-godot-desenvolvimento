@@ -14,3 +14,7 @@ func show_subtitle(text: String="", dur: float=-1.0) -> void:
 	_label.visible=true; shown.emit(); _timer.start(duration)
 func _hide() -> void: _label.visible=false; hidden.emit()
 func _update_label() -> void: if _label: _label.text=subtitle_text
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray=[]
+	if subtitle_text.is_empty(): w.append("subtitle_text vazio.")
+	return w

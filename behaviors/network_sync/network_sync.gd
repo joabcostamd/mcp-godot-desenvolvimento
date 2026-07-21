@@ -11,6 +11,7 @@ func _process(delta: float) -> void:
 	if not multiplayer or not multiplayer.multiplayer_peer: return
 	_timer+=delta
 	if _timer>=sync_interval: _timer=0.0; synced.emit()
+func notify_desync() -> void: desync_detected.emit()
 func add_sync_property(prop: String) -> void:
 	if not prop in _sync_properties: _sync_properties.append(prop)
 func get_sync_properties() -> Array[String]: return _sync_properties.duplicate()
