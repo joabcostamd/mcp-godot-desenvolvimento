@@ -1,0 +1,51 @@
+{
+  "name": "damage_over_time",
+  "description_pt": "Aplica dano periódico a um componente Health alvo por uma duração. Ideal para veneno, fogo, sangramento. Timer interno.",
+  "description_en": "Applies periodic damage to a target Health component over a duration. Ideal for poison, fire, bleeding. Internal Timer.",
+  "synonyms": {
+    "pt": ["DOT", "veneno", "fogo", "sangramento", "dano contínuo", "queimadura", "poison"],
+    "en": ["DOT", "poison", "fire", "bleed", "burn", "continuous damage", "tick"]
+  },
+  "parameters": [
+    {
+      "name": "damage_per_tick",
+      "type": "int",
+      "description_pt": "Dano aplicado a cada tick.",
+      "range": {"min": 1, "max": 9999},
+      "default": 5
+    },
+    {
+      "name": "tick_interval",
+      "type": "float",
+      "description_pt": "Intervalo entre ticks (s).",
+      "range": {"min": 0.1, "max": 10.0},
+      "default": 1.0,
+      "unit": "s"
+    },
+    {
+      "name": "duration",
+      "type": "float",
+      "description_pt": "Duração total do efeito (s).",
+      "range": {"min": 0.1, "max": 60.0},
+      "default": 5.0,
+      "unit": "s"
+    }
+  ],
+  "signals": [
+    {
+      "name": "dot_tick",
+      "description_pt": "Emitido a cada tick de dano.",
+      "params": [{"name": "damage", "type": "int"}]
+    },
+    {
+      "name": "dot_ended",
+      "description_pt": "Emitido quando o efeito termina (duração completa ou stop).",
+      "params": []
+    }
+  ],
+  "dependencies": ["health"],
+  "genres": ["rpg", "roguelike", "platformer", "topdown_shooter", "generic"],
+  "version": "1.0.0",
+  "category": "combate",
+  "status": "implementado"
+}

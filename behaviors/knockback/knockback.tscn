@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://knockback000000001"]
+
+[ext_resource type="Script" path="res://behaviors/knockback/knockback.gd" id="1_knockback"]
+
+[node name="Knockback" type="Node"]
+script = ExtResource("1_knockback")
+force = 200.0
+duration = 0.3
+damping = 0.0

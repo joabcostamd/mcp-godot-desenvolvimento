@@ -1,7 +1,7 @@
 {
   "agente": "AGENTE 02",
   "ultima_atualizacao": "2026-07-20",
-  "branch": "agente2/trabalho",
+  "branch": "agente2/behaviors-onda2",
   "onda_0": "pulado",
   "fase_1_fundacao": {
     "status": "concluida",
@@ -39,5 +39,19 @@
     "corrigidos": 7,
     "resultado": "100% dos problemas corrigidos. contract_snapshot: TODOS OS CHECKS PASSARAM. merge-tree: LIMPO."
   },
-  "proximo": "Aguardar merge do Agente 1 na main. Depois: validar health.gd no Godot, instalar GdUnit4 (Fatia 2.B), criar behaviors restantes (2.E-2.Z)."
+  "comportamentos": {
+    "total_catalogo": 224,
+    "implementados": 12,
+    "lista": [
+      {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido", "data": "2026-07-20", "hash": "0fddd1c"},
+      {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "893be48"},
+      {"id": 11, "nome": "hitbox", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "f2d5df8", "nota": "Area2D + Health. 4 params, 3 sinais, 21 testes."},
+      {"id": 12, "nome": "hurtbox", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "f2d5df8", "nota": "Area2D passiva + Health. Detecta Hitbox e Projectile. 27 testes."},
+      {"id": 13, "nome": "fire_rate", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "f2d5df8", "nota": "Node + Timer. Cooldown + burst. 19 testes."},
+      {"id": 14, "nome": "knockback", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "f2d5df8", "nota": "Node + impulso ao CharacterBody2D pai. 17 testes."},
+      {"id": 21, "nome": "enemy_chase", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "f2d5df8", "nota": "Node + perseguição ao player. P1-P8 checklist. 17 testes."},
+      {"id": 25, "nome": "state_machine", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "f2d5df8", "nota": "FSM leve. 16 testes."}
+    ]
+  },
+  "proximo": "Core loop COMPLETO (8/8). Próximo: spawner_wave (#24)."
 }

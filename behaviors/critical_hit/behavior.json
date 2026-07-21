@@ -1,0 +1,39 @@
+{
+  "name": "critical_hit",
+  "description_pt": "Aplica chance de crítico ao dano. try_critical(damage) retorna o dano modificado e emite crit_landed quando ativa.",
+  "description_en": "Applies critical hit chance to damage. try_critical(damage) returns modified damage and emits crit_landed on success.",
+  "synonyms": {
+    "pt": ["crítico", "crit", "dano crítico", "sorte", "critical", "headshot"],
+    "en": ["crit", "critical", "lucky hit", "headshot", "critical strike"]
+  },
+  "parameters": [
+    {
+      "name": "crit_chance",
+      "type": "float",
+      "description_pt": "Probabilidade de crítico (0.0 = nunca, 1.0 = sempre).",
+      "range": {"min": 0.0, "max": 1.0},
+      "default": 0.1
+    },
+    {
+      "name": "crit_multiplier",
+      "type": "float",
+      "description_pt": "Multiplicador de dano no crítico (2.0 = dobro).",
+      "range": {"min": 1.0, "max": 10.0},
+      "default": 2.0
+    }
+  ],
+  "signals": [
+    {
+      "name": "crit_landed",
+      "description_pt": "Emitido quando um crítico é ativado.",
+      "params": [
+        {"name": "damage", "type": "int"}
+      ]
+    }
+  ],
+  "dependencies": ["health"],
+  "genres": ["rpg", "roguelike", "fighting", "platformer", "topdown_shooter", "generic"],
+  "version": "1.0.0",
+  "category": "combate",
+  "status": "implementado"
+}

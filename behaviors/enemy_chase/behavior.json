@@ -1,0 +1,52 @@
+{
+  "name": "enemy_chase",
+  "description_pt": "Persegue o jogador (grupo 'player') quando dentro do chase_range e desiste no lose_range. Node filho de CharacterBody2D.",
+  "description_en": "Chases the player (group 'player') when within chase_range and gives up at lose_range. Node child of CharacterBody2D.",
+  "synonyms": {
+    "pt": ["perseguir", "inimigo", "chase", "seguir", "rastrear", "ir atrás"],
+    "en": ["chase", "follow", "pursue", "track", "seek", "hunt"]
+  },
+  "parameters": [
+    {
+      "name": "speed",
+      "type": "float",
+      "description_pt": "Velocidade de perseguição (px/s).",
+      "range": {"min": 10.0, "max": 2000.0},
+      "default": 150.0,
+      "unit": "px/s"
+    },
+    {
+      "name": "chase_range",
+      "type": "float",
+      "description_pt": "Distância para começar a perseguir (px).",
+      "range": {"min": 10.0, "max": 5000.0},
+      "default": 300.0,
+      "unit": "px"
+    },
+    {
+      "name": "lose_range",
+      "type": "float",
+      "description_pt": "Distância para desistir da perseguição (px). Deve ser >= chase_range.",
+      "range": {"min": 10.0, "max": 5000.0},
+      "default": 500.0,
+      "unit": "px"
+    }
+  ],
+  "signals": [
+    {
+      "name": "target_acquired",
+      "description_pt": "Emitido quando o inimigo entra em modo perseguição.",
+      "params": []
+    },
+    {
+      "name": "target_lost",
+      "description_pt": "Emitido quando o inimigo perde o alvo.",
+      "params": []
+    }
+  ],
+  "dependencies": [],
+  "genres": ["topdown_shooter", "platformer", "roguelike", "bullet_hell", "metroidvania", "generic"],
+  "version": "1.0.0",
+  "category": "inimigo",
+  "status": "implementado"
+}

@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://hurtbox00000000001"]
+
+[ext_resource type="Script" path="res://behaviors/hurtbox/hurtbox.gd" id="1_hurtbox"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_32x32"]
+size = Vector2(32, 32)
+
+[node name="Hurtbox" type="Area2D"]
+script = ExtResource("1_hurtbox")
+damage_multiplier = 1.0
+hurt_type = "body"
+health_path = NodePath("")
+monitoring = true
+monitorable = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_32x32")

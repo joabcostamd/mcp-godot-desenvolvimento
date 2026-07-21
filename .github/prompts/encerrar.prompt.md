@@ -1,7 +1,6 @@
 ---
 description: 'Encerramento profissional de sessão. Audita, documenta, commita e prepara qualquer projeto para a próxima sessão sem perda de contexto. Universal — adapta-se automaticamente à estrutura do projeto.'
 mode: 'agent'
-tools: ['read', 'search', 'edit', 'terminal', 'runSubagent']
 agentMode: true
 user-invocable: true
 ---

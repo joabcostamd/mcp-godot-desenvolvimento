@@ -1,0 +1,47 @@
+{
+  "name": "knockback",
+  "description_pt": "Aplica impulso ao CharacterBody2D pai na direção especificada. Usado para recuo ao receber dano. Cooldown evita empilhamento.",
+  "description_en": "Applies impulse to the parent CharacterBody2D in the specified direction. Used for knockback on damage. Cooldown prevents stacking.",
+  "synonyms": {
+    "pt": ["recuo", "empurrão", "impulso", "repelir", "arremessar", "jogar para trás"],
+    "en": ["recoil", "pushback", "impulse", "repel", "throw back", "launch"]
+  },
+  "parameters": [
+    {
+      "name": "force",
+      "type": "float",
+      "description_pt": "Intensidade do impulso aplicado ao velocity do pai (px/s).",
+      "range": {"min": 0.0, "max": 5000.0},
+      "default": 200.0
+    },
+    {
+      "name": "duration",
+      "type": "float",
+      "description_pt": "Duração do cooldown entre knockbacks (s).",
+      "range": {"min": 0.01, "max": 5.0},
+      "default": 0.3,
+      "unit": "s"
+    },
+    {
+      "name": "damping",
+      "type": "float",
+      "description_pt": "Reservado para knockback contínuo (0.0–1.0). Não utilizado na v1.0.",
+      "range": {"min": 0.0, "max": 1.0},
+      "default": 0.0
+    }
+  ],
+  "signals": [
+    {
+      "name": "knocked_back",
+      "description_pt": "Emitido quando o knockback é aplicado com sucesso.",
+      "params": [
+        {"name": "direction", "type": "Vector2"}
+      ]
+    }
+  ],
+  "dependencies": [],
+  "genres": ["platformer", "topdown_shooter", "fighting", "roguelike", "metroidvania", "generic"],
+  "version": "1.0.0",
+  "category": "combate",
+  "status": "implementado"
+}
