@@ -1,5 +1,5 @@
 @tool class_name DeadZoneConfig extends Node
-@export var dead_zone: float = 0.2: set(v)=dead_zone=clampf(v,0.0,0.9)
+@export var dead_zone: float = 0.2: set(v)=dead_zone=clampf(v,0.0,0.9); zone_calibrated.emit()
 signal zone_calibrated()
 var _initialized: bool = false
 func _ready() -> void: if _initialized: return; _initialized=true

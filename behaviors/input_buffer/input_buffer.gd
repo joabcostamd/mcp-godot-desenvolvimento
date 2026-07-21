@@ -9,7 +9,10 @@ func _process(delta: float) -> void:
 	var expired:=[]; var t:=Time.get_ticks_msec()/1000.0
 	for i in _buffer.size():
 		if t-_buffer[i].time>buffer_window: expired.append(i)
-	for i in expired.reverse(): _buffer.remove_at(i)
+	for i in range(expired.size()-1, -1, -1):
+		var idx:=expired[i]
+		cancelled.emit(_buffer[idx].action)
+		_buffer.remove_at(idx)
 func push_action(action: String) -> void:
 	if _buffer.size()>=max_queue: _buffer.pop_front()
 	_buffer.append({"action":action,"time":Time.get_ticks_msec()/1000.0}); buffered.emit(action)
