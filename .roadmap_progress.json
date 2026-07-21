@@ -50,6 +50,10 @@
     "checkpoint": "acfe25c",
     "resultado": "Gate de design do core loop. Integra fun_report no advance_phase: se detectar modo de falha (sem escalada, estrategia degenerada, recompensa distante, pico escondido), bloqueia avanco. So bloqueia com dados reais (sem dados = nao bloqueia). 281 tools. C1 PASS, C3 PASS."
   },
+  "fatia_3.H": {"status": "concluida", "data": "2026-07-21", "tentativa": 1, "agente": "AGENTE 01", "checkpoint": "acfe25c", "resultado": "Modo professor. teacher_manage(op=explain): explica em 3 partes (o_que/por_que/proximo). Reduz dependencia da IA. 284 tools."},
+  "fatia_3.I": {"status": "concluida", "data": "2026-07-21", "tentativa": 1, "agente": "AGENTE 01", "checkpoint": "acfe25c", "resultado": "Primeiro nao bem feito. scope_manage(op=validate_idea): detecta escopos inviaveis e oferece contraproposta de 2 semanas."},
+  "fatia_3.J": {"status": "concluida", "data": "2026-07-21", "tentativa": 1, "agente": "AGENTE 01", "checkpoint": "acfe25c", "resultado": "Disclosure IA. scope_manage(op=disclosure): gera declaracao Steam + itch.io para publicacao."},
+  "fatia_3.K": {"status": "concluida", "data": "2026-07-21", "tentativa": 1, "agente": "AGENTE 01", "checkpoint": "acfe25c", "resultado": "Revisor adversarial. reviewer_manage(op=enable|disable|status). Estado em .mcp_reviewer_mode.json."},
   "fatia_3.A": {
     "status": "concluida",
     "data": "2026-07-21",
