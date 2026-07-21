@@ -241,6 +241,9 @@ TOOLSETS = {
     
         "runtime_list_signals",
         "runtime_watch_signal",
+        # ── F3: _manage órfãos ganham namespace ──
+        "complexity_gate_manage", "fun_report_manage",
+        "reviewer_manage", "scope_manage", "teacher_manage",
 ],
     "orchestration": [
         # Meta-tools, workflow, governança, fase, segurança, bootstrap
@@ -270,6 +273,10 @@ TOOLSETS = {
         "configure_export_preset",
         # Camada 5 (Gameplay): orchestration
         "remote_balance_config",
+        # ── F3: _manage órfãos ganham namespace ──
+        "budget_manage", "mcp_telemetry_manage", "quickstart_manage",
+        "version_history_manage", "publish_manage", "community_manage",
+        "polish_manage",
     ],
 }
 
