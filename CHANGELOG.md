@@ -1,5 +1,34 @@
 # CHANGELOG — mcp-godot-desenvolvimento
 
+## v3.8.0 (2026-07-21) — Reorganização de Tools F0-F5
+
+### Redução de superfície
+- **PROTOTIPO: 100 → 33 tools (-67%)**
+- **CORE: 34 → 23 tools**
+- PROTOTIPO agora tem 10 rollups + 23 CORE = 33 tools visíveis
+
+### Rollups criados/expandidos (7)
+- `godot_manage` — 5 atômicas de execução Godot consolidadas
+- `lsp_manage` — 9 gdscript_* consolidadas (introspecção LSP)
+- `skeleton_manage` — 6 skeleton_* consolidadas (esqueleto 2D)
+- `network_manage` — 5 network_* consolidadas (multiplayer)
+- `debug_manage` — +5 ops de debugger
+- `ui_manage` — +5 ops de UI avançada
+- `render_manage` — 4 render_* consolidadas
+
+### Bug crítico corrigido
+- **Rollups não eram incluídos em `tools/list`** — código em nível de módulo executava com cache=None, falhava silenciosamente. Movido para dentro de `_tool_defs()`.
+
+### Registry (F1)
+- `registry/` — 6 módulos: types, discovery, legacy_adapter, annotations, invariants
+- `domains/_template/` — template de domínio (manifesto, handlers, schemas, examples)
+- `experimental/README.md` — 11 verticais em quarentena
+
+### Métricas
+- Testes: 145/145 passam ✅
+- SEM_DEF: 36→0 | NS_FANTASMA: 31→0 | PHASE_FANTASMA: 34→0
+- Anotações MCP: ToolAnnotations spec em `_meta_tool.py`
+
 ## v3.7.0 (2026-07-21) — ONDA 3: Qualidade de Jogo (AGENTE 01)
 
 ### Playtest automatizado (3.A-3.C)
