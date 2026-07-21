@@ -1,0 +1,23 @@
+{
+  "name": "day_night_cycle",
+  "description_pt": "Ciclo dia-noite contínuo. _process interpola 0→1 sobre cycle_duration. Emite time_changed(0-1) e phase_changed(dawn/day/dusk/night). Usado para modular iluminação e ambiente.",
+  "description_en": "Continuous day-night cycle. _process interpolates 0-1 over cycle_duration. Emits time_changed(0-1) and phase_changed(dawn/day/dusk/night). Used to modulate lighting and ambience.",
+  "synonyms": {
+    "pt": ["dia", "noite", "ciclo", "amanhecer", "entardecer", "iluminacao"],
+    "en": ["day", "night", "cycle", "dawn", "dusk", "lighting"]
+  },
+  "parameters": [
+    {"name": "cycle_duration", "type": "float", "description_pt": "Duração total do ciclo em segundos.", "range": {"min": 10.0, "max": 86400.0}, "default": 300.0, "unit": "s"},
+    {"name": "auto_start", "type": "bool", "description_pt": "Se true, inicia automaticamente.", "default": true}
+  ],
+  "signals": [
+    {"name": "time_changed", "description_pt": "Emitido a cada frame com a posição 0-1 no ciclo.", "params": [{"name": "time", "type": "float"}]},
+    {"name": "phase_changed", "description_pt": "Emitido quando a fase muda.", "params": [{"name": "phase", "type": "String"}]}
+  ],
+  "dependencies": [],
+  "genres": ["generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["sistema", "ciclo", "dia_noite", "ambiente"]
+}
