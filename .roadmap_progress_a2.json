@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 28,
+    "implementados": 29,
     "lista": [
       {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido"},
       {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido"},
@@ -66,8 +66,9 @@
       {"id": 32, "nome": "xp_level", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + xp_table/add_xp/leveled_up. Multiplos level ups. 18 testes."},
       {"id": 33, "nome": "upgrade", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + escuta XPLevel.leveled_up. Opcoes aleatorias, max_level. 12 testes."},
       {"id": 35, "nome": "quest", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + objectives collect/spend. Auto-detecta Inventory+Currency. Rewards. 13 testes."},
-      {"id": 38, "nome": "save_load", "versao": "1.0.1", "status": "concluido", "data": "2026-07-21", "nota": "Node + ConfigFile. Salva Inventory/Currency/XPLevel. Multiplos slots. Auditoria: M1(save_dir setter), B2(DirAccess null guard). 12 testes."}
+      {"id": 38, "nome": "save_load", "versao": "1.0.1", "status": "concluido", "data": "2026-07-21", "nota": "Node + ConfigFile. Salva Inventory/Currency/XPLevel. Multiplos slots. Auditoria: M1(save_dir setter), B2(DirAccess null guard). 12 testes."},
+      {"id": 36, "nome": "achievement", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + conditions collect/currency/level. Auto-detecta siblings. 9 testes."}
     ]
   },
-  "proximo": "achievement (#36) — sem dependências. Grupo: Progressão."
+  "proximo": "unlockable (#37) — sem dependências. Grupo: Progressão."
 }
