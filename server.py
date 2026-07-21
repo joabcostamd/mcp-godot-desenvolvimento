@@ -2245,6 +2245,9 @@ def _build_handlers() -> dict:
         # Fun Report Onda 3 (relatorio de qualidade)
         "fun_report_manage": _handle_fun_report_manage,
         "complexity_gate_manage": _handle_complexity_gate_manage,
+        "teacher_manage": _handle_teacher_manage,
+        "scope_manage": _handle_scope_manage,
+        "reviewer_manage": _handle_reviewer_manage,
         # Playtest Onda 1 (watch_state, godot_exec, effect_probe)
         "watch_state_start": watch_state_start,
         "watch_state_collect": watch_state_collect,
@@ -4084,6 +4087,30 @@ def _handle_complexity_gate_manage(args: dict) -> dict:
     op = args.get("op", "check")
     params = {k: v for k, v in args.items() if k != "op"}
     return complexity_gate_manage(op=op, params=params)
+
+
+def _handle_teacher_manage(args: dict) -> dict:
+    """Handler para teacher_manage — modo professor (Fatia 3.H)."""
+    from tools.teacher_ops import teacher_manage
+    op = args.get("op", "explain")
+    params = {k: v for k, v in args.items() if k != "op"}
+    return teacher_manage(op=op, params=params)
+
+
+def _handle_scope_manage(args: dict) -> dict:
+    """Handler para scope_manage — validador de escopo + disclosure (3.I/3.J)."""
+    from tools.scope_ops import scope_manage
+    op = args.get("op", "validate_idea")
+    params = {k: v for k, v in args.items() if k != "op"}
+    return scope_manage(op=op, params=params)
+
+
+def _handle_reviewer_manage(args: dict) -> dict:
+    """Handler para reviewer_manage — modo revisor adversarial (3.K)."""
+    from tools.reviewer_ops import reviewer_manage
+    op = args.get("op", "status")
+    params = {k: v for k, v in args.items() if k != "op"}
+    return reviewer_manage(op=op, params=params)
 
 
 # ── Auto-Config Handlers (Fase 2C) ──────────────────────────────────

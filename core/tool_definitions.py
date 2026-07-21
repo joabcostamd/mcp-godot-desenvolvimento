@@ -2482,6 +2482,62 @@ def _raw_tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
+        # ── Modo Professor (ONDA 3 — Fatia 3.H) ────────────────
+        Tool(
+            name="teacher_manage",
+            description=(
+                "📚 Modo professor (ONDA 3 — Fatia 3.H). "
+                "Explica de forma didatica o que foi feito e por que. "
+                "Reduz dependencia da IA ao ensinar o desenvolvedor. "
+                "Operacoes: explain. "
+                "Exemplo: {\"op\": \"explain\", \"context\": \"criar um inimigo com patrulha\"}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "op": {"type": "string", "description": "Operacao: 'explain'.", "enum": ["explain"]},
+                    "context": {"type": "string", "description": "Descricao do que foi feito."},
+                },
+                "required": [],
+            },
+        ),
+        # ── Scope + Disclosure + Reviewer (ONDA 3 — 3.I/3.J/3.K) ─
+        Tool(
+            name="scope_manage",
+            description=(
+                "🎯 Validador de escopo + Disclosure IA (ONDA 3 — 3.I + 3.J). "
+                "validate_idea: transforma 'nao da' em contraproposta. "
+                "disclosure: gera declaracao de uso de IA para Steam/itch.io. "
+                "Exemplo validate: {\"op\": \"validate_idea\", \"idea\": \"MMO open world\"}. "
+                "Exemplo disclosure: {\"op\": \"disclosure\"}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "op": {"type": "string", "enum": ["validate_idea", "disclosure"]},
+                    "idea": {"type": "string", "description": "Ideia do usuario (para validate_idea)."},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="reviewer_manage",
+            description=(
+                "🔍 Modo revisor adversarial (ONDA 3 — 3.K). "
+                "Ativa/desativa modo onde o agente audita em vez de implementar. "
+                "Ataca evidencia fabricada com confianca. "
+                "Operacoes: enable, disable, status. "
+                "Exemplo: {\"op\": \"enable\", \"reason\": \"Auditar fatia 3.G\"}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "op": {"type": "string", "enum": ["enable", "disable", "status"]},
+                    "reason": {"type": "string", "description": "Motivo da auditoria (para enable)."},
+                },
+                "required": [],
+            },
+        ),
         # ── Playtest Onda 1 (watch_state, godot_exec, effect_probe) ──
         Tool(
             name="watch_state_start",
