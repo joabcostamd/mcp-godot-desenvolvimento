@@ -919,6 +919,36 @@ def _godot_info_handler(**params) -> dict:
         return {"status": "error", "message": str(e)}
 
 
+def _build_lsp_manage():
+    """lsp_manage: 9 operações de introspecção GDScript/LSP (F5 consolidation)."""
+    from tools.lsp_ops import (
+        gdscript_lsp_connect, gdscript_lsp_disconnect, gdscript_sync_file,
+        gdscript_definition, gdscript_references, gdscript_hover,
+        gdscript_symbols, gdscript_rename, gdscript_diagnostics,
+    )
+    return create_manage_tool(
+        tool_name="lsp_manage",
+        description=(
+            "Introspecção GDScript via LSP: conecta ao Godot, analisa código, "
+            "busca definições, referências, símbolos, diagnósticos e renomeia."
+        ),
+        ops={
+            "connect": gdscript_lsp_connect,
+            "disconnect": gdscript_lsp_disconnect,
+            "sync": gdscript_sync_file,
+            "definition": gdscript_definition,
+            "references": gdscript_references,
+            "hover": gdscript_hover,
+            "symbols": gdscript_symbols,
+            "rename": gdscript_rename,
+            "diagnostics": gdscript_diagnostics,
+        },
+        tool_hints={"destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
+        title="Introspecção GDScript (LSP)",
+        tags=["lsp", "gdscript", "análise", "código"],
+    )
+
+
 # ── Builders registry ───────────────────────────────────────────────
 
 _ROLLUP_BUILDERS = [
@@ -965,6 +995,8 @@ _ROLLUP_BUILDERS = [
     _build_localization_manage,
     # F5: godot execution consolidation
     _build_godot_manage,
+    # F5: lsp consolidation
+    _build_lsp_manage,
 ]
 
 # Cache interno — garante que cada builder só executa UMA vez.

@@ -413,9 +413,7 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
     "DESIGN": {
         "scene_manage", "node_manage",
         "script_manage", "safe_write_gdscript",
-        "gdscript_diagnostics", "gdscript_references", "gdscript_definition",
-        "gdscript_hover", "gdscript_rename", "gdscript_symbols",
-        "gdscript_lsp_connect", "gdscript_lsp_disconnect", "gdscript_sync_file",
+        "lsp_manage",
         "file_manage",
         "create_entity", "create_entities",
         "ui_manage",
