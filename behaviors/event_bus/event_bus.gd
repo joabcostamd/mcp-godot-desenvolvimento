@@ -22,3 +22,8 @@ func fire(event_name: String, payload: Dictionary = {}) -> void:
 func clear() -> void: _listeners.clear()
 func has_listeners(event_name: String) -> bool:
 	return _listeners.has(event_name) and not (_listeners[event_name] as Array).is_empty()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	return w  # EventBus is a simple pub/sub — no common misconfigurations

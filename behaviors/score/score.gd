@@ -93,3 +93,9 @@ func get_combo() -> int: return _combo_level
 func reset_score() -> void:
 	_score = 0; _combo_level = 0
 	score_changed.emit(0)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

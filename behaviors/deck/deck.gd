@@ -18,3 +18,10 @@ func draw() -> Card:
 func discard(card: Card) -> void: _discard.append(card)
 func get_remaining() -> int: return _cards.size()
 func get_discard_size() -> int: return _discard.size()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	if _cards.is_empty() and _discard.is_empty():
+		w.append("Deck is empty — use add_card() to populate.")
+	return w

@@ -90,3 +90,9 @@ func _transition_to(scene: String) -> void:
 	st.default_duration = 0.5
 	add_child(st)
 	st.transition_to(scene)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

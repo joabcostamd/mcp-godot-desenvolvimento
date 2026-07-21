@@ -28,3 +28,9 @@ func _physics_process(delta: float) -> void:
 			(body as CharacterBody2D).velocity += direction * delta
 		elif body is RigidBody2D:
 			(body as RigidBody2D).apply_central_force(direction * 10)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("Consider setting collision_mask to detect specific layers.")
+	return w

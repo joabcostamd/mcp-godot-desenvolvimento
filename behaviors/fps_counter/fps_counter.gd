@@ -27,3 +27,9 @@ func _process(delta: float) -> void:
 	var text:=str(int(_fps))+" FPS"
 	if show_min_max: text+=" | min:"+str(int(_min_fps))+" max:"+str(int(_max_fps))
 	_label.text=text
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

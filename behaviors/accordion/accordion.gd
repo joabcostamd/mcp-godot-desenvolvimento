@@ -160,3 +160,9 @@ func _collapse(index: int, section: Dictionary) -> void:
 	var wrapper := section.wrapper as Control
 	wrapper.visible = false
 	section_toggled.emit(index, true)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

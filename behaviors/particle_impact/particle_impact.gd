@@ -106,3 +106,9 @@ func _apply_color(particle: Node2D, clr: Color) -> void:
 func _on_particle_finished(p: Node2D) -> void:
 	if is_instance_valid(p):
 		p.queue_free()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

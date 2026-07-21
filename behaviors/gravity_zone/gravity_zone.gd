@@ -32,3 +32,9 @@ func _physics_process(delta: float) -> void:
 		var b := body as CharacterBody2D
 		if override: b.velocity.y = 0; b.velocity.x = 0
 		b.velocity += gravity_direction * gravity_strength * delta
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("Consider setting collision_mask to detect specific layers.")
+	return w

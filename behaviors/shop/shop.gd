@@ -46,3 +46,17 @@ func _find_item(id: String) -> Dictionary:
 	for item in _items:
 		if item.id==id: return item
 	return {}
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	if _items.is_empty():
+		w.append("No items added to shop — use add_item() to populate.")
+	var p := get_parent()
+	if p:
+		var has_currency := false
+		for c in p.get_children():
+			if c is Currency: has_currency = true
+		if not has_currency:
+			w.append("No Currency sibling found — buy/sell will fail.")
+	return w

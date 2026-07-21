@@ -62,3 +62,9 @@ func _on_finished(p: AudioStreamPlayer) -> void:
 	finished.emit()
 	if is_instance_valid(p):
 		p.queue_free()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

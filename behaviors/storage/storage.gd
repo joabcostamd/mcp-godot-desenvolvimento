@@ -29,3 +29,10 @@ func get_data(key: String, default = null):
 func has_key(key: String) -> bool: return _config.has_section_key(section, key)
 func erase_key(key: String) -> void: _config.erase_section_key(section, key); if auto_save: save_data()
 func clear_all() -> void: _config.erase_section(section); if auto_save: save_data()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	if file_path.is_empty():
+		w.append("file_path is empty — data will not be persisted.")
+	return w

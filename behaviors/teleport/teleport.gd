@@ -43,3 +43,9 @@ func _on_body_entered(body: Node2D) -> void:
 		body.global_position = target_position
 
 	teleported.emit()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("Consider setting collision_mask to detect specific layers.")
+	return w

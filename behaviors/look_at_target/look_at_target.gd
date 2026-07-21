@@ -71,3 +71,9 @@ func clear_target() -> void:
 
 func has_target() -> bool:
 	return (_target and is_instance_valid(_target)) or _use_position
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

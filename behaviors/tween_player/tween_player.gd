@@ -67,3 +67,9 @@ func stop() -> void:
 
 func is_playing() -> bool:
 	return _tween != null and is_instance_valid(_tween)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

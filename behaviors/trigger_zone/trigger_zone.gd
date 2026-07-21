@@ -63,3 +63,9 @@ func _is_valid(body: Node2D) -> bool:
 func reset_trigger() -> void:
 	_triggered = false
 	monitoring = true
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("Consider setting collision_mask to detect specific layers.")
+	return w

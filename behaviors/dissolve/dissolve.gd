@@ -21,3 +21,11 @@ func _update() -> void:
 	if _material: _material.set_shader_parameter("progress",_progress)
 	if _material: _material.set_shader_parameter("edge_color",edge_color)
 	if _material: _material.set_shader_parameter("edge_width",edge_width)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	var p := get_parent()
+	if not p is CanvasItem:
+		w.append("Parent must be CanvasItem (Sprite2D, Control, etc.) for shader to apply.")
+	return w

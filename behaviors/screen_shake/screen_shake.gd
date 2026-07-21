@@ -78,3 +78,9 @@ func _stop() -> void:
 
 func is_shaking() -> bool:
 	return _active
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

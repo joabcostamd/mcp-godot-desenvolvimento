@@ -5,3 +5,9 @@ var card_data: Dictionary = {}
 func flip() -> void: face_up=!face_up
 func play() -> void: played.emit()
 func draw() -> void: drawn.emit()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

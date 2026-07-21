@@ -123,3 +123,9 @@ func _find_health(node: Node) -> Health:
 	if parent and parent is Health:
 		return parent
 	return null
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("Consider setting collision_mask to detect specific layers.")
+	return w

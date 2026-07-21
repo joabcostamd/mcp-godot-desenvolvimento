@@ -15,3 +15,9 @@ func _draw() -> void:
 		var p:=get_parent(); var t:=""
 		if p is Node2D: t=str((p as Node2D).global_position)
 		draw_string(ThemeDB.fallback_font,Vector2(size+4,4),t,HORIZONTAL_ALIGNMENT_LEFT,-1,10,color)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

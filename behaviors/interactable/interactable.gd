@@ -64,3 +64,9 @@ func _on_exit(body: Node2D) -> void:
 
 
 func get_focused_body() -> Node2D: return _focused_body
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("Consider setting collision_mask to detect specific layers.")
+	return w

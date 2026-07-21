@@ -52,3 +52,9 @@ func _physics_process(delta: float) -> void:
 
 func reset() -> void: _progress = 0.0
 func get_progress() -> float: return _progress
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

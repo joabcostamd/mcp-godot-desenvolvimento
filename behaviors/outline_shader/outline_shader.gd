@@ -12,3 +12,9 @@ func _ready() -> void:
 func _update() -> void:
 	if _material: _material.set_shader_parameter("outline_color",outline_color)
 	if _material: _material.set_shader_parameter("outline_width",outline_width)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

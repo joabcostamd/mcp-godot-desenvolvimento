@@ -82,3 +82,9 @@ func resume() -> void:
 
 func is_running() -> bool:
 	return _timer != null and not _timer.is_stopped()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

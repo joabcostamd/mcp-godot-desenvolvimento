@@ -87,3 +87,9 @@ func _try_spread() -> void:
 
 
 func is_burning() -> bool: return _burning
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

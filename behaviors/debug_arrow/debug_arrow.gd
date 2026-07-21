@@ -10,3 +10,9 @@ func _draw() -> void:
 	var perp:=Vector2(-direction.y,direction.x)*length*0.2
 	draw_line(tip,tip-direction*length*0.25+perp,color,2)
 	draw_line(tip,tip-direction*length*0.25-perp,color,2)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

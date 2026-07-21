@@ -80,3 +80,12 @@ func is_at_min() -> bool:
 
 func is_at_max() -> bool:
 	return max_value > 0 and _value == max_value
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	if min_value > initial_value:
+		w.append("min_value is greater than initial_value — counter starts below minimum.")
+	if max_value > 0 and max_value < min_value:
+		w.append("max_value is less than min_value — no valid range.")
+	return w

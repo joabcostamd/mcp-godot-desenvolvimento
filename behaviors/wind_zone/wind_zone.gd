@@ -29,3 +29,9 @@ func _physics_process(delta: float) -> void:
 		var f := wind_direction * wind_strength
 		if turbulence > 0: f += Vector2(randf_range(-1,1), randf_range(-1,1)) * wind_strength * turbulence
 		(body as CharacterBody2D).velocity += f * delta
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("Consider setting collision_mask to detect specific layers.")
+	return w

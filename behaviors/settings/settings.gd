@@ -140,3 +140,9 @@ func apply() -> void:
 		sl.set_data("settings_music_vol", _slider_music.value)
 		sl.set_data("settings_sfx_vol", _slider_sfx.value)
 	_apply_volumes()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

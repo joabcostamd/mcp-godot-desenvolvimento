@@ -35,3 +35,9 @@ func add_line(text: String) -> void:
 func register_command(name: String, callback: Callable) -> void: _commands[name]=callback
 
 func clear() -> void: _log.clear()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

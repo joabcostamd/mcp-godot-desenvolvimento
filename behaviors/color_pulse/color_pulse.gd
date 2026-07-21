@@ -70,3 +70,9 @@ func stop() -> void:
 
 func is_pulsing() -> bool:
 	return _active
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

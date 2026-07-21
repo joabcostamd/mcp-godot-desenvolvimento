@@ -71,3 +71,9 @@ func _trigger_victory() -> void:
 
 func is_achieved() -> bool:
 	return _achieved
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

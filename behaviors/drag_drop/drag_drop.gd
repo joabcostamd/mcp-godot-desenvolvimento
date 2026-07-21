@@ -133,3 +133,9 @@ func start_drag(data: Variant = null) -> void:
 ## Retorna true se está arrastando no momento.
 func is_dragging() -> bool:
 	return _dragging
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

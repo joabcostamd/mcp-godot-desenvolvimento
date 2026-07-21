@@ -80,3 +80,9 @@ func _stop_bus_players(bus_name: String) -> void:
 			if p.bus == bus_name and p.playing:
 				p.stop()
 				p.queue_free()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

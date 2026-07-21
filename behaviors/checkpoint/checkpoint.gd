@@ -77,3 +77,9 @@ static func respawn(player: Node2D) -> void:
 
 func is_activated() -> bool:
 	return _activated
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("Consider setting collision_mask to detect specific layers.")
+	return w

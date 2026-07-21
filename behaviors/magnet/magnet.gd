@@ -36,3 +36,9 @@ func _physics_process(delta: float) -> void:
 		elif falloff == 2: factor = clampf(pow(1.0 - dist / radius, 2), 0.01, 1.0)
 		(body as CharacterBody2D).velocity += dir * force * factor * delta
 		attracted.emit(body)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("Consider setting collision_mask to detect specific layers.")
+	return w

@@ -78,3 +78,9 @@ func _kill_tween() -> void:
 
 func stop() -> void: _kill_tween()
 func is_running() -> bool: return _tween != null and _tween.is_valid()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

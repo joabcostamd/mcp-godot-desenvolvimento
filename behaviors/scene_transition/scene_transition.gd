@@ -75,3 +75,9 @@ func _on_done() -> void:
 
 func is_active() -> bool:
 	return _rect != null and _rect.modulate.a > 0.0
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

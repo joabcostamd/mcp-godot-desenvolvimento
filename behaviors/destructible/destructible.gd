@@ -65,3 +65,9 @@ func _spawn_effect() -> void:
 
 func is_destroyed() -> bool:
 	return _destroyed
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

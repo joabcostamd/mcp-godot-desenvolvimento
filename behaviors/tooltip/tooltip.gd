@@ -150,3 +150,13 @@ func hide_tooltip() -> void:
 ## Retorna true se o tooltip está visível.
 func is_visible_tooltip() -> bool:
 	return _visible
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	if tooltip_text.is_empty():
+		w.append("tooltip_text is empty — tooltip will not show anything.")
+	var p := get_parent()
+	if not p is Control:
+		w.append("Parent is not a Control — mouse_entered/exited won't connect.")
+	return w

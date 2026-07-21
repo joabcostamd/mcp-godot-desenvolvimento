@@ -28,3 +28,9 @@ func _get_node2d(path: NodePath) -> Node2D:
 func _aplly_force(node: Node2D, force: Vector2) -> void:
 	if node is CharacterBody2D: (node as CharacterBody2D).velocity += force * 0.01
 	elif node is RigidBody2D: (node as RigidBody2D).apply_central_force(force)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("Parent must be CharacterBody2D for physics to work.")
+	return w

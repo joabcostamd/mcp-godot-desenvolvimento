@@ -75,3 +75,9 @@ func _process(delta: float) -> void:
 
 	if _label:
 		_label.text = "%d / %d" % [_health.current_hp, _health.max_hp]
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

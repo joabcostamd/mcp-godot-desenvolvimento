@@ -56,3 +56,9 @@ func hide_outline() -> void:
 func is_outline_visible() -> bool:
 	if not _material: return false
 	return _material.get_shader_parameter("enabled") as bool
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

@@ -49,3 +49,9 @@ func check(defeated: bool = true) -> void:
 func trigger() -> void: _trigger_defeat()
 func _trigger_defeat() -> void: _triggered = true; defeat_triggered.emit()
 func is_triggered() -> bool: return _triggered
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

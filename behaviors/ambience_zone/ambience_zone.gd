@@ -78,3 +78,9 @@ func _stop() -> void:
 
 func is_playing() -> bool:
 	return _player != null and _player.playing
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("Consider setting collision_mask to detect specific layers.")
+	return w

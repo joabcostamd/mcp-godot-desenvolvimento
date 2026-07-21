@@ -17,3 +17,12 @@ func add_detection(amount: float) -> void:
 func make_noise() -> void: add_detection(0.3*(1.0-visibility))
 func get_detection_level() -> float: return _detection
 func is_detected() -> bool: return _detected
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	if visibility >= 1.0:
+		w.append("visibility is 1.0 — entity is invisible, make_noise() has no effect.")
+	if detection_decay <= 0.1:
+		w.append("detection_decay is very low — once detected, hard to become hidden.")
+	return w

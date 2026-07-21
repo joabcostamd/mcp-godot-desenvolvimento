@@ -65,3 +65,9 @@ func _start_climb(body: Node2D) -> void:
 
 func _stop_climb(body: Node2D) -> void:
 	_climbers[body] = false; climbing_ended.emit(body)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("Consider setting collision_mask to detect specific layers.")
+	return w

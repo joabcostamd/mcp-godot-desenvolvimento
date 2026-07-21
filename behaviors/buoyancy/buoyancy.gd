@@ -31,3 +31,9 @@ func _physics_process(delta: float) -> void:
 		var depth := surface_y - b.global_position.y if surface_y != 0 else b.global_position.y
 		if depth > 0: b.velocity.y -= fluid_density * 500 * delta
 		b.velocity *= (1.0 - drag_coefficient * delta)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("Consider setting collision_mask to detect specific layers.")
+	return w

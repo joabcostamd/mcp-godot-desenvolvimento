@@ -41,3 +41,9 @@ func _find_camera() -> void:
 func add_layer(texture: Texture2D, scroll_scale: float = 1.0) -> void:
 	var s := Sprite2D.new(); s.texture = texture; s.set_meta("parallax_scale", scroll_scale)
 	add_child(s); _layers.append({"sprite": s, "scroll_scale": scroll_scale})
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

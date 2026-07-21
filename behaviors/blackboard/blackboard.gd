@@ -18,3 +18,9 @@ func has_var(key: String) -> bool: return _vars.has(key)
 func erase_var(key: String) -> void: _vars.erase(key)
 func set_trigger(key: String, callback: Callable) -> void: _triggers[key]=callback
 func clear() -> void: _vars.clear(); _triggers.clear()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+		w.append("No specific configuration issues detected.")
+	return w

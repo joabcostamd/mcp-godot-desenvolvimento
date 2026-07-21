@@ -21,3 +21,12 @@ func _check_hit() -> void:
 	if offset<tolerance*0.5: perfect.emit()
 	elif offset<tolerance: good.emit()
 	else: miss.emit()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	if bpm < 60:
+		w.append("BPM is below 60 — very slow rhythm, may feel unresponsive.")
+	if tolerance > 0.3:
+		w.append("tolerance is high — nearly all inputs will count as good/perfect.")
+	return w

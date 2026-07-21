@@ -42,3 +42,12 @@ func can_craft(recipe_id: String) -> bool:
 func unlock_recipe(id: String) -> void:
 	if id in _recipes and id not in _unlocked: _unlocked.append(id); recipe_unlocked.emit(id)
 func get_recipes() -> Dictionary: return _recipes.duplicate()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	if _recipes.is_empty():
+		w.append("No recipes defined — use add_recipe() to add crafting options.")
+	if _unlocked.is_empty() and not _recipes.is_empty():
+		w.append("Recipes exist but none are unlocked — use unlock_recipe().")
+	return w
