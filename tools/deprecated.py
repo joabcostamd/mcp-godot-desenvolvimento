@@ -1,15 +1,16 @@
 """deprecated.py — Set unificado de tools depreciadas.
 
-Estas 69 tools foram colapsadas nos 16 <domain>_manage rollups.
+Estas ~112 tools foram colapsadas em <domain>_manage rollups.
 As funções subjacentes CONTINUAM existindo — só a definição
 da tool individual é removida para reduzir o tool count.
 
 Uso:
-    from tools.deprecated import DEPRECATED_TOOLS
+    from tools.deprecated import DEPRECATED_TOOLS, ALIAS_MAP
     _DEPRECATED = DEPRECATED_TOOLS
     _DEPRECATED_H = DEPRECATED_TOOLS
 
 Gerado em: Sprint 0.5 — Unificação _DEPRECATED + _DEPRECATED_H
+Expandido em: F5 (reorg) + Estabilizacao K2 (aliases)
 Origem: server.py linhas ~4600 e ~4996 (duplicados)
 """
 
