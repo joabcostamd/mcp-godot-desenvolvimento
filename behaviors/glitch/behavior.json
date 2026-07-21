@@ -1,0 +1,25 @@
+{
+  "name": "glitch",
+  "description_pt": "Efeito glitch (deslocamento horizontal aleatório + flicker) no parent Node2D. trigger(intensity, duration) aplica saltos de posição e oscilação de modulate. Restaura original ao terminar.",
+  "description_en": "Glitch effect (random horizontal displacement + flicker) on the parent Node2D. trigger(intensity, duration) applies position jumps and modulate oscillation. Restores original on finish.",
+  "synonyms": {
+    "pt": ["glitch", "falha", "interferencia", "bug_visual", "static"],
+    "en": ["glitch", "static", "interference", "visual_bug"]
+  },
+  "parameters": [
+    {"name": "default_intensity", "type": "float", "description_pt": "Intensidade padrão (0–1).", "range": {"min": 0.0, "max": 1.0}, "default": 0.5},
+    {"name": "default_duration", "type": "float", "description_pt": "Duração padrão.", "range": {"min": 0.05, "max": 3.0}, "default": 0.3, "unit": "s"},
+    {"name": "max_offset", "type": "float", "description_pt": "Deslocamento horizontal máximo (px).", "range": {"min": 1.0, "max": 100.0}, "default": 10.0, "unit": "px"},
+    {"name": "flicker_speed", "type": "float", "description_pt": "Velocidade do flicker (Hz).", "range": {"min": 5.0, "max": 60.0}, "default": 20.0, "unit": "Hz"}
+  ],
+  "signals": [
+    {"name": "glitch_started", "description_pt": "Emitido ao iniciar.", "params": []},
+    {"name": "glitch_finished", "description_pt": "Emitido ao terminar e restaurar.", "params": []}
+  ],
+  "dependencies": [],
+  "genres": ["generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["efeitos_visuais", "glitch", "distorcao", "interferencia"]
+}
