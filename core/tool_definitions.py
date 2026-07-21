@@ -2383,30 +2383,35 @@ def _raw_tool_defs() -> list[Tool]:
         Tool(
             name="playtest_manage",
             description=(
-                "🎮 Playtest automatizado do jogo (ONDA 3 — Fatia 3.A). "
-                "Smoke test: verifica se o jogo abre, nao crasha e mantem FPS minimo. "
+                "🎮 Playtest automatizado do jogo (ONDA 3). "
+                "Operacoes: smoke (teste de sanidade: FPS, crash, viewport) e "
+                "persona_run (persona scriptada joga o jogo: apressado, cauteloso, explorador). "
                 "Usa o runtime bridge (porta 8790) — requer jogo rodando em debug (F5 no Godot). "
-                "Quando usar: validar que o jogo esta saudavel apos alteracoes, "
-                "antes de um playtest humano, ou como gate de CI. "
-                "Operacoes: smoke (teste de sanidade). "
-                "Exemplo: {\"op\": \"smoke\", \"duration\": 10, \"fps_threshold\": 30}. "
-                "Pré-condições: jogo rodando em modo debug (F5 no Godot)."
+                "Quando usar: validar que o jogo esta saudavel (smoke) ou testar "
+                "jogabilidade com perfis diferentes de jogador (persona_run). "
+                "Exemplo smoke: {\"op\": \"smoke\", \"duration\": 10, \"fps_threshold\": 30}. "
+                "Exemplo persona: {\"op\": \"persona_run\", \"persona\": \"apressado\", \"duration\": 60}."
             ),
             inputSchema={
                 "type": "object",
                 "properties": {
                     "op": {
                         "type": "string",
-                        "description": "Operacao: 'smoke'.",
-                        "enum": ["smoke"],
+                        "description": "Operacao: 'smoke' ou 'persona_run'.",
+                        "enum": ["smoke", "persona_run"],
                     },
                     "duration": {
                         "type": "integer",
-                        "description": "Segundos de observacao (default: 10).",
+                        "description": "Segundos de duracao (smoke default: 10, persona default: 60).",
                     },
                     "fps_threshold": {
                         "type": "integer",
-                        "description": "FPS minimo aceitavel (default: 30).",
+                        "description": "FPS minimo aceitavel (para op='smoke', default: 30).",
+                    },
+                    "persona": {
+                        "type": "string",
+                        "description": "ID da persona para op='persona_run': 'apressado', 'cauteloso' ou 'explorador'.",
+                        "enum": ["apressado", "cauteloso", "explorador"],
                     },
                 },
                 "required": [],

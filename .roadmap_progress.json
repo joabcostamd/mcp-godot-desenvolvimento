@@ -1,6 +1,14 @@
 {
   "onda_3_iniciada_por": "AGENTE 01 — 2026-07-21",
-  "aviso_agente_2": "ONDA 3 em andamento pelo Agente 1. NAO INTERFIRA nos arquivos: tools/playtest_ops.py, core/tool_definitions.py, server.py, tests/test_playtest.py.",
+  "aviso_agente_2": "ONDA 3 em andamento pelo Agente 1. NAO INTERFIRA em: tools/playtest_ops.py, tools/personas.py, core/tool_definitions.py, server.py, tests/test_personas.py.",
+  "fatia_3.B": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "f4b6d75",
+    "resultado": "Playtest camada 2: personas scriptadas. tools/personas.py (NOVO, 153 linhas): 3 personas (apressado/cauteloso/explorador) com KEY_MAP Godot 4. playtest_manage op=persona_run: envia sequencia de inputs via runtime bridge (:8790), simula hold com taps a 50ms. Coleta: completed, total_time_s, inputs_total, input_errors. 279 tools. C1 PASS, C3 PASS. 47/47 testes (10 personas + 11 smoke + 26 version_history). Bug encontrado na autocrítica: bridge usa cmd=input_event, nao custom/send_input — corrigido."
+  },
   "fatia_3.A": {
     "status": "concluida",
     "data": "2026-07-21",

@@ -1133,8 +1133,186 @@ def _op_playtest_smoke(params: dict) -> dict:
     }
 
 
+# ── Operacao persona_run (Fatia 3.B) ───────────────────────────────
+
+def _send_key_event(action: str, hold_ms: int) -> dict:
+    """Envia evento(s) de tecla via runtime bridge.
+
+    O runtime bridge processa input_event como press+release atomico.
+    Para simular hold, envia o evento repetidamente com intervalos
+    de ~50ms (aproximadamente 1 frame a 60fps).
+
+    Args:
+        action: Nome da acao (ex: 'ui_right', 'space').
+        hold_ms: Milissegundos para "segurar" a tecla.
+
+    Returns:
+        dict com resultado.
+    """
+    from tools.personas import KEY_MAP
+
+    keycode = KEY_MAP.get(action)
+    if keycode is None:
+        return {"status": "error", "message": f"Acao desconhecida: '{action}'"}
+
+    try:
+        from runtime_bridge_client import send_bridge_command
+
+        # Simula hold enviando o evento a cada ~50ms
+        TAP_INTERVAL_MS = 50
+        elapsed = 0
+        errors = 0
+
+        while elapsed < hold_ms:
+            result = send_bridge_command({
+                "cmd": "input_event",
+                "event": {
+                    "type": "key",
+                    "keycode": keycode,
+                },
+            }, timeout=2.0)
+
+            if not result.get("ok"):
+                errors += 1
+
+            _time.sleep(TAP_INTERVAL_MS / 1000.0)
+            elapsed += TAP_INTERVAL_MS
+
+        if errors > 0:
+            return {"status": "warning", "message": f"{errors} erros em {hold_ms}ms de hold"}
+
+        return {"status": "success"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+
+def _op_persona_run(params: dict) -> dict:
+    """Executa uma persona scriptada contra o jogo rodando.
+
+    A persona envia uma sequencia de inputs e coleta metricas:
+    tempo total, se completou, caminho percorrido.
+
+    Campos em params:
+        persona: str — ID da persona ('apressado', 'cauteloso', 'explorador')
+        duration: int (default 60) — timeout maximo em segundos
+    """
+    from tools.personas import get_persona, list_personas
+
+    persona_id = params.get("persona", "").strip().lower()
+    max_duration = params.get("duration", 60)
+
+    if not isinstance(max_duration, (int, float)) or max_duration < 5:
+        return {
+            "status": "error",
+            "message": f"Duracao invalida: {max_duration}. Use um valor >= 5 segundos.",
+        }
+
+    max_duration = int(max_duration)
+
+    if not persona_id:
+        personas_list = list_personas()
+        return {
+            "status": "error",
+            "message": "Campo 'persona' e obrigatorio. Use uma das personas disponiveis.",
+            "available_personas": [p["id"] for p in personas_list["personas"]],
+        }
+
+    persona = get_persona(persona_id)
+    if persona is None:
+        personas_list = list_personas()
+        return {
+            "status": "error",
+            "message": f"Persona '{persona_id}' nao encontrada.",
+            "available_personas": [p["id"] for p in personas_list["personas"]],
+        }
+
+    # Verifica bridge
+    if not _is_runtime_bridge_available():
+        return {
+            "status": "error",
+            "message": (
+                "Jogo nao esta rodando em modo debug. "
+                "Abra o Godot e rode o jogo (F5) antes do playtest."
+            ),
+        }
+
+    # Coleta metrica inicial
+    initial_metrics = _collect_playtest_metrics()
+    if initial_metrics is None:
+        return {
+            "status": "error",
+            "message": "Bridge respondeu mas falhou ao coletar metricas iniciais.",
+        }
+
+    start_time = _time.time()
+    total_inputs = 0
+    input_errors = 0
+    events: list[dict] = []
+
+    # Executa sequencia de inputs da persona
+    for step in persona["inputs"]:
+        elapsed = _time.time() - start_time
+        if elapsed >= max_duration:
+            events.append({"type": "timeout", "elapsed_s": round(elapsed, 1)})
+            break
+
+        action = step.get("action", "")
+        hold_ms = step.get("hold_ms", 100)
+        wait_ms = step.get("wait_ms", 200)
+
+        result = _send_key_event(action, hold_ms)
+        total_inputs += 1
+
+        if result.get("status") == "error":
+            input_errors += 1
+            events.append({
+                "type": "input_error",
+                "action": action,
+                "error": result.get("message", ""),
+                "elapsed_s": round(elapsed, 1),
+            })
+
+        # Aguarda entre inputs
+        if wait_ms > 0:
+            _time.sleep(wait_ms / 1000.0)
+
+    end_time = _time.time()
+    total_time = round(end_time - start_time, 1)
+
+    # Metricas finais
+    final_metrics = _collect_playtest_metrics()
+
+    return {
+        "status": "success",
+        "persona": {
+            "id": persona_id,
+            "name": persona["name"],
+            "strategy": persona["strategy"],
+        },
+        "result": {
+            "completed": total_time < max_duration and input_errors == 0,
+            "total_time_s": total_time,
+            "total_inputs": total_inputs,
+            "input_errors": input_errors,
+            "timeout": total_time >= max_duration,
+        },
+        "metrics": {
+            "initial": initial_metrics,
+            "final": final_metrics,
+        },
+        "events": events[-20:],  # ultimas 20 eventos
+        "note": (
+            "Playtest por persona scriptada — heuristicas simplificadas. "
+            "NAO substitui playtest humano. "
+            "Fisica nao-deterministica pode produzir resultados diferentes "
+            "entre execucoes."
+        ),
+    }
+
+
 _PLAYTEST_OPS = {
     "smoke": _op_playtest_smoke,
+    "persona_run": _op_persona_run,
 }
 
 
@@ -1142,7 +1320,7 @@ def playtest_manage(op: str, params: dict | None = None) -> dict:
     """Gerencia playtesting automatizado do jogo (ONDA 3).
 
     Args:
-        op: Operacao ('smoke').
+        op: Operacao ('smoke' ou 'persona_run').
         params: Parametros especificos da operacao.
 
     Returns:

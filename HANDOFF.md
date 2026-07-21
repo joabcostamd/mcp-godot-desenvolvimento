@@ -5,16 +5,45 @@
 
 ## ⚠️ AVISO AO AGENTE 2 (2026-07-21)
 
-**ONDA 3 iniciada pelo Agente 1. Não interfira nos seguintes arquivos:**
+**ONDA 3 em andamento pelo Agente 1. Não interfira em:**
 - `tools/playtest_ops.py`
+- `tools/personas.py`
 - `core/tool_definitions.py`
 - `server.py`
+- `tests/test_personas.py`
 - `tests/test_playtest.py`
 - `.roadmap_progress.json`
 
-Continue seu trabalho na ONDA 2 normalmente nos seus territórios.
+## Último Handoff (AGENTE 01 — 2026-07-21 — Fatia 3.B)
 
-## Último Handoff (AGENTE 01 — 2026-07-21 — Fatia 3.A)
+- **Data:** 2026-07-21
+- **De:** AGENTE 01 (Arquitetura & Core)
+- **Ação:** Implementação da Fatia 3.B — Playtest camada 2: personas scriptadas [SÊNIOR]
+
+### O que foi feito
+
+- `tools/personas.py` (NOVO, 153 linhas) — 3 personas (apressado/cauteloso/explorador) com KEY_MAP Godot 4
+- `tools/playtest_ops.py` — estendido (+180 linhas): `op=persona_run` no rollup `playtest_manage`
+- `_send_key_event()` — simula hold com taps a 50ms via runtime bridge (:8790) `input_event`
+- Coleta: completed, total_time_s, total_inputs, input_errors, métricas inicial/final
+- `core/tool_definitions.py` — schema atualizado com `persona_run` + parâmetro `persona`
+- `tests/test_personas.py` — 10 testes (listagem, validação, KEY_MAP, smoke regressão)
+
+### Como usar
+- `playtest_manage op=persona_run persona=apressado duration=60`
+- Personas: apressado (rush), cauteloso (careful), explorador (explore)
+- Requer jogo rodando em debug (F5 no Godot)
+
+### Métricas
+- **ONDA 1:** ✅ 17/17
+- **ONDA 3:** 2/11 (3.A + 3.B concluídas)
+- **Total tools:** 279
+- **C1:** PASS (0 breaking)
+- **C3:** PASS (smoke_test)
+- **Testes:** 47/47 (10 personas + 11 smoke + 26 version_history)
+
+### Próximo passo
+- **3.C — Playtest camada 3: agente LLM pontual** [SÊNIOR]
 
 - **Data:** 2026-07-21
 - **De:** AGENTE 01 (Arquitetura & Core)
