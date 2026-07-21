@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://infinite_world_v1"][ext_resource type="Script" path="res://behaviors/infinite_world/infinite_world.gd" id="1_x"][node name="InfiniteWorld" type="Node"]script=ExtResource("1_x")

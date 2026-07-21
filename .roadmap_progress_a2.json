@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 177,
+    "implementados": 184,
     "lista": [
       {
         "nome": "accordion",
@@ -416,6 +416,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "dungeon_generator",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "element_system",
         "versao": "1.0.0",
         "status": "concluido",
@@ -614,6 +620,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "infinite_world",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "input_buffer",
         "versao": "1.0.0",
         "status": "concluido",
@@ -639,6 +651,12 @@
       },
       {
         "nome": "knockback",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "l_system",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -716,6 +734,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "modular_weapon",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "moving_platform",
         "versao": "1.0.0",
         "status": "concluido",
@@ -729,6 +753,12 @@
       },
       {
         "nome": "network_sync",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "noise_generator",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -819,6 +849,12 @@
       },
       {
         "nome": "random_loot",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "random_walker",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -1095,6 +1131,12 @@
       },
       {
         "nome": "wind_zone",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "world_map_generator",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
