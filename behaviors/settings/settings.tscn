@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bsettings00000001"]
+
+[ext_resource type="Script" path="res://behaviors/settings/settings.gd" id="1_se"]
+
+[node name="Settings" type="CanvasLayer"]
+script = ExtResource("1_se")
+default_master_vol = 0.0
+default_music_vol = 0.0
+default_sfx_vol = 0.0
+show_fullscreen = true
+show_language = false
