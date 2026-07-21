@@ -1,36 +1,39 @@
-﻿# PROXIMA SESSAO
+﻿# 🔄 PRÓXIMA SESSÃO
 
 ## Resumo
-Sessao de 2026-07-21: ONDA 1 avancou de 15/17 para 16/17.
-Fatia concluida: 1.P (telemetria opt-in do MCP).
-Novo modulo: tools/mcp_telemetry_ops.py (574 linhas, zero dependencias).
-Hook track_mcp_event em call_tool (fail-open). Pesquisa externa em docs/PESQUISA_EXTERNA.md secao 6.
+ONDA 3 (Qualidade de Jogo) concluída: 11 fatias originais + 10 gaps = 21 itens implementados. 285 tools, 69 testes. O MCP agora faz playtest automático (smoke, personas, LLM), gera relatório de qualidade com 5 sinais, bloqueia avanço em 3 gates, e oferece modo professor, validador de escopo, disclosure Steam e revisor adversarial.
 
 ## Estado
-- Versao: 3.5.1 | ONDA 1: 16/17 | Commit: 19da07d
+- Versão: v3.7.0 | Commit: 4076041
+- Módulos: 285 tools, 300+ handlers
+- Progresso: ONDA 1 ✅ 17/17 | ONDA 2 ⏳ Agente 2 | ONDA 3 ✅ 11/11+10 | ONDA 4 🔒
 
-## Ultima tarefa
-- 1.P: Telemetria opt-in do MCP. Rollup mcp_telemetry_manage, consentimento desligado por padrao, JSONL local, zero envio externo, zero PII.
+## Última tarefa
+- 3.A-3.K + G1-G10: Playtest, fun_report, gates, dashboard, suite completa, polimento
 
-## Pendencias
-- [ ] 1.Q — Historico de versoes jogaveis [SENIOR] (alta — ULTIMA da ONDA 1)
-- [ ] ONDA 2 — 30 behaviors, 3 blueprints, 3 seeds (futuro)
+## Pendências
+- [ ] 4.A — Publicar na AssetLib (alta)
+- [ ] 4.E — Publicar o Shardbreaker (alta)
+- [ ] 4.D — Nome e identidade do produto (média)
+- [ ] Atualizar Agente 2 com novo estado (média)
 
 ## Arquivos-chave
-- server.py, tools/mcp_telemetry_ops.py, core/tool_definitions.py, CONTRACT_SNAPSHOT.json
+- tools/playtest_ops.py (principal, +800 linhas)
+- tools/fun_report_ops.py (relatório de qualidade)
+- tools/personas.py (3 personas)
+- core/tool_definitions.py (285 definições)
 
 ## Fluxo sugerido
-1. Leia .session/NEXT_SESSION.md
-2. Rode auditar.py
-3. Continue de 1.Q (ultima fatia da ONDA 1)
+1. Leia HANDOFF.md e .roadmap_progress.json
+2. Rode pytest + auditar.py --skip-c5
+3. Continue com /plan para ONDA 4 (4.A)
 
-## Decisoes da sessao
-- Telemetria 100%% local — zero envio externo, export manual
-- Formato JSONL (append-only) + summary agregado
-- Padrao identico ao budget_ops (hook fail-open, threading.Lock, estado por projeto)
-- Consentimento DESLIGADO por padrao (.mcp_telemetry_consent.json)
+## Decisões da sessão
+- Adaptar 3.C de 'MCP chama API' para 'servidor HTTP outbound' → usou urllib.request
+- Adicionar 5º sinal (densidade de eventos) ao fun_report → detecta vale de tédio
+- Commits automáticos após cada /act a partir da 3.E → acelera o ciclo
 
-## Atencao
-- C5 (orcamento) e pre-existente — 8 fases overflow, responsabilidade da Fatia 0.7
-- Agente 2 ativo em agente2/behaviors-onda2 (10 behaviors)
-- 1.Q e [SENIOR] — ultima fatia antes da ONDA 2
+## ⚠️ Atenção
+- 285 tools — monitorar teto (~40/fase)
+- Agente 2 branch agente2/behaviors-onda2 — pode ter conflitos se fizer merge
+- --headless nao funciona no Windows 4.7 (R12)
