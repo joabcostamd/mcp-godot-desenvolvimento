@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bcamerazoom000001"]
+
+[ext_resource type="Script" path="res://behaviors/camera_zoom/camera_zoom.gd" id="1_cz"]
+
+[node name="CameraZoom" type="Node"]
+script = ExtResource("1_cz")
+default_zoom = Vector2(1, 1)
+default_duration = 0.5
