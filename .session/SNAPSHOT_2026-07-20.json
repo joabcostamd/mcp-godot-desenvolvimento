@@ -1,60 +1,19 @@
-{
-  "date": "2026-07-20T23:45:00Z",
+﻿{
+  "date": "2026-07-20",
   "project": "mcp-godot-desenvolvimento",
-  "version": "3.2.1",
-  "commit": "9b0daaa",
+  "version": "3.5.0",
+  "commit": "156ed74",
   "branch": "main",
-  "files_changed": [
-    "server.py", "core/tool_definitions.py",
-    "tools/skeleton_ops.py", "tools/network_ops.py", "tools/render_ops.py", "tools/csharp_ops.py",
-    "tools/devsolo_ops.py", "tools/physics_ops.py", "tools/runtime_ops.py",
-    "tools/dynamic_groups.py", "tools/editor_safety.py",
-    "addons/mcp_addon/mcp_addon.gd",
-    "scripts/docs_sync.py",
-    "README.md", "docs/arquitetura.md", ".roadmap_progress.json",
-    "HANDOFF.md", "NEXT_STEP.md", "ROADMAP_DEFINITIVO.md",
-    "LICENSE", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "SECURITY.md",
-    ".session/SESSION_NEXT.md",
-    ".github/agents/* (4 arquivos)",
-    ".github/roadmap/* (4 arquivos)",
-    ".github/prompts/encerrar.prompt.md",
-    ".github/instructions/* (11 arquivos)",
-    "ROADMAP_UNIFICADO.md (removido → journal/)"
-  ],
+  "files_changed": ["init.py", "tools/friendly_errors.py", "README.md", "README.en.md", "llms.txt", ".roadmap_progress.json"],
   "features": [
-    "Camada 6: 38 tools (skeleton, 3D, physics, UI, network, runtime, render, csharp)",
-    "docs_sync: números gerados do código",
-    "Protocolo anti-conflito MCP ↔ editor Godot (0.H)",
-    "Comando /encerrar (15 fases)",
-    "4 Lotes documentais instalados",
-    "4 agentes Copilot ultra-polidos",
-    "LICENSE MIT + CONTRIBUTING + CODE_OF_CONDUCT + SECURITY",
-    "Expurgo de Cline e caminhos pessoais"
+    "fatia 1.K: modo remix",
+    "fatia 1.L: vitrine 17→32 generos",
+    "fatia 1.M: skills exportaveis + modo guiado",
+    "fatia 1.N: llms.txt + README bilingue",
+    "fatia 1.O: degradacao sem internet"
   ],
-  "bugs_fixed": [
-    "38 handlers com nome de função errado",
-    "physics_ops helpers inexistentes (_read_tscn, _write_tscn)",
-    "query_area_overlap hasattr(object) bug",
-    "JSON duplicata fatia_0.7b",
-    "GDScript sintaxe inválida em _check_file_modified"
-  ],
-  "pending": [
-    "0.H: testar com Godot aberto",
-    "0.I: Detectar pasta sincronizada",
-    "0.J: Normalização de nome",
-    "0.K: Guarda PI",
-    "0.L: Bug set_node_property",
-    "Camada 7 (Polimento) — [MARGINAL]"
-  ],
-  "risks": [
-    "PROTOTIPO com 100 tools efetivas (acima do teto de ~40)",
-    "_tool_defs() retorna None sem projeto ativo (pré-existente)",
-    "Godot sync (OneDrive) pode corromper .godot/"
-  ],
-  "next_priorities": [
-    "0.I — Detectar pasta sincronizada [AUTO]",
-    "0.J — Normalização de nome [AUTO]",
-    "Testar 0.H com Godot aberto",
-    "Committar 0.H"
-  ]
+  "bugs_fixed": [],
+  "pending": ["1.P: Telemetria opt-in [SENIOR]", "1.Q: Historico de versoes [SENIOR]"],
+  "risks": ["3 blueprints vs 32 generos (gap conhecido Onda 2)"],
+  "next_priorities": ["1.P", "1.Q", "OND A 2 — O Fosso"]
 }

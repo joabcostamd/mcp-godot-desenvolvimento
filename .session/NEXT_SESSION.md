@@ -1,43 +1,34 @@
-# 🔄 PRÓXIMA SESSÃO — MCP Godot Agent
+﻿# PROXIMA SESSAO
 
 ## Resumo
-ONDA 0: 12/12 concluída. ONDA 1: 5/17 (1.A–1.E) concluídas.
-Iniciado suporte multi-cliente, orçamento de tokens, dock visual v2 com 14 melhorias UX.
-Pesquisa externa documentada (MCP Spec, Godot Docs, Apple HIG, Material Design 3).
+Sessao de 2026-07-20: ONDA 1 avancou de 11/17 para 15/17.
+Fatias concluidas: 1.K (remix), 1.L (vitrine 32 generos), 1.M (skills/modo guiado), 1.N (llms.txt + README bilingue), 1.O (offline).
+32 game patterns, _SYNONYMS 120+, fallback GAME_PATTERNS, init.py com copy_prompts_to_project e check_internet.
 
 ## Estado
-- Versão: 275 tools, 296 handlers
-- Branch: main
-- Último commit: 761d103 (dock v2 + pesquisa externa)
-- Progresso ONDA 1: 5/17 (29%)
+- Versao: 3.5.0 | ON DA 1: 15/17 | Commit: 156ed74
 
-## Última tarefa
-- 1.E — Dock v2 com 14 melhorias UX + P3 (sub-plugins) + P4 (@export)
-- Pendente de commit: dock.gd, dock.tscn, mcp_addon.gd, PESQUISA_EXTERNA.md
+## Ultima tarefa
+- 1.O: Degradacao elegante sem internet (check_internet + friendly_errors socket)
 
-## Pendências
-- [ ] Commitar arquivos pendentes (ALTA)
-- [ ] 1.F — Erro amigável universal [AUTO]
-- [ ] 1.G — Reestruturação documental [SÊNIOR]
-- [ ] 1.H a 1.Q — Restante da ONDA 1
+## Pendencias
+- [ ] 1.P — Telemetria opt-in [SENIOR] (alta)
+- [ ] 1.Q — Historico de versoes [SENIOR] (media)
+- [ ] ONDA 2 — 30 behaviors, 3 blueprints, 3 seeds (futuro)
 
 ## Arquivos-chave
-- init.py — instalador de 1 comando
-- tools/budget_ops.py — orçamento de tokens
-- addons/mcp_dock/dock.gd — dock visual (717 linhas)
-- docs/PESQUISA_EXTERNA.md — referência técnica
+- server.py, init.py, tools/quickstart_ops.py, resources/game_patterns.py
 
 ## Fluxo sugerido
-1. Commite os pendentes: `git add -A && git commit -m "..." && git push`
-2. Rode `/plan` para 1.F
-3. Continue o desenvolvimento
+1. Leia .session/NEXT_SESSION.md
+2. Rode auditar.py
+3. Continue de 1.P ou va para ONDA 2
 
-## Decisões da sessão
-- Preços DeepSeek V4 como estimativas (~R$0.003/1K input, ~R$0.010/1K output)
-- Dock segue padrão Godot oficial (add_control_to_dock)
-- Sub-plugins: mcp_addon auto-gerencia mcp_dock
+## Decisoes da sessao
+- 32 generos (nao 17) — cobertura ~100%% dos generos 2D viaveis
+- .prompt.md no .github/prompts/ do projeto, nao %%APPDATA%%
+- Fallback GAME_PATTERNS no _match_blueprint quando blueprints nao cobrem
 
-## ⚠️ Atenção
-- Agente 2 ativo em agente2/behaviors-onda2 — verificar merge-tree antes de cada fatia
-- C1/C5 do auditar.py pré-existentes (7 breaking, 8 fases overflow)
-- Dock não testado com Godot editor aberto (validado apenas por sintaxe)
+## Atencao
+- Apenas 3 blueprints para 32 generos — gap conhecido, Onda 2 resolve
+- Agente 2 ativo em agente2/behaviors-onda2 (10 behaviors)
