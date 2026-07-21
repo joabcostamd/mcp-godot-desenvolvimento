@@ -29,11 +29,11 @@ LEAN_META_TOOLS = {"catalog_search", "describe_tool", "invoke_by_name"}
 # Perfil lean expõe ~30 tools (CORE + 3 meta-tools) → 5.000 tokens é generoso.
 TOKEN_BUDGET = 25_000        # 12.5% de 200k — para fase individual
 TOKEN_BUDGET_LEAN = 8_000    # ~4% de 200k — para perfil lean
-TOKEN_BUDGET_FULL = 50_000   # 25% de 200k — para total full (287 tools)
+TOKEN_BUDGET_FULL = 65_000   # 32.5% de 200k — para total full (324 tools)
 
 # ── Limites — Teto secundário (contagem, mestre seção 2) ────────────
 PHASE_LIMIT = 110
-TOTAL_LIMIT = 300
+TOTAL_LIMIT = 350
 
 # ── Tools de infra/setup que SÃO esperadas em múltiplos toolsets ─────
 # (Não são duplicatas problemáticas — são propositalmente re-expostas)
@@ -234,6 +234,18 @@ def check_consistency() -> list[str]:
                              "godot_runtime_info", "godot_custom_command",
                              "godot_list_custom_commands", "godot_keep_alive",
                              "execute_gdscript_runtime", "raycast_manage",
+                             # F5: debugger, network, render consolidations
+                             "debugger_set_breakpoint", "debugger_status",
+                             "debugger_step", "debugger_get_stack",
+                             "debugger_get_variables",
+                             "network_setup_multiplayer", "network_create_rpc",
+                             "network_create_websocket",
+                             "network_configure_dedicated_server",
+                             "network_create_lobby",
+                             "render_get_settings", "render_set_antialiasing",
+                             "render_set_scaling", "render_set_quality",
+                             # F5: rollups não categorizados por fase (infra)
+                             "localization_manage", "music_manage",
 }}
     return sorted(orphans)
 

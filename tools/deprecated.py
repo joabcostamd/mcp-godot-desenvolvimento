@@ -74,4 +74,14 @@ DEPRECATED_TOOLS: set[str] = {
     # godot_* → godot_manage
     "godot_run_project", "godot_stop_project", "godot_wait_for_bridge",
     "godot_exec", "godot_runtime_info",
+    # debugger_* → debug_manage
+    "debugger_set_breakpoint", "debugger_status", "debugger_step",
+    "debugger_get_stack", "debugger_get_variables",
+    # network_* → network_manage
+    "network_setup_multiplayer", "network_create_rpc",
+    "network_create_websocket", "network_configure_dedicated_server",
+    "network_create_lobby",
+    # render_* → render_manage
+    "render_get_settings", "render_set_antialiasing",
+    "render_set_scaling", "render_set_quality",
 }

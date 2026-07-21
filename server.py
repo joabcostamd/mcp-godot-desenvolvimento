@@ -110,6 +110,7 @@ TOOLSETS = {
         "skeleton_create_bone",
         "skeleton_create_ik_chain",
         "skeleton_get_info",
+        "skeleton_manage",
         "csg_create_node",
         "gi_create_node",
         "scene_fx_create_node",
@@ -128,10 +129,12 @@ TOOLSETS = {
         "network_create_websocket",
         "network_configure_dedicated_server",
         "network_create_lobby",
+        "network_manage",
         "render_get_settings",
         "render_set_antialiasing",
         "render_set_scaling",
         "render_set_quality",
+        "render_manage",
         "csharp_scaffold_project",
         "csharp_generate_script",
         "csharp_build_project",
@@ -166,6 +169,7 @@ TOOLSETS = {
     "runtime": [
         # Execução, debug, testes, bridge, jogo rodando
         "runtime_manage",
+        "godot_manage",
         "execute_gdscript_runtime", "capture_game_screenshot", "take_screenshot",
         "godot_run_project", "godot_stop_project", "godot_wait_for_bridge",
         "godot_exec", "godot_runtime_info", "godot_screenshot",
@@ -226,6 +230,7 @@ TOOLSETS = {
         "gdscript_diagnostics", "gdscript_references", "gdscript_definition",
         "gdscript_hover", "gdscript_rename", "gdscript_symbols",
         "gdscript_lsp_connect", "gdscript_lsp_disconnect", "gdscript_sync_file",
+        "lsp_manage",
         "resource_dependency_graph",
         "find_unused_resources",
         "estimate_tool_tokens",
@@ -1793,6 +1798,12 @@ def _tool_defs() -> list[Tool]:
         # ── M3: Defer Loading ───────────────────────────────────
         if t.name not in _CORE_TOOLS:
             t.annotations["deferLoading"] = True
+    # ── Rollups: adicionar APÓS pós-processamento (trazem próprios hints) ──
+    try:
+        from tools.rollups import get_rollup_tool_defs
+        _TOOL_DEFS_CACHE.extend(get_rollup_tool_defs())
+    except Exception:
+        pass
     # ── Fim pós-processamento ──────────────────────────────────────
 
     return _TOOL_DEFS_CACHE
@@ -1819,31 +1830,6 @@ def _make_import_handler(module_name: str, func_name: str):
     handler.__name__ = f"_handle_{func_name}"
     return handler
 
-
-# ── Rollups Fase 2A / C1 ───────────────────────────────────────
-    # Domain rollups: colapsam múltiplas tools em <domain>_manage.
-    # Adicionados APÓS o pós-processamento pois já trazem seus próprios hints.
-    try:
-        from tools.rollups import get_rollup_tool_defs
-        _TOOL_DEFS_CACHE.extend(get_rollup_tool_defs())
-    except Exception:
-        pass  # Rollups são bônus — se falhar, server ainda funciona sem eles
-
-    # ── B6: Read/Write Split para rollups ───────────────────────────
-    for t in _TOOL_DEFS_CACHE:
-        cat = _classify_operation(t.name)
-        if t.annotations:
-            t.annotations["operationCategory"] = cat
-        else:
-            t.annotations = {"operationCategory": cat}
-
-    # ── M3: Defer Loading para rollups ─────────────────────────────
-    for t in _TOOL_DEFS_CACHE:
-        if t.name not in _CORE_TOOLS:
-            if t.annotations:
-                t.annotations["deferLoading"] = True
-            else:
-                t.annotations = {"deferLoading": True}
 
     # ── Output Schema (Fase 2A / C5) ────────────────────────────────
     # Schema padrão para 90%+ das tools. Ferramentas com formato
