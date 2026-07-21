@@ -1,4 +1,28 @@
 {
+  "fatia_F5.5_navigation": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "pendente-commit",
+    "resultado": "F5.5 — Migrar dominio navigation. Criado domains/navigation/ (manifest.py, handlers.py). 3 ops: create_navigation_region_2d, create_navigation_agent_2d, bake_navigation_polygon. Removidas 2 atômicas do wire: create_navigation_region_2d, create_navigation_agent_2d. Aliases→navigation_manage. 146/148 regressao (2 pre-existentes: remix). DESIGN: -2 tools."
+  },
+  "fatia_F5.4_camera": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "pendente-commit",
+    "resultado": "F5.4 — Migrar dominio camera. Criado domains/camera/ (manifest.py, handlers.py). 3 ops: setup_camera_2d, setup_camera_follow, setup_camera_shake. Removida 1 atômica do wire: setup_camera_2d. Aliases→camera_manage. 146/148 regressao (2 pre-existentes: remix). DESIGN: -1 tool."
+  },
+  "fatia_F5.3_shader": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "pendente-commit",
+    "resultado": "F5.3 — Migrar dominio shader. Criado domains/shader/ (manifest.py, handlers.py). 5 ops: generate_shader_2d, apply_shader_to_node, read_shader, edit_shader, get_shader_params. Removidas 4 atômicas do wire: generate_shader_2d, read_shader, get_shader_params, edit_shader. Aliases→shader_manage. 146/148 regressao (2 pre-existentes: remix). DESIGN: -4 tools."
+  },
   "fatia_F5.2_ui": {
     "status": "concluida",
     "data": "2026-07-21",

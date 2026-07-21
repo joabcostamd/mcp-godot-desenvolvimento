@@ -1106,73 +1106,8 @@ def _raw_tool_defs() -> list[Tool]:
                 "required": ["scene_path", "parent_node_path"],
             },
         ),
-        Tool(
-            name="setup_camera_2d",
-            description=(
-                "Adiciona e configura uma Camera2D com limites, zoom, drag e suavização. "
-                "Use ao criar qualquer cena 2D que precise de câmera. "
-                "Quando NÃO usar: se a cena já tem câmera configurada. "
-                "Pré-condições: cena deve existir. "
-                "Exemplo: {\"scene_path\": \"scenes/game.tscn\", \"limits\": {\"left\": 0, \"top\": 0, \"right\": 2560, \"bottom\": 1440}, \"smoothing_enabled\": true}. "
-                "Erro mais comum: cena não encontrada — verifique o caminho."
-            ),
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "scene_path": {"type": "string"},
-                    "parent_node_path": {"type": "string"},
-                    "limits": {"type": "object"},
-                    "drag_horizontal": {"type": "number"},
-                    "drag_vertical": {"type": "number"},
-                    "zoom": {"type": "array", "items": {"type": "number"}},
-                    "smoothing_enabled": {"type": "boolean"},
-                    "smoothing_speed": {"type": "number"},
-                    "current": {"type": "boolean"},
-                },
-                "required": ["scene_path"],
-            },
-        ),
-        Tool(
-            name="create_navigation_region_2d",
-            description=(
-                "Cria região de navegação 2D com polígono. Define área onde personagens podem andar. "
-                "Use ao criar mapa com pathfinding. "
-                "Depois use create_navigation_agent_2d para personagens que navegam. "
-                "Exemplo: {\"scene_path\": \"...\", \"polygon_vertices\": [[0,0],[1280,0],[1280,720],[0,720]]}."
-            ),
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "scene_path": {"type": "string"},
-                    "parent_node_path": {"type": "string"},
-                    "polygon_vertices": {"type": "array", "items": {"type": "array", "items": {"type": "number"}}},
-                    "region_name": {"type": "string"},
-                },
-                "required": ["scene_path"],
-            },
-        ),
-        Tool(
-            name="create_navigation_agent_2d",
-            description=(
-                "Adiciona NavigationAgent2D com script de perseguição. O nó pai DEVE ser CharacterBody2D. "
-                "Gera script que persegue o alvo usando pathfinding da NavigationRegion. "
-                "Use para inimigos que perseguem o player ou NPCs com destino. "
-                "Pré-condições: NavigationRegion2D já deve existir na cena. "
-                "Exemplo: {\"scene_path\": \"...\", \"parent_node_path\": \"./Enemy\", \"target_node_path\": \"./Player\", \"speed\": 150}."
-            ),
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "scene_path": {"type": "string"},
-                    "parent_node_path": {"type": "string"},
-                    "agent_name": {"type": "string"},
-                    "target_node_path": {"type": "string"},
-                    "speed": {"type": "number"},
-                    "avoidance_enabled": {"type": "boolean"},
-                },
-                "required": ["scene_path", "parent_node_path", "target_node_path"],
-            },
-        ),
+        # ── setup_camera_2d migrado para camera_manage (F5.4) ──
+        # ── navigation atômicas migradas para navigation_manage (F5.5) ──
         Tool(
             name="generate_project_structure",
             description=(
@@ -1304,28 +1239,7 @@ def _raw_tool_defs() -> list[Tool]:
                 "required": ["scene_path"],
             },
         ),
-        Tool(
-            name="generate_shader_2d",
-            description=(
-                "Gera um shader 2D a partir de templates pre-definidos. "
-                "Use para efeitos visuais avancados: glow, dissolve, outline, water, wind. "
-                "O shader e salvo como arquivo .gdshader e aplicado ao no. "
-                "Pre-condicoes: no alvo deve existir na cena. "
-                "Exemplo: {'scene_path': 'scenes/game.tscn', 'node_path': './Player/Sprite', 'template': 'glow'}. "
-                "Erro mais comum: shader nao visivel — compile_test nao renderiza shaders; use run_game."
-            ),
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "scene_path": {"type": "string", "description": "Caminho da cena."},
-                    "node_path": {"type": "string", "description": "Path do no alvo."},
-                    "template": {"type": "string", "description": "Template: glow, dissolve, outline, water, wind, grayscale, shockwave."},
-                    "uniforms": {"type": "object", "description": "Valores de uniforms do shader (opcional)."},
-                    "shader_name": {"type": "string", "description": "Nome do arquivo .gdshader (opcional)."},
-                },
-                "required": ["scene_path", "node_path", "template"],
-            },
-        ),
+        # ── generate_shader_2d migrado para shader_manage (F5.3) ──
         Tool(
             name="create_path_2d",
             description=(
@@ -1841,45 +1755,8 @@ def _raw_tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
-        # ── Shader Editor ──────────────────────────────────────
-        Tool(
-            name="read_shader",
-            description="Le o conteudo de um arquivo .gdshader existente.",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "shader_path": {"type": "string"},
-                    "project_path": {"type": "string"},
-                },
-                "required": ["shader_path"],
-            },
-        ),
-        Tool(
-            name="get_shader_params",
-            description="Extrai as declaracoes uniform de um shader.",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "shader_path": {"type": "string"},
-                    "project_path": {"type": "string"},
-                },
-                "required": ["shader_path"],
-            },
-        ),
-        Tool(
-            name="edit_shader",
-            description="Edita .gdshader com validacao antes de escrever.",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "shader_path": {"type": "string"},
-                    "new_code": {"type": "string"},
-                    "project_path": {"type": "string"},
-                    "validate": {"type": "boolean"},
-                },
-                "required": ["shader_path", "new_code"],
-            },
-        ),
+        # ── Shader Editor migrado para shader_manage (F5.3) ──
+        # read_shader / get_shader_params / edit_shader agora via shader_manage
         # ── PATCH 14: Testes Roteirizados ──────────────────────
         Tool(
             name="run_scripted_tests",

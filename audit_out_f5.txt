@@ -1,0 +1,36 @@
+{
+  "fatia": "F5.3-F5.4-F5.5",
+  "timestamp": "2026-07-21T21:57:30.182944+00:00",
+  "exit_code": 0,
+  "criteria": {
+    "C1_contrato": {
+      "status": "pass",
+      "detail": "308 mudancas: 0 breaking, 308 warning, 0 cosmetic"
+    },
+    "C2_canary": {
+      "status": "skipped",
+      "detail": "Nenhuma canary fornecida (--canary ausente)"
+    },
+    "C3_regressao": {
+      "status": "pass",
+      "detail": "smoke_test concluido — status: success ({'status': 'success', 'scenarios': [{'name': 'SMOKE-01: Pipeline core', 'description': 'Valida que ping, health_check, self_test e ClassDB respondem c)"
+    },
+    "C4_seguranca": {
+      "status": "skipped",
+      "detail": "Nenhuma checklist fornecida (--c4-checklist ausente)"
+    },
+    "C5_orcamento": {
+      "status": "pre_existente",
+      "detail": "Pulado (--skip-c5). Problema pre-existente documentado no commit f056aed8. Responsabilidade da fatia 0.7."
+    },
+    "C6_distinguibilidade": {
+      "status": "skipped",
+      "detail": "Nenhum nome de tool fornecido (--tool-name ausente)"
+    },
+    "C7_visual": {
+      "status": "skipped",
+      "detail": ""
+    }
+  },
+  "errors": []
+}
