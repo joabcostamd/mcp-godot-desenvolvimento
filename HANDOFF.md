@@ -5,6 +5,89 @@
 
 ---
 
+## Último Handoff (AGENTE 01 — 2026-07-21 — Sincronização completa)
+
+- **Data:** 2026-07-21
+- **De:** AGENTE 01 (Arquitetura & Core)
+- **Ação:** Sincronização completa do repositório + push para GitHub
+
+### Entregues nesta sessão
+
+**Fatias concluídas:**
+- 4.A — publish_manage (AssetLib): empacotar addons em .zip
+- Gap Comunidade — community_manage (changelog, release_notes, roadmap_public, badge)
+- Gap Limpeza — B5 warnings corrigidos, budget limits atualizados
+- 4.F — GitHub Discussions: guia de ativação + templates
+- Documento de auditoria de tools (`.github/audit/tool_organization_audit.md`)
+
+**Pesquisas externas (nível extremo):**
+- ONDA 4 completa (distribuição, monetização, comunidade, identidade, métricas, Steam)
+- Organização de tools (taxonomia, curadoria, escalabilidade)
+
+### Métricas finais
+
+| Indicador | Valor |
+|---|---|
+| Tools | 287 |
+| Handlers | 184/184 registrados |
+| Testes | 148/148 passam |
+| C1 | 0 breaking |
+| C3 | PASS |
+| C5 | Pré-existente (0.7) |
+| Commits nesta sessão | 5 |
+
+### Estado das Ondas
+
+- ONDA 0: ✅ 12/12
+- ONDA 1: ✅ 17/17
+- ONDA 2: ⏳ Agente 2 (branch agente2/behaviors-onda2)
+- ONDA 3: ✅ 21/21
+- ONDA 4: ⏳ 1/7 (4.A ✅) + gaps de comunidade ✅
+
+### Próximo passo
+
+- Aguardar auditoria do Claude sobre organização de tools
+- Decidir nome do produto (4.D)
+- Implementar consolidação de tools conforme recomendação do Claude
+
+---
+
+## Último Handoff (AGENTE 01 — 2026-07-21 — Pesquisa Organização de Tools)
+
+- **Data:** 2026-07-21
+- **De:** AGENTE 01 (Arquitetura & Core)
+- **Ação:** Pesquisa externa nível extremo — Organização de Tools (taxonomia, curadoria, escalabilidade)
+
+### Diagnóstico
+
+- 287 tools em lista plana, 13 rollups (4.5%), 75 órfãs de fase
+- PROTOTIPO: 100 tools visíveis (2.5x acima do teto)
+- Nomes baseados em verbos, não recursos (Azure API Design)
+- Hints MCP não utilizados (readOnlyHint, destructiveHint, etc.)
+
+### Recomendações (7 priorizadas, todas não-destrutivas)
+
+| # | Recomendação | Esforço | Impacto |
+|---|---|---|---|
+| R1 | Adicionar hints MCP nas 287 tools | 2h | Alto |
+| R2 | Enriquecer catalog_search com taxonomia | 1h | Alto |
+| R3 | Criar 5 rollups críticos | 3h | Alto |
+| R4 | Metadata de fase/namespace nas tools | 1h | Alto |
+| R5 | Curadoria agressiva por fase | 30min | Alto |
+| R6 | Migrar 22 famílias para rollups | 8h | Alto |
+| R7 | Paginação no tools/list | 2h | Médio |
+
+### Documentos atualizados
+
+- `docs/PESQUISA_EXTERNA.md` — +Seção 8 (~400 linhas): Organização de Tools
+
+### Próximo passo
+
+- Implementar R1 (hints MCP) — mais rápido, maior impacto, zero breaking changes
+- Rode `/plan`.
+
+---
+
 ## Último Handoff (AGENTE 01 — 2026-07-21 — Pesquisa ONDA 4)
 
 - **Data:** 2026-07-21

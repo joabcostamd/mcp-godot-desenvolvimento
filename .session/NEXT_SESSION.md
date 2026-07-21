@@ -1,7 +1,29 @@
 ﻿# 🔄 PRÓXIMA SESSÃO
 
 ## Resumo
-ONDA 4 iniciada. 4.A (AssetLib) concluída. Pesquisa externa nível extremo sobre toda a ONDA 4 (MUNDO) concluída: distribuição, monetização, comunidade, identidade, métricas, Steam. Ordem revisada com base na pesquisa: Nome → Shardbreaker → itch.io → Comunidade → Sponsors → Métricas.
+ONDA 4 em andamento. 4.A ✅ + gaps de comunidade ✅ + limpeza ✅ + pesquisa de tools ✅. Documento de auditoria de tools enviado para o Claude analisar. Aguardando feedback sobre consolidação de tools.
+
+## Estado
+- Versão: v3.7.0 | Último commit: em breve (sync)
+- Módulos: 287 tools, 184 handlers, 148 testes
+- Progresso: ONDA 0 ✅ | ONDA 1 ✅ | ONDA 2 ⏳ | ONDA 3 ✅ | ONDA 4 ⏳ (1/7 + gaps)
+
+## Pendências
+- [ ] Aguardar auditoria do Claude sobre tools (`.github/audit/tool_organization_audit.md`)
+- [ ] 4.D — Nome e identidade (decisão do Joab)
+- [ ] Implementar consolidação de tools conforme recomendação do Claude
+- [ ] 4.E — Shardbreaker (quando o jogo estiver pronto)
+- [ ] 4.F — Ativar GitHub Discussions (guia pronto em `.github/DISCUSSIONS.md`)
+
+## Arquivos-chave
+- `.github/audit/tool_organization_audit.md` — Documento completo para auditoria do Claude
+- `docs/PESQUISA_EXTERNA.md` — Seções 7 (ONDA 4) e 8 (Organização de Tools)
+- `HANDOFF.md` — Resumo completo da sessão
+
+## Fluxo sugerido
+1. Leia HANDOFF.md
+2. Veja o feedback do Claude sobre as tools
+3. Continue com /plan para implementar as recomendações
 
 ## Estado
 - Versão: v3.7.0 | Commit: 702de23 (último commitado)
