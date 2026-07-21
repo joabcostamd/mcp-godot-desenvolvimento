@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://boutline000000001"]
+
+[ext_resource type="Script" path="res://behaviors/outline/outline.gd" id="1_ol"]
+
+[node name="Outline" type="Node"]
+script = ExtResource("1_ol")

@@ -1,0 +1,23 @@
+{
+  "name": "interactable",
+  "description_pt": "Area2D que torna o parent interagível. Detecta corpos no grupo players e emite interacted ao pressionar ui_accept. Suporta hold (segurar botão) e sinais focused/unfocused.",
+  "description_en": "Area2D that makes parent interactable. Detects bodies in players group and emits interacted on ui_accept press. Supports hold and focused/unfocused signals.",
+  "synonyms": {
+    "pt": ["interagir", "dialogo", "abrir", "usar", "acao"],
+    "en": ["interact", "use", "action", "talk", "open"]
+  },
+  "parameters": [
+    {"name": "prompt_text", "type": "String", "description_pt": "Texto do prompt (ex: 'Pressione E para abrir').", "default": ""},
+    {"name": "player_group", "type": "String", "default": "players"},
+    {"name": "hold_duration", "type": "float", "description_pt": "Duração para hold (0 = pressionar uma vez).", "range": {"min": 0, "max": 5}, "default": 0, "unit": "s"}
+  ],
+  "signals": [
+    {"name": "focused", "params": [{"name": "body", "type": "Node2D"}]},
+    {"name": "unfocused", "params": [{"name": "body", "type": "Node2D"}]},
+    {"name": "interacted", "params": [{"name": "body", "type": "Node2D"}]}
+  ],
+  "dependencies": [],
+  "genres": ["generic"],
+  "version": "1.0.0", "godot_version": "4.7",
+  "tags": ["interacao", "dialogo", "acao"]
+}
