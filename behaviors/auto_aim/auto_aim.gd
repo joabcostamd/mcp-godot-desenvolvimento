@@ -2,4 +2,5 @@
 signal aim_adjusted()
 var _init:=false
 func _ready()->void:if _init:return;_init=true
+func adjust()->void:aim_adjusted.emit()
 func _get_configuration_warnings()->PackedStringArray:return[]

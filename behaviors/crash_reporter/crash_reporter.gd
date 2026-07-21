@@ -5,4 +5,5 @@ var _initialized: bool = false
 func _ready() -> void: if _initialized: return; _initialized=true
 func capture_error(error_msg: String) -> void: crash_captured.emit(error_msg)
 func send_report() -> void: report_sent.emit()
+func fail_report()->void:report_failed.emit()
 func _get_configuration_warnings() -> PackedStringArray: return []
