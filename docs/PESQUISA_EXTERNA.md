@@ -12,7 +12,7 @@
 | Data | Tema | Fatia | Resumo |
 |---|---|---|---|
 | 2026-07-20 | MCP Spec, Godot Plugins, GDScript Style | 1.E (Dock v1) | Protocolo, plugins, style guide |
-| — | — | — | — |
+| 2026-07-20 | Vitrine de gêneros, MCP Prompts/Resources, Competidores MCP+Godot | 1.L (Vitrine de gêneros) | Game patterns, UX de showcase, landscape competitivo |
 
 ---
 
@@ -162,6 +162,88 @@ func _enable_plugin():
 
 | Regra | dock.gd |
 |-------|---------|
+
+---
+
+## 4. Vitrine de Gêneros & UX de Quickstart (Pesquisa 2026-07-20 — Fatia 1.L)
+
+> **Fontes:** MCP Spec 2025-06-18 (Prompts/Resources), Godot 4.7 Docs (Project Organization, Demo Projects), IvanMurzak/Godot-MCP (v0.19.0), godotengine/godot-demo-projects (9.2k★), Godot Asset Library
+
+### 4.1 Como outras engines/ferramentas apresentam templates de gênero
+
+| Fonte | Padrão | Aplicabilidade ao 1.L |
+|---|---|---|
+| godot-demo-projects | Categorização por dimensão (2d/, 3d/) + feature (physics_tests, audio/rhythm_game). Cada demo: README com descrição, linguagem, renderer, screenshots, link AssetLib | Cada gênero nosso vira um "cartão" com: nome PT-BR, frase pronta, dificuldade, referência |
+| Godot Asset Library | Categorias: 2D Tools, 3D Tools, Scripts, Misc. Busca por texto livre. 5.227 assets | Nossa vitrine é navegável por categoria (ação, puzzle, estratégia) + busca por frase |
+| Unity Hub / Templates | Templates de projeto com cena inicial, assets mínimos, configurações. Download → abre editor já funcional | Nosso `quickstart_manage` já faz isso; a vitrine só expõe as opções |
+| Itch.io | Tags + gêneros como filtro de descoberta. Cada jogo: cover, descrição curta, tags | README pode ter "mini-cartões" com emoji + frase + dificuldade |
+
+### 4.2 Ecossistema competitivo MCP + Godot
+
+| Projeto | Estrelas | Versão | Linguagem | Tools | Diferencial |
+|---|---|---|---|---|---|
+| **IvanMurzak/Godot-MCP** | 178 | 0.19.0 | C# | 39 (11 famílias) | Cloud (ai-game.dev), runtime mode, prompts/resources, CLI |
+| **Open Godot MCP** | — | 0.1.1 | ? | ? | MIT, simples |
+| **Godot MCP Pro** | — | 1.15.1 | ? | ? | Proprietário |
+| **Beckett (AI MCP)** | — | 1.10.1 | ? | ? | MIT |
+| **Breakpoint MCP** | — | 1.7.0 | ? | ? | Foco em debugging |
+| **Godot Agent** | — | 1.0.1 | ? | ? | MIT |
+| **Godot AI Workbench** | — | 0.1.0 | ? | ? | Apache-2.0 |
+
+**Nosso diferencial competitivo (confirmado pela pesquisa):**
+- ✅ **Python** (não C#) — barreira de entrada menor, sem necessidade de mono build
+- ✅ **Dono do processo** (fases, gates, verificação) — os outros são só pontes
+- ✅ **PT-BR nativo** — nenhum concorrente tem
+- ✅ **Não-programador como público-alvo** — os outros assumem desenvolvedor experiente
+- ✅ **Vitrine de gêneros** — nenhum concorrente oferece catálogo de "o que posso criar"
+
+**Oportunidade:** O IvanMurzak/Godot-MCP implementa MCP Prompts e Resources nativos (especificação 2025-06-18). Podemos adotar Prompts como canal adicional para a vitrine (Onda 2+), mas **não agora** — a vitrine via `quickstart_manage(op="showcase")` é mais simples e resolve o problema imediato.
+
+### 4.3 MCP Prompts e Resources como canal de descoberta
+
+A spec MCP 2025-06-18 define:
+
+- **Prompts:** Templates de interação expostos como slash commands. Cada prompt tem `name`, `title`, `description`, `arguments`. Servers declaram capability `prompts`. Cliente faz `prompts/list` → `prompts/get`.
+- **Resources:** Dados contextuais endereçáveis por URI. Suportam `annotations` (audience, priority, lastModified). Cliente faz `resources/list` → `resources/read`.
+
+**Decisão para 1.L:** NÃO implementar MCP Prompts/Resources agora. Motivo:
+1. Nosso server já usa `prompts/list` para os 11 prompts (`criar-jogo`, `revisar-cena`, etc.)
+2. A vitrine como tool (`op="showcase"`) é mais direta: o agente chama, recebe JSON, mostra ao usuário
+3. Prompts MCP exigiriam que o VS Code os expusesse como slash commands — depende do host, não controlamos
+4. Custo de implementação de Resources como canal de vitrine é alto para ganho marginal na Onda 1
+
+**Para Onda 2+:** Avaliar expor a vitrine como MCP Resource (`godot://showcase/genres`) com annotations de prioridade.
+
+### 4.4 Padrões de organização de projetos Godot
+
+Do Godot Docs "Project Organization":
+- **snake_case** para arquivos e pastas
+- Assets agrupados perto das cenas que os usam
+- `addons/` para código de terceiros
+- `.gdignore` para pastas que o Godot não deve importar
+
+**Aplicação ao 1.L:** As frases-âncora no `game_patterns.py` já seguem snake_case para as chaves. Os arquivos da vitrine (se gerarmos Markdown) devem seguir a mesma convenção.
+
+### 4.5 Recomendações para implementação
+
+| # | Recomendação | Custo | Impacto | Prioridade |
+|---|---|---|---|---|
+| R1 | Adicionar `quickstart_phrase_pt` a cada gênero em `game_patterns.py` | Baixo | Alto | ✅ Imediata |
+| R2 | Implementar `quickstart_manage(op="showcase")` retornando JSON com frases | Baixo | Alto | ✅ Imediata |
+| R3 | Adicionar tabela de vitrine no README.md | Baixo | Alto | ✅ Imediata |
+| R4 | Agrupar gêneros por dificuldade (fácil/médio/difícil) na vitrine | Baixo | Médio | ✅ Imediata |
+| R5 | Adicionar `tags_pt` para busca semântica na vitrine | Médio | Médio | Onda 2 |
+| R6 | Expor vitrine como MCP Resource (`godot://showcase/genres`) | Médio | Baixo | Onda 2+ |
+| R7 | Gerar Markdown da vitrine automaticamente via `docs_sync.py` | Baixo | Médio | Onda 2 |
+
+### 4.6 Riscos e anti-padrões identificados
+
+| Risco | Mitigação |
+|---|---|
+| Frase pronta não corresponde ao que o blueprint realmente gera | Cada frase deve ser testada: `quickstart_manage(op="run", phrase="...")` e verificar se o match é ≥ 0.3 |
+| Vitrine muito grande intimida o usuário | Agrupar por dificuldade (3 grupos de ~6) e mostrar "fáceis" primeiro |
+| Frases em PT-BR não dão match com blueprints em EN | O `_SYNONYMS` já cobre PT→EN; as frases usam palavras que estão nos sinônimos |
+| Duplicação: frases no README e no código divergem | Gerar README da vitrine via script que lê `game_patterns.py` (docs_sync) |
 | Tabs (não espaços) | ✅ |
 | Linhas < 100 chars | ✅ |
 | Espaço após `#` | ✅ |

@@ -36,10 +36,51 @@ def _validate_genre(genre: str) -> str | None:
         from resources.game_patterns import GAME_PATTERNS
 
         ALIAS_MAP = {
+            # Mapeamentos curtos → canônicos
             "rpg": "rpg_turn_based",
             "shooter": "top_down_shooter",
             "puzzle": "puzzle_match3",
             "roguelike": "roguelike_dungeon_crawler",
+            "corrida": "racing_top_down",
+            "plataforma": "platformer",
+            "tiro": "top_down_shooter",
+            "cartas": "card_deck_builder",
+            "deckbuilder": "card_deck_builder",
+            "towerdefense": "tower_defense",
+            "defesa": "tower_defense",
+            "match3": "puzzle_match3",
+            "breakout": "arcade_breakout",
+            "snake": "snake_classic",
+            "cobrinha": "snake_classic",
+            "runner": "endless_runner",
+            "tetris": "tetris_like",
+            "pacman": "pacman",
+            "memoria": "memory_match",
+            "asteroids": "asteroids",
+            "spaceinvaders": "space_invaders",
+            "flappy": "flappy_bird",
+            "pong": "pong",
+            "sokoban": "sokoban",
+            "stealth": "stealth_2d",
+            "furtivo": "stealth_2d",
+            "bubble": "bubble_shooter",
+            "bolhas": "bubble_shooter",
+            "doodle": "doodle_jump",
+            "minas": "minesweeper",
+            "campominado": "minesweeper",
+            "frogger": "frogger",
+            "sapo": "frogger",
+            "sobrevivencia": "vampire_survivors_like",
+            "survivors": "vampire_survivors_like",
+            "novel": "visual_novel",
+            "visualnovel": "visual_novel",
+            "clicker": "idle_clicker",
+            "idle": "idle_clicker",
+            "fisica": "physics_puzzle",
+            "beat": "beat_em_up",
+            "luta": "beat_em_up",
+            "bullet": "bullet_hell",
+            "metroidvania": "metroidvania",
         }
 
         # Normaliza: lowercase, espaços → underscores
@@ -116,7 +157,7 @@ def set_project_brief(
     """Define/sobrescreve o project brief do projeto ativo.
 
     Args:
-        genre: Genero do jogo (17 generos via GAME_PATTERNS). Validado.
+        genre: Genero do jogo (32 generos via GAME_PATTERNS). Validado.
         art_style: Estilo visual (ex: scifi, fantasia, cartoon, pixel, minimalista).
         tone: Tom do jogo (ex: estrategico, casual, sombrio, epico, humorado).
         target_platform: Plataforma alvo (pc, mobile, web). Validado.

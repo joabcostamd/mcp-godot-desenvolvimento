@@ -239,7 +239,7 @@ def create_milestone_plan(
     """Cria um plano de milestones baseado no genero e ideia do jogo.
 
     Args:
-        genero: Genero do jogo (17 generos via GAME_PATTERNS).
+        genero: Genero do jogo (32 generos via GAME_PATTERNS).
         ideia: Descricao da ideia do jogo.
         num_milestones: Quantidade de milestones a gerar (default: 8).
         force: Se True, sobrescreve plano existente.

@@ -19,7 +19,7 @@
 
 ---
 
-## 📊 Progresso: Camada 4 — 100% concluída
+## � Progresso: Camada 4 — 100% concluída
 
 | Etapa | Nome | Status | Descrição |
 |---|---|---|---|
@@ -43,7 +43,7 @@
 |---|---|
 | `server.py` | Servidor MCP (~3700 linhas, 240 ferramentas, stdio JSON-RPC 2.0) |
 | `tools/` | 115 modulos Python (cenas, scripts, fisica, arte IA, som IA, pipeline, verificacao, gameplay, etc.) |
-| `resources/` | Game patterns (17 gêneros) + MCP Prompts (11 comandos) |
+| `resources/` | Game patterns (32 gêneros) + MCP Prompts (11 comandos) |
 | `templates/` | Templates GDScript (Jinja2) |
 | `classdb_cache/` | Cache da API do Godot 4.7 (1074 classes) |
 | `addons/` | Plugins Godot (mcp_addon + mcp_runtime_bridge) |
@@ -57,7 +57,60 @@
 
 ---
 
-## 🆕 Novidades da v3.2.1 (2026-07-12)
+## 🎮 Vitrine de Gêneros (32 gêneros)
+
+> Use `quickstart_manage(op="showcase")` para ver a lista completa. Escolha uma frase e crie seu jogo com `quickstart_manage(op="run", phrase="...")`.
+
+### ⭐ Fácil (dificuldade total ≤ 5)
+
+| Gênero | Experimente: |
+|---|---|
+| 🐍 Snake | "jogo da cobrinha, controle a cobra no grid, coma a comida para crescer" |
+| 🐦 Flappy Bird | "jogo do passarinho que voa entre canos, toque na tela para pular" |
+| 🏓 Pong | "jogo de ping-pong com dois paddles e uma bola, rebata para marcar ponto" |
+| 📈 Doodle Jump | "jogo de pular de plataforma em plataforma subindo sem parar" |
+| 🧠 Memória | "jogo da memória, vire as cartas e encontre os pares iguais" |
+| 🧱 Breakout | "jogo de quebrar tijolos com bola e paddle, colete power-ups" |
+| 🖱️ Idle Clicker | "jogo de clique incremental, clique para ganhar recursos e automatize" |
+| 🌌 Asteroids | "jogo de nave no espaço, gire e atire em asteroides que se partem" |
+| 💣 Campo Minado | "jogo de campo minado, revele as celulas e deduza onde estão as minas" |
+
+### ⭐⭐ Médio (dificuldade total 6–8)
+
+| Gênero | Experimente: |
+|---|---|
+| 👾 Space Invaders | "jogo de nave que atira em aliens, eles descem em formação" |
+| 🏃 Endless Runner | "jogo de corrida infinita, pule e desvie dos obstáculos" |
+| 🫧 Bubble Shooter | "jogo de atirar bolhas coloridas, forme grupos para estourar" |
+| 🐸 Frogger | "jogo do sapo, atravesse a rua e o rio desviando de carros" |
+| 🎯 Top-Down Shooter | "jogo de nave que atira em asteroides, colete power-ups" |
+| 🔫 Twin-Stick | "jogo de arena com dois controles, mova e atire contra waves" |
+| 🧊 Tetris | "jogo de encaixar peças que caem, complete linhas para eliminá-las" |
+| 📦 Sokoban | "jogo de empurrar caixas, coloque cada caixa no lugar marcado" |
+| 🎮 Plataforma | "jogo de plataforma com pulo, coleta de moedas e inimigos" |
+| 🕹️ Pac-Man | "jogo de labirinto, colete todos os pontos e fuja dos fantasmas" |
+| 🧩 Match-3 | "jogo de combinar 3 peças coloridas no grid, troque posições" |
+| 🏎️ Corrida | "jogo de corrida visto de cima, acelere e derrape nas curvas" |
+| 🧲 Puzzle Física | "jogo de puzzle com física realista, use gravidade e colisões" |
+
+### ⭐⭐⭐ Avançado (dificuldade total ≥ 9)
+
+| Gênero | Experimente: |
+|---|---|
+| 🏰 Tower Defense | "jogo de defesa de torre, posicione torres para deter inimigos" |
+| 🧛 Vampire Survivors | "jogo de sobrevivência com ataque automático e waves de inimigos" |
+| ⚔️ RPG Turno | "RPG de turno, explore o mapa e lute em batalhas por turno" |
+| 🗡️ Dungeon Crawler | "dungeon procedural, explore salas aleatórias e colete loot" |
+| 🃏 Deck Builder | "jogo de cartas estratégico, monte seu deck durante a partida" |
+| 🗺️ Metroidvania | "exploração com plataforma, desbloqueie habilidades para avançar" |
+| 📖 Visual Novel | "história interativa com diálogos, suas escolhas mudam o final" |
+| 💥 Bullet Hell | "jogo de esquiva com dezenas de projéteis, derrote chefes difíceis" |
+| 👊 Beat 'em Up | "jogo de luta de rua, derrote ondas de inimigos para avançar" |
+| 🥷 Stealth 2D | "jogo de furtividade, evite guardas e use distrações para passar" |
+
+---
+
+## �🆕 Novidades da v3.2.1 (2026-07-12)
 
 ### Item 1: Pipeline de Verificação (`run_verification_pipeline`)
 | Feature | Descrição |

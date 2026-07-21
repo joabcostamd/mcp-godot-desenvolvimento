@@ -4257,19 +4257,20 @@ def _raw_tool_defs() -> list[Tool]:
                 "Recebe uma frase em linguagem natural descrevendo o jogo desejado, "
                 "cria o projeto Godot completo com cena jogável (personagem + inimigo + colisão). "
                 "Usa matching por palavras-chave para match automático com o blueprint mais próximo. "
-                "Também suporta modo remix: clona um jogo-semente completo (ex: Breakout). "
+                "Também suporta modo remix (clona jogo-semente) e vitrine de gêneros (lista frases prontas). "
                 "Quando usar: primeira ferramenta após instalar o MCP, ou para começar um jogo novo. "
-                "Operações: run (cria a partir da frase), remix (clona seed). "
+                "Operações: run (cria a partir da frase), remix (clona seed), showcase (vitrine de gêneros). "
                 "Exemplo run: {\"op\": \"run\", \"phrase\": \"jogo de plataforma com herói que atira\"}. "
-                "Exemplo remix: {\"op\": \"remix\", \"seed\": \"breakout\"}."
+                "Exemplo remix: {\"op\": \"remix\", \"seed\": \"breakout\"}. "
+                "Exemplo showcase: {\"op\": \"showcase\"}."
             ),
             inputSchema={
                 "type": "object",
                 "properties": {
                     "op": {
                         "type": "string",
-                        "description": "Operação: 'run' para criar a partir de frase, 'remix' para clonar seed.",
-                        "enum": ["run", "remix"],
+                        "description": "Operação: 'run' para criar, 'remix' para clonar seed, 'showcase' para listar gêneros disponíveis.",
+                        "enum": ["run", "remix", "showcase"],
                     },
                     "phrase": {
                         "type": "string",

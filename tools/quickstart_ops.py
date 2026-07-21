@@ -23,21 +23,126 @@ _STOPWORDS = {
 # ATENÇÃO: só mapear palavras FORTEMENTE indicativas de gênero.
 # Palavras genéricas como "inimigo", "heroi", "fase" aparecem em todos os gêneros.
 _SYNONYMS: dict[str, str] = {
-    # Tiro — palavras exclusivas do gênero
+    # === Tiro / Shooter ===
     "atirar": "tiro", "atirando": "tiro", "tiro": "tiro", "tiros": "tiro",
     "nave": "tiro", "naves": "tiro", "navinha": "tiro",
-    "asteroide": "tiro", "asteroides": "tiro",
+    "asteroide": "asteroids", "asteroides": "asteroids",
     "bala": "tiro", "balas": "tiro", "disparo": "tiro", "disparos": "tiro",
     "shooter": "tiro", "top-down": "tiro", "topdown": "tiro",
-    "bullet": "tiro", "survivors": "tiro",
-    # Plataforma — palavras exclusivas do gênero
+    "bullet": "bullet_hell",
+    # === Plataforma ===
     "plataforma": "plataforma", "plataformas": "plataforma",
     "pular": "plataforma", "pulo": "plataforma", "pulos": "plataforma",
     "scroll": "plataforma", "lateral": "plataforma",
-    # Puzzle — palavras exclusivas do gênero
+    # === Puzzle / Lógica ===
     "puzzle": "puzzle", "quebra": "puzzle", "cabeca": "puzzle",
     "raciocinio": "puzzle", "logica": "puzzle", "logico": "puzzle",
     "enigmas": "puzzle", "enigma": "puzzle",
+    # === Tower Defense ===
+    "torre": "tower_defense", "torres": "tower_defense",
+    "defesa": "tower_defense", "defender": "tower_defense",
+    "posicionar": "tower_defense",
+    # === Vampire Survivors / Sobrevivência ===
+    "sobrevivencia": "survivors", "sobreviver": "survivors",
+    "automatico": "survivors", "evolucao": "survivors",
+    "survivors": "survivors",
+    # === Match-3 ===
+    "combinar": "match3", "combine": "match3",
+    "pecas": "match3", "coloridas": "match3", "troque": "match3",
+    # === RPG Turno ===
+    "rpg": "rpg", "turno": "rpg", "turnos": "rpg",
+    "batalhas": "rpg", "batalha": "rpg",
+    "explorar": "rpg", "explore": "rpg",
+    # === Roguelike / Dungeon ===
+    "dungeon": "roguelike", "calabouco": "roguelike",
+    "procedural": "roguelike", "aleatorias": "roguelike",
+    "loot": "roguelike", "roguelike": "roguelike",
+    # === Cartas / Deck Builder ===
+    "cartas": "cards", "carta": "cards", "deck": "cards",
+    "baralho": "cards", "estrategico": "cards",
+    # === Breakout / Tijolos ===
+    "tijolos": "breakout", "tijolo": "breakout",
+    "blocos": "breakout", "paddle": "breakout", "rebater": "breakout",
+    # === Metroidvania ===
+    "exploracao": "metroidvania", "habilidades": "metroidvania",
+    "mapa": "metroidvania", "interconectada": "metroidvania",
+    "metroidvania": "metroidvania",
+    # === Corrida ===
+    "corrida": "racing", "pista": "racing",
+    "acelere": "racing", "derrape": "racing",
+    "voltas": "racing", "carro": "racing", "carros": "racing",
+    # === Visual Novel / História ===
+    "historia": "visual_novel", "dialogos": "visual_novel",
+    "dialogo": "visual_novel", "escolhas": "visual_novel",
+    "narrativa": "visual_novel", "interativa": "visual_novel",
+    # === Idle / Clicker ===
+    "clique": "idle", "clicker": "idle",
+    "incremental": "idle", "automatize": "idle",
+    "recursos": "idle", "automaticos": "idle",
+    # === Física ===
+    "fisica": "physics", "gravidade": "physics",
+    "colisoes": "physics", "colisao": "physics",
+    # === Twin-Stick ===
+    "arena": "twin_stick", "waves": "twin_stick",
+    # === Snake / Cobrinha ===
+    "cobrinha": "snake", "cobra": "snake",
+    "crescer": "snake", "comida": "snake",
+    # === Bullet Hell ===
+    "esquiva": "bullet_hell", "projeteis": "bullet_hell",
+    "desviar": "bullet_hell", "desvie": "bullet_hell",
+    "padroes": "bullet_hell", "chefes": "bullet_hell",
+    # === Flappy Bird ===
+    "passarinho": "flappy", "passaro": "flappy",
+    "canos": "flappy", "cano": "flappy", "voar": "flappy",
+    # === Pong ===
+    "ping-pong": "pong", "pingpong": "pong",
+    "rebata": "pong", "adversario": "pong", "paddles": "pong",
+    # === Space Invaders ===
+    "aliens": "invaders", "alien": "invaders",
+    "invadiram": "invaders", "formacao": "invaders",
+    "eliminar": "invaders",
+    # === Endless Runner ===
+    "correr": "runner", "obstaculos": "runner",
+    "infinita": "runner", "infinito": "runner",
+    # === Tetris ===
+    "tetris": "tetris", "encaixar": "tetris",
+    "linhas": "tetris", "completar": "tetris",
+    "peca": "tetris",
+    # === Sokoban ===
+    "empurrar": "sokoban", "caixas": "sokoban",
+    "caixa": "sokoban", "sokoban": "sokoban",
+    # === Beat 'em Up ===
+    "luta": "beat_em_up", "socos": "beat_em_up",
+    "chutes": "beat_em_up", "derrotando": "beat_em_up",
+    "ondas": "beat_em_up",
+    # === Stealth 2D ===
+    "furtividade": "stealth", "esconda": "stealth",
+    "sombras": "stealth", "distracoes": "stealth",
+    "guardas": "stealth", "despercebido": "stealth",
+    # === Pac-Man ===
+    "labirinto": "pacman", "pacman": "pacman", "pac-man": "pacman",
+    "fantasmas": "pacman", "fantasma": "pacman",
+    "pontos": "pacman", "pilula": "pacman",
+    # === Doodle Jump ===
+    "subindo": "doodle", "molas": "doodle",
+    "jetpack": "doodle",
+    # === Campo Minado ===
+    "minado": "minesweeper", "minas": "minesweeper",
+    "mina": "minesweeper", "celulas": "minesweeper",
+    "deduzir": "minesweeper", "bandeira": "minesweeper",
+    # === Frogger ===
+    "sapo": "frogger", "atravessar": "frogger",
+    "rua": "frogger", "rio": "frogger",
+    "troncos": "frogger", "tronco": "frogger",
+    # === Memória ===
+    "memoria": "memory", "pares": "memory",
+    "vire": "memory", "memorizar": "memory",
+    # === Bubble Shooter ===
+    "bolhas": "bubble", "bolha": "bubble",
+    "estourar": "bubble", "grupos": "bubble",
+    # === Espaço (genérico → asteroids) ===
+    "espaco": "asteroids", "girar": "asteroids",
+    "gire": "asteroids", "gira": "asteroids",
 }
 
 
@@ -116,8 +221,53 @@ def _match_blueprint(phrase: str) -> tuple[dict | None, str, float]:
             best = data
             best_name = display
 
-    if best is not None and best_score > 0.0:
+    if best is not None and best_score >= 0.3:
         return best, best_name, best_score
+
+    # ── Fallback/Competição: match contra GAME_PATTERNS ──
+    # Se blueprints não cobrem bem o gênero (score < 0.3), ou se GAME_PATTERNS
+    # tem match melhor, usa o GAME_PATTERNS como fonte da verdade.
+    best_gp_score = 0.0
+    best_gp_name = ""
+    try:
+        from resources.game_patterns import GAME_PATTERNS
+        for gp_key, gp_data in GAME_PATTERNS.items():
+            phrase_pt = gp_data.get("quickstart_phrase_pt", "")
+            desc = gp_data.get("description", "")
+            gp_keywords = _extract_keywords(f"{gp_key} {phrase_pt} {desc}", apply_synonyms=True)
+            if not gp_keywords:
+                continue
+            matches = len(keywords & gp_keywords)
+            score = matches / len(keywords) if keywords else 0.0
+            if score > best_gp_score:
+                best_gp_score = score
+                best_gp_name = gp_key
+        # Usa GAME_PATTERNS se for melhor que blueprint OU se blueprint for fraco
+        if best_gp_name and best_gp_score > best_score:
+            gp_data = GAME_PATTERNS[best_gp_name]
+            synthetic_bp = {
+                "genre": best_gp_name,
+                "display_name_pt": gp_data.get("description", best_gp_name),
+                "description_pt": gp_data.get("description", ""),
+                "tags": [best_gp_name] + gp_data.get("combines_with", []),
+            }
+            return synthetic_bp, best_gp_name, best_gp_score
+    except Exception:
+        pass
+
+    if best is not None and best_score >= 0.3:
+        return best, best_name, best_score
+
+    # Último recurso: GAME_PATTERNS com threshold baixo
+    if best_gp_name and best_gp_score >= 0.10:
+        gp_data = GAME_PATTERNS[best_gp_name]
+        synthetic_bp = {
+            "genre": best_gp_name,
+            "display_name_pt": gp_data.get("description", best_gp_name),
+            "description_pt": gp_data.get("description", ""),
+            "tags": [best_gp_name] + gp_data.get("combines_with", []),
+        }
+        return synthetic_bp, best_gp_name, best_gp_score
 
     return None, "", 0.0
 
@@ -311,24 +461,56 @@ def _generate_script_placeholder(path: Path, name: str, purpose: str) -> None:
     path.write_text(content, encoding="utf-8")
 
 
+def _showcase() -> dict:
+    """Retorna a vitrine de generos com frases prontas em PT-BR.
+
+    Returns:
+        dict com status, total e lista de generos.
+    """
+    from resources.game_patterns import GAME_PATTERNS
+    genres = []
+    for key, pat in GAME_PATTERNS.items():
+        diff = pat.get("difficulty", {})
+        total_diff = diff.get("design", 0) + diff.get("implementation", 0) + diff.get("tuning", 0)
+        genres.append({
+            "genre": key,
+            "phrase": pat.get("quickstart_phrase_pt", pat["description"]),
+            "description": pat["description"],
+            "difficulty": diff,
+            "difficulty_total": total_diff,
+            "camera": pat["camera"],
+        })
+    # Ordena por dificuldade total (faceis primeiro)
+    genres.sort(key=lambda g: g["difficulty_total"])
+    return {
+        "status": "success",
+        "total": len(genres),
+        "genres": genres,
+        "tip": "Use quickstart_manage(op='run', phrase='<frase acima>') para criar um jogo.",
+    }
+
+
 def quickstart_manage(op: str = "run", phrase: str = "", project_name: str = "", seed: str = "breakout") -> dict:
     """Rollup quickstart_manage — cria projeto jogável a partir de uma frase.
 
     Args:
-        op: Operação ("run").
+        op: Operação ("run", "remix", "showcase").
         phrase: Frase descrevendo o jogo (ex: "jogo de plataforma com herói").
         project_name: Nome do projeto (opcional, gerado da frase se vazio).
 
     Returns:
         dict com status e project_path ou mensagem de erro.
     """
+    if op == "showcase":
+        return _showcase()
+
     if op == "remix":
         if not seed or not seed.strip():
             return {"status": "error", "message": "Parametro 'seed' obrigatorio para op='remix'. Ex: 'breakout'."}
         return _clone_seed(seed.strip(), project_name or seed.strip())
 
     if op != "run":
-        return {"status": "error", "message": f"Operacao '{op}' nao suportada. Use op='run'."}
+        return {"status": "error", "message": f"Operacao '{op}' nao suportada. Use op='run', 'remix' ou 'showcase'."}
 
     if not phrase or not phrase.strip():
         return {"status": "error", "message": "Parametro 'phrase' obrigatorio. Ex: 'jogo de plataforma'"}

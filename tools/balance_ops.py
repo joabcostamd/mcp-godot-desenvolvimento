@@ -368,7 +368,7 @@ def gdd_generate(
 
     Args:
         concept: Ideia do jogo em uma frase.
-        game_type: Tipo de jogo. 17 generos suportados via GAME_PATTERNS.
+        game_type: Tipo de jogo. 32 generos suportados via GAME_PATTERNS.
         target_platform: Plataforma alvo (pc, mobile, web).
         detail_level: Nivel de detalhe (brief = 1 pagina, full = documento completo).
 
