@@ -3,6 +3,70 @@
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo
 > para que o outro agente saiba o estado do projeto na próxima sessão.
 
+---
+
+## Último Handoff (AGENTE 01 — 2026-07-21 — Pesquisa ONDA 4)
+
+- **Data:** 2026-07-21
+- **De:** AGENTE 01 (Arquitetura & Core)
+- **Ação:** Pesquisa externa nível extremo — ONDA 4 (MUNDO) completa
+
+### O que foi pesquisado
+
+**7 domínios mapeados exaustivamente:**
+
+1. **Distribuição de addons** (AssetLib, itch.io, gd-plug, GitHub Releases, canais alternativos)
+   - AssetLib: 5.227 assets, 6 concorrentes MCP+Godot, submissão manual, sem API
+   - itch.io: 29.680 tools, open revenue sharing, pay what you want, analytics
+   - gd-plug: 296★, plugin manager com version freeze, requer Git
+
+2. **Monetização open source** (GitHub Sponsors, modelos de negócio, projeções)
+   - GitHub Sponsors: $40M+ distribuídos, tiers com benefícios NOMEADOS (nunca genéricos)
+   - Sidekiq, Homebrew, curl como referências de sucesso
+   - Projeção: $15–150/mês no primeiro ano
+
+3. **Steam publishing** (Steam Direct, requisitos, estratégia de lançamento)
+   - $100/fee, 30 dias espera, revisão Valve 1–5 dias
+   - Shardbreaker como prova de marketing mais forte que existe
+
+4. **Comunidade** (GitHub Discussions vs Discord, canais, moderação)
+   - GitHub Discussions PRIMEIRO (assíncrono, indexado, baixa manutenção)
+   - Discord DEPOIS (≥ 50 usuários ativos)
+
+5. **Nome e identidade** (análise do nome atual, padrões de naming, sugestões)
+   - `mcp-godot-desenvolvimento` = repositório, não produto
+   - Sugestão: "Saga" como nome de produto
+
+6. **Métricas** (CHAOSS, opensource.guide framework, dashboard proposto)
+   - Métrica principal: quantas pessoas terminam um jogo
+   - Proxies: projetos → PRONTO_PARA_LANCAR, depoimentos, fun_report
+
+7. **Oportunidades adicionais** (19 oportunidades mapeadas além do roadmap)
+   - Upload via itch.io API (butler), export Godot via MCP, CI/CD GitHub Actions
+   - Landing page, badge "Made with MCP", changelog automático, heatmap de erros
+
+### Ordem revisada da ONDA 4 (baseada na pesquisa)
+
+| # | Original | Revisada | Justificativa |
+|---|---|---|---|
+| 4.A | AssetLib | ✅ Concluído | Primeiro canal |
+| 4.B | itch.io | **4.D Nome** | Sem nome, não publica |
+| 4.C | Sponsors | **4.E Shardbreaker** | Sem prova, não tem marketing |
+| 4.D | Nome | **4.B itch.io** | Com nome e prova, publica |
+| 4.E | Shardbreaker | **4.F Comunidade** | Com produto, cresce comunidade |
+| 4.F | Comunidade | **4.C Sponsors** | Com comunidade, monetiza |
+| 4.G | Métricas | **4.G Métricas** | Paralelo, sempre relevante |
+
+### Documentos atualizados
+
+- `docs/PESQUISA_EXTERNA.md` — +Seção 7 (~500 linhas): ONDA 4 completa
+- `.github/instructions/fontes.instructions.md` — +Seção "Distribuição e Mundo (ONDA 4)"
+
+### Próximo passo
+
+- **4.D — Nome e identidade do produto** [SÊNIOR] — definir nome, logo, tagline, paleta de cores
+- Rode `/plan`.
+
 ## ⚠️ AVISO AO AGENTE 2 (2026-07-21)
 
 **ONDA 3 em andamento pelo Agente 1. Não interfira em:**

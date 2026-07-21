@@ -1,4 +1,12 @@
 {
+  "fatia_4.A": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "702de23",
+    "resultado": "Publicar na AssetLib. tools/publish_ops.py (NOVO, 289 linhas): rollup publish_manage(op=package|validate|metadata|preview). Empacota addons em .zip pronto para AssetLib. Valida plugin.cfg, LICENSE, versao semantica. Gera JSON de metadados. 3 addons cadastrados (mcp_addon, mcp_dock, mcp_runtime_bridge). 286 tools (+1). C1 PASS (0 breaking), C3 PASS. 18/18 testes pytest + regressao 127/129 (2 pre-existentes)."
+  },
   "onda_3_iniciada_por": "AGENTE 01 — 2026-07-21",
   "aviso_agente_2": "ONDA 3 em andamento pelo Agente 1. NAO INTERFIRA em: tools/playtest_ops.py, tools/personas.py, core/tool_definitions.py, server.py, tests/test_personas.py.",
   "fatia_3.B": {

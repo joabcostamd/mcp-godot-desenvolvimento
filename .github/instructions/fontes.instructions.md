@@ -101,6 +101,26 @@ Asset sem licenca clara e passivo juridico para quem publicar.
 
 ---
 
+## Distribuicao e Mundo (ONDA 4)
+
+| Tema | Onde |
+|---|---|
+| AssetLib oficial do Godot | godotengine.org/asset-library — submissao via formulario web |
+| itch.io para ferramentas | itch.io/docs/creators — getting started, payments, pricing |
+| gd-plug (plugin manager) | github.com/imjp94/gd-plug — 296★, MIT, version freeze |
+| GitHub Sponsors | github.com/sponsors — $40M+ distribuidos, 4.2K+ orgs |
+| Open source monetizacao | opensource.guide/getting-paid — modelos, casos reais |
+| Steam Direct (Steamworks) | partner.steamgames.com/steamdirect — $100/fee, 30 dias |
+| Metricas open source | opensource.guide/metrics — CHAOSS, discovery/usage/retention |
+| Comunidade open source | opensource.guide/best-practices — moderacao, governanca |
+| GitHub Discussions | docs.github.com/discussions — nativo, indexado pelo Google |
+| Naming de produto | Analise de 50+ dev tools — padroes: metafora, composto, sigla |
+
+**Regra:** ao publicar em qualquer plataforma, declare a licenca (MIT) e a versao do Godot testada.
+Nunca publique sem o Shardbreaker como prova — sem jogo publicado, nao tem credibilidade.
+
+---
+
 ## Design de jogo
 
 | Tema | Onde |

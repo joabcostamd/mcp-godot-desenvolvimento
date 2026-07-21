@@ -2110,6 +2110,7 @@ def _build_handlers() -> dict:
         "bootstrap_godot_mcp": _handle_bootstrap_godot_mcp,
         "quickstart_manage": _handle_quickstart_manage,
         "version_history_manage": _handle_version_history_manage,
+        "publish_manage": _handle_publish_manage,
         "godot_keep_alive": godot_keep_alive,
         # Fase 2: Runtime
         # Fase 3: Editor
@@ -3301,6 +3302,14 @@ def _handle_version_history_manage(args: dict) -> dict:
     # Constrói params a partir dos args (menos op)
     params = {k: v for k, v in args.items() if k != "op"}
     return version_history_manage(op=op, params=params)
+
+
+def _handle_publish_manage(args: dict) -> dict:
+    """Handler para publish_manage — publicação na AssetLib (Fatia 4.A)."""
+    from tools.publish_ops import publish_manage
+    op = args.get("op", "preview")
+    params = args.get("params", {})
+    return publish_manage(op=op, params=params)
 
 
 def _handle_generate_project_structure(args: dict) -> dict:

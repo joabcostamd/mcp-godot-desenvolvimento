@@ -4528,5 +4528,37 @@ def _raw_tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
+        # ── Publish (ONDA 4 — Fatia 4.A) ───────────────────────
+        Tool(
+            name="publish_manage",
+            description=(
+                "📦 Publicacao na AssetLib oficial do Godot (ONDA 4 — Fatia 4.A). "
+                "Empacota addons em .zip pronto para submissao na godotengine.org/asset-library. "
+                "Operacoes: package (gera .zip), validate (valida estrutura), "
+                "metadata (gera JSON de metadados), preview (pre-visualiza sem gerar .zip). "
+                "NAO faz upload automatico — o humano faz upload no site. "
+                "Exemplo: {\"op\": \"package\", \"params\": {\"addon\": \"mcp_addon\"}}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "op": {
+                        "type": "string",
+                        "description": "Operacao: 'package', 'validate', 'metadata' ou 'preview'.",
+                        "enum": ["package", "validate", "metadata", "preview"],
+                    },
+                    "params": {
+                        "type": "object",
+                        "description": (
+                            "Parametros da operacao. Campos comuns: "
+                            "addon (string, default 'mcp_addon'): qual addon empacotar. "
+                            "include_license (bool, default true): incluir LICENSE no .zip "
+                            "(apenas op='package')."
+                        ),
+                    },
+                },
+                "required": [],
+            },
+        ),
     ]
 
