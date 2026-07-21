@@ -581,6 +581,8 @@ PHASE_TOOLS_CORE = {
     "validate_project_refs", "find_usages",
     "create_entity", "create_entities",
     "project_progress",
+    # ── F4.1: Descoberta progressiva (padrão MCP 3 camadas) ──
+    "catalog_search", "describe_tool", "invoke_by_name",
 }
 
 
