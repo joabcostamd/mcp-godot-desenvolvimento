@@ -126,8 +126,11 @@ def create_manage_tool(
         inputSchema=input_schema,
     )
 
-    # ── Aplica hints (C4) ───────────────────────────────────────
-    # Pydantic model com extra='allow' aceita qualquer atributo via setattr.
+    # ── Aplica hints DENTRO de annotations (spec MCP) ───────────
+    from mcp.types import ToolAnnotations
+
+    # Constrói ToolAnnotations com os hints fornecidos + defaults seguros
+    ann_kwargs: dict = {}
     if tool_hints:
         for hint_name, hint_value in tool_hints.items():
             if hint_name not in _VALID_HINTS:
@@ -135,15 +138,29 @@ def create_manage_tool(
                     f"Hint inválido: '{hint_name}'. "
                     f"Hints válidos: {sorted(_VALID_HINTS)}"
                 )
-            setattr(tool_def, hint_name, hint_value)
+            ann_kwargs[hint_name] = hint_value
 
-    # ── Aplica título (C4) ──────────────────────────────────────
+    # Preenche defaults para hints não fornecidos (spec: readOnly=false, destructive=true)
+    for hint_name in _VALID_HINTS:
+        if hint_name not in ann_kwargs:
+            # Defaults spec: readOnlyHint=False, destructiveHint=True,
+            # idempotentHint=False, openWorldHint=True
+            if hint_name == "destructiveHint":
+                ann_kwargs[hint_name] = True
+            elif hint_name == "openWorldHint":
+                ann_kwargs[hint_name] = True
+            else:
+                ann_kwargs[hint_name] = False
+
+    tool_def.annotations = ToolAnnotations(**ann_kwargs)
+
+    # ── Aplica título ──────────────────────────────────────────
     if title:
         tool_def.title = title
 
-    # ── Aplica tags (C4) ────────────────────────────────────────
+    # ── Tags: armazenadas em meta (NÃO em annotations — campo fora da spec) ──
     if tags:
-        tool_def.annotations = {"tags": tags}
+        tool_def.meta = {"tags": tags}
 
     # ── Handler (delega para build_manage_handler) ──────────────
     def handler(args: dict) -> dict:
