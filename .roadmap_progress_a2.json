@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 45,
+    "implementados": 46,
     "lista": [
       {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido"},
       {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido"},
@@ -83,8 +83,9 @@
       {"id": 56, "nome": "tween_player", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Tween wrapper generico. play(node,prop,target,dur,delay). Suporta easing/transition/stop. 4 params, sinais started/finished. 6 testes. Fonte: Godot 4.7 ClassDB Tween."},
       {"id": 57, "nome": "chromatic_aberration", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + flicker RGB no modulate do parent. trigger(intensity,duration) com Tween oscilando R/G/B. Restaura original. 3 params, sinais started/finished. 7 testes. Fonte: Godot 4.7 ClassDB modulate/Tween."},
       {"id": 58, "nome": "vignette", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "CanvasLayer + ColorRect + GradientTexture2D radial. trigger(intensity,duration) com Tween. mouse_filter=IGNORE. 3 params, sinais started/finished. 6 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 60, "nome": "glitch", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + deslocamento horizontal aleatorio no parent Node2D. trigger(intensity,duration) com Tween rapido. Restaura position original. 4 params, sinais started/finished. 7 testes. Fonte: Godot 4.7 ClassDB."}
+      {"id": 60, "nome": "glitch", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + deslocamento horizontal aleatorio no parent Node2D. trigger(intensity,duration) com Tween rapido. Restaura position original. 4 params, sinais started/finished. 7 testes. Fonte: Godot 4.7 ClassDB."},
+      {"id": 42, "nome": "scene_transition", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "CanvasLayer + ColorRect fullscreen. transition_to(scene_path,dur) fade-out -> change_scene_to_file -> fade-in. 2 params, sinais started/finished. 5 testes. Fonte: Godot 4.7 ClassDB."}
     ]
   },
-  "proximo": "scene_transition — sem dependências. Grupo: Sistema."
+  "proximo": "audio_manager (#43) — sem dependências. Grupo: Sistema."
 }
