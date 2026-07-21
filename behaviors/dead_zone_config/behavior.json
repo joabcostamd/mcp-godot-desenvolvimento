@@ -1,0 +1,1 @@
+{"name":"dead_zone_config","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":["deadzone","zona_morta","joystick"],"en":["deadzone","joystick"]},"parameters":[{"name":"dead_zone","type":"float","range":{"min":0.0,"max":0.9},"default":0.2}],"signals":[{"name":"zone_calibrated","params":[]}],"genres":["generic"],"tags":["input"]}

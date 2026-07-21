@@ -1,0 +1,1 @@
+{"name":"steam_input","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":["steam","input","controle"],"en":["steam","input","controller"]},"parameters":[{"name":"action_set","type":"String","default":"default"}],"signals":[{"name":"action_set_changed","params":[{"name":"new_set","type":"String"}]}],"genres":["generic"],"tags":["input","steam"]}

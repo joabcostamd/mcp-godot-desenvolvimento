@@ -1,0 +1,1 @@
+[gd_scene load_steps=2 format=3 uid="uid://steam_input_v1"][ext_resource type="Script" path="res://behaviors/steam_input/steam_input.gd" id="1_si"][node name="SteamInput" type="Node"]script=ExtResource("1_si")

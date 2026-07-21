@@ -1,0 +1,1 @@
+{"name":"haptic_manager","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":["vibracao","haptic","controle"],"en":["haptic","vibration","rumble"]},"parameters":[{"name":"intensity","type":"float","range":{"min":0.0,"max":2.0},"default":1.0}],"signals":[{"name":"vibration_started","params":[]},{"name":"vibration_ended","params":[]}],"genres":["generic"],"tags":["input"]}
