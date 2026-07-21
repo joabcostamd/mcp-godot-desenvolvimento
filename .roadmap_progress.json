@@ -1,4 +1,28 @@
 {
+  "fatia_1.K": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "f19c744",
+    "resultado": "Modo remix: op=remix no quickstart_manage. _clone_seed() clona seeds/breakout.json: 3 cenas, behaviors, assets, project.godot. Seed invalida retorna erro claro. op=run regressao OK. C3 smoke_test: PASS."
+  },
+  "fatia_1.J": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "f0b45db",
+    "resultado": "quick_start: frase -> jogavel. quickstart_manage(op=run). Match por palavras-chave com sinonimos PT-BR. 4 auditorias, 9 bugs corrigidos. Projeto gerado com Player+Enemy+scripts. 277 tools. C3 smoke_test: PASS."
+  },
+  "fatia_1.I": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "ba9e841",
+    "resultado": "Tutoriais 1 a 4 em docs/tutorial/. 2 auditorias, 10 bugs corrigidos. Testes simulam chamadas reais. C3 smoke_test: PASS."
+  },
   "fatia_1.H": {
     "status": "concluida",
     "data": "2026-07-20",

@@ -3248,12 +3248,13 @@ def _handle_bootstrap_godot_mcp(args: dict) -> dict:
 
 
 def _handle_quickstart_manage(args: dict) -> dict:
-    """Handler para quickstart_manage — frase → projeto jogável."""
+    """Handler para quickstart_manage — frase → projeto jogável ou clone de seed."""
     from tools.quickstart_ops import quickstart_manage
     return quickstart_manage(
         op=args.get("op", "run"),
         phrase=args.get("phrase", ""),
         project_name=args.get("project_name", ""),
+        seed=args.get("seed", "breakout"),
     )
 
 
