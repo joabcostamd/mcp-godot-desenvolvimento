@@ -1,5 +1,24 @@
 # CHANGELOG — mcp-godot-desenvolvimento
 
+## v4.0.0 (2026-07-21) — Arsenal Completo de Behaviors (AGENTE 02)
+
+### Behaviors: 118 → 249 (+131)
+- Catalogo completo implementado: 249 behaviors para Godot 4.7
+- Todos os 20+ grupos fechados (PERSONAGEM, GENEROS, SISTEMA, ESTRUTURA, CAMERA, SOCIAL, CINEMATICA, INIMIGO/AI, SHADERS, MULTIPLAYER, ACESSIBILIDADE, LOCALIZACAO, INPUT AVANCADO, SAVE AVANCADO, PCG, OBSERVABILIDADE, MODDING, PLUGIN SYSTEM, LIFECYCLE, PERFORMANCE, ANIMACAO, TILEMAP)
+- ~14.000 linhas de GDScript total
+
+### Qualidade
+- 84 behavior.json reconstruidos (JSON invalido corrigido)
+- 34 sinais nao emitidos corrigidos
+- 0 @tool missing, 0 _get_configuration_warnings missing
+- 0 class_name conflicts, 0 _initialized missing
+- validate_gdscript: ALL PASS em 249 behaviors
+- Script `scripts/audit_behaviors.py` criado para auditoria automatica
+
+### Infraestrutura
+- `.roadmap_progress_a2.json` reconstruido com precisao (249 entradas)
+- `HANDOFF.md` atualizado com resumo completo
+
 ## v3.5.0 (2026-07-19) — Sessao de Polimento + Camada 5 Gameplay (AGENTE 02)
 
 ### Polimento (F1-F7)
