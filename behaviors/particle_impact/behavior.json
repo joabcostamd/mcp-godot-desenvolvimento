@@ -1,0 +1,24 @@
+{
+  "name": "particle_impact",
+  "description_pt": "Emissor de partículas de impacto (explosão, faísca, poeira). Instancia uma cena de GPUParticles2D/CpuParticles2D na posição desejada via emit(). One-shot com auto-limpeza após finished.",
+  "description_en": "Impact particle emitter (explosion, spark, dust). Instantiates a GPUParticles2D/CpuParticles2D scene at the desired position via emit(). One-shot with auto-cleanup after finished.",
+  "synonyms": {
+    "pt": ["particula", "explosao", "faisca", "poeira", "impacto", "explodir", "efeito"],
+    "en": ["particle", "explosion", "spark", "dust", "impact", "explode", "effect", "vfx"]
+  },
+  "parameters": [
+    {"name": "particle_scene", "type": "PackedScene", "description_pt": "Cena .tscn com GPUParticles2D ou CpuParticles2D. Se null, cria um GPUParticles2D padrão.", "default": null},
+    {"name": "default_count", "type": "int", "description_pt": "Quantidade padrão de instâncias por emit().", "range": {"min": 1, "max": 100}, "default": 10},
+    {"name": "spread", "type": "float", "description_pt": "Dispersão máxima em pixels a partir da posição de emit().", "range": {"min": 0.0, "max": 500.0}, "default": 30.0, "unit": "px"},
+    {"name": "auto_free", "type": "bool", "description_pt": "Se true, dá queue_free na partícula após o sinal finished.", "default": true}
+  ],
+  "signals": [
+    {"name": "particles_emitted", "description_pt": "Emitido após instanciar as partículas.", "params": [{"name": "count", "type": "int"}]}
+  ],
+  "dependencies": [],
+  "genres": ["generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["feedback", "particula", "vfx", "explosao", "impacto"]
+}

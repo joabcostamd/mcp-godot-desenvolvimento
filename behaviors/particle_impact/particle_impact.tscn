@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bparticleimpact001"]
+
+[ext_resource type="Script" path="res://behaviors/particle_impact/particle_impact.gd" id="1_pi"]
+
+[node name="ParticleImpact" type="Node2D"]
+script = ExtResource("1_pi")
+default_count = 10
+spread = 30.0
+auto_free = true
