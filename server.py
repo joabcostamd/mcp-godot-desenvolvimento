@@ -439,7 +439,7 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "behavior_tree_generate", "behavior_tree_list_templates",
         "generate_project_structure",
         "world_describe",
-        "render_get_settings",
+        "render_manage",
         "csharp_scaffold_project",
         "csharp_generate_script",
         # ── Movidos do PROTOTIPO (F5 prep) ──
@@ -503,9 +503,7 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "generate_voice",
         "find_unused_resources",
         "network_manage",
-        "render_set_antialiasing",
-        "render_set_scaling",
-        "render_set_quality",
+        "render_manage",
         # ── F5 prep: assets generation moved from PROTOTIPO ──
         "generate_game_art", "generate_game_art_flux",
         "apply_game_art",

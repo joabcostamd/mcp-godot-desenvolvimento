@@ -1024,6 +1024,26 @@ def _build_network_manage():
     )
 
 
+def _build_render_manage():
+    """render_manage: 4 operações de renderização (F5 consolidation)."""
+    from tools.render_ops import (
+        get_render_settings, set_antialiasing, set_scaling_mode, set_render_quality,
+    )
+    return create_manage_tool(
+        tool_name="render_manage",
+        description="Gerencia renderização: consultar configs, anti-aliasing, scaling e qualidade.",
+        ops={
+            "get": get_render_settings,
+            "set_aa": set_antialiasing,
+            "set_scale": set_scaling_mode,
+            "set_quality": set_render_quality,
+        },
+        tool_hints={"destructiveHint": True, "idempotentHint": False, "openWorldHint": False},
+        title="Gerenciar Renderização",
+        tags=["render", "gráfico", "qualidade"],
+    )
+
+
 # ── Builders registry ───────────────────────────────────────────────
 
 _ROLLUP_BUILDERS = [
@@ -1076,6 +1096,8 @@ _ROLLUP_BUILDERS = [
     _build_skeleton_manage,
     # F5: network consolidation
     _build_network_manage,
+    # F5: render consolidation
+    _build_render_manage,
 ]
 
 # Cache interno — garante que cada builder só executa UMA vez.
