@@ -1,0 +1,13 @@
+{
+  "date": "2026-07-20T23:59:00",
+  "project": "mcp-godot-agente02",
+  "version": "3.5.0",
+  "commit": "8d40eec",
+  "branch": "agente2/behaviors-onda2",
+  "files_changed": ["behaviors/hitbox/*", "behaviors/hurtbox/*", "behaviors/fire_rate/*", "behaviors/knockback/*", "behaviors/enemy_chase/*", "behaviors/state_machine/*", "behaviors/critical_hit/*", "behaviors/damage_over_time/*", "behaviors/area_damage/*", "behaviors/homing_projectile/*", ".roadmap_progress_a2.json", ".github/prompts/encerrar.prompt.md"],
+  "features": ["hitbox", "hurtbox", "fire_rate", "knockback", "enemy_chase", "state_machine", "critical_hit", "damage_over_time", "area_damage", "homing_projectile"],
+  "bugs_fixed": ["8 padrões de bug catalogados (P1-P8), +5 adicionais (P9-P13)"],
+  "pending": ["beam_laser (#19)", "hitscan (#20)", "enemy_patrol (#22)", "line_of_sight (#23)"],
+  "risks": ["12 behaviors aguardando merge do Agente 1 na main"],
+  "next_priorities": ["beam_laser (#19) — RayCast2D, dep: health"]
+}
