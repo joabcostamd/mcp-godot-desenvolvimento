@@ -1,0 +1,24 @@
+{
+  "name": "burnable",
+  "description_pt": "Torna o parent inflamável. Auto-detecta Health sibling. Ao receber dano do tipo 'fire', inicia ignição. Queima por burn_duration causando dano contínuo. Pode se espalhar para burnables próximos.",
+  "description_en": "Makes parent flammable. Auto-detects Health sibling. On 'fire' damage, starts ignition. Burns for burn_duration dealing continuous damage. Can spread to nearby burnables.",
+  "synonyms": {
+    "pt": ["inflamavel", "queimar", "fogo", "incendiar", "tocha"],
+    "en": ["flammable", "burn", "fire", "ignite", "torch"]
+  },
+  "parameters": [
+    {"name": "ignition_time", "type": "float", "description_pt": "Tempo até começar a queimar após receber dano de fogo.", "range": {"min": 0, "max": 5}, "default": 0.5, "unit": "s"},
+    {"name": "burn_duration", "type": "float", "description_pt": "Duração total da queima.", "range": {"min": 0.5, "max": 30}, "default": 5, "unit": "s"},
+    {"name": "burn_dps", "type": "float", "description_pt": "Dano por segundo durante a queima.", "range": {"min": 1, "max": 500}, "default": 10},
+    {"name": "spread_radius", "type": "float", "description_pt": "Raio de propagação do fogo (0 = não espalha).", "range": {"min": 0, "max": 500}, "default": 100, "unit": "px"}
+  ],
+  "signals": [
+    {"name": "ignited", "params": []},
+    {"name": "extinguished", "params": []},
+    {"name": "burned_out", "params": []}
+  ],
+  "dependencies": ["health"],
+  "genres": ["generic"],
+  "version": "1.0.0", "godot_version": "4.7",
+  "tags": ["fogo", "combate", "status"]
+}
