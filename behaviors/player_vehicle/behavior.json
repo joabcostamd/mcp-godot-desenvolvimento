@@ -1,0 +1,22 @@
+{
+  "name": "player_vehicle",
+  "description_pt": "Controle de veículo com física de derrapagem. Rotação via steering (ui_left/right) e impulso na direção frontal (ui_up/down). Drift reduz velocidade lateral. Ideal para naves, carros, barcos.",
+  "description_en": "Vehicle controller with drift physics. Rotation via steering (ui_left/right) and thrust in forward direction (ui_up/down). Drift reduces lateral speed. Ideal for spaceships, cars, boats.",
+  "synonyms": {
+    "pt": ["veiculo", "carro", "nave", "barco", "drift", "derrapagem"],
+    "en": ["vehicle", "car", "ship", "boat", "drift", "spaceship"]
+  },
+  "parameters": [
+    {"name": "acceleration", "type": "float", "description_pt": "Força de impulso (px/s²).", "range": {"min": 10.0, "max": 5000.0}, "default": 500.0, "unit": "px/s²"},
+    {"name": "max_speed", "type": "float", "description_pt": "Velocidade máxima (px/s).", "range": {"min": 10.0, "max": 3000.0}, "default": 400.0, "unit": "px/s"},
+    {"name": "turn_rate", "type": "float", "description_pt": "Velocidade de rotação (rad/s).", "range": {"min": 0.5, "max": 20.0}, "default": 3.0, "unit": "rad/s"},
+    {"name": "drift", "type": "float", "description_pt": "Fricção lateral (0 = derrapagem livre, 1 = sem derrapagem).", "range": {"min": 0.0, "max": 1.0}, "default": 0.9}
+  ],
+  "signals": [],
+  "dependencies": [],
+  "genres": ["topdown_shooter", "racing", "generic"],
+  "conflicts": ["player_controller", "player_topdown"],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["movimento", "veiculo", "drift", "nave"]
+}
