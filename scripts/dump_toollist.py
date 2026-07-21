@@ -6,6 +6,7 @@ Determinístico: ordenado por nome.
 
 import json
 import sys
+import io
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -43,7 +44,10 @@ def main():
     for phase in phases:
         all_data[phase] = dump_phase(phase)
     
-    print(json.dumps(all_data, indent=2, ensure_ascii=False, sort_keys=True))
+    import io
+    output = json.dumps(all_data, indent=2, ensure_ascii=False, sort_keys=True)
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    print(output)
 
 
 if __name__ == "__main__":

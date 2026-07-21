@@ -628,6 +628,12 @@ def _invalidate_tool_caches() -> None:
     global _TOOL_DEFS_CACHE, _HANDLERS_CACHE
     _TOOL_DEFS_CACHE = None
     _HANDLERS_CACHE = None
+    # ── F1.5: também invalida cache do registry ──
+    try:
+        from registry import invalidate_caches as _reg_invalidate
+        _reg_invalidate()
+    except Exception:
+        pass
 
 
 # ── PATCH 12: Runtime Bridge ─────────────────────────────────
