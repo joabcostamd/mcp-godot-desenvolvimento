@@ -342,6 +342,10 @@ def advance_phase(force: bool = False, reason: str = "") -> dict:
     """Avança automaticamente para a PRÓXIMA fase da sequência.
 
     Tool MCP: advance_phase
+
+    A partir da ONDA 3 (Fatia 3.E), verifica o gate dos primeiros
+    5 minutos antes de avancar alem do PROTOTIPO. Use force=True
+    para pular a verificacao.
     """
     phase = _phase_state.current_phase
     try:
@@ -357,7 +361,76 @@ def advance_phase(force: bool = False, reason: str = "") -> dict:
         }
 
     next_phase = PHASE_ORDER[current_idx + 1]
+
+    # ── Gate dos primeiros 5 minutos (Fatia 3.E) ─────────────────
+    # Bloqueia avanco alem do PROTOTIPO se o gate nao passou
+    _GATE_PHASES = {"PROTOTIPO", "CONTEUDO"}
+    if not force and phase in _GATE_PHASES:
+        gate_state = _check_first_5min_gate()
+        if gate_state == "failed":
+            return {
+                "status": "error",
+                "message": (
+                    "🚫 Gate dos primeiros 5 minutos REPROVADO. "
+                    "O jogo precisa passar no teste de primeira impressao "
+                    "antes de avancar de fase. Rode "
+                    "playtest_manage op=gate_first_5min para diagnostico, "
+                    "ou use force=True para pular."
+                ),
+                "gate": "first_5min",
+                "current_phase": phase,
+            }
+        elif gate_state == "not_run":
+            return {
+                "status": "error",
+                "message": (
+                    "⚠️ Gate dos primeiros 5 minutos NAO EXECUTADO. "
+                    "Rode playtest_manage op=gate_first_5min com o jogo "
+                    "aberto (F5) para validar a primeira impressao. "
+                    "Ou use force=True para pular."
+                ),
+                "gate": "first_5min",
+                "current_phase": phase,
+            }
+
     return _phase_state.advance(next_phase, force=force, reason=reason)
+
+
+def _check_first_5min_gate() -> str:
+    """Verifica estado do gate dos primeiros 5 minutos.
+
+    Returns:
+        'passed' — gate passou
+        'failed' — gate falhou
+        'not_run' — gate nunca foi executado
+    """
+    try:
+        from tools.project_ops import _get_active_project
+        proj = _get_active_project()
+        gate_file = proj / ".mcp_gate_first_5min.json"
+        if not gate_file.exists():
+            return "not_run"
+        import json
+        data = json.loads(gate_file.read_text(encoding="utf-8"))
+        return data.get("status", "not_run")
+    except Exception:
+        return "not_run"
+
+
+def _save_first_5min_gate(status: str, details: dict | None = None) -> None:
+    """Salva estado do gate dos primeiros 5 minutos no projeto."""
+    try:
+        from tools.project_ops import _get_active_project
+        import json
+        proj = _get_active_project()
+        gate_file = proj / ".mcp_gate_first_5min.json"
+        gate_file.write_text(json.dumps({
+            "status": status,
+            "timestamp": __import__("datetime").datetime.now().isoformat(),
+            "details": details or {},
+        }, indent=2, ensure_ascii=False), encoding="utf-8")
+    except Exception:
+        pass
 
 
 def get_phase_history() -> dict:

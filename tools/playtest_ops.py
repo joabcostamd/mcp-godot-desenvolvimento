@@ -1643,12 +1643,134 @@ def _op_agent_run(params: dict) -> dict:
     }
 
 
+# ── Operacao gate_first_5min (Fatia 3.E) ────────────────────────────
+
+def _op_gate_first_5min(params: dict) -> dict:  # noqa: ARG001
+    """Gate dos primeiros 5 minutos: bloqueia avanco de fase se o jogo
+    falhar no teste de primeira impressao.
+
+    Roda persona 'apressado' por 30s e verifica 3 condicoes:
+      1. ENTENDEU: usou >= 2 acoes distintas
+      2. VITORIA: completou ou teve progresso
+      3. NAO MORREU: input_errors < 3
+
+    Se as 3 passarem, o gate libera. Se falhar, retorna diagnostico
+    e bloqueia avanco de fase.
+
+    Returns:
+        {"status": "pass", ...} ou {"status": "fail", "diagnosis": [...]}
+    """
+    if not _is_runtime_bridge_available():
+        return {
+            "status": "error",
+            "message": "Jogo nao esta rodando. Abra o Godot e rode (F5).",
+        }
+
+    # Roda persona apressado por 30s
+    persona_result = _op_persona_run({
+        "persona": "apressado",
+        "duration": 30,
+    })
+
+    if persona_result.get("status") == "error":
+        return {
+            "status": "fail",
+            "message": "Gate nao pode ser executado: persona_run falhou.",
+            "persona_error": persona_result,
+        }
+
+    result = persona_result.get("result", {})
+    events = persona_result.get("events", [])
+
+    # Condicao 1: ENTENDEU — usou acoes variadas?
+    actions_used: set[str] = set()
+    for e in events:
+        if e.get("type") == "input_error":
+            actions_used.add(e.get("action", ""))
+
+    # Tambem considera os inputs da persona
+    from tools.personas import get_persona
+    persona = get_persona("apressado")
+    if persona:
+        for step in persona.get("inputs", []):
+            actions_used.add(step.get("action", ""))
+
+    understands = len(actions_used) >= 2
+
+    # Condicao 2: VITORIA — completou ou fez progresso?
+    completed = result.get("completed", False)
+    has_progress = result.get("total_inputs", 0) > 3  # enviou inputs = interagiu
+
+    victory = completed or (has_progress and not result.get("timeout", True))
+
+    # Condicao 3: NAO MORREU — poucos erros de input
+    input_errors = result.get("input_errors", 0)
+    not_dying = input_errors < 3
+
+    # Diagnostico
+    diagnosis: list[str] = []
+    if not understands:
+        diagnosis.append(
+            "NAO ENTENDEU: a pessoa ficou presa no menu ou nao descobriu os controles. "
+            "Adicione tutorial ou instrucoes visuais nos primeiros segundos."
+        )
+    if not victory:
+        diagnosis.append(
+            "SEM VITORIA: a pessoa nao teve nenhuma conquista nos 5 minutos. "
+            "Garanta uma vitoria pequena logo no inicio (ex: primeiro item, primeira porta)."
+        )
+    if not not_dying:
+        diagnosis.append(
+            "MORREU REPETIDAMENTE: a pessoa morreu muito antes de entender o jogo. "
+            "Reduza a dificuldade inicial ou adicione invencibilidade temporaria."
+        )
+
+    passed = understands and victory and not_dying
+
+    # Salva estado do gate para o advance_phase verificar
+    from tools.phase_ops import _save_first_5min_gate
+    _save_first_5min_gate("passed" if passed else "failed", {
+        "understands": understands,
+        "victory": victory,
+        "not_dying": not_dying,
+    })
+
+    return {
+        "status": "pass" if passed else "fail",
+        "gate": "first_5min",
+        "conditions": {
+            "understands": understands,
+            "victory": victory,
+            "not_dying": not_dying,
+        },
+        "diagnosis": diagnosis,
+        "persona_result": {
+            "completed": completed,
+            "total_time_s": result.get("total_time_s", 0),
+            "total_inputs": result.get("total_inputs", 0),
+            "input_errors": input_errors,
+            "actions_used": sorted(actions_used),
+        },
+        "message": (
+            "✅ Gate dos 5 minutos: PASSOU. O jogo esta pronto para avancar de fase."
+            if passed else
+            f"❌ Gate dos 5 minutos: FALHOU ({len(diagnosis)} problemas). "
+            "Corrija os problemas antes de avancar de fase."
+        ),
+        "note": (
+            "Este gate e a maior alavanca de retencao que existe. "
+            "A curva inicial decide se o jogador continua ou abandona."
+        ),
+    }
+
+
 _PLAYTEST_OPS = {
     "smoke": _op_playtest_smoke,
     "persona_run": _op_persona_run,
     "agent_observe": _op_agent_observe,
     "agent_step": _op_agent_step,
     "agent_run": _op_agent_run,
+    "gate_first_5min": _op_gate_first_5min,
 }
 
 

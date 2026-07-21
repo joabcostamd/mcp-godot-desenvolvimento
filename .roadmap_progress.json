@@ -26,6 +26,14 @@
     "checkpoint": "93770cb",
     "resultado": "fun_report: relatorio de qualidade com 4 sinais. tools/fun_report_ops.py (NOVO, 360 linhas): rollup fun_report_manage(op=generate). 4 sinais: taxa de aprovacao, tentativas, estrategia, escalada. 4 modos de falha nomeados: sem escalada, estrategia degenerada, recompensa distante, pico escondido. Recomendacoes acionaveis em portugues. 280 tools (+1). C1 PASS, C3 PASS. 12/12 testes pytest."
   },
+  "fatia_3.E": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "e20f2c4",
+    "resultado": "Gate dos primeiros 5 minutos. playtest_manage op=gate_first_5min: roda persona apressado 30s, verifica 3 condicoes (entendeu/vitoria/nao-morreu). Integrado com advance_phase em phase_ops.py: bloqueia avanco alem de PROTOTIPO se gate falhou. Estado salvo em .mcp_gate_first_5min.json. 280 tools. C1 PASS, C3 PASS. 33/33 testes."
+  },
   "fatia_3.A": {
     "status": "concluida",
     "data": "2026-07-21",

@@ -123,3 +123,10 @@ class TestAgentRun:
         """Sem jogo, mesmo agent_run deve retornar erro claro."""
         r = playtest_manage(op="agent_run", params={"steps": 3})
         assert r["status"] == "error"
+
+
+class TestGateFirst5min:
+    def test_gate_without_game(self):
+        r = playtest_manage(op="gate_first_5min")
+        assert r["status"] == "error"
+        assert "rodando" in r["message"].lower()
