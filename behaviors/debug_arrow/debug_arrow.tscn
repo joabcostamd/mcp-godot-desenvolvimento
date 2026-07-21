@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdebugarrow000001"]
+[ext_resource type="Script" path="res://behaviors/debug_arrow/debug_arrow.gd" id="1_da"]
+[node name="DebugArrow" type="Node2D"]
+script = ExtResource("1_da")

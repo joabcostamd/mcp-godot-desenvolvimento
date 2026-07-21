@@ -41,8 +41,14 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 93,
+    "implementados": 99,
     "lista": [
+      {"id": 126, "nome": "crafting", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + recipes com ingredients. craft/can_craft/unlock. Integra Inventory."},
+      {"id": 125, "nome": "shop", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + itens com preco. buy/sell. Integra Inventory + Currency."},
+      {"id": 136, "nome": "debug_console", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + RichTextLabel + LineEdit. Ctrl+Enter toggle. register_command."},
+      {"id": 135, "nome": "debug_arrow", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node2D + _draw seta. Color/length/direction com ponta."},
+      {"id": 108, "nome": "blackboard", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + variaveis compartilhadas. set_var/get_var + triggers."},
+      {"id": 106, "nome": "storage", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + ConfigFile persistence. set_data/get_data/erase. auto_save."},
       {"id": 107, "nome": "event_bus", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + pub/sub global. register/fire/unregister/clear. 2 testes."},
       {"id": 137, "nome": "fps_counter", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + Label FPS. min/max/avg com update_interval. 1 teste."},
       {"id": 134, "nome": "debug_position", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node2D + _draw cruz/circulo. Color/size/show_label. 1 teste."},

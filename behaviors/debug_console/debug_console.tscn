@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdebugconsole0001"]
+[ext_resource type="Script" path="res://behaviors/debug_console/debug_console.gd" id="1_dc"]
+[node name="DebugConsole" type="Control"]
+script = ExtResource("1_dc")
+layout_mode=3; anchors_preset=0
