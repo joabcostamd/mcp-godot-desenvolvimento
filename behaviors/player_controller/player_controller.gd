@@ -108,3 +108,13 @@ func is_on_ground() -> bool:
 	if parent is CharacterBody2D:
 		return parent.is_on_floor()
 	return false
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	var p := get_parent()
+	if not p is CharacterBody2D:
+		w.append("Parent must be CharacterBody2D for move_and_slide().")
+	if kill_plane_y < 0.0:
+		w.append("kill_plane_y is negative — player will never die below screen.")
+	return w

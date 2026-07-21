@@ -109,3 +109,10 @@ func get_jumps_used() -> int:
 ## Retorna quantos pulos ainda restam.
 func get_jumps_remaining() -> int:
 	return maxi(0, jump_count - _jumps_used)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	if jump_count <= 1:
+		w.append("jump_count is 1 — no extra air jumps. Consider removing DoubleJump.")
+	return w

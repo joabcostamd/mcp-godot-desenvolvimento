@@ -138,3 +138,15 @@ func get_progress_ratio() -> float:
 		return 0.0
 	var length := _get_curve_length(_path.curve)
 	return _progress / length if length > 0.0 else 0.0
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	var has_path := false
+	for c in get_children():
+		if c is Path2D:
+			has_path = true
+			break
+	if not has_path:
+		w.append("No Path2D child found — platform will not move.")
+	return w

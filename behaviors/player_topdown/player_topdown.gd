@@ -98,3 +98,11 @@ func set_velocity(v: Vector2) -> void:
 	var parent := get_parent()
 	if parent is CharacterBody2D:
 		parent.velocity = _current_velocity
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	var p := get_parent()
+	if not p is CharacterBody2D:
+		w.append("Parent must be CharacterBody2D for velocity to be applied.")
+	return w

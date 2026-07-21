@@ -135,3 +135,10 @@ func cancel_dash() -> void:
 	if _dashing and _dash_timer:
 		_dash_timer.stop()
 	_dashing = false
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	if cooldown <= 0.0:
+		w.append("cooldown is 0 — dash can be spammed with no limit.")
+	return w

@@ -86,3 +86,13 @@ func get_velocity() -> Vector2:
 	if parent is CharacterBody2D:
 		return parent.velocity
 	return Vector2.ZERO
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	var p := get_parent()
+	if not p is CharacterBody2D:
+		w.append("Parent must be CharacterBody2D for move_and_slide().")
+	if drift <= 0.0:
+		w.append("drift is 0 — total lateral slide (ice/space physics).")
+	return w

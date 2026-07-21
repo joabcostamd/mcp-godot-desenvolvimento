@@ -131,3 +131,13 @@ func is_wall_sliding() -> bool:
 ## Retorna a direção da parede (-1=esquerda, 1=direita, 0=nenhuma).
 func get_wall_direction() -> int:
 	return _wall_dir
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	var p := get_parent()
+	if not p is CharacterBody2D:
+		w.append("Parent must be CharacterBody2D for wall slide physics.")
+	if not _ray_left or not _ray_right:
+		w.append("RayCast2D children not created yet — wall detection may fail.")
+	return w

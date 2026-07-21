@@ -123,3 +123,13 @@ func get_grid_position() -> Vector2:
 		return Vector2.ZERO
 	var p := (parent as Node2D).position
 	return Vector2(round(p.x / grid_size.x), round(p.y / grid_size.y))
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var w: PackedStringArray = []
+	var p := get_parent()
+	if not p is Node2D:
+		w.append("Parent must be Node2D for grid movement to work.")
+	if grid_size.x < 8.0 or grid_size.y < 8.0:
+		w.append("grid_size is very small — movement may look choppy.")
+	return w
