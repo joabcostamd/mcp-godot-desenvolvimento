@@ -161,6 +161,54 @@ def _analyze_escalation(smoke_result: dict | None) -> dict:
     }
 
 
+# ── 5º Sinal: Densidade de eventos (vale de tedio) ─────────────────
+
+def _analyze_event_density(persona_results: list[dict], agent_result: dict | None) -> dict:
+    """Detecta 'vale de tedio': periodos sem eventos no jogo.
+
+    Se nada acontece por periodos longos, o jogador se afasta em silencio.
+    Mais perigoso que o pico de dificuldade porque nao gera reclamacao.
+    """
+    total_time = 0
+    total_events = 0
+
+    for p in persona_results:
+        t = p.get("result", {}).get("total_time_s", 0)
+        inputs = p.get("result", {}).get("total_inputs", 0)
+        total_time += t
+        total_events += inputs
+
+    if agent_result:
+        total_time += agent_result.get("result", {}).get("total_time_s", 0) if isinstance(agent_result, dict) else 0
+
+    if total_time == 0:
+        return {"status": "no_data", "events_per_minute": 0}
+
+    minutes = total_time / 60
+    events_per_minute = round(total_events / max(minutes, 0.1), 1)
+
+    if events_per_minute < 2:
+        status = "valley"
+        detail = (
+            f"Apenas {events_per_minute} eventos/minuto — "
+            "longos periodos sem acao. O jogador pode se afastar por tedio."
+        )
+    elif events_per_minute < 5:
+        status = "low"
+        detail = f"Baixa densidade: {events_per_minute} eventos/minuto."
+    else:
+        status = "healthy"
+        detail = f"Densidade saudavel: {events_per_minute} eventos/minuto."
+
+    return {
+        "events_per_minute": events_per_minute,
+        "total_events": total_events,
+        "total_time_s": total_time,
+        "status": status,
+        "detail": detail,
+    }
+
+
 # ── Diagnostico: sinais → modo de falha ────────────────────────────
 
 def _diagnose_failure_mode(
@@ -168,9 +216,19 @@ def _diagnose_failure_mode(
     attempts: dict,
     strategy: dict,
     escalation: dict,
+    density: dict | None = None,
 ) -> list[dict]:
-    """Mapeia os 4 sinais para modos de falha nomeados."""
+    """Mapeia os 4+1 sinais para modos de falha nomeados."""
     failures: list[dict] = []
+
+    # 0. Vale de tedio (5º sinal — G3)
+    if density and density.get("status") == "valley":
+        failures.append({
+            "mode": "vale_de_tedio",
+            "label": "Vale de tédio",
+            "detail": density.get("detail", "Periodos longos sem acao detectados."),
+            "severity": "warning",
+        })
 
     # 1. Sem escalada
     if escalation.get("status") == "flat":
@@ -283,14 +341,15 @@ def _op_generate(params: dict) -> dict:  # noqa: ARG001
     if not isinstance(personas, list):
         personas = []
 
-    # Calcula os 4 sinais
+    # Calcula os 4+1 sinais
     approval = _analyze_approval(personas, agent)
     attempts = _analyze_attempts(personas)
     strategy = _analyze_strategy(personas, agent)
     escalation = _analyze_escalation(smoke)
+    density = _analyze_event_density(personas, agent)  # 5º sinal (G3)
 
     # Diagnostico
-    failures = _diagnose_failure_mode(approval, attempts, strategy, escalation)
+    failures = _diagnose_failure_mode(approval, attempts, strategy, escalation, density)
     recommendations = _generate_recommendations(failures)
 
     # Determina status geral
@@ -358,6 +417,7 @@ def _op_generate(params: dict) -> dict:  # noqa: ARG001
             "attempts": attempts,
             "strategy": strategy,
             "escalation": escalation,
+            "event_density": density,
         },
         "failures": failures,
         "failure_count": len(failures),
