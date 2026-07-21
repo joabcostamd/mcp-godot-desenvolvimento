@@ -2248,6 +2248,7 @@ def _build_handlers() -> dict:
         "teacher_manage": _handle_teacher_manage,
         "scope_manage": _handle_scope_manage,
         "reviewer_manage": _handle_reviewer_manage,
+        "polish_manage": _handle_polish_manage,
         # Playtest Onda 1 (watch_state, godot_exec, effect_probe)
         "watch_state_start": watch_state_start,
         "watch_state_collect": watch_state_collect,
@@ -4111,6 +4112,14 @@ def _handle_reviewer_manage(args: dict) -> dict:
     op = args.get("op", "status")
     params = {k: v for k, v in args.items() if k != "op"}
     return reviewer_manage(op=op, params=params)
+
+
+def _handle_polish_manage(args: dict) -> dict:
+    """Handler para polish_manage — polimento e qualidade (G5-G10)."""
+    from tools.polish_ops import polish_manage
+    op = args.get("op", "test_report")
+    params = {k: v for k, v in args.items() if k != "op"}
+    return polish_manage(op=op, params=params)
 
 
 # ── Auto-Config Handlers (Fase 2C) ──────────────────────────────────

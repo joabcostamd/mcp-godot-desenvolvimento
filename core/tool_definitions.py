@@ -2538,6 +2538,30 @@ def _raw_tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
+        # ── Polish Ops (Gaps G5-G10) ────────────────────────────
+        Tool(
+            name="polish_manage",
+            description=(
+                "✨ Polimento e qualidade final (Gaps G5-G10). "
+                "version_diff: compara qualidade entre versoes. "
+                "record_gif: captura frames para GIF. "
+                "accessibility: relatorio de acessibilidade. "
+                "productivity: metricas de produtividade. "
+                "test_report: relatorio de teste em markdown. "
+                "visual_diff: compara screenshots entre versoes."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "op": {"type": "string", "enum": ["version_diff", "record_gif", "accessibility", "productivity", "test_report", "visual_diff"]},
+                    "version_id_a": {"type": "string"},
+                    "version_id_b": {"type": "string"},
+                    "duration": {"type": "integer"},
+                    "fps": {"type": "integer"},
+                },
+                "required": [],
+            },
+        ),
         # ── Playtest Onda 1 (watch_state, godot_exec, effect_probe) ──
         Tool(
             name="watch_state_start",
