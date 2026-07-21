@@ -281,6 +281,90 @@ def print_final_box(project_dir: Path):
     print()
 
 
+def copy_prompts_to_project(project_dir: Path) -> dict:
+    """Copia os prompts do MCP (.github/prompts/*.prompt.md) para o projeto.
+
+    Os prompts viram comandos de barra (/plan, /act, etc) no VS Code
+    quando o usuario abre a pasta do projeto.
+
+    Idempotente: nao sobrescreve prompts que o usuario ja modificou.
+    Preserva prompts pessoais que nao sao do MCP.
+
+    Args:
+        project_dir: Raiz do projeto Godot.
+
+    Returns:
+        dict com 'total' (prompts disponiveis), 'new' (copiados agora),
+        'skipped' (preservados do usuario), 'unchanged' (ja sincronizados).
+    """
+    result = {"total": 0, "new": 0, "skipped": 0, "unchanged": 0}
+    src = ROOT / ".github" / "prompts"
+    if not src.is_dir():
+        return result
+
+    dst = project_dir / ".github" / "prompts"
+    dst.mkdir(parents=True, exist_ok=True)
+
+    for f in src.glob("*.prompt.md"):
+        result["total"] += 1
+        dest_file = dst / f.name
+        if dest_file.exists():
+            try:
+                existing = dest_file.read_text(encoding="utf-8")
+                ours = f.read_text(encoding="utf-8")
+                if existing.strip() == ours.strip():
+                    result["unchanged"] += 1
+                    continue
+                # Usuario modificou — preservar a versao dele
+                result["skipped"] += 1
+                continue
+            except (OSError, UnicodeDecodeError):
+                # Arquivo ilegivel — sobrescrever
+                pass
+        try:
+            shutil.copy2(f, dest_file)
+            result["new"] += 1
+        except OSError:
+            pass  # fail-open: permissao, disco cheio, etc
+
+    return result
+
+
+def print_guided_mode(project_dir: Path, skills_count: int):
+    """Modo guiado conversacional: mostra os comandos disponíveis após instalação."""
+    print()
+    print("=" * 60)
+    print("  [OK] INSTALACAO CONCLUIDA!")
+    pdir = str(project_dir)
+    if len(pdir) > 42:
+        pdir = "..." + pdir[-39:]
+    print(f"  Projeto: {pdir}")
+    print(f"  Comandos instalados: {skills_count}")
+    print("=" * 60)
+    print()
+    if skills_count > 0:
+        print("  COMANDOS DISPONIVEIS (digite no chat do Copilot):")
+        print()
+        print("  /plan       ->  Planejar a proxima etapa do seu jogo")
+        print("  /act        ->  Executar o plano aprovado")
+        print("  /handoff    ->  Salvar o progresso da sessao")
+        print("  /manual     ->  Ver o manual completo de comandos")
+        print("  /encerrar   ->  Encerrar a sessao e salvar tudo")
+        print()
+    print("  COMO COMECAR:")
+    print("  1.  Digite /plan no chat do Copilot")
+    print("  2.  A IA vai sugerir a proxima etapa do jogo")
+    print("  3.  Voce aprova (ou nao) e a IA executa")
+    print()
+    print("  DICA: Tambem pode digitar direto, por exemplo:")
+    print('      "crie um jogo de plataforma com heroi e inimigos"')
+    print()
+
+
+# print_final_box mantida para compatibilidade com scripts antigos.
+# O fluxo principal usa print_guided_mode().
+
+
 # ══════════════════════════════════════════════════════════════════════
 # Utilidades
 # ══════════════════════════════════════════════════════════════════════
@@ -997,9 +1081,29 @@ def main():
         print_step(11, "Verificação de conexão", True, "pulada (--no-verify)")
 
     # ══════════════════════════════════════════════════════════════════
+    # ETAPA 9: Copiar skills (prompts) para o projeto
+    # ══════════════════════════════════════════════════════════════════
+    skills = copy_prompts_to_project(project_dir)
+    skills_total = skills["total"]
+    if skills["new"] > 0:
+        print_step(12, "Comandos instalados", True,
+                   f"{skills['new']} novo(s) copiado(s) para .github/prompts/ "
+                   f"(total: {skills_total})")
+    elif skills["unchanged"] == skills_total and skills_total > 0:
+        print_step(12, "Comandos instalados", True,
+                   f"{skills_total} comandos ja estavam sincronizados")
+    elif skills["skipped"] > 0:
+        print_step(12, "Comandos instalados", True,
+                   f"{skills['skipped']} comando(s) do usuario preservado(s), "
+                   f"{skills['new']} novo(s)")
+    else:
+        print_step(12, "Comandos instalados", True,
+                   "pasta .github/prompts/ nao encontrada na origem")
+
+    # ══════════════════════════════════════════════════════════════════
     # Pronto!
     # ══════════════════════════════════════════════════════════════════
-    print_final_box(project_dir)
+    print_guided_mode(project_dir, skills_total)
 
     if not args.silent:
         try:

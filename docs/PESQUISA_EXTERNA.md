@@ -13,6 +13,7 @@
 |---|---|---|---|
 | 2026-07-20 | MCP Spec, Godot Plugins, GDScript Style | 1.E (Dock v1) | Protocolo, plugins, style guide |
 | 2026-07-20 | Vitrine de gêneros, MCP Prompts/Resources, Competidores MCP+Godot | 1.L (Vitrine de gêneros) | Game patterns, UX de showcase, landscape competitivo |
+| 2026-07-20 | VS Code Prompts, Agent Skills, Onboarding guiado | 1.M (Skills exportáveis) | .prompt.md vs SKILL.md, MCP prompts spec, UX de onboarding |
 
 ---
 
@@ -227,6 +228,111 @@ Do Godot Docs "Project Organization":
 ### 4.5 Recomendações para implementação
 
 | # | Recomendação | Custo | Impacto | Prioridade |
+|---|---|---|---|---|
+
+---
+
+## 5. VS Code Prompts, Agent Skills & Onboarding Guiado (Pesquisa 2026-07-20 — Fatia 1.M)
+
+> **Fontes:** VS Code Docs (Prompt Files, Agent Skills, Agent Customizations), MCP Spec 2025-11-25 (Prompts), agentskills.io
+
+### 5.1 VS Code Prompt Files (`.prompt.md`)
+
+Formato oficial do VS Code para comandos de barra (`/`):
+
+```yaml
+---
+description: Descrição curta do que o prompt faz
+name: nome-do-comando     # opcional, usa nome do arquivo se omitido
+argument-hint: [arg1]     # hint no campo de input
+agent: ask|agent|plan     # qual agente usar
+model:                    # modelo opcional
+tools:                    # lista de tools/tool sets
+---
+# Corpo do prompt em Markdown
+```
+
+**Localização:**
+- Workspace: `.github/prompts/` (descoberto automaticamente pelo VS Code)
+- User profile: gerenciado pelo Settings Sync (NÃO copiar manualmente)
+
+**Correção crítica ao plano original:** O destino NÃO é `%APPDATA%/Code/User/prompts/`. O VS Code descobre prompts do workspace automaticamente da pasta `.github/prompts/`. O `init.py` deve copiar para `<projeto_godot>/.github/prompts/`, não para o perfil do usuário.
+
+### 5.2 Agent Skills (`SKILL.md`) — Padrão Aberto
+
+Formato mais recente e portável (agentskills.io):
+
+```yaml
+---
+name: skill-name          # lowercase, hífens, max 64 chars
+description: O que faz e quando usar (max 1024 chars)
+argument-hint: [opcional]
+user-invocable: true      # aparece no menu /
+disable-model-invocation: false  # agente pode carregar automaticamente
+context: inline|fork      # fork = executa em subagente isolado
+---
+# Instruções, scripts, exemplos
+```
+
+**Localização:**
+- `.github/skills/`, `.claude/skills/`, `.agents/skills/` (workspace)
+- `~/.copilot/skills/` (user profile)
+
+**Carregamento progressivo (3 níveis):**
+1. Discovery: lê `name` + `description` do frontmatter
+2. Instructions: carrega corpo do `SKILL.md` no contexto
+3. Resources: acessa arquivos adicionais só quando referenciados
+
+### 5.3 Prompt Files vs Agent Skills — Decisão para 1.M
+
+| Dimensão | `.prompt.md` | `SKILL.md` |
+|---|---|---|
+| Invocação | `/comando` manual | `/comando` ou automático |
+| Complexidade | Arquivo único | Pasta com scripts, exemplos |
+| Portabilidade | VS Code apenas | VS Code + CLI + Cloud |
+| Padrão | VS Code específico | agentskills.io (aberto) |
+| Uso atual no projeto | 6 arquivos em `.github/prompts/` | Nenhum |
+
+**Decisão:** Manter `.prompt.md` para 1.M. Motivos:
+- Já temos 6 prompts nesse formato, funcionando
+- Agent Skills é mais poderoso mas requer migração — escopo de fatia separada
+- O `init.py` só precisa copiar o que já existe
+- Migrar para SKILL.md é material para Onda 2+ (quando tivermos scripts/exemplos para empacotar)
+
+### 5.4 MCP Prompts (nível de protocolo)
+
+O MCP expõe prompts via `prompts/list` e `prompts/get`. Nosso `resources/prompts.py` tem 11 prompts MCP (criar-jogo, revisar-cena, balancear, polir, deploy, debug, etc.). Estes são diferentes dos `.prompt.md` — são prompts que o agente de IA pode solicitar ao servidor MCP, não comandos de barra do usuário.
+
+**Relação com 1.M:** Nenhuma mudança necessária. Os MCP prompts já funcionam. A fatia é sobre os `.prompt.md` (comandos de barra do VS Code).
+
+### 5.5 Estratégia de onboarding guiado
+
+O `print_guided_mode()` deve mostrar:
+1. Lista de comandos disponíveis com descrição de 1 linha
+2. Exemplo concreto de primeiro uso ("digite /plan")
+3. Dica de quickstart ("crie um jogo de plataforma")
+
+**Anti-padrões identificados na pesquisa:**
+- Não mostrar TODOS os comandos de uma vez (sobrecarga cognitiva) — mostrar os 3 principais + "veja /manual para todos"
+- Não usar jargão técnico ("rollup", "tool", "MCP") — usar linguagem de jogo
+- Não assumir que o usuário sabe o que é um "prompt" ou "slash command"
+
+### 5.6 Correção ao plano original
+
+| Item do plano | Correção |
+|---|---|
+| Destino: `%APPDATA%/Code/User/prompts/` | ❌ Errado. Destino correto: `<projeto>/.github/prompts/` |
+| `copy_prompts_to_vscode()` | Renomear para `copy_prompts_to_project()` |
+| Merge com prompts existentes | ✅ Mantido — se projeto já tem `.github/prompts/`, mesclar |
+
+### 5.7 Recomendações
+
+| # | Recomendação | Custo | Impacto |
+|---|---|---|---|
+| R1 | Copiar `.github/prompts/` para `<projeto>/.github/prompts/` | Baixo | Alto |
+| R2 | `print_guided_mode()` com os 3 comandos principais | Baixo | Alto |
+| R3 | Adicionar `argument-hint` ao YAML dos prompts existentes | Baixo | Médio |
+| R4 | Migrar para Agent Skills (SKILL.md) | Médio | Onda 2+ |
 |---|---|---|---|---|
 | R1 | Adicionar `quickstart_phrase_pt` a cada gênero em `game_patterns.py` | Baixo | Alto | ✅ Imediata |
 | R2 | Implementar `quickstart_manage(op="showcase")` retornando JSON com frases | Baixo | Alto | ✅ Imediata |

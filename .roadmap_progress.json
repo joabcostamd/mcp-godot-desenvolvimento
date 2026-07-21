@@ -1,4 +1,20 @@
 {
+  "fatia_1.M": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "cfc6990",
+    "resultado": "Skills exportaveis + modo guiado. copy_prompts_to_project() retorna dict com total/new/unchanged/skipped. Idempotente, preserva prompts do usuario, sobrescreve arquivos corrompidos. print_guided_mode() com/sem comandos. 7 testes automatizados. C3 smoke_test: PASS."
+  },
+  "fatia_1.L": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "cfc6990",
+    "resultado": "Vitrine de generos 17→32. +15 generos, +32 quickstart_phrase_pt, op=showcase, fallback GAME_PATTERNS no _match_blueprint, _SYNONYMS 24→120+, ALIAS_MAP 4→42. README com 32 generos em 3 niveis. C3 smoke_test: PASS."
+  },
   "fatia_1.K": {
     "status": "concluida",
     "data": "2026-07-20",
