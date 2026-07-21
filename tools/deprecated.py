@@ -59,4 +59,19 @@ DEPRECATED_TOOLS: set[str] = {
     "list_backups", "restore_backup", "git_commit_checkpoint",
     "undo_last_action", "get_undo_history",
     "compare_screenshots", "detect_empty_screen", "detect_offscreen_elements",
+    # ── F5: atômicas consolidadas em rollups ──
+    # gdscript_* → lsp_manage
+    "gdscript_definition", "gdscript_diagnostics", "gdscript_hover",
+    "gdscript_lsp_connect", "gdscript_lsp_disconnect", "gdscript_references",
+    "gdscript_rename", "gdscript_symbols", "gdscript_sync_file",
+    # skeleton_* → skeleton_manage
+    "skeleton_create_bone", "skeleton_create_ik_chain",
+    "skeleton_get_bone_pose", "skeleton_get_info",
+    "skeleton_list_bones", "skeleton_set_bone_pose",
+    # ui_* → ui_manage (ops adicionados)
+    "ui_configure_focus_nav", "ui_create_tab_with_content",
+    "ui_create_widget", "ui_set_anchor_preset", "ui_set_tooltip",
+    # godot_* → godot_manage
+    "godot_run_project", "godot_stop_project", "godot_wait_for_bridge",
+    "godot_exec", "godot_runtime_info",
 }

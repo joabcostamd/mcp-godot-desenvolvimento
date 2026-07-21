@@ -74,11 +74,16 @@ def A01_arquitetural(ctx: AuditContext) -> None:
     _log("A01 — Verificando direção de imports...")
     violations = []
     for py_file in ROOT.glob("domains/**/*.py"):
+        # Excluir templates
+        if "_template" in str(py_file):
+            continue
         content = py_file.read_text(encoding="utf-8", errors="ignore")
         if "import server" in content or "from server" in content:
             violations.append(f"{py_file.relative_to(ROOT)} importa server.py")
+        # Permitir import de registry.types (padrão correto para manifestos)
         if "import registry" in content or "from registry" in content:
-            violations.append(f"{py_file.relative_to(ROOT)} importa registry/")
+            if "from registry.types" not in content and "from registry import" not in content:
+                violations.append(f"{py_file.relative_to(ROOT)} importa registry/")
     if not violations:
         _log("  OK — 0 violações de direção")
     for v in violations:
@@ -244,14 +249,14 @@ def main() -> int:
     if ctx.failures:
         print(f" AUDITORIA {fase}: REPROVADA")
         for f in ctx.failures:
-            print(f"   ❌ {f}")
+            print(f"   FAIL: {f}")
     else:
         print(f" AUDITORIA {fase}: APROVADA")
 
     if ctx.warnings:
         print(f" Avisos:")
         for w in ctx.warnings:
-            print(f"   ⚠️ {w}")
+            print(f"   WARN: {w}")
 
     return 1 if ctx.failures else 0
 

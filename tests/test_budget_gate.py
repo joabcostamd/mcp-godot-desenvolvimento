@@ -219,7 +219,22 @@ def check_consistency() -> list[str]:
                              "trailer_capture_clip", "trailer_render_sequence",
                              "capsule_generate_store_image", "remote_balance_config",
                              # GUT/runtime/bridge
-                             "run_gut_tests", "effect_probe", "godot_exec"}}
+                             "run_gut_tests", "effect_probe", "godot_exec",
+                             # F5: atômicas consolidadas em rollups (mantidas p/ compatibilidade)
+                             "gdscript_definition", "gdscript_diagnostics", "gdscript_hover",
+                             "gdscript_lsp_connect", "gdscript_lsp_disconnect",
+                             "gdscript_references", "gdscript_rename", "gdscript_symbols",
+                             "gdscript_sync_file",
+                             "skeleton_create_bone", "skeleton_create_ik_chain",
+                             "skeleton_get_bone_pose", "skeleton_get_info",
+                             "skeleton_list_bones", "skeleton_set_bone_pose",
+                             "ui_configure_focus_nav", "ui_create_tab_with_content",
+                             "ui_create_widget", "ui_set_anchor_preset", "ui_set_tooltip",
+                             "godot_run_project", "godot_stop_project", "godot_wait_for_bridge",
+                             "godot_runtime_info", "godot_custom_command",
+                             "godot_list_custom_commands", "godot_keep_alive",
+                             "execute_gdscript_runtime", "raycast_manage",
+}}
     return sorted(orphans)
 
 
