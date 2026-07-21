@@ -37,14 +37,17 @@ var _direction: Vector2 = Vector2.RIGHT
 var _distance_traveled: float = 0.0
 var _lifetime_elapsed: float = 0.0
 var _spawn_position: Vector2
+var _initialized: bool = false
 
 
 func _ready() -> void:
+	if _initialized: return
 	_spawn_position = global_position
 	if lifetime <= 0.0 and max_distance <= 0.0:
 		push_warning("[Projectile] lifetime e max_distance são 0 — projétil nunca expira.")
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)
+	_initialized = true
 
 
 func _physics_process(delta: float) -> void:

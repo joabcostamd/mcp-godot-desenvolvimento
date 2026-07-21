@@ -51,12 +51,15 @@ var _was_hitting: bool = false
 
 ## Linha visual do raio.
 var _line: Line2D
+var _initialized: bool = false
 
 
 func _ready() -> void:
+	if _initialized: return
 	# enabled já é true por default no RayCast2D — respeitar escolha do usuário
 	target_position = Vector2(max_range, 0.0)
 	_create_visual()
+	_initialized = true
 
 
 ## Cria a linha visual do raio. Guard anti-duplicação.

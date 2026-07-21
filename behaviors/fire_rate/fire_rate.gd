@@ -42,10 +42,13 @@ var _can_fire: bool = true
 var _burst_shots_fired: int = 0
 var _cooldown_timer: Timer
 var _burst_timer: Timer
+var _initialized: bool = false
 
 
 func _ready() -> void:
+	if _initialized: return
 	_create_timers()
+	_initialized = true
 
 
 func _create_timers() -> void:

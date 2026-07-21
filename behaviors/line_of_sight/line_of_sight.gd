@@ -39,12 +39,15 @@ signal target_lost(target: Node2D)
 
 ## Alvos atualmente visíveis.
 var _targets: Array[Node2D] = []
+var _initialized: bool = false
 
 
 func _ready() -> void:
+	if _initialized: return
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	_update_collision_shape()
+	_initialized = true
 
 
 ## Atualiza o CircleShape2D com o raio de visão.

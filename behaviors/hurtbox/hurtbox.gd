@@ -29,9 +29,11 @@ signal hit_received(original_damage: int, modified_damage: int, hit_type: String
 
 ## Emitido quando dano é bloqueado (multiplier=0 ou health_path inválido).
 signal hit_blocked(original_damage: int, reason: String)
+var _initialized: bool = false
 
 
 func _ready() -> void:
+	if _initialized: return
 	# Hurtbox é sempre passiva: monitoring=true, monitorable=true
 	monitoring = true
 	monitorable = true
@@ -39,6 +41,7 @@ func _ready() -> void:
 
 	if health_path.is_empty():
 		push_warning("[Hurtbox] health_path está vazio — hurtbox não aplicará dano.")
+	_initialized = true
 
 
 ## Detecta fontes de dano (Hitbox, Projectile) que entram na área.

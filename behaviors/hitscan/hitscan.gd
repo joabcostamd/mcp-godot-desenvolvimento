@@ -48,13 +48,16 @@ var _line: Line2D
 
 ## Timer para esconder o flash visual.
 var _flash_timer: Timer
+var _initialized: bool = false
 
 
 func _ready() -> void:
+	if _initialized: return
 	# enabled já é true por default — respeitar escolha do usuário
 	target_position = Vector2(max_range, 0.0)
 	_create_visual()
 	_create_flash_timer()
+	_initialized = true
 
 
 ## Cria a linha visual. Guard anti-duplicação.

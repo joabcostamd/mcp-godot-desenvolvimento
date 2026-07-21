@@ -26,11 +26,14 @@ signal expired()
 var _target: Node2D
 var _velocity: Vector2 = Vector2.RIGHT
 var _elapsed: float = 0.0
+var _initialized: bool = false
 
 
 func _ready() -> void:
+	if _initialized: return
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)
+	_initialized = true
 
 
 func _physics_process(delta: float) -> void:

@@ -34,10 +34,13 @@ signal knocked_back(direction: Vector2)
 
 var _can_knockback: bool = true
 var _cooldown_timer: Timer
+var _initialized: bool = false
 
 
 func _ready() -> void:
+	if _initialized: return
 	_create_timer()
+	_initialized = true
 
 
 func _create_timer() -> void:

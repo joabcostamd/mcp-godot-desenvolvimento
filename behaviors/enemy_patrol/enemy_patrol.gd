@@ -47,13 +47,16 @@ var _state: String = "patrol"   # patrol | idle
 var _wait_timer: Timer
 var _state_machine: StateMachine
 var _arrival_threshold: float = 4.0
+var _initialized: bool = false
 
 
 func _ready() -> void:
+	if _initialized: return
 	_find_state_machine()
 	_create_wait_timer()
 	if not waypoints.is_empty() and _state_machine:
 		_state_machine.set_state("patrol")
+	_initialized = true
 
 
 ## Localiza o StateMachine sibling (mesmo pai).

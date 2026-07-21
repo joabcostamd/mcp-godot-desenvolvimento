@@ -15,12 +15,15 @@ extends Node
 @export var music_volume_db: float = 0.0: set(v): _set_bus_volume("Music", v)
 @export var sfx_volume_db: float = 0.0: set(v): _set_bus_volume("SFX", v)
 
+var _initialized: bool = false
 
 func _ready() -> void:
+	if _initialized: return
 	# Aplica volumes iniciais
 	_set_bus_volume("Master", master_volume_db)
 	_set_bus_volume("Music", music_volume_db)
 	_set_bus_volume("SFX", sfx_volume_db)
+	_initialized = true
 
 
 ## Toca um som SFX (one-shot). Retorna o player para controle.

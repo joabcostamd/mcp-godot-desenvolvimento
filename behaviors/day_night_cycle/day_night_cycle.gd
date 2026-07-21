@@ -22,10 +22,13 @@ signal phase_changed(phase: String)
 var _elapsed: float = 0.0
 var _active: bool = false
 var _last_phase: int = -1
+var _initialized: bool = false
 
 
 func _ready() -> void:
+	if _initialized: return
 	if auto_start: start()
+	_initialized = true
 
 
 func _process(delta: float) -> void:

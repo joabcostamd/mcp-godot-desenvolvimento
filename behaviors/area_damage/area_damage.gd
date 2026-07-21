@@ -35,9 +35,12 @@ extends Area2D
 ## Emitido após a explosão.
 signal exploded(targets_hit: int)
 
+var _initialized: bool = false
 
 func _ready() -> void:
+	if _initialized: return
 	_update_shape()
+	_initialized = true
 
 
 func _update_shape() -> void:

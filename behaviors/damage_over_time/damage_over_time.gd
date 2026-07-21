@@ -38,10 +38,13 @@ var _target_health: Health
 var _elapsed: float = 0.0
 var _active: bool = false
 var _tick_timer: Timer
+var _initialized: bool = false
 
 
 func _ready() -> void:
+	if _initialized: return
 	_create_timer()
+	_initialized = true
 
 
 func _create_timer() -> void:

@@ -46,12 +46,15 @@ signal activated()
 signal deactivated()
 
 var _hit_targets: Array[Node] = []  # Evita multi-hit no mesmo frame
+var _initialized: bool = false
 
 
 func _ready() -> void:
+	if _initialized: return
 	monitoring = active
 	area_entered.connect(_on_area_entered)
 	body_entered.connect(_on_body_entered)
+	_initialized = true
 
 
 ## Ativa a hitbox. Equivalente a active = true.

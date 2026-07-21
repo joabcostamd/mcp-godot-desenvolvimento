@@ -40,12 +40,15 @@ var _threat: Node2D
 var _state: String = "safe"  # safe | flee
 var _health: Health
 var _state_machine: StateMachine
+var _initialized: bool = false
 
 
 func _ready() -> void:
+	if _initialized: return
 	_find_health()
 	_find_state_machine()
 	_find_threat()
+	_initialized = true
 
 
 func _physics_process(_delta: float) -> void:

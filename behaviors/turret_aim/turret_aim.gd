@@ -41,10 +41,13 @@ signal fired(projectile: Node2D)
 var _target: Node2D
 var _fire_rate: FireRate
 var _was_locked: bool = false
+var _initialized: bool = false
 
 
 func _ready() -> void:
+	if _initialized: return
 	_find_fire_rate()
+	_initialized = true
 
 
 func _physics_process(delta: float) -> void:

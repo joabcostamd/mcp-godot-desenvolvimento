@@ -37,10 +37,13 @@ signal target_lost()
 var _player: Node2D
 var _chasing: bool = false
 var _stopped: bool = false  # Impede re-aquisição após stop()
+var _initialized: bool = false
 
 
 func _ready() -> void:
+	if _initialized: return
 	_find_player()
+	_initialized = true
 
 
 func _physics_process(_delta: float) -> void:
