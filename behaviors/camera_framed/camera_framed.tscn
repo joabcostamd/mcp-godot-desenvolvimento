@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://camera_framed_v1"]
+
+[ext_resource type="Script" path="res://behaviors/camera_framed/camera_framed.gd" id="1_cf"]
+
+[node name="CameraFramed" type="Node"]
+script = ExtResource("1_cf")
+dead_zone = Vector2(100, 60)
+soft_zone = Vector2(80, 50)
+damping = 0.1

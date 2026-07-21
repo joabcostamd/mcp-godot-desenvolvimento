@@ -41,8 +41,9 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 122,
+    "implementados": 123,
     "lista": [
+      {"id": 71, "nome": "camera_framed", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + dead zone camera. Phantom Camera Framed. damping/soft_zone. 7 testes."},
       {"id": 70, "nome": "camera_shake", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + tremor sinusoidal. sin() com frequency/amplitude/duration/decay. Distinto de screen_shake (random). 13 testes."},
       {"id": 128, "nome": "idle_generator", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + geracao idle/clicker. _physics_process, max_storage, upgrade com custo escalavel. 3 sinais, 20 testes."},
       {"id": 123, "nome": "hand", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + mao de cartas. add/remove/draw_from_deck/play/discard. Fan layout. 24 testes."},
@@ -152,5 +153,5 @@
       {"id": 84, "nome": "music_playlist", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + array AudioStream com shuffle, crossfade e next/prev. Bus Music. 5 params, sinais track_changed/playlist_finished. 5 testes. Fonte: Godot 4.7 ClassDB."}
     ]
   },
-  "proximo": "hand (#123) — Grupo: GÊNEROS. Ou camera_shake (#70) — Grupo: CÂMERA."
+  "proximo": "camera_priority (#72) — Grupo: CAMERA. Ou input_manager (#44) — Grupo: SISTEMA."
 }
