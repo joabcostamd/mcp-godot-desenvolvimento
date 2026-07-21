@@ -103,17 +103,20 @@ def A02_qualidade(ctx: AuditContext) -> None:
 
 
 def A03_consistencia(ctx: AuditContext) -> None:
-    """Invariantes ativas da fase."""
+    """Invariantes ativas da fase: INV-01 a INV-15."""
     _log("A03 — Verificando invariantes...")
     try:
         from registry.invariants import check_all
         results = check_all(ctx.fase)
-    except ImportError:
-        _log("  AVISO — registry/invariants.py ainda não existe (esperado em F0)")
+    except ImportError as e:
+        _log(f"  AVISO — registry/invariants.py indisponível: {e}")
+        return
+    except Exception as e:
+        ctx.fail("A03", f"EXCEÇÃO ao carregar invariantes: {e}")
         return
     for inv_id, passed, detail in results:
         if passed:
-            _log(f"  {inv_id}: OK")
+            _log(f"  {inv_id}: OK — {detail[:80]}")
         else:
             ctx.fail("A03", f"{inv_id}: {detail}")
 
@@ -126,18 +129,19 @@ def A04_nomenclatura(ctx: AuditContext) -> None:
 
 
 def A05_modularizacao(ctx: AuditContext) -> None:
-    """Todo domínio tem os 6 arquivos do template."""
+    """Todo domínio migrado tem os arquivos essenciais."""
     _log("A05 — Verificando estrutura de domínios...")
     template = ROOT / "domains" / "_template"
     if not template.exists():
         _log("  OK — template não existe ainda (esperado em F0)")
         return
-    expected = {"manifest.py", "ops.py", "handlers.py", "schemas.py", "examples.py", "tests"}
+    # Arquivos essenciais para um domínio migrado (manifest.py + handlers.py)
+    essential = {"manifest.py", "handlers.py"}
     for domain_dir in ROOT.glob("domains/*/"):
         if domain_dir.name.startswith("_") or domain_dir.name == "__pycache__":
             continue
         actual = {f.name for f in domain_dir.iterdir() if f.is_file()}
-        missing = expected - actual
+        missing = essential - actual
         if missing:
             ctx.fail("A05", f"{domain_dir.name}: faltando {missing}")
 

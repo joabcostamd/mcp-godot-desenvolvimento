@@ -90,11 +90,7 @@ TOOLSETS = {
         "loot_table_generate",
         # Operações atômicas de cena (complementam os rollups)
         "raycast_manage",
-        "add_raycast_2d", "add_shapecast_2d",
-        "create_joint_2d",
         "create_light_2d", "create_light_3d",
-        "create_navigation_agent_2d", "create_navigation_region_2d",
-        "setup_camera_2d",
         # Camada 5 (Gameplay): project
         "create_achievement_system", "cloud_save_configure",
         "mod_manifest_generate",
@@ -119,11 +115,7 @@ TOOLSETS = {
         "multimesh_create_instance",
         "physics_create_joint",
         "physics_configure_body",
-        "ui_create_widget",
-        "ui_create_tab_with_content",
-        "ui_configure_focus_nav",
-        "ui_set_tooltip",
-        "ui_set_anchor_preset",
+
         "network_setup_multiplayer",
         "network_create_rpc",
         "network_create_websocket",
@@ -149,7 +141,6 @@ TOOLSETS = {
         "audio_manage", "music_manage",
         "generate_audio_sfx", "generate_voice",
         "shader_manage", "shader_generate", "shader_list_templates",
-        "read_shader", "edit_shader", "get_shader_params",
         "vfx_manage",
         "optimize_sprite", "remove_background",
         "marketplace_search", "marketplace_download",
@@ -163,7 +154,6 @@ TOOLSETS = {
         # Operações atômicas de assets (complementam os rollups)
         "configure_particles_2d", "create_particles_2d", "create_particles_3d",
         "configure_standard_material_3d",
-        "generate_shader_2d",
         "import_3d_model",
     ],
     "runtime": [
@@ -1805,6 +1795,13 @@ def _tool_defs() -> list[Tool]:
     except Exception:
         pass
     # ── Fim pós-processamento ──────────────────────────────────────
+    # ── Filtrar tools depreciadas (paridade com _build_handlers) ───
+    # _build_handlers() remove handlers de tools em DEPRECATED_TOOLS.
+    # _tool_defs() deve remover as definições também, senão fica
+    # SEM_HANDLER: tool definida sem handler.
+    if not _REGISTRY_VALIDATION_UNFILTERED:
+        from tools.deprecated import DEPRECATED_TOOLS as _DEPRECATED_T
+        _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name not in _DEPRECATED_T]
 
     return _TOOL_DEFS_CACHE
 

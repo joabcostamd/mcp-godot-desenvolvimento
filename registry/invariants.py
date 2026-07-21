@@ -80,33 +80,39 @@ def _inv_02() -> tuple[str, bool, str]:
 
 
 def _inv_10() -> tuple[str, bool, str]:
-    """INV-10: Todo nome em PHASE_TOOLSETS existe em tools/list."""
+    """INV-10: Todo nome em PHASE_TOOLSETS existe em tools/list (excluindo depreciados)."""
     try:
         from server import PHASE_TOOLSETS, PHASE_TOOLS_CORE
+        from tools.deprecated import DEPRECATED_TOOLS
         tools = _get_tool_names()
         all_phase = set(PHASE_TOOLS_CORE)
         for names in PHASE_TOOLSETS.values():
             all_phase.update(names)
+        # Exclui tools depreciadas — foram intencionalmente removidas
+        all_phase -= DEPRECATED_TOOLS
         missing = all_phase - tools
         if missing:
             return ("INV-10", False, f"PHASE_FANTASMA: {sorted(missing)}")
-        return ("INV-10", True, f"OK — {len(all_phase)} nomes de fase, todos em tools/list")
+        return ("INV-10", True, f"OK — {len(all_phase)} nomes de fase, todos em tools/list ({len(DEPRECATED_TOOLS)} depreciados ignorados)")
     except Exception as e:
         return ("INV-10", False, str(e))
 
 
 def _inv_11() -> tuple[str, bool, str]:
-    """INV-11: Todo nome em TOOLSETS existe em tools/list."""
+    """INV-11: Todo nome em TOOLSETS existe em tools/list (excluindo depreciados)."""
     try:
         from server import TOOLSETS
+        from tools.deprecated import DEPRECATED_TOOLS
         tools = _get_tool_names()
         all_ns: set[str] = set()
         for names in TOOLSETS.values():
             all_ns.update(names)
+        # Exclui tools depreciadas — foram intencionalmente removidas de _tool_defs()
+        all_ns -= DEPRECATED_TOOLS
         missing = all_ns - tools
         if missing:
             return ("INV-11", False, f"NS_FANTASMA: {sorted(missing)}")
-        return ("INV-11", True, f"OK — {len(all_ns)} nomes em TOOLSETS, todos em tools/list")
+        return ("INV-11", True, f"OK — {len(all_ns)} nomes em TOOLSETS, todos em tools/list ({len(DEPRECATED_TOOLS)} depreciados ignorados)")
     except Exception as e:
         return ("INV-11", False, str(e))
 

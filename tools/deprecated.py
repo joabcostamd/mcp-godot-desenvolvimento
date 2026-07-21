@@ -84,4 +84,8 @@ DEPRECATED_TOOLS: set[str] = {
     # render_* → render_manage
     "render_get_settings", "render_set_antialiasing",
     "render_set_scaling", "render_set_quality",
+    # shader atomics → shader_manage (F5.3)
+    "read_shader", "edit_shader", "get_shader_params",
+    # raycast atomics → physics_manage (F5.1)
+    "add_raycast_2d", "add_shapecast_2d",
 }
