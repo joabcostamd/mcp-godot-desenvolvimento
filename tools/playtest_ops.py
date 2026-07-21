@@ -1023,6 +1023,11 @@ def _op_playtest_smoke(params: dict) -> dict:
             "status": "error",
             "message": f"Duracao invalida: {duration}. Use um valor >= 1 segundo.",
         }
+    if duration > 300:
+        return {
+            "status": "error",
+            "message": f"Duracao muito longa: {duration}s. Maximo permitido: 300s (5 min).",
+        }
     if not isinstance(fps_threshold, (int, float)) or fps_threshold < 1:
         return {
             "status": "error",
@@ -1069,9 +1074,9 @@ def _op_playtest_smoke(params: dict) -> dict:
         }
 
     warnings = []
-    fps_min = min(initial["fps"], final["fps"])
+    fps_min = round(min(initial["fps"], final["fps"]), 1)
     fps_avg = round((initial["fps"] + final["fps"]) / 2, 1)
-    fps_max = max(initial["fps"], final["fps"])
+    fps_max = round(max(initial["fps"], final["fps"]), 1)
 
     if fps_min < fps_threshold:
         warnings.append(

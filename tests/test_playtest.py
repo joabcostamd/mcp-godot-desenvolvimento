@@ -29,6 +29,12 @@ class TestOpSmoke:
         r = playtest_manage(op="smoke", params={"duration": -5})
         assert r["status"] == "error"
 
+    def test_smoke_excessive_duration(self):
+        """Duration > 300s deve ser rejeitado."""
+        r = playtest_manage(op="smoke", params={"duration": 999})
+        assert r["status"] == "error"
+        assert "300" in r["message"] or "maximo" in r["message"].lower()
+
     def test_smoke_invalid_fps_threshold(self):
         r = playtest_manage(op="smoke", params={"fps_threshold": 0})
         assert r["status"] == "error"
