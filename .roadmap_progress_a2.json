@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 155,
+    "implementados": 159,
     "lista": [
       {
         "nome": "accordion",
@@ -183,6 +183,12 @@
       },
       {
         "nome": "camera_zoom",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "camera_zoom_range",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -404,6 +410,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "farming_plot",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "fire_mode",
         "versao": "1.0.0",
         "status": "concluido",
@@ -411,6 +423,12 @@
       },
       {
         "nome": "fire_rate",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "fishing_cast",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -728,6 +746,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "racing_lap",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "random_loot",
         "versao": "1.0.0",
         "status": "concluido",
@@ -975,5 +999,5 @@
       }
     ]
   },
-  "proximo": "round_timer (#61) — Grupo: ESTRUTURA. Ou camera_priority (#72) — Grupo: CAMERA."
+  "proximo": "Continuar implementando behaviors restantes (245 no catalogo, 159 implementados)."
 }
