@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 42,
+    "implementados": 43,
     "lista": [
       {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido"},
       {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido"},
@@ -80,8 +80,9 @@
       {"id": 53, "nome": "camera_zoom", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Camera2D.zoom via Tween. zoom_to(target,duration). Detecta Camera2D parent/viewport. Sem camera = no-op. 2 params, sinais zoom_started/finished. 8 testes. Fonte: Godot 4.7 ClassDB Camera2D/Tween."},
       {"id": 54, "nome": "color_pulse", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + _process + sin(). Pulsacao de modulate no parent. start/stop com restauracao do original. 4 params, sinal pulsing. 10 testes. Fonte: Godot 4.7 ClassDB modulate/_process."},
       {"id": 55, "nome": "trail", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Line2D + _process seguindo parent. Acumula pontos historicos com spacing e max_points. Fade via Gradient. 4 params. 8 testes. Fonte: Godot 4.7 ClassDB Line2D/to_local."},
-      {"id": 56, "nome": "tween_player", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Tween wrapper generico. play(node,prop,target,dur,delay). Suporta easing/transition/stop. 4 params, sinais started/finished. 6 testes. Fonte: Godot 4.7 ClassDB Tween."}
+      {"id": 56, "nome": "tween_player", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Tween wrapper generico. play(node,prop,target,dur,delay). Suporta easing/transition/stop. 4 params, sinais started/finished. 6 testes. Fonte: Godot 4.7 ClassDB Tween."},
+      {"id": 57, "nome": "chromatic_aberration", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + flicker RGB no modulate do parent. trigger(intensity,duration) com Tween oscilando R/G/B. Restaura original. 3 params, sinais started/finished. 7 testes. Fonte: Godot 4.7 ClassDB modulate/Tween."}
     ]
   },
-  "proximo": "chromatic_aberration (#57) — sem dependências. Grupo: Efeitos visuais."
+  "proximo": "vignette (#58) — sem dependências. Grupo: Efeitos visuais."
 }
