@@ -41,8 +41,9 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 78,
+    "implementados": 79,
     "lista": [
+      {"id": 91, "nome": "destructible", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node2D + Health sibling. destroyed + damaged signals. destroy_effect. 6 testes."},
       {"id": 93, "nome": "lerp_smooth", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Tween wrapper. move_to/rotate_to/scale_to/modulate_to. 7 testes."},
       {"id": 88, "nome": "follow_path", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Path2D child. loop, look_along. 4 testes."},
       {"id": 89, "nome": "look_at_target", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + lerp_angle. set_target/set_target_position. 6 testes."},
