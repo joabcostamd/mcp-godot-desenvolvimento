@@ -41,8 +41,9 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 51,
+    "implementados": 63,
     "lista": [
+      {"id": 2, "nome": "player_topdown", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + CharacterBody2D child. InputMap 8-dir com aceleracao/friccao. 4 params, sinal velocity_changed. 17 testes. Fonte: Godot 4.7 ClassDB CharacterBody2D/Input/Vector2.move_toward."},
       {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido"},
       {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido"},
       {"id": 11, "nome": "hitbox", "versao": "1.0.0", "status": "concluido"},
@@ -92,5 +93,5 @@
       {"id": 84, "nome": "music_playlist", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + array AudioStream com shuffle, crossfade e next/prev. Bus Music. 5 params, sinais track_changed/playlist_finished. 5 testes. Fonte: Godot 4.7 ClassDB."}
     ]
   },
-  "proximo": "ambience_zone (#85) — depende de audio_manager (OK). Grupo: Audio."
+  "proximo": "tooltip (#103) — Grupo: UI/HUD. Ou player_controller (#1) — Grupo: Movimento."
 }
