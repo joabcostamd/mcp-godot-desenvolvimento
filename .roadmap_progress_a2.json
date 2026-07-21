@@ -41,8 +41,9 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 89,
+    "implementados": 90,
     "lista": [
+      {"id": 119, "nome": "parallax_background", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node2D + Sprite2D layers com parallax_scale. auto_scroll, follow_camera. 2 testes."},
       {"id": 114, "nome": "spring_joint", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + 2 anchors. Stiffness/damping/rest_length. 2 testes."},
       {"id": 113, "nome": "wind_zone", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + wind_direction/strength/turbulence. 1 teste."},
       {"id": 109, "nome": "buoyancy", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + fluid_density/drag/surface_y. Empuxo e arrasto. 2 testes."},
