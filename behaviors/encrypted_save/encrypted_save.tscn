@@ -1,0 +1,1 @@
+[gd_scene load_steps=2 format=3 uid="uid://encrypted_save_v1"][ext_resource type="Script" path="res://behaviors/encrypted_save/encrypted_save.gd" id="1_es"][node name="EncryptedSave" type="Node"]script=ExtResource("1_es")

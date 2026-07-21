@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 170,
+    "implementados": 177,
     "lista": [
       {
         "nome": "accordion",
@@ -99,6 +99,12 @@
       },
       {
         "nome": "authority",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "auto_save",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -230,6 +236,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "cloud_save",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "collectable",
         "versao": "1.0.0",
         "status": "concluido",
@@ -279,6 +291,12 @@
       },
       {
         "nome": "critical_hit",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "cross_save",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -399,6 +417,12 @@
       },
       {
         "nome": "element_system",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "encrypted_save",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -824,7 +848,25 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "save_integrity",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "save_load",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "save_migration",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "save_slots",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
