@@ -129,4 +129,20 @@ class TestGateFirst5min:
     def test_gate_without_game(self):
         r = playtest_manage(op="gate_first_5min")
         assert r["status"] == "error"
+
+
+class TestGateStatus:
+    def test_gate_status_works(self):
+        r = playtest_manage(op="gate_status")
+        assert r["status"] == "success"
+        assert "gates" in r
+        assert "first_5min" in r["gates"]
+        assert "complexity" in r["gates"]
+        assert "core_loop" in r["gates"]
+
+
+class TestFullSuite:
+    def test_full_suite_without_game(self):
+        r = playtest_manage(op="full_suite")
+        assert r["status"] == "error"
         assert "rodando" in r["message"].lower()

@@ -1764,6 +1764,131 @@ def _op_gate_first_5min(params: dict) -> dict:  # noqa: ARG001
     }
 
 
+# ── Dashboard de gates + Suíte completa (G1+G4) ────────────────────
+
+def _op_gate_status(params: dict) -> dict:  # noqa: ARG001
+    """Dashboard unificado de todos os gates do projeto.
+
+    Mostra status de cada gate (PASS/FAIL/NOT_RUN) em uma unica tela.
+    NAO requer jogo rodando.
+    """
+    gates = {}
+
+    # Gate 3.E: primeiros 5 minutos
+    from tools.phase_ops import _check_first_5min_gate
+    gates["first_5min"] = {
+        "status": _check_first_5min_gate(),
+        "label": "Primeiros 5 minutos",
+        "description": "A pessoa entende, vence algo e nao morre repetidamente",
+        "action": "playtest_manage op=gate_first_5min",
+    }
+
+    # Gate 3.F: complexidade
+    from tools.phase_ops import _check_complexity_gate
+    gates["complexity"] = {
+        "status": _check_complexity_gate(),
+        "label": "Divida de complexidade",
+        "description": "Codigo nao cresceu >50% sem justificativa",
+        "action": "complexity_gate_manage op=check",
+    }
+
+    # Gate 3.G: core loop
+    from tools.phase_ops import _check_core_loop_gate
+    loop_failures = _check_core_loop_gate()
+    gates["core_loop"] = {
+        "status": "fail" if loop_failures else "pass",
+        "label": "Design do core loop",
+        "description": f"{len(loop_failures)} modo(s) de falha" if loop_failures else "Nenhum modo de falha detectado",
+        "action": "fun_report_manage op=generate",
+    }
+
+    passed = sum(1 for g in gates.values() if g["status"] == "pass")
+    total = len(gates)
+    all_pass = passed == total
+
+    return {
+        "status": "success",
+        "overall": "pass" if all_pass else "fail",
+        "summary": f"{passed}/{total} gates passando",
+        "gates": gates,
+        "message": (
+            "✅ Todos os gates passando. Pronto para avancar de fase!"
+            if all_pass else
+            f"⚠️ {total - passed} gate(s) pendente(s). Rode os comandos 'action' acima."
+        ),
+    }
+
+
+def _op_full_suite(params: dict) -> dict:  # noqa: ARG001
+    """Suíte completa de playtest: smoke + personas + agent_run + fun_report.
+
+    Roda todas as camadas de teste em sequencia e gera diagnostico completo.
+    Um unico comando para avaliacao completa do jogo.
+
+    Requer jogo rodando em debug (F5).
+    """
+    if not _is_runtime_bridge_available():
+        return {"status": "error", "message": "Jogo nao esta rodando (F5)."}
+
+    results = {}
+
+    # 1. Smoke test
+    smoke = _op_playtest_smoke({"duration": 10})
+    results["smoke"] = {"status": smoke.get("status"), "fps_avg": smoke.get("metrics", {}).get("fps_avg", "?")}
+
+    # 2. Personas
+    personas = {}
+    for pid in ["apressado", "cauteloso", "explorador"]:
+        p = _op_persona_run({"persona": pid, "duration": 15})
+        personas[pid] = {
+            "status": p.get("status"),
+            "completed": p.get("result", {}).get("completed", False),
+            "time_s": p.get("result", {}).get("total_time_s", 0),
+        }
+    results["personas"] = personas
+
+    # 3. Agent run (heurístico, sem API key para não gastar)
+    agent = _op_agent_run({"steps": 3})
+    results["agent"] = {"status": agent.get("status"), "mode": agent.get("mode"), "steps": agent.get("completed", 0)}
+
+    # 4. Fun report
+    from tools.fun_report_ops import fun_report_manage
+    report = fun_report_manage(op="generate", params={
+        "smoke_result": smoke,
+        "persona_results": [
+            {"result": personas[p], "inputs": []} for p in personas
+        ],
+        "agent_result": agent,
+    })
+    results["fun_report"] = {
+        "overall": report.get("overall"),
+        "failures": report.get("failure_count", 0),
+        "summary": report.get("summary", ""),
+    }
+
+    # 5. Gate status
+    gates = _op_gate_status({})
+    results["gates"] = {"overall": gates.get("overall"), "summary": gates.get("summary")}
+
+    # Resumo final
+    all_ok = (
+        smoke.get("status") in ("pass", "warn")
+        and report.get("failure_count", 99) == 0
+    )
+
+    return {
+        "status": "success",
+        "overall": "pass" if all_ok else "warn",
+        "results": results,
+        "message": (
+            "✅ Suíte completa: jogo saudavel!"
+            if all_ok else
+            "⚠️ Suíte completa: encontrados problemas. Veja fun_report para detalhes."
+        ),
+        "duration_note": "Suíte executada em modo rapido. Para teste completo, rode cada etapa individualmente com mais tempo.",
+    }
+
+
 _PLAYTEST_OPS = {
     "smoke": _op_playtest_smoke,
     "persona_run": _op_persona_run,
@@ -1771,6 +1896,8 @@ _PLAYTEST_OPS = {
     "agent_step": _op_agent_step,
     "agent_run": _op_agent_run,
     "gate_first_5min": _op_gate_first_5min,
+    "gate_status": _op_gate_status,
+    "full_suite": _op_full_suite,
 }
 
 

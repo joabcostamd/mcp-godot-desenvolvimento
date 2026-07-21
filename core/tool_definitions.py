@@ -2397,8 +2397,8 @@ def _raw_tool_defs() -> list[Tool]:
                 "properties": {
                     "op": {
                         "type": "string",
-                        "description": "Operacao: 'smoke', 'persona_run', 'agent_observe', 'agent_step', 'agent_run' ou 'gate_first_5min'.",
-                        "enum": ["smoke", "persona_run", "agent_observe", "agent_step", "agent_run", "gate_first_5min"],
+                        "description": "Operacao: 'smoke', 'persona_run', 'agent_observe', 'agent_step', 'agent_run', 'gate_first_5min', 'gate_status' ou 'full_suite'.",
+                        "enum": ["smoke", "persona_run", "agent_observe", "agent_step", "agent_run", "gate_first_5min", "gate_status", "full_suite"],
                     },
                     "duration": {
                         "type": "integer",
