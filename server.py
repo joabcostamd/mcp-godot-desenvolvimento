@@ -2242,6 +2242,8 @@ def _build_handlers() -> dict:
         "capture_runtime_errors": _handle_capture_runtime_errors,
         # Playtest Onda 3 (smoke test do jogo)
         "playtest_manage": _handle_playtest_manage,
+        # Fun Report Onda 3 (relatorio de qualidade)
+        "fun_report_manage": _handle_fun_report_manage,
         # Playtest Onda 1 (watch_state, godot_exec, effect_probe)
         "watch_state_start": watch_state_start,
         "watch_state_collect": watch_state_collect,
@@ -4063,6 +4065,16 @@ def _handle_playtest_manage(args: dict) -> dict:
     op = args.get("op", "smoke")
     params = {k: v for k, v in args.items() if k != "op"}
     return playtest_manage(op=op, params=params)
+
+
+# ── Fun Report Onda 3 (relatorio de qualidade) ─────────────────────
+
+def _handle_fun_report_manage(args: dict) -> dict:
+    """Handler para fun_report_manage — relatorio de qualidade (Fatia 3.D)."""
+    from tools.fun_report_ops import fun_report_manage
+    op = args.get("op", "generate")
+    params = {k: v for k, v in args.items() if k != "op"}
+    return fun_report_manage(op=op, params=params)
 
 
 # ── Auto-Config Handlers (Fase 2C) ──────────────────────────────────

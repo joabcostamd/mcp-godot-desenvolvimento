@@ -2434,6 +2434,31 @@ def _raw_tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
+        # ── Fun Report (ONDA 3 — Fatia 3.D) ──────────────────────
+        Tool(
+            name="fun_report_manage",
+            description=(
+                "📊 Relatorio de qualidade do jogo com 4 sinais (ONDA 3 — Fatia 3.D). "
+                "Analisa taxa de aprovacao, tentativas, variedade de estrategia e escalada. "
+                "Nomeia modos de falha do core loop (sem escalada, estrategia degenerada, "
+                "recompensa distante, pico de dificuldade) em vez de dizer 'esta chato'. "
+                "NAO requer jogo rodando — analisa dados ja coletados por smoke/persona/agent. "
+                "Quando usar: apos rodar playtest, para obter diagnostico de qualidade. "
+                "Operacoes: generate (gera relatorio completo com recomendacoes). "
+                "Exemplo: {\"op\": \"generate\"}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "op": {
+                        "type": "string",
+                        "description": "Operacao: 'generate'.",
+                        "enum": ["generate"],
+                    },
+                },
+                "required": [],
+            },
+        ),
         # ── Playtest Onda 1 (watch_state, godot_exec, effect_probe) ──
         Tool(
             name="watch_state_start",

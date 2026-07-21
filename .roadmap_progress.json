@@ -18,6 +18,14 @@
     "resultado": "Playtest camada 3: agente LLM pontual. IMPLEMENTACAO COMPLETA: agent_run chama DeepSeek API real (deepseek-v4-flash/pro) via urllib. Detecta DEEPSEEK_API_KEY ou ANTHROPIC_API_KEY do ambiente. Fallback heuristico offline se sem chave. Estima custo (~R$0.001/step). agent_observe + agent_step como ferramentas auxiliares. 279 tools. C1 PASS, C3 PASS. 20/20 testes playtest. Pesquisa externa: api.deepseek.com/chat/completions, OpenAI-compativel.",
     "pesquisa_externa": "api-docs.deepseek.com — endpoint /chat/completions, model deepseek-v4-flash, auth Bearer token, OpenAI-compatible format"
   },
+  "fatia_3.D": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "93770cb",
+    "resultado": "fun_report: relatorio de qualidade com 4 sinais. tools/fun_report_ops.py (NOVO, 360 linhas): rollup fun_report_manage(op=generate). 4 sinais: taxa de aprovacao, tentativas, estrategia, escalada. 4 modos de falha nomeados: sem escalada, estrategia degenerada, recompensa distante, pico escondido. Recomendacoes acionaveis em portugues. 280 tools (+1). C1 PASS, C3 PASS. 12/12 testes pytest."
+  },
   "fatia_3.A": {
     "status": "concluida",
     "data": "2026-07-21",
