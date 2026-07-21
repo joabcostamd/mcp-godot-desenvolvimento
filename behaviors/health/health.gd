@@ -30,19 +30,24 @@ extends Node
 			died.emit()
 
 ## Tempo de invulnerabilidade após dano. 0 = sem invulnerabilidade.
-@export var invulnerable_time: float = 0.0
+@export var invulnerable_time: float = 0.0:
+	set(v): invulnerable_time = clampf(v, 0.0, 60.0)
 
 ## Se false, ignora todo dano (take_damage retorna 0). Ex: NPC invencível.
-@export var damageable: bool = true
+@export var damageable: bool = true:
+	set(v): damageable = v
 
 ## Se false, ignora toda cura (heal retorna 0). Ex: inimigo que não se cura.
-@export var healable: bool = true
+@export var healable: bool = true:
+	set(v): healable = v
 
 ## Se false, current_hp nunca chega a 0 (entidade fica com 1 HP mínimo).
-@export var killable: bool = true
+@export var killable: bool = true:
+	set(v): killable = v
 
 ## Se true, permite curar após morte para reviver. false = morte permanente.
-@export var revivable: bool = true
+@export var revivable: bool = true:
+	set(v): revivable = v
 
 ## Emitido quando current_hp chega a 0.
 signal died()

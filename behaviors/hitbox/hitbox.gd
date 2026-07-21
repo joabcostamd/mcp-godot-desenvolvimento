@@ -24,7 +24,10 @@ extends Area2D
 		knockback_force = maxf(0.0, value)
 
 ## Tipo do golpe: "melee", "ranged", "magic", "explosive".
-@export var hit_type: String = "melee"
+@export var hit_type: String = "melee":
+	set(v):
+		var valid := ["melee", "ranged", "magic", "explosive"]
+		hit_type = v if v in valid else "melee"
 
 ## Se true, a hitbox está ativa e detecta colisões.
 @export var active: bool = false:

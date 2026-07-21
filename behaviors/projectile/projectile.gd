@@ -13,19 +13,24 @@ class_name Projectile
 extends Area2D
 
 ## Velocidade de movimento (px/s).
-@export var speed: float = 400.0
+@export var speed: float = 400.0:
+	set(v): speed = clampf(v, 10.0, 10000.0)
 
 ## Dano causado ao atingir um alvo com Health.
-@export var damage: int = 10
+@export var damage: int = 10:
+	set(v): damage = clampi(v, 0, 100000)
 
 ## Tempo máximo de vida (0 = infinito).
-@export var lifetime: float = 5.0
+@export var lifetime: float = 5.0:
+	set(v): lifetime = clampf(v, 0.0, 3600.0)
 
 ## Distância máxima percorrida (0 = infinito).
-@export var max_distance: float = 1000.0
+@export var max_distance: float = 1000.0:
+	set(v): max_distance = clampf(v, 0.0, 100000.0)
 
 ## Se true, atravessa alvos sem se destruir.
-@export var piercing: bool = false
+@export var piercing: bool = false:
+	set(v): piercing = v
 
 ## Emitido ao atingir algo.
 signal hit(target: Node, damage_dealt: int)

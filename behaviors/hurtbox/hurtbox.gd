@@ -19,7 +19,10 @@ extends Area2D
 		damage_multiplier = clampf(value, 0.0, 10.0)
 
 ## Tipo da hurtbox: "body", "head", "legs", "shield", "weak_point".
-@export var hurt_type: String = "body"
+@export var hurt_type: String = "body":
+	set(v):
+		var valid := ["body", "head", "legs", "shield", "weak_point"]
+		hurt_type = v if v in valid else "body"
 
 ## Caminho relativo para o nó Health do dono (ex: "../Health").
 @export var health_path: NodePath

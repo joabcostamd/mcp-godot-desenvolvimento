@@ -32,7 +32,8 @@ extends Node
 			_cooldown_timer.wait_time = cooldown
 
 ## Se false, não processa input de dash.
-@export var enabled: bool = true
+@export var enabled: bool = true:
+	set(v): enabled = v
 
 signal dashed()
 signal dash_ready()

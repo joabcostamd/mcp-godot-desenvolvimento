@@ -40,6 +40,11 @@
       "status": "concluida",
       "data_conclusao": "2026-07-21",
       "resultado": "10/10 class_name mismatches corrigidos. 9 renames (BlendSpace1D→BlendSpace1d, BlendSpace2D→BlendSpace2d, CameraLookAt→CameraLookat, FPSCounter→FpsCounter, LODController→LodController, PlayerTopDown→PlayerTopdown, RPCBridge→RpcBridge, SkeletonIK→SkeletonIk, XPLevel→XpLevel). 1 rename de diretorio (timer→timer_behavior) para evitar conflito com Timer built-in. audit_behaviors.py: 0 mismatches. validate_gdscript: 10/10 PASS."
+    },
+    "fatia_2b_exports_setters": {
+      "status": "concluida",
+      "data_conclusao": "2026-07-21",
+      "resultado": "15 exports sem setter corrigidos em 6 behaviors antigos (health:5, player_controller:2, projectile:5, hitbox:1, hurtbox:1, dash:1). Numericos com clampf/clampi, strings com validacao de enum, bools com setter simples. audit_behaviors.py: 0 CRITICAL, 0 WARNINGS. validate_gdscript: 6/6 PASS."
     }
   },
   "auditoria": {

@@ -33,10 +33,12 @@ extends Node
 	set(v): friction = clampf(v, 10.0, 10000.0)
 
 ## Posição Y abaixo da qual o jogador morre (0 = desativado).
-@export var kill_plane_y: float = 0.0
+@export var kill_plane_y: float = 0.0:
+	set(v): kill_plane_y = v
 
 ## Se false, não processa input nem física.
-@export var enabled: bool = true
+@export var enabled: bool = true:
+	set(v): enabled = v
 
 signal player_died()
 signal jumped()
