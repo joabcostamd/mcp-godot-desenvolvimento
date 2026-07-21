@@ -1,0 +1,24 @@
+{
+  "name": "vignette",
+  "description_pt": "Efeito vinheta (bordas escuras) via ColorRect fullscreen com GradientTexture2D radial em CanvasLayer. trigger(intensity, duration) com Tween em modulate.a. Não bloqueia input.",
+  "description_en": "Vignette effect (dark edges) via fullscreen ColorRect with radial GradientTexture2D in CanvasLayer. trigger(intensity, duration) with Tween on modulate.a. Does not block input.",
+  "synonyms": {
+    "pt": ["vinheta", "bordas_escuras", "vignette", "escurecer_bordas"],
+    "en": ["vignette", "dark_edges", "tunnel_vision"]
+  },
+  "parameters": [
+    {"name": "vignette_color", "type": "Color", "description_pt": "Cor da vinheta (normalmente preto).", "default": {"r":0.0,"g":0.0,"b":0.0,"a":1.0}},
+    {"name": "default_intensity", "type": "float", "description_pt": "Intensidade padrão (0–1).", "range": {"min": 0.0, "max": 1.0}, "default": 0.5},
+    {"name": "default_duration", "type": "float", "description_pt": "Duração da transição.", "range": {"min": 0.1, "max": 5.0}, "default": 0.5, "unit": "s"}
+  ],
+  "signals": [
+    {"name": "vignette_started", "description_pt": "Emitido ao iniciar.", "params": []},
+    {"name": "vignette_finished", "description_pt": "Emitido ao terminar.", "params": []}
+  ],
+  "dependencies": [],
+  "genres": ["generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["efeitos_visuais", "vinheta", "vignette", "ui"]
+}
