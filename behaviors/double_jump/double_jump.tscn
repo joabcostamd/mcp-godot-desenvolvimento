@@ -7,3 +7,4 @@ script = ExtResource("1_dj")
 jump_count = 2
 jump_velocity = -400.0
 coyote_time = 0.1
+enabled = true

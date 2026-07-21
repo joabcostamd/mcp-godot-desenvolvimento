@@ -7,3 +7,4 @@ script = ExtResource("1_mp")
 speed = 100.0
 loop = true
 pause_at_ends = 0.0
+enabled = true

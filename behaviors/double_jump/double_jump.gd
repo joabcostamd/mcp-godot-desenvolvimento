@@ -27,6 +27,9 @@ extends Node
 	set(v):
 		coyote_time = clampf(v, 0.0, 0.5)
 
+## Se false, não processa pulos adicionais.
+@export var enabled: bool = true
+
 signal jumped(jumps_used: int)
 signal jumps_exhausted()
 
@@ -43,6 +46,9 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if not enabled:
+		return
+
 	var parent := get_parent()
 	if not parent is CharacterBody2D:
 		return

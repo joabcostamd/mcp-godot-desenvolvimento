@@ -35,6 +35,9 @@ extends Node
 ## Posição Y abaixo da qual o jogador morre (0 = desativado).
 @export var kill_plane_y: float = 0.0
 
+## Se false, não processa input nem física.
+@export var enabled: bool = true
+
 signal player_died()
 signal jumped()
 
@@ -48,6 +51,9 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if not enabled:
+		return
+
 	var parent := get_parent()
 	if not parent is CharacterBody2D:
 		return

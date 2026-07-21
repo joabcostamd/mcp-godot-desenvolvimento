@@ -9,7 +9,8 @@
   "parameters": [
     {"name": "jump_count", "type": "int", "description_pt": "Número total de pulos permitidos (2 = pulo duplo).", "range": {"min": 1, "max": 10}, "default": 2},
     {"name": "jump_velocity", "type": "float", "description_pt": "Velocidade vertical do pulo (negativa = para cima).", "range": {"min": -2000.0, "max": -50.0}, "default": -400.0, "unit": "px/s"},
-    {"name": "coyote_time", "type": "float", "description_pt": "Tempo extra após sair do chão em que o pulo ainda funciona.", "range": {"min": 0.0, "max": 0.5}, "default": 0.1, "unit": "s"}
+    {"name": "coyote_time", "type": "float", "description_pt": "Tempo extra após sair do chão em que o pulo ainda funciona.", "range": {"min": 0.0, "max": 0.5}, "default": 0.1, "unit": "s"},
+    {"name": "enabled", "type": "bool", "description_pt": "Se false, não processa pulos adicionais.", "default": true}
   ],
   "signals": [
     {"name": "jumped", "description_pt": "Emitido a cada pulo executado.", "params": [{"name": "jumps_used", "type": "int"}]},

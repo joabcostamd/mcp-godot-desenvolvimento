@@ -177,3 +177,11 @@ func _get_configuration_warnings() -> PackedStringArray:
 	if not _currency:
 		w.append("Nenhum Currency irmão — objetivos 'spend' não serão rastreados.")
 	return w
+
+
+## Falha uma quest ativa pelo ID. Emite quest_failed e remove dos ativos.
+func fail_quest(quest_id: String) -> void:
+	if not _active_quests.has(quest_id):
+		return
+	_active_quests.erase(quest_id)
+	quest_failed.emit(quest_id)

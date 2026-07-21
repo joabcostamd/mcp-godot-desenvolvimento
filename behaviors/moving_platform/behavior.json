@@ -9,7 +9,8 @@
   "parameters": [
     {"name": "speed", "type": "float", "description_pt": "Velocidade ao longo do path (px/s).", "range": {"min": 10.0, "max": 2000.0}, "default": 100.0, "unit": "px/s"},
     {"name": "loop", "type": "bool", "description_pt": "Se true, reinicia do começo ao chegar ao fim.", "default": true},
-    {"name": "pause_at_ends", "type": "float", "description_pt": "Tempo de pausa em cada ponta do path (0 = sem pausa).", "range": {"min": 0.0, "max": 10.0}, "default": 0.0, "unit": "s"}
+    {"name": "pause_at_ends", "type": "float", "description_pt": "Tempo de pausa em cada ponta do path (0 = sem pausa).", "range": {"min": 0.0, "max": 10.0}, "default": 0.0, "unit": "s"},
+    {"name": "enabled", "type": "bool", "description_pt": "Se false, a plataforma não se move.", "default": true}
   ],
   "signals": [
     {"name": "waypoint_reached", "description_pt": "Emitido ao chegar em uma ponta do path.", "params": [{"name": "index", "type": "int"}]},

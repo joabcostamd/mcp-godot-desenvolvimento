@@ -9,7 +9,8 @@
   "parameters": [
     {"name": "dash_speed", "type": "float", "description_pt": "Velocidade durante o dash (px/s).", "range": {"min": 100.0, "max": 5000.0}, "default": 800.0, "unit": "px/s"},
     {"name": "dash_duration", "type": "float", "description_pt": "Duração do dash em segundos.", "range": {"min": 0.05, "max": 1.0}, "default": 0.15, "unit": "s"},
-    {"name": "cooldown", "type": "float", "description_pt": "Tempo de recarga entre dashes.", "range": {"min": 0.0, "max": 10.0}, "default": 0.5, "unit": "s"}
+    {"name": "cooldown", "type": "float", "description_pt": "Tempo de recarga entre dashes.", "range": {"min": 0.0, "max": 10.0}, "default": 0.5, "unit": "s"},
+    {"name": "enabled", "type": "bool", "description_pt": "Se false, não processa input de dash.", "default": true}
   ],
   "signals": [
     {"name": "dashed", "description_pt": "Emitido ao iniciar o dash.", "params": []},

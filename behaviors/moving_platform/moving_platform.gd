@@ -26,6 +26,9 @@ extends AnimatableBody2D
 		if _pause_timer:
 			_pause_timer.wait_time = pause_at_ends
 
+## Se false, a plataforma não se move.
+@export var enabled: bool = true
+
 signal waypoint_reached(index: int)
 signal loop_completed()
 
@@ -64,6 +67,8 @@ func _create_timer() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if not enabled:
+		return
 	if _paused or not _path:
 		return
 

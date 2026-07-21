@@ -10,3 +10,4 @@ gravity = 980.0
 acceleration = 1000.0
 friction = 1000.0
 kill_plane_y = 0.0
+enabled = true

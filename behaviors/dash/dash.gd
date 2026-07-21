@@ -31,6 +31,9 @@ extends Node
 		if _cooldown_timer:
 			_cooldown_timer.wait_time = cooldown
 
+## Se false, não processa input de dash.
+@export var enabled: bool = true
+
 signal dashed()
 signal dash_ready()
 
@@ -69,6 +72,9 @@ func _create_timers() -> void:
 
 
 func _physics_process(_delta: float) -> void:
+	if not enabled:
+		return
+
 	if not _dashing:
 		# Tenta iniciar dash
 		if _can_dash and Input.is_action_just_pressed("ui_accept"):

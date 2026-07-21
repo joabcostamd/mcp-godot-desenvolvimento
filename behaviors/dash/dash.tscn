@@ -7,3 +7,4 @@ script = ExtResource("1_dash")
 dash_speed = 800.0
 dash_duration = 0.15
 cooldown = 0.5
+enabled = true
