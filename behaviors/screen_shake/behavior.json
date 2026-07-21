@@ -1,0 +1,24 @@
+{
+  "name": "screen_shake",
+  "description_pt": "Efeito de tremor de tela via offset da câmera. Intensidade, duração e decay configuráveis. Disparado por trigger(). Afeta Camera2D se presente, senão o nó pai.",
+  "description_en": "Screen shake effect via camera offset. Configurable intensity, duration, and decay. Triggered via trigger(). Affects Camera2D if present, otherwise the parent node.",
+  "synonyms": {
+    "pt": ["tremor", "vibração", "terremoto", "impacto", "shake"],
+    "en": ["shake", "vibration", "earthquake", "impact", "trauma"]
+  },
+  "parameters": [
+    {"name": "intensity", "type": "float", "description_pt": "Intensidade máxima do tremor em pixels.", "range": {"min": 0.0, "max": 100.0}, "default": 5.0},
+    {"name": "duration", "type": "float", "description_pt": "Duração total do efeito.", "range": {"min": 0.01, "max": 5.0}, "default": 0.3, "unit": "s"},
+    {"name": "decay", "type": "float", "description_pt": "Fator de decaimento por segundo (0 = constante, 1 = some rápido).", "range": {"min": 0.0, "max": 1.0}, "default": 0.8}
+  ],
+  "signals": [
+    {"name": "shake_started", "description_pt": "Emitido quando o tremor começa.", "params": []},
+    {"name": "shake_ended", "description_pt": "Emitido quando o tremor termina.", "params": []}
+  ],
+  "dependencies": [],
+  "genres": ["generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["feedback", "screen_shake", "tremor", "camera"]
+}

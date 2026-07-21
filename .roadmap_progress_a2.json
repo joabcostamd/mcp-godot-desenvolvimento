@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 31,
+    "implementados": 32,
     "lista": [
       {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido"},
       {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido"},
@@ -69,8 +69,9 @@
       {"id": 38, "nome": "save_load", "versao": "1.0.1", "status": "concluido", "data": "2026-07-21", "nota": "Node + ConfigFile. Salva Inventory/Currency/XPLevel. Multiplos slots. Auditoria: M1(save_dir setter), B2(DirAccess null guard). 12 testes."},
       {"id": 36, "nome": "achievement", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + conditions collect/currency/level. Auto-detecta siblings. 9 testes."},
       {"id": 37, "nome": "unlockable", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + metaprogression. Conditions achievement/level/currency. 7 testes."},
-      {"id": 39, "nome": "pause_menu", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + get_tree().paused. Input ui_cancel. Sinais paused/resumed. 6 testes."}
+      {"id": 39, "nome": "pause_menu", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + get_tree().paused. Input ui_cancel. Sinais paused/resumed. 6 testes."},
+      {"id": 40, "nome": "screen_shake", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Camera2D offset. trigger() com intensity/duration/decay. 7 testes."}
     ]
   },
-  "proximo": "screen_shake (#40) — sem dependências. Grupo: Feedback."
+  "proximo": "floating_text (#41) — sem dependências. Grupo: Feedback."
 }
