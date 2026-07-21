@@ -1,0 +1,22 @@
+{
+  "name": "checkpoint",
+  "description_pt": "Ponto de checkpoint que salva a posição do player via SaveLoad. Area2D com CollisionShape2D. body_entered ativa e salva. respawn() estático teleporta o player para o último checkpoint.",
+  "description_en": "Checkpoint point that saves the player position via SaveLoad. Area2D with CollisionShape2D. body_entered activates and saves. Static respawn() teleports player to last checkpoint.",
+  "synonyms": {
+    "pt": ["checkpoint", "salvamento", "respawn", "ponto", "bandeira"],
+    "en": ["checkpoint", "save_point", "respawn", "flag"]
+  },
+  "parameters": [
+    {"name": "checkpoint_id", "type": "String", "description_pt": "ID único do checkpoint.", "default": "default"},
+    {"name": "spawn_offset", "type": "Vector2", "description_pt": "Offset da posição de spawn relativa ao checkpoint.", "default": {"x":0.0,"y":0.0}}
+  ],
+  "signals": [
+    {"name": "checkpoint_reached", "description_pt": "Emitido quando o checkpoint é ativado.", "params": [{"name": "checkpoint_id", "type": "String"}]}
+  ],
+  "dependencies": ["save_load"],
+  "genres": ["platformer", "topdown_shooter", "metroidvania", "generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["sistema", "checkpoint", "respawn", "save"]
+}
