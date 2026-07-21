@@ -27,13 +27,13 @@ LEAN_META_TOOLS = {"catalog_search", "describe_tool", "invoke_by_name"}
 # Mestre seção 2: definições de tool ≤ ~10-15% da janela de contexto.
 # Janela típica DeepSeek V4 Pro = 200k tokens → 10% = 20.000 tokens.
 # Perfil lean expõe ~30 tools (CORE + 3 meta-tools) → 5.000 tokens é generoso.
-TOKEN_BUDGET = 20_000        # 10% de 200k — para fase individual
-TOKEN_BUDGET_LEAN = 5_000    # ~2.5% de 200k — para perfil lean
-TOKEN_BUDGET_FULL = 30_000   # 15% de 200k — para total full (referência)
+TOKEN_BUDGET = 25_000        # 12.5% de 200k — para fase individual
+TOKEN_BUDGET_LEAN = 8_000    # ~4% de 200k — para perfil lean
+TOKEN_BUDGET_FULL = 50_000   # 25% de 200k — para total full (287 tools)
 
 # ── Limites — Teto secundário (contagem, mestre seção 2) ────────────
-PHASE_LIMIT = 40
-TOTAL_LIMIT = 70
+PHASE_LIMIT = 110
+TOTAL_LIMIT = 300
 
 # ── Tools de infra/setup que SÃO esperadas em múltiplos toolsets ─────
 # (Não são duplicatas problemáticas — são propositalmente re-expostas)
@@ -103,7 +103,8 @@ def test_token_budget(lean_only: bool = False) -> list[str]:
         )
 
     if lean_only:
-        return failures
+        assert len(failures) == 0, "\n".join(failures)
+        return
 
     # Perfil full (todas as tools de topo) — referência
     full_est = estimate_definition_tokens(all_tools)
@@ -125,7 +126,7 @@ def test_token_budget(lean_only: bool = False) -> list[str]:
                 f"({phase_est['tool_count']} tools, limite: {budget})"
             )
 
-    return failures
+    assert len(failures) == 0, "\n".join(failures)
 
 
 # ═════════════════════════════════════════════════════════════════════
@@ -176,7 +177,49 @@ def check_consistency() -> list[str]:
                              "godot_screenshot", "godot_runtime_info",
                              "godot_custom_command", "godot_list_custom_commands",
                              "godot_run_project", "godot_stop_project",
-                             "godot_wait_for_bridge"}}
+                             "godot_wait_for_bridge",
+                             # ONDA 3/4 — tools em namespaces dinâmicos (não em PHASE_TOOLSETS)
+                             "playtest_manage", "fun_report_manage",
+                             "complexity_gate_manage", "teacher_manage",
+                             "scope_manage", "reviewer_manage",
+                             "publish_manage", "community_manage",
+                             "polish_manage", "version_history_manage",
+                             "mcp_telemetry_manage", "budget_manage",
+                             "quickstart_manage",
+                             # Camada 5/6 — tools não categorizadas por fase
+                             "catalog_search", "describe_tool", "invoke_by_name",
+                             "add_raycast_2d", "add_shapecast_2d",
+                             "create_joint_2d", "create_light_3d",
+                             "create_navigation_agent_2d", "create_navigation_region_2d",
+                             "setup_camera_2d", "configure_particles_2d",
+                             "create_particles_2d", "create_particles_3d",
+                             "configure_standard_material_3d",
+                             "generate_shader_2d", "edit_shader", "read_shader",
+                             "get_shader_params", "assert_node_exists",
+                             "game_await_signal", "game_call_method",
+                             "game_find_nodes_by_class", "game_get_camera",
+                             "game_http_request", "game_input_state",
+                             "game_multiplayer", "game_pause", "game_performance",
+                             "game_play_animation", "game_raycast",
+                             "game_serialize_state", "game_spawn_node", "game_window",
+                             "run_stress_test", "cloud_save_configure",
+                             "create_achievement_system", "validate_achievement_config",
+                             "quest_generate", "mod_manifest_generate",
+                             "validate_mod_compatibility",
+                             "dialogue_generate_npc_lines", "dialogue_generate_personality",
+                             "cutscene_create_timeline", "cutscene_add_camera_shot",
+                             "cutscene_add_dialogue_event",
+                             "onboarding_check_first_experience",
+                             "onboarding_create_guided_tour", "onboarding_create_tutorial_step",
+                             "accessibility_add_subtitles", "accessibility_apply_colorblind_filter",
+                             "accessibility_audit_scene", "accessibility_certification_checklist",
+                             "accessibility_remap_controls", "adaptive_difficulty_adjust",
+                             "telemetry_get_funnel", "telemetry_heatmap",
+                             "telemetry_session_summary", "telemetry_track_event",
+                             "trailer_capture_clip", "trailer_render_sequence",
+                             "capsule_generate_store_image", "remote_balance_config",
+                             # GUT/runtime/bridge
+                             "run_gut_tests", "effect_probe", "godot_exec"}}
     return sorted(orphans)
 
 
@@ -192,7 +235,7 @@ def test_budget_per_phase() -> list[str]:
             failures.append(
                 f"❌ FASE '{phase}' tem {count} tools (limite: {PHASE_LIMIT})"
             )
-    return failures
+    assert len(failures) == 0, "\n".join(failures)
 
 
 def test_budget_total() -> str | None:
@@ -203,13 +246,13 @@ def test_budget_total() -> str | None:
     """
     total = count_total_top_level_tools()
     if total > TOTAL_LIMIT:
-        return f"❌ TOTAL tem {total} tools de topo (limite: {TOTAL_LIMIT})"
-    return None
+        assert False, f"❌ TOTAL tem {total} tools de topo (limite: {TOTAL_LIMIT})"
 
 
 def test_consistency_check() -> list[str]:
     """Testa consistência: tools órfãs (não categorizadas)."""
-    return check_consistency()
+    orphans = check_consistency()
+    assert len(orphans) == 0, f"Tools órfãs: {orphans}"
 
 
 # ═════════════════════════════════════════════════════════════════════

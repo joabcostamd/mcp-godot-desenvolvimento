@@ -67,11 +67,11 @@ def test_gdtoolkit_installed():
     result = _ensure_gdtoolkit()
     if result["installed"]:
         ok(f"gdtoolkit instalado — versão: {result['version']}")
+        return
     else:
         falha(f"gdtoolkit NÃO instalado: {result['error']}")
         print("\n  ⚠️  Execute: pip install 'gdtoolkit>=4.0,<5.0'")
-        return False
-    return True
+        assert False, f"gdtoolkit não instalado: {result['error']}"
 
 
 # ══════════════════════════════════════════════════════════════════════
