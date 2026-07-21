@@ -1,0 +1,24 @@
+{
+  "name": "double_jump",
+  "description_pt": "Pulo múltiplo no ar. Permite jump_count pulos (2 = pulo duplo). Coyote time dá margem após sair do chão. Complementar ao PlayerController (cuida do 1º pulo). Deve ser filho de CharacterBody2D.",
+  "description_en": "Multiple air jumps. Allows jump_count jumps (2 = double jump). Coyote time gives a grace period after leaving ground. Complementary to PlayerController (handles 1st jump). Must be child of CharacterBody2D.",
+  "synonyms": {
+    "pt": ["pulo_duplo", "pulo_triplo", "pulo_ar", "coyote_time", "air_jump"],
+    "en": ["double_jump", "triple_jump", "air_jump", "coyote_time", "multi_jump"]
+  },
+  "parameters": [
+    {"name": "jump_count", "type": "int", "description_pt": "Número total de pulos permitidos (2 = pulo duplo).", "range": {"min": 1, "max": 10}, "default": 2},
+    {"name": "jump_velocity", "type": "float", "description_pt": "Velocidade vertical do pulo (negativa = para cima).", "range": {"min": -2000.0, "max": -50.0}, "default": -400.0, "unit": "px/s"},
+    {"name": "coyote_time", "type": "float", "description_pt": "Tempo extra após sair do chão em que o pulo ainda funciona.", "range": {"min": 0.0, "max": 0.5}, "default": 0.1, "unit": "s"}
+  ],
+  "signals": [
+    {"name": "jumped", "description_pt": "Emitido a cada pulo executado.", "params": [{"name": "jumps_used", "type": "int"}]},
+    {"name": "jumps_exhausted", "description_pt": "Emitido quando todos os pulos foram usados.", "params": []}
+  ],
+  "dependencies": [],
+  "genres": ["platformer", "metroidvania", "generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["movimento", "pulo", "double_jump", "jogador"]
+}
