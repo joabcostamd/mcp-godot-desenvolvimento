@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 184,
+    "implementados": 190,
     "lista": [
       {
         "nome": "accordion",
@@ -69,6 +69,12 @@
       },
       {
         "nome": "ambience_zone",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "analytics_tracker",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -290,6 +296,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "crash_reporter",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "critical_hit",
         "versao": "1.0.0",
         "status": "concluido",
@@ -357,6 +369,12 @@
       },
       {
         "nome": "debug_console",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "debug_overlay",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -710,6 +728,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "logger",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "look_at_target",
         "versao": "1.0.0",
         "status": "concluido",
@@ -812,6 +836,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "performance_monitor",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "player_controller",
         "versao": "1.0.0",
         "status": "concluido",
@@ -825,6 +855,12 @@
       },
       {
         "nome": "player_vehicle",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "profiler_hook",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
