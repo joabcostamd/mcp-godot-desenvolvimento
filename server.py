@@ -447,6 +447,11 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "runtime_connect_signal", "runtime_disconnect_signal",
         "runtime_emit_signal", "runtime_watch_signal",
         "shader_generate", "shader_list_templates",
+        # ── Movidos do PROTOTIPO (F5 prep) ──
+        "create_animation_tree", "generate_audio_sfx",
+        "load_scene_async",
+        "godot_custom_command", "godot_list_custom_commands",
+        "godot_keep_alive",
 },
     "PROTOTIPO": {
         # ── Execução runtime (core do prototipar) ──
@@ -454,35 +459,23 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "godot_run_project", "godot_stop_project", "godot_wait_for_bridge",
         "execute_gdscript_runtime",
         "godot_exec", "godot_runtime_info",
-        "godot_custom_command", "godot_list_custom_commands",
-        "godot_keep_alive",
-        # ── Observação ──
-        "capture_game_screenshot", "godot_screenshot", "take_screenshot",
-        "get_runtime_state_digest", "capture_runtime_errors",
-        "effect_probe",
         # ── Game bridge ──
         "game_bridge_manage",
         # ── Rollups de prototipagem rápida ──
         "physics_manage",
         "asset_manage",
-        "audio_manage", "generate_audio_sfx",
-        "anim_manage", "create_animation_tree",
+        "audio_manage",
+        "anim_manage",
         "camera_manage",
         "vfx_manage",
         "shader_manage",
         "raycast_manage",
-        "load_scene_async",
-        # ── Movidos para DESIGN: physics_create_joint, physics_configure_body,
-        #     camera_configure_attributes, runtime_connect/disconnect/emit/watch_signal,
-        #     physics_query_area_overlap, physics_raycast_query,
-        #     shader_generate, shader_list_templates
-        # ── Movidos para CONTEUDO: skeleton_*, csg_*, gi_*, scene_fx_*,
-        #     sky_create_procedural, multimesh_create_instance,
-        #     batch_atomic_edit, add_nodes_batch, set_properties_batch,
-        #     create_light_2d
-        # ── Movidos para POLIMENTO: freeze_game_clock, unfreeze_game_clock,
-        #     step_game_time, step_until, watch_signal, watch_state_*,
-        #     inject_input_event, simulate_input_sequence
+        # ── Movidos para DESIGN: create_animation_tree, generate_audio_sfx,
+        #     load_scene_async, godot_custom_command, godot_list_custom_commands,
+        #     godot_keep_alive
+        # ── Movidos para POLIMENTO: capture_game_screenshot, godot_screenshot,
+        #     take_screenshot, get_runtime_state_digest, capture_runtime_errors,
+        #     effect_probe
 },
     "CONTEUDO": {
         "tilemap_manage",
@@ -560,6 +553,10 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "step_game_time", "step_until",
         "watch_signal", "watch_state_start", "watch_state_collect",
         "inject_input_event", "simulate_input_sequence",
+        # ── Screenshots e debug (movidos do PROTOTIPO) ──
+        "capture_game_screenshot", "godot_screenshot", "take_screenshot",
+        "get_runtime_state_digest", "capture_runtime_errors",
+        "effect_probe",
 },
     "PRONTO_PARA_LANCAR": {
         "export_manage",
