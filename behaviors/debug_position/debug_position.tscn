@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdebugpos00000001"]
+[ext_resource type="Script" path="res://behaviors/debug_position/debug_position.gd" id="1_dp"]
+[node name="DebugPosition" type="Node2D"]
+script = ExtResource("1_dp")

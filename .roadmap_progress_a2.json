@@ -41,8 +41,11 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 90,
+    "implementados": 93,
     "lista": [
+      {"id": 107, "nome": "event_bus", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + pub/sub global. register/fire/unregister/clear. 2 testes."},
+      {"id": 137, "nome": "fps_counter", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + Label FPS. min/max/avg com update_interval. 1 teste."},
+      {"id": 134, "nome": "debug_position", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node2D + _draw cruz/circulo. Color/size/show_label. 1 teste."},
       {"id": 119, "nome": "parallax_background", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node2D + Sprite2D layers com parallax_scale. auto_scroll, follow_camera. 2 testes."},
       {"id": 114, "nome": "spring_joint", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + 2 anchors. Stiffness/damping/rest_length. 2 testes."},
       {"id": 113, "nome": "wind_zone", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + wind_direction/strength/turbulence. 1 teste."},
