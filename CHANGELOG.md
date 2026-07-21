@@ -1,5 +1,40 @@
 # CHANGELOG — mcp-godot-desenvolvimento
 
+## v3.7.0 (2026-07-21) — ONDA 3: Qualidade de Jogo (AGENTE 01)
+
+### Playtest automatizado (3.A-3.C)
+- **Novo:** `tools/playtest_ops.py` (+800 linhas) — rollup `playtest_manage` com 8 operações
+- **Smoke test (3.A):** FPS, crash, viewport ativo via runtime bridge (:8790)
+- **Personas (3.B):** `tools/personas.py` — 3 personas (apressado/cauteloso/explorador) com KEY_MAP Godot 4
+- **Agente LLM (3.C):** `agent_run` via DeepSeek API real (`api.deepseek.com/chat/completions`) + fallback heurístico offline. Detecta `DEEPSEEK_API_KEY`/`ANTHROPIC_API_KEY` do ambiente
+
+### Relatório de qualidade (3.D)
+- **Novo:** `tools/fun_report_ops.py` (420 linhas) — rollup `fun_report_manage`
+- **5 sinais:** taxa de aprovação, tentativas, estratégia, escalada, densidade de eventos (vale de tédio)
+- **5 modos de falha nomeados:** sem escalada, estratégia degenerada, recompensa distante, pico escondido, vale de tédio
+- Recomendações acionáveis em português por modo de falha
+
+### Gates integrados ao advance_phase (3.E-3.G)
+- **Gate 5 minutos (3.E):** `playtest_manage op=gate_first_5min` — entendeu/vitória/não-morreu
+- **Gate complexidade (3.F):** `tools/complexity_gate_ops.py` — mede scripts .gd e linhas, bloqueia >50%
+- **Gate core loop (3.G):** fun_report como trava no `advance_phase`
+
+### Ferramentas de qualidade (3.H-3.K)
+- **Modo professor (3.H):** `tools/teacher_ops.py` — explica em 3 partes (o_que/por_que/proximo)
+- **Primeiro não (3.I):** `tools/scope_ops.py` — detecta escopos inviáveis e oferece contraproposta
+- **Disclosure IA (3.J):** `scope_manage op=disclosure` — declaração Steam + itch.io
+- **Revisor adversarial (3.K):** `tools/reviewer_ops.py` — ativa/desativa modo auditoria
+
+### Gaps de qualidade (G1-G10)
+- Dashboard unificado (`gate_status`), suíte completa (`full_suite`), 5º sinal (vale de tédio)
+- `tools/polish_ops.py` — version_diff, record_gif, accessibility, productivity, test_report, visual_diff
+
+### Métricas
+- **ONDA 3:** 11/11 fatias + 10 gaps = 21 itens
+- **Total tools:** 285 (+8)
+- **Total handlers:** 307
+- **Testes:** 69 (pytest)
+
 ## v3.5.1 (2026-07-21) — ONDA 1: Fatia 1.P (AGENTE 01)
 
 ### Telemetria opt-in do MCP (1.P)
