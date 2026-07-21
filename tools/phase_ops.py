@@ -409,6 +409,24 @@ def advance_phase(force: bool = False, reason: str = "") -> dict:
                 "current_phase": phase,
             }
 
+    # ── Gate de design do core loop (Fatia 3.G) ──────────────────
+    if not force and phase in _GATE_PHASES:
+        loop_failures = _check_core_loop_gate()
+        if loop_failures:
+            failure_labels = [f["label"] for f in loop_failures]
+            return {
+                "status": "error",
+                "message": (
+                    f"🎮 Gate de design do core loop: {len(loop_failures)} modo(s) de falha "
+                    f"detectado(s): {', '.join(failure_labels)}. "
+                    "Rode fun_report_manage op=generate para diagnostico completo, "
+                    "ou use force=True para pular."
+                ),
+                "gate": "core_loop",
+                "failures": loop_failures,
+                "current_phase": phase,
+            }
+
     return _phase_state.advance(next_phase, force=force, reason=reason)
 
 
@@ -461,6 +479,25 @@ def _check_complexity_gate() -> str:
         return result.get("status", "not_run")
     except Exception:
         return "not_run"
+
+
+def _check_core_loop_gate() -> list[dict]:
+    """Verifica gate de design do core loop via fun_report.
+
+    Returns:
+        Lista de falhas detectadas (vazia se passou ou sem dados).
+    """
+    try:
+        from tools.fun_report_ops import fun_report_manage
+        result = fun_report_manage(op="generate")
+        failures = result.get("failures", [])
+        # So bloqueia se ha dados reais (nao "no_data")
+        approval = result.get("signals", {}).get("approval", {})
+        if approval.get("status") == "no_data":
+            return []  # sem dados = nao bloqueia
+        return failures
+    except Exception:
+        return []
 
 
 def get_phase_history() -> dict:

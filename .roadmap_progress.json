@@ -42,6 +42,14 @@
     "checkpoint": "e757878",
     "resultado": "Gate de divida de complexidade. complexity_gate_manage(op=baseline|check): conta scripts .gd e linhas, compara com baseline. Bloqueia se >50%% crescimento. Integrado com advance_phase. 281 tools (+1). C1 PASS, C3 PASS."
   },
+  "fatia_3.G": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "acfe25c",
+    "resultado": "Gate de design do core loop. Integra fun_report no advance_phase: se detectar modo de falha (sem escalada, estrategia degenerada, recompensa distante, pico escondido), bloqueia avanco. So bloqueia com dados reais (sem dados = nao bloqueia). 281 tools. C1 PASS, C3 PASS."
+  },
   "fatia_3.A": {
     "status": "concluida",
     "data": "2026-07-21",
