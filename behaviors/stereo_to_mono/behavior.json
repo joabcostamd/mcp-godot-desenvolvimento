@@ -1,1 +1,22 @@
-﻿{"name":"stereo_to_mono","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "stereo_to_mono",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior stereo_to_mono para Godot 4.7.",
+  "description_en": "stereo_to_mono behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "stereo_to_mono"
+    ],
+    "en": [
+      "stereo_to_mono"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

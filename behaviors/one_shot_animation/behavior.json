@@ -1,1 +1,22 @@
-﻿{"name":"one_shot_animation","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "one_shot_animation",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior one_shot_animation para Godot 4.7.",
+  "description_en": "one_shot_animation behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "one_shot_animation"
+    ],
+    "en": [
+      "one_shot_animation"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

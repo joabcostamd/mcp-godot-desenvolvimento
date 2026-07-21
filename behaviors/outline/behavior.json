@@ -3,17 +3,55 @@
   "description_pt": "Adiciona outline (contorno) ao parent Node2D usando shader. Cor e largura configuráveis. Pode mostrar apenas no foco (show_on_focus).",
   "description_en": "Adds outline to parent Node2D using shader. Configurable color and width. Can show only on focus.",
   "synonyms": {
-    "pt": ["contorno", "borda", "highlight", "selecao"],
-    "en": ["outline", "border", "highlight", "selection"]
+    "pt": [
+      "contorno",
+      "borda",
+      "highlight",
+      "selecao"
+    ],
+    "en": [
+      "outline",
+      "border",
+      "highlight",
+      "selection"
+    ]
   },
   "parameters": [
-    {"name": "outline_color", "type": "Color", "default": {"r":1,"g":1,"b":1,"a":1}},
-    {"name": "outline_width", "type": "float", "range": {"min": 1, "max": 10}, "default": 2},
-    {"name": "show_on_focus", "type": "bool", "default": false}
+    {
+      "name": "outline_color",
+      "type": "Color",
+      "default": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 1
+      }
+    },
+    {
+      "name": "outline_width",
+      "type": "float",
+      "range": {
+        "min": 1,
+        "max": 10
+      },
+      "default": 2
+    },
+    {
+      "name": "show_on_focus",
+      "type": "bool",
+      "default": false
+    }
   ],
   "signals": [],
   "dependencies": [],
-  "genres": ["generic"],
-  "version": "1.0.0", "godot_version": "4.7",
-  "tags": ["visual", "outline", "highlight"]
+  "genres": [
+    "generic"
+  ],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": [
+    "visual",
+    "outline",
+    "highlight"
+  ]
 }

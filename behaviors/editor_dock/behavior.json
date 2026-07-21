@@ -1,1 +1,22 @@
-﻿{"name":"editor_dock","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":["system"]}
+{
+  "name": "editor_dock",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior editor_dock para Godot 4.7.",
+  "description_en": "editor_dock behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "editor_dock"
+    ],
+    "en": [
+      "editor_dock"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

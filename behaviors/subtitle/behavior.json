@@ -1,1 +1,51 @@
-{"name":"subtitle","version":"1.0.0","godot_version":"4.7","description_pt":"Control que exibe legendas estilizadas com speaker, duração e posição.","synonyms":{"pt":["legenda","subtitle","acessibilidade"],"en":["subtitle","caption","accessibility"]},"parameters":[{"name":"text","type":"String","default":""},{"name":"duration","type":"float","range":{"min":0.5,"max":30.0},"default":3.0}],"signals":[{"name":"shown","params":[]},{"name":"hidden","params":[]}],"genres":["generic"],"tags":["acessibilidade","legenda"]}
+{
+  "name": "subtitle",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Control que exibe legendas estilizadas com speaker, duração e posição.",
+  "synonyms": {
+    "pt": [
+      "legenda",
+      "subtitle",
+      "acessibilidade"
+    ],
+    "en": [
+      "subtitle",
+      "caption",
+      "accessibility"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "text",
+      "type": "String",
+      "default": ""
+    },
+    {
+      "name": "duration",
+      "type": "float",
+      "range": {
+        "min": 0.5,
+        "max": 30.0
+      },
+      "default": 3.0
+    }
+  ],
+  "signals": [
+    {
+      "name": "shown",
+      "params": []
+    },
+    {
+      "name": "hidden",
+      "params": []
+    }
+  ],
+  "genres": [
+    "generic"
+  ],
+  "tags": [
+    "acessibilidade",
+    "legenda"
+  ]
+}

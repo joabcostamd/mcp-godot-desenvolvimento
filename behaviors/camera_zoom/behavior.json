@@ -3,21 +3,76 @@
   "description_pt": "Zoom suave da câmera via Camera2D.zoom com Tween e easing configurável. zoom_to(target, duration) para aproximar/afastar. Sem câmera = no-op seguro.",
   "description_en": "Smooth camera zoom via Camera2D.zoom with Tween and configurable easing. zoom_to(target, duration) to zoom in/out. No camera = safe no-op.",
   "synonyms": {
-    "pt": ["zoom", "camera", "aproximar", "afastar", "lente"],
-    "en": ["zoom", "camera", "zoom_in", "zoom_out", "lens"]
+    "pt": [
+      "zoom",
+      "camera",
+      "aproximar",
+      "afastar",
+      "lente"
+    ],
+    "en": [
+      "zoom",
+      "camera",
+      "zoom_in",
+      "zoom_out",
+      "lens"
+    ]
   },
   "parameters": [
-    {"name": "default_zoom", "type": "Vector2", "description_pt": "Zoom normal (1,1 = sem zoom).", "default": {"x":1.0,"y":1.0}},
-    {"name": "default_duration", "type": "float", "description_pt": "Duração padrão da transição.", "range": {"min": 0.0, "max": 5.0}, "default": 0.5, "unit": "s"}
+    {
+      "name": "default_zoom",
+      "type": "Vector2",
+      "description_pt": "Zoom normal (1,1 = sem zoom).",
+      "default": {
+        "x": 1.0,
+        "y": 1.0
+      }
+    },
+    {
+      "name": "default_duration",
+      "type": "float",
+      "description_pt": "Duração padrão da transição.",
+      "range": {
+        "min": 0.0,
+        "max": 5.0
+      },
+      "default": 0.5,
+      "unit": "s"
+    }
   ],
   "signals": [
-    {"name": "zoom_started", "description_pt": "Emitido ao iniciar o zoom.", "params": [{"name": "target", "type": "Vector2"}]},
-    {"name": "zoom_finished", "description_pt": "Emitido ao finalizar o zoom.", "params": [{"name": "current", "type": "Vector2"}]}
+    {
+      "name": "zoom_started",
+      "description_pt": "Emitido ao iniciar o zoom.",
+      "params": [
+        {
+          "name": "target",
+          "type": "Vector2"
+        }
+      ]
+    },
+    {
+      "name": "zoom_finished",
+      "description_pt": "Emitido ao finalizar o zoom.",
+      "params": [
+        {
+          "name": "current",
+          "type": "Vector2"
+        }
+      ]
+    }
   ],
   "dependencies": [],
-  "genres": ["generic"],
+  "genres": [
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["camera", "zoom", "efeitos_visuais", "tween"]
+  "tags": [
+    "camera",
+    "zoom",
+    "efeitos_visuais",
+    "tween"
+  ]
 }

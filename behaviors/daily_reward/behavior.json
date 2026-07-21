@@ -1,1 +1,74 @@
-{"name":"daily_reward","version":"1.0.0","godot_version":"4.7","description_pt":"Node que gerencia recompensas diárias com streak bônus. Baseado em data real (Time). Ideal para jogos mobile e gacha.","synonyms":{"pt":["diario","recompensa","daily","login","bonus"],"en":["daily","reward","login","bonus"]},"parameters":[{"name":"rewards","type":"Array","description_pt":"Array de {day,item_id,quantity}. Dia 1 = primeira recompensa."},{"name":"streak_bonus_multiplier","type":"float","range":{"min":1.0,"max":5.0},"default":1.5}],"signals":[{"name":"claimed","params":[{"name":"day","type":"int"},{"name":"item_id","type":"String"}]},{"name":"streak_updated","params":[{"name":"streak","type":"int"}]}],"dependencies":["save_load"],"genres":["mobile","gacha","generic"],"tags":["daily","reward","social"]}
+{
+  "name": "daily_reward",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que gerencia recompensas diárias com streak bônus. Baseado em data real (Time). Ideal para jogos mobile e gacha.",
+  "synonyms": {
+    "pt": [
+      "diario",
+      "recompensa",
+      "daily",
+      "login",
+      "bonus"
+    ],
+    "en": [
+      "daily",
+      "reward",
+      "login",
+      "bonus"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "rewards",
+      "type": "Array",
+      "description_pt": "Array de {day,item_id,quantity}. Dia 1 = primeira recompensa."
+    },
+    {
+      "name": "streak_bonus_multiplier",
+      "type": "float",
+      "range": {
+        "min": 1.0,
+        "max": 5.0
+      },
+      "default": 1.5
+    }
+  ],
+  "signals": [
+    {
+      "name": "claimed",
+      "params": [
+        {
+          "name": "day",
+          "type": "int"
+        },
+        {
+          "name": "item_id",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "streak_updated",
+      "params": [
+        {
+          "name": "streak",
+          "type": "int"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    "save_load"
+  ],
+  "genres": [
+    "mobile",
+    "gacha",
+    "generic"
+  ],
+  "tags": [
+    "daily",
+    "reward",
+    "social"
+  ]
+}

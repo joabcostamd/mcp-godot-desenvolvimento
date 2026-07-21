@@ -3,24 +3,87 @@
   "description_pt": "Timer de rodada com contagem regressiva. Emite tick a cada segundo, round_started/round_ended/time_up. Suporta countdown e pause_on_end (pausa o jogo ao terminar).",
   "description_en": "Round timer with countdown. Emits tick every second, round_started/round_ended/time_up. Supports countdown and pause_on_end (pauses the game on finish).",
   "synonyms": {
-    "pt": ["rodada", "timer", "contagem", "round", "tempo"],
-    "en": ["round", "timer", "countdown", "time"]
+    "pt": [
+      "rodada",
+      "timer",
+      "contagem",
+      "round",
+      "tempo"
+    ],
+    "en": [
+      "round",
+      "timer",
+      "countdown",
+      "time"
+    ]
   },
   "parameters": [
-    {"name": "duration", "type": "float", "description_pt": "Duração total em segundos.", "range": {"min": 1.0, "max": 3600.0}, "default": 60.0, "unit": "s"},
-    {"name": "countdown", "type": "bool", "description_pt": "Se true, decrementa (timer regressivo).", "default": true},
-    {"name": "pause_on_end", "type": "bool", "description_pt": "Se true, pausa o jogo ao terminar.", "default": false}
+    {
+      "name": "duration",
+      "type": "float",
+      "description_pt": "Duração total em segundos.",
+      "range": {
+        "min": 1.0,
+        "max": 3600.0
+      },
+      "default": 60.0,
+      "unit": "s"
+    },
+    {
+      "name": "countdown",
+      "type": "bool",
+      "description_pt": "Se true, decrementa (timer regressivo).",
+      "default": true
+    },
+    {
+      "name": "pause_on_end",
+      "type": "bool",
+      "description_pt": "Se true, pausa o jogo ao terminar.",
+      "default": false
+    }
   ],
   "signals": [
-    {"name": "tick", "description_pt": "Emitido a cada segundo.", "params": [{"name": "remaining", "type": "float"}]},
-    {"name": "round_started", "description_pt": "Emitido ao iniciar.", "params": []},
-    {"name": "round_ended", "description_pt": "Emitido ao terminar (pausa ou tempo).", "params": []},
-    {"name": "time_up", "description_pt": "Emitido quando o tempo zera (apenas countdown).", "params": []}
+    {
+      "name": "tick",
+      "description_pt": "Emitido a cada segundo.",
+      "params": [
+        {
+          "name": "remaining",
+          "type": "float"
+        }
+      ]
+    },
+    {
+      "name": "round_started",
+      "description_pt": "Emitido ao iniciar.",
+      "params": []
+    },
+    {
+      "name": "round_ended",
+      "description_pt": "Emitido ao terminar (pausa ou tempo).",
+      "params": []
+    },
+    {
+      "name": "time_up",
+      "description_pt": "Emitido quando o tempo zera (apenas countdown).",
+      "params": []
+    }
   ],
-  "dependencies": ["pause"],
-  "genres": ["survivor_like", "tower_defense", "generic"],
+  "dependencies": [
+    "pause"
+  ],
+  "genres": [
+    "survivor_like",
+    "tower_defense",
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["estrutura", "timer", "round", "contagem"]
+  "tags": [
+    "estrutura",
+    "timer",
+    "round",
+    "contagem"
+  ]
 }

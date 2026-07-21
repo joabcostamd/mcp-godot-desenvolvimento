@@ -1,1 +1,22 @@
-﻿{"name":"save_slots","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":["save"]}
+{
+  "name": "save_slots",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior save_slots para Godot 4.7.",
+  "description_en": "save_slots behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "save_slots"
+    ],
+    "en": [
+      "save_slots"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

@@ -1,1 +1,65 @@
-{"name":"racing_lap","version":"1.0.0","godot_version":"4.7","description_pt":"Node que gerencia voltas de corrida com checkpoints e melhor tempo.","synonyms":{"pt":["corrida","volta","racing","checkpoint"],"en":["racing","lap","checkpoint"]},"parameters":[{"name":"total_laps","type":"int","range":{"min":1,"max":20},"default":3}],"signals":[{"name":"lap_completed","params":[{"name":"lap","type":"int"}]},{"name":"race_finished","params":[{"name":"best_time","type":"float"}]},{"name":"checkpoint_passed","params":[{"name":"index","type":"int"}]}],"genres":["racing"],"tags":["racing"]}
+{
+  "name": "racing_lap",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que gerencia voltas de corrida com checkpoints e melhor tempo.",
+  "synonyms": {
+    "pt": [
+      "corrida",
+      "volta",
+      "racing",
+      "checkpoint"
+    ],
+    "en": [
+      "racing",
+      "lap",
+      "checkpoint"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "total_laps",
+      "type": "int",
+      "range": {
+        "min": 1,
+        "max": 20
+      },
+      "default": 3
+    }
+  ],
+  "signals": [
+    {
+      "name": "lap_completed",
+      "params": [
+        {
+          "name": "lap",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "race_finished",
+      "params": [
+        {
+          "name": "best_time",
+          "type": "float"
+        }
+      ]
+    },
+    {
+      "name": "checkpoint_passed",
+      "params": [
+        {
+          "name": "index",
+          "type": "int"
+        }
+      ]
+    }
+  ],
+  "genres": [
+    "racing"
+  ],
+  "tags": [
+    "racing"
+  ]
+}

@@ -1,1 +1,22 @@
-﻿{"name":"root_motion_controller","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "root_motion_controller",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior root_motion_controller para Godot 4.7.",
+  "description_en": "root_motion_controller behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "root_motion_controller"
+    ],
+    "en": [
+      "root_motion_controller"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

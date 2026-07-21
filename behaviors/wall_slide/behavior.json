@@ -3,23 +3,102 @@
   "description_pt": "Deslize em parede com wall jump. Detecta paredes via RayCast2D esquerdo/direito. Reduz velocidade de queda enquanto encostado. Pulo na parede impulsiona para o lado oposto. Deve ser filho de CharacterBody2D.",
   "description_en": "Wall slide with wall jump. Detects walls via left/right RayCast2D. Reduces fall speed while touching. Wall jump pushes away from wall. Must be child of CharacterBody2D.",
   "synonyms": {
-    "pt": ["deslizar_parede", "wall_jump", "escorregar", "pulo_parede", "metroidvania"],
-    "en": ["wall_slide", "wall_jump", "cling", "metroidvania", "wall_grab"]
+    "pt": [
+      "deslizar_parede",
+      "wall_jump",
+      "escorregar",
+      "pulo_parede",
+      "metroidvania"
+    ],
+    "en": [
+      "wall_slide",
+      "wall_jump",
+      "cling",
+      "metroidvania",
+      "wall_grab"
+    ]
   },
   "parameters": [
-    {"name": "slide_speed", "type": "float", "description_pt": "Velocidade máxima de descida na parede (px/s).", "range": {"min": 10.0, "max": 500.0}, "default": 60.0, "unit": "px/s"},
-    {"name": "wall_jump_horizontal", "type": "float", "description_pt": "Força horizontal do wall jump (px/s, direção oposta à parede).", "range": {"min": 50.0, "max": 1000.0}, "default": 300.0, "unit": "px/s"},
-    {"name": "wall_jump_vertical", "type": "float", "description_pt": "Força vertical do wall jump (negativa = para cima).", "range": {"min": -2000.0, "max": -50.0}, "default": -350.0, "unit": "px/s"},
-    {"name": "wall_detection_distance", "type": "float", "description_pt": "Distância de detecção da parede (px).", "range": {"min": 4.0, "max": 64.0}, "default": 16.0, "unit": "px"}
+    {
+      "name": "slide_speed",
+      "type": "float",
+      "description_pt": "Velocidade máxima de descida na parede (px/s).",
+      "range": {
+        "min": 10.0,
+        "max": 500.0
+      },
+      "default": 60.0,
+      "unit": "px/s"
+    },
+    {
+      "name": "wall_jump_horizontal",
+      "type": "float",
+      "description_pt": "Força horizontal do wall jump (px/s, direção oposta à parede).",
+      "range": {
+        "min": 50.0,
+        "max": 1000.0
+      },
+      "default": 300.0,
+      "unit": "px/s"
+    },
+    {
+      "name": "wall_jump_vertical",
+      "type": "float",
+      "description_pt": "Força vertical do wall jump (negativa = para cima).",
+      "range": {
+        "min": -2000.0,
+        "max": -50.0
+      },
+      "default": -350.0,
+      "unit": "px/s"
+    },
+    {
+      "name": "wall_detection_distance",
+      "type": "float",
+      "description_pt": "Distância de detecção da parede (px).",
+      "range": {
+        "min": 4.0,
+        "max": 64.0
+      },
+      "default": 16.0,
+      "unit": "px"
+    }
   ],
   "signals": [
-    {"name": "wall_sliding", "description_pt": "Emitido a cada frame enquanto desliza na parede.", "params": [{"name": "is_sliding", "type": "bool"}]},
-    {"name": "wall_jumped", "description_pt": "Emitido ao executar wall jump.", "params": [{"name": "direction", "type": "Vector2"}]}
+    {
+      "name": "wall_sliding",
+      "description_pt": "Emitido a cada frame enquanto desliza na parede.",
+      "params": [
+        {
+          "name": "is_sliding",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "wall_jumped",
+      "description_pt": "Emitido ao executar wall jump.",
+      "params": [
+        {
+          "name": "direction",
+          "type": "Vector2"
+        }
+      ]
+    }
   ],
   "dependencies": [],
-  "genres": ["platformer", "metroidvania", "generic"],
+  "genres": [
+    "platformer",
+    "metroidvania",
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["movimento", "parede", "wall_jump", "metroidvania"]
+  "tags": [
+    "movimento",
+    "parede",
+    "wall_jump",
+    "metroidvania"
+  ]
 }

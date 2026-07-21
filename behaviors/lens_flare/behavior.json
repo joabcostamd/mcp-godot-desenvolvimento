@@ -1,1 +1,58 @@
-{"name":"lens_flare","version":"1.0.0","godot_version":"4.7","description_pt":"Node2D que renderiza efeito de lens flare (reflexo de lente) seguindo posição do sol. Suporta textura, intensidade e cor. Ideal para jogos 2D com iluminação atmosférica.","synonyms":{"pt":["lens_flare","flare","reflexo","lente","sol"],"en":["lens_flare","flare","lens","sun"]},"parameters":[{"name":"flare_intensity","type":"float","range":{"min":0.0,"max":3.0},"default":1.0},{"name":"sun_position","type":"Vector2","default":{"x":0.5,"y":0.2}},{"name":"flare_color","type":"Color","default":{"r":1.0,"g":0.9,"b":0.7,"a":0.5}}],"signals":[],"genres":["generic"],"tags":["lens_flare","shader"]}
+{
+  "name": "lens_flare",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node2D que renderiza efeito de lens flare (reflexo de lente) seguindo posição do sol. Suporta textura, intensidade e cor. Ideal para jogos 2D com iluminação atmosférica.",
+  "synonyms": {
+    "pt": [
+      "lens_flare",
+      "flare",
+      "reflexo",
+      "lente",
+      "sol"
+    ],
+    "en": [
+      "lens_flare",
+      "flare",
+      "lens",
+      "sun"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "flare_intensity",
+      "type": "float",
+      "range": {
+        "min": 0.0,
+        "max": 3.0
+      },
+      "default": 1.0
+    },
+    {
+      "name": "sun_position",
+      "type": "Vector2",
+      "default": {
+        "x": 0.5,
+        "y": 0.2
+      }
+    },
+    {
+      "name": "flare_color",
+      "type": "Color",
+      "default": {
+        "r": 1.0,
+        "g": 0.9,
+        "b": 0.7,
+        "a": 0.5
+      }
+    }
+  ],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "tags": [
+    "lens_flare",
+    "shader"
+  ]
+}

@@ -1,1 +1,22 @@
-﻿{"name":"noise_generator","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["procedural"],"tags":["pcg"]}
+{
+  "name": "noise_generator",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior noise_generator para Godot 4.7.",
+  "description_en": "noise_generator behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "noise_generator"
+    ],
+    "en": [
+      "noise_generator"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

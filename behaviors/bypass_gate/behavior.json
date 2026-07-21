@@ -1,1 +1,22 @@
-﻿{"name":"bypass_gate","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "bypass_gate",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior bypass_gate para Godot 4.7.",
+  "description_en": "bypass_gate behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "bypass_gate"
+    ],
+    "en": [
+      "bypass_gate"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

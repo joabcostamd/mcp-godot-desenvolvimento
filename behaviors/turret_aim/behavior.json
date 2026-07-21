@@ -3,15 +3,32 @@
   "description_pt": "Torre que mira e atira: Node2D que rotaciona suavemente para seguir um alvo e dispara projéteis via fire_rate + projectile. Comportamento base para torres de defesa.",
   "description_en": "Turret that aims and shoots: Node2D that smoothly rotates to track a target and fires projectiles via fire_rate + projectile. Base behavior for defense towers.",
   "synonyms": {
-    "pt": ["torre", "torreta", "canhão", "atirador", "sentry", "defesa"],
-    "en": ["turret", "tower", "cannon", "sentry", "gun", "defense"]
+    "pt": [
+      "torre",
+      "torreta",
+      "canhão",
+      "atirador",
+      "sentry",
+      "defesa"
+    ],
+    "en": [
+      "turret",
+      "tower",
+      "cannon",
+      "sentry",
+      "gun",
+      "defense"
+    ]
   },
   "parameters": [
     {
       "name": "rotation_speed",
       "type": "float",
       "description_pt": "Velocidade de rotação (rad/s). Quanto maior, mais rápido mira.",
-      "range": {"min": 0.1, "max": 20.0},
+      "range": {
+        "min": 0.1,
+        "max": 20.0
+      },
       "default": 3.0,
       "unit": "rad/s"
     },
@@ -19,7 +36,10 @@
       "name": "detection_range",
       "type": "float",
       "description_pt": "Alcance máximo de detecção e disparo (px).",
-      "range": {"min": 50.0, "max": 3000.0},
+      "range": {
+        "min": 50.0,
+        "max": 3000.0
+      },
       "default": 400.0,
       "unit": "px"
     },
@@ -33,7 +53,10 @@
       "name": "aim_tolerance_deg",
       "type": "float",
       "description_pt": "Tolerância de mira em graus. Abaixo disso, considera 'mirando' e pode atirar.",
-      "range": {"min": 0.5, "max": 45.0},
+      "range": {
+        "min": 0.5,
+        "max": 45.0
+      },
       "default": 5.0,
       "unit": "°"
     }
@@ -42,7 +65,12 @@
     {
       "name": "target_locked",
       "description_pt": "Emitido quando a torre está mirando no alvo.",
-      "params": [{"name": "target", "type": "Node2D"}]
+      "params": [
+        {
+          "name": "target",
+          "type": "Node2D"
+        }
+      ]
     },
     {
       "name": "target_lost",
@@ -52,13 +80,33 @@
     {
       "name": "fired",
       "description_pt": "Emitido quando a torre dispara um projétil.",
-      "params": [{"name": "projectile", "type": "Node2D"}]
+      "params": [
+        {
+          "name": "projectile",
+          "type": "Node2D"
+        }
+      ]
     }
   ],
-  "dependencies": ["fire_rate", "projectile"],
-  "genres": ["tower_defense", "topdown_shooter", "roguelike", "generic"],
+  "dependencies": [
+    "fire_rate",
+    "projectile"
+  ],
+  "genres": [
+    "tower_defense",
+    "topdown_shooter",
+    "roguelike",
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["ia", "torre", "mira", "disparo", "defesa", "rotação"]
+  "tags": [
+    "ia",
+    "torre",
+    "mira",
+    "disparo",
+    "defesa",
+    "rotação"
+  ]
 }

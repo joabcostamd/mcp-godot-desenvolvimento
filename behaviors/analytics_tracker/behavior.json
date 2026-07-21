@@ -1,1 +1,22 @@
-﻿{"name":"analytics_tracker","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":["observability"]}
+{
+  "name": "analytics_tracker",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior analytics_tracker para Godot 4.7.",
+  "description_en": "analytics_tracker behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "analytics_tracker"
+    ],
+    "en": [
+      "analytics_tracker"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

@@ -3,20 +3,50 @@
   "description_pt": "Condição de derrota: PLAYER_DEAD (polling de grupo), TIME_UP ou CUSTOM. check() manual ou trigger() direto. Emite defeat_triggered.",
   "description_en": "Defeat condition: PLAYER_DEAD (group polling), TIME_UP, or CUSTOM. Manual check() or direct trigger(). Emits defeat_triggered.",
   "synonyms": {
-    "pt": ["derrota", "perder", "game_over", "fail"],
-    "en": ["defeat", "lose", "game_over", "fail"]
+    "pt": [
+      "derrota",
+      "perder",
+      "game_over",
+      "fail"
+    ],
+    "en": [
+      "defeat",
+      "lose",
+      "game_over",
+      "fail"
+    ]
   },
   "parameters": [
-    {"name": "condition_type", "type": "int", "description_pt": "PLAYER_DEAD=0, TIME_UP=1, CUSTOM=2.", "default": 0},
-    {"name": "player_group", "type": "String", "description_pt": "Grupo do player para PLAYER_DEAD.", "default": "players"}
+    {
+      "name": "condition_type",
+      "type": "int",
+      "description_pt": "PLAYER_DEAD=0, TIME_UP=1, CUSTOM=2.",
+      "default": 0
+    },
+    {
+      "name": "player_group",
+      "type": "String",
+      "description_pt": "Grupo do player para PLAYER_DEAD.",
+      "default": "players"
+    }
   ],
   "signals": [
-    {"name": "defeat_triggered", "description_pt": "Emitido quando a condição é satisfeita.", "params": []}
+    {
+      "name": "defeat_triggered",
+      "description_pt": "Emitido quando a condição é satisfeita.",
+      "params": []
+    }
   ],
   "dependencies": [],
-  "genres": ["generic"],
+  "genres": [
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["estrutura", "derrota", "game_over"]
+  "tags": [
+    "estrutura",
+    "derrota",
+    "game_over"
+  ]
 }

@@ -1,1 +1,42 @@
-{"name":"aim_assist","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":["mira","assistencia","auto_aim"],"en":["aim","assist","auto_aim"]},"parameters":[{"name":"magnetism","type":"float","range":{"min":0.0,"max":1.0},"default":0.5}],"signals":[{"name":"assist_activated","params":[]}],"genres":["shooter"],"tags":["input"]}
+{
+  "name": "aim_assist",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "synonyms": {
+    "pt": [
+      "mira",
+      "assistencia",
+      "auto_aim"
+    ],
+    "en": [
+      "aim",
+      "assist",
+      "auto_aim"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "magnetism",
+      "type": "float",
+      "range": {
+        "min": 0.0,
+        "max": 1.0
+      },
+      "default": 0.5
+    }
+  ],
+  "signals": [
+    {
+      "name": "assist_activated",
+      "params": []
+    }
+  ],
+  "genres": [
+    "shooter"
+  ],
+  "tags": [
+    "input"
+  ],
+  "description_pt": "Behavior Aim Assist para Godot 4.7. Componente plugavel para jogos 2D.",
+  "description_en": "Aim Assist behavior for Godot 4.7. Pluggable component for 2D games."
+}

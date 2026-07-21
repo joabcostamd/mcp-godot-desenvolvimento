@@ -1,1 +1,22 @@
-﻿{"name":"logger","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":["observability"]}
+{
+  "name": "logger",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior logger para Godot 4.7.",
+  "description_en": "logger behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "logger"
+    ],
+    "en": [
+      "logger"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

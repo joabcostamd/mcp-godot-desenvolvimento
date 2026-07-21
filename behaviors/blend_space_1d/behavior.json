@@ -1,1 +1,22 @@
-﻿{"name":"blend_space_1d","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "blend_space_1d",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior blend_space_1d para Godot 4.7.",
+  "description_en": "blend_space_1d behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "blend_space_1d"
+    ],
+    "en": [
+      "blend_space_1d"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

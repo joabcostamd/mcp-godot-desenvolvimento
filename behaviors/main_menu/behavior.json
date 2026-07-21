@@ -3,24 +3,77 @@
   "description_pt": "Menu principal com botões Play, Settings e Quit em CanvasLayer. Configurável: cenas de destino, visibilidade dos botões. Emite sinais play_pressed, settings_pressed, quit_pressed.",
   "description_en": "Main menu with Play, Settings, and Quit buttons in a CanvasLayer. Configurable: target scenes, button visibility. Emits play_pressed, settings_pressed, quit_pressed signals.",
   "synonyms": {
-    "pt": ["menu", "principal", "inicio", "titulo", "tela_inicial"],
-    "en": ["menu", "main", "title", "start", "home"]
+    "pt": [
+      "menu",
+      "principal",
+      "inicio",
+      "titulo",
+      "tela_inicial"
+    ],
+    "en": [
+      "menu",
+      "main",
+      "title",
+      "start",
+      "home"
+    ]
   },
   "parameters": [
-    {"name": "play_scene", "type": "String", "description_pt": "Caminho da cena ao apertar Play.", "default": "res://scenes/game.tscn"},
-    {"name": "settings_scene", "type": "String", "description_pt": "Caminho da cena ao apertar Settings.", "default": "res://scenes/settings.tscn"},
-    {"name": "show_quit", "type": "bool", "description_pt": "Se true, mostra botão Quit.", "default": true},
-    {"name": "show_settings", "type": "bool", "description_pt": "Se true, mostra botão Settings.", "default": true}
+    {
+      "name": "play_scene",
+      "type": "String",
+      "description_pt": "Caminho da cena ao apertar Play.",
+      "default": "res://scenes/game.tscn"
+    },
+    {
+      "name": "settings_scene",
+      "type": "String",
+      "description_pt": "Caminho da cena ao apertar Settings.",
+      "default": "res://scenes/settings.tscn"
+    },
+    {
+      "name": "show_quit",
+      "type": "bool",
+      "description_pt": "Se true, mostra botão Quit.",
+      "default": true
+    },
+    {
+      "name": "show_settings",
+      "type": "bool",
+      "description_pt": "Se true, mostra botão Settings.",
+      "default": true
+    }
   ],
   "signals": [
-    {"name": "play_pressed", "description_pt": "Emitido ao pressionar Play.", "params": []},
-    {"name": "settings_pressed", "description_pt": "Emitido ao pressionar Settings.", "params": []},
-    {"name": "quit_pressed", "description_pt": "Emitido ao pressionar Quit.", "params": []}
+    {
+      "name": "play_pressed",
+      "description_pt": "Emitido ao pressionar Play.",
+      "params": []
+    },
+    {
+      "name": "settings_pressed",
+      "description_pt": "Emitido ao pressionar Settings.",
+      "params": []
+    },
+    {
+      "name": "quit_pressed",
+      "description_pt": "Emitido ao pressionar Quit.",
+      "params": []
+    }
   ],
-  "dependencies": ["scene_transition"],
-  "genres": ["generic"],
+  "dependencies": [
+    "scene_transition"
+  ],
+  "genres": [
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["sistema", "menu", "ui", "principal"]
+  "tags": [
+    "sistema",
+    "menu",
+    "ui",
+    "principal"
+  ]
 }

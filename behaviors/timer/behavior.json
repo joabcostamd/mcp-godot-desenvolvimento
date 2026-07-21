@@ -3,22 +3,67 @@
   "description_pt": "Timer wrapper com start/stop/restart/pause/resume. Emite timeout ao terminar e tick a cada ciclo (não one-shot). Parâmetros: wait_time, one_shot, auto_start. Base para spawner_wave, round_timer e cooldowns.",
   "description_en": "Timer wrapper with start/stop/restart/pause/resume. Emits timeout on finish and tick every cycle (non-one-shot). Parameters: wait_time, one_shot, auto_start. Base for spawner_wave, round_timer, and cooldowns.",
   "synonyms": {
-    "pt": ["timer", "temporizador", "contagem", "delay", "cooldown"],
-    "en": ["timer", "countdown", "delay", "cooldown"]
+    "pt": [
+      "timer",
+      "temporizador",
+      "contagem",
+      "delay",
+      "cooldown"
+    ],
+    "en": [
+      "timer",
+      "countdown",
+      "delay",
+      "cooldown"
+    ]
   },
   "parameters": [
-    {"name": "wait_time", "type": "float", "description_pt": "Tempo de espera em segundos.", "range": {"min": 0.01, "max": 3600.0}, "default": 1.0, "unit": "s"},
-    {"name": "one_shot", "type": "bool", "description_pt": "Se true, dispara uma vez e para.", "default": false},
-    {"name": "auto_start", "type": "bool", "description_pt": "Se true, inicia automaticamente.", "default": false}
+    {
+      "name": "wait_time",
+      "type": "float",
+      "description_pt": "Tempo de espera em segundos.",
+      "range": {
+        "min": 0.01,
+        "max": 3600.0
+      },
+      "default": 1.0,
+      "unit": "s"
+    },
+    {
+      "name": "one_shot",
+      "type": "bool",
+      "description_pt": "Se true, dispara uma vez e para.",
+      "default": false
+    },
+    {
+      "name": "auto_start",
+      "type": "bool",
+      "description_pt": "Se true, inicia automaticamente.",
+      "default": false
+    }
   ],
   "signals": [
-    {"name": "timeout", "description_pt": "Emitido quando o timer termina.", "params": []},
-    {"name": "tick", "description_pt": "Emitido a cada ciclo (apenas quando one_shot=false).", "params": []}
+    {
+      "name": "timeout",
+      "description_pt": "Emitido quando o timer termina.",
+      "params": []
+    },
+    {
+      "name": "tick",
+      "description_pt": "Emitido a cada ciclo (apenas quando one_shot=false).",
+      "params": []
+    }
   ],
   "dependencies": [],
-  "genres": ["generic"],
+  "genres": [
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["sistema", "timer", "temporizador"]
+  "tags": [
+    "sistema",
+    "timer",
+    "temporizador"
+  ]
 }

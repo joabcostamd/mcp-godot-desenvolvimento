@@ -1,1 +1,75 @@
-{"name":"shop","version":"1.0.0","godot_version":"4.7","description_pt":"Node que gerencia uma loja com itens e preços. Integra com Currency e Inventory siblings. Suporta compra, venda e desconto.","description_en":"Node managing a shop with items and prices. Integrates with Currency and Inventory siblings. Supports buy, sell and discount.","synonyms":{"pt":["loja","comprar","vender","mercador","comercio"],"en":["shop","buy","sell","merchant","trade"]},"parameters":[{"name":"shop_name","type":"String","default":"Loja"},{"name":"discount","type":"float","range":{"min":0,"max":1},"default":0}],"signals":[{"name":"item_bought","params":[{"name":"item_id","type":"String"}]},{"name":"item_sold","params":[{"name":"item_id","type":"String"}]},{"name":"insufficient_funds","params":[]}],"dependencies":["inventory","currency"],"genres":["rpg","generic"],"tags":["loja","economia"]}
+{
+  "name": "shop",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que gerencia uma loja com itens e preços. Integra com Currency e Inventory siblings. Suporta compra, venda e desconto.",
+  "description_en": "Node managing a shop with items and prices. Integrates with Currency and Inventory siblings. Supports buy, sell and discount.",
+  "synonyms": {
+    "pt": [
+      "loja",
+      "comprar",
+      "vender",
+      "mercador",
+      "comercio"
+    ],
+    "en": [
+      "shop",
+      "buy",
+      "sell",
+      "merchant",
+      "trade"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "shop_name",
+      "type": "String",
+      "default": "Loja"
+    },
+    {
+      "name": "discount",
+      "type": "float",
+      "range": {
+        "min": 0,
+        "max": 1
+      },
+      "default": 0
+    }
+  ],
+  "signals": [
+    {
+      "name": "item_bought",
+      "params": [
+        {
+          "name": "item_id",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "item_sold",
+      "params": [
+        {
+          "name": "item_id",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "insufficient_funds",
+      "params": []
+    }
+  ],
+  "dependencies": [
+    "inventory",
+    "currency"
+  ],
+  "genres": [
+    "rpg",
+    "generic"
+  ],
+  "tags": [
+    "loja",
+    "economia"
+  ]
+}

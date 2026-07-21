@@ -3,19 +3,58 @@
   "description_pt": "Interpolação suave de propriedades com duração configurável. Wrapper sobre Tween para facilitar transições de posição, rotação, escala, modulate. Útil para menus, transições, animações simples.",
   "description_en": "Smooth property interpolation with configurable duration. Tween wrapper for position, rotation, scale, modulate transitions. Useful for menus, transitions, simple animations.",
   "synonyms": {
-    "pt": ["interpolar", "transicao", "animar", "suavizar", "tween"],
-    "en": ["lerp", "interpolate", "transition", "animate", "smooth"]
+    "pt": [
+      "interpolar",
+      "transicao",
+      "animar",
+      "suavizar",
+      "tween"
+    ],
+    "en": [
+      "lerp",
+      "interpolate",
+      "transition",
+      "animate",
+      "smooth"
+    ]
   },
   "parameters": [
-    {"name": "duration", "type": "float", "range": {"min": 0.01, "max": 10}, "default": 0.5, "unit": "s"},
-    {"name": "easing", "type": "float", "description_pt": "Tipo de easing (0=linear, 1=ease_in, 2=ease_out, 3=ease_in_out).", "range": {"min": 0, "max": 3}, "default": 3}
+    {
+      "name": "duration",
+      "type": "float",
+      "range": {
+        "min": 0.01,
+        "max": 10
+      },
+      "default": 0.5,
+      "unit": "s"
+    },
+    {
+      "name": "easing",
+      "type": "float",
+      "description_pt": "Tipo de easing (0=linear, 1=ease_in, 2=ease_out, 3=ease_in_out).",
+      "range": {
+        "min": 0,
+        "max": 3
+      },
+      "default": 3
+    }
   ],
   "signals": [
-    {"name": "completed", "params": []}
+    {
+      "name": "completed",
+      "params": []
+    }
   ],
   "dependencies": [],
-  "genres": ["generic"],
+  "genres": [
+    "generic"
+  ],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["util", "tween", "animacao"]
+  "tags": [
+    "util",
+    "tween",
+    "animacao"
+  ]
 }

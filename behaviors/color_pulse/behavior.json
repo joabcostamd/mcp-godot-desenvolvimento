@@ -3,22 +3,84 @@
   "description_pt": "Pulsação rítmica de modulate no nó pai. Oscila entre a cor original e pulse_color com frequência e amplitude configuráveis via _process + sin(). Útil para dano, power-up, seleção.",
   "description_en": "Rhythmic modulate pulse on the parent node. Oscillates between original color and pulse_color with configurable frequency and amplitude via _process + sin(). Useful for damage, power-up, selection feedback.",
   "synonyms": {
-    "pt": ["piscar", "pulsar", "brilhar", "flash_colorido", "dano_feedback"],
-    "en": ["blink", "pulse", "glow", "color_flash", "damage_feedback"]
+    "pt": [
+      "piscar",
+      "pulsar",
+      "brilhar",
+      "flash_colorido",
+      "dano_feedback"
+    ],
+    "en": [
+      "blink",
+      "pulse",
+      "glow",
+      "color_flash",
+      "damage_feedback"
+    ]
   },
   "parameters": [
-    {"name": "pulse_color", "type": "Color", "description_pt": "Cor alvo do pulso (misturada com original).", "default": {"r":1.0,"g":0.0,"b":0.0,"a":1.0}},
-    {"name": "frequency", "type": "float", "description_pt": "Frequência em Hz (pulsos por segundo).", "range": {"min": 0.1, "max": 30.0}, "default": 2.0, "unit": "Hz"},
-    {"name": "amplitude", "type": "float", "description_pt": "Intensidade do pulso (0 = sem efeito, 1 = troca total para pulse_color).", "range": {"min": 0.0, "max": 1.0}, "default": 0.5},
-    {"name": "auto_start", "type": "bool", "description_pt": "Se true, começa a pulsar ao entrar na árvore.", "default": true}
+    {
+      "name": "pulse_color",
+      "type": "Color",
+      "description_pt": "Cor alvo do pulso (misturada com original).",
+      "default": {
+        "r": 1.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 1.0
+      }
+    },
+    {
+      "name": "frequency",
+      "type": "float",
+      "description_pt": "Frequência em Hz (pulsos por segundo).",
+      "range": {
+        "min": 0.1,
+        "max": 30.0
+      },
+      "default": 2.0,
+      "unit": "Hz"
+    },
+    {
+      "name": "amplitude",
+      "type": "float",
+      "description_pt": "Intensidade do pulso (0 = sem efeito, 1 = troca total para pulse_color).",
+      "range": {
+        "min": 0.0,
+        "max": 1.0
+      },
+      "default": 0.5
+    },
+    {
+      "name": "auto_start",
+      "type": "bool",
+      "description_pt": "Se true, começa a pulsar ao entrar na árvore.",
+      "default": true
+    }
   ],
   "signals": [
-    {"name": "pulsing", "description_pt": "Emitido quando o estado de pulsação muda.", "params": [{"name": "is_active", "type": "bool"}]}
+    {
+      "name": "pulsing",
+      "description_pt": "Emitido quando o estado de pulsação muda.",
+      "params": [
+        {
+          "name": "is_active",
+          "type": "bool"
+        }
+      ]
+    }
   ],
   "dependencies": [],
-  "genres": ["generic"],
+  "genres": [
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["feedback", "pulse", "modulate", "efeitos_visuais"]
+  "tags": [
+    "feedback",
+    "pulse",
+    "modulate",
+    "efeitos_visuais"
+  ]
 }

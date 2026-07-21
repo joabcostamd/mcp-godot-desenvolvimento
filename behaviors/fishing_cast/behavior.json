@@ -1,1 +1,69 @@
-{"name":"fishing_cast","version":"1.0.0","godot_version":"4.7","description_pt":"Node que implementa mecânica de pesca com potência de arremesso e minigame.","synonyms":{"pt":["pesca","fishing","anzol","peixe"],"en":["fishing","cast","lure"]},"parameters":[{"name":"cast_power","type":"float","range":{"min":0.1,"max":10.0},"default":1.0},{"name":"minigame_difficulty","type":"float","range":{"min":0.1,"max":3.0},"default":1.0}],"signals":[{"name":"cast","params":[{"name":"power","type":"float"}]},{"name":"bite","params":[]},{"name":"caught","params":[{"name":"fish_id","type":"String"}]}],"genres":["fishing"],"tags":["fishing"]}
+{
+  "name": "fishing_cast",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que implementa mecânica de pesca com potência de arremesso e minigame.",
+  "synonyms": {
+    "pt": [
+      "pesca",
+      "fishing",
+      "anzol",
+      "peixe"
+    ],
+    "en": [
+      "fishing",
+      "cast",
+      "lure"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "cast_power",
+      "type": "float",
+      "range": {
+        "min": 0.1,
+        "max": 10.0
+      },
+      "default": 1.0
+    },
+    {
+      "name": "minigame_difficulty",
+      "type": "float",
+      "range": {
+        "min": 0.1,
+        "max": 3.0
+      },
+      "default": 1.0
+    }
+  ],
+  "signals": [
+    {
+      "name": "cast",
+      "params": [
+        {
+          "name": "power",
+          "type": "float"
+        }
+      ]
+    },
+    {
+      "name": "bite",
+      "params": []
+    },
+    {
+      "name": "caught",
+      "params": [
+        {
+          "name": "fish_id",
+          "type": "String"
+        }
+      ]
+    }
+  ],
+  "genres": [
+    "fishing"
+  ],
+  "tags": [
+    "fishing"
+  ]
+}

@@ -1,1 +1,22 @@
-﻿{"name":"safe_space","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "safe_space",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior safe_space para Godot 4.7.",
+  "description_en": "safe_space behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "safe_space"
+    ],
+    "en": [
+      "safe_space"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

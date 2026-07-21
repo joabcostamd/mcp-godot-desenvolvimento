@@ -1,1 +1,22 @@
-﻿{"name":"terrain_autotiler","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "terrain_autotiler",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior terrain_autotiler para Godot 4.7.",
+  "description_en": "terrain_autotiler behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "terrain_autotiler"
+    ],
+    "en": [
+      "terrain_autotiler"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

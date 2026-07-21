@@ -1,1 +1,22 @@
-﻿{"name":"mod_sandbox","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":["system"]}
+{
+  "name": "mod_sandbox",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior mod_sandbox para Godot 4.7.",
+  "description_en": "mod_sandbox behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "mod_sandbox"
+    ],
+    "en": [
+      "mod_sandbox"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

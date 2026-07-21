@@ -3,23 +3,81 @@
   "description_pt": "Torna o parent Control arrastável via set_drag_forwarding(). Detecta drop em zonas do grupo drop_group. Suporte a snap em grid. Útil para inventários, cards, quebra-cabeças.",
   "description_en": "Makes the parent Control draggable via set_drag_forwarding(). Detects drops on zones in the drop_group. Supports grid snapping. Useful for inventories, cards, puzzles.",
   "synonyms": {
-    "pt": ["arrastar", "soltar", "drag_and_drop", "mover_item", "arrasta_solta"],
-    "en": ["drag", "drop", "drag_and_drop", "move_item", "pick_up"]
+    "pt": [
+      "arrastar",
+      "soltar",
+      "drag_and_drop",
+      "mover_item",
+      "arrasta_solta"
+    ],
+    "en": [
+      "drag",
+      "drop",
+      "drag_and_drop",
+      "move_item",
+      "pick_up"
+    ]
   },
   "parameters": [
-    {"name": "drag_preview", "type": "bool", "description_pt": "Se true, mostra preview do controle durante o arrasto.", "default": true},
-    {"name": "snap_size", "type": "Vector2", "description_pt": "Tamanho do grid para snap ao soltar (0,0 desativa).", "default": {"x":0.0,"y":0.0}},
-    {"name": "drop_group", "type": "String", "description_pt": "Grupo dos nós que aceitam drop (vazio = qualquer Control).", "default": ""}
+    {
+      "name": "drag_preview",
+      "type": "bool",
+      "description_pt": "Se true, mostra preview do controle durante o arrasto.",
+      "default": true
+    },
+    {
+      "name": "snap_size",
+      "type": "Vector2",
+      "description_pt": "Tamanho do grid para snap ao soltar (0,0 desativa).",
+      "default": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    {
+      "name": "drop_group",
+      "type": "String",
+      "description_pt": "Grupo dos nós que aceitam drop (vazio = qualquer Control).",
+      "default": ""
+    }
   ],
   "signals": [
-    {"name": "drag_started", "description_pt": "Emitido ao iniciar o arrasto.", "params": []},
-    {"name": "dropped", "description_pt": "Emitido ao soltar sobre um alvo válido.", "params": [{"name": "target", "type": "NodePath"}]},
-    {"name": "drag_cancelled", "description_pt": "Emitido ao cancelar o arrasto (soltou fora de zona válida).", "params": []}
+    {
+      "name": "drag_started",
+      "description_pt": "Emitido ao iniciar o arrasto.",
+      "params": []
+    },
+    {
+      "name": "dropped",
+      "description_pt": "Emitido ao soltar sobre um alvo válido.",
+      "params": [
+        {
+          "name": "target",
+          "type": "NodePath"
+        }
+      ]
+    },
+    {
+      "name": "drag_cancelled",
+      "description_pt": "Emitido ao cancelar o arrasto (soltou fora de zona válida).",
+      "params": []
+    }
   ],
   "dependencies": [],
-  "genres": ["generic", "puzzle", "rpg", "card"],
+  "genres": [
+    "generic",
+    "puzzle",
+    "rpg",
+    "card"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["ui", "drag", "drop", "arrastar", "inventario"]
+  "tags": [
+    "ui",
+    "drag",
+    "drop",
+    "arrastar",
+    "inventario"
+  ]
 }

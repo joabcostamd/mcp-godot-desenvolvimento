@@ -1,1 +1,22 @@
-﻿{"name":"profile_manager","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "profile_manager",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior profile_manager para Godot 4.7.",
+  "description_en": "profile_manager behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "profile_manager"
+    ],
+    "en": [
+      "profile_manager"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

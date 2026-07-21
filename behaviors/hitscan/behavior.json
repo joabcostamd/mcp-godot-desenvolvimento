@@ -3,22 +3,42 @@
   "description_pt": "Tiro instantâneo (hitscan) — um disparo único via RayCast2D que causa dano imediato ao primeiro alvo na linha de fogo. One-shot: chama fire(), causa dano, emite sinal.",
   "description_en": "Instant hitscan shot — a single RayCast2D shot that deals immediate damage to the first target in the line of fire. One-shot: call fire(), deal damage, emit signal.",
   "synonyms": {
-    "pt": ["tiro", "disparo", "insta-hit", "rifle", "pistola", "arma de fogo"],
-    "en": ["shot", "gunshot", "rifle", "pistol", "insta-hit", "bullet"]
+    "pt": [
+      "tiro",
+      "disparo",
+      "insta-hit",
+      "rifle",
+      "pistola",
+      "arma de fogo"
+    ],
+    "en": [
+      "shot",
+      "gunshot",
+      "rifle",
+      "pistol",
+      "insta-hit",
+      "bullet"
+    ]
   },
   "parameters": [
     {
       "name": "damage",
       "type": "int",
       "description_pt": "Dano causado ao atingir um alvo.",
-      "range": {"min": 1, "max": 9999},
+      "range": {
+        "min": 1,
+        "max": 9999
+      },
       "default": 25
     },
     {
       "name": "max_range",
       "type": "float",
       "description_pt": "Alcance máximo do tiro em pixels.",
-      "range": {"min": 10.0, "max": 3000.0},
+      "range": {
+        "min": 10.0,
+        "max": 3000.0
+      },
       "default": 1000.0,
       "unit": "px"
     },
@@ -26,7 +46,10 @@
       "name": "flash_duration",
       "type": "float",
       "description_pt": "Duração do flash visual do disparo (segundos).",
-      "range": {"min": 0.01, "max": 0.5},
+      "range": {
+        "min": 0.01,
+        "max": 0.5
+      },
       "default": 0.05,
       "unit": "s"
     },
@@ -42,23 +65,52 @@
       "name": "fired",
       "description_pt": "Emitido ao final de fire(), independente de acertar ou não.",
       "params": [
-        {"name": "target", "type": "Node"},
-        {"name": "damage_dealt", "type": "int"}
+        {
+          "name": "target",
+          "type": "Node"
+        },
+        {
+          "name": "damage_dealt",
+          "type": "int"
+        }
       ]
     },
     {
       "name": "hit",
       "description_pt": "Emitido quando o tiro atinge um alvo (antes de fired).",
       "params": [
-        {"name": "target", "type": "Node"},
-        {"name": "damage_dealt", "type": "int"}
+        {
+          "name": "target",
+          "type": "Node"
+        },
+        {
+          "name": "damage_dealt",
+          "type": "int"
+        }
       ]
     }
   ],
-  "dependencies": ["health", "fire_rate"],
-  "genres": ["topdown_shooter", "platformer", "shooter", "roguelike", "metroidvania", "generic"],
+  "dependencies": [
+    "health",
+    "fire_rate"
+  ],
+  "genres": [
+    "topdown_shooter",
+    "platformer",
+    "shooter",
+    "roguelike",
+    "metroidvania",
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["combate", "tiro", "hitscan", "dano", "arma", "instantâneo"]
+  "tags": [
+    "combate",
+    "tiro",
+    "hitscan",
+    "dano",
+    "arma",
+    "instantâneo"
+  ]
 }

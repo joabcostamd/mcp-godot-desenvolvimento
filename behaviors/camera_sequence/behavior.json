@@ -1,1 +1,53 @@
-{"name":"camera_sequence","version":"1.0.0","godot_version":"4.7","description_pt":"Node que gerencia sequência de shots de câmera com transições. Ideal para cutscenes e apresentações.","synonyms":{"pt":["camera","sequencia","shot","cinemachine"],"en":["camera","sequence","shot","cinemachine"]},"parameters":[{"name":"shots","type":"Array","description_pt":"Array de {target, duration, easing, zoom}."}],"signals":[{"name":"shot_changed","params":[{"name":"index","type":"int"}]},{"name":"sequence_finished","params":[]}],"dependencies":["camera_follow"],"genres":["generic"],"tags":["camera","sequencia","cinematica"]}
+{
+  "name": "camera_sequence",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que gerencia sequência de shots de câmera com transições. Ideal para cutscenes e apresentações.",
+  "synonyms": {
+    "pt": [
+      "camera",
+      "sequencia",
+      "shot",
+      "cinemachine"
+    ],
+    "en": [
+      "camera",
+      "sequence",
+      "shot",
+      "cinemachine"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "shots",
+      "type": "Array",
+      "description_pt": "Array de {target, duration, easing, zoom}."
+    }
+  ],
+  "signals": [
+    {
+      "name": "shot_changed",
+      "params": [
+        {
+          "name": "index",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "sequence_finished",
+      "params": []
+    }
+  ],
+  "dependencies": [
+    "camera_follow"
+  ],
+  "genres": [
+    "generic"
+  ],
+  "tags": [
+    "camera",
+    "sequencia",
+    "cinematica"
+  ]
+}

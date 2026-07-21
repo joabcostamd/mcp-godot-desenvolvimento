@@ -3,8 +3,24 @@
   "description_pt": "Patrulha entre waypoints: move o CharacterBody2D pai por uma rota de pontos, espera em cada um, faz loop ou ping-pong. Integra com state_machine para estados patrol/idle.",
   "description_en": "Patrol between waypoints: moves the parent CharacterBody2D along a route, waits at each point, loops or ping-pongs. Integrates with state_machine for patrol/idle states.",
   "synonyms": {
-    "pt": ["patrulha", "rota", "ronda", "vigia", "guardar", "caminho", "percurso"],
-    "en": ["patrol", "route", "guard", "walk", "waypoint", "path", "march"]
+    "pt": [
+      "patrulha",
+      "rota",
+      "ronda",
+      "vigia",
+      "guardar",
+      "caminho",
+      "percurso"
+    ],
+    "en": [
+      "patrol",
+      "route",
+      "guard",
+      "walk",
+      "waypoint",
+      "path",
+      "march"
+    ]
   },
   "parameters": [
     {
@@ -17,7 +33,10 @@
       "name": "speed",
       "type": "float",
       "description_pt": "Velocidade de movimento entre waypoints (px/s).",
-      "range": {"min": 10.0, "max": 2000.0},
+      "range": {
+        "min": 10.0,
+        "max": 2000.0
+      },
       "default": 100.0,
       "unit": "px/s"
     },
@@ -25,7 +44,10 @@
       "name": "wait_time",
       "type": "float",
       "description_pt": "Tempo de espera em cada waypoint (s).",
-      "range": {"min": 0.0, "max": 60.0},
+      "range": {
+        "min": 0.0,
+        "max": 60.0
+      },
       "default": 1.0,
       "unit": "s"
     },
@@ -47,7 +69,10 @@
       "name": "waypoint_reached",
       "description_pt": "Emitido ao chegar em um waypoint.",
       "params": [
-        {"name": "index", "type": "int"}
+        {
+          "name": "index",
+          "type": "int"
+        }
       ]
     },
     {
@@ -56,10 +81,26 @@
       "params": []
     }
   ],
-  "dependencies": ["state_machine"],
-  "genres": ["platformer", "topdown_shooter", "roguelike", "metroidvania", "stealth", "generic"],
+  "dependencies": [
+    "state_machine"
+  ],
+  "genres": [
+    "platformer",
+    "topdown_shooter",
+    "roguelike",
+    "metroidvania",
+    "stealth",
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["ia", "patrulha", "movimento", "waypoint", "npc", "inimigo"]
+  "tags": [
+    "ia",
+    "patrulha",
+    "movimento",
+    "waypoint",
+    "npc",
+    "inimigo"
+  ]
 }

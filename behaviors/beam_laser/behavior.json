@@ -3,15 +3,32 @@
   "description_pt": "Raio contínuo instantâneo (hitscan persistente) que causa dano por segundo enquanto atinge um alvo. Usa RayCast2D para detecção e Line2D para visual.",
   "description_en": "Continuous instant beam (persistent hitscan) that deals damage per second while hitting a target. Uses RayCast2D for detection and Line2D for visuals.",
   "synonyms": {
-    "pt": ["raio", "laser", "feixe", "raio laser", "raio contínuo", "raio de dano"],
-    "en": ["beam", "laser", "ray", "continuous beam", "damage beam", "energy beam"]
+    "pt": [
+      "raio",
+      "laser",
+      "feixe",
+      "raio laser",
+      "raio contínuo",
+      "raio de dano"
+    ],
+    "en": [
+      "beam",
+      "laser",
+      "ray",
+      "continuous beam",
+      "damage beam",
+      "energy beam"
+    ]
   },
   "parameters": [
     {
       "name": "damage_per_second",
       "type": "float",
       "description_pt": "Dano causado por segundo enquanto o raio atinge um alvo.",
-      "range": {"min": 1.0, "max": 9999.0},
+      "range": {
+        "min": 1.0,
+        "max": 9999.0
+      },
       "default": 30.0,
       "unit": "dps"
     },
@@ -19,7 +36,10 @@
       "name": "beam_width",
       "type": "float",
       "description_pt": "Largura visual do raio em pixels.",
-      "range": {"min": 1.0, "max": 50.0},
+      "range": {
+        "min": 1.0,
+        "max": 50.0
+      },
       "default": 4.0,
       "unit": "px"
     },
@@ -27,7 +47,10 @@
       "name": "max_range",
       "type": "float",
       "description_pt": "Alcance máximo do raio em pixels.",
-      "range": {"min": 10.0, "max": 2000.0},
+      "range": {
+        "min": 10.0,
+        "max": 2000.0
+      },
       "default": 500.0,
       "unit": "px"
     },
@@ -43,8 +66,14 @@
       "name": "hitting",
       "description_pt": "Emitido a cada frame de física enquanto o raio atinge algo.",
       "params": [
-        {"name": "target", "type": "Node"},
-        {"name": "dps", "type": "float"}
+        {
+          "name": "target",
+          "type": "Node"
+        },
+        {
+          "name": "dps",
+          "type": "float"
+        }
       ]
     },
     {
@@ -53,10 +82,26 @@
       "params": []
     }
   ],
-  "dependencies": ["health"],
-  "genres": ["topdown_shooter", "platformer", "bullet_hell", "tower_defense", "metroidvania", "generic"],
+  "dependencies": [
+    "health"
+  ],
+  "genres": [
+    "topdown_shooter",
+    "platformer",
+    "bullet_hell",
+    "tower_defense",
+    "metroidvania",
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["combate", "laser", "raio", "dano", "hitscan", "contínuo"]
+  "tags": [
+    "combate",
+    "laser",
+    "raio",
+    "dano",
+    "hitscan",
+    "contínuo"
+  ]
 }

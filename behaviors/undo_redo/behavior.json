@@ -1,1 +1,22 @@
-﻿{"name":"undo_redo","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "undo_redo",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior undo_redo para Godot 4.7.",
+  "description_en": "undo_redo behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "undo_redo"
+    ],
+    "en": [
+      "undo_redo"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

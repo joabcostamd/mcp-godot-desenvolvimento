@@ -3,20 +3,67 @@
   "description_pt": "Painel expansível com seções clicáveis. Cada seção tem um cabeçalho (Button) e conteúdo (Control) com visibilidade toggle. Suporta animação de altura e modo múltiplo (várias abertas ao mesmo tempo).",
   "description_en": "Expandable panel with clickable sections. Each section has a header (Button) and content (Control) with toggle visibility. Supports height animation and multiple mode (several open at once).",
   "synonyms": {
-    "pt": ["sanfona", "painel_expansivel", "secoes", "collapse", "expandir_recolher"],
-    "en": ["expandable", "collapsible", "sections", "fold", "collapse_panel"]
+    "pt": [
+      "sanfona",
+      "painel_expansivel",
+      "secoes",
+      "collapse",
+      "expandir_recolher"
+    ],
+    "en": [
+      "expandable",
+      "collapsible",
+      "sections",
+      "fold",
+      "collapse_panel"
+    ]
   },
   "parameters": [
-    {"name": "animation_duration", "type": "float", "description_pt": "Duração da animação de expandir/recolher em segundos.", "range": {"min": 0.0, "max": 2.0}, "default": 0.2, "unit": "s"},
-    {"name": "allow_multiple", "type": "bool", "description_pt": "Se true, várias seções podem ficar abertas ao mesmo tempo.", "default": false}
+    {
+      "name": "animation_duration",
+      "type": "float",
+      "description_pt": "Duração da animação de expandir/recolher em segundos.",
+      "range": {
+        "min": 0.0,
+        "max": 2.0
+      },
+      "default": 0.2,
+      "unit": "s"
+    },
+    {
+      "name": "allow_multiple",
+      "type": "bool",
+      "description_pt": "Se true, várias seções podem ficar abertas ao mesmo tempo.",
+      "default": false
+    }
   ],
   "signals": [
-    {"name": "section_toggled", "description_pt": "Emitido quando uma seção é expandida ou recolhida.", "params": [{"name": "index", "type": "int"}, {"name": "collapsed", "type": "bool"}]}
+    {
+      "name": "section_toggled",
+      "description_pt": "Emitido quando uma seção é expandida ou recolhida.",
+      "params": [
+        {
+          "name": "index",
+          "type": "int"
+        },
+        {
+          "name": "collapsed",
+          "type": "bool"
+        }
+      ]
+    }
   ],
   "dependencies": [],
-  "genres": ["generic"],
+  "genres": [
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["ui", "accordion", "painel", "expansivel"]
+  "tags": [
+    "ui",
+    "accordion",
+    "painel",
+    "expansivel"
+  ]
 }

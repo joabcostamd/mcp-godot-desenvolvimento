@@ -1,1 +1,22 @@
-﻿{"name":"input_cooldown","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "input_cooldown",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior input_cooldown para Godot 4.7.",
+  "description_en": "input_cooldown behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "input_cooldown"
+    ],
+    "en": [
+      "input_cooldown"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

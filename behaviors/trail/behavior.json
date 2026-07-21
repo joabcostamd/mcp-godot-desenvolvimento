@@ -3,20 +3,74 @@
   "description_pt": "Rastro visual (trail) que segue o nó pai via Line2D. Acumula pontos históricos da posição global e os conecta com fading de alpha. Ideal para projéteis, dash e movimento rápido.",
   "description_en": "Visual trail following the parent node via Line2D. Accumulates historical global position points and connects them with alpha fading. Ideal for projectiles, dash, and fast movement.",
   "synonyms": {
-    "pt": ["rastro", "trilha", "cauda", "ghosting", "after_image"],
-    "en": ["trail", "trace", "tail", "ghosting", "afterimage"]
+    "pt": [
+      "rastro",
+      "trilha",
+      "cauda",
+      "ghosting",
+      "after_image"
+    ],
+    "en": [
+      "trail",
+      "trace",
+      "tail",
+      "ghosting",
+      "afterimage"
+    ]
   },
   "parameters": [
-    {"name": "max_points", "type": "int", "description_pt": "Número máximo de pontos no rastro.", "range": {"min": 2, "max": 200}, "default": 20},
-    {"name": "point_spacing", "type": "float", "description_pt": "Distância mínima (px) entre pontos consecutivos.", "range": {"min": 1.0, "max": 100.0}, "default": 5.0, "unit": "px"},
-    {"name": "fade", "type": "bool", "description_pt": "Se true, aplica fading de alpha do início ao fim do trail.", "default": true},
-    {"name": "trail_width", "type": "float", "description_pt": "Largura da linha do trail.", "range": {"min": 0.5, "max": 50.0}, "default": 3.0, "unit": "px"}
+    {
+      "name": "max_points",
+      "type": "int",
+      "description_pt": "Número máximo de pontos no rastro.",
+      "range": {
+        "min": 2,
+        "max": 200
+      },
+      "default": 20
+    },
+    {
+      "name": "point_spacing",
+      "type": "float",
+      "description_pt": "Distância mínima (px) entre pontos consecutivos.",
+      "range": {
+        "min": 1.0,
+        "max": 100.0
+      },
+      "default": 5.0,
+      "unit": "px"
+    },
+    {
+      "name": "fade",
+      "type": "bool",
+      "description_pt": "Se true, aplica fading de alpha do início ao fim do trail.",
+      "default": true
+    },
+    {
+      "name": "trail_width",
+      "type": "float",
+      "description_pt": "Largura da linha do trail.",
+      "range": {
+        "min": 0.5,
+        "max": 50.0
+      },
+      "default": 3.0,
+      "unit": "px"
+    }
   ],
   "signals": [],
   "dependencies": [],
-  "genres": ["generic"],
+  "genres": [
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["feedback", "trail", "rastro", "movimento", "efeitos_visuais"]
+  "tags": [
+    "feedback",
+    "trail",
+    "rastro",
+    "movimento",
+    "efeitos_visuais"
+  ]
 }

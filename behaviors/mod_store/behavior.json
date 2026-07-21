@@ -1,1 +1,22 @@
-﻿{"name":"mod_store","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":["system"]}
+{
+  "name": "mod_store",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior mod_store para Godot 4.7.",
+  "description_en": "mod_store behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "mod_store"
+    ],
+    "en": [
+      "mod_store"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

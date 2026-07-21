@@ -1,1 +1,22 @@
-﻿{"name":"dirty_flag","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "dirty_flag",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior dirty_flag para Godot 4.7.",
+  "description_en": "dirty_flag behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "dirty_flag"
+    ],
+    "en": [
+      "dirty_flag"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

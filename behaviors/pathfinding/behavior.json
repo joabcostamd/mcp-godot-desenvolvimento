@@ -1,17 +1,73 @@
 {
-  "name": "pathfinding", "version": "1.0.0", "godot_version": "4.7",
+  "name": "pathfinding",
+  "version": "1.0.0",
+  "godot_version": "4.7",
   "description_pt": "Node que move o parent CharacterBody2D até um alvo usando NavigationAgent2D. Suporta avoidance e velocidade configurável. Emite path_found, path_lost, arrived.",
   "description_en": "Node moving parent CharacterBody2D to a target using NavigationAgent2D. Supports avoidance and configurable speed. Emits path_found, path_lost, arrived.",
-  "synonyms": {"pt": ["navegar", "caminho", "pathfind", "destino"], "en": ["navigate", "path", "pathfind", "destination"]},
+  "synonyms": {
+    "pt": [
+      "navegar",
+      "caminho",
+      "pathfind",
+      "destino"
+    ],
+    "en": [
+      "navigate",
+      "path",
+      "pathfind",
+      "destination"
+    ]
+  },
   "parameters": [
-    {"name": "speed", "type": "float", "range":{"min":10,"max":2000}, "default":150, "unit":"px/s"},
-    {"name": "arrival_distance", "type": "float", "range":{"min":4,"max":64}, "default":8, "unit":"px"},
-    {"name": "avoidance_enabled", "type": "bool", "default":true}
+    {
+      "name": "speed",
+      "type": "float",
+      "range": {
+        "min": 10,
+        "max": 2000
+      },
+      "default": 150,
+      "unit": "px/s"
+    },
+    {
+      "name": "arrival_distance",
+      "type": "float",
+      "range": {
+        "min": 4,
+        "max": 64
+      },
+      "default": 8,
+      "unit": "px"
+    },
+    {
+      "name": "avoidance_enabled",
+      "type": "bool",
+      "default": true
+    }
   ],
   "signals": [
-    {"name":"path_found","params":[]},
-    {"name":"path_lost","params":[]},
-    {"name":"arrived","params":[]}
+    {
+      "name": "path_found",
+      "params": []
+    },
+    {
+      "name": "path_lost",
+      "params": []
+    },
+    {
+      "name": "arrived",
+      "params": []
+    }
   ],
-  "dependencies": [], "genres": ["topdown_shooter", "roguelike", "rpg", "generic"], "tags": ["navegacao","ai"]
+  "dependencies": [],
+  "genres": [
+    "topdown_shooter",
+    "roguelike",
+    "rpg",
+    "generic"
+  ],
+  "tags": [
+    "navegacao",
+    "ai"
+  ]
 }

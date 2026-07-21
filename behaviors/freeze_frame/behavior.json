@@ -3,21 +3,70 @@
   "description_pt": "Congela o jogo completamente por uma duração fixa (segundos ou frames). Engine.time_scale vai a zero e Timer com ignore_time_scale garante a contagem. Para ênfase em momentos críticos: morte de boss, Ultimate, vitória.",
   "description_en": "Completely freezes the game for a fixed duration (seconds or frames). Engine.time_scale drops to zero while a Timer with ignore_time_scale ensures counting. For emphasis on critical moments: boss death, Ultimate, victory.",
   "synonyms": {
-    "pt": ["freeze_frame", "congelar", "parar_tempo", "pausa_dramatica", "frame_pause"],
-    "en": ["freeze_frame", "frame_freeze", "time_stop", "dramatic_pause"]
+    "pt": [
+      "freeze_frame",
+      "congelar",
+      "parar_tempo",
+      "pausa_dramatica",
+      "frame_pause"
+    ],
+    "en": [
+      "freeze_frame",
+      "frame_freeze",
+      "time_stop",
+      "dramatic_pause"
+    ]
   },
   "parameters": [
-    {"name": "default_duration", "type": "float", "description_pt": "Duração padrão do freeze (modo segundos).", "range": {"min": 0.01, "max": 5.0}, "default": 0.3, "unit": "s"},
-    {"name": "restore_duration", "type": "float", "description_pt": "Duração da transição de volta para 1.0.", "range": {"min": 0.0, "max": 2.0}, "default": 0.1, "unit": "s"}
+    {
+      "name": "default_duration",
+      "type": "float",
+      "description_pt": "Duração padrão do freeze (modo segundos).",
+      "range": {
+        "min": 0.01,
+        "max": 5.0
+      },
+      "default": 0.3,
+      "unit": "s"
+    },
+    {
+      "name": "restore_duration",
+      "type": "float",
+      "description_pt": "Duração da transição de volta para 1.0.",
+      "range": {
+        "min": 0.0,
+        "max": 2.0
+      },
+      "default": 0.1,
+      "unit": "s"
+    }
   ],
   "signals": [
-    {"name": "frozen", "description_pt": "Emitido quando o freeze começa.", "params": []},
-    {"name": "resumed", "description_pt": "Emitido quando o freeze termina e a escala é restaurada.", "params": []}
+    {
+      "name": "frozen",
+      "description_pt": "Emitido quando o freeze começa.",
+      "params": []
+    },
+    {
+      "name": "resumed",
+      "description_pt": "Emitido quando o freeze termina e a escala é restaurada.",
+      "params": []
+    }
   ],
-  "dependencies": ["time_scale"],
-  "genres": ["generic"],
+  "dependencies": [
+    "time_scale"
+  ],
+  "genres": [
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["feedback", "freeze_frame", "time_stop", "dramatic", "game_feel"]
+  "tags": [
+    "feedback",
+    "freeze_frame",
+    "time_stop",
+    "dramatic",
+    "game_feel"
+  ]
 }

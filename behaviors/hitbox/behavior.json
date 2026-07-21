@@ -3,22 +3,44 @@
   "description_pt": "Área de ataque que causa dano ao sobrepor entidades com componente Health. Ativável/desativável, com tipo de hit e força de knockback. Plugável como filho de personagem ou arma.",
   "description_en": "Attack area that deals damage when overlapping entities with a Health component. Togglable, with hit type and knockback force. Plug in as child of character or weapon.",
   "synonyms": {
-    "pt": ["ataque", "dano", "golpe", "colisão de ataque", "área de dano", "hit", "zona de impacto"],
-    "en": ["attack", "damage zone", "strike", "melee", "impact area", "hit", "collision damage"]
+    "pt": [
+      "ataque",
+      "dano",
+      "golpe",
+      "colisão de ataque",
+      "área de dano",
+      "hit",
+      "zona de impacto"
+    ],
+    "en": [
+      "attack",
+      "damage zone",
+      "strike",
+      "melee",
+      "impact area",
+      "hit",
+      "collision damage"
+    ]
   },
   "parameters": [
     {
       "name": "damage",
       "type": "int",
       "description_pt": "Dano causado ao atingir um alvo com Health.",
-      "range": {"min": 0, "max": 9999},
+      "range": {
+        "min": 0,
+        "max": 9999
+      },
       "default": 10
     },
     {
       "name": "knockback_force",
       "type": "float",
       "description_pt": "Força de empurrão aplicada ao alvo (0 = sem knockback). O movimento real é responsabilidade do behavior knockback (#14).",
-      "range": {"min": 0.0, "max": 5000.0},
+      "range": {
+        "min": 0.0,
+        "max": 5000.0
+      },
       "default": 200.0
     },
     {
@@ -39,8 +61,14 @@
       "name": "hit_dealt",
       "description_pt": "Emitido quando a hitbox causa dano a um alvo.",
       "params": [
-        {"name": "target", "type": "Node"},
-        {"name": "damage_dealt", "type": "int"}
+        {
+          "name": "target",
+          "type": "Node"
+        },
+        {
+          "name": "damage_dealt",
+          "type": "int"
+        }
       ]
     },
     {
@@ -54,9 +82,21 @@
       "params": []
     }
   ],
-  "dependencies": ["health"],
-  "genres": ["platformer", "topdown_shooter", "rpg", "roguelike", "fighting", "metroidvania", "bullet_hell", "generic"],
+  "dependencies": [
+    "health"
+  ],
+  "genres": [
+    "platformer",
+    "topdown_shooter",
+    "rpg",
+    "roguelike",
+    "fighting",
+    "metroidvania",
+    "bullet_hell",
+    "generic"
+  ],
   "version": "1.0.0",
   "category": "combate",
-  "status": "implementado"
+  "status": "implementado",
+  "godot_version": "4.7"
 }

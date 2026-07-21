@@ -3,22 +3,44 @@
   "description_pt": "Sistema de inventário baseado em slots: adiciona, remove e consulta itens por ID. Cada slot tem stack máximo configurável. Emite sinais de item_added, item_removed e inventory_full. Plugável em qualquer nó.",
   "description_en": "Slot-based inventory system: add, remove, and query items by ID. Each slot has a configurable max stack. Emits item_added, item_removed, and inventory_full signals. Plug into any node.",
   "synonyms": {
-    "pt": ["inventário", "itens", "slots", "mochila", "bag", "estoque", "coleta"],
-    "en": ["inventory", "items", "slots", "backpack", "bag", "storage", "collect"]
+    "pt": [
+      "inventário",
+      "itens",
+      "slots",
+      "mochila",
+      "bag",
+      "estoque",
+      "coleta"
+    ],
+    "en": [
+      "inventory",
+      "items",
+      "slots",
+      "backpack",
+      "bag",
+      "storage",
+      "collect"
+    ]
   },
   "parameters": [
     {
       "name": "slot_count",
       "type": "int",
       "description_pt": "Número total de slots do inventário.",
-      "range": {"min": 1, "max": 999},
+      "range": {
+        "min": 1,
+        "max": 999
+      },
       "default": 20
     },
     {
       "name": "max_stack",
       "type": "int",
       "description_pt": "Quantidade máxima de itens por slot.",
-      "range": {"min": 1, "max": 999},
+      "range": {
+        "min": 1,
+        "max": 999
+      },
       "default": 99
     }
   ],
@@ -27,18 +49,36 @@
       "name": "item_added",
       "description_pt": "Emitido quando um item é adicionado ao inventário.",
       "params": [
-        {"name": "item_id", "type": "String"},
-        {"name": "quantity", "type": "int"},
-        {"name": "slot", "type": "int"}
+        {
+          "name": "item_id",
+          "type": "String"
+        },
+        {
+          "name": "quantity",
+          "type": "int"
+        },
+        {
+          "name": "slot",
+          "type": "int"
+        }
       ]
     },
     {
       "name": "item_removed",
       "description_pt": "Emitido quando um item é removido do inventário.",
       "params": [
-        {"name": "item_id", "type": "String"},
-        {"name": "quantity", "type": "int"},
-        {"name": "slot", "type": "int"}
+        {
+          "name": "item_id",
+          "type": "String"
+        },
+        {
+          "name": "quantity",
+          "type": "int"
+        },
+        {
+          "name": "slot",
+          "type": "int"
+        }
       ]
     },
     {
@@ -48,9 +88,23 @@
     }
   ],
   "dependencies": [],
-  "genres": ["platformer", "topdown_shooter", "rpg", "roguelike", "tower_defense", "metroidvania", "generic"],
+  "genres": [
+    "platformer",
+    "topdown_shooter",
+    "rpg",
+    "roguelike",
+    "tower_defense",
+    "metroidvania",
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.1",
   "godot_version": "4.7",
-  "tags": ["progressao", "inventario", "itens", "slots", "coleta"]
+  "tags": [
+    "progressao",
+    "inventario",
+    "itens",
+    "slots",
+    "coleta"
+  ]
 }

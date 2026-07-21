@@ -1,1 +1,42 @@
-{"name":"gyro_aim","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":["giroscopio","gyro","motion"],"en":["gyro","motion","aim"]},"parameters":[{"name":"sensitivity","type":"float","range":{"min":0.1,"max":5.0},"default":1.0}],"signals":[{"name":"gyro_active","params":[]}],"genres":["shooter"],"tags":["input"]}
+{
+  "name": "gyro_aim",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "synonyms": {
+    "pt": [
+      "giroscopio",
+      "gyro",
+      "motion"
+    ],
+    "en": [
+      "gyro",
+      "motion",
+      "aim"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "sensitivity",
+      "type": "float",
+      "range": {
+        "min": 0.1,
+        "max": 5.0
+      },
+      "default": 1.0
+    }
+  ],
+  "signals": [
+    {
+      "name": "gyro_active",
+      "params": []
+    }
+  ],
+  "genres": [
+    "shooter"
+  ],
+  "tags": [
+    "input"
+  ],
+  "description_pt": "Behavior Gyro Aim para Godot 4.7. Componente plugavel para jogos 2D.",
+  "description_en": "Gyro Aim behavior for Godot 4.7. Pluggable component for 2D games."
+}

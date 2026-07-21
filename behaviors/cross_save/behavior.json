@@ -1,1 +1,22 @@
-﻿{"name":"cross_save","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":["save"]}
+{
+  "name": "cross_save",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior cross_save para Godot 4.7.",
+  "description_en": "cross_save behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "cross_save"
+    ],
+    "en": [
+      "cross_save"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

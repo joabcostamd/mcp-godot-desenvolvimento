@@ -1,1 +1,22 @@
-﻿{"name":"lod_controller","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "lod_controller",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior lod_controller para Godot 4.7.",
+  "description_en": "lod_controller behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "lod_controller"
+    ],
+    "en": [
+      "lod_controller"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

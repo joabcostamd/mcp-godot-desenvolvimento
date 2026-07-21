@@ -1,13 +1,77 @@
 {
-  "name": "gravity_zone", "version": "1.0.0", "godot_version": "4.7",
+  "name": "gravity_zone",
+  "version": "1.0.0",
+  "godot_version": "4.7",
   "description_pt": "Area2D que altera a direção e força da gravidade para corpos dentro dela. Útil para planetas, paredes magnéticas, áreas de gravidade zero.",
   "description_en": "Area2D that changes gravity direction and strength for bodies inside. Useful for planets, magnetic walls, zero-G areas.",
-  "synonyms": {"pt": ["gravidade", "zona_gravidade", "planeta", "anti_gravidade"], "en": ["gravity", "planet", "anti_gravity"]},
+  "synonyms": {
+    "pt": [
+      "gravidade",
+      "zona_gravidade",
+      "planeta",
+      "anti_gravidade"
+    ],
+    "en": [
+      "gravity",
+      "planet",
+      "anti_gravity"
+    ]
+  },
   "parameters": [
-    {"name": "gravity_direction", "type": "Vector2", "description_pt": "Direção da gravidade (ex: (0,1) = para baixo).", "default": {"x":0,"y":1}},
-    {"name": "gravity_strength", "type": "float", "range": {"min": 0, "max": 5000}, "default": 980, "unit": "px/s²"},
-    {"name": "override", "type": "bool", "description_pt": "Se true, substitui gravidade global. Se false, soma.", "default": false}
+    {
+      "name": "gravity_direction",
+      "type": "Vector2",
+      "description_pt": "Direção da gravidade (ex: (0,1) = para baixo).",
+      "default": {
+        "x": 0,
+        "y": 1
+      }
+    },
+    {
+      "name": "gravity_strength",
+      "type": "float",
+      "range": {
+        "min": 0,
+        "max": 5000
+      },
+      "default": 980,
+      "unit": "px/s²"
+    },
+    {
+      "name": "override",
+      "type": "bool",
+      "description_pt": "Se true, substitui gravidade global. Se false, soma.",
+      "default": false
+    }
   ],
-  "signals": [{"name": "entered_zone", "params": [{"name": "body", "type": "Node2D"}]}, {"name": "exited_zone", "params": [{"name": "body", "type": "Node2D"}]}],
-  "dependencies": [], "genres": ["platformer", "generic"], "conflicts": [], "tags": ["fisica", "gravidade"]
+  "signals": [
+    {
+      "name": "entered_zone",
+      "params": [
+        {
+          "name": "body",
+          "type": "Node2D"
+        }
+      ]
+    },
+    {
+      "name": "exited_zone",
+      "params": [
+        {
+          "name": "body",
+          "type": "Node2D"
+        }
+      ]
+    }
+  ],
+  "dependencies": [],
+  "genres": [
+    "platformer",
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": [
+    "fisica",
+    "gravidade"
+  ]
 }

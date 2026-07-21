@@ -1,1 +1,22 @@
-﻿{"name":"server_sprite","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "server_sprite",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior server_sprite para Godot 4.7.",
+  "description_en": "server_sprite behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "server_sprite"
+    ],
+    "en": [
+      "server_sprite"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

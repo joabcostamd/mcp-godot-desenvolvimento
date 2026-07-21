@@ -3,21 +3,92 @@
   "description_pt": "Dano em área (explosão). explode() causa dano a todos os Health no raio, com falloff por distância e knockback opcional.",
   "description_en": "Area damage (explosion). explode() damages all Health in radius, with distance falloff and optional knockback.",
   "synonyms": {
-    "pt": ["explosão", "dano em área", "AoE", "granada", "bomba", "onda de choque"],
-    "en": ["explosion", "AoE", "grenade", "bomb", "blast", "shockwave", "splash"]
+    "pt": [
+      "explosão",
+      "dano em área",
+      "AoE",
+      "granada",
+      "bomba",
+      "onda de choque"
+    ],
+    "en": [
+      "explosion",
+      "AoE",
+      "grenade",
+      "bomb",
+      "blast",
+      "shockwave",
+      "splash"
+    ]
   },
   "parameters": [
-    {"name": "damage", "type": "int", "description_pt": "Dano no centro da explosão.", "range": {"min": 1, "max": 9999}, "default": 50},
-    {"name": "radius", "type": "float", "description_pt": "Raio da explosão (px).", "range": {"min": 10.0, "max": 2000.0}, "default": 100.0, "unit": "px"},
-    {"name": "falloff", "type": "float", "description_pt": "Redução do dano na borda (0.0 = dano total, 1.0 = zero na borda).", "range": {"min": 0.0, "max": 1.0}, "default": 0.5},
-    {"name": "explosion_force", "type": "float", "description_pt": "Força de knockback (0 = sem).", "range": {"min": 0.0, "max": 5000.0}, "default": 300.0}
+    {
+      "name": "damage",
+      "type": "int",
+      "description_pt": "Dano no centro da explosão.",
+      "range": {
+        "min": 1,
+        "max": 9999
+      },
+      "default": 50
+    },
+    {
+      "name": "radius",
+      "type": "float",
+      "description_pt": "Raio da explosão (px).",
+      "range": {
+        "min": 10.0,
+        "max": 2000.0
+      },
+      "default": 100.0,
+      "unit": "px"
+    },
+    {
+      "name": "falloff",
+      "type": "float",
+      "description_pt": "Redução do dano na borda (0.0 = dano total, 1.0 = zero na borda).",
+      "range": {
+        "min": 0.0,
+        "max": 1.0
+      },
+      "default": 0.5
+    },
+    {
+      "name": "explosion_force",
+      "type": "float",
+      "description_pt": "Força de knockback (0 = sem).",
+      "range": {
+        "min": 0.0,
+        "max": 5000.0
+      },
+      "default": 300.0
+    }
   ],
   "signals": [
-    {"name": "exploded", "description_pt": "Emitido após a explosão aplicar dano.", "params": [{"name": "targets_hit", "type": "int"}]}
+    {
+      "name": "exploded",
+      "description_pt": "Emitido após a explosão aplicar dano.",
+      "params": [
+        {
+          "name": "targets_hit",
+          "type": "int"
+        }
+      ]
+    }
   ],
-  "dependencies": ["health", "knockback"],
-  "genres": ["topdown_shooter", "platformer", "roguelike", "bullet_hell", "generic"],
+  "dependencies": [
+    "health",
+    "knockback"
+  ],
+  "genres": [
+    "topdown_shooter",
+    "platformer",
+    "roguelike",
+    "bullet_hell",
+    "generic"
+  ],
   "version": "1.0.0",
   "category": "combate",
-  "status": "implementado"
+  "status": "implementado",
+  "godot_version": "4.7"
 }

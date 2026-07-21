@@ -1,1 +1,22 @@
-﻿{"name":"narrative_replay","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "narrative_replay",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior narrative_replay para Godot 4.7.",
+  "description_en": "narrative_replay behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "narrative_replay"
+    ],
+    "en": [
+      "narrative_replay"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

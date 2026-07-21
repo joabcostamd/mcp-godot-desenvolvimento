@@ -1,1 +1,42 @@
-{"name":"controller_remap","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":["controle","remap","acessibilidade"],"en":["controller","remap","accessibility"]},"parameters":[{"name":"actions","type":"Array"}],"signals":[{"name":"rebound","params":[{"name":"action","type":"String"}]}],"genres":["generic"],"tags":["acessibilidade"]}
+{
+  "name": "controller_remap",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "synonyms": {
+    "pt": [
+      "controle",
+      "remap",
+      "acessibilidade"
+    ],
+    "en": [
+      "controller",
+      "remap",
+      "accessibility"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "actions",
+      "type": "Array"
+    }
+  ],
+  "signals": [
+    {
+      "name": "rebound",
+      "params": [
+        {
+          "name": "action",
+          "type": "String"
+        }
+      ]
+    }
+  ],
+  "genres": [
+    "generic"
+  ],
+  "tags": [
+    "acessibilidade"
+  ],
+  "description_pt": "Behavior Controller Remap para Godot 4.7. Componente plugavel para jogos 2D.",
+  "description_en": "Controller Remap behavior for Godot 4.7. Pluggable component for 2D games."
+}

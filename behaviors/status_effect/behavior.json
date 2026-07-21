@@ -1,27 +1,126 @@
 {
-  "name": "status_effect", "version": "1.0.0", "godot_version": "4.7",
+  "name": "status_effect",
+  "version": "1.0.0",
+  "godot_version": "4.7",
   "description_pt": "Sistema de buff/debuff (efeito de status). Aplica modificadores temporários a uma entidade. Suporta duração, ticks (DoT/HoT), stacks e refresh. Auto-detecta Health sibling para dano/cura por tick.",
   "description_en": "Buff/debuff (status effect) system. Applies temporary modifiers to an entity. Supports duration, ticks (DoT/HoT), stacks and refresh. Auto-detects Health sibling for tick damage/healing.",
   "synonyms": {
-    "pt": ["buff", "debuff", "efeito", "status", "dot", "hot", "envenenar", "queimar", "congelar"],
-    "en": ["buff", "debuff", "effect", "status", "dot", "hot", "poison", "burn", "freeze"]
+    "pt": [
+      "buff",
+      "debuff",
+      "efeito",
+      "status",
+      "dot",
+      "hot",
+      "envenenar",
+      "queimar",
+      "congelar"
+    ],
+    "en": [
+      "buff",
+      "debuff",
+      "effect",
+      "status",
+      "dot",
+      "hot",
+      "poison",
+      "burn",
+      "freeze"
+    ]
   },
   "parameters": [
-    {"name": "effect_type", "type": "String", "description_pt": "Tipo do efeito (ex: burn, poison, freeze, haste, shield).", "default": "custom"},
-    {"name": "duration", "type": "float", "description_pt": "Duração total em segundos (0 = permanente até remove()).", "range": {"min": 0.0, "max": 300.0}, "default": 5.0, "unit": "s"},
-    {"name": "tick_interval", "type": "float", "description_pt": "Intervalo entre ticks (0 = sem ticks).", "range": {"min": 0.0, "max": 10.0}, "default": 1.0, "unit": "s"},
-    {"name": "tick_damage", "type": "int", "description_pt": "Dano por tick (positivo = dano, negativo = cura). 0 = sem dano.", "default": 0},
-    {"name": "max_stacks", "type": "int", "description_pt": "Número máximo de stacks acumuláveis.", "range": {"min": 1, "max": 99}, "default": 1}
+    {
+      "name": "effect_type",
+      "type": "String",
+      "description_pt": "Tipo do efeito (ex: burn, poison, freeze, haste, shield).",
+      "default": "custom"
+    },
+    {
+      "name": "duration",
+      "type": "float",
+      "description_pt": "Duração total em segundos (0 = permanente até remove()).",
+      "range": {
+        "min": 0.0,
+        "max": 300.0
+      },
+      "default": 5.0,
+      "unit": "s"
+    },
+    {
+      "name": "tick_interval",
+      "type": "float",
+      "description_pt": "Intervalo entre ticks (0 = sem ticks).",
+      "range": {
+        "min": 0.0,
+        "max": 10.0
+      },
+      "default": 1.0,
+      "unit": "s"
+    },
+    {
+      "name": "tick_damage",
+      "type": "int",
+      "description_pt": "Dano por tick (positivo = dano, negativo = cura). 0 = sem dano.",
+      "default": 0
+    },
+    {
+      "name": "max_stacks",
+      "type": "int",
+      "description_pt": "Número máximo de stacks acumuláveis.",
+      "range": {
+        "min": 1,
+        "max": 99
+      },
+      "default": 1
+    }
   ],
   "signals": [
-    {"name": "applied", "description_pt": "Emitido quando o efeito é aplicado.", "params": []},
-    {"name": "tick", "description_pt": "Emitido a cada tick do efeito.", "params": [{"name": "stacks", "type": "int"}]},
-    {"name": "expired", "description_pt": "Emitido quando a duração expira.", "params": []},
-    {"name": "refreshed", "description_pt": "Emitido quando a duração é renovada.", "params": []},
-    {"name": "removed", "description_pt": "Emitido quando o efeito é removido manualmente.", "params": []}
+    {
+      "name": "applied",
+      "description_pt": "Emitido quando o efeito é aplicado.",
+      "params": []
+    },
+    {
+      "name": "tick",
+      "description_pt": "Emitido a cada tick do efeito.",
+      "params": [
+        {
+          "name": "stacks",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "expired",
+      "description_pt": "Emitido quando a duração expira.",
+      "params": []
+    },
+    {
+      "name": "refreshed",
+      "description_pt": "Emitido quando a duração é renovada.",
+      "params": []
+    },
+    {
+      "name": "removed",
+      "description_pt": "Emitido quando o efeito é removido manualmente.",
+      "params": []
+    }
   ],
-  "dependencies": ["health"],
-  "genres": ["rpg", "roguelike", "platformer", "topdown_shooter", "generic"],
+  "dependencies": [
+    "health"
+  ],
+  "genres": [
+    "rpg",
+    "roguelike",
+    "platformer",
+    "topdown_shooter",
+    "generic"
+  ],
   "conflicts": [],
-  "tags": ["rpg", "status", "buff", "debuff"]
+  "tags": [
+    "rpg",
+    "status",
+    "buff",
+    "debuff"
+  ]
 }

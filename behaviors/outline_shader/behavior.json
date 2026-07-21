@@ -1,1 +1,46 @@
-{"name":"outline_shader","version":"1.0.0","godot_version":"4.7","description_pt":"Node que aplica shader de outline ao parent CanvasItem. Cor e largura configuráveis. Alternativa ao Outline (#95) que usa shader dedicado.","synonyms":{"pt":["contorno","shader","borda"],"en":["outline","shader","border"]},"parameters":[{"name":"outline_color","type":"Color","default":{"r":0,"g":1,"b":1,"a":1}},{"name":"outline_width","type":"float","range":{"min":0,"max":5},"default":1}],"signals":[],"genres":["generic"],"tags":["shader"]}
+{
+  "name": "outline_shader",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que aplica shader de outline ao parent CanvasItem. Cor e largura configuráveis. Alternativa ao Outline (#95) que usa shader dedicado.",
+  "synonyms": {
+    "pt": [
+      "contorno",
+      "shader",
+      "borda"
+    ],
+    "en": [
+      "outline",
+      "shader",
+      "border"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "outline_color",
+      "type": "Color",
+      "default": {
+        "r": 0,
+        "g": 1,
+        "b": 1,
+        "a": 1
+      }
+    },
+    {
+      "name": "outline_width",
+      "type": "float",
+      "range": {
+        "min": 0,
+        "max": 5
+      },
+      "default": 1
+    }
+  ],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "tags": [
+    "shader"
+  ]
+}

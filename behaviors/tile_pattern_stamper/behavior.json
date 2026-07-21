@@ -1,1 +1,22 @@
-﻿{"name":"tile_pattern_stamper","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "tile_pattern_stamper",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior tile_pattern_stamper para Godot 4.7.",
+  "description_en": "tile_pattern_stamper behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "tile_pattern_stamper"
+    ],
+    "en": [
+      "tile_pattern_stamper"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

@@ -1,1 +1,22 @@
-﻿{"name":"custom_node","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":["system"]}
+{
+  "name": "custom_node",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior custom_node para Godot 4.7.",
+  "description_en": "custom_node behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "custom_node"
+    ],
+    "en": [
+      "custom_node"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

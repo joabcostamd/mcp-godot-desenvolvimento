@@ -1,1 +1,63 @@
-{"name":"rpc_bridge","version":"1.0.0","godot_version":"4.7","description_pt":"Node que encapsula chamadas RPC multiplayer. Suporta métodos reliable/unreliable e canais.","synonyms":{"pt":["rpc","chamada","remota","multiplayer"],"en":["rpc","remote","call","multiplayer"]},"parameters":[{"name":"reliable","type":"bool","default":true},{"name":"channel","type":"int","range":{"min":0,"max":15},"default":0}],"signals":[{"name":"rpc_sent","params":[{"name":"method","type":"String"}]},{"name":"rpc_received","params":[{"name":"method","type":"String"}]}],"genres":["multiplayer"],"tags":["multiplayer","rpc"]}
+{
+  "name": "rpc_bridge",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que encapsula chamadas RPC multiplayer. Suporta métodos reliable/unreliable e canais.",
+  "synonyms": {
+    "pt": [
+      "rpc",
+      "chamada",
+      "remota",
+      "multiplayer"
+    ],
+    "en": [
+      "rpc",
+      "remote",
+      "call",
+      "multiplayer"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "reliable",
+      "type": "bool",
+      "default": true
+    },
+    {
+      "name": "channel",
+      "type": "int",
+      "range": {
+        "min": 0,
+        "max": 15
+      },
+      "default": 0
+    }
+  ],
+  "signals": [
+    {
+      "name": "rpc_sent",
+      "params": [
+        {
+          "name": "method",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "rpc_received",
+      "params": [
+        {
+          "name": "method",
+          "type": "String"
+        }
+      ]
+    }
+  ],
+  "genres": [
+    "multiplayer"
+  ],
+  "tags": [
+    "multiplayer",
+    "rpc"
+  ]
+}

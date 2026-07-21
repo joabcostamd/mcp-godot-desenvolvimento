@@ -1,1 +1,22 @@
-﻿{"name":"infinite_world","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["procedural"],"tags":["pcg"]}
+{
+  "name": "infinite_world",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior infinite_world para Godot 4.7.",
+  "description_en": "infinite_world behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "infinite_world"
+    ],
+    "en": [
+      "infinite_world"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

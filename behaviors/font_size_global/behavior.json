@@ -1,1 +1,22 @@
-﻿{"name":"font_size_global","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "font_size_global",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior font_size_global para Godot 4.7.",
+  "description_en": "font_size_global behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "font_size_global"
+    ],
+    "en": [
+      "font_size_global"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

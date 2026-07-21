@@ -1,1 +1,22 @@
-﻿{"name":"patch_system","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":["system"]}
+{
+  "name": "patch_system",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior patch_system para Godot 4.7.",
+  "description_en": "patch_system behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "patch_system"
+    ],
+    "en": [
+      "patch_system"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

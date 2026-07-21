@@ -1,21 +1,76 @@
 {
-  "name": "camera_framed", "version": "1.0.0", "godot_version": "4.7",
+  "name": "camera_framed",
+  "version": "1.0.0",
+  "godot_version": "4.7",
   "description_pt": "Node que implementa câmera com dead zone (zona morta). A câmera só segue o alvo quando ele sai da dead zone central. Movimento suave com damping na soft zone. Ideal para jogos de plataforma e ação com câmera não-rígida.",
   "description_en": "Node implementing a dead-zone camera. The camera only follows the target when it leaves the central dead zone. Smooth movement with damping in the soft zone. Ideal for platformers and action games with non-rigid cameras.",
   "synonyms": {
-    "pt": ["camera", "deadzone", "zona_morta", "enquadramento", "framed", "suave"],
-    "en": ["camera", "deadzone", "framed", "smooth", "follow"]
+    "pt": [
+      "camera",
+      "deadzone",
+      "zona_morta",
+      "enquadramento",
+      "framed",
+      "suave"
+    ],
+    "en": [
+      "camera",
+      "deadzone",
+      "framed",
+      "smooth",
+      "follow"
+    ]
   },
   "parameters": [
-    {"name": "dead_zone", "type": "Vector2", "description_pt": "Tamanho da zona morta central (target livre sem mover câmera).", "default": {"x": 100.0, "y": 60.0}},
-    {"name": "soft_zone", "type": "Vector2", "description_pt": "Margem adicional além da dead zone onde a câmera segue com damping.", "default": {"x": 80.0, "y": 50.0}},
-    {"name": "damping", "type": "float", "description_pt": "Fator de suavização (0.01 = muito lento, 1.0 = snap instantâneo).", "range": {"min": 0.01, "max": 1.0}, "default": 0.1}
+    {
+      "name": "dead_zone",
+      "type": "Vector2",
+      "description_pt": "Tamanho da zona morta central (target livre sem mover câmera).",
+      "default": {
+        "x": 100.0,
+        "y": 60.0
+      }
+    },
+    {
+      "name": "soft_zone",
+      "type": "Vector2",
+      "description_pt": "Margem adicional além da dead zone onde a câmera segue com damping.",
+      "default": {
+        "x": 80.0,
+        "y": 50.0
+      }
+    },
+    {
+      "name": "damping",
+      "type": "float",
+      "description_pt": "Fator de suavização (0.01 = muito lento, 1.0 = snap instantâneo).",
+      "range": {
+        "min": 0.01,
+        "max": 1.0
+      },
+      "default": 0.1
+    }
   ],
   "signals": [
-    {"name": "target_entered_dead_zone", "description_pt": "Emitido quando o alvo entra na zona morta (câmera parada).", "params": []}
+    {
+      "name": "target_entered_dead_zone",
+      "description_pt": "Emitido quando o alvo entra na zona morta (câmera parada).",
+      "params": []
+    }
   ],
   "dependencies": [],
-  "genres": ["platformer", "topdown_shooter", "generic"],
-  "conflicts": ["camera_follow"],
-  "tags": ["camera", "deadzone", "framed", "suave"]
+  "genres": [
+    "platformer",
+    "topdown_shooter",
+    "generic"
+  ],
+  "conflicts": [
+    "camera_follow"
+  ],
+  "tags": [
+    "camera",
+    "deadzone",
+    "framed",
+    "suave"
+  ]
 }

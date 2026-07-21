@@ -1,22 +1,142 @@
 {
-  "name": "character_creator", "version": "1.0.0", "godot_version": "4.7",
+  "name": "character_creator",
+  "version": "1.0.0",
+  "godot_version": "4.7",
   "description_pt": "Control que gerencia partes customizáveis de personagem (cabelo, olhos, corpo, etc.) com opções por parte e paleta de cores. Suporta presets salvos via ConfigFile, integrando com SaveLoad sibling para diretório de saves. Ideal para telas de criação de personagem em RPGs e jogos com avatar customizável.",
   "description_en": "Control managing customizable character parts (hair, eyes, body, etc.) with per-part options and color palette. Supports presets saved via ConfigFile, integrating with SaveLoad sibling for save directory. Ideal for character creation screens in RPGs and games with customizable avatars.",
   "synonyms": {
-    "pt": ["criacao", "personagem", "avatar", "customizacao", "partes", "cores", "presets", "aparencia", "editor"],
-    "en": ["creation", "character", "avatar", "customization", "parts", "colors", "presets", "appearance", "editor"]
+    "pt": [
+      "criacao",
+      "personagem",
+      "avatar",
+      "customizacao",
+      "partes",
+      "cores",
+      "presets",
+      "aparencia",
+      "editor"
+    ],
+    "en": [
+      "creation",
+      "character",
+      "avatar",
+      "customization",
+      "parts",
+      "colors",
+      "presets",
+      "appearance",
+      "editor"
+    ]
   },
   "parameters": [
-    {"name": "preset_category", "type": "String", "description_pt": "Categoria para agrupar presets (ex: player, npc, enemy). Permite múltiplos tipos de personagem com presets isolados.", "default": "default"},
-    {"name": "color_palette", "type": "PackedColorArray", "description_pt": "Paleta de cores disponíveis para customização de partes. Cada parte pode selecionar qualquer cor desta paleta.", "default": [{"r": 1.0, "g": 1.0, "b": 1.0, "a": 1.0}, {"r": 0.0, "g": 0.0, "b": 0.0, "a": 1.0}, {"r": 1.0, "g": 0.0, "b": 0.0, "a": 1.0}, {"r": 0.0, "g": 0.0, "b": 1.0, "a": 1.0}, {"r": 0.0, "g": 1.0, "b": 0.0, "a": 1.0}, {"r": 1.0, "g": 1.0, "b": 0.0, "a": 1.0}, {"r": 1.0, "g": 0.0, "b": 1.0, "a": 1.0}, {"r": 1.0, "g": 0.5, "b": 0.0, "a": 1.0}]}
+    {
+      "name": "preset_category",
+      "type": "String",
+      "description_pt": "Categoria para agrupar presets (ex: player, npc, enemy). Permite múltiplos tipos de personagem com presets isolados.",
+      "default": "default"
+    },
+    {
+      "name": "color_palette",
+      "type": "PackedColorArray",
+      "description_pt": "Paleta de cores disponíveis para customização de partes. Cada parte pode selecionar qualquer cor desta paleta.",
+      "default": [
+        {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        {
+          "r": 0.0,
+          "g": 0.0,
+          "b": 0.0,
+          "a": 1.0
+        },
+        {
+          "r": 1.0,
+          "g": 0.0,
+          "b": 0.0,
+          "a": 1.0
+        },
+        {
+          "r": 0.0,
+          "g": 0.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        {
+          "r": 0.0,
+          "g": 1.0,
+          "b": 0.0,
+          "a": 1.0
+        },
+        {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 0.0,
+          "a": 1.0
+        },
+        {
+          "r": 1.0,
+          "g": 0.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        {
+          "r": 1.0,
+          "g": 0.5,
+          "b": 0.0,
+          "a": 1.0
+        }
+      ]
+    }
   ],
   "signals": [
-    {"name": "part_changed", "description_pt": "Emitido quando a opção ou cor de uma parte é alterada.", "params": [{"name": "part_name", "type": "String"}]},
-    {"name": "saved", "description_pt": "Emitido ao salvar um preset com sucesso.", "params": [{"name": "preset_name", "type": "String"}]},
-    {"name": "loaded", "description_pt": "Emitido ao carregar um preset com sucesso.", "params": [{"name": "preset_name", "type": "String"}]}
+    {
+      "name": "part_changed",
+      "description_pt": "Emitido quando a opção ou cor de uma parte é alterada.",
+      "params": [
+        {
+          "name": "part_name",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "saved",
+      "description_pt": "Emitido ao salvar um preset com sucesso.",
+      "params": [
+        {
+          "name": "preset_name",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "loaded",
+      "description_pt": "Emitido ao carregar um preset com sucesso.",
+      "params": [
+        {
+          "name": "preset_name",
+          "type": "String"
+        }
+      ]
+    }
   ],
-  "dependencies": ["save_load"],
-  "genres": ["rpg", "roguelike", "generic"],
+  "dependencies": [
+    "save_load"
+  ],
+  "genres": [
+    "rpg",
+    "roguelike",
+    "generic"
+  ],
   "conflicts": [],
-  "tags": ["personagem", "customizacao", "avatar", "preset", "criacao"]
+  "tags": [
+    "personagem",
+    "customizacao",
+    "avatar",
+    "preset",
+    "criacao"
+  ]
 }

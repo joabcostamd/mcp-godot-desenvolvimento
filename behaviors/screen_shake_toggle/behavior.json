@@ -1,1 +1,22 @@
-﻿{"name":"screen_shake_toggle","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":["acessibilidade"]}
+{
+  "name": "screen_shake_toggle",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior screen_shake_toggle para Godot 4.7.",
+  "description_en": "screen_shake_toggle behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "screen_shake_toggle"
+    ],
+    "en": [
+      "screen_shake_toggle"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

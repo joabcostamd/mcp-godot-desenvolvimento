@@ -1,1 +1,22 @@
-﻿{"name":"flexible_text_entry","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "flexible_text_entry",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior flexible_text_entry para Godot 4.7.",
+  "description_en": "flexible_text_entry behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "flexible_text_entry"
+    ],
+    "en": [
+      "flexible_text_entry"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

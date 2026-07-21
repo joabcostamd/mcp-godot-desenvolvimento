@@ -3,22 +3,103 @@
   "description_pt": "Comportamento de bando (boids): aplica 3 forças de steering — separação, alinhamento, coesão — no CharacterBody2D pai. NPCs se movem em grupo como pássaros ou peixes.",
   "description_en": "Flocking behavior (boids): applies 3 steering forces — separation, alignment, cohesion — to the parent CharacterBody2D. NPCs move as a group like birds or fish.",
   "synonyms": {
-    "pt": ["bando", "boids", "cardume", "revoada", "enxame", "grupo", "coletivo"],
-    "en": ["boids", "swarm", "herd", "school", "flock", "group", "collective"]
+    "pt": [
+      "bando",
+      "boids",
+      "cardume",
+      "revoada",
+      "enxame",
+      "grupo",
+      "coletivo"
+    ],
+    "en": [
+      "boids",
+      "swarm",
+      "herd",
+      "school",
+      "flock",
+      "group",
+      "collective"
+    ]
   },
   "parameters": [
-    {"name": "separation_weight", "type": "float", "description_pt": "Peso da força de separação (afastar de vizinhos).", "range": {"min": 0.0, "max": 10.0}, "default": 1.5},
-    {"name": "alignment_weight", "type": "float", "description_pt": "Peso da força de alinhamento (igualar velocidade).", "range": {"min": 0.0, "max": 10.0}, "default": 1.0},
-    {"name": "cohesion_weight", "type": "float", "description_pt": "Peso da força de coesão (mover ao centro).", "range": {"min": 0.0, "max": 10.0}, "default": 1.0},
-    {"name": "neighbor_radius", "type": "float", "description_pt": "Raio de detecção de vizinhos (px).", "range": {"min": 10.0, "max": 1000.0}, "default": 100.0, "unit": "px"},
-    {"name": "max_speed", "type": "float", "description_pt": "Velocidade máxima (px/s).", "range": {"min": 10.0, "max": 2000.0}, "default": 150.0, "unit": "px/s"},
-    {"name": "flock_group", "type": "String", "description_pt": "Grupo usado para encontrar vizinhos do bando.", "default": "flock"}
+    {
+      "name": "separation_weight",
+      "type": "float",
+      "description_pt": "Peso da força de separação (afastar de vizinhos).",
+      "range": {
+        "min": 0.0,
+        "max": 10.0
+      },
+      "default": 1.5
+    },
+    {
+      "name": "alignment_weight",
+      "type": "float",
+      "description_pt": "Peso da força de alinhamento (igualar velocidade).",
+      "range": {
+        "min": 0.0,
+        "max": 10.0
+      },
+      "default": 1.0
+    },
+    {
+      "name": "cohesion_weight",
+      "type": "float",
+      "description_pt": "Peso da força de coesão (mover ao centro).",
+      "range": {
+        "min": 0.0,
+        "max": 10.0
+      },
+      "default": 1.0
+    },
+    {
+      "name": "neighbor_radius",
+      "type": "float",
+      "description_pt": "Raio de detecção de vizinhos (px).",
+      "range": {
+        "min": 10.0,
+        "max": 1000.0
+      },
+      "default": 100.0,
+      "unit": "px"
+    },
+    {
+      "name": "max_speed",
+      "type": "float",
+      "description_pt": "Velocidade máxima (px/s).",
+      "range": {
+        "min": 10.0,
+        "max": 2000.0
+      },
+      "default": 150.0,
+      "unit": "px/s"
+    },
+    {
+      "name": "flock_group",
+      "type": "String",
+      "description_pt": "Grupo usado para encontrar vizinhos do bando.",
+      "default": "flock"
+    }
   ],
   "signals": [],
   "dependencies": [],
-  "genres": ["topdown_shooter", "simulation", "bullet_hell", "roguelike", "generic"],
+  "genres": [
+    "topdown_shooter",
+    "simulation",
+    "bullet_hell",
+    "roguelike",
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["ia", "bando", "boids", "movimento", "grupo", "coletivo"]
+  "tags": [
+    "ia",
+    "bando",
+    "boids",
+    "movimento",
+    "grupo",
+    "coletivo"
+  ]
 }

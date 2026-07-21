@@ -1,1 +1,59 @@
-{"name":"debug_arrow","version":"1.0.0","godot_version":"4.7","description_pt":"Node2D que desenha uma seta colorida na direção configurada. Útil para debug de direção de movimento, vetores de força, AI.","description_en":"Node2D drawing a colored arrow in configured direction. Useful for debugging movement direction, force vectors, AI.","synonyms":{"pt":["debug","seta","direcao","vetor"],"en":["debug","arrow","direction","vector"]},"parameters":[{"name":"color","type":"Color","default":{"r":0,"g":1,"b":0,"a":1}},{"name":"length","type":"float","range":{"min":8,"max":256},"default":64,"unit":"px"},{"name":"direction","type":"Vector2","default":{"x":1,"y":0}}],"signals":[],"dependencies":[],"genres":["generic"],"tags":["debug"]}
+{
+  "name": "debug_arrow",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node2D que desenha uma seta colorida na direção configurada. Útil para debug de direção de movimento, vetores de força, AI.",
+  "description_en": "Node2D drawing a colored arrow in configured direction. Useful for debugging movement direction, force vectors, AI.",
+  "synonyms": {
+    "pt": [
+      "debug",
+      "seta",
+      "direcao",
+      "vetor"
+    ],
+    "en": [
+      "debug",
+      "arrow",
+      "direction",
+      "vector"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "color",
+      "type": "Color",
+      "default": {
+        "r": 0,
+        "g": 1,
+        "b": 0,
+        "a": 1
+      }
+    },
+    {
+      "name": "length",
+      "type": "float",
+      "range": {
+        "min": 8,
+        "max": 256
+      },
+      "default": 64,
+      "unit": "px"
+    },
+    {
+      "name": "direction",
+      "type": "Vector2",
+      "default": {
+        "x": 1,
+        "y": 0
+      }
+    }
+  ],
+  "signals": [],
+  "dependencies": [],
+  "genres": [
+    "generic"
+  ],
+  "tags": [
+    "debug"
+  ]
+}

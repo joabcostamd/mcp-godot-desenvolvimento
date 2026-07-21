@@ -3,24 +3,87 @@
   "description_pt": "Sistema de diálogo com CanvasLayer + RichTextLabel. Array de linhas {text, speaker}. next() avança, auto_advance com Timer, advance_input via ação. Emite dialogue_started, line_displayed, dialogue_finished.",
   "description_en": "Dialogue system with CanvasLayer + RichTextLabel. Array of lines {text, speaker}. next() advances, auto_advance with Timer, advance_input via action. Emits dialogue_started, line_displayed, dialogue_finished.",
   "synonyms": {
-    "pt": ["dialogo", "conversa", "fala", "texto", "narrativa"],
-    "en": ["dialogue", "conversation", "speech", "text", "narrative"]
+    "pt": [
+      "dialogo",
+      "conversa",
+      "fala",
+      "texto",
+      "narrativa"
+    ],
+    "en": [
+      "dialogue",
+      "conversation",
+      "speech",
+      "text",
+      "narrative"
+    ]
   },
   "parameters": [
-    {"name": "lines", "type": "Array", "description_pt": "Array de {text: String, speaker: String}.", "default": []},
-    {"name": "auto_advance", "type": "bool", "description_pt": "Se true, avança automaticamente após delay.", "default": false},
-    {"name": "auto_delay", "type": "float", "description_pt": "Delay do auto-avanço (s).", "range": {"min": 0.5, "max": 30.0}, "default": 3.0, "unit": "s"},
-    {"name": "advance_input", "type": "String", "description_pt": "Ação de input para avançar (vazio = qualquer tecla).", "default": "ui_accept"}
+    {
+      "name": "lines",
+      "type": "Array",
+      "description_pt": "Array de {text: String, speaker: String}.",
+      "default": []
+    },
+    {
+      "name": "auto_advance",
+      "type": "bool",
+      "description_pt": "Se true, avança automaticamente após delay.",
+      "default": false
+    },
+    {
+      "name": "auto_delay",
+      "type": "float",
+      "description_pt": "Delay do auto-avanço (s).",
+      "range": {
+        "min": 0.5,
+        "max": 30.0
+      },
+      "default": 3.0,
+      "unit": "s"
+    },
+    {
+      "name": "advance_input",
+      "type": "String",
+      "description_pt": "Ação de input para avançar (vazio = qualquer tecla).",
+      "default": "ui_accept"
+    }
   ],
   "signals": [
-    {"name": "dialogue_started", "description_pt": "Emitido ao iniciar.", "params": []},
-    {"name": "line_displayed", "description_pt": "Emitido a cada linha.", "params": [{"name": "index", "type": "int"}]},
-    {"name": "dialogue_finished", "description_pt": "Emitido ao terminar.", "params": []}
+    {
+      "name": "dialogue_started",
+      "description_pt": "Emitido ao iniciar.",
+      "params": []
+    },
+    {
+      "name": "line_displayed",
+      "description_pt": "Emitido a cada linha.",
+      "params": [
+        {
+          "name": "index",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "dialogue_finished",
+      "description_pt": "Emitido ao terminar.",
+      "params": []
+    }
   ],
   "dependencies": [],
-  "genres": ["rpg", "platformer", "generic"],
+  "genres": [
+    "rpg",
+    "platformer",
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["sistema", "dialogo", "narrativa", "ui"]
+  "tags": [
+    "sistema",
+    "dialogo",
+    "narrativa",
+    "ui"
+  ]
 }

@@ -1,1 +1,22 @@
-﻿{"name":"plugin_creator","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":["system"]}
+{
+  "name": "plugin_creator",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior plugin_creator para Godot 4.7.",
+  "description_en": "plugin_creator behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "plugin_creator"
+    ],
+    "en": [
+      "plugin_creator"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

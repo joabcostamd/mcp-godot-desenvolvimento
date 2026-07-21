@@ -3,21 +3,63 @@
   "description_pt": "Torna o parent Node2D destrutível. Auto-detecta Health sibling e escuta damage_taken. Emite destroyed ao chegar a 0 HP. Suporta efeito de destruição (PackedScene instanciável) e drop_table.",
   "description_en": "Makes parent Node2D destructible. Auto-detects Health sibling and listens to damage_taken. Emits destroyed on 0 HP. Supports destroy effect (instanced PackedScene) and drop_table.",
   "synonyms": {
-    "pt": ["destrutivel", "quebravel", "destruir", "explodir", "breakable"],
-    "en": ["destructible", "breakable", "destroy", "explode"]
+    "pt": [
+      "destrutivel",
+      "quebravel",
+      "destruir",
+      "explodir",
+      "breakable"
+    ],
+    "en": [
+      "destructible",
+      "breakable",
+      "destroy",
+      "explode"
+    ]
   },
   "parameters": [
-    {"name": "destroy_effect", "type": "String", "description_pt": "Cena PackedScene para instanciar ao destruir (opcional).", "default": ""},
-    {"name": "auto_detect_health", "type": "bool", "description_pt": "Se true, busca Health sibling automaticamente.", "default": true}
+    {
+      "name": "destroy_effect",
+      "type": "String",
+      "description_pt": "Cena PackedScene para instanciar ao destruir (opcional).",
+      "default": ""
+    },
+    {
+      "name": "auto_detect_health",
+      "type": "bool",
+      "description_pt": "Se true, busca Health sibling automaticamente.",
+      "default": true
+    }
   ],
   "signals": [
-    {"name": "damaged", "description_pt": "Emitido ao receber dano.", "params": [{"name": "current_hp", "type": "int"}]},
-    {"name": "destroyed", "description_pt": "Emitido ao ser destruído (HP = 0).", "params": []}
+    {
+      "name": "damaged",
+      "description_pt": "Emitido ao receber dano.",
+      "params": [
+        {
+          "name": "current_hp",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "destroyed",
+      "description_pt": "Emitido ao ser destruído (HP = 0).",
+      "params": []
+    }
   ],
-  "dependencies": ["health"],
-  "genres": ["generic"],
+  "dependencies": [
+    "health"
+  ],
+  "genres": [
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["destrutivel", "combate", "util"]
+  "tags": [
+    "destrutivel",
+    "combate",
+    "util"
+  ]
 }

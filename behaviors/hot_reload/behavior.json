@@ -1,1 +1,22 @@
-﻿{"name":"hot_reload","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":[]}
+{
+  "name": "hot_reload",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior hot_reload para Godot 4.7.",
+  "description_en": "hot_reload behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "hot_reload"
+    ],
+    "en": [
+      "hot_reload"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

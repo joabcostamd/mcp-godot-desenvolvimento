@@ -1,24 +1,103 @@
 {
-  "name": "camera_shake", "version": "1.0.0", "godot_version": "4.7",
+  "name": "camera_shake",
+  "version": "1.0.0",
+  "godot_version": "4.7",
   "description_pt": "Node que aplica tremor sinusoidal periódico à Camera2D. Diferente de screen_shake (aleatório), este usa onda senoidal com frequência configurável para vibração controlada (terremoto, motor, passos). Suporta direção, decaimento e duração.",
   "description_en": "Node applying periodic sinusoidal shake to Camera2D. Unlike screen_shake (random), this uses sine wave with configurable frequency for controlled vibration (earthquake, engine, footsteps). Supports direction, decay and duration.",
   "synonyms": {
-    "pt": ["camera", "tremor", "vibracao", "terremoto", "senoidal", "shake"],
-    "en": ["camera", "shake", "vibration", "earthquake", "sinusoidal"]
+    "pt": [
+      "camera",
+      "tremor",
+      "vibracao",
+      "terremoto",
+      "senoidal",
+      "shake"
+    ],
+    "en": [
+      "camera",
+      "shake",
+      "vibration",
+      "earthquake",
+      "sinusoidal"
+    ]
   },
   "parameters": [
-    {"name": "amplitude", "type": "float", "description_pt": "Intensidade máxima do deslocamento em pixels.", "range": {"min": 0.1, "max": 100.0}, "default": 5.0},
-    {"name": "frequency", "type": "float", "description_pt": "Frequência da onda em Hz (ciclos/segundo).", "range": {"min": 0.5, "max": 60.0}, "default": 10.0},
-    {"name": "duration", "type": "float", "description_pt": "Duração total do tremor em segundos.", "range": {"min": 0.05, "max": 10.0}, "default": 0.5},
-    {"name": "decay", "type": "float", "description_pt": "Fator de decaimento (0 = linear até 0, 1 = sem decaimento).", "range": {"min": 0.0, "max": 1.0}, "default": 0.8},
-    {"name": "direction", "type": "Vector2", "description_pt": "Direção do tremor (1,0 = horizontal, 0,1 = vertical, 1,1 = diagonal).", "default": {"x": 1.0, "y": 1.0}}
+    {
+      "name": "amplitude",
+      "type": "float",
+      "description_pt": "Intensidade máxima do deslocamento em pixels.",
+      "range": {
+        "min": 0.1,
+        "max": 100.0
+      },
+      "default": 5.0
+    },
+    {
+      "name": "frequency",
+      "type": "float",
+      "description_pt": "Frequência da onda em Hz (ciclos/segundo).",
+      "range": {
+        "min": 0.5,
+        "max": 60.0
+      },
+      "default": 10.0
+    },
+    {
+      "name": "duration",
+      "type": "float",
+      "description_pt": "Duração total do tremor em segundos.",
+      "range": {
+        "min": 0.05,
+        "max": 10.0
+      },
+      "default": 0.5
+    },
+    {
+      "name": "decay",
+      "type": "float",
+      "description_pt": "Fator de decaimento (0 = linear até 0, 1 = sem decaimento).",
+      "range": {
+        "min": 0.0,
+        "max": 1.0
+      },
+      "default": 0.8
+    },
+    {
+      "name": "direction",
+      "type": "Vector2",
+      "description_pt": "Direção do tremor (1,0 = horizontal, 0,1 = vertical, 1,1 = diagonal).",
+      "default": {
+        "x": 1.0,
+        "y": 1.0
+      }
+    }
   ],
   "signals": [
-    {"name": "shake_started", "description_pt": "Emitido ao iniciar o tremor.", "params": []},
-    {"name": "shake_finished", "description_pt": "Emitido ao terminar o tremor.", "params": []}
+    {
+      "name": "shake_started",
+      "description_pt": "Emitido ao iniciar o tremor.",
+      "params": []
+    },
+    {
+      "name": "shake_finished",
+      "description_pt": "Emitido ao terminar o tremor.",
+      "params": []
+    }
   ],
   "dependencies": [],
-  "genres": ["platformer", "topdown_shooter", "rpg", "generic"],
-  "conflicts": ["screen_shake"],
-  "tags": ["camera", "shake", "tremor", "vibracao"]
+  "genres": [
+    "platformer",
+    "topdown_shooter",
+    "rpg",
+    "generic"
+  ],
+  "conflicts": [
+    "screen_shake"
+  ],
+  "tags": [
+    "camera",
+    "shake",
+    "tremor",
+    "vibracao"
+  ]
 }

@@ -1,12 +1,59 @@
 {
-  "name": "wind_zone", "version": "1.0.0", "godot_version": "4.7",
+  "name": "wind_zone",
+  "version": "1.0.0",
+  "godot_version": "4.7",
   "description_pt": "Area2D que aplica força de vento contínua a corpos dentro dela. Direção, força e turbulência configuráveis.",
   "description_en": "Area2D applying continuous wind force to bodies inside. Configurable direction, strength and turbulence.",
-  "synonyms": {"pt": ["vento", "soprar", "corrente_ar"], "en": ["wind", "blow", "air_current"]},
+  "synonyms": {
+    "pt": [
+      "vento",
+      "soprar",
+      "corrente_ar"
+    ],
+    "en": [
+      "wind",
+      "blow",
+      "air_current"
+    ]
+  },
   "parameters": [
-    {"name": "wind_direction", "type": "Vector2", "default": {"x":1,"y":0}},
-    {"name": "wind_strength", "type": "float", "range": {"min": 10, "max": 5000}, "default": 300, "unit": "px/s²"},
-    {"name": "turbulence", "type": "float", "description_pt": "Variação aleatória da força (0-1).", "range": {"min": 0, "max": 1}, "default": 0}
+    {
+      "name": "wind_direction",
+      "type": "Vector2",
+      "default": {
+        "x": 1,
+        "y": 0
+      }
+    },
+    {
+      "name": "wind_strength",
+      "type": "float",
+      "range": {
+        "min": 10,
+        "max": 5000
+      },
+      "default": 300,
+      "unit": "px/s²"
+    },
+    {
+      "name": "turbulence",
+      "type": "float",
+      "description_pt": "Variação aleatória da força (0-1).",
+      "range": {
+        "min": 0,
+        "max": 1
+      },
+      "default": 0
+    }
   ],
-  "signals": [], "dependencies": [], "genres": ["platformer", "generic"], "tags": ["fisica", "vento"]
+  "signals": [],
+  "dependencies": [],
+  "genres": [
+    "platformer",
+    "generic"
+  ],
+  "tags": [
+    "fisica",
+    "vento"
+  ]
 }

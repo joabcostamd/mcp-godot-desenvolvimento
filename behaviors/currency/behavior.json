@@ -3,8 +3,24 @@
   "description_pt": "Componente de moeda genérica (ouro, gems, etc.) com tipo nomeado. Operações: add, spend, can_afford. Emite gained, spent e insufficient. Plugável em qualquer nó.",
   "description_en": "Generic currency component (gold, gems, etc.) with named type. Operations: add, spend, can_afford. Emits gained, spent, and insufficient. Plug into any node.",
   "synonyms": {
-    "pt": ["moeda", "dinheiro", "ouro", "gems", "saldo", "carteira", "recursos"],
-    "en": ["currency", "money", "gold", "gems", "balance", "wallet", "resources"]
+    "pt": [
+      "moeda",
+      "dinheiro",
+      "ouro",
+      "gems",
+      "saldo",
+      "carteira",
+      "recursos"
+    ],
+    "en": [
+      "currency",
+      "money",
+      "gold",
+      "gems",
+      "balance",
+      "wallet",
+      "resources"
+    ]
   },
   "parameters": [
     {
@@ -17,7 +33,10 @@
       "name": "amount",
       "type": "int",
       "description_pt": "Quantidade atual da moeda.",
-      "range": {"min": 0, "max": 999999},
+      "range": {
+        "min": 0,
+        "max": 999999
+      },
       "default": 0
     }
   ],
@@ -26,31 +45,62 @@
       "name": "gained",
       "description_pt": "Emitido ao ganhar moeda.",
       "params": [
-        {"name": "value", "type": "int"},
-        {"name": "new_total", "type": "int"}
+        {
+          "name": "value",
+          "type": "int"
+        },
+        {
+          "name": "new_total",
+          "type": "int"
+        }
       ]
     },
     {
       "name": "spent",
       "description_pt": "Emitido ao gastar moeda com sucesso.",
       "params": [
-        {"name": "value", "type": "int"},
-        {"name": "new_total", "type": "int"}
+        {
+          "name": "value",
+          "type": "int"
+        },
+        {
+          "name": "new_total",
+          "type": "int"
+        }
       ]
     },
     {
       "name": "insufficient",
       "description_pt": "Emitido ao tentar gastar sem saldo suficiente.",
       "params": [
-        {"name": "requested", "type": "int"},
-        {"name": "available", "type": "int"}
+        {
+          "name": "requested",
+          "type": "int"
+        },
+        {
+          "name": "available",
+          "type": "int"
+        }
       ]
     }
   ],
   "dependencies": [],
-  "genres": ["platformer", "topdown_shooter", "rpg", "roguelike", "tower_defense", "idle", "generic"],
+  "genres": [
+    "platformer",
+    "topdown_shooter",
+    "rpg",
+    "roguelike",
+    "tower_defense",
+    "idle",
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["progressao", "moeda", "economia", "recursos"]
+  "tags": [
+    "progressao",
+    "moeda",
+    "economia",
+    "recursos"
+  ]
 }

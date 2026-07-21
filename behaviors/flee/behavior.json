@@ -3,15 +3,32 @@
   "description_pt": "Fuga condicional: move o CharacterBody2D pai para longe de uma ameaça quando a condição é atendida (vida baixa, ao tomar dano). Integra com state_machine (flee/safe).",
   "description_en": "Conditional flee: moves the parent CharacterBody2D away from a threat when condition is met (low health, on damage). Integrates with state_machine (flee/safe).",
   "synonyms": {
-    "pt": ["fugir", "escapar", "recuar", "retirada", "correr", "medo"],
-    "en": ["flee", "escape", "retreat", "run away", "scared", "panic"]
+    "pt": [
+      "fugir",
+      "escapar",
+      "recuar",
+      "retirada",
+      "correr",
+      "medo"
+    ],
+    "en": [
+      "flee",
+      "escape",
+      "retreat",
+      "run away",
+      "scared",
+      "panic"
+    ]
   },
   "parameters": [
     {
       "name": "flee_speed",
       "type": "float",
       "description_pt": "Velocidade de fuga (px/s).",
-      "range": {"min": 10.0, "max": 2000.0},
+      "range": {
+        "min": 10.0,
+        "max": 2000.0
+      },
       "default": 200.0,
       "unit": "px/s"
     },
@@ -19,7 +36,10 @@
       "name": "safe_distance",
       "type": "float",
       "description_pt": "Distância segura da ameaça (px). Ao atingir, para de fugir.",
-      "range": {"min": 50.0, "max": 5000.0},
+      "range": {
+        "min": 50.0,
+        "max": 5000.0
+      },
       "default": 400.0,
       "unit": "px"
     },
@@ -33,7 +53,10 @@
       "name": "health_threshold_pct",
       "type": "float",
       "description_pt": "Porcentagem de HP abaixo da qual foge (0.0–1.0). Usado com flee_condition=health_below_X%.",
-      "range": {"min": 0.0, "max": 1.0},
+      "range": {
+        "min": 0.0,
+        "max": 1.0
+      },
       "default": 0.3
     }
   ],
@@ -49,10 +72,26 @@
       "params": []
     }
   ],
-  "dependencies": ["health", "state_machine"],
-  "genres": ["topdown_shooter", "platformer", "roguelike", "stealth", "generic"],
+  "dependencies": [
+    "health",
+    "state_machine"
+  ],
+  "genres": [
+    "topdown_shooter",
+    "platformer",
+    "roguelike",
+    "stealth",
+    "generic"
+  ],
   "conflicts": [],
   "version": "1.0.0",
   "godot_version": "4.7",
-  "tags": ["ia", "fuga", "medo", "movimento", "npc", "inimigo"]
+  "tags": [
+    "ia",
+    "fuga",
+    "medo",
+    "movimento",
+    "npc",
+    "inimigo"
+  ]
 }

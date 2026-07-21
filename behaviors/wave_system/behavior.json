@@ -1,24 +1,132 @@
 {
-  "name": "wave_system", "version": "1.0.0", "godot_version": "4.7",
+  "name": "wave_system",
+  "version": "1.0.0",
+  "godot_version": "4.7",
   "description_pt": "Node que gerencia ondas de inimigos com spawn progressivo. Configura número de ondas, intervalo entre spawns e rampa de dificuldade. Ideal para survivors-like, tower defense e jogos de arena.",
   "description_en": "Node managing enemy waves with progressive spawning. Configurable wave count, spawn interval and difficulty ramp. Ideal for survivors-like, tower defense and arena games.",
-  "synonyms": {"pt": ["onda", "wave", "spawn", "inimigos", "survivors"], "en": ["wave", "spawn", "enemies", "survivors"]},
+  "synonyms": {
+    "pt": [
+      "onda",
+      "wave",
+      "spawn",
+      "inimigos",
+      "survivors"
+    ],
+    "en": [
+      "wave",
+      "spawn",
+      "enemies",
+      "survivors"
+    ]
+  },
   "parameters": [
-    {"name": "total_waves", "type": "int", "description_pt": "Número total de ondas.", "range": {"min": 1, "max": 100}, "default": 10},
-    {"name": "spawn_interval", "type": "float", "description_pt": "Intervalo entre spawns dentro da onda (s).", "range": {"min": 0.1, "max": 10.0}, "default": 1.0},
-    {"name": "wave_duration", "type": "float", "description_pt": "Duração de cada onda (s).", "range": {"min": 5.0, "max": 300.0}, "default": 30.0},
-    {"name": "rest_duration", "type": "float", "description_pt": "Intervalo de descanso entre ondas (s).", "range": {"min": 0.0, "max": 60.0}, "default": 5.0},
-    {"name": "enemies_per_wave_base", "type": "int", "description_pt": "Inimigos base na primeira onda.", "range": {"min": 1, "max": 500}, "default": 5},
-    {"name": "enemies_increment", "type": "int", "description_pt": "Inimigos adicionais a cada onda.", "range": {"min": 0, "max": 100}, "default": 3}
+    {
+      "name": "total_waves",
+      "type": "int",
+      "description_pt": "Número total de ondas.",
+      "range": {
+        "min": 1,
+        "max": 100
+      },
+      "default": 10
+    },
+    {
+      "name": "spawn_interval",
+      "type": "float",
+      "description_pt": "Intervalo entre spawns dentro da onda (s).",
+      "range": {
+        "min": 0.1,
+        "max": 10.0
+      },
+      "default": 1.0
+    },
+    {
+      "name": "wave_duration",
+      "type": "float",
+      "description_pt": "Duração de cada onda (s).",
+      "range": {
+        "min": 5.0,
+        "max": 300.0
+      },
+      "default": 30.0
+    },
+    {
+      "name": "rest_duration",
+      "type": "float",
+      "description_pt": "Intervalo de descanso entre ondas (s).",
+      "range": {
+        "min": 0.0,
+        "max": 60.0
+      },
+      "default": 5.0
+    },
+    {
+      "name": "enemies_per_wave_base",
+      "type": "int",
+      "description_pt": "Inimigos base na primeira onda.",
+      "range": {
+        "min": 1,
+        "max": 500
+      },
+      "default": 5
+    },
+    {
+      "name": "enemies_increment",
+      "type": "int",
+      "description_pt": "Inimigos adicionais a cada onda.",
+      "range": {
+        "min": 0,
+        "max": 100
+      },
+      "default": 3
+    }
   ],
   "signals": [
-    {"name": "wave_started", "params": [{"name": "wave_number", "type": "int"}]},
-    {"name": "wave_cleared", "params": [{"name": "wave_number", "type": "int"}]},
-    {"name": "spawn_enemy", "params": [{"name": "wave_number", "type": "int"}]},
-    {"name": "all_waves_cleared", "params": []}
+    {
+      "name": "wave_started",
+      "params": [
+        {
+          "name": "wave_number",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "wave_cleared",
+      "params": [
+        {
+          "name": "wave_number",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "spawn_enemy",
+      "params": [
+        {
+          "name": "wave_number",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "all_waves_cleared",
+      "params": []
+    }
   ],
-  "dependencies": ["spawner_wave"],
-  "genres": ["survivors_like", "tower_defense", "generic"],
+  "dependencies": [
+    "spawner_wave"
+  ],
+  "genres": [
+    "survivors_like",
+    "tower_defense",
+    "generic"
+  ],
   "conflicts": [],
-  "tags": ["wave", "onda", "spawn", "estrutura"]
+  "tags": [
+    "wave",
+    "onda",
+    "spawn",
+    "estrutura"
+  ]
 }

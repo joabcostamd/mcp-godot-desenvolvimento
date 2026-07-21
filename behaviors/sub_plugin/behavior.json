@@ -1,1 +1,22 @@
-﻿{"name":"sub_plugin","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":[],"en":[]},"parameters":[],"signals":[],"genres":["generic"],"tags":["system"]}
+{
+  "name": "sub_plugin",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior sub_plugin para Godot 4.7.",
+  "description_en": "sub_plugin behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "sub_plugin"
+    ],
+    "en": [
+      "sub_plugin"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

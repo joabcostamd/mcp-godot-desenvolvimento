@@ -1,13 +1,75 @@
 {
-  "name": "patrol_route", "version": "1.0.0", "godot_version": "4.7",
+  "name": "patrol_route",
+  "version": "1.0.0",
+  "godot_version": "4.7",
   "description_pt": "Node que faz o parent Node2D patrulhar waypoints sequencialmente. Suporta loop e wait_time em cada ponto. Usa move_toward para movimento suave.",
   "description_en": "Node making parent Node2D patrol waypoints sequentially. Supports loop and wait_time at each point. Uses move_toward for smooth movement.",
-  "synonyms": {"pt": ["patrulha", "rota", "vigia", "waypoints"], "en": ["patrol", "route", "guard", "waypoints"]},
+  "synonyms": {
+    "pt": [
+      "patrulha",
+      "rota",
+      "vigia",
+      "waypoints"
+    ],
+    "en": [
+      "patrol",
+      "route",
+      "guard",
+      "waypoints"
+    ]
+  },
   "parameters": [
-    {"name": "speed", "type": "float", "range":{"min":10,"max":1000}, "default":80, "unit":"px/s"},
-    {"name": "wait_time", "type": "float", "range":{"min":0,"max":10}, "default":1, "unit":"s"},
-    {"name": "loop", "type": "bool", "default":true}
+    {
+      "name": "speed",
+      "type": "float",
+      "range": {
+        "min": 10,
+        "max": 1000
+      },
+      "default": 80,
+      "unit": "px/s"
+    },
+    {
+      "name": "wait_time",
+      "type": "float",
+      "range": {
+        "min": 0,
+        "max": 10
+      },
+      "default": 1,
+      "unit": "s"
+    },
+    {
+      "name": "loop",
+      "type": "bool",
+      "default": true
+    }
   ],
-  "signals": [{"name":"waypoint_reached","params":[{"name":"index","type":"int"}]},{"name":"route_complete","params":[]}],
-  "dependencies": [], "genres": ["topdown_shooter", "platformer", "stealth", "generic"], "tags": ["navegacao","ai","patrulha"]
+  "signals": [
+    {
+      "name": "waypoint_reached",
+      "params": [
+        {
+          "name": "index",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "route_complete",
+      "params": []
+    }
+  ],
+  "dependencies": [],
+  "genres": [
+    "topdown_shooter",
+    "platformer",
+    "stealth",
+    "generic"
+  ],
+  "tags": [
+    "navegacao",
+    "ai",
+    "patrulha"
+  ]
 }
