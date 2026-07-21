@@ -58,6 +58,29 @@ def _raw_tool_defs() -> list[Tool]:
             },
         ),
         Tool(
+            name="mcp_telemetry_manage",
+            description=(
+                "Gerencia a telemetria opt-in do MCP (Fatia 1.P). "
+                "Rastreia uso do MCP como ferramenta: quais tools sao chamadas, em qual fase, "
+                "quanto tempo levam, quais falham. Telemetria 100% LOCAL — NADA sai da sua maquina. "
+                "Consentimento explicito: DESLIGADO por padrao. "
+                "Quando usar: ativar telemetria (op=enable), ver metricas (op=status), "
+                "exportar relatorio (op=export), desativar (op=disable), apagar dados (op=reset). "
+                "Exemplo: {\"op\": \"enable\"} ativa a coleta de dados de uso."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "op": {
+                        "type": "string",
+                        "description": "Operacao: 'status', 'enable', 'disable', 'export' ou 'reset'.",
+                        "enum": ["status", "enable", "disable", "export", "reset"],
+                    },
+                },
+                "required": [],
+            },
+        ),
+        Tool(
             name="godot",
             description=(
                 "🎯 INTENT ROUTER — A MELHOR FERRAMENTA DO MCP. "

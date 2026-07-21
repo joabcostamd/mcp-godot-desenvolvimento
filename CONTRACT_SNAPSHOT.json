@@ -1,963 +1,5462 @@
 {
-  "generated_at": "2026-07-19T12:27:35.340852+00:00",
-  "hash": "cb6dd1fe0153c89eaaa76d69f7e90fb39c8501292ebf8c514a1898163f3cff96",
-  "tool_count": 48,
-  "_note": "Snapshot parcial — 48/240 tools (fase CORE). O catalogo completo tem 240 tools em 5 namespaces.",
-  "tools": {
-    "advance_milestone": {
-      "description": "Conclui um milestone. Sem ID, avanca o proximo pendente automaticamente. GRATIS.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "milestone_id": {
-            "description": "ID do milestone a concluir. Se omitido, usa get_next_milestone().",
+  "ping": {
+    "description": "Verifica se o servidor godot-mcp-agent está funcional e conectado. Use esta tool",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "budget_manage": {
+    "description": "Gerencia o orcamento de tokens da sessao (Fatia 1.D). Mostra custo estimado em r",
+    "inputSchema": {
+      "properties": {
+        "op": {
+          "type": "string",
+          "description": "Operacao: 'status', 'set_limit' ou 'reset'.",
+          "enum": [
+            "status",
+            "set_limit",
+            "reset"
+          ]
+        },
+        "limit_brl": {
+          "type": "number",
+          "description": "Valor do teto em reais (para op='set_limit'). Ex: 5.00."
+        },
+        "force": {
+          "type": "boolean",
+          "description": "Se True, ignora confirmacoes."
+        }
+      }
+    }
+  },
+  "mcp_telemetry_manage": {
+    "description": "Gerencia a telemetria opt-in do MCP (Fatia 1.P). Rastreia uso do MCP como ferram",
+    "inputSchema": {
+      "properties": {
+        "op": {
+          "type": "string",
+          "description": "Operacao: 'status', 'enable', 'disable', 'export' ou 'reset'.",
+          "enum": [
+            "status",
+            "enable",
+            "disable",
+            "export",
+            "reset"
+          ]
+        }
+      }
+    }
+  },
+  "godot": {
+    "description": "🎯 INTENT ROUTER — A MELHOR FERRAMENTA DO MCP. Descreva o que você quer fazer em ",
+    "inputSchema": {
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "O que você quer fazer? Descreva em PT-BR ou EN. Ex: 'criar cena', 'adicionar nó Sprite2D', 'rodar o jogo'."
+        }
+      }
+    }
+  },
+  "validate_mcp_registry": {
+    "description": "Ferramenta de diagnóstico: valida a consistência entre as 3 fontes de verdade do",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "validate_godot_version": {
+    "description": "Verifica se a versão do Godot instalada é 4.7.x. Use no início da primeira sessã",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "read_file": {
+    "description": "Lê o conteúdo de um arquivo do projeto (.gd, .tscn, .tres, etc.). Use para exami",
+    "inputSchema": {
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Caminho relativo ao projeto."
+        },
+        "start_line": {
+          "type": "integer",
+          "description": "Linha inicial (1-indexed, opcional)."
+        },
+        "end_line": {
+          "type": "integer",
+          "description": "Linha final inclusiva (opcional)."
+        }
+      }
+    }
+  },
+  "write_file": {
+    "description": "Cria ou modifica um arquivo no projeto. Use para criar scripts GDScript, editar ",
+    "inputSchema": {
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Caminho relativo ao projeto."
+        },
+        "content": {
+          "type": "string",
+          "description": "Conteúdo a escrever."
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "create",
+            "overwrite",
+            "append"
+          ],
+          "description": "Modo: create (só se não existir), overwrite (substitui), append (adiciona)."
+        }
+      }
+    }
+  },
+  "query_classdb": {
+    "description": "Consulta informações COMPLETAS de uma classe na ClassDB do Godot com PAGINAÇÃO, ",
+    "inputSchema": {
+      "properties": {
+        "class_name": {
+          "type": "string",
+          "description": "Nome da classe (ex: 'Node2D', 'CharacterBody2D'). Case-sensitive."
+        },
+        "section": {
+          "type": "string",
+          "enum": [
+            "all",
+            "properties",
+            "methods",
+            "signals",
+            "enums",
+            "constants"
+          ],
+          "description": "Seção a retornar. 'all' retorna todas. Default: 'all'."
+        },
+        "include_inherited": {
+          "type": "boolean",
+          "description": "Incluir membros herdados da classe pai. Default: false."
+        },
+        "offset": {
+          "type": "integer",
+          "description": "Offset para paginação. Default: 0."
+        },
+        "limit": {
+          "type": "integer",
+          "description": "Máximo de itens por seção. Default: 50."
+        }
+      }
+    }
+  },
+  "search_classdb": {
+    "description": "🔍 Busca classes na ClassDB do Godot por nome PARCIAL. Diferente de query_classdb",
+    "inputSchema": {
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Texto parcial para buscar (ex: 'Body', 'Light', 'Camera'). Case-insensitive."
+        },
+        "limit": {
+          "type": "integer",
+          "description": "Máximo de resultados. Default: 20."
+        }
+      }
+    }
+  },
+  "download_asset": {
+    "description": "Baixa assets GRATUITOS (CC0) de APIs publicas. Fontes: Poly Haven (texturas PBR,",
+    "inputSchema": {
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": [
+            "polyhaven",
+            "kenney",
+            "ambientcg"
+          ]
+        },
+        "query": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "asset_id": {
+          "type": "string"
+        },
+        "resolution": {
+          "type": "string"
+        },
+        "limit": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "import_downloaded_asset": {
+    "description": "Importa um asset baixado para o projeto Godot ativo. Use APOS download_asset. Ex",
+    "inputSchema": {
+      "properties": {
+        "asset_path": {
+          "type": "string"
+        },
+        "target_dir": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "workflow_snapshot": {
+    "description": "Salva snapshot do estado atual do projeto no workflow log. Use ANTES de operaçõe",
+    "inputSchema": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "project_path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "workflow_handoff": {
+    "description": "Prepara resumo para proxima sessao. Use no FINAL de cada sessao.",
+    "inputSchema": {
+      "properties": {
+        "next_steps": {
+          "type": "array",
+          "items": {
             "type": "string"
           }
         },
-        "required": [],
-        "type": "object"
+        "notes": {
+          "type": "string"
+        }
       }
-    },
-    "advance_phase": {
-      "description": "Avanca o projeto para a proxima fase, SE o criterio da fase atual foi cumprido. Use force=true so com motivo explicito.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "force": {
-            "description": "Ignora criterios de transicao (obrigatorio informar reason).",
-            "type": "boolean"
-          },
-          "reason": {
-            "description": "Justificativa para avanco forcado (obrigatorio se force=true).",
-            "type": "string"
-          }
+    }
+  },
+  "project_map": {
+    "description": "Gera mapa do projeto: cenas, scripts, funcoes, assets. Formatos: json ou html.",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string"
         },
-        "required": [],
-        "type": "object"
+        "format": {
+          "type": "string",
+          "enum": [
+            "json",
+            "html",
+            "both"
+          ]
+        }
       }
-    },
-    "analysis_manage": {
-      "description": "",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "op": {
-            "description": "Operação a executar. Valores válidos: structure, next_steps, missing_refs, validate_design, estimate_scope, search, history.",
-            "enum": [
-              "structure",
-              "next_steps",
-              "missing_refs",
-              "validate_design",
-              "estimate_scope",
-              "search",
-              "history"
-            ],
-            "type": "string"
-          },
-          "params": {
-            "additionalProperties": true,
-            "description": "Parâmetros da operação. Cada op espera campos específicos — consulte a descrição da tool para saber quais campos são necessários para cada op.",
+    }
+  },
+  "configure_security": {
+    "description": "Configura token de seguranca para o addon MCP.",
+    "inputSchema": {
+      "properties": {
+        "generate_token": {
+          "type": "boolean"
+        },
+        "allow_remote": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "security_status": {
+    "description": "Verifica configuracao de seguranca atual.",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "run_gut_tests": {
+    "description": "Executa testes GUT via Godot headless. Ex: {'test_dir': 'res://tests'}.",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string"
+        },
+        "test_dir": {
+          "type": "string"
+        },
+        "timeout": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "assert_node_exists": {
+    "description": "Verifica se no existe na cena. Ex: {'scene_path':'...','node_path':'./Player'}.",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string"
+        },
+        "node_path": {
+          "type": "string"
+        },
+        "node_type": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "simulate_input_sequence": {
+    "description": "Simula sequencia de inputs. Ex: {'actions':[{'type':'key','key':32}]}.",
+    "inputSchema": {
+      "properties": {
+        "actions": {
+          "type": "array",
+          "items": {
             "type": "object"
           }
         },
-        "required": [
-          "op"
-        ],
-        "type": "object"
+        "delay_ms": {
+          "type": "integer"
+        }
       }
-    },
-    "audit_autoloads": {
-      "description": "Audita os Autoloads do projeto: lista autoloads registrados e detecta autoloads possivelmente nao usados.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "project_path": {
-            "description": "Caminho do projeto.",
+    }
+  },
+  "vibe_coding_mode": {
+    "description": "Ativa/desativa Vibe Coding Mode. Foco automatico na cena configurada.",
+    "inputSchema": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "scene_path": {
+          "type": "string"
+        },
+        "focus_node": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "get_vibe_context": {
+    "description": "Retorna contexto atual do Vibe Coding Mode.",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "game_http_request": {
+    "description": "HTTP request no jogo. Ex: {'url':'https://api.ex.com','method':'GET'}.",
+    "inputSchema": {
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "headers": {
+          "type": "object"
+        },
+        "body": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "game_multiplayer": {
+    "description": "Multiplayer ENet. Ex: {'action':'create_server','port':9090}.",
+    "inputSchema": {
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "create_server",
+            "create_client",
+            "disconnect",
+            "status"
+          ]
+        },
+        "port": {
+          "type": "integer"
+        },
+        "address": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "set_safety_policy": {
+    "description": "Configura politica de seguranca (allowlist/blocklist).",
+    "inputSchema": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "allowlist": {
+          "type": "array",
+          "items": {
             "type": "string"
           }
         },
-        "required": [],
-        "type": "object"
-      }
-    },
-    "audit_input_map": {
-      "description": "Audita o Input Map do projeto: lista acoes declaradas, acoes nao usadas e acoes referenciadas mas nao declaradas.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "project_path": {
-            "description": "Caminho do projeto.",
+        "blocklist": {
+          "type": "array",
+          "items": {
             "type": "string"
           }
         },
-        "required": [],
-        "type": "object"
+        "confirm_destructive": {
+          "type": "boolean"
+        }
       }
-    },
-    "audit_save_compatibility": {
-      "description": "Audita a compatibilidade de save: verifica se o SaveManager tem campo de versao e logica de migracao.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "project_path": {
-            "description": "Caminho do projeto.",
-            "type": "string"
-          },
-          "save_file_path": {
-            "description": "Caminho de um save file para testar (opcional).",
-            "type": "string"
-          }
+    }
+  },
+  "get_audit_log": {
+    "description": "Historico de auditoria das acoes da IA.",
+    "inputSchema": {
+      "properties": {
+        "limit": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "get_audit_replay": {
+    "description": "Replay do historico de auditoria.",
+    "inputSchema": {
+      "properties": {
+        "steps": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "safe_write_gdscript": {
+    "description": "Escreve .gd COM validacao. Recusa codigo invalido! Ex: {'file_path':'res://x.gd'",
+    "inputSchema": {
+      "properties": {
+        "file_path": {
+          "type": "string"
         },
-        "required": [],
-        "type": "object"
-      }
-    },
-    "audit_scene_reachability": {
-      "description": "",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "project_path": {
-            "description": "Caminho do projeto.",
-            "type": "string"
-          },
-          "root_scene": {
-            "description": "Cena raiz. Default: main_scene do project.godot.",
-            "type": "string"
-          }
+        "content": {
+          "type": "string"
         },
-        "required": [],
-        "type": "object"
-      }
-    },
-    "audit_uid_consistency": {
-      "description": "",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "project_path": {
-            "description": "Caminho do projeto.",
-            "type": "string"
-          }
+        "project_path": {
+          "type": "string"
         },
-        "required": [],
-        "type": "object"
+        "strict": {
+          "type": "boolean"
+        }
       }
-    },
-    "bootstrap_godot_mcp": {
-      "description": "🚀 BOOTSTRAP AUTOMÁTICO: conecta VS Code → MCP → Godot em UMA chamada.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "godot_path": {
-            "description": "Caminho do executável Godot. Auto-detecta do config.json se omitido.",
-            "type": "string"
-          },
-          "launch_editor": {
-            "description": "Abrir Godot Editor se não estiver aberto. Default: true.",
-            "type": "boolean"
-          },
-          "project_path": {
-            "description": "Caminho do projeto Godot. Auto-detecta se omitido.",
-            "type": "string"
-          },
-          "target": {
-            "description": "full=tudo, connect_only=só conexão (Godot já aberto), validate_only=só checar ambiente",
-            "enum": [
-              "full",
-              "connect_only",
-              "validate_only"
-            ],
-            "type": "string"
-          },
-          "timeout_addon": {
-            "description": "Segundos máximos esperando addon iniciar (default 15).",
-            "type": "integer"
-          },
-          "timeout_godot": {
-            "description": "Segundos máximos esperando Godot abrir (default 30).",
-            "type": "integer"
-          }
+    }
+  },
+  "tool_catalog": {
+    "description": "Catalogo de tools por grupo. Ex: {'query':'scene','group':'core'}.",
+    "inputSchema": {
+      "properties": {
+        "query": {
+          "type": "string"
         },
-        "required": [],
-        "type": "object"
+        "group": {
+          "type": "string"
+        },
+        "limit": {
+          "type": "integer"
+        }
       }
-    },
-    "capture_proof": {
-      "description": "Coleta MECANICAMENTE a evidência de uma tarefa concluída e grava num arquivo assinado por hash SHA-256.",
-      "inputSchema": {
-        "additionalProperties": false,
+    }
+  },
+  "tool_groups": {
+    "description": "Gerencia grupos dinamicos de tools. Ex: {'action':'activate','group':'art'}.",
+    "inputSchema": {
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "list",
+            "activate",
+            "deactivate"
+          ]
+        },
+        "group": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "catalog_search": {
+    "description": "Busca ferramentas por linguagem natural (português ou inglês). Use para DESCOBRI",
+    "inputSchema": {
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "O que você quer fazer? (PT ou EN)"
+        },
+        "namespace": {
+          "type": "string",
+          "enum": [
+            "project",
+            "assets",
+            "runtime",
+            "analysis",
+            "orchestration"
+          ],
+          "description": "Filtrar por namespace semântico."
+        },
+        "limit": {
+          "type": "integer",
+          "description": "Máximo de resultados (default 20)."
+        }
+      }
+    }
+  },
+  "describe_tool": {
+    "description": "Retorna o schema COMPLETO de uma ferramenta específica: descrição, parâmetros, h",
+    "inputSchema": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Nome exato da tool (ex: 'scene_manage', 'ping')."
+        }
+      }
+    }
+  },
+  "invoke_by_name": {
+    "description": "Invoca uma ferramenta pelo nome, passando os argumentos como dict. RESPEITA todo",
+    "inputSchema": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Nome exato da tool a invocar."
+        },
+        "arguments": {
+          "type": "object",
+          "description": "Argumentos da tool como dict."
+        }
+      }
+    }
+  },
+  "game_serialize_state": {
+    "description": "Salva/restaura estado completo do jogo como JSON.",
+    "inputSchema": {
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "save",
+            "load"
+          ]
+        },
+        "file_name": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "start_recording": {
+    "description": "Inicia gravacao de sessao (inputs/estados).",
+    "inputSchema": {
+      "properties": {
+        "session_name": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "stop_recording": {
+    "description": "Para gravacao e retorna resumo.",
+    "inputSchema": {
+      "properties": {
+        "session_name": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "game_call_method": {
+    "description": "Chama metodo em no no jogo rodando.",
+    "inputSchema": {
+      "properties": {
+        "node_path": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "args": {
+          "type": "array"
+        }
+      }
+    }
+  },
+  "game_spawn_node": {
+    "description": "Cria no dinamicamente no jogo.",
+    "inputSchema": {
+      "properties": {
+        "parent_path": {
+          "type": "string"
+        },
+        "node_type": {
+          "type": "string"
+        },
+        "node_name": {
+          "type": "string"
+        },
         "properties": {
-          "extra_commands": {
-            "description": "Comandos extras cujo stdout/stderr capturar. Máx 5.",
-            "items": {
-              "type": "string"
+          "type": "object"
+        }
+      }
+    }
+  },
+  "game_raycast": {
+    "description": "Ray cast 2D/3D no jogo.",
+    "inputSchema": {
+      "properties": {
+        "origin_x": {
+          "type": "number"
+        },
+        "origin_y": {
+          "type": "number"
+        },
+        "target_x": {
+          "type": "number"
+        },
+        "target_y": {
+          "type": "number"
+        },
+        "collision_mask": {
+          "type": "integer"
+        },
+        "mode": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "game_get_camera": {
+    "description": "Obtem posicao da camera ativa.",
+    "inputSchema": {
+      "properties": {
+        "mode": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "game_play_animation": {
+    "description": "Controla AnimationPlayer no jogo.",
+    "inputSchema": {
+      "properties": {
+        "node_path": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        },
+        "animation_name": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "game_find_nodes_by_class": {
+    "description": "Encontra nos por classe no jogo.",
+    "inputSchema": {
+      "properties": {
+        "class_name": {
+          "type": "string"
+        },
+        "limit": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "game_await_signal": {
+    "description": "Espera sinal com timeout.",
+    "inputSchema": {
+      "properties": {
+        "node_path": {
+          "type": "string"
+        },
+        "signal_name": {
+          "type": "string"
+        },
+        "timeout_ms": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "game_pause": {
+    "description": "Pausa/despausa o jogo.",
+    "inputSchema": {
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "toggle",
+            "pause",
+            "unpause"
+          ]
+        }
+      }
+    }
+  },
+  "game_performance": {
+    "description": "Metricas: FPS, memoria, objetos, draw calls.",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "game_window": {
+    "description": "Controle de janela: size, fullscreen, title.",
+    "inputSchema": {
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "fullscreen": {
+          "type": "boolean"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "game_input_state": {
+    "description": "Estado de input: teclas, mouse, gamepad.",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "generate_ci_snippet": {
+    "description": "Gera GitHub Actions / GitLab CI para export.",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string"
+        },
+        "target_platforms": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "resource_dependency_graph": {
+    "description": "Grafo de dependencias de recursos.",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "build_csharp": {
+    "description": "Compila projeto C# e retorna erros estruturados.",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "debugger_set_breakpoint": {
+    "description": "Define breakpoint. Ex: {'script_path':'res://player.gd','line':42}.",
+    "inputSchema": {
+      "properties": {
+        "script_path": {
+          "type": "string"
+        },
+        "line": {
+          "type": "integer"
+        },
+        "condition": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "debugger_status": {
+    "description": "Verifica estado do debugger do Godot (porta 6006).",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "debugger_step": {
+    "description": "Avança uma linha no debugger. Ex: {'step_type':'over'}.",
+    "inputSchema": {
+      "properties": {
+        "step_type": {
+          "type": "string",
+          "enum": [
+            "over",
+            "into",
+            "out"
+          ]
+        }
+      }
+    }
+  },
+  "debugger_get_stack": {
+    "description": "Obtem stack trace atual do debugger.",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "debugger_get_variables": {
+    "description": "Inspeciona variaveis no escopo do debugger. Ex: {'variable_name':'health'}.",
+    "inputSchema": {
+      "properties": {
+        "variable_name": {
+          "type": "string",
+          "description": "Nome da variavel (null = todas)."
+        }
+      }
+    }
+  },
+  "list_valid_node_types": {
+    "description": "Lista todos os tipos de nó que podem ser usados em cenas (classes que herdam de ",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "install_mcp_addon": {
+    "description": "Instala o addon MCP no projeto Godot ativo e ativa o plugin do editor. O QUE FAZ",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do projeto Godot. Opcional se já usou set_active_project. Ex: 'C:/meu_jogo'"
+        }
+      }
+    }
+  },
+  "bootstrap_godot_mcp": {
+    "description": "🚀 BOOTSTRAP AUTOMÁTICO: conecta VS Code → MCP → Godot em UMA chamada. Substitui ",
+    "inputSchema": {
+      "properties": {
+        "target": {
+          "type": "string",
+          "enum": [
+            "full",
+            "connect_only",
+            "validate_only"
+          ],
+          "description": "full=tudo, connect_only=só conexão (Godot já aberto), validate_only=só checar ambiente"
+        },
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do projeto Godot. Auto-detecta se omitido."
+        },
+        "godot_path": {
+          "type": "string",
+          "description": "Caminho do executável Godot. Auto-detecta do config.json se omitido."
+        },
+        "launch_editor": {
+          "type": "boolean",
+          "description": "Abrir Godot Editor se não estiver aberto. Default: true."
+        },
+        "timeout_godot": {
+          "type": "integer",
+          "description": "Segundos máximos esperando Godot abrir (default 30)."
+        },
+        "timeout_addon": {
+          "type": "integer",
+          "description": "Segundos máximos esperando addon iniciar (default 15)."
+        }
+      }
+    }
+  },
+  "godot_keep_alive": {
+    "description": "Garante que o Godot Editor esta aberto. Se nao estiver, abre. NAO fecha o Godot ",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do projeto (auto se omitido)."
+        },
+        "godot_path": {
+          "type": "string",
+          "description": "Caminho do Godot (auto se omitido)."
+        }
+      }
+    }
+  },
+  "take_screenshot": {
+    "description": "Captura uma screenshot do viewport 2D do editor Godot. Use para VER o estado atu",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "read_console_output": {
+    "description": "Lê as últimas linhas do console do editor Godot. Use para diagnosticar erros de ",
+    "inputSchema": {
+      "properties": {
+        "since_timestamp": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "capture_proof": {
+    "description": "Coleta MECANICAMENTE a evidência de uma tarefa concluída e grava num arquivo ass",
+    "inputSchema": {
+      "properties": {
+        "task_id": {
+          "type": "string",
+          "description": "Identificador curto da tarefa."
+        },
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do repositório. Default: raiz do MCP."
+        },
+        "run_tests": {
+          "type": "boolean",
+          "description": "Se roda regression_test como parte da prova. Default: true."
+        },
+        "extra_commands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Comandos extras cujo stdout/stderr capturar. Máx 5."
+        }
+      }
+    }
+  },
+  "verify_proof": {
+    "description": "Verifica se uma prova é válida E se corresponde ao estado ATUAL do código (ou se",
+    "inputSchema": {
+      "properties": {
+        "task_id": {
+          "type": "string",
+          "description": "Se passado, verifica a prova mais recente desse task_id."
+        },
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do repositório. Default: raiz do MCP."
+        },
+        "max_age_minutes": {
+          "type": "integer",
+          "description": "Prova mais velha que isso é obsoleta. Default: 60."
+        }
+      }
+    }
+  },
+  "inject_input_event": {
+    "description": "Injeta um evento de input (mouse/teclado) no jogo EM EXECUÇÃO. Use para simular ",
+    "inputSchema": {
+      "properties": {
+        "event_type": {
+          "type": "string",
+          "enum": [
+            "key",
+            "mouse_button",
+            "mouse_motion"
+          ]
+        },
+        "event_data": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "execute_gdscript_runtime": {
+    "description": "Executa código GDScript arbitrário no jogo em execução e retorna o valor. Use pa",
+    "inputSchema": {
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Código GDScript a executar."
+        }
+      }
+    }
+  },
+  "watch_signal": {
+    "description": "Observa um sinal de um nó por N segundos e retorna se disparou. Use para verific",
+    "inputSchema": {
+      "properties": {
+        "node_path": {
+          "type": "string"
+        },
+        "signal_name": {
+          "type": "string"
+        },
+        "timeout": {
+          "type": "number",
+          "description": "Segundos de espera (default 5)."
+        }
+      }
+    }
+  },
+  "capture_game_screenshot": {
+    "description": "Captura uma screenshot do jogo em execução usando janela off-screen. Use para VE",
+    "inputSchema": {
+      "properties": {
+        "wait_frames": {
+          "type": "integer",
+          "description": "Frames de espera antes da captura (default 30)."
+        },
+        "scene_path": {
+          "type": "string",
+          "description": "Cena específica (opcional)."
+        },
+        "resolution_width": {
+          "type": "integer",
+          "description": "Largura (default 1280)."
+        },
+        "resolution_height": {
+          "type": "integer",
+          "description": "Altura (default 720)."
+        }
+      }
+    }
+  },
+  "add_nodes_batch": {
+    "description": "Adiciona múltiplos nós a uma cena em UMA OPERAÇÃO. Muito mais rápido que chamar ",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string"
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  },
+  "set_properties_batch": {
+    "description": "Define múltiplas propriedades em UMA OPERAÇÃO. Muito mais rápido que chamar set_",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string"
+        },
+        "properties": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  },
+  "batch_atomic_edit": {
+    "description": "⚛️ Edição ATÔMICA em lote com ROLLBACK automático. Executa múltiplas operações (",
+    "inputSchema": {
+      "properties": {
+        "operations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "op": {
+                "type": "string",
+                "enum": [
+                  "create_node",
+                  "delete_node",
+                  "set_property",
+                  "reparent_node",
+                  "duplicate_node",
+                  "connect_signal"
+                ]
+              },
+              "params": {
+                "type": "object"
+              }
             },
-            "type": "array"
+            "required": [
+              "op"
+            ]
           },
-          "project_path": {
-            "description": "Caminho do repositório. Default: raiz do MCP.",
+          "description": "Lista de operações atômicas. Se uma falhar, todas são desfeitas."
+        },
+        "scene_path": {
+          "type": "string",
+          "description": "Caminho da cena .tscn. Obrigatório para file-based. Opcional se addon conectado."
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "addon",
+            "file"
+          ],
+          "description": "auto=detecta addon, addon=força WebSocket, file=força file-based."
+        }
+      }
+    }
+  },
+  "generate_audio_sfx": {
+    "description": "Gera um efeito sonoro WAV por sintese procedural com 23 tipos. Suporta: beep, ju",
+    "inputSchema": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "sfx_type": {
+          "type": "string",
+          "enum": [
+            "beep",
+            "jump",
+            "laser",
+            "explosion",
+            "collect",
+            "hit",
+            "coin",
+            "ui_click",
+            "ui_hover",
+            "ui_error",
+            "ui_notification",
+            "wind",
+            "rain",
+            "footsteps",
+            "gunshot",
+            "engine",
+            "electricity",
+            "magic",
+            "powerup",
+            "damage",
+            "door",
+            "fire",
+            "water",
+            "string"
+          ]
+        },
+        "duration": {
+          "type": "number"
+        },
+        "frequency": {
+          "type": "number"
+        },
+        "sample_rate": {
+          "type": "integer"
+        },
+        "style": {
+          "type": "string",
+          "enum": [
+            "scifi",
+            "fantasia",
+            "retro",
+            "realista"
+          ]
+        },
+        "save_path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "generate_voice": {
+    "description": "Gera narracao/fala a partir de texto (TTS). Usa Kokoro TTS local (82M params, Ap",
+    "inputSchema": {
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Texto para converter em fala (max 500 chars)"
+        },
+        "voice": {
+          "type": "string",
+          "description": "Voz: af_heart, af_bella, am_adam, pt-BR-AntonioNeural..."
+        },
+        "speed": {
+          "type": "number",
+          "description": "Velocidade (0.5 lento a 2.0 rapido)"
+        },
+        "language": {
+          "type": "string",
+          "enum": [
+            "pt",
+            "en",
+            "ja",
+            "zh",
+            "kr",
+            "fr"
+          ],
+          "description": "Idioma do texto"
+        },
+        "save_path": {
+          "type": "string",
+          "description": "Caminho no projeto (auto se None)"
+        }
+      }
+    }
+  },
+  "generate_game_art": {
+    "description": "Gera arte de jogo a partir de descricao em linguagem natural usando IA (ChatGPT/",
+    "inputSchema": {
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Descricao da arte em portugues (ex: 'torre laser com cristal flutuante')."
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "torre",
+            "inimigo",
+            "personagem",
+            "bioma",
+            "tile",
+            "icone",
+            "hud",
+            "vfx",
+            "fundo",
+            "projetil",
+            "ui"
+          ],
+          "description": "Categoria do artefato."
+        },
+        "style": {
+          "type": "string",
+          "enum": [
+            "scifi",
+            "fantasia",
+            "cartoon",
+            "realista",
+            "pixel",
+            "minimalista"
+          ],
+          "description": "Estilo visual."
+        },
+        "anim_type": {
+          "type": "string",
+          "enum": [
+            "idle",
+            "fire",
+            "walk",
+            "run",
+            "death",
+            "attack",
+            "spawn",
+            "hit"
+          ],
+          "description": "Tipo de animacao."
+        },
+        "frames": {
+          "type": "integer",
+          "description": "Quantidade de frames (4-16). Se omitido, usa padrao por animacao."
+        },
+        "grid_cols": {
+          "type": "integer",
+          "description": "Colunas do grid (opcional, calculado automaticamente)."
+        },
+        "grid_rows": {
+          "type": "integer",
+          "description": "Linhas do grid (opcional, calculado automaticamente)."
+        },
+        "width": {
+          "type": "integer",
+          "description": "Largura por frame em pixels."
+        },
+        "height": {
+          "type": "integer",
+          "description": "Altura por frame em pixels."
+        },
+        "save_dir": {
+          "type": "string",
+          "description": "Diretorio relativo no projeto (ex: 'assets/sprites/towers/')."
+        },
+        "ip_force": {
+          "type": "boolean",
+          "description": "Forca geracao mesmo com alerta de propriedade intelectual."
+        },
+        "ip_reason": {
+          "type": "string",
+          "description": "Justificativa para ignorar alerta de PI (obrigatorio com ip_force=True)."
+        }
+      }
+    }
+  },
+  "apply_game_art": {
+    "description": "Aplica arte gerada (frames recortados) num AnimatedSprite2D do Godot. Importa fr",
+    "inputSchema": {
+      "properties": {
+        "frame_paths": {
+          "type": "array",
+          "items": {
             "type": "string"
           },
-          "run_tests": {
-            "description": "Se roda regression_test como parte da prova. Default: true.",
-            "type": "boolean"
-          },
-          "task_id": {
-            "description": "Identificador curto da tarefa.",
+          "description": "Lista de caminhos relativos dos frames."
+        },
+        "scene_path": {
+          "type": "string",
+          "description": "Caminho da cena .tscn."
+        },
+        "node_path": {
+          "type": "string",
+          "description": "Caminho do no AnimatedSprite2D."
+        },
+        "anim_name": {
+          "type": "string",
+          "description": "Nome da animacao (ex: 'idle', 'fire')."
+        },
+        "fps": {
+          "type": "number",
+          "description": "Frames por segundo. Default: 10."
+        },
+        "loop": {
+          "type": "boolean",
+          "description": "Se a animacao faz loop. Default: true."
+        }
+      }
+    }
+  },
+  "generate_game_art_flux": {
+    "description": "Gera arte de jogo via FLUX.2 API (Black Forest Labs). Substitui o DALL-E/Playwri",
+    "inputSchema": {
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Descricao em portugues do que gerar"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "torre",
+            "inimigo",
+            "personagem",
+            "bioma",
+            "tile",
+            "icone",
+            "hud",
+            "vfx",
+            "fundo",
+            "projetil",
+            "ui"
+          ],
+          "description": "Tipo de artefato"
+        },
+        "style": {
+          "type": "string",
+          "enum": [
+            "scifi",
+            "fantasia",
+            "cartoon",
+            "realista",
+            "pixel",
+            "minimalista"
+          ],
+          "description": "Estilo visual"
+        },
+        "frames": {
+          "type": "integer",
+          "description": "Numero de frames (1 = imagem unica)"
+        },
+        "width": {
+          "type": "integer",
+          "description": "Largura (auto por categoria se omitido)"
+        },
+        "height": {
+          "type": "integer",
+          "description": "Altura (auto por categoria se omitido)"
+        },
+        "save_path": {
+          "type": "string",
+          "description": "Caminho relativo no projeto Godot"
+        }
+      }
+    }
+  },
+  "remove_background": {
+    "description": "Remove o fundo de uma imagem usando IA (rembg/birefnet). Use para sprites gerado",
+    "inputSchema": {
+      "properties": {
+        "image_path": {
+          "type": "string",
+          "description": "Caminho da imagem com fundo"
+        },
+        "output_path": {
+          "type": "string",
+          "description": "Caminho de saida (auto: _nobg)"
+        }
+      }
+    }
+  },
+  "optimize_sprite": {
+    "description": "Otimiza/compacta sprite PNG usando oxipng (lossless, 10-30% reducao). Use antes ",
+    "inputSchema": {
+      "properties": {
+        "image_path": {
+          "type": "string",
+          "description": "Caminho da imagem PNG a otimizar"
+        },
+        "lossless": {
+          "type": "boolean",
+          "description": "True=oxipng sem perda, False=pngquant (default true)"
+        }
+      }
+    }
+  },
+  "create_spritesheet": {
+    "description": "Cria sprite sheet a partir de frames individuais. Use para juntar frames de anim",
+    "inputSchema": {
+      "properties": {
+        "frame_paths": {
+          "type": "array",
+          "items": {
             "type": "string"
+          },
+          "description": "Lista de caminhos dos frames"
+        },
+        "output_path": {
+          "type": "string",
+          "description": "Caminho de saida da sprite sheet"
+        },
+        "frame_width": {
+          "type": "integer",
+          "description": "Largura de cada frame (default 64)"
+        },
+        "frame_height": {
+          "type": "integer",
+          "description": "Altura de cada frame (default 64)"
+        },
+        "columns": {
+          "type": "integer",
+          "description": "Numero de colunas (default 4)"
+        },
+        "gap": {
+          "type": "integer",
+          "description": "Espaco entre frames em px (default 0)"
+        }
+      }
+    }
+  },
+  "godot_class_ref": {
+    "description": "Consulta metodos, propriedades, sinais, enums e constantes nativos do Godot via ",
+    "inputSchema": {
+      "properties": {
+        "class_name": {
+          "type": "string",
+          "description": "Nome exato da classe nativa (ex: Node2D, CharacterBody2D). Nao funciona com classes custom de projetos."
+        }
+      }
+    }
+  },
+  "create_animation_tree": {
+    "description": "Adiciona um nó AnimationTree a uma cena. Use para animações avançadas com blend ",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string"
+        },
+        "parent_node_path": {
+          "type": "string"
+        },
+        "player_name": {
+          "type": "string"
+        },
+        "root_type": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "create_joint_2d": {
+    "description": "Cria uma junta 2D (PinJoint2D) conectando dois nós. Use para portas giratórias, ",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string"
+        },
+        "node_a_path": {
+          "type": "string"
+        },
+        "node_b_path": {
+          "type": "string"
+        },
+        "joint_type": {
+          "type": "string",
+          "enum": [
+            "pin",
+            "groove"
+          ]
+        },
+        "softness": {
+          "type": "number"
+        },
+        "bias": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "import_3d_model": {
+    "description": "Importa um modelo 3D (.glb/.gltf) e opcionalmente cria cena com MeshInstance3D. ",
+    "inputSchema": {
+      "properties": {
+        "source_path": {
+          "type": "string"
+        },
+        "target_res_path": {
+          "type": "string"
+        },
+        "create_scene": {
+          "type": "boolean"
+        },
+        "scene_name": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "create_particles_2d": {
+    "description": "Adiciona GPUParticles2D com ParticleProcessMaterial a uma cena. Use para efeitos",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string"
+        },
+        "parent_node_path": {
+          "type": "string"
+        },
+        "node_name": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "integer"
+        },
+        "lifetime": {
+          "type": "number"
+        },
+        "explosiveness": {
+          "type": "number"
+        },
+        "direction": {
+          "type": "string"
+        },
+        "spread": {
+          "type": "number"
+        },
+        "gravity": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "create_light_2d": {
+    "description": "Adiciona PointLight2D ou DirectionalLight2D a uma cena. Use para iluminação 2D: ",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string"
+        },
+        "parent_node_path": {
+          "type": "string"
+        },
+        "node_name": {
+          "type": "string"
+        },
+        "light_type": {
+          "type": "string",
+          "enum": [
+            "point",
+            "directional"
+          ]
+        },
+        "color": {
+          "type": "string"
+        },
+        "energy": {
+          "type": "number"
+        },
+        "range_z": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "setup_camera_2d": {
+    "description": "Adiciona e configura uma Camera2D com limites, zoom, drag e suavização. Use ao c",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string"
+        },
+        "parent_node_path": {
+          "type": "string"
+        },
+        "limits": {
+          "type": "object"
+        },
+        "drag_horizontal": {
+          "type": "number"
+        },
+        "drag_vertical": {
+          "type": "number"
+        },
+        "zoom": {
+          "type": "array",
+          "items": {
+            "type": "number"
           }
         },
-        "required": [
-          "task_id"
-        ],
-        "type": "object"
+        "smoothing_enabled": {
+          "type": "boolean"
+        },
+        "smoothing_speed": {
+          "type": "number"
+        },
+        "current": {
+          "type": "boolean"
+        }
       }
-    },
-    "create_entities": {
-      "description": "Cria MULTIPLAS entidades em lote sequencial.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "entities": {
-            "description": "Lista de specs de entidade (cada uma igual ao create_entity).",
+    }
+  },
+  "create_navigation_region_2d": {
+    "description": "Cria região de navegação 2D com polígono. Define área onde personagens podem and",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string"
+        },
+        "parent_node_path": {
+          "type": "string"
+        },
+        "polygon_vertices": {
+          "type": "array",
+          "items": {
+            "type": "array",
             "items": {
-              "type": "object"
-            },
-            "type": "array"
-          },
-          "stop_on_first_failure": {
-            "description": "Se True, para na primeira falha (default: False).",
-            "type": "boolean"
+              "type": "number"
+            }
           }
         },
-        "required": [
-          "entities"
-        ],
-        "type": "object"
+        "region_name": {
+          "type": "string"
+        }
       }
-    },
-    "create_entity": {
-      "description": "Cria uma entidade COMPLETA: cena + collider + script + sprite + audio. Decide automaticamente o que gerar.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "art_style": {
-            "description": "Estilo visual.",
-            "enum": [
-              "scifi",
-              "fantasy",
-              "pixel",
-              "cartoon"
-            ],
+    }
+  },
+  "create_navigation_agent_2d": {
+    "description": "Adiciona NavigationAgent2D com script de perseguição. O nó pai DEVE ser Characte",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string"
+        },
+        "parent_node_path": {
+          "type": "string"
+        },
+        "agent_name": {
+          "type": "string"
+        },
+        "target_node_path": {
+          "type": "string"
+        },
+        "speed": {
+          "type": "number"
+        },
+        "avoidance_enabled": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "generate_project_structure": {
+    "description": "Gera a estrutura completa de pastas e arquivos base para um projeto Godot. Cria ",
+    "inputSchema": {
+      "properties": {
+        "template": {
+          "type": "string",
+          "description": "Tipo: '2d', '3d', ou 'mobile'"
+        },
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do projeto (opcional)"
+        }
+      }
+    }
+  },
+  "record_gameplay_gif": {
+    "description": "Grava a tela do jogo por N segundos e retorna um GIF animado em base64. Usa Godo",
+    "inputSchema": {
+      "properties": {
+        "duration": {
+          "type": "integer",
+          "description": "Duracao em segundos (max 30)"
+        },
+        "fps": {
+          "type": "integer",
+          "description": "Frames por segundo (menor = arquivo menor)"
+        },
+        "resolution_width": {
+          "type": "integer",
+          "description": "Largura em pixels"
+        },
+        "resolution_height": {
+          "type": "integer",
+          "description": "Altura em pixels"
+        }
+      }
+    }
+  },
+  "create_parallax_background": {
+    "description": "Cria um fundo com efeito parallax (ParallaxBackground + multiplas camadas). Use ",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "Caminho da cena onde adicionar o parallax."
+        },
+        "layers": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "Lista de camadas [{texture, scroll_scale_x, scroll_scale_y, mirroring_x, mirroring_y}]."
+        },
+        "parent_node_path": {
+          "type": "string",
+          "description": "No pai (default '.' = raiz)."
+        },
+        "bg_name": {
+          "type": "string",
+          "description": "Nome do no ParallaxBackground."
+        }
+      }
+    }
+  },
+  "add_parallax_layer": {
+    "description": "Adiciona uma camada a um ParallaxBackground existente. Use para adicionar mais c",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "Caminho da cena."
+        },
+        "parallax_bg_path": {
+          "type": "string",
+          "description": "Path do ParallaxBackground."
+        },
+        "texture_path": {
+          "type": "string",
+          "description": "Caminho da textura (ex: assets/bg.png)."
+        },
+        "scroll_scale_x": {
+          "type": "number",
+          "description": "Escala de scroll horizontal (0=fixo, 1=normal, default 0.5)."
+        },
+        "scroll_scale_y": {
+          "type": "number",
+          "description": "Escala de scroll vertical (default 0.5)."
+        },
+        "mirroring_x": {
+          "type": "number",
+          "description": "Repeticoes horizontais (0=sem mirroring)."
+        },
+        "mirroring_y": {
+          "type": "number",
+          "description": "Repeticoes verticais (0=sem mirroring)."
+        },
+        "layer_name": {
+          "type": "string",
+          "description": "Nome do no da camada."
+        }
+      }
+    }
+  },
+  "configure_particles_2d": {
+    "description": "Configura particulas 2D (GPUParticles2D) com parametros de emissao. Use para efe",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "Caminho da cena."
+        },
+        "node_path": {
+          "type": "string",
+          "description": "Path do no GPUParticles2D."
+        },
+        "amount": {
+          "type": "integer",
+          "description": "Quantidade de particulas (default 50)."
+        },
+        "lifetime": {
+          "type": "number",
+          "description": "Tempo de vida em segundos (default 1.0)."
+        },
+        "explosiveness": {
+          "type": "number",
+          "description": "0=continuo, 1=explosao unica (default 0)."
+        },
+        "emitting": {
+          "type": "boolean",
+          "description": "Se esta emitindo (default true)."
+        },
+        "one_shot": {
+          "type": "boolean",
+          "description": "Emite uma vez e para (default false)."
+        },
+        "preset": {
+          "type": "string",
+          "description": "Preset: explosion, fire, smoke, rain, snow, sparkles, custom."
+        }
+      }
+    }
+  },
+  "create_particles_3d": {
+    "description": "Adiciona GPUParticles3D a uma cena 3D com presets visuais. Use para fogo, fumaca",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "Caminho da cena."
+        },
+        "parent_node_path": {
+          "type": "string",
+          "description": "No pai (default '.' = raiz)."
+        },
+        "node_name": {
+          "type": "string",
+          "description": "Nome do no (default 'GPUParticles3D')."
+        },
+        "preset": {
+          "type": "string",
+          "description": "Preset: fire, smoke, sparkles, dust, rain."
+        }
+      }
+    }
+  },
+  "generate_shader_2d": {
+    "description": "Gera um shader 2D a partir de templates pre-definidos. Use para efeitos visuais ",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "Caminho da cena."
+        },
+        "node_path": {
+          "type": "string",
+          "description": "Path do no alvo."
+        },
+        "template": {
+          "type": "string",
+          "description": "Template: glow, dissolve, outline, water, wind, grayscale, shockwave."
+        },
+        "uniforms": {
+          "type": "object",
+          "description": "Valores de uniforms do shader (opcional)."
+        },
+        "shader_name": {
+          "type": "string",
+          "description": "Nome do arquivo .gdshader (opcional)."
+        }
+      }
+    }
+  },
+  "create_path_2d": {
+    "description": "Cria um Path2D com PathFollow2D para movimentacao controlada por curva. Use para",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "Caminho da cena."
+        },
+        "parent_node_path": {
+          "type": "string",
+          "description": "No pai (default '.')."
+        },
+        "waypoints": {
+          "type": "array",
+          "items": {
             "type": "string"
           },
-          "behavior": {
-            "description": "Comportamento IA.",
-            "enum": [
-              "patrol",
-              "chase",
-              "idle",
-              "none"
-            ],
+          "description": "Lista de pontos Vector2 (ex: ['Vector2(0,0)', 'Vector2(100,100)'])."
+        },
+        "path_name": {
+          "type": "string",
+          "description": "Nome do no Path2D (default 'Path2D')."
+        },
+        "closed": {
+          "type": "boolean",
+          "description": "Se o caminho e fechado (loop, default false)."
+        }
+      }
+    }
+  },
+  "create_patrol_route": {
+    "description": "Cria uma rota de patrulha com waypoints e script de movimento automatico. Use pa",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "Caminho da cena."
+        },
+        "parent_node_path": {
+          "type": "string",
+          "description": "No pai que recebera o script de patrulha."
+        },
+        "waypoints": {
+          "type": "array",
+          "items": {
             "type": "string"
           },
-          "description": {
-            "description": "Descricao do comportamento.",
+          "description": "Lista de posicoes Vector2."
+        },
+        "speed": {
+          "type": "number",
+          "description": "Velocidade de movimento (default 100)."
+        },
+        "wait_time": {
+          "type": "number",
+          "description": "Tempo de espera em cada waypoint (default 1.0s)."
+        },
+        "ping_pong": {
+          "type": "boolean",
+          "description": "Vai e volta em vez de reiniciar (default true)."
+        }
+      }
+    }
+  },
+  "create_bullet_template": {
+    "description": "Cria uma cena de projetil (bullet) reutilizavel para sistemas de tiro. Use em sh",
+    "inputSchema": {
+      "properties": {
+        "bullet_name": {
+          "type": "string",
+          "description": "Nome do projetil (default 'Bullet')."
+        },
+        "speed": {
+          "type": "number",
+          "description": "Velocidade em px/s (default 500)."
+        },
+        "damage": {
+          "type": "number",
+          "description": "Dano causado (default 10)."
+        },
+        "lifetime": {
+          "type": "number",
+          "description": "Tempo de vida em segundos (default 3.0)."
+        },
+        "bullet_color": {
+          "type": "string",
+          "description": "Cor em hex (default '#ffff00')."
+        },
+        "bullet_size": {
+          "type": "integer",
+          "description": "Tamanho em px (default 8)."
+        }
+      }
+    }
+  },
+  "create_gun_system": {
+    "description": "Cria um script de sistema de arma com fire rate, municao, reload e spread. Use p",
+    "inputSchema": {
+      "properties": {
+        "script_path": {
+          "type": "string",
+          "description": "Caminho para salvar o script da arma."
+        },
+        "bullet_scene_path": {
+          "type": "string",
+          "description": "Caminho da cena do projetil (default 'res://scenes/bullet.tscn')."
+        },
+        "fire_rate": {
+          "type": "number",
+          "description": "Intervalo entre tiros em segundos (default 0.3)."
+        },
+        "ammo_max": {
+          "type": "integer",
+          "description": "Municao maxima (default 30)."
+        },
+        "spread_angle": {
+          "type": "number",
+          "description": "Angulo de dispersao em graus (default 0 = tiro perfeito)."
+        },
+        "auto_reload": {
+          "type": "boolean",
+          "description": "Recarga automatica quando vazio (default true)."
+        },
+        "reload_time": {
+          "type": "number",
+          "description": "Tempo de recarga em segundos (default 1.5)."
+        }
+      }
+    }
+  },
+  "generate_dungeon_rooms": {
+    "description": "Gera um layout procedural de dungeon com salas e corredores. Use para roguelikes",
+    "inputSchema": {
+      "properties": {
+        "num_rooms": {
+          "type": "integer",
+          "description": "Numero de salas (default 8)."
+        },
+        "min_size": {
+          "type": "integer",
+          "description": "Tamanho minimo da sala (default 5)."
+        },
+        "max_size": {
+          "type": "integer",
+          "description": "Tamanho maximo da sala (default 12)."
+        },
+        "map_width": {
+          "type": "integer",
+          "description": "Largura do mapa (default 80)."
+        },
+        "map_height": {
+          "type": "integer",
+          "description": "Altura do mapa (default 60)."
+        },
+        "corridor_width": {
+          "type": "integer",
+          "description": "Largura dos corredores (default 2)."
+        },
+        "seed": {
+          "type": "integer",
+          "description": "Seed para reproducibilidade (default 0)."
+        }
+      }
+    }
+  },
+  "load_scene_async": {
+    "description": "Carrega uma cena de forma assincrona com tela de loading. Use para transicoes su",
+    "inputSchema": {
+      "properties": {
+        "target_scene": {
+          "type": "string",
+          "description": "Caminho da cena a carregar (ex: 'res://scenes/level.tscn')."
+        },
+        "loading_scene": {
+          "type": "string",
+          "description": "Caminho da loading screen (default 'res://scenes/loading_screen.tscn')."
+        }
+      }
+    }
+  },
+  "add_raycast_2d": {
+    "description": "Adiciona um RayCast2D a um no para deteccao de linha de visao. Use para: verific",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "Caminho da cena."
+        },
+        "parent_node_path": {
+          "type": "string",
+          "description": "No pai que recebera o RayCast2D."
+        },
+        "target_position": {
+          "type": "string",
+          "description": "Posicao alvo (ex: 'Vector2(100, 0)')."
+        },
+        "collision_mask": {
+          "type": "integer",
+          "description": "Mascara de colisao (default 1)."
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Se esta ativo (default true)."
+        },
+        "node_name": {
+          "type": "string",
+          "description": "Nome do no (default 'RayCast2D')."
+        }
+      }
+    }
+  },
+  "add_shapecast_2d": {
+    "description": "Adiciona um ShapeCast2D para deteccao de area em linha. Use para deteccao mais r",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "Caminho da cena."
+        },
+        "parent_node_path": {
+          "type": "string",
+          "description": "No pai."
+        },
+        "shape_type": {
+          "type": "string",
+          "description": "Forma: rectangle, circle, capsule (default 'rectangle')."
+        },
+        "shape_size": {
+          "type": "string",
+          "description": "Tamanho (ex: 'Vector2(40, 10)')."
+        },
+        "collision_mask": {
+          "type": "integer",
+          "description": "Mascara de colisao (default 1)."
+        },
+        "node_name": {
+          "type": "string",
+          "description": "Nome do no (default 'ShapeCast2D')."
+        }
+      }
+    }
+  },
+  "setup_localization": {
+    "description": "Configura o sistema de traducao (i18n) do projeto. Use para jogos com suporte a ",
+    "inputSchema": {
+      "properties": {
+        "default_locale": {
+          "type": "string",
+          "description": "Localidade padrao (default 'pt_BR')."
+        },
+        "additional_locales": {
+          "type": "array",
+          "items": {
             "type": "string"
           },
-          "entity_type": {
-            "description": "Tipo de entidade.",
-            "enum": [
-              "enemy",
-              "player",
-              "tower",
-              "npc",
-              "item",
-              "projectile"
-            ],
+          "description": "Localidades adicionais (ex: ['en', 'es'])."
+        }
+      }
+    }
+  },
+  "add_translation_string": {
+    "description": "Adiciona uma string traduzida ao sistema de localizacao. Use para cada texto que",
+    "inputSchema": {
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "Chave da string (ex: 'BTN_PLAY', 'TXT_WELCOME')."
+        },
+        "translations": {
+          "type": "object",
+          "description": "Dicionario {locale: texto}."
+        }
+      }
+    }
+  },
+  "create_light_3d": {
+    "description": "Adiciona uma luz 3D (OmniLight3D, SpotLight3D ou DirectionalLight3D) a uma cena.",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "Caminho da cena."
+        },
+        "parent_node_path": {
+          "type": "string",
+          "description": "No pai (default '.')."
+        },
+        "light_type": {
+          "type": "string",
+          "description": "Tipo: omni, spot, directional (default 'omni')."
+        },
+        "color": {
+          "type": "string",
+          "description": "Cor em hex (default '#ffffff')."
+        },
+        "energy": {
+          "type": "number",
+          "description": "Intensidade (default 1.0)."
+        },
+        "shadows": {
+          "type": "boolean",
+          "description": "Ativar sombras (default false)."
+        },
+        "node_name": {
+          "type": "string",
+          "description": "Nome do no (vazio = auto)."
+        }
+      }
+    }
+  },
+  "configure_standard_material_3d": {
+    "description": "Aplica e configura um StandardMaterial3D a um MeshInstance3D. Use para definir a",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "Caminho da cena."
+        },
+        "node_path": {
+          "type": "string",
+          "description": "Path do MeshInstance3D."
+        },
+        "preset": {
+          "type": "string",
+          "description": "Preset: metal, plastic, wood, stone, glass, emissive, custom."
+        }
+      }
+    }
+  },
+  "configure_export_preset": {
+    "description": "Configura um preset de exportacao (Windows, Linux, macOS, Web, Android). Use ant",
+    "inputSchema": {
+      "properties": {
+        "preset_name": {
+          "type": "string",
+          "description": "Nome do preset (default 'Windows Desktop')."
+        },
+        "app_name": {
+          "type": "string",
+          "description": "Nome do aplicativo."
+        },
+        "version": {
+          "type": "string",
+          "description": "Versao (ex: '1.0.0')."
+        },
+        "icon_path": {
+          "type": "string",
+          "description": "Caminho do icone .ico/.png."
+        },
+        "company": {
+          "type": "string",
+          "description": "Nome da empresa/estudio."
+        }
+      }
+    }
+  },
+  "health_check": {
+    "description": "Verifica a saude de todos os componentes do MCP: config.json, Godot, ClassDB, te",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "self_test": {
+    "description": "Executa uma suite de testes internos do MCP: ping, ClassDB, godot_parser, jinja2",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "import_asset_manifest": {
+    "description": "Importa TODOS os assets listados no asset_manifest.json do projeto. Suporta 5 fo",
+    "inputSchema": {
+      "properties": {
+        "manifest_path": {
+          "type": "string",
+          "description": "Caminho para o manifest (opcional)."
+        },
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do projeto (opcional)."
+        },
+        "dry_run": {
+          "type": "boolean",
+          "description": "Apenas valida, nao importa (default: false)."
+        },
+        "allow_paid_generation": {
+          "type": "boolean",
+          "description": "Permite source='generate' (pode custar $$). Default: false."
+        }
+      }
+    }
+  },
+  "create_asset_manifest": {
+    "description": "Gera um template de asset_manifest.json no projeto com exemplos. Use para inicia",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do projeto (opcional)."
+        },
+        "overwrite": {
+          "type": "boolean",
+          "description": "Sobrescrever existente (default: false)."
+        }
+      }
+    }
+  },
+  "validate_project_refs": {
+    "description": "Valida TODAS as referencias cruzadas no projeto Godot: ext_resource, sub_resourc",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do projeto (opcional)."
+        },
+        "full_report": {
+          "type": "boolean",
+          "description": "Relatorio completo sem truncar (default: false)."
+        }
+      }
+    }
+  },
+  "find_usages": {
+    "description": "Encontra TODOS os usos de um recurso/alvo no projeto (estatico, sem LSP). Busca ",
+    "inputSchema": {
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "Nome do arquivo ou path parcial (ex: player.gd)."
+        },
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do projeto (opcional)."
+        },
+        "search_type": {
+          "type": "string",
+          "description": "auto, script, scene, texture, any (default: auto)."
+        },
+        "max_results": {
+          "type": "integer",
+          "description": "Limite de resultados (default: 50)."
+        }
+      }
+    }
+  },
+  "find_unused_resources": {
+    "description": "Encontra assets que existem no projeto mas nao sao referenciados por nenhum .tsc",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do projeto."
+        },
+        "asset_types": {
+          "type": "array",
+          "items": {
             "type": "string"
           },
-          "generate_art": {
-            "description": "Forcar geracao de arte (null=auto).",
-            "type": "boolean"
-          },
-          "generate_audio": {
-            "description": "Forcar geracao de audio (null=auto).",
-            "type": "boolean"
-          },
-          "name": {
-            "description": "Nome da entidade (ex: Slime, Player, Turret).",
+          "description": "Tipos: image, audio, model, resource, font (default: todos)."
+        },
+        "exclude_paths": {
+          "type": "array",
+          "items": {
             "type": "string"
           },
-          "save_path": {
-            "description": "Caminho para salvar a cena.",
-            "type": "string"
+          "description": "Pastas a excluir (default: addons/, .godot/, .git/, _backups/, build/)."
+        },
+        "min_size_bytes": {
+          "type": "integer",
+          "description": "Tamanho minimo em bytes (default: 0)."
+        }
+      }
+    }
+  },
+  "analyze_signal_flow": {
+    "description": "Analisa conexoes de sinal no projeto: detecta sinais conectados a metodos que na",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do projeto."
+        },
+        "scene_path": {
+          "type": "string",
+          "description": "Caminho de uma cena especifica (opcional — default: varre todo o projeto)."
+        }
+      }
+    }
+  },
+  "audit_input_map": {
+    "description": "Audita o Input Map do projeto: lista acoes declaradas, acoes nao usadas e acoes ",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do projeto."
+        }
+      }
+    }
+  },
+  "audit_autoloads": {
+    "description": "Audita os Autoloads do projeto: lista autoloads registrados e detecta autoloads ",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do projeto."
+        }
+      }
+    }
+  },
+  "audit_scene_reachability": {
+    "description": "Audita a alcançabilidade de cenas: partindo da cena principal, detecta cenas que",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do projeto."
+        },
+        "root_scene": {
+          "type": "string",
+          "description": "Cena raiz. Default: main_scene do project.godot."
+        }
+      }
+    }
+  },
+  "audit_uid_consistency": {
+    "description": "Audita a consistencia de UIDs no projeto: detecta UIDs duplicados, UIDs com mism",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do projeto."
+        }
+      }
+    }
+  },
+  "audit_save_compatibility": {
+    "description": "Audita a compatibilidade de save: verifica se o SaveManager tem campo de versao ",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do projeto."
+        },
+        "save_file_path": {
+          "type": "string",
+          "description": "Caminho de um save file para testar (opcional)."
+        }
+      }
+    }
+  },
+  "set_auto_dismiss": {
+    "description": "Liga/desliga o fechamento automatico de dialogos modais durante testes automatiz",
+    "inputSchema": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Ativar (true) ou desativar."
+        },
+        "action": {
+          "type": "string",
+          "description": "confirm, cancel ou hide (default: hide)."
+        },
+        "check_interval_ms": {
+          "type": "integer",
+          "description": "Intervalo em ms (default: 500)."
+        }
+      }
+    }
+  },
+  "read_shader": {
+    "description": "Le o conteudo de um arquivo .gdshader existente.",
+    "inputSchema": {
+      "properties": {
+        "shader_path": {
+          "type": "string"
+        },
+        "project_path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "get_shader_params": {
+    "description": "Extrai as declaracoes uniform de um shader.",
+    "inputSchema": {
+      "properties": {
+        "shader_path": {
+          "type": "string"
+        },
+        "project_path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "edit_shader": {
+    "description": "Edita .gdshader com validacao antes de escrever.",
+    "inputSchema": {
+      "properties": {
+        "shader_path": {
+          "type": "string"
+        },
+        "new_code": {
+          "type": "string"
+        },
+        "project_path": {
+          "type": "string"
+        },
+        "validate": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "run_scripted_tests": {
+    "description": "Executa cenarios de teste roteirizados com input sintetico. NAO requer Godot rod",
+    "inputSchema": {
+      "properties": {
+        "scenarios": {
+          "type": "array",
+          "description": "Lista de cenarios customizados (opcional).",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "steps": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
           }
         },
-        "required": [
-          "name"
-        ],
-        "type": "object"
+        "stop_on_failure": {
+          "type": "boolean",
+          "description": "Parar no primeiro cenario que falhar (default: false)."
+        }
       }
-    },
-    "create_milestone_plan": {
-      "description": "Cria um plano de milestones (roteiro) baseado no genero e ideia do jogo.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "force": {
-            "description": "Sobrescrever plano existente.",
-            "type": "boolean"
-          },
-          "genero": {
-            "description": "Genero do jogo (17 generos via GAME_PATTERNS). Default: tower_defense.",
-            "type": "string"
-          },
-          "ideia": {
-            "description": "Descricao da ideia do jogo.",
-            "type": "string"
-          },
-          "num_milestones": {
-            "description": "Quantidade de milestones (default: 8).",
-            "type": "integer"
-          }
+    }
+  },
+  "smoke_test": {
+    "description": "Smoke test rapido: valida pipeline core do MCP (ping, ClassDB, validacao, config",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "regression_test": {
+    "description": "Teste de regressao: valida correcoes dos GRUPOS 1 e 2 (write_file .gd, R2, GUT s",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "dump_mcp_state": {
+    "description": "Captura snapshot completo do estado do MCP: config, tool counts, caches, imports",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "estimate_tool_tokens": {
+    "description": "Estima o consumo de tokens do tools/list para cada perfil de ferramentas. Mede o",
+    "inputSchema": {
+      "properties": {
+        "profile": {
+          "type": "string",
+          "description": "Perfil a estimar: core (16 tools), dev (31), ou full (189, default)."
+        }
+      }
+    }
+  },
+  "gdscript_lsp_connect": {
+    "description": "Conecta ao Language Server do Godot na porta 6005. Use no início da sessão, após",
+    "inputSchema": {
+      "properties": {
+        "project_root": {
+          "type": "string",
+          "description": "Caminho raiz do projeto (opcional)."
+        }
+      }
+    }
+  },
+  "gdscript_lsp_disconnect": {
+    "description": "Desconecta do Language Server do Godot. Use ao finalizar a sessão ou antes de fe",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "gdscript_references": {
+    "description": "Encontra todas as referências a um símbolo GDScript (variável, função, classe). ",
+    "inputSchema": {
+      "properties": {
+        "file_path": {
+          "type": "string",
+          "description": "Caminho do arquivo .gd."
         },
-        "required": [],
-        "type": "object"
+        "line": {
+          "type": "integer",
+          "description": "Linha (0-indexed)."
+        },
+        "character": {
+          "type": "integer",
+          "description": "Posição do caractere (0-indexed)."
+        }
       }
-    },
-    "dump_mcp_state": {
-      "description": "Captura snapshot completo do estado do MCP: config, tool counts, caches, imports, git.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {},
-        "required": [],
-        "type": "object"
+    }
+  },
+  "gdscript_definition": {
+    "description": "Navega para a definição de um símbolo GDScript. Use para encontrar onde uma vari",
+    "inputSchema": {
+      "properties": {
+        "file_path": {
+          "type": "string",
+          "description": "Caminho do arquivo .gd."
+        },
+        "line": {
+          "type": "integer",
+          "description": "Linha (0-indexed)."
+        },
+        "character": {
+          "type": "integer",
+          "description": "Posição do caractere (0-indexed)."
+        }
       }
-    },
-    "file_manage": {
-      "description": "Gerencia arquivos do projeto Godot: deletar, mover/renomear e inspecionar/listar arquivos por categoria.",
-      "inputSchema": {
-        "additionalProperties": false,
+    }
+  },
+  "gdscript_hover": {
+    "description": "Exibe tipo e documentação de um símbolo GDScript sob o cursor. Use para inspecio",
+    "inputSchema": {
+      "properties": {
+        "file_path": {
+          "type": "string",
+          "description": "Caminho do arquivo .gd."
+        },
+        "line": {
+          "type": "integer",
+          "description": "Linha (0-indexed)."
+        },
+        "character": {
+          "type": "integer",
+          "description": "Posição do caractere (0-indexed)."
+        }
+      }
+    }
+  },
+  "gdscript_symbols": {
+    "description": "Lista símbolos (funções, classes, variáveis) de um arquivo GDScript. Use para ob",
+    "inputSchema": {
+      "properties": {
+        "file_path": {
+          "type": "string",
+          "description": "Caminho do arquivo .gd."
+        }
+      }
+    }
+  },
+  "gdscript_rename": {
+    "description": "Renomeia um símbolo GDScript em TODO o projeto com segurança semântica. Diferent",
+    "inputSchema": {
+      "properties": {
+        "file_path": {
+          "type": "string",
+          "description": "Caminho do arquivo .gd."
+        },
+        "line": {
+          "type": "integer",
+          "description": "Linha (0-indexed)."
+        },
+        "character": {
+          "type": "integer",
+          "description": "Posição do caractere (0-indexed)."
+        },
+        "new_name": {
+          "type": "string",
+          "description": "Novo nome para o símbolo."
+        }
+      }
+    }
+  },
+  "gdscript_diagnostics": {
+    "description": "Retorna erros e warnings do compilador GDScript via LSP. Mais preciso que valida",
+    "inputSchema": {
+      "properties": {
+        "file_path": {
+          "type": "string",
+          "description": "Caminho do arquivo .gd."
+        }
+      }
+    }
+  },
+  "gdscript_sync_file": {
+    "description": "Notifica o LSP sobre alterações em um arquivo GDScript. Use após write_file para",
+    "inputSchema": {
+      "properties": {
+        "file_path": {
+          "type": "string",
+          "description": "Caminho do arquivo .gd."
+        },
+        "content": {
+          "type": "string",
+          "description": "Conteúdo atualizado (se omitido, lê do disco)."
+        }
+      }
+    }
+  },
+  "addon_connect": {
+    "description": "Conecta ao addon GDScript via WebSocket na porta 9082. Use após abrir o Godot co",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "addon_disconnect": {
+    "description": "Desconecta do addon GDScript.",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "addon_is_available": {
+    "description": "Verifica se o addon GDScript está conectado e respondendo. Use para decidir entr",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "addon_ping": {
+    "description": "Verifica se o addon GDScript está respondendo (ping/pong).",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "addon_create_node": {
+    "description": "Cria um nó na cena atual do editor Godot com UndoRedo NATIVO (Ctrl+Z funciona). ",
+    "inputSchema": {
+      "properties": {
+        "parent_path": {
+          "type": "string",
+          "description": "Path do nó pai (ex: /root/Main)."
+        },
+        "node_type": {
+          "type": "string",
+          "description": "Tipo Godot (ex: Sprite2D)."
+        },
+        "node_name": {
+          "type": "string",
+          "description": "Nome do novo nó."
+        },
         "properties": {
-          "op": {
-            "description": "Operação a executar. Valores válidos: delete, move, inspect.",
-            "enum": [
-              "delete",
-              "move",
-              "inspect"
-            ],
+          "type": "object",
+          "description": "Propriedades iniciais (opcional)."
+        },
+        "scene_path": {
+          "type": "string",
+          "description": "Cena alvo (opcional)."
+        }
+      }
+    }
+  },
+  "addon_delete_node": {
+    "description": "Remove um nó da cena do editor com UndoRedo nativo. Pré-condições: addon conecta",
+    "inputSchema": {
+      "properties": {
+        "node_path": {
+          "type": "string",
+          "description": "Path absoluto do nó."
+        }
+      }
+    }
+  },
+  "addon_set_property": {
+    "description": "Define uma propriedade de nó no editor com UndoRedo nativo. Use para ajustar pos",
+    "inputSchema": {
+      "properties": {
+        "node_path": {
+          "type": "string",
+          "description": "Path do nó."
+        },
+        "property_name": {
+          "type": "string",
+          "description": "Nome da propriedade."
+        },
+        "value": {
+          "type": "string",
+          "description": "Valor (tipos Godot serializados como JSON)."
+        }
+      }
+    }
+  },
+  "addon_reparent_node": {
+    "description": "Move um nó para outro pai no editor com UndoRedo nativo. Pré-condições: addon co",
+    "inputSchema": {
+      "properties": {
+        "node_path": {
+          "type": "string",
+          "description": "Path do nó a mover."
+        },
+        "new_parent_path": {
+          "type": "string",
+          "description": "Path do novo pai."
+        }
+      }
+    }
+  },
+  "addon_duplicate_node": {
+    "description": "Duplica um nó no editor com UndoRedo nativo. Pré-condições: addon conectado.",
+    "inputSchema": {
+      "properties": {
+        "node_path": {
+          "type": "string",
+          "description": "Path do nó a duplicar."
+        },
+        "new_name": {
+          "type": "string",
+          "description": "Nome da cópia (opcional)."
+        }
+      }
+    }
+  },
+  "addon_batch_edit": {
+    "description": "Executa MÚLTIPLAS operações no editor em UMA ação UndoRedo. 1 Ctrl+Z desfaz TUDO",
+    "inputSchema": {
+      "properties": {
+        "operations": {
+          "type": "array",
+          "description": "Lista de operações [{method, params}, ...].",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  },
+  "addon_take_screenshot": {
+    "description": "Captura screenshot do viewport do editor Godot via addon. Alternativa ao take_sc",
+    "inputSchema": {
+      "properties": {
+        "viewport": {
+          "type": "string",
+          "description": "'editor' (padrão) ou path."
+        }
+      }
+    }
+  },
+  "addon_get_scene_tree": {
+    "description": "Obtém a árvore da cena atual do editor via addon. Retorna estrutura hierárquica ",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "freeze_game_clock": {
+    "description": "Congela o relogio do jogo. Use antes de step_game_time para playtesting determin",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "unfreeze_game_clock": {
+    "description": "Descongela o relogio do jogo (retoma execucao normal).",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "step_game_time": {
+    "description": "Avanca o jogo em N ms e congela novamente. Ex: 500ms = meio segundo de jogo proc",
+    "inputSchema": {
+      "properties": {
+        "ms": {
+          "type": "integer",
+          "description": "Milissegundos (default: 16)."
+        }
+      }
+    }
+  },
+  "step_until": {
+    "description": "Avanca o jogo ate que uma condicao GDScript seja verdadeira. Com timeout.",
+    "inputSchema": {
+      "properties": {
+        "condition": {
+          "type": "string",
+          "description": "Expressao GDScript que retorna bool."
+        },
+        "timeout_ms": {
+          "type": "integer",
+          "description": "Timeout em ms (default: 5000)."
+        }
+      }
+    }
+  },
+  "get_runtime_state_digest": {
+    "description": "Retorna estado do jogo como JSON: posicao, velocidade, grupos de todas as entida",
+    "inputSchema": {
+      "properties": {
+        "groups": {
+          "type": "array",
+          "items": {
             "type": "string"
           },
-          "params": {
-            "additionalProperties": true,
-            "description": "Parâmetros da operação. Cada op espera campos específicos — consulte a descrição da tool para saber quais campos são necessários para cada op.",
+          "description": "Grupos a filtrar."
+        }
+      }
+    }
+  },
+  "capture_runtime_errors": {
+    "description": "Captura informacoes de runtime: FPS, contagem de objetos, estado da arvore.",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "watch_state_start": {
+    "description": "Comeca a observar propriedades de nos do jogo a cada step. Use para monitorar HP",
+    "inputSchema": {
+      "properties": {
+        "targets": {
+          "type": "array",
+          "items": {
             "type": "object"
           }
         },
-        "required": [
-          "op"
-        ],
-        "type": "object"
+        "interval_steps": {
+          "type": "integer"
+        }
       }
-    },
-    "find_usages": {
-      "description": "Encontra TODOS os usos de um recurso/alvo no projeto (estatico, sem LSP).",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "max_results": {
-            "description": "Limite de resultados (default: 50).",
-            "type": "integer"
-          },
-          "project_path": {
-            "description": "Caminho do projeto (opcional).",
-            "type": "string"
-          },
-          "search_type": {
-            "description": "auto, script, scene, texture, any (default: auto).",
-            "type": "string"
-          },
-          "target": {
-            "description": "Nome do arquivo ou path parcial (ex: player.gd).",
-            "type": "string"
-          }
+    }
+  },
+  "watch_state_collect": {
+    "description": "Coleta o historico de estados observados desde watch_state_start(). Retorna arra",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "godot_exec": {
+    "description": "Executa codigo GDScript DENTRO do jogo rodando. Use para setup de cenarios de te",
+    "inputSchema": {
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Codigo GDScript a executar no jogo"
+        }
+      }
+    }
+  },
+  "effect_probe": {
+    "description": "Verifica se uma acao no jogo produziu o efeito esperado. Avalia expressao antes,",
+    "inputSchema": {
+      "properties": {
+        "before": {
+          "type": "string",
+          "description": "Expressao GDScript antes da acao"
         },
-        "required": [
-          "target"
-        ],
-        "type": "object"
-      }
-    },
-    "gdd_generate": {
-      "description": "Gera Game Design Document (GDD) completo a partir de uma ideia.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "concept": {
-            "description": "Ideia do jogo em uma frase",
-            "type": "string"
-          },
-          "detail_level": {
-            "enum": [
-              "brief",
-              "full"
-            ],
-            "type": "string"
-          },
-          "game_type": {
-            "enum": [
-              "tower_defense",
-              "platformer",
-              "rpg",
-              "shooter",
-              "puzzle",
-              "roguelike"
-            ],
-            "type": "string"
-          },
-          "target_platform": {
-            "enum": [
-              "pc",
-              "mobile",
-              "web"
-            ],
-            "type": "string"
-          }
+        "action": {
+          "type": "string",
+          "description": "Codigo GDScript da acao"
         },
-        "required": [
-          "concept"
-        ],
-        "type": "object"
-      }
-    },
-    "get_current_phase": {
-      "description": "",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {},
-        "type": "object"
-      }
-    },
-    "get_milestone_plan": {
-      "description": "Mostra o plano completo de milestones + progresso (total, concluidos, pendentes, %). GRATIS.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {},
-        "type": "object"
-      }
-    },
-    "get_next_step": {
-      "description": "Retorna o PROXIMO PASSO OBRIGATORIO da sessao: fase atual, blockers, criterio para avancar, e acao sugerida.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {},
-        "type": "object"
-      }
-    },
-    "get_phase_history": {
-      "description": "Mostra o historico de mudancas de fase do projeto. GRATIS.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {},
-        "type": "object"
-      }
-    },
-    "get_project_brief": {
-      "description": "Retorna o project brief atual. Se nunca foi configurado, retorna brief=null e configured=False.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {},
-        "required": [],
-        "type": "object"
-      }
-    },
-    "godot_class_ref": {
-      "description": "Consulta metodos, propriedades, sinais, enums e constantes nativos do Godot via ClassDB (extension_api.json).",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "class_name": {
-            "description": "Nome exato da classe nativa (ex: Node2D, CharacterBody2D). Nao funciona com classes custom de projetos.",
-            "type": "string"
-          }
+        "after": {
+          "type": "string",
+          "description": "Expressao GDScript depois da acao"
         },
-        "required": [
-          "class_name"
-        ],
-        "type": "object"
+        "wait_ms": {
+          "type": "integer",
+          "description": "ms de espera entre acao e verificacao"
+        }
       }
-    },
-    "health_check": {
-      "description": "Verifica a saude de todos os componentes do MCP: config.json, Godot, ClassDB, templates, projeto ativo.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {},
-        "required": [],
-        "type": "object"
-      }
-    },
-    "install_mcp_addon": {
-      "description": "Instala o addon MCP no projeto Godot ativo e ativa o plugin do editor.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "project_path": {
-            "description": "Caminho do projeto Godot. Opcional se já usou set_active_project. Ex: 'C:/meu_jogo'",
-            "type": "string"
-          }
+    }
+  },
+  "balance_analyze": {
+    "description": "Analisa o balanceamento do jogo e sugere ajustes. Calcula DPS necessario, verifi",
+    "inputSchema": {
+      "properties": {
+        "game_type": {
+          "type": "string",
+          "enum": [
+            "tower_defense",
+            "rpg",
+            "platformer",
+            "shooter"
+          ]
         },
-        "required": [],
-        "type": "object"
-      }
-    },
-    "node_manage": {
-      "description": "",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "op": {
-            "description": "Operação a executar. Valores válidos: create, delete, set_property, get_property, reparent, connect_signal, list_signals.",
-            "enum": [
-              "create",
-              "delete",
-              "set_property",
-              "get_property",
-              "reparent",
-              "connect_signal",
-              "list_signals"
-            ],
-            "type": "string"
-          },
-          "params": {
-            "additionalProperties": true,
-            "description": "Parâmetros da operação. Cada op espera campos específicos — consulte a descrição da tool para saber quais campos são necessários para cada op.",
+        "towers": {
+          "type": "array",
+          "items": {
             "type": "object"
           }
         },
-        "required": [
-          "op"
-        ],
-        "type": "object"
-      }
-    },
-    "ping": {
-      "description": "Verifica se o servidor godot-mcp-agent está funcional e conectado.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {},
-        "required": [],
-        "type": "object"
-      }
-    },
-    "project_manage": {
-      "description": "",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "op": {
-            "description": "Operação a executar. Valores válidos: create, set_active, get_settings, set_setting, set_main_scene.",
-            "enum": [
-              "create",
-              "set_active",
-              "get_settings",
-              "set_setting",
-              "set_main_scene"
-            ],
-            "type": "string"
-          },
-          "params": {
-            "additionalProperties": true,
-            "description": "Parâmetros da operação. Cada op espera campos específicos — consulte a descrição da tool para saber quais campos são necessários para cada op.",
+        "enemies": {
+          "type": "array",
+          "items": {
             "type": "object"
           }
         },
-        "required": [
-          "op"
-        ],
-        "type": "object"
-      }
-    },
-    "project_progress": {
-      "description": "",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {},
-        "type": "object"
-      }
-    },
-    "project_status": {
-      "description": "Status completo do projeto: cenas, scripts, sprites, audio, assets faltantes, sugestoes do que criar a seguir.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {},
-        "required": [],
-        "type": "object"
-      }
-    },
-    "read_file": {
-      "description": "Lê o conteúdo de um arquivo do projeto (.gd, .tscn, .tres, etc.).",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "end_line": {
-            "description": "Linha final inclusiva (opcional).",
-            "type": "integer"
-          },
-          "path": {
-            "description": "Caminho relativo ao projeto.",
-            "type": "string"
-          },
-          "start_line": {
-            "description": "Linha inicial (1-indexed, opcional).",
-            "type": "integer"
-          }
+        "waves": {
+          "type": "integer"
         },
-        "required": [
-          "path"
-        ],
-        "type": "object"
+        "target_duration_minutes": {
+          "type": "integer"
+        }
       }
-    },
-    "resume_session": {
-      "description": "",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {},
-        "type": "object"
-      }
-    },
-    "safe_write_gdscript": {
-      "description": "Escreve .gd COM validacao. Recusa codigo invalido! Ex: {'file_path':'res://x.gd','content':'...'}.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "content": {
-            "type": "string"
-          },
-          "file_path": {
-            "type": "string"
-          },
-          "project_path": {
-            "type": "string"
-          },
-          "strict": {
-            "type": "boolean"
-          }
+    }
+  },
+  "wave_generate": {
+    "description": "Gera composicao de ondas para tower defense. Curva de dificuldade (linear, expon",
+    "inputSchema": {
+      "properties": {
+        "wave_count": {
+          "type": "integer"
         },
-        "required": [
-          "file_path",
-          "content"
-        ],
-        "type": "object"
-      }
-    },
-    "safety_manage": {
-      "description": "",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "op": {
-            "description": "Operação a executar. Valores válidos: list_backups, restore, checkpoint, undo, undo_history.",
-            "enum": [
-              "list_backups",
-              "restore",
-              "checkpoint",
-              "undo",
-              "undo_history"
-            ],
-            "type": "string"
-          },
-          "params": {
-            "additionalProperties": true,
-            "description": "Parâmetros da operação. Cada op espera campos específicos — consulte a descrição da tool para saber quais campos são necessários para cada op.",
+        "enemy_types": {
+          "type": "array",
+          "items": {
             "type": "object"
           }
         },
-        "required": [
-          "op"
-        ],
-        "type": "object"
+        "difficulty_curve": {
+          "type": "string",
+          "enum": [
+            "linear",
+            "exponential",
+            "staircase"
+          ]
+        },
+        "boss_every": {
+          "type": "integer"
+        }
       }
-    },
-    "scene_manage": {
-      "description": "Gerencia cenas Godot (.tscn) com operações de criação, carregamento e instanciação.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "op": {
-            "description": "Operação a executar. Valores válidos: create, load_tree, instance.",
-            "enum": [
-              "create",
-              "load_tree",
-              "instance"
-            ],
+    }
+  },
+  "dps_calculator": {
+    "description": "Calcula DPS efetivo de uma torre/arma considerando criticos, dano em area e dano",
+    "inputSchema": {
+      "properties": {
+        "damage": {
+          "type": "number"
+        },
+        "fire_rate": {
+          "type": "number"
+        },
+        "crit_chance": {
+          "type": "number"
+        },
+        "crit_multiplier": {
+          "type": "number"
+        },
+        "aoe_radius": {
+          "type": "number"
+        },
+        "aoe_targets": {
+          "type": "integer"
+        },
+        "damage_over_time": {
+          "type": "number"
+        },
+        "dot_duration": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "loot_table_generate": {
+    "description": "Gera tabela de loot balanceada com chances de drop por raridade. Suporta temas: ",
+    "inputSchema": {
+      "properties": {
+        "rarity_levels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "items_per_rarity": {
+          "type": "integer"
+        },
+        "game_theme": {
+          "type": "string",
+          "enum": [
+            "scifi",
+            "fantasy",
+            "modern",
+            "post_apocalyptic"
+          ]
+        }
+      }
+    }
+  },
+  "gdd_generate": {
+    "description": "Gera Game Design Document (GDD) completo a partir de uma ideia. Suporta: tower_d",
+    "inputSchema": {
+      "properties": {
+        "concept": {
+          "type": "string",
+          "description": "Ideia do jogo em uma frase"
+        },
+        "game_type": {
+          "type": "string",
+          "enum": [
+            "tower_defense",
+            "platformer",
+            "rpg",
+            "shooter",
+            "puzzle",
+            "roguelike"
+          ]
+        },
+        "target_platform": {
+          "type": "string",
+          "enum": [
+            "pc",
+            "mobile",
+            "web"
+          ]
+        },
+        "detail_level": {
+          "type": "string",
+          "enum": [
+            "brief",
+            "full"
+          ]
+        }
+      }
+    }
+  },
+  "behavior_tree_generate": {
+    "description": "Gera Behavior Tree completa em GDScript a partir de descricao em portugues. Anal",
+    "inputSchema": {
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Comportamento em portugues"
+        },
+        "behavior_name": {
+          "type": "string",
+          "description": "Nome da classe (ex: EnemyAI)"
+        },
+        "tree_type": {
+          "type": "string",
+          "enum": [
+            "selector",
+            "sequence"
+          ]
+        },
+        "save_path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "behavior_tree_list_templates": {
+    "description": "Lista templates de Behavior Tree disponiveis: patrol_chase_attack, patrol_chase_",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "profile_frame": {
+    "description": "Analisa performance do jogo rodando: FPS medio/min/max, draw calls, uso de memor",
+    "inputSchema": {
+      "properties": {
+        "sample_frames": {
+          "type": "integer",
+          "description": "Frames para amostrar (default 60)"
+        }
+      }
+    }
+  },
+  "profile_memory": {
+    "description": "Analisa uso de memoria do jogo (estatica + video) e detecta objetos. GRATIS — se",
+    "inputSchema": {
+      "properties": {
+        "track_objects": {
+          "type": "boolean",
+          "description": "Contar objetos por tipo"
+        }
+      }
+    }
+  },
+  "run_stress_test": {
+    "description": "Teste de stress com carga e input aleatorio REPRODUTIVEL. Spawna N instancias de",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do projeto."
+        },
+        "spawn_scene_path": {
+          "type": "string",
+          "description": "Cena a instanciar em massa (ex: res://scenes/enemy.tscn)."
+        },
+        "spawn_count": {
+          "type": "integer",
+          "description": "Quantidade de instancias (default: 10)."
+        },
+        "duration_seconds": {
+          "type": "integer",
+          "description": "Duracao total do teste em segundos (default: 5)."
+        },
+        "input_actions": {
+          "type": "array",
+          "items": {
             "type": "string"
           },
-          "params": {
-            "additionalProperties": true,
-            "description": "Parâmetros da operação. Cada op espera campos específicos — consulte a descrição da tool para saber quais campos são necessários para cada op.",
+          "description": "Acoes do InputMap a injetar aleatoriamente."
+        },
+        "random_seed": {
+          "type": "integer",
+          "description": "Seed explicita para reproducibilidade (OBRIGATORIO)."
+        },
+        "fps_threshold": {
+          "type": "number",
+          "description": "FPS minimo aceitavel — abaixo marca FALHOU (default: 30)."
+        },
+        "sample_interval_ms": {
+          "type": "integer",
+          "description": "Intervalo entre amostras em ms (default: 500)."
+        }
+      }
+    }
+  },
+  "shader_generate": {
+    "description": "Gera arquivo .gdshader a partir de descricao em portugues. 15 templates 2D: glow",
+    "inputSchema": {
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Efeito visual desejado. Ex: 'holograma azul com scanlines'"
+        },
+        "shader_type": {
+          "type": "string",
+          "enum": [
+            "canvas_item",
+            "spatial",
+            "particles",
+            "sky"
+          ]
+        },
+        "save_path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "shader_list_templates": {
+    "description": "Lista 15 templates de shader 2D disponiveis com palavras-chave.",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "terrain_generate": {
+    "description": "Gera terreno procedural com biomas por altura/umidade. Usa FastNoiseLite (built-",
+    "inputSchema": {
+      "properties": {
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "seed": {
+          "type": "integer"
+        },
+        "biomes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "water_level": {
+          "type": "number"
+        },
+        "mountain_level": {
+          "type": "number"
+        },
+        "save_path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "dungeon_generate": {
+    "description": "Gera dungeon procedural com salas e corredores (algoritmo BSP). Salas classifica",
+    "inputSchema": {
+      "properties": {
+        "rooms": {
+          "type": "integer"
+        },
+        "min_room_size": {
+          "type": "integer"
+        },
+        "max_room_size": {
+          "type": "integer"
+        },
+        "seed": {
+          "type": "integer"
+        },
+        "save_path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "world_describe": {
+    "description": "Analisa um mundo gerado e sugere melhorias e pontos de interesse. Detecta biomas",
+    "inputSchema": {
+      "properties": {
+        "terrain_path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "generate_3d_placeholder": {
+    "description": "Gera placeholder 3D procedural (box, sphere, cylinder, cone, pyramid). Preview P",
+    "inputSchema": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "shape": {
+          "type": "string",
+          "enum": [
+            "box",
+            "sphere",
+            "cylinder",
+            "cone",
+            "pyramid"
+          ]
+        },
+        "color": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number"
+        },
+        "save_path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "generate_3d_asset": {
+    "description": "Gera asset 3D via API Hyper3D Rodin (⚠️💰 ~$0.05/modelo) ou placeholder GRATIS. S",
+    "inputSchema": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "prop",
+            "character",
+            "vehicle",
+            "building",
+            "weapon"
+          ]
+        },
+        "style": {
+          "type": "string",
+          "enum": [
+            "scifi",
+            "fantasy",
+            "modern",
+            "realistic"
+          ]
+        },
+        "save_path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "deploy_itch": {
+    "description": "Exporta e envia o jogo para itch.io via butler CLI. Suporta Windows, Linux, Web,",
+    "inputSchema": {
+      "properties": {
+        "itch_username": {
+          "type": "string"
+        },
+        "itch_game": {
+          "type": "string"
+        },
+        "platforms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "version": {
+          "type": "string"
+        },
+        "dry_run": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "release_checklist": {
+    "description": "Verifica se o projeto esta pronto para lancamento (nota 0-10): project.godot, ma",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "get_current_phase": {
+    "description": "Mostra em que fase do projeto o time esta (IDEIA/DESIGN/PROTOTIPO/CONTEUDO/POLIM",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "advance_phase": {
+    "description": "Avanca o projeto para a proxima fase, SE o criterio da fase atual foi cumprido. ",
+    "inputSchema": {
+      "properties": {
+        "force": {
+          "type": "boolean",
+          "description": "Ignora criterios de transicao (obrigatorio informar reason)."
+        },
+        "reason": {
+          "type": "string",
+          "description": "Justificativa para avanco forcado (obrigatorio se force=true)."
+        }
+      }
+    }
+  },
+  "get_phase_history": {
+    "description": "Mostra o historico de mudancas de fase do projeto. GRATIS.",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "get_next_step": {
+    "description": "Retorna o PROXIMO PASSO OBRIGATORIO da sessao: fase atual, blockers, criterio pa",
+    "inputSchema": {
+      "properties": {
+        "low_energy": {
+          "type": "boolean",
+          "description": "Se true, retorna apenas a menor acao possivel como passo sugerido. Util quando o desenvolvedor esta cansado e quer um passo trivial.",
+          "default": false
+        }
+      }
+    }
+  },
+  "resume_session": {
+    "description": "Recuperacao de sessao: le o estado persistente do projeto (fase, milestone, road",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "set_project_brief": {
+    "description": "Define ou sobrescreve o project brief (genero, estilo de arte, tom, plataforma).",
+    "inputSchema": {
+      "properties": {
+        "genre": {
+          "type": "string",
+          "description": "Genero do jogo (17 validos: tower_defense, platformer, rpg_turn_based, etc.)."
+        },
+        "art_style": {
+          "type": "string",
+          "description": "Estilo visual (scifi, fantasia, cartoon, pixel, minimalista)."
+        },
+        "tone": {
+          "type": "string",
+          "description": "Tom do jogo (estrategico, casual, sombrio, epico, humorado, frenetico)."
+        },
+        "target_platform": {
+          "type": "string",
+          "description": "Plataforma alvo (pc, mobile, web)."
+        },
+        "force": {
+          "type": "boolean",
+          "description": "Obrigatorio True para sobrescrever brief existente."
+        },
+        "ip_force": {
+          "type": "boolean",
+          "description": "Forca criacao mesmo com alerta de propriedade intelectual."
+        },
+        "ip_reason": {
+          "type": "string",
+          "description": "Justificativa para ignorar alerta de PI (obrigatorio com ip_force=True)."
+        }
+      }
+    }
+  },
+  "get_project_brief": {
+    "description": "Retorna o project brief atual. Se nunca foi configurado, retorna brief=null e co",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "update_project_brief": {
+    "description": "Atualiza campos especificos do project brief sem sobrescrever os demais. Use par",
+    "inputSchema": {
+      "properties": {
+        "genre": {
+          "type": "string",
+          "description": "Genero do jogo (validado contra GAME_PATTERNS)."
+        },
+        "art_style": {
+          "type": "string",
+          "description": "Estilo visual."
+        },
+        "tone": {
+          "type": "string",
+          "description": "Tom do jogo."
+        },
+        "target_platform": {
+          "type": "string",
+          "description": "Plataforma alvo (pc, mobile, web)."
+        }
+      }
+    }
+  },
+  "create_milestone_plan": {
+    "description": "Cria um plano de milestones (roteiro) baseado no genero e ideia do jogo. Usa gdd",
+    "inputSchema": {
+      "properties": {
+        "genero": {
+          "type": "string",
+          "description": "Genero do jogo (17 generos via GAME_PATTERNS). Default: tower_defense."
+        },
+        "ideia": {
+          "type": "string",
+          "description": "Descricao da ideia do jogo."
+        },
+        "num_milestones": {
+          "type": "integer",
+          "description": "Quantidade de milestones (default: 8)."
+        },
+        "force": {
+          "type": "boolean",
+          "description": "Sobrescrever plano existente."
+        }
+      }
+    }
+  },
+  "advance_milestone": {
+    "description": "Conclui um milestone. Sem ID, avanca o proximo pendente automaticamente. GRATIS.",
+    "inputSchema": {
+      "properties": {
+        "milestone_id": {
+          "type": "string",
+          "description": "ID do milestone a concluir. Se omitido, usa get_next_milestone()."
+        }
+      }
+    }
+  },
+  "get_milestone_plan": {
+    "description": "Mostra o plano completo de milestones + progresso (total, concluidos, pendentes,",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "project_progress": {
+    "description": "Termometro visual do milestone atual: barra de progresso ASCII, percentual, mens",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "auto_screenshot": {
+    "description": "Gera screenshots automaticas do jogo rodando para loja (itch.io/Steam). GRATIS.",
+    "inputSchema": {
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "delay_between": {
+          "type": "number"
+        },
+        "save_dir": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "marketplace_search": {
+    "description": "Busca assets em marketplaces gratuitos: Kenney.nl (CC0, 300+ packs), Godot Asset",
+    "inputSchema": {
+      "properties": {
+        "query": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "kenney",
+            "godot_assets",
+            "opengameart",
+            "polyhaven"
+          ]
+        },
+        "category": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "marketplace_download": {
+    "description": "Baixa asset gratuito do marketplace. Kenney.nl (ZIP direto, CC0). GRATIS.",
+    "inputSchema": {
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": [
+            "kenney",
+            "godot_assets",
+            "polyhaven"
+          ]
+        },
+        "slug": {
+          "type": "string"
+        },
+        "save_to": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "juice_apply": {
+    "description": "Aplica tecnicas de game feel/polish profissional: coyote time, input buffer, hit",
+    "inputSchema": {
+      "properties": {
+        "preset": {
+          "type": "string",
+          "enum": [
+            "full",
+            "platformer",
+            "action",
+            "minimal"
+          ]
+        },
+        "save_to_script": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "juice_list_presets": {
+    "description": "Lista presets de juice disponiveis com tecnicas incluidas.",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "validate_mcp_environment": {
+    "description": "Verifica se o ambiente MCP esta pronto: Python, dependencias, server.py.",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "setup_mcp_config": {
+    "description": "Gera arquivo de configuracao MCP para VS Code Copilot, Claude ou Cursor.",
+    "inputSchema": {
+      "properties": {
+        "target": {
+          "type": "string",
+          "enum": [
+            "vscode",
+            "claude",
+            "cursor",
+            "all"
+          ],
+          "description": "Cliente alvo (default: vscode)."
+        }
+      }
+    }
+  },
+  "create_entity": {
+    "description": "Cria uma entidade COMPLETA: cena + collider + script + sprite + audio. Decide au",
+    "inputSchema": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Nome da entidade (ex: Slime, Player, Turret)."
+        },
+        "entity_type": {
+          "type": "string",
+          "enum": [
+            "enemy",
+            "player",
+            "tower",
+            "npc",
+            "item",
+            "projectile"
+          ],
+          "description": "Tipo de entidade."
+        },
+        "description": {
+          "type": "string",
+          "description": "Descricao do comportamento."
+        },
+        "behavior": {
+          "type": "string",
+          "enum": [
+            "patrol",
+            "chase",
+            "idle",
+            "none"
+          ],
+          "description": "Comportamento IA."
+        },
+        "generate_art": {
+          "type": "boolean",
+          "description": "Forcar geracao de arte (null=auto)."
+        },
+        "generate_audio": {
+          "type": "boolean",
+          "description": "Forcar geracao de audio (null=auto)."
+        },
+        "art_style": {
+          "type": "string",
+          "enum": [
+            "scifi",
+            "fantasy",
+            "pixel",
+            "cartoon"
+          ],
+          "description": "Estilo visual."
+        },
+        "save_path": {
+          "type": "string",
+          "description": "Caminho para salvar a cena."
+        }
+      }
+    }
+  },
+  "create_entities": {
+    "description": "Cria MULTIPLAS entidades em lote sequencial. Cada entidade passa pelo mesmo pipe",
+    "inputSchema": {
+      "properties": {
+        "entities": {
+          "type": "array",
+          "description": "Lista de specs de entidade (cada uma igual ao create_entity).",
+          "items": {
             "type": "object"
           }
         },
-        "required": [
-          "op"
-        ],
-        "type": "object"
+        "stop_on_first_failure": {
+          "type": "boolean",
+          "description": "Se True, para na primeira falha (default: False)."
+        }
       }
-    },
-    "script_manage": {
-      "description": "",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "op": {
-            "description": "Operação a executar. Valores válidos: generate, attach, detach, validate, add_var, add_signal.",
-            "enum": [
-              "generate",
-              "attach",
-              "detach",
-              "validate",
-              "add_var",
-              "add_signal"
-            ],
-            "type": "string"
-          },
-          "params": {
-            "additionalProperties": true,
-            "description": "Parâmetros da operação. Cada op espera campos específicos — consulte a descrição da tool para saber quais campos são necessários para cada op.",
+    }
+  },
+  "project_status": {
+    "description": "Status completo do projeto: cenas, scripts, sprites, audio, assets faltantes, su",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "circuit_breaker_status": {
+    "description": "Status dos circuit breakers das APIs externas (FLUX, Replicate, Edge TTS). Use p",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "godot_screenshot": {
+    "description": "Captura screenshot do jogo rodando via MCPRuntimeBridge. Jogo precisa estar em e",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "godot_runtime_info": {
+    "description": "FPS, draw calls, memoria estatica e tempo de fisica do jogo rodando agora.",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "godot_custom_command": {
+    "description": "Chama comando customizado registrado no jogo (ex: get_puzzle_state).",
+    "inputSchema": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Nome do comando registrado no jogo."
+        },
+        "args": {
+          "type": "object",
+          "description": "Argumentos do comando (opcional)."
+        }
+      }
+    }
+  },
+  "godot_list_custom_commands": {
+    "description": "Lista comandos customizados registrados no bridge do jogo.",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "godot_run_project": {
+    "description": "Lanca o jogo direto via CLI (godot --path <projeto>), sem abrir o editor. Retorn",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "Caminho absoluto da pasta do projeto."
+        },
+        "godot_executable": {
+          "type": "string",
+          "description": "Caminho absoluto do executavel do Godot."
+        }
+      }
+    }
+  },
+  "godot_stop_project": {
+    "description": "Encerra um processo de jogo iniciado por godot_run_project.",
+    "inputSchema": {
+      "properties": {
+        "pid": {
+          "type": "integer",
+          "description": "PID retornado por godot_run_project."
+        }
+      }
+    }
+  },
+  "godot_wait_for_bridge": {
+    "description": "Espera ate o MCPRuntimeBridge responder (polling de runtime_info).",
+    "inputSchema": {
+      "properties": {
+        "timeout_sec": {
+          "type": "integer",
+          "description": "Timeout em segundos (default 10)."
+        }
+      }
+    }
+  },
+  "run_verification_pipeline": {
+    "description": "Executa pipeline de verificacao completo em um projeto Godot: compilacao, execuc",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "Caminho do projeto Godot. Se omitido, usa projeto ativo."
+        },
+        "godot_path": {
+          "type": "string",
+          "description": "Caminho do executavel Godot. Se omitido, auto-detecta."
+        },
+        "test_scene": {
+          "type": "string",
+          "description": "Cena para rodar headless (ex: 'res://scenes/main.tscn'). Se omitido, le run/main_scene do project.godot."
+        },
+        "gut_test_dir": {
+          "type": "string",
+          "description": "Diretorio de testes GUT (default: 'res://tests')."
+        },
+        "headless_frames": {
+          "type": "integer",
+          "description": "Quantos frames executar antes do screenshot (default: 30)."
+        },
+        "timeout_compile": {
+          "type": "integer",
+          "description": "Timeout em segundos para compile check (default: 30)."
+        },
+        "timeout_headless": {
+          "type": "integer",
+          "description": "Timeout em segundos para headless run (default: 60)."
+        },
+        "timeout_gut": {
+          "type": "integer",
+          "description": "Timeout em segundos para GUT (default: 120)."
+        },
+        "screenshot_dir": {
+          "type": "string",
+          "description": "Diretorio para screenshots. Default: <proj>/verification_screenshots/."
+        }
+      }
+    }
+  },
+  "create_achievement_system": {
+    "description": "Cria sistema de conquistas e Cloud Save para o projeto. Gera script GDScript com",
+    "inputSchema": {
+      "properties": {
+        "achievements": {
+          "type": "array",
+          "items": {
             "type": "object"
-          }
+          },
+          "description": "Lista de conquistas [{id, name, description, icon}]."
         },
-        "required": [
-          "op"
-        ],
-        "type": "object"
-      }
-    },
-    "self_test": {
-      "description": "Executa uma suite de testes internos do MCP: ping, ClassDB, godot_parser, jinja2, Pillow.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {},
-        "required": [],
-        "type": "object"
-      }
-    },
-    "set_project_brief": {
-      "description": "Define ou sobrescreve o project brief (genero, estilo de arte, tom, plataforma).",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "art_style": {
-            "description": "Estilo visual (scifi, fantasia, cartoon, pixel, minimalista).",
-            "type": "string"
-          },
-          "force": {
-            "description": "Obrigatorio True para sobrescrever brief existente.",
-            "type": "boolean"
-          },
-          "genre": {
-            "description": "Genero do jogo (17 validos: tower_defense, platformer, rpg_turn_based, etc.).",
-            "type": "string"
-          },
-          "target_platform": {
-            "description": "Plataforma alvo (pc, mobile, web).",
-            "type": "string"
-          },
-          "tone": {
-            "description": "Tom do jogo (estrategico, casual, sombrio, epico, humorado, frenetico).",
-            "type": "string"
-          }
+        "use_steam": {
+          "type": "boolean",
+          "description": "Usar Steamworks (requer GodotSteam). Default: false."
         },
-        "required": [],
-        "type": "object"
+        "apply_to_project": {
+          "type": "boolean",
+          "description": "Salvar scripts no projeto. Default: true."
+        }
       }
-    },
-    "setup_mcp_config": {
-      "description": "Gera arquivo de configuracao MCP para VS Code Copilot, Claude ou Cursor.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "target": {
-            "description": "Cliente alvo (default: vscode).",
-            "enum": [
-              "vscode",
-              "claude",
-              "cursor",
-              "all"
-            ],
-            "type": "string"
-          }
+    }
+  },
+  "cloud_save_configure": {
+    "description": "Configura sistema de Cloud Save (Steam Auto-Cloud ou local). Gera CloudSaveManag",
+    "inputSchema": {
+      "properties": {
+        "save_slots": {
+          "type": "integer",
+          "description": "Numero de slots de save. Default: 3."
         },
-        "required": [],
-        "type": "object"
+        "auto_save_interval_sec": {
+          "type": "integer",
+          "description": "Intervalo de auto-save em segundos. Default: 60."
+        },
+        "cloud_provider": {
+          "type": "string",
+          "enum": [
+            "steam",
+            "local"
+          ],
+          "description": "Provedor de cloud. Default: 'local'."
+        }
       }
-    },
-    "tool_catalog": {
-      "description": "Catalogo de tools por grupo. Ex: {'query':'scene','group':'core'}.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "group": {
+    }
+  },
+  "validate_achievement_config": {
+    "description": "Valida configuracao de conquistas: IDs duplicados, nomes vazios, icones de conqu",
+    "inputSchema": {
+      "properties": {
+        "achievements": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "Lista de conquistas a validar."
+        }
+      }
+    }
+  },
+  "mod_manifest_generate": {
+    "description": "Gera manifesto de mod (mod.json) para projetos Godot. Define nome, versao, depen",
+    "inputSchema": {
+      "properties": {
+        "mod_name": {
+          "type": "string",
+          "description": "Nome do mod."
+        },
+        "mod_version": {
+          "type": "string",
+          "description": "Versao semver (ex: '1.0.0')."
+        },
+        "mod_author": {
+          "type": "string",
+          "description": "Autor do mod."
+        },
+        "mod_description": {
+          "type": "string",
+          "description": "Descricao do mod."
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
             "type": "string"
           },
-          "limit": {
+          "description": "Mods requeridos."
+        },
+        "target_game_version": {
+          "type": "string",
+          "description": "Versao do jogo compativel."
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Arquivos do mod."
+        }
+      }
+    }
+  },
+  "validate_mod_compatibility": {
+    "description": "Valida compatibilidade entre mods e jogo base. Verifica versao, dependencias, co",
+    "inputSchema": {
+      "properties": {
+        "mod_manifest": {
+          "type": "object",
+          "description": "Manifesto do mod (dict)."
+        },
+        "game_version": {
+          "type": "string",
+          "description": "Versao atual do jogo."
+        },
+        "loaded_mods": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "Mods ja carregados."
+        }
+      }
+    }
+  },
+  "cutscene_create_timeline": {
+    "description": "Cria linha do tempo de cutscene com eventos sequenciais. Suporta shots de camera",
+    "inputSchema": {
+      "properties": {
+        "cutscene_name": {
+          "type": "string",
+          "description": "Nome da cutscene."
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "Lista de eventos [{type, time_sec, params}]."
+        },
+        "apply_to_project": {
+          "type": "boolean",
+          "description": "Salvar script no projeto. Default: false."
+        }
+      }
+    }
+  },
+  "cutscene_add_camera_shot": {
+    "description": "Adiciona um shot de camera a uma cutscene. Define alvo, transicao (cut, fade, di",
+    "inputSchema": {
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "Alvo da camera (node path ou nome)."
+        },
+        "transition": {
+          "type": "string",
+          "enum": [
+            "cut",
+            "fade",
+            "dissolve",
+            "zoom_in",
+            "zoom_out",
+            "pan_left",
+            "pan_right",
+            "pan_up",
+            "pan_down"
+          ],
+          "description": "Tipo de transicao."
+        },
+        "duration": {
+          "type": "number",
+          "description": "Duracao em segundos."
+        },
+        "time_sec": {
+          "type": "number",
+          "description": "Timestamp de inicio do shot."
+        }
+      }
+    }
+  },
+  "cutscene_add_dialogue_event": {
+    "description": "Adiciona evento de dialogo a uma cutscene. Define falante, texto e duracao da ex",
+    "inputSchema": {
+      "properties": {
+        "speaker": {
+          "type": "string",
+          "description": "Nome do falante."
+        },
+        "text": {
+          "type": "string",
+          "description": "Texto do dialogo."
+        },
+        "duration": {
+          "type": "number",
+          "description": "Duracao da exibicao em segundos."
+        },
+        "time_sec": {
+          "type": "number",
+          "description": "Timestamp de inicio na timeline."
+        }
+      }
+    }
+  },
+  "telemetry_track_event": {
+    "description": "Registra evento de telemetria COM opt-in explicito do jogador. Suporta 19 tipos ",
+    "inputSchema": {
+      "properties": {
+        "event_type": {
+          "type": "string",
+          "description": "Tipo do evento (ver doc para lista completa)."
+        },
+        "event_data": {
+          "type": "object",
+          "description": "Dados adicionais do evento."
+        },
+        "session_id": {
+          "type": "string",
+          "description": "ID da sessao atual."
+        },
+        "opt_in": {
+          "type": "boolean",
+          "description": "Deve ser True para registrar. Default: False."
+        }
+      }
+    }
+  },
+  "telemetry_get_funnel": {
+    "description": "Gera analise de funil (funnel analysis) dos eventos de telemetria. Mostra taxas ",
+    "inputSchema": {
+      "properties": {
+        "funnel_steps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Etapas do funil (eventos)."
+        },
+        "session_id": {
+          "type": "string",
+          "description": "Filtrar por sessao especifica."
+        }
+      }
+    }
+  },
+  "telemetry_session_summary": {
+    "description": "Resumo da sessao de jogo: tempo total, eventos, mortes, kills, itens. Use para a",
+    "inputSchema": {
+      "properties": {
+        "session_id": {
+          "type": "string",
+          "description": "ID da sessao."
+        }
+      }
+    }
+  },
+  "telemetry_heatmap": {
+    "description": "Gera mapa de calor (heatmap) de eventos de jogo. Mostra onde jogadores morrem, c",
+    "inputSchema": {
+      "properties": {
+        "event_type": {
+          "type": "string",
+          "description": "Tipo de evento para heatmap."
+        },
+        "level": {
+          "type": "string",
+          "description": "Nivel/fase para filtrar."
+        },
+        "resolution": {
+          "type": "integer",
+          "description": "Resolucao do grid de calor. Default: 32."
+        }
+      }
+    }
+  },
+  "adaptive_difficulty_adjust": {
+    "description": "Analisa desempenho do jogador e sugere ajustes de dificuldade. Usa metricas (mor",
+    "inputSchema": {
+      "properties": {
+        "player_metrics": {
+          "type": "object",
+          "description": "Metricas: {deaths, kills, time_per_level_sec, damage_taken, accuracy}."
+        },
+        "current_difficulty": {
+          "type": "string",
+          "enum": [
+            "easy",
+            "normal",
+            "hard"
+          ],
+          "description": "Dificuldade atual."
+        },
+        "target_win_rate": {
+          "type": "number",
+          "description": "Taxa de vitoria desejada (0.0-1.0). Default: 0.6."
+        }
+      }
+    }
+  },
+  "quest_generate": {
+    "description": "Gera quest procedural baseada em templates. Tipos: fetch, kill, boss, explore. I",
+    "inputSchema": {
+      "properties": {
+        "quest_type": {
+          "type": "string",
+          "enum": [
+            "fetch",
+            "kill",
+            "escort",
+            "collect",
+            "boss",
+            "explore"
+          ],
+          "description": "Tipo da quest."
+        },
+        "difficulty": {
+          "type": "string",
+          "enum": [
+            "easy",
+            "normal",
+            "hard"
+          ],
+          "description": "Dificuldade."
+        },
+        "level_range": {
+          "type": "array",
+          "items": {
             "type": "integer"
           },
-          "query": {
-            "type": "string"
-          }
+          "description": "Nivel recomendado [min, max]."
         },
-        "required": [],
-        "type": "object"
+        "npc_giver": {
+          "type": "string",
+          "description": "Nome do NPC que da a quest."
+        }
       }
-    },
-    "tool_groups": {
-      "description": "Gerencia grupos dinamicos de tools. Ex: {'action':'activate','group':'art'}.",
-      "inputSchema": {
-        "additionalProperties": false,
+    }
+  },
+  "remote_balance_config": {
+    "description": "Gerencia configuracao de balance remoto para ajustes pos-lancamento. Permite exp",
+    "inputSchema": {
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "export",
+            "template",
+            "validate"
+          ],
+          "description": "Acao: export, template ou validate."
+        },
+        "config": {
+          "type": "object",
+          "description": "Configuracao de balance (para validate)."
+        }
+      }
+    }
+  },
+  "dialogue_generate_npc_lines": {
+    "description": "Gera linhas de dialogo para NPCs baseado em tipo e contexto. Suporta 8 personali",
+    "inputSchema": {
+      "properties": {
+        "npc_type": {
+          "type": "string",
+          "description": "Personalidade: guarda, mercador, sabio, aldeao, vilao, companheiro, crianca, anciao."
+        },
+        "scenario": {
+          "type": "string",
+          "description": "Contexto: greeting, farewell, quest_give, quest_complete, combat_taunt, fear, rumor."
+        },
+        "count": {
+          "type": "integer",
+          "description": "Quantas linhas gerar (max 10). Default: 3."
+        },
+        "npc_name": {
+          "type": "string",
+          "description": "Nome do NPC para personalizar."
+        }
+      }
+    }
+  },
+  "dialogue_generate_personality": {
+    "description": "Gera perfil completo de personalidade para NPC. Define tracos, tom de fala, moti",
+    "inputSchema": {
+      "properties": {
+        "npc_name": {
+          "type": "string",
+          "description": "Nome do NPC."
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "guarda",
+            "mercador",
+            "mentor",
+            "vilao",
+            "aliado",
+            "neutro"
+          ],
+          "description": "Papel no jogo."
+        },
+        "context": {
+          "type": "string",
+          "description": "Breve descricao do contexto do NPC."
+        }
+      }
+    }
+  },
+  "accessibility_apply_colorblind_filter": {
+    "description": "Aplica filtro de daltonismo ao projeto (shader fullscreen). Suporta 4 tipos: pro",
+    "inputSchema": {
+      "properties": {
+        "cb_type": {
+          "type": "string",
+          "enum": [
+            "protanopia",
+            "deuteranopia",
+            "tritanopia",
+            "achromatopsia"
+          ],
+          "description": "Tipo de daltonismo."
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "simulate",
+            "correct"
+          ],
+          "description": "'simulate' ou 'correct'."
+        },
+        "apply_to_project": {
+          "type": "boolean",
+          "description": "Criar shader no projeto. Default: false."
+        }
+      }
+    }
+  },
+  "accessibility_add_subtitles": {
+    "description": "Adiciona sistema de legendas/closed captions ao projeto. Gera script de UI que e",
+    "inputSchema": {
+      "properties": {
+        "apply_to_project": {
+          "type": "boolean",
+          "description": "Criar script no projeto. Default: true."
+        },
+        "font_size": {
+          "type": "integer",
+          "description": "Tamanho da fonte. Default: 16."
+        },
+        "background_alpha": {
+          "type": "number",
+          "description": "Opacidade do fundo (0-1). Default: 0.7."
+        }
+      }
+    }
+  },
+  "accessibility_remap_controls": {
+    "description": "Configura sistema de remapeamento de controles. Permite jogador redefinir teclas",
+    "inputSchema": {
+      "properties": {
+        "apply_to_project": {
+          "type": "boolean",
+          "description": "Criar script no projeto. Default: true."
+        },
+        "input_actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Acoes remapeaveis. Default: move, jump, attack, interact."
+        }
+      }
+    }
+  },
+  "accessibility_audit_scene": {
+    "description": "Audita cena para problemas de acessibilidade. Verifica contraste de cores, taman",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "Caminho da cena a auditar."
+        }
+      }
+    }
+  },
+  "accessibility_certification_checklist": {
+    "description": "Checklist de certificacao de acessibilidade. Cobre requisitos Steam, console (TR",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "trailer_capture_clip": {
+    "description": "Captura clipe de gameplay para trailer. Suporta specs por plataforma: Steam (108",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "Cena a capturar."
+        },
+        "duration_sec": {
+          "type": "integer",
+          "description": "Duracao em segundos. Default: 30."
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "steam",
+            "itch",
+            "youtube"
+          ],
+          "description": "Plataforma alvo."
+        },
+        "action_sequence": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "Inputs automatizados."
+        }
+      }
+    }
+  },
+  "trailer_render_sequence": {
+    "description": "Define sequencia de cenas para renderizacao de trailer. Planeja storyboard: quai",
+    "inputSchema": {
+      "properties": {
+        "shots": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "Lista de cenas [{scene, duration_sec, description, inputs}]."
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "steam",
+            "itch",
+            "youtube"
+          ],
+          "description": "Plataforma alvo."
+        }
+      }
+    }
+  },
+  "capsule_generate_store_image": {
+    "description": "Gera imagem de capsula para loja (Steam). Suporta 6 tamanhos: header (920x430), ",
+    "inputSchema": {
+      "properties": {
+        "size": {
+          "type": "string",
+          "enum": [
+            "header",
+            "small",
+            "main",
+            "vertical",
+            "hero",
+            "logo"
+          ],
+          "description": "Tamanho da capsula Steam."
+        },
+        "title": {
+          "type": "string",
+          "description": "Titulo do jogo."
+        },
+        "style": {
+          "type": "string",
+          "description": "Estilo visual."
+        },
+        "background_color": {
+          "type": "string",
+          "description": "Cor de fundo em hex. Default: '#1a1a2e'."
+        }
+      }
+    }
+  },
+  "onboarding_create_tutorial_step": {
+    "description": "Cria passo de tutorial interativo com highlight e instrucao. Gera script GDScrip",
+    "inputSchema": {
+      "properties": {
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "Lista de passos [{target_node, instruction, required_action, highlight}]."
+        },
+        "tutorial_name": {
+          "type": "string",
+          "description": "Nome do tutorial. Default: 'tutorial'."
+        },
+        "apply_to_project": {
+          "type": "boolean",
+          "description": "Salvar script no projeto. Default: false."
+        }
+      }
+    }
+  },
+  "onboarding_create_guided_tour": {
+    "description": "Cria tour guiado pela UI do jogo. Sequencia de destaques que mostram cada elemen",
+    "inputSchema": {
+      "properties": {
+        "ui_elements": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Lista de node paths da UI."
+        },
+        "tour_name": {
+          "type": "string",
+          "description": "Nome do tour. Default: 'guided_tour'."
+        },
+        "apply_to_project": {
+          "type": "boolean",
+          "description": "Salvar script no projeto. Default: true."
+        }
+      }
+    }
+  },
+  "onboarding_check_first_experience": {
+    "description": "Verifica qualidade da primeira experiencia do jogador (FTUE). Avalia clareza do ",
+    "inputSchema": {
+      "properties": {}
+    }
+  },
+  "skeleton_get_bone_pose": {
+    "description": "Obtém a pose (transform) de um osso específico num Skeleton3D. Quando usar: para",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "skeleton_path": {
+          "type": "string",
+          "description": "skeleton_path (str)"
+        },
+        "bone_name": {
+          "type": "string",
+          "description": "bone_name (str)"
+        }
+      }
+    }
+  },
+  "skeleton_set_bone_pose": {
+    "description": "Define a pose (transform) de um osso num Skeleton3D. Quando usar: para posiciona",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "skeleton_path": {
+          "type": "string",
+          "description": "skeleton_path (str)"
+        },
+        "bone_name": {
+          "type": "string",
+          "description": "bone_name (str)"
+        },
+        "position": {
+          "type": "string",
+          "description": "position (list[float])"
+        },
+        "rotation": {
+          "type": "string",
+          "description": "rotation (list[float])"
+        },
+        "scale": {
+          "type": "string",
+          "description": "scale (list[float])"
+        }
+      }
+    }
+  },
+  "skeleton_list_bones": {
+    "description": "Lista todos os ossos de um Skeleton3D com índices, nomes e hierarquia. Quando us",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "skeleton_path": {
+          "type": "string",
+          "description": "skeleton_path (str)"
+        }
+      }
+    }
+  },
+  "skeleton_create_bone": {
+    "description": "Cria um novo osso num Skeleton3D existente. Quando usar: para adicionar ossos ex",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "skeleton_path": {
+          "type": "string",
+          "description": "skeleton_path (str)"
+        },
+        "bone_name": {
+          "type": "string",
+          "description": "bone_name (str)"
+        },
+        "parent_bone": {
+          "type": "string",
+          "description": "parent_bone (str|int)"
+        },
+        "position": {
+          "type": "string",
+          "description": "position (list[float])"
+        },
+        "rotation": {
+          "type": "string",
+          "description": "rotation (list[float])"
+        }
+      }
+    }
+  },
+  "skeleton_create_ik_chain": {
+    "description": "Cria/configura uma chain SkeletonIK3D vinculada a um osso. Quando usar: para adi",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "skeleton_path": {
+          "type": "string",
+          "description": "skeleton_path (str)"
+        },
+        "bone_name": {
+          "type": "string",
+          "description": "bone_name (str)"
+        },
+        "target_node_path": {
+          "type": "string",
+          "description": "target_node_path (str)"
+        },
+        "chain_length": {
+          "type": "string",
+          "description": "chain_length (int)"
+        },
+        "iterations": {
+          "type": "string",
+          "description": "iterations (int)"
+        }
+      }
+    }
+  },
+  "skeleton_get_info": {
+    "description": "Obtém informações completas de um Skeleton3D: bones, IK chains, estrutura. Quand",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "skeleton_path": {
+          "type": "string",
+          "description": "skeleton_path (str)"
+        }
+      }
+    }
+  },
+  "csg_create_node": {
+    "description": "Cria nó CSG (Constructive Solid Geometry) para prototipagem 3D: box, sphere, cyl",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "parent_node_path": {
+          "type": "string",
+          "description": "parent_node_path (str)"
+        },
+        "csg_type": {
+          "type": "string",
+          "description": "csg_type (str)"
+        },
+        "node_name": {
+          "type": "string",
+          "description": "node_name (str)"
+        },
+        "operation": {
+          "type": "string",
+          "description": "operation (str)"
+        },
+        "width": {
+          "type": "string",
+          "description": "width (float)"
+        },
+        "height": {
+          "type": "string",
+          "description": "height (float)"
+        },
+        "depth": {
+          "type": "string",
+          "description": "depth (float)"
+        },
+        "radius": {
+          "type": "string",
+          "description": "radius (float)"
+        },
+        "position": {
+          "type": "string",
+          "description": "position (list[float])"
+        }
+      }
+    }
+  },
+  "gi_create_node": {
+    "description": "Cria nó de Global Illumination (VoxelGI ou LightmapGI) para iluminação indireta ",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "gi_type": {
+          "type": "string",
+          "description": "gi_type (str)"
+        },
+        "parent_node_path": {
+          "type": "string",
+          "description": "parent_node_path (str)"
+        },
+        "node_name": {
+          "type": "string",
+          "description": "node_name (str)"
+        },
+        "subdiv": {
+          "type": "string",
+          "description": "subdiv (int)"
+        },
+        "extents": {
+          "type": "string",
+          "description": "extents (list[float])"
+        },
+        "bake_mode": {
+          "type": "string",
+          "description": "bake_mode (str)"
+        }
+      }
+    }
+  },
+  "scene_fx_create_node": {
+    "description": "Cria nó de efeito de cena: ReflectionProbe, Decal, FogVolume. Quando usar: para ",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "fx_type": {
+          "type": "string",
+          "description": "fx_type (str)"
+        },
+        "parent_node_path": {
+          "type": "string",
+          "description": "parent_node_path (str)"
+        },
+        "node_name": {
+          "type": "string",
+          "description": "node_name (str)"
+        },
         "properties": {
-          "action": {
-            "enum": [
-              "list",
-              "activate",
-              "deactivate"
-            ],
-            "type": "string"
-          },
-          "group": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "action"
-        ],
-        "type": "object"
+          "type": "string",
+          "description": "properties (dict)"
+        }
       }
-    },
-    "update_project_brief": {
-      "description": "Atualiza campos especificos do project brief sem sobrescrever os demais.",
-      "inputSchema": {
-        "additionalProperties": false,
+    }
+  },
+  "sky_create_procedural": {
+    "description": "Cria um céu procedural ou físico (Sky/PhysicalSky) numa cena 3D. Quando usar: pa",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "sky_type": {
+          "type": "string",
+          "description": "sky_type (str)"
+        },
+        "parent_node_path": {
+          "type": "string",
+          "description": "parent_node_path (str)"
+        },
+        "sun_color": {
+          "type": "string",
+          "description": "sun_color (str)"
+        },
+        "ground_color": {
+          "type": "string",
+          "description": "ground_color (str)"
+        },
+        "sky_energy": {
+          "type": "string",
+          "description": "sky_energy (float)"
+        }
+      }
+    }
+  },
+  "camera_configure_attributes": {
+    "description": "Configura atributos de câmera 3D: DOF, exposição, near/far, FOV. Quando usar: pa",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "camera_path": {
+          "type": "string",
+          "description": "camera_path (str)"
+        },
+        "dof_enabled": {
+          "type": "string",
+          "description": "dof_enabled (bool)"
+        },
+        "dof_distance": {
+          "type": "string",
+          "description": "dof_distance (float)"
+        },
+        "dof_blur": {
+          "type": "string",
+          "description": "dof_blur (float)"
+        },
+        "exposure_enabled": {
+          "type": "string",
+          "description": "exposure_enabled (bool)"
+        },
+        "exposure_value": {
+          "type": "string",
+          "description": "exposure_value (float)"
+        },
+        "auto_exposure": {
+          "type": "string",
+          "description": "auto_exposure (bool)"
+        },
+        "near": {
+          "type": "string",
+          "description": "near (float)"
+        },
+        "far": {
+          "type": "string",
+          "description": "far (float)"
+        },
+        "fov": {
+          "type": "string",
+          "description": "fov (float)"
+        }
+      }
+    }
+  },
+  "multimesh_create_instance": {
+    "description": "Cria um MultiMeshInstance3D para renderizar muitos objetos idênticos com perform",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "parent_node_path": {
+          "type": "string",
+          "description": "parent_node_path (str)"
+        },
+        "mesh_resource": {
+          "type": "string",
+          "description": "mesh_resource (str)"
+        },
+        "instance_count": {
+          "type": "string",
+          "description": "instance_count (int)"
+        },
+        "node_name": {
+          "type": "string",
+          "description": "node_name (str)"
+        }
+      }
+    }
+  },
+  "physics_create_joint": {
+    "description": "Cria um joint físico entre dois corpos: PinJoint2D, Spring, Hinge, Cone, Slider.",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "parent_node_path": {
+          "type": "string",
+          "description": "parent_node_path (str)"
+        },
+        "joint_type": {
+          "type": "string",
+          "description": "joint_type (str)"
+        },
+        "joint_name": {
+          "type": "string",
+          "description": "joint_name (str)"
+        },
+        "node_a": {
+          "type": "string",
+          "description": "node_a (str)"
+        },
+        "node_b": {
+          "type": "string",
+          "description": "node_b (str)"
+        },
+        "stiffness": {
+          "type": "string",
+          "description": "stiffness (float)"
+        },
+        "damping": {
+          "type": "string",
+          "description": "damping (float)"
+        },
+        "bias": {
+          "type": "string",
+          "description": "bias (float)"
+        },
+        "disable_collision": {
+          "type": "string",
+          "description": "disable_collision (bool)"
+        }
+      }
+    }
+  },
+  "physics_configure_body": {
+    "description": "Configura propriedades físicas de um corpo: massa, atrito, bounce, damping, free",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "node_path": {
+          "type": "string",
+          "description": "node_path (str)"
+        },
+        "mass": {
+          "type": "string",
+          "description": "mass (float)"
+        },
+        "friction": {
+          "type": "string",
+          "description": "friction (float)"
+        },
+        "bounce": {
+          "type": "string",
+          "description": "bounce (float)"
+        },
+        "gravity_scale": {
+          "type": "string",
+          "description": "gravity_scale (float)"
+        },
+        "linear_damp": {
+          "type": "string",
+          "description": "linear_damp (float)"
+        },
+        "angular_damp": {
+          "type": "string",
+          "description": "angular_damp (float)"
+        },
+        "freeze": {
+          "type": "string",
+          "description": "freeze (bool)"
+        },
+        "freeze_mode": {
+          "type": "string",
+          "description": "freeze_mode (str)"
+        }
+      }
+    }
+  },
+  "physics_query_area_overlap": {
+    "description": "Prepara código para verificar corpos/áreas sobrepostos a uma Area2D/Area3D em ru",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "area_path": {
+          "type": "string",
+          "description": "area_path (str)"
+        },
+        "query_type": {
+          "type": "string",
+          "description": "query_type (str)"
+        }
+      }
+    }
+  },
+  "physics_raycast_query": {
+    "description": "Prepara código para executar raycast em runtime via nó RayCast2D/3D. Quando usar",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "raycast_path": {
+          "type": "string",
+          "description": "raycast_path (str)"
+        }
+      }
+    }
+  },
+  "ui_create_widget": {
+    "description": "Cria widget de UI granular: Tree, ItemList, OptionButton, TabContainer, PopupMen",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "parent_node_path": {
+          "type": "string",
+          "description": "parent_node_path (str)"
+        },
+        "widget_type": {
+          "type": "string",
+          "description": "widget_type (str)"
+        },
+        "widget_name": {
+          "type": "string",
+          "description": "widget_name (str)"
+        },
         "properties": {
-          "art_style": {
-            "description": "Estilo visual.",
-            "type": "string"
-          },
-          "genre": {
-            "description": "Genero do jogo (validado contra GAME_PATTERNS).",
-            "type": "string"
-          },
-          "target_platform": {
-            "description": "Plataforma alvo (pc, mobile, web).",
-            "type": "string"
-          },
-          "tone": {
-            "description": "Tom do jogo.",
-            "type": "string"
-          }
+          "type": "string",
+          "description": "properties (dict)"
+        }
+      }
+    }
+  },
+  "ui_create_tab_with_content": {
+    "description": "Adiciona uma tab com conteúdo a um TabContainer existente. Quando usar: para cri",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
         },
-        "required": [],
-        "type": "object"
-      }
-    },
-    "validate_godot_version": {
-      "description": "Verifica se a versão do Godot instalada é 4.7.x.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {},
-        "required": [],
-        "type": "object"
-      }
-    },
-    "validate_mcp_environment": {
-      "description": "Verifica se o ambiente MCP esta pronto: Python, dependencias, server.py.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {},
-        "required": [],
-        "type": "object"
-      }
-    },
-    "validate_mcp_registry": {
-      "description": "",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {},
-        "required": [],
-        "type": "object"
-      }
-    },
-    "validate_project_refs": {
-      "description": "",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "full_report": {
-            "description": "Relatorio completo sem truncar (default: false).",
-            "type": "boolean"
-          },
-          "project_path": {
-            "description": "Caminho do projeto (opcional).",
-            "type": "string"
-          }
+        "tab_container_path": {
+          "type": "string",
+          "description": "tab_container_path (str)"
         },
-        "required": [],
-        "type": "object"
-      }
-    },
-    "verify_proof": {
-      "description": "",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "max_age_minutes": {
-            "description": "Prova mais velha que isso é obsoleta. Default: 60.",
-            "type": "integer"
-          },
-          "project_path": {
-            "description": "Caminho do repositório. Default: raiz do MCP.",
-            "type": "string"
-          },
-          "task_id": {
-            "description": "Se passado, verifica a prova mais recente desse task_id.",
-            "type": "string"
-          }
+        "tab_title": {
+          "type": "string",
+          "description": "tab_title (str)"
         },
-        "required": [],
-        "type": "object"
-      }
-    },
-    "write_file": {
-      "description": "Cria ou modifica um arquivo no projeto.",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "content": {
-            "description": "Conteúdo a escrever.",
-            "type": "string"
-          },
-          "mode": {
-            "description": "Modo: create (só se não existir), overwrite (substitui), append (adiciona).",
-            "enum": [
-              "create",
-              "overwrite",
-              "append"
-            ],
-            "type": "string"
-          },
-          "path": {
-            "description": "Caminho relativo ao projeto.",
-            "type": "string"
-          }
+        "content_type": {
+          "type": "string",
+          "description": "content_type (str)"
         },
-        "required": [
-          "path",
-          "content"
-        ],
-        "type": "object"
+        "tab_name": {
+          "type": "string",
+          "description": "tab_name (str)"
+        }
+      }
+    }
+  },
+  "ui_configure_focus_nav": {
+    "description": "Configura navegação por foco entre widgets (gamepad/teclado). Quando usar: para ",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "node_path": {
+          "type": "string",
+          "description": "node_path (str)"
+        },
+        "focus_neighbor_top": {
+          "type": "string",
+          "description": "focus_neighbor_top (str)"
+        },
+        "focus_neighbor_bottom": {
+          "type": "string",
+          "description": "focus_neighbor_bottom (str)"
+        },
+        "focus_neighbor_left": {
+          "type": "string",
+          "description": "focus_neighbor_left (str)"
+        },
+        "focus_neighbor_right": {
+          "type": "string",
+          "description": "focus_neighbor_right (str)"
+        },
+        "focus_neighbor_next": {
+          "type": "string",
+          "description": "focus_neighbor_next (str)"
+        },
+        "focus_neighbor_prev": {
+          "type": "string",
+          "description": "focus_neighbor_prev (str)"
+        },
+        "focus_mode": {
+          "type": "string",
+          "description": "focus_mode (str)"
+        }
+      }
+    }
+  },
+  "ui_set_tooltip": {
+    "description": "Define o texto de tooltip de um nó Control. Quando usar: para adicionar dicas de",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "node_path": {
+          "type": "string",
+          "description": "node_path (str)"
+        },
+        "tooltip_text": {
+          "type": "string",
+          "description": "tooltip_text (str)"
+        }
+      }
+    }
+  },
+  "ui_set_anchor_preset": {
+    "description": "Define anchor preset de um nó Control para layout responsivo. Quando usar: para ",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "node_path": {
+          "type": "string",
+          "description": "node_path (str)"
+        },
+        "preset": {
+          "type": "string",
+          "description": "preset (str)"
+        }
+      }
+    }
+  },
+  "network_setup_multiplayer": {
+    "description": "Configura multiplayer peer (ENet ou WebSocket) gerando script de setup. Quando u",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "mode": {
+          "type": "string",
+          "description": "mode (str)"
+        },
+        "port": {
+          "type": "string",
+          "description": "port (int)"
+        },
+        "max_players": {
+          "type": "string",
+          "description": "max_players (int)"
+        },
+        "server_address": {
+          "type": "string",
+          "description": "server_address (str)"
+        }
+      }
+    }
+  },
+  "network_create_rpc": {
+    "description": "Adiciona um método RPC (@rpc) a um script GDScript. Quando usar: para criar funç",
+    "inputSchema": {
+      "properties": {
+        "script_path": {
+          "type": "string",
+          "description": "script_path (str)"
+        },
+        "method_name": {
+          "type": "string",
+          "description": "method_name (str)"
+        },
+        "params": {
+          "type": "string",
+          "description": "params (list[str])"
+        },
+        "rpc_mode": {
+          "type": "string",
+          "description": "rpc_mode (str)"
+        },
+        "call_local": {
+          "type": "string",
+          "description": "call_local (bool)"
+        },
+        "method_body": {
+          "type": "string",
+          "description": "method_body (str)"
+        }
+      }
+    }
+  },
+  "network_create_websocket": {
+    "description": "Adiciona código de WebSocket client a um script GDScript. Quando usar: para comu",
+    "inputSchema": {
+      "properties": {
+        "script_path": {
+          "type": "string",
+          "description": "script_path (str)"
+        },
+        "url": {
+          "type": "string",
+          "description": "url (str)"
+        },
+        "protocols": {
+          "type": "string",
+          "description": "protocols (list[str])"
+        }
+      }
+    }
+  },
+  "network_configure_dedicated_server": {
+    "description": "Configura parâmetros de servidor dedicado para exportação. Quando usar: para pre",
+    "inputSchema": {
+      "properties": {
+        "export_preset_name": {
+          "type": "string",
+          "description": "export_preset_name (str)"
+        },
+        "port": {
+          "type": "string",
+          "description": "port (int)"
+        },
+        "enable_upnp": {
+          "type": "string",
+          "description": "enable_upnp (bool)"
+        }
+      }
+    }
+  },
+  "network_create_lobby": {
+    "description": "Cria sistema de lobby básico para multiplayer: salas, join/ready, transição. Qua",
+    "inputSchema": {
+      "properties": {
+        "scene_path": {
+          "type": "string",
+          "description": "scene_path (str)"
+        },
+        "max_players": {
+          "type": "string",
+          "description": "max_players (int)"
+        },
+        "lobby_name": {
+          "type": "string",
+          "description": "lobby_name (str)"
+        }
+      }
+    }
+  },
+  "runtime_connect_signal": {
+    "description": "Gera código GDScript para conectar sinais em runtime. Quando usar: para wiring d",
+    "inputSchema": {
+      "properties": {
+        "source_node_path": {
+          "type": "string",
+          "description": "source_node_path (str)"
+        },
+        "signal_name": {
+          "type": "string",
+          "description": "signal_name (str)"
+        },
+        "target_node_path": {
+          "type": "string",
+          "description": "target_node_path (str)"
+        },
+        "method_name": {
+          "type": "string",
+          "description": "method_name (str)"
+        },
+        "flags": {
+          "type": "string",
+          "description": "flags (int)"
+        }
+      }
+    }
+  },
+  "runtime_disconnect_signal": {
+    "description": "Gera código GDScript para desconectar sinais em runtime. Quando usar: para limpa",
+    "inputSchema": {
+      "properties": {
+        "source_node_path": {
+          "type": "string",
+          "description": "source_node_path (str)"
+        },
+        "signal_name": {
+          "type": "string",
+          "description": "signal_name (str)"
+        },
+        "target_node_path": {
+          "type": "string",
+          "description": "target_node_path (str)"
+        },
+        "method_name": {
+          "type": "string",
+          "description": "method_name (str)"
+        }
+      }
+    }
+  },
+  "runtime_emit_signal": {
+    "description": "Gera código GDScript para emitir sinal em runtime. Quando usar: para disparar ev",
+    "inputSchema": {
+      "properties": {
+        "node_path": {
+          "type": "string",
+          "description": "node_path (str)"
+        },
+        "signal_name": {
+          "type": "string",
+          "description": "signal_name (str)"
+        },
+        "args": {
+          "type": "string",
+          "description": "args (list)"
+        }
+      }
+    }
+  },
+  "runtime_list_signals": {
+    "description": "Lista todos os sinais definidos e emitidos num script GDScript. Quando usar: par",
+    "inputSchema": {
+      "properties": {
+        "script_path": {
+          "type": "string",
+          "description": "script_path (str)"
+        }
+      }
+    }
+  },
+  "runtime_watch_signal": {
+    "description": "Gera código para monitorar (watch) um sinal durante runtime com contagem e duraç",
+    "inputSchema": {
+      "properties": {
+        "signal_name": {
+          "type": "string",
+          "description": "signal_name (str)"
+        },
+        "node_path": {
+          "type": "string",
+          "description": "node_path (str)"
+        },
+        "duration": {
+          "type": "string",
+          "description": "duration (float)"
+        }
+      }
+    }
+  },
+  "render_get_settings": {
+    "description": "Obtém configurações atuais de rendering do project.godot. Quando usar: para audi",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "project_path (str)"
+        }
+      }
+    }
+  },
+  "render_set_antialiasing": {
+    "description": "Configura antialiasing: MSAA (2x/4x/8x), FXAA, TAA. Quando usar: para melhorar q",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "project_path (str)"
+        },
+        "msaa": {
+          "type": "string",
+          "description": "msaa (str)"
+        },
+        "fxaa": {
+          "type": "string",
+          "description": "fxaa (bool)"
+        },
+        "taa": {
+          "type": "string",
+          "description": "taa (bool)"
+        },
+        "screen_space_aa": {
+          "type": "string",
+          "description": "screen_space_aa (str)"
+        }
+      }
+    }
+  },
+  "render_set_scaling": {
+    "description": "Configura modo de scaling/resolução: modo, escala, stretch. Quando usar: para co",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "project_path (str)"
+        },
+        "mode": {
+          "type": "string",
+          "description": "mode (str)"
+        },
+        "scale": {
+          "type": "string",
+          "description": "scale (float)"
+        },
+        "stretch_mode": {
+          "type": "string",
+          "description": "stretch_mode (str)"
+        },
+        "stretch_aspect": {
+          "type": "string",
+          "description": "stretch_aspect (str)"
+        }
+      }
+    }
+  },
+  "render_set_quality": {
+    "description": "Configura qualidade de rendering por preset (low/balanced/high/ultra) ou manual.",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "project_path (str)"
+        },
+        "preset": {
+          "type": "string",
+          "description": "preset (str)"
+        },
+        "shadows": {
+          "type": "string",
+          "description": "shadows (str)"
+        },
+        "gi": {
+          "type": "string",
+          "description": "gi (str)"
+        },
+        "reflections": {
+          "type": "string",
+          "description": "reflections (str)"
+        },
+        "particles": {
+          "type": "string",
+          "description": "particles (str)"
+        }
+      }
+    }
+  },
+  "csharp_scaffold_project": {
+    "description": "Cria/scaffolda um projeto C# Godot: .csproj, .sln, script exemplo. Quando usar: ",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "project_path (str)"
+        },
+        "dotnet_version": {
+          "type": "string",
+          "description": "dotnet_version (str)"
+        },
+        "create_solution": {
+          "type": "string",
+          "description": "create_solution (bool)"
+        }
+      }
+    }
+  },
+  "csharp_generate_script": {
+    "description": "Gera script C# a partir de templates: basic, player, enemy, pickup, ui. Quando u",
+    "inputSchema": {
+      "properties": {
+        "script_path": {
+          "type": "string",
+          "description": "script_path (str)"
+        },
+        "class_name": {
+          "type": "string",
+          "description": "class_name (str)"
+        },
+        "parent_class": {
+          "type": "string",
+          "description": "parent_class (str)"
+        },
+        "namespace": {
+          "type": "string",
+          "description": "namespace (str)"
+        },
+        "template": {
+          "type": "string",
+          "description": "template (str)"
+        }
+      }
+    }
+  },
+  "csharp_build_project": {
+    "description": "Compila o projeto C# do Godot via dotnet build. Quando usar: para verificar erro",
+    "inputSchema": {
+      "properties": {
+        "project_path": {
+          "type": "string",
+          "description": "project_path (str)"
+        },
+        "configuration": {
+          "type": "string",
+          "description": "configuration (str)"
+        }
+      }
+    }
+  },
+  "quickstart_manage": {
+    "description": "⚡ QUICK START: frase → jogo jogável em minutos. Recebe uma frase em linguagem na",
+    "inputSchema": {
+      "properties": {
+        "op": {
+          "type": "string",
+          "description": "Operação: 'run' para criar, 'remix' para clonar seed, 'showcase' para listar gêneros disponíveis.",
+          "enum": [
+            "run",
+            "remix",
+            "showcase"
+          ]
+        },
+        "phrase": {
+          "type": "string",
+          "description": "Frase descrevendo o jogo (para op='run'). Ex: 'jogo de plataforma com herói'."
+        },
+        "project_name": {
+          "type": "string",
+          "description": "Nome do projeto (opcional, gerado da frase/seed se vazio)."
+        },
+        "seed": {
+          "type": "string",
+          "description": "Nome do seed para clone (para op='remix'). Ex: 'breakout'."
+        }
       }
     }
   }

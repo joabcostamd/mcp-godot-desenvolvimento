@@ -1,4 +1,12 @@
 {
+  "fatia_1.P": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "5f24b27",
+    "resultado": "Telemetria opt-in do MCP. tools/mcp_telemetry_ops.py (557 linhas): rollup mcp_telemetry_manage(op=status|enable|disable|export|reset). Hook track_mcp_event em call_tool (fail-open). Consentimento explicito DESLIGADO por padrao (.mcp_telemetry_consent.json). Eventos em JSONL (.mcp_telemetry_events.jsonl) append-only + summary agregado. Zero envio externo, zero PII, zero dependencias (stdlib only). Hook de phase_transition integrado no advance_phase. 277 tools (+1). C1 PASS (0 breaking), C3 PASS, C5 pre-existente. Pesquisa externa em docs/PESQUISA_EXTERNA.md secao 6."
+  },
   "fatia_1.O": {
     "status": "concluida",
     "data": "2026-07-20",

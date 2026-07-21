@@ -14,6 +14,7 @@
 | 2026-07-20 | MCP Spec, Godot Plugins, GDScript Style | 1.E (Dock v1) | Protocolo, plugins, style guide |
 | 2026-07-20 | Vitrine de gêneros, MCP Prompts/Resources, Competidores MCP+Godot | 1.L (Vitrine de gêneros) | Game patterns, UX de showcase, landscape competitivo |
 | 2026-07-20 | VS Code Prompts, Agent Skills, Onboarding guiado | 1.M (Skills exportáveis) | .prompt.md vs SKILL.md, MCP prompts spec, UX de onboarding |
+| 2026-07-21 | Telemetria opt-in, MCP Logging, VS Code Telemetry, Glean SDK | 1.P (Telemetria opt-in) | MCP spec (sem telemetria nativa), VS Code padrão ouro, Glean privacy-first, JSONL stdlib |
 
 ---
 
@@ -405,3 +406,169 @@ O projeto está **bem alinhado** com as melhores práticas das fontes consultada
 - ⚠️ Oportunidade: MCP `progress` para operações longas.
 
 **Nenhuma regressão, incompatibilidade ou mudança arquitetural necessária.**
+
+---
+
+## 6. Telemetria Opt-in de Ferramenta de Desenvolvimento (Pesquisa 2026-07-21 — Fatia 1.P)
+
+### 6.1 Fontes consultadas
+
+| Fonte | URL | O que foi consultado |
+|---|---|---|
+| MCP Specification 2025-06-18 | modelcontextprotocol.io | Logging capability, primitivas de cliente, segurança e consentimento |
+| MCP Python SDK (v1.x/v2) | github.com/modelcontextprotocol/python-sdk | API, hooks, padrões de servidor |
+| VS Code Telemetry Guide | code.visualstudio.com/api | `isTelemetryEnabled`, `telemetry.json`, custom telemetry |
+| Mozilla Glean SDK | mozilla.github.io/glean | Privacy-first telemetry, Python SDK, métricas declarativas |
+| Python `logging` module | docs.python.org/3/library/logging | API padrão, handlers, thread safety |
+| `structlog` (Hynek Schlawack) | pypi.org/project/structlog | Structured logging para Python |
+| MCP Reference Servers | github.com/modelcontextprotocol/servers | Zero servidores de referência com telemetria |
+| Python `json` module | docs.python.org/3/library/json | JSON Lines pattern (`--json-lines`) |
+
+### 6.2 Estado da arte
+
+#### 6.2.1 MCP Protocol — NÃO tem telemetria nativa
+
+O protocolo MCP (2025-06-18) **não define primitiva de telemetria**. O que existe:
+
+- **Logging capability:** Servidores podem enviar mensagens de log ao cliente via `logging/setLevel` e `notifications/message`. Isso é log operacional (debug, info, warning), não telemetria de uso.
+- **Security principles:** Consentimento explícito, data privacy, tool safety — princípios que se aplicam perfeitamente à telemetria.
+- **V2 SDK (2026-07-28):** Em beta. Nosso projeto usa v1.x (`mcp>=1.27,<2`). Nenhuma novidade de telemetria na v2.
+
+**Conclusão:** Não há padrão MCP para telemetria. Somos pioneiros nisso. Isso é uma oportunidade (definimos o padrão) e um risco (sem referência para seguir).
+
+#### 6.2.2 VS Code Telemetry — padrão ouro de DX tooling
+
+O guia oficial de telemetria do VS Code define 2 abordagens aprovadas:
+
+**Abordagem A — Módulo oficial:**
+- `@vscode/extension-telemetry` (npm, Azure Monitor/Application Insights)
+- Não aplicável a nós (servidor Python, não extensão TypeScript)
+
+**Abordagem B — Solução customizada:**
+- Respeitar `isTelemetryEnabled` e `onDidChangeTelemetryEnabled`
+- Tag `telemetry` e `usesOnlineServices` em settings customizadas
+- Arquivo `telemetry.json` na raiz (transparência: lista tudo que é coletado)
+
+**Regras universais (aplicáveis a nós):**
+
+| ✅ Do | ❌ Don't |
+|---|---|
+| Consentimento explícito do usuário | Telemetria ligada por padrão |
+| Coletar o mínimo possível | Coletar PII (Personally Identifiable Information) |
+| Transparência total (`telemetry.json`) | Coletar mais do que o necessário |
+| Respeitar toggle global | Ignorar `isTelemetryEnabled` |
+
+#### 6.2.3 Mozilla Glean — privacy-first, mas pesado
+
+Glean é o SDK de telemetria do Firefox. Princípios de design:
+
+- **Métricas declarativas em YAML** (`metrics.yaml`) — define o que é coletado ANTES de codificar
+- **Built-in privacy guarantees** — dados nunca saem sem revisão
+- **Python SDK** disponível (`glean_sdk` no PyPI), mas requer Rust/Cargo para compilar em plataformas não-glibc
+- **Pings:** Upload em processo separado, atexit handler
+
+**Por que NÃO usar:**
+1. Dependência pesada (Rust + Cargo) — viola princípio de zero dependências externas
+2. Overkill para telemetria local sem envio a servidor
+3. Glean é desenhado para telemetria que sai da máquina (upload a servidor). Nosso caso é o oposto: dados ficam 100% locais.
+
+**O que APRENDER do Glean:**
+- Separar definição do que é coletado (schema) do código que coleta
+- Toda métrica tem documentação obrigatória
+- Privacy by design: cada métrica passa por review de privacidade
+
+#### 6.2.4 Python `logging` + `json` — simplicidade máxima
+
+A abordagem mais simples e robusta para telemetria local:
+
+- **`logging` module:** stdlib, thread-safe, hierárquico, handlers plugáveis
+- **JSON Lines (JSONL):** `python -m json --json-lines`, append-only, O(1) por evento, cada linha é um JSON válido
+- **`json` module:** stdlib, `json.dumps()` com `ensure_ascii=False`, `separators=(',', ':')` para compacto
+
+**Vantagens:**
+- Zero dependências externas
+- Thread-safe nativamente
+- JSONL é parseável linha a linha (não precisa carregar arquivo inteiro)
+- Append-only = sem corrupção de dados
+- Fácil de exportar/analisar com qualquer ferramenta (jq, pandas, etc.)
+
+#### 6.2.5 `structlog` — structured logging profissional
+
+Biblioteca madura (2013-presente, 4.8k estrelas) para logging estruturado em Python:
+
+- Renderização flexível: JSON, logfmt, console colorido
+- Integração com `logging` stdlib
+- Processors pipeline (filtros, transformações)
+- Bound loggers (contexto imutável por logger)
+
+**Por que NÃO usar:**
+- Dependência externa adicional (mesmo que leve)
+- Complexidade desnecessária para nosso caso (JSONL com `json.dumps` já resolve)
+- Não queremos logging — queremos eventos discretos de telemetria
+
+### 6.3 Decisão de arquitetura
+
+**Abordagem escolhida: Zero dependências — `json` stdlib + arquivo JSONL + hook em `call_tool()`**
+
+| Dimensão | Decisão | Justificativa |
+|---|---|---|
+| Formato | JSON Lines (`.jsonl`) | Append-only, parseável linha a linha, stdlib |
+| Armazenamento | Arquivo local no projeto (`.mcp_telemetry_events.jsonl`) | Zero envio externo, transparência total |
+| Consentimento | Arquivo `.mcp_telemetry_consent.json` (por projeto) | Explícito, desligado por padrão |
+| Interface | Rollup `mcp_telemetry_manage(op=...)` | Padrão do projeto (`budget_manage`) |
+| Integração | Hook fail-open em `call_tool()` | Padrão do projeto (`track_tool_cost`) |
+| Dependências | **Zero** — só stdlib (`json`, `pathlib`, `time`, `threading`) | Consistente com `budget_ops.py` |
+| Schema | Constantes no código (`_TELEMETRY_EVENT_TYPES`) | Sem YAML externo, sem parser adicional |
+
+### 6.4 O que coletamos (schema)
+
+| Campo | Tipo | Descrição | PII? |
+|---|---|---|---|
+| `event_type` | string | `tool_call`, `session_start`, `phase_transition`, `error` | Não |
+| `timestamp` | ISO 8601 | UTC | Não |
+| `session_id` | UUID | Gerado no início da sessão MCP | Não |
+| `tool_name` | string | Nome da tool (ex: `scene_manage`) | Não |
+| `phase` | string | Fase atual do projeto (ex: `PROTOTIPO`) | Não |
+| `duration_ms` | int | Tempo de execução da tool | Não |
+| `is_error` | bool | Se a tool retornou erro | Não |
+| `error_code` | int | Código de erro (se aplicável) | Não |
+| `mcp_version` | string | Versão do MCP (do `server.py`) | Não |
+
+**NUNCA coletamos:** argumentos das tools, nomes de projetos, paths, conteúdo de arquivos.
+
+### 6.5 Privacidade e conformidade
+
+- **GDPR:** Dados 100% locais, zero PII, consentimento explícito → **isento** de obrigações GDPR (não há processamento de dados pessoais, não há transferência).
+- **LGPD (Brasil):** Mesma lógica. Dados anônimos e locais = fora do escopo.
+- **COPPA:** Não aplicável (ferramenta de desenvolvimento, não produto infantil).
+
+### 6.6 Anti-padrões e armadilhas
+
+| Anti-padrão | Risco | Prevenção |
+|---|---|---|
+| Telemetria ligada por padrão | Perda de confiança, violação de privacidade | Consent file com `consent: false` por default |
+| Coletar argumentos de tools | Vazamento de código do usuário | Só coletamos metadados (nome, fase, duração, erro) |
+| Envio automático a servidor | Violação de privacidade, problema legal | Zero código de rede no módulo |
+| Hook síncrono pesado | Degradação de performance do MCP | JSONL append é O(1); hook é fail-open |
+| Arquivo único sem lock | Corrupção em chamadas concorrentes | `threading.Lock` (igual `budget_ops.py`) |
+| Confundir com `telemetry_ops.py` (5.4) | Duplicação de funcionalidade | 5.4 = telemetria DE JOGO. 1.P = telemetria DO MCP. |
+
+### 6.7 Oportunidades futuras (pós-1.P)
+
+| Oportunidade | Custo | Benefício |
+|---|---|---|
+| Dashboard local (HTML gerado a partir do JSONL) | Médio | Visualizar uso sem ferramenta externa |
+| `telemetry.json` (transparência) | Baixo | Documentar schema publicamente |
+| Integração com `isTelemetryEnabled` do VS Code | Baixo | Respeitar toggle global do editor |
+| Análise de funil (`op=funnel`) | Baixo | "Quantos usuários chegam à fase PROTOTIPO?" |
+| Heatmap de erros | Baixo | "Qual tool mais falha?" |
+
+### 6.8 Conclusão da pesquisa
+
+A abordagem de **zero dependências com JSONL stdlib** é a correta para este projeto porque:
+
+1. **Alinhada com a arquitetura existente:** `budget_ops.py` já usa o mesmo padrão (hook em call_tool, estado em arquivo local, threading.Lock, fail-open).
+2. **Privacidade por design:** Dados nunca saem da máquina. Consentimento explícito. Zero PII.
+3. **Simplicidade máxima:** ~200 linhas de código, zero novas dependências no `requirements.txt`.
+4. **Extensível:** JSONL é o formato mais portável que existe. Qualquer ferramenta consegue ler.
+5. **Segue padrões da indústria:** Alinhado com as diretrizes do VS Code (consentimento, minimalidade, transparência) e com os princípios de privacidade do Glean (schema declarado, revisão de privacidade).

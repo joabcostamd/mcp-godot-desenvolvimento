@@ -1242,6 +1242,7 @@ from tools.achievement_ops import create_achievement_system, cloud_save_configur
 from tools.mod_ops import mod_manifest_generate, validate_mod_compatibility
 from tools.cutscene_ops import cutscene_create_timeline, cutscene_add_camera_shot, cutscene_add_dialogue_event
 from tools.telemetry_ops import telemetry_track_event, telemetry_get_funnel, telemetry_session_summary, telemetry_heatmap
+from tools.mcp_telemetry_ops import mcp_telemetry_manage, track_mcp_event, track_phase_transition
 from tools.adaptive_ops import adaptive_difficulty_adjust, quest_generate, remote_balance_config
 from tools.dialogue_ops import dialogue_generate_npc_lines, dialogue_generate_personality
 from tools.accessibility_ops import accessibility_apply_colorblind_filter, accessibility_add_subtitles, accessibility_remap_controls, accessibility_audit_scene, accessibility_certification_checklist
@@ -2051,6 +2052,7 @@ def _build_handlers() -> dict:
         "ping": _handle_ping,
         "validate_godot_version": _handle_validate_godot_version,
         "budget_manage": _handle_budget_manage,
+        "mcp_telemetry_manage": _handle_mcp_telemetry_manage,
         "read_file": _handle_read_file,
         "write_file": _handle_write_file,
         # Fase 2: ClassDB (com cache Onda 5)
@@ -2629,6 +2631,7 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
     if handler:
         try:
             # P1-1: Despachar handlers para thread pool (Opcao B: _smart_call)
+            _t0 = time.time()
             loop = asyncio.get_running_loop()
             result = await loop.run_in_executor(None, _dispatch_with_context)
             # Garante status sempre presente (outputSchema exige)
@@ -2650,6 +2653,14 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
                     await session.send_tool_list_changed()
                 except Exception as e:
                     logger.warning("send_tool_list_changed falhou: %s", e)
+                # ── Fatia 1.P: Rastrear transicao de fase ────────
+                try:
+                    old_phase = arguments.get("current_phase", "") if arguments else ""
+                    new_phase = result.get("new_phase", "") if isinstance(result, dict) else ""
+                    if old_phase and new_phase:
+                        track_phase_transition(old_phase, new_phase)
+                except Exception:
+                    pass
             # ── Governador: registrar resultado após execução ──────
             gov.record_after(
                 name, arguments or {},
@@ -2686,6 +2697,14 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
                     )]
             except Exception:
                 pass  # fail-open: tracking nao pode bloquear
+
+            # ── Fatia 1.P: Telemetria opt-in do MCP ──────────────
+            try:
+                _elapsed_ms = int((time.time() - _t0) * 1000)
+                current_phase = gov.state.current_phase if gov else "unknown"
+                track_mcp_event(name, arguments, result, _elapsed_ms, current_phase)
+            except Exception:
+                pass  # fail-open: telemetria nunca bloqueia
 
             # A6.4: isError + resultado (structuredContent requer SDK update)
             return [TextContent(
@@ -2904,6 +2923,13 @@ def _handle_budget_manage(args: dict) -> dict:
         op=args.get("op", "status"),
         limit_brl=args.get("limit_brl", 0),
         force=args.get("force", False),
+    )
+
+
+def _handle_mcp_telemetry_manage(args: dict) -> dict:
+    """Handler da tool mcp_telemetry_manage (Fatia 1.P)."""
+    return mcp_telemetry_manage(
+        op=args.get("op", "status"),
     )
 
 
