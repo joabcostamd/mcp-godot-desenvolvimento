@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 133,
+    "implementados": 136,
     "lista": [
       {"id": 44, "nome": "input_manager", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + rebinding runtime. InputMap/device detection/save+load ConfigFile. 2 sinais, 13 testes."},
       {"id": 130, "nome": "match3_grid", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + nucleo match-3. Grade/gemas/deteccao/gravidade/refill/cascata. 3 sinais, 19 testes."},
