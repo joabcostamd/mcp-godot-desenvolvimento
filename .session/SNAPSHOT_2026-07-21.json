@@ -1,0 +1,23 @@
+{
+  "date": "2026-07-21T03:00:00-03:00",
+  "project": "mcp-godot-agente02",
+  "version": "0.2.0",
+  "commit": "601b97b",
+  "branch": "agente2/behaviors-onda2",
+  "files_changed": 47,
+  "features": [
+    "beam_laser (#19) — RayCast2D, dano contínuo dps",
+    "hitscan (#20) — RayCast2D one-shot, flash visual",
+    "enemy_patrol (#22) — waypoints, loop/ping_pong",
+    "line_of_sight (#23) — cone de visão, dot product",
+    "flee (#27) — 3 condições de fuga",
+    "turret_aim (#29) — rotação suave, FireRate+Projectile",
+    "flocking (#28) — boids: separação/alinhamento/coesão",
+    "object_pool (#47) — PackedScene pool, take/return",
+    "spawner_wave (#24) — ondas via ObjectPool"
+  ],
+  "bugs_fixed": 26,
+  "pending": ["inventory (#30)", "collectable (#31)"],
+  "risks": ["_find_health com 8 variantes — inconsistência leve"],
+  "next_priorities": ["continuar grupo Progressão (#30-#35)"]
+}

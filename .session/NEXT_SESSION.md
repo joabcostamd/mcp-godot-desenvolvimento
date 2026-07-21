@@ -1,36 +1,39 @@
 # 🔄 PRÓXIMA SESSÃO — Agente 2
 
 ## Resumo
-Implementados 10 behaviors de combate (hitbox a homing_projectile). Core loop 8/8 completo. Catálogo de 13 padrões de bug. 12/224 behaviors total.
+9 behaviors implementados (beam_laser, hitscan, enemy_patrol, line_of_sight, flee, turret_aim, flocking, object_pool, spawner_wave). 21/224 total. 26 bugs corrigidos. 23 padrões de bugs documentados.
 
 ## Estado
-- Versão: 3.5.0 | Branch: agente2/behaviors-onda2 | Commit: 8d40eec
-- Progresso: 12/224 behaviors (5.4%)
+- Versão: 0.2.0 | Branch: agente2/behaviors-onda2 | Commit: 601b97b
+- Progresso: 21/224 behaviors (9.4%)
+- Grupos completos: Combate (8/8), IA/Mundo (7/7)
 
 ## Última tarefa
-- homing_projectile (#18) — projétil teleguiado com steering. 5 testes. Auditado e aprovado.
+- spawner_wave (#24) — concluído, auditado, commitado, pushed
 
 ## Pendências
-- [ ] beam_laser (#19) — RayCast2D, dep: health (alta)
-- [ ] hitscan (#20) — RayCast2D, dep: health (média)
-- [ ] enemy_patrol (#22) — dep: state_machine (média)
-- [ ] Merge do Agente 1 na main (alta)
+- [ ] inventory (#30) — Node, slot_count, max_stack (alta)
+- [ ] collectable (#31) — Area2D, item_id, auto_pickup (alta)
+- [ ] Restante do grupo Progressão (#32-#35)
 
 ## Arquivos-chave
-- behaviors/ (12 pastas de behaviors)
+- behaviors/ — 21 behaviors implementados
 - .roadmap_progress_a2.json
-- /memories/repo/padroes-de-bugs-behaviors.md
+- /memories/repo/padroes-de-bugs-behaviors.md — 23 padrões, 22 itens
 
 ## Fluxo sugerido
-1. Leia NEXT_SESSION.md e decisions.md
-2. Rode contract_snapshot_behaviors.py para validar
-3. Continue com beam_laser (#19) — rode /plan
+1. Leia NEXT_SESSION.md e HANDOFF.md
+2. Rode validação (validate_gdscript.py nos behaviors/)
+3. /plan para inventory (#30)
+4. /act para implementar
 
 ## Decisões da sessão
-- /encerrar sem restrição de tools → poder total
-- /seguir-roadmap manteve restrição → segurança do ciclo autônomo
-- checklist P1-P13 aplicado → bugs/behavior caiu de ~4 para ~1
+- `_initialized` como padrão para `_ready()` em @tool
+- Setters devem atualizar dependentes (Timer, Shape)
+- `process_mode = DISABLED` suficiente para pooling
+- Sinais declarados devem ter `.emit()` correspondente
 
 ## ⚠️ Atenção
-- 12 behaviors não foram mergeados na main
-- spawner_wave (#24) bloqueado por dependência object_pool (#47)
+- `_find_health` tem 8 variantes — inconsistência leve, aceitável v1
+- C1 e C5 do auditar.py falham (pré-existentes, servidor)
+- Godot 4.7 `--headless --script` não funciona no Windows (R12)
