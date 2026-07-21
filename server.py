@@ -2111,6 +2111,7 @@ def _build_handlers() -> dict:
         "quickstart_manage": _handle_quickstart_manage,
         "version_history_manage": _handle_version_history_manage,
         "publish_manage": _handle_publish_manage,
+        "community_manage": _handle_community_manage,
         "godot_keep_alive": godot_keep_alive,
         # Fase 2: Runtime
         # Fase 3: Editor
@@ -3310,6 +3311,14 @@ def _handle_publish_manage(args: dict) -> dict:
     op = args.get("op", "preview")
     params = args.get("params", {})
     return publish_manage(op=op, params=params)
+
+
+def _handle_community_manage(args: dict) -> dict:
+    """Handler para community_manage — ferramentas de comunidade (Gaps ONDA 4)."""
+    from tools.community_ops import community_manage
+    op = args.get("op", "badge")
+    params = args.get("params", {})
+    return community_manage(op=op, params=params)
 
 
 def _handle_generate_project_structure(args: dict) -> dict:

@@ -1,4 +1,12 @@
 {
+  "gap_comunidade": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "b9a1824",
+    "resultado": "Infraestrutura de comunidade (Gaps ONDA 4). tools/community_ops.py (NOVO, 260 linhas): rollup community_manage(op=changelog|release_notes|roadmap_public|badge). Templates Issue/PR (.github/ISSUE_TEMPLATE/). Badge SVG (assets/badge.svg). 287 tools (+1). C1 PASS (0 breaking), C3 PASS. 19/19 testes pytest + regressao 146/148 (2 pre-existentes)."
+  },
   "fatia_4.A": {
     "status": "concluida",
     "data": "2026-07-21",

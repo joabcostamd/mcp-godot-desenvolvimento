@@ -4560,5 +4560,32 @@ def _raw_tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
+        # ── Community (Gaps ONDA 4) ────────────────────────────
+        Tool(
+            name="community_manage",
+            description=(
+                "👥 Ferramentas de comunidade (Gaps ONDA 4). "
+                "changelog: gera CHANGELOG.md padrao Keep a Changelog. "
+                "release_notes: gera notas de release para GitHub Releases. "
+                "roadmap_public: gera ROADMAP.md publico. "
+                "badge: retorna snippet do badge 'Made with MCP Godot Agent'. "
+                "Exemplo: {\"op\": \"badge\"}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "op": {
+                        "type": "string",
+                        "description": "Operacao: 'changelog', 'release_notes', 'roadmap_public' ou 'badge'.",
+                        "enum": ["changelog", "release_notes", "roadmap_public", "badge"],
+                    },
+                    "params": {
+                        "type": "object",
+                        "description": "Parametros. version (string): versao para release_notes.",
+                    },
+                },
+                "required": [],
+            },
+        ),
     ]
 
