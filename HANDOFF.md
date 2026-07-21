@@ -5,29 +5,96 @@
 
 ---
 
-## Último Handoff (AGENTE 01 — 2026-07-21 — F5.3-F5.5)
+## Último Handoff (AGENTE 01 — 2026-07-21 — FECHAMENTO DA ESTABILIZAÇÃO)
 
 - **Data:** 2026-07-21
-- **Commit:** a82c8ef (main, pushed to origin)
-- **O que foi feito:**
-  - F5.3: Domínio shader (5 ops) — KW-only handlers + manifest + aliases
-  - F5.4: Domínio camera (3 ops) — KW-only handlers + manifest + aliases
-  - F5.5: Domínio navigation (3 ops) — KW-only handlers + manifest + aliases
-  - 7 atômicas removidas de core/tool_definitions.py
-  - Auditoria: C1 0 breaking, C3 smoke_test pass
-  - Testes: 146/148 passam (2 pré-existentes: test_remix)
-- **Decisões:** KW-only handlers como padrão; aliases no manifest; commit automático pós-/act
-- **Pendências:**
-  - F5.2 ui: handlers.py ainda usa re-exports (precisa KW-only wrappers) — ALTA
-  - F5.6+: Continuar migração dos domínios restantes
-  - test_remix: falha pré-existente por diretórios sujos
-- **Próximo:** Corrigir F5.2 ui → /plan para F5.6
-- **De:** AGENTE 01 (Arquitetura & Core)
-- **Ação:** Sincronização completa do repositório + push para GitHub
+- **Commit:** 3f109f2 (main, pushed to origin)
+- **O que foi feito:** PARADA DE ESTABILIZAÇÃO completa (CHECKPOINT → E1-E6 → J1-J4 → K1-K3 → L1-L4 → M1-M3 → Auditoria final). NENHUMA feature nova — apenas correção de processo, dívida técnica e dano ao wire.
 
-### Entregues nesta sessão
+### Estado final do wire
 
-**Fatias concluídas:**
+```
+defs_total=269, handlers_total=268
+SEM_HANDLER=0, SEM_DEF=0, NS_FANTASMA=0, PHASE_FANTASMA=0
+AUDITORIA F5: APROVADA
+176/176 testes passam (8 xfailed)
+```
+
+### Arquitetura pós-estabilização
+
+- **DEPRECATED_TOOLS** (~112 ferramentas) agora filtra **tanto** `_tool_defs()` quanto `_build_handlers()` — consistente. Filtro condicional a `_REGISTRY_VALIDATION_UNFILTERED` (default=False → filtra em operação normal).
+- **ALIAS_MAP** (42 entradas em `tools/deprecated.py`) — `invoke_by_name` redireciona nomes antigos para rollups ANTES do phase gate. Loga `deprecated_alias_used`. Expira em F6 (Secao 11.9).
+- **TOOLSETS e PHASE_TOOLSETS** limpos — ~46 entradas atômicas removidas. Apenas rollups `_manage` permanecem.
+- **Invariantes INV-10/INV-11** excluem DEPRECATED_TOOLS da contagem. INV-01/INV-02 verificam paridade wire↔handler.
+- **audit_fase.py** implementa Seção 15 (A01-A12, "AUDITORIA F<N>: APROVADA"). test_invariants.py cobre INV-01..15 com 8 xfail.
+- **test_remix.py** corrigido (bug de isolamento — cleanup + try/finally).
+- **test_tutorial_01.py** corrigido (dependência de dirt do remix removida).
+
+### 6 rollups com cobertura real provada (K1)
+
+| Rollup | Fases | Prova |
+|---|---|---|
+| godot_manage | PROTOTIPO | exec_gdscript: erro pré-cond (sem jogo) — dispatch OK |
+| lsp_manage | DESIGN | hover: erro parâmetro (falta 'character') — dispatch OK |
+| debug_manage | POLIMENTO | **status: SUCESSO** — debugger 127.0.0.1:6006 |
+| network_manage | CONTEUDO | setup_peer: erro pré-cond (cena não encontrada) — dispatch OK |
+| render_manage | DESIGN+CONTEUDO | **get: SUCESSO** — 7 settings reais do breakout_test |
+| skeleton_manage | DESIGN+CONTEUDO | list_bones: erro pré-cond (cena não encontrada) — dispatch OK |
+
+### Commits da sessão
+
+```
+3f109f2 fix-auditoria-final-estabilizacao-3-bugs      (bug #1, #2, doc, +3 tests)
+6d7ca49 feat-K1-K3-aliases-limpeza-TOOLSETS-estabilizacao-final
+d65fe00 docs-registra-estabilizacao-E1-E6-roadmap
+996d588 fix-E1-E5-estabilizacao-auditoria-aprovada
+```
+
+### Arquivos alterados nesta sessão
+
+- `server.py` — filtro DEPRECATED_TOOLS em `_tool_defs()`, limpeza TOOLSETS/PHASE_TOOLSETS
+- `tools/deprecated.py` — +5 entries, +ALIAS_MAP (42), docstring atualizado
+- `tools/meta_ops.py` — alias resolution step 0, dead code removido, bug #1 corrigido
+- `registry/invariants.py` — INV-10/INV-11 excluem DEPRECATED_TOOLS
+- `scripts/audit_fase.py` — A03 corrigido, A05 usa `essential={manifest,handlers}`
+- `tests/test_invariants.py` — NOVO (140+ linhas, INV-01..15 + 3 testes de alias)
+- `tests/test_remix.py` — adicionado cleanup + try/finally
+- `tests/test_tutorial_01.py` — captura FileNotFoundError no get_next_step
+- `.reorg_progress.json` — recriado, válido, atualizado com métricas finais
+- `.roadmap_progress.json` — registrada estabilização E1-E6
+
+### Decisões
+
+- **KW-only wrappers** como padrão para todos os handlers de domínio (estabelecido em F5.1 physics, corrigido em F5.2 ui)
+- **DEPRECATED_TOOLS como mecanismo único** de filtragem (não dois sistemas separados)
+- **Aliases expiram em F6** (Secao 11.9), registrado em `.reorg_progress.json`
+- **Commit automático pós-/act** (confirmado pelo usuário)
+- **Nenhuma regressão de fase** — rollups têm MAIS cobertura que as atômicas antigas (M1-M3)
+
+### Pendências
+
+- **F5.6+**: Continuar migração dos domínios restantes (~8 domínios)
+- **F3 completa**: Unificação dos 3 caminhos de rollup pendente
+- **F4 completa**: Descoberta progressiva por fase pendente
+- **59 tools SEM_FASE**: acessibilidade, gameplay, telemetria, onboarding — nunca atribuídas a fases
+- **COLISAO_ROLLUP**: `playtest_manage` definido em `_raw_tool_defs()` E em `get_rollup_tool_defs()`
+- **Aliases**: Remover em F6 (42 entradas em ALIAS_MAP)
+- **ruff**: Não instalado no venv (A02 warning)
+- **create_light_2d**: removido de PHASE_TOOLSETS mas ainda em DEPRECATED_TOOLS (sem rollup atribuído)
+
+### Próximo
+
+- `/plan` para F5.6 (próximo domínio a migrar)
+- Antes: verificar `.reorg_progress.json` e `.roadmap_progress.json`
+- Rodar `audit_fase.py --fase F5` para confirmar baseline limpo
+- **NUNCA** pular auditoria antes de commit
+- **NUNCA** commitar sem aprovação humana (exceto pós-/act)
+
+### Para o Agente 2 (Conteúdo)
+
+- Nada nesta sessão afetou behaviors/, blueprints/, seeds/, addons/, tests/ (exceto test_remix e test_tutorial_01)
+- Agente 2 pode continuar normalmente
+- Se precisar tocar em server.py, tools/deprecated.py, ou tools/meta_ops.py — **AVISAR antes** (terra de ninguém)
 - 4.A — publish_manage (AssetLib): empacotar addons em .zip
 - Gap Comunidade — community_manage (changelog, release_notes, roadmap_public, badge)
 - Gap Limpeza — B5 warnings corrigidos, budget limits atualizados
