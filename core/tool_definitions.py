@@ -4311,5 +4311,39 @@ def _raw_tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
+        Tool(
+            name="version_history_manage",
+            description=(
+                "📸 Histórico de versões jogáveis (Fatia 1.Q). "
+                "Salva, lista, restaura e remove versões do jogo com screenshot e data. "
+                "Navegação visual: escolher por screenshot e data, não por hash git. "
+                "Quando usar: salvar marco do jogo (op=save), ver galeria de versões (op=list), "
+                "voltar para versão anterior (op=restore), capturar screenshot avulso (op=screenshot). "
+                "Pré-condições para screenshot: jogo precisa estar rodando em modo debug (F5 no Godot). "
+                "Exemplo save: {\"op\": \"save\", \"description\": \"Antes de refatorar IA\"}. "
+                "Exemplo list: {\"op\": \"list\"}. "
+                "Exemplo restore: {\"op\": \"restore\", \"version_id\": \"20260721_143022\"}. "
+                "Exemplo delete: {\"op\": \"delete\", \"version_id\": \"20260721_143022\"}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "op": {
+                        "type": "string",
+                        "description": "Operação: 'save', 'list', 'restore', 'delete' ou 'screenshot'.",
+                        "enum": ["save", "list", "restore", "delete", "screenshot"],
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Descrição da versão (para op='save'). Ex: 'Antes de refatorar IA'.",
+                    },
+                    "version_id": {
+                        "type": "string",
+                        "description": "ID da versão (para op='restore' ou op='delete'). Ex: '20260721_143022'.",
+                    },
+                },
+                "required": [],
+            },
+        ),
     ]
 

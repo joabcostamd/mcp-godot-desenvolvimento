@@ -119,7 +119,7 @@ Escolha um gênero e comece a criar. Use `quickstart_manage(op="showcase")` para
 
 | Pasta/Arquivo | O que é |
 |---|---|
-| `server.py` | Servidor MCP principal (277 ferramentas, stdio JSON-RPC 2.0) |
+| `server.py` | Servidor MCP principal (278 ferramentas, stdio JSON-RPC 2.0) |
 | `init.py` | Instalador de 1 comando (só stdlib, zero dependências) |
 | `tools/` | 115+ módulos Python (cenas, scripts, física, arte, som, pipeline) |
 | `resources/` | 32 padrões de gêneros + 11 prompts MCP |

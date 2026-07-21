@@ -3,7 +3,48 @@
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo
 > para que o outro agente saiba o estado do projeto na próxima sessão.
 
-## Último Handoff (AGENTE 01 — 2026-07-21 — Fatia 1.P)
+## Último Handoff (AGENTE 01 — 2026-07-21 — Fatia 1.Q)
+
+- **Data:** 2026-07-21
+- **De:** AGENTE 01 (Arquitetura & Core)
+- **Ação:** Implementação da Fatia 1.Q — Histórico de versões jogáveis [SÊNIOR]
+
+### O que foi feito
+
+- `tools/version_history_ops.py` (NOVO, 334 linhas) — rollup `version_history_manage(op=save|list|restore|delete|screenshot)`
+- Screenshot via `runtime_bridge_client.send_bridge_command({"cmd": "screenshot"})` — comando já existente no addon
+- Armazenamento em `<project>/.mcp_versions/` com `index.json` + `manifest.json` + `screenshot.png`
+- Save fail-soft: sem jogo rodando, salva sem screenshot com aviso
+- Restore: `git checkout <commit> --` com validação de working tree limpo + checkpoint via `safety.checkpoint()`
+- Path traversal sanitizado em version_id
+- Lock `VERSION_HISTORY_LOCK` em `tools/config_lock.py`
+- `core/tool_definitions.py` — tool `version_history_manage` registrada
+- `server.py` — handler `_handle_version_history_manage` registrado
+- `tests/test_version_history.py` (NOVO) — 26 testes automatizados (pytest)
+- Auditoria: 1 bug CRÍTICO encontrado e corrigido (`run_subprocess_safe` kwargs conflitantes)
+
+### Como usar
+- `version_history_manage op=save description="Antes de refatorar IA"` — salva versão jogável
+- `version_history_manage op=list` — lista versões salvas
+- `version_history_manage op=restore version_id="20260721_143022"` — restaura versão (git checkout)
+- `version_history_manage op=delete version_id="20260721_143022"` — remove versão
+- `version_history_manage op=screenshot` — captura screenshot avulso (jogo precisa estar rodando)
+
+### Métricas
+- **ONDA 1:** ✅ 17/17 CONCLUÍDA
+- **Total tools:** 278 (+1)
+- **Total handlers:** 299 (+1)
+- **C1:** PASS (0 breaking)
+- **C3:** PASS (smoke_test)
+- **C5:** pre-existente (8 fases overflow)
+- **Testes:** 26/26 pytest + 10/10 manuais
+
+### Próximo passo
+- **ONDA 2 — O FOSSO** — `.github/roadmap/ONDA_2_fosso.md`. Fatia 2.A. Rode `/plan`.
+
+---
+
+## Handoff anterior (AGENTE 01 — 2026-07-21 — Fatia 1.P)
 
 - **Data:** 2026-07-21
 - **De:** AGENTE 01 (Arquitetura & Core)

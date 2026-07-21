@@ -1,4 +1,12 @@
 {
+  "fatia_1.Q": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "1aa2283",
+    "resultado": "Historico de versoes jogaveis. tools/version_history_ops.py (334 linhas): rollup version_history_manage(op=save|list|restore|delete|screenshot). Screenshot via runtime_bridge (comando ja existente). Armazenamento em <project>/.mcp_versions/ com index.json + manifest.json + screenshot.png. Save fail-soft sem jogo (aviso). Restore com git checkout + validacao de working tree limpo. Lock VERSION_HISTORY_LOCK em config_lock.py. 278 tools (+1). C1 PASS (0 breaking), C3 PASS, C5 pre-existente. 10/10 testes manuais passam."
+  },
   "fatia_1.P": {
     "status": "concluida",
     "data": "2026-07-21",

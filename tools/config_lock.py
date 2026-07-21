@@ -11,3 +11,4 @@ import threading
 CONFIG_FILE_LOCK = threading.Lock()
 VIBE_STATE_LOCK = threading.Lock()
 BRIEF_STATE_LOCK = threading.Lock()
+VERSION_HISTORY_LOCK = threading.Lock()

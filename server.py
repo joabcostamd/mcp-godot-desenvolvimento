@@ -2109,6 +2109,7 @@ def _build_handlers() -> dict:
         "install_mcp_addon": _handle_install_mcp_addon,
         "bootstrap_godot_mcp": _handle_bootstrap_godot_mcp,
         "quickstart_manage": _handle_quickstart_manage,
+        "version_history_manage": _handle_version_history_manage,
         "godot_keep_alive": godot_keep_alive,
         # Fase 2: Runtime
         # Fase 3: Editor
@@ -3282,6 +3283,15 @@ def _handle_quickstart_manage(args: dict) -> dict:
         project_name=args.get("project_name", ""),
         seed=args.get("seed", "breakout"),
     )
+
+
+def _handle_version_history_manage(args: dict) -> dict:
+    """Handler para version_history_manage — histórico de versões jogáveis (Fatia 1.Q)."""
+    from tools.version_history_ops import version_history_manage
+    op = args.get("op", "list")
+    # Constrói params a partir dos args (menos op)
+    params = {k: v for k, v in args.items() if k != "op"}
+    return version_history_manage(op=op, params=params)
 
 
 def _handle_generate_project_structure(args: dict) -> dict:
