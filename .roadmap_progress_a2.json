@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 14,
+    "implementados": 15,
     "lista": [
       {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido", "data": "2026-07-20", "hash": "0fddd1c"},
       {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "893be48"},
@@ -52,8 +52,9 @@
       {"id": 19, "nome": "beam_laser", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "RayCast2D + Line2D. Dano contínuo (dps). 17 testes."},
       {"id": 20, "nome": "hitscan", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "RayCast2D one-shot. 4 params, 2 sinais, flash visual. 18 testes."},
       {"id": 21, "nome": "enemy_chase", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "f2d5df8", "nota": "Node + perseguição ao player. P1-P8 checklist. 17 testes."},
+      {"id": 22, "nome": "enemy_patrol", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "Node + waypoints. 5 params, loop/ping_pong. StateMachine sibling. 12 testes."},
       {"id": 25, "nome": "state_machine", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "f2d5df8", "nota": "FSM leve. 16 testes."}
     ]
   },
-  "proximo": "enemy_patrol (#22) — Node + waypoints, wait_time, loop/ping_pong."
+  "proximo": "spawner_wave (#24) — Node + spawn_table, wave_interval, max_active."
 }
