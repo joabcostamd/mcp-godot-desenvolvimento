@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdragdrop0000001"]
+
+[ext_resource type="Script" path="res://behaviors/drag_drop/drag_drop.gd" id="1_dd"]
+
+[node name="DragDrop" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_dd")
+drag_preview = true
+snap_size = Vector2(0, 0)
+drop_group = ""
