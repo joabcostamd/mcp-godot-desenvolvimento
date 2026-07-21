@@ -1,0 +1,24 @@
+{
+  "name": "moving_platform",
+  "description_pt": "Plataforma móvel que segue um Path2D filho. Velocidade configurável, loop e pausa nas pontas. Usa AnimatableBody2D para sincronizar movimento com física (jogador em cima não escorrega).",
+  "description_en": "Moving platform that follows a child Path2D. Configurable speed, loop and pause at ends. Uses AnimatableBody2D to sync motion with physics (player on top doesn't slide).",
+  "synonyms": {
+    "pt": ["plataforma_movel", "elevador", "trilho", "carrinho", "conveyor"],
+    "en": ["moving_platform", "elevator", "rail", "cart", "conveyor"]
+  },
+  "parameters": [
+    {"name": "speed", "type": "float", "description_pt": "Velocidade ao longo do path (px/s).", "range": {"min": 10.0, "max": 2000.0}, "default": 100.0, "unit": "px/s"},
+    {"name": "loop", "type": "bool", "description_pt": "Se true, reinicia do começo ao chegar ao fim.", "default": true},
+    {"name": "pause_at_ends", "type": "float", "description_pt": "Tempo de pausa em cada ponta do path (0 = sem pausa).", "range": {"min": 0.0, "max": 10.0}, "default": 0.0, "unit": "s"}
+  ],
+  "signals": [
+    {"name": "waypoint_reached", "description_pt": "Emitido ao chegar em uma ponta do path.", "params": [{"name": "index", "type": "int"}]},
+    {"name": "loop_completed", "description_pt": "Emitido ao completar uma volta (apenas com loop=true).", "params": []}
+  ],
+  "dependencies": [],
+  "genres": ["platformer", "puzzle", "generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["movimento", "plataforma", "path", "fisica"]
+}

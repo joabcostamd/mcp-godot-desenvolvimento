@@ -41,8 +41,9 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 69,
+    "implementados": 70,
     "lista": [
+      {"id": 4, "nome": "moving_platform", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "AnimatableBody2D + Path2D child. Loop/ping-pong, pause_at_ends. 12 testes. Fonte: Godot 4.7 ClassDB."},
       {"id": 6, "nome": "double_jump", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + jump_count air jumps + coyote_time. Complementar ao PlayerController. Sinais jumped/jumps_exhausted. 12 testes. Fonte: Godot 4.7 ClassDB."},
       {"id": 5, "nome": "dash", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Timer duracao/cooldown. Override velocidade na direcao do input. cancel_dash(). 13 testes. Fonte: Godot 4.7 ClassDB."},
       {"id": 1, "nome": "player_controller", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + CharacterBody2D child. Gravidade, pulo (is_on_floor), move_and_slide, kill_plane. 14 testes. Fonte: Godot 4.7 ClassDB."},

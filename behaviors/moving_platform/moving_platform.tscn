@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bmovingplat000001"]
+
+[ext_resource type="Script" path="res://behaviors/moving_platform/moving_platform.gd" id="1_mp"]
+
+[node name="MovingPlatform" type="AnimatableBody2D"]
+script = ExtResource("1_mp")
+speed = 100.0
+loop = true
+pause_at_ends = 0.0
