@@ -134,6 +134,12 @@ from tools.devsolo_ops import (
     generate_shader_2d,
     apply_shader_to_node,
     configure_particles_2d,
+    # ── F5: UI atomics consolidation ──
+    create_ui_widget,
+    create_tab_with_content,
+    configure_ui_focus_and_nav,
+    set_tooltip,
+    set_anchor_preset,
 )
 
 # ── Shader Editor ─────────────────────────────────────────────
@@ -398,10 +404,10 @@ def _build_anim_manage():
 
 
 def _build_ui_manage():
-    """ui_manage: 7 operações de interface."""
+    """ui_manage: 12 operações de interface."""
     return create_manage_tool(
         tool_name="ui_manage",
-        description="Gerencia interfaces: criar UI, adicionar controles, menus, HUD, loading screen.",
+        description="Gerencia interfaces: criar UI, adicionar controles, menus, HUD, loading screen, widgets, tooltips e navegação por foco.",
         ops={
             "create_root": create_ui_scene,
             "add_control": add_control_node,
@@ -410,10 +416,15 @@ def _build_ui_manage():
             "pause_menu": create_pause_menu,
             "health_bar": create_health_bar,
             "loading_screen": create_loading_screen,
+            "create_widget": create_ui_widget,
+            "create_tab": create_tab_with_content,
+            "config_focus": configure_ui_focus_and_nav,
+            "set_tooltip": set_tooltip,
+            "set_anchor": set_anchor_preset,
         },
         tool_hints={"destructiveHint": True, "idempotentHint": False, "openWorldHint": True},
         title="Gerenciar UI",
-        tags=["ui", "interface", "menu", "hud"],
+        tags=["ui", "interface", "menu", "hud", "widget"],
     )
 
 
@@ -949,6 +960,32 @@ def _build_lsp_manage():
     )
 
 
+def _build_skeleton_manage():
+    """skeleton_manage: 6 operações de esqueleto 2D (F5 consolidation)."""
+    from tools.skeleton_ops import (
+        get_bone_pose, set_bone_pose, list_bones,
+        create_bone, create_ik_chain, get_skeleton_info,
+    )
+    return create_manage_tool(
+        tool_name="skeleton_manage",
+        description=(
+            "Gerencia esqueletos 2D (Skeleton2D): consultar ossos, "
+            "obter/definir poses, criar ossos e cadeias IK."
+        ),
+        ops={
+            "get_info": get_skeleton_info,
+            "list_bones": list_bones,
+            "get_pose": get_bone_pose,
+            "set_pose": set_bone_pose,
+            "create_bone": create_bone,
+            "create_ik": create_ik_chain,
+        },
+        tool_hints={"destructiveHint": True, "idempotentHint": False, "openWorldHint": True},
+        title="Gerenciar Esqueleto 2D",
+        tags=["skeleton", "2D", "animação", "bones"],
+    )
+
+
 # ── Builders registry ───────────────────────────────────────────────
 
 _ROLLUP_BUILDERS = [
@@ -997,6 +1034,8 @@ _ROLLUP_BUILDERS = [
     _build_godot_manage,
     # F5: lsp consolidation
     _build_lsp_manage,
+    # F5: skeleton consolidation
+    _build_skeleton_manage,
 ]
 
 # Cache interno — garante que cada builder só executa UMA vez.
