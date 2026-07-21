@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 32,
+    "implementados": 33,
     "lista": [
       {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido"},
       {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido"},
@@ -70,8 +70,9 @@
       {"id": 36, "nome": "achievement", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + conditions collect/currency/level. Auto-detecta siblings. 9 testes."},
       {"id": 37, "nome": "unlockable", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + metaprogression. Conditions achievement/level/currency. 7 testes."},
       {"id": 39, "nome": "pause_menu", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + get_tree().paused. Input ui_cancel. Sinais paused/resumed. 6 testes."},
-      {"id": 40, "nome": "screen_shake", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Camera2D offset. trigger() com intensity/duration/decay. 7 testes."}
+      {"id": 40, "nome": "screen_shake", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Camera2D offset. trigger() com intensity/duration/decay. 7 testes."},
+      {"id": 49, "nome": "floating_text", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node2D + Label subida+fade. show_text(text,color). 5 params, sinal text_shown. 16 testes. Fonte: Nodot TextEmitter + Godot docs Label/Tween."}
     ]
   },
-  "proximo": "floating_text (#41) — sem dependências. Grupo: Feedback."
+  "proximo": "particle_impact (#50) — sem dependências. Grupo: Feedback."
 }

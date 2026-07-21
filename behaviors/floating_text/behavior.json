@@ -1,0 +1,25 @@
+{
+  "name": "floating_text",
+  "description_pt": "Texto flutuante que aparece na tela (dano, cura, crítica) sobe verticalmente e desaparece com fade. Configurável: cor, velocidade, tempo de vida e duração do fade.",
+  "description_en": "Floating text that appears on screen (damage, heal, crit), rises vertically, and fades out. Configurable: color, speed, lifetime, and fade duration.",
+  "synonyms": {
+    "pt": ["texto_flutuante", "dano", "cura", "crítico", "popup", "número"],
+    "en": ["floating_text", "damage_number", "heal_number", "crit", "popup", "number"]
+  },
+  "parameters": [
+    {"name": "speed", "type": "float", "description_pt": "Velocidade de subida do texto em pixels por segundo.", "range": {"min": 10.0, "max": 500.0}, "default": 100.0, "unit": "px/s"},
+    {"name": "lifetime", "type": "float", "description_pt": "Tempo total de vida do texto antes de desaparecer.", "range": {"min": 0.1, "max": 5.0}, "default": 1.0, "unit": "s"},
+    {"name": "fade_duration", "type": "float", "description_pt": "Duração do fade-out no final da vida.", "range": {"min": 0.0, "max": 2.0}, "default": 0.3, "unit": "s"},
+    {"name": "font_size", "type": "int", "description_pt": "Tamanho da fonte do texto.", "range": {"min": 8, "max": 128}, "default": 24},
+    {"name": "outline_size", "type": "int", "description_pt": "Tamanho do contorno do texto (0 = sem contorno).", "range": {"min": 0, "max": 10}, "default": 2}
+  ],
+  "signals": [
+    {"name": "text_shown", "description_pt": "Emitido quando a animação termina e o texto é removido.", "params": []}
+  ],
+  "dependencies": [],
+  "genres": ["generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["feedback", "floating_text", "dano", "ui", "popup"]
+}
