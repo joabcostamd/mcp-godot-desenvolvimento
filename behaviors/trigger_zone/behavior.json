@@ -1,0 +1,24 @@
+{
+  "name": "trigger_zone",
+  "description_pt": "Area2D que emite sinais ao detectar entrada/saída de corpos. Filtro por grupo, trigger_once (desativa após primeiro uso). Cria CollisionShape2D automaticamente.",
+  "description_en": "Area2D that emits signals on body enter/exit. Group filter, trigger_once (deactivates after first use). Auto-creates CollisionShape2D.",
+  "synonyms": {
+    "pt": ["gatilho", "zona", "deteccao", "area_efeito", "portal"],
+    "en": ["trigger", "zone", "detection", "area", "sensor"]
+  },
+  "parameters": [
+    {"name": "trigger_group", "type": "String", "description_pt": "Grupo dos corpos que ativam (vazio = qualquer).", "default": ""},
+    {"name": "trigger_once", "type": "bool", "description_pt": "Se true, desativa após o primeiro trigger.", "default": false},
+    {"name": "shape_size", "type": "Vector2", "description_pt": "Tamanho do CollisionShape2D retangular.", "default": {"x":64.0,"y":64.0}}
+  ],
+  "signals": [
+    {"name": "zone_entered", "description_pt": "Emitido quando um corpo elegível entra.", "params": [{"name": "body", "type": "Node2D"}]},
+    {"name": "zone_exited", "description_pt": "Emitido quando um corpo elegível sai.", "params": [{"name": "body", "type": "Node2D"}]}
+  ],
+  "dependencies": [],
+  "genres": ["generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["trigger", "area", "deteccao"]
+}

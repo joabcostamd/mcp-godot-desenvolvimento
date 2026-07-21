@@ -41,8 +41,9 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 74,
+    "implementados": 75,
     "lista": [
+      {"id": 90, "nome": "trigger_zone", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + CollisionShape2D auto. trigger_group, trigger_once, reset_trigger. 11 testes."},
       {"id": 87, "nome": "counter", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + min/max/step. increment/decrement/add com clamp. Sinais value_changed/min/max_reached. 16 testes."},
       {"id": 3, "nome": "player_vehicle", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + rotacao + drift. Impulso frontal, turn_rate, max_speed. move_and_slide. 11 testes. Fonte: Godot 4.7 ClassDB."},
       {"id": 8, "nome": "grid_movement", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Tween grid snap. move_to_grid, is_moving. Input bloqueado durante animacao. 12 testes. Fonte: Godot 4.7 ClassDB."},
