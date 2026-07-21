@@ -1,0 +1,24 @@
+{
+  "name": "grid_movement",
+  "description_pt": "Movimento discreto em grid para Node2D. Passos de grid_size pixels com animação via Tween (move_duration). Bloqueia input durante o movimento. Ideal para roguelikes, puzzles, jogos de tabuleiro.",
+  "description_en": "Discrete grid movement for Node2D. Steps of grid_size pixels with Tween animation (move_duration). Blocks input during movement. Ideal for roguelikes, puzzles, board games.",
+  "synonyms": {
+    "pt": ["grade", "turno", "passo", "roguelike", "tabuleiro", "grid"],
+    "en": ["grid", "turn_based", "step", "tile", "board", "snap"]
+  },
+  "parameters": [
+    {"name": "grid_size", "type": "Vector2", "description_pt": "Tamanho de cada célula do grid em pixels.", "default": {"x":32.0,"y":32.0}},
+    {"name": "move_duration", "type": "float", "description_pt": "Duração da animação de movimento entre células.", "range": {"min": 0.01, "max": 1.0}, "default": 0.15, "unit": "s"},
+    {"name": "snap_on_start", "type": "bool", "description_pt": "Se true, ajusta posição inicial para a célula mais próxima.", "default": true}
+  ],
+  "signals": [
+    {"name": "moved", "description_pt": "Emitido ao iniciar movimento para nova célula.", "params": [{"name": "direction", "type": "Vector2"}]},
+    {"name": "arrived", "description_pt": "Emitido ao chegar na célula destino.", "params": [{"name": "grid_pos", "type": "Vector2"}]}
+  ],
+  "dependencies": [],
+  "genres": ["roguelike", "puzzle", "generic"],
+  "conflicts": ["player_controller", "player_topdown"],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["movimento", "grid", "turno", "roguelike"]
+}
