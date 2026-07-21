@@ -1,0 +1,58 @@
+{
+  "name": "line_of_sight",
+  "description_pt": "Visão em cone para NPCs: Area2D que detecta alvos dentro de um ângulo e alcance. Verifica ângulo via dot product. Suporta oclusão opcional via RayCast2D.",
+  "description_en": "Cone vision for NPCs: Area2D that detects targets within an angle and range. Angle check via dot product. Optional occlusion via RayCast2D.",
+  "synonyms": {
+    "pt": ["visão", "cone", "campo de visão", "detecção", "visão de cone", "spot"],
+    "en": ["vision", "cone", "field of view", "detection", "sight", "spot", "fov"]
+  },
+  "parameters": [
+    {
+      "name": "view_angle",
+      "type": "float",
+      "description_pt": "Ângulo total do cone de visão em graus.",
+      "range": {"min": 1.0, "max": 360.0},
+      "default": 90.0,
+      "unit": "°"
+    },
+    {
+      "name": "view_range",
+      "type": "float",
+      "description_pt": "Alcance máximo da visão em pixels.",
+      "range": {"min": 10.0, "max": 3000.0},
+      "default": 300.0,
+      "unit": "px"
+    },
+    {
+      "name": "ray_count",
+      "type": "int",
+      "description_pt": "Número de raycasts para verificação de oclusão (0 = sem oclusão).",
+      "range": {"min": 0, "max": 10},
+      "default": 0
+    },
+    {
+      "name": "target_group",
+      "type": "String",
+      "description_pt": "Nome do grupo que este sensor detecta (ex: 'player').",
+      "default": "player"
+    }
+  ],
+  "signals": [
+    {
+      "name": "target_spotted",
+      "description_pt": "Emitido quando um alvo entra no cone de visão.",
+      "params": [{"name": "target", "type": "Node2D"}]
+    },
+    {
+      "name": "target_lost",
+      "description_pt": "Emitido quando um alvo sai do cone de visão.",
+      "params": [{"name": "target", "type": "Node2D"}]
+    }
+  ],
+  "dependencies": [],
+  "genres": ["stealth", "topdown_shooter", "platformer", "roguelike", "metroidvania", "generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["ia", "visão", "detecção", "cone", "stealth", "npc"]
+}

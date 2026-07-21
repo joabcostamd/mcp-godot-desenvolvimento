@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 15,
+    "implementados": 16,
     "lista": [
       {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido", "data": "2026-07-20", "hash": "0fddd1c"},
       {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "893be48"},
@@ -53,8 +53,10 @@
       {"id": 20, "nome": "hitscan", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "RayCast2D one-shot. 4 params, 2 sinais, flash visual. 18 testes."},
       {"id": 21, "nome": "enemy_chase", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "f2d5df8", "nota": "Node + perseguição ao player. P1-P8 checklist. 17 testes."},
       {"id": 22, "nome": "enemy_patrol", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "Node + waypoints. 5 params, loop/ping_pong. StateMachine sibling. 12 testes."},
+      {"id": 23, "nome": "line_of_sight", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "Area2D + CircleShape2D. Cone de visão com dot product. 4 params. 14 testes."},
       {"id": 25, "nome": "state_machine", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "f2d5df8", "nota": "FSM leve. 16 testes."}
     ]
   },
+  "proximo": "flee (#27) — health + state_machine. Ou object_pool (#47) para destravar spawner_wave."
   "proximo": "spawner_wave (#24) — Node + spawn_table, wave_interval, max_active."
 }
