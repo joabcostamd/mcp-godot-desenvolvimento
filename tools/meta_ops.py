@@ -114,6 +114,33 @@ def invoke_by_name(name: str, arguments: dict | None = None) -> dict:
 
     args = arguments or {}
 
+    # ── 0. Alias resolution (Secao 11.9) — ANTES do phase gate ──
+    # Ferramentas renomeadas mantêm compatibilidade via alias.
+    # O alias redireciona para o rollup equivalente ANTES de qualquer
+    # verificação de fase, porque o rollup alvo é que define a fase.
+    from tools.deprecated import ALIAS_MAP
+    if name in ALIAS_MAP:
+        rollup_name, op_name = ALIAS_MAP[name]
+        logging.getLogger("mcp_godot").warning(
+            "deprecated_alias_used: %s -> %s(op=%s)", name, rollup_name, op_name
+        )
+        # Redireciona: chama invoke_by_name recursivamente com o rollup
+        alias_args = dict(args)
+        alias_args["op"] = op_name
+        try:
+            result = invoke_by_name(rollup_name, alias_args)
+        except RecursionError:
+            return {
+                "status": "error",
+                "message": f"Alias circular detectado: {name} -> {rollup_name}",
+            }
+        if isinstance(result, dict):
+            result["_alias_used"] = True
+            result["_alias_from"] = name
+            result["_alias_to"] = f"{rollup_name}(op={op_name})"
+            result.setdefault("status", "success" if "error" not in str(result).lower() else "error")
+        return result
+
     # ── 1. Verificar visibilidade na fase atual ──
     try:
         phase_tools = _srv._get_phase_tools()
@@ -160,6 +187,36 @@ def invoke_by_name(name: str, arguments: dict | None = None) -> dict:
         handler = handlers.get(name)
     except Exception as e:
         return {"status": "error", "message": f"Erro ao carregar handlers: {e}"}
+
+    # ── 4a. Alias resolution (Secao 11.9) ──
+    if handler is None:
+        from tools.deprecated import ALIAS_MAP
+        if name in ALIAS_MAP:
+            rollup_name, op_name = ALIAS_MAP[name]
+            logging.getLogger("mcp_godot").warning(
+                "deprecated_alias_used: %s → %s(op=%s)", name, rollup_name, op_name
+            )
+            rollup_handler = handlers.get(rollup_name)
+            if rollup_handler is not None:
+                try:
+                    alias_args = {"op": op_name, "params": args}
+                    result = _srv._smart_call(rollup_handler, alias_args)
+                    if isinstance(result, dict):
+                        result["_alias_used"] = True
+                        result["_alias_from"] = name
+                        result["_alias_to"] = f"{rollup_name}(op={op_name})"
+                        result.setdefault("status", "success")
+                    return result
+                except Exception as e:
+                    return {
+                        "status": "error",
+                        "message": f"Alias '{name}' → {rollup_name}(op={op_name}) falhou: {e}",
+                    }
+            else:
+                return {
+                    "status": "error",
+                    "message": f"Alias '{name}' → {rollup_name} mas rollup não encontrado.",
+                }
 
     if handler is None:
         return {

@@ -90,7 +90,6 @@ TOOLSETS = {
         "loot_table_generate",
         # Operações atômicas de cena (complementam os rollups)
         "raycast_manage",
-        "create_light_2d", "create_light_3d",
         # Camada 5 (Gameplay): project
         "create_achievement_system", "cloud_save_configure",
         "mod_manifest_generate",
@@ -100,12 +99,6 @@ TOOLSETS = {
         "accessibility_apply_colorblind_filter", "accessibility_add_subtitles", "accessibility_remap_controls",
         "onboarding_create_tutorial_step", "onboarding_create_guided_tour",
     
-        "skeleton_get_bone_pose",
-        "skeleton_set_bone_pose",
-        "skeleton_list_bones",
-        "skeleton_create_bone",
-        "skeleton_create_ik_chain",
-        "skeleton_get_info",
         "skeleton_manage",
         "csg_create_node",
         "gi_create_node",
@@ -116,16 +109,7 @@ TOOLSETS = {
         "physics_create_joint",
         "physics_configure_body",
 
-        "network_setup_multiplayer",
-        "network_create_rpc",
-        "network_create_websocket",
-        "network_configure_dedicated_server",
-        "network_create_lobby",
         "network_manage",
-        "render_get_settings",
-        "render_set_antialiasing",
-        "render_set_scaling",
-        "render_set_quality",
         "render_manage",
         "csharp_scaffold_project",
         "csharp_generate_script",
@@ -151,9 +135,6 @@ TOOLSETS = {
         "juice_apply", "juice_list_presets",
         # Camada 5 (Gameplay): assets
         "trailer_capture_clip", "trailer_render_sequence", "capsule_generate_store_image",
-        # Operações atômicas de assets (complementam os rollups)
-        "configure_particles_2d", "create_particles_2d", "create_particles_3d",
-        "configure_standard_material_3d",
         "import_3d_model",
     ],
     "runtime": [
@@ -161,8 +142,7 @@ TOOLSETS = {
         "runtime_manage",
         "godot_manage",
         "execute_gdscript_runtime", "capture_game_screenshot", "take_screenshot",
-        "godot_run_project", "godot_stop_project", "godot_wait_for_bridge",
-        "godot_exec", "godot_runtime_info", "godot_screenshot",
+        "godot_screenshot",
         "godot_custom_command", "godot_list_custom_commands",
         "godot_keep_alive",
         "get_runtime_state_digest", "capture_runtime_errors",
@@ -170,8 +150,6 @@ TOOLSETS = {
         "effect_probe",
         # Debug
         "debug_manage",
-        "debugger_set_breakpoint", "debugger_status", "debugger_step",
-        "debugger_get_stack", "debugger_get_variables",
         # Testes
         "test_manage",
         "run_gut_tests", "run_scripted_tests", "regression_test", "smoke_test",
@@ -217,9 +195,6 @@ TOOLSETS = {
         "audit_input_map", "audit_autoloads", "audit_scene_reachability",
         "audit_uid_consistency", "audit_save_compatibility",
         "analyze_signal_flow",
-        "gdscript_diagnostics", "gdscript_references", "gdscript_definition",
-        "gdscript_hover", "gdscript_rename", "gdscript_symbols",
-        "gdscript_lsp_connect", "gdscript_lsp_disconnect", "gdscript_sync_file",
         "lsp_manage",
         "resource_dependency_graph",
         "find_unused_resources",
@@ -509,7 +484,6 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "multimesh_create_instance",
         "batch_atomic_edit", "add_nodes_batch",
         "set_properties_batch",
-        "create_light_2d",
 },
     "POLIMENTO": {
         "run_gut_tests", "run_scripted_tests",

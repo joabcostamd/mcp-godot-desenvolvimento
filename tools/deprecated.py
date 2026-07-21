@@ -89,3 +89,60 @@ DEPRECATED_TOOLS: set[str] = {
     # raycast atomics → physics_manage (F5.1)
     "add_raycast_2d", "add_shapecast_2d",
 }
+
+
+# ── ALIAS_MAP: old_name → (rollup_name, op_name) ─────────────────
+# Secao 11.9 do roadmap: toda tool renomeada leva alias por 1 fase.
+# Quando invoke_by_name recebe um nome antigo, redireciona para o
+# rollup equivalente e loga "deprecated_alias_used".
+# Gerado em: Fechamento da Estabilizacao (K2) — 2026-07-21
+
+ALIAS_MAP: dict[str, tuple[str, str]] = {
+    # ── godot_* → godot_manage ──
+    "godot_exec": ("godot_manage", "exec_gdscript"),
+    "godot_run_project": ("godot_manage", "run_project"),
+    "godot_runtime_info": ("godot_manage", "runtime_info"),
+    "godot_stop_project": ("godot_manage", "stop_project"),
+    "godot_wait_for_bridge": ("godot_manage", "wait_bridge"),
+    # ── gdscript_* → lsp_manage ──
+    "gdscript_lsp_connect": ("lsp_manage", "connect"),
+    "gdscript_lsp_disconnect": ("lsp_manage", "disconnect"),
+    "gdscript_sync_file": ("lsp_manage", "sync"),
+    "gdscript_definition": ("lsp_manage", "definition"),
+    "gdscript_references": ("lsp_manage", "references"),
+    "gdscript_hover": ("lsp_manage", "hover"),
+    "gdscript_symbols": ("lsp_manage", "symbols"),
+    "gdscript_rename": ("lsp_manage", "rename"),
+    "gdscript_diagnostics": ("lsp_manage", "diagnostics"),
+    # ── debugger_* → debug_manage ──
+    "debugger_set_breakpoint": ("debug_manage", "set_breakpoint"),
+    "debugger_status": ("debug_manage", "status"),
+    "debugger_step": ("debug_manage", "step"),
+    "debugger_get_stack": ("debug_manage", "get_stack"),
+    "debugger_get_variables": ("debug_manage", "get_vars"),
+    # ── network_* → network_manage ──
+    "network_setup_multiplayer": ("network_manage", "setup_peer"),
+    "network_create_rpc": ("network_manage", "create_rpc"),
+    "network_create_websocket": ("network_manage", "create_ws"),
+    "network_configure_dedicated_server": ("network_manage", "config_server"),
+    "network_create_lobby": ("network_manage", "create_lobby"),
+    # ── render_* → render_manage ──
+    "render_get_settings": ("render_manage", "get"),
+    "render_set_antialiasing": ("render_manage", "set_aa"),
+    "render_set_scaling": ("render_manage", "set_scale"),
+    "render_set_quality": ("render_manage", "set_quality"),
+    # ── skeleton_* → skeleton_manage ──
+    "skeleton_get_bone_pose": ("skeleton_manage", "get_pose"),
+    "skeleton_set_bone_pose": ("skeleton_manage", "set_pose"),
+    "skeleton_list_bones": ("skeleton_manage", "list_bones"),
+    "skeleton_create_bone": ("skeleton_manage", "create_bone"),
+    "skeleton_create_ik_chain": ("skeleton_manage", "create_ik"),
+    "skeleton_get_info": ("skeleton_manage", "get_info"),
+    # ── shader atomics → shader_manage ──
+    "read_shader": ("shader_manage", "read"),
+    "edit_shader": ("shader_manage", "edit"),
+    "get_shader_params": ("shader_manage", "get_params"),
+    # ── raycast atomics → physics_manage ──
+    "add_raycast_2d": ("physics_manage", "add_raycast"),
+    "add_shapecast_2d": ("physics_manage", "add_shapecast"),
+}
