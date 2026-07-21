@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://bwindzone00000001"]
+[ext_resource type="Script" path="res://behaviors/wind_zone/wind_zone.gd" id="1_wz"]
+[node name="WindZone" type="Area2D"]
+script = ExtResource("1_wz")

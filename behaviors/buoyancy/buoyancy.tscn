@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://bbuoyancy00000001"]
+[ext_resource type="Script" path="res://behaviors/buoyancy/buoyancy.gd" id="1_by"]
+[node name="Buoyancy" type="Area2D"]
+script = ExtResource("1_by")

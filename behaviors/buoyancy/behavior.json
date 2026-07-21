@@ -1,0 +1,13 @@
+{
+  "name": "buoyancy", "version": "1.0.0", "godot_version": "4.7",
+  "description_pt": "Area2D que simula flutuabilidade. Aplica força para cima proporcional à submersão. Drag e densidade configuráveis. Útil para água, lava, poções.",
+  "description_en": "Area2D simulating buoyancy. Applies upward force proportional to submersion. Configurable drag and density. Useful for water, lava, potions.",
+  "synonyms": {"pt": ["flutuacao", "agua", "liquido", "nadar", "fluido"], "en": ["water", "float", "swim", "fluid"]},
+  "parameters": [
+    {"name": "fluid_density", "type": "float", "range": {"min": 0.1, "max": 5}, "default": 1.0},
+    {"name": "drag_coefficient", "type": "float", "range": {"min": 0, "max": 2}, "default": 0.5},
+    {"name": "surface_y", "type": "float", "description_pt": "Y global da superfície (0 = centro da área).", "default": 0}
+  ],
+  "signals": [{"name": "entered_fluid", "params": [{"name": "body", "type": "Node2D"}]}, {"name": "exited_fluid", "params": [{"name": "body", "type": "Node2D"}]}],
+  "dependencies": [], "genres": ["platformer", "generic"], "tags": ["fisica", "fluido", "agua"]
+}

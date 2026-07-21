@@ -41,8 +41,11 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 86,
+    "implementados": 89,
     "lista": [
+      {"id": 114, "nome": "spring_joint", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + 2 anchors. Stiffness/damping/rest_length. 2 testes."},
+      {"id": 113, "nome": "wind_zone", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + wind_direction/strength/turbulence. 1 teste."},
+      {"id": 109, "nome": "buoyancy", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + fluid_density/drag/surface_y. Empuxo e arrasto. 2 testes."},
       {"id": 110, "nome": "conveyor_belt", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + direction velocity. CharacterBody2D + RigidBody2D. 2 testes."},
       {"id": 112, "nome": "gravity_zone", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + gravity_direction/strength/override. 2 testes."},
       {"id": 111, "nome": "magnet", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + attraction force/falloff (const/linear/quad). 3 testes."},
