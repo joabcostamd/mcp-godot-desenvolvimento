@@ -3,6 +3,44 @@
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo
 > para que o outro agente saiba o estado do projeto na próxima sessão.
 
+## Último Handoff (AGENTE 02 — 2026-07-21 — ONDA 2: 9 behaviors)
+
+- **Data:** 2026-07-21
+- **De:** AGENTE 02 (Conteúdo — behaviors)
+- **Branch:** `agente2/behaviors-onda2`
+- **Ação:** 9 behaviors implementados — 21/224 total
+
+### O que foi feito
+
+| # | Behavior | Node | Destaque |
+|---|---|---|---|
+| 19 | `beam_laser` | RayCast2D | Dano contínuo (dps), Line2D, 17 testes |
+| 20 | `hitscan` | RayCast2D | One-shot, flash visual, 18 testes |
+| 22 | `enemy_patrol` | Node | Waypoints, loop/ping_pong, StateMachine, 12 testes |
+| 23 | `line_of_sight` | Area2D | Cone de visão, dot product, oclusão, 15 testes |
+| 27 | `flee` | Node | 3 condições (always/health/on_damage), StateMachine, 14 testes |
+| 28 | `flocking` | Node | Boids: separação/alinhamento/coesão, 9 testes |
+| 29 | `turret_aim` | Node2D | Rotação suave, FireRate+Projectile, 10 testes |
+| 47 | `object_pool` | Node | PackedScene pool, take/return, expandable, 11 testes |
+| 24 | `spawner_wave` | Node | Ondas via ObjectPool, total_waves, 10 testes |
+
+### Métricas
+
+- **Total:** 21/224 behaviors
+- **Bugs encontrados/corrigidos:** 26
+- **Padrões registrados:** 23 (em `/memories/repo/padroes-de-bugs-behaviors.md`)
+- **Checklist:** 22 itens de verificação pré-implementação
+- **Commits:** 9
+
+### ⚠️ Pontos de atenção para AGENTE 01
+
+- Nenhum arquivo do território do Agente 1 foi alterado
+- `.roadmap_progress_a2.json` atualizado com 21 behaviors
+- `spawner_wave` (#24) destravado após `object_pool` (#47)
+- Próximo: `inventory` (#30) — Progressão
+
+---
+
 ## Último Handoff (AGENTE 01 — 2026-07-20 — ONDA 0: ✅ 12/12)
 
 - **Data:** 2026-07-20
