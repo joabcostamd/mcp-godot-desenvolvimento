@@ -1,34 +1,36 @@
 ﻿# PROXIMA SESSAO
 
 ## Resumo
-Sessao de 2026-07-20: ONDA 1 avancou de 11/17 para 15/17.
-Fatias concluidas: 1.K (remix), 1.L (vitrine 32 generos), 1.M (skills/modo guiado), 1.N (llms.txt + README bilingue), 1.O (offline).
-32 game patterns, _SYNONYMS 120+, fallback GAME_PATTERNS, init.py com copy_prompts_to_project e check_internet.
+Sessao de 2026-07-21: ONDA 1 avancou de 15/17 para 16/17.
+Fatia concluida: 1.P (telemetria opt-in do MCP).
+Novo modulo: tools/mcp_telemetry_ops.py (574 linhas, zero dependencias).
+Hook track_mcp_event em call_tool (fail-open). Pesquisa externa em docs/PESQUISA_EXTERNA.md secao 6.
 
 ## Estado
-- Versao: 3.5.0 | ON DA 1: 15/17 | Commit: 156ed74
+- Versao: 3.5.1 | ONDA 1: 16/17 | Commit: 19da07d
 
 ## Ultima tarefa
-- 1.O: Degradacao elegante sem internet (check_internet + friendly_errors socket)
+- 1.P: Telemetria opt-in do MCP. Rollup mcp_telemetry_manage, consentimento desligado por padrao, JSONL local, zero envio externo, zero PII.
 
 ## Pendencias
-- [ ] 1.P — Telemetria opt-in [SENIOR] (alta)
-- [ ] 1.Q — Historico de versoes [SENIOR] (media)
+- [ ] 1.Q — Historico de versoes jogaveis [SENIOR] (alta — ULTIMA da ONDA 1)
 - [ ] ONDA 2 — 30 behaviors, 3 blueprints, 3 seeds (futuro)
 
 ## Arquivos-chave
-- server.py, init.py, tools/quickstart_ops.py, resources/game_patterns.py
+- server.py, tools/mcp_telemetry_ops.py, core/tool_definitions.py, CONTRACT_SNAPSHOT.json
 
 ## Fluxo sugerido
 1. Leia .session/NEXT_SESSION.md
 2. Rode auditar.py
-3. Continue de 1.P ou va para ONDA 2
+3. Continue de 1.Q (ultima fatia da ONDA 1)
 
 ## Decisoes da sessao
-- 32 generos (nao 17) — cobertura ~100%% dos generos 2D viaveis
-- .prompt.md no .github/prompts/ do projeto, nao %%APPDATA%%
-- Fallback GAME_PATTERNS no _match_blueprint quando blueprints nao cobrem
+- Telemetria 100%% local — zero envio externo, export manual
+- Formato JSONL (append-only) + summary agregado
+- Padrao identico ao budget_ops (hook fail-open, threading.Lock, estado por projeto)
+- Consentimento DESLIGADO por padrao (.mcp_telemetry_consent.json)
 
 ## Atencao
-- Apenas 3 blueprints para 32 generos — gap conhecido, Onda 2 resolve
+- C5 (orcamento) e pre-existente — 8 fases overflow, responsabilidade da Fatia 0.7
 - Agente 2 ativo em agente2/behaviors-onda2 (10 behaviors)
+- 1.Q e [SENIOR] — ultima fatia antes da ONDA 2

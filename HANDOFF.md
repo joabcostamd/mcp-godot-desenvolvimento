@@ -3,7 +3,39 @@
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo
 > para que o outro agente saiba o estado do projeto na próxima sessão.
 
-## Último Handoff (AGENTE 01 — 2026-07-20 — Comando /pesquise)
+## Último Handoff (AGENTE 01 — 2026-07-21 — Fatia 1.P)
+
+- **Data:** 2026-07-21
+- **De:** AGENTE 01 (Arquitetura & Core)
+- **Ação:** Implementação da Fatia 1.P — Telemetria opt-in do próprio MCP
+
+### O que foi feito
+
+- `tools/mcp_telemetry_ops.py` (NOVO, 574 linhas) — rollup `mcp_telemetry_manage(op=status|enable|disable|export|reset)`
+- Hook `track_mcp_event()` em `server.py::call_tool()` — fail-open, mesmo padrão de `budget_ops`
+- Hook `track_phase_transition()` integrado no `advance_phase`
+- `core/tool_definitions.py` — tool `mcp_telemetry_manage` registrada
+- `docs/PESQUISA_EXTERNA.md` — Seção 6: pesquisa de 8 fontes sobre telemetria de ferramentas
+
+### Como usar
+- `mcp_telemetry_manage op=enable` ativa coleta (consentimento explícito)
+- `mcp_telemetry_manage op=status` mostra métricas
+- `mcp_telemetry_manage op=export` gera relatório JSON
+- Dados 100% locais (.mcp_telemetry_events.jsonl)
+
+### Métricas
+- **ONDA 1:** 16/17 concluídas
+- **Total tools:** 277
+- **C1:** PASS (0 breaking)
+- **C3:** PASS (smoke_test)
+- **C5:** pre-existente (8 fases overflow)
+
+### Próximo passo
+- **1.Q — Histórico de versões jogáveis** [SÊNIOR] — última fatia da ONDA 1
+
+---
+
+## Handoff anterior (AGENTE 01 — 2026-07-20 — Comando /pesquise)
 
 - **Data:** 2026-07-20
 - **De:** AGENTE 01 (Arquitetura & Core)

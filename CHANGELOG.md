@@ -1,5 +1,16 @@
 # CHANGELOG — mcp-godot-desenvolvimento
 
+## v3.5.1 (2026-07-21) — ONDA 1: Fatia 1.P (AGENTE 01)
+
+### Telemetria opt-in do MCP (1.P)
+- **Novo:** `tools/mcp_telemetry_ops.py` (574 linhas) — rollup `mcp_telemetry_manage(op=status|enable|disable|export|reset)`
+- **Hook:** `track_mcp_event()` em `call_tool()` (fail-open, mesmo padrão de `budget_ops`)
+- **Privacidade:** Consentimento explícito DESLIGADO por padrão, zero envio externo, zero PII
+- **Formato:** JSONL append-only + summary agregado + `track_phase_transition`
+- **Dependências:** Zero (stdlib only: `json`, `pathlib`, `time`, `threading`, `uuid`)
+- **Pesquisa externa:** `docs/PESQUISA_EXTERNA.md` seção 6 (~150 linhas, 8 fontes consultadas)
+- **ONDA 1:** 16/17 concluídas
+
 ## v3.5.0 (2026-07-19) — Sessao de Polimento + Camada 5 Gameplay (AGENTE 02)
 
 ### Polimento (F1-F7)
