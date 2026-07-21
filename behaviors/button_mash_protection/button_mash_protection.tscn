@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://button_mash_protection_v1"][ext_resource type="Script" path="res://behaviors/button_mash_protection/button_mash_protection.gd" id="1_x"][node name="ButtonMashProtection" type="Node"]script=ExtResource("1_x")

@@ -1,0 +1,1 @@
+{"name":"high_contrast","version":"1.0.0","godot_version":"4.7","synonyms":{"pt":["contraste","alto"],"en":["contrast","high"]},"parameters":[{"name":"contrast_level","type":"float","range":{"min":0.5,"max":3.0},"default":1.0}],"signals":[{"name":"contrast_changed","params":[]}],"genres":["generic"],"tags":["acessibilidade"]}
