@@ -41,8 +41,9 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 124,
+    "implementados": 125,
     "lista": [
+      {"id": 44, "nome": "input_manager", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + rebinding runtime. InputMap/device detection/save+load ConfigFile. 2 sinais, 13 testes."},
       {"id": 130, "nome": "match3_grid", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + nucleo match-3. Grade/gemas/deteccao/gravidade/refill/cascata. 3 sinais, 19 testes."},
       {"id": 71, "nome": "camera_framed", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + dead zone camera. Phantom Camera Framed. damping/soft_zone. 7 testes."},
       {"id": 70, "nome": "camera_shake", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + tremor sinusoidal. sin() com frequency/amplitude/duration/decay. Distinto de screen_shake (random). 13 testes."},
@@ -154,5 +155,5 @@
       {"id": 84, "nome": "music_playlist", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + array AudioStream com shuffle, crossfade e next/prev. Bus Music. 5 params, sinais track_changed/playlist_finished. 5 testes. Fonte: Godot 4.7 ClassDB."}
     ]
   },
-  "proximo": "camera_priority (#72) — Grupo: CAMERA. Ou input_manager (#44) — Grupo: SISTEMA."
+  "proximo": "round_timer (#61) — Grupo: ESTRUTURA. Ou camera_priority (#72) — Grupo: CAMERA."
 }

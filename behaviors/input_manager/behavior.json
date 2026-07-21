@@ -1,0 +1,20 @@
+{
+  "name": "input_manager", "version": "1.0.0", "godot_version": "4.7",
+  "description_pt": "Node que gerencia rebinding de input em runtime. Permite reassociar teclas/botões a ações do InputMap, detecta tipo de dispositivo (teclado, gamepad, touch) e salva/carrega bindings via ConfigFile. Essencial para jogos com controles customizáveis.",
+  "description_en": "Node managing runtime input rebinding. Allows reassigning keys/buttons to InputMap actions, detects device type (keyboard, gamepad, touch), and saves/loads bindings via ConfigFile. Essential for games with customizable controls.",
+  "synonyms": {
+    "pt": ["input", "controle", "teclado", "gamepad", "rebind", "remap", "botoes"],
+    "en": ["input", "control", "keyboard", "gamepad", "rebind", "remap", "buttons"]
+  },
+  "parameters": [
+    {"name": "bindings_path", "type": "String", "description_pt": "Caminho para salvar/carregar bindings (ex: user://input_bindings.cfg).", "default": "user://input_bindings.cfg"}
+  ],
+  "signals": [
+    {"name": "device_changed", "description_pt": "Emitido quando o dispositivo de input muda.", "params": [{"name": "device_type", "type": "String"}]},
+    {"name": "action_rebound", "description_pt": "Emitido quando uma ação é reassociada.", "params": [{"name": "action_name", "type": "String"}, {"name": "event", "type": "InputEvent"}]}
+  ],
+  "dependencies": [],
+  "genres": ["platformer", "topdown_shooter", "rpg", "generic"],
+  "conflicts": [],
+  "tags": ["input", "controle", "rebind", "sistema"]
+}

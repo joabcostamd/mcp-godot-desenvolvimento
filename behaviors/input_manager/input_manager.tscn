@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://input_manager_v1"]
+
+[ext_resource type="Script" path="res://behaviors/input_manager/input_manager.gd" id="1_im"]
+
+[node name="InputManager" type="Node"]
+script = ExtResource("1_im")
+bindings_path = "user://input_bindings.cfg"
