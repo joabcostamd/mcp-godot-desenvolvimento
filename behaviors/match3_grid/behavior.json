@@ -1,0 +1,24 @@
+{
+  "name": "match3_grid", "version": "1.0.0", "godot_version": "4.7",
+  "description_pt": "Node que implementa a lógica central de um jogo match-3 (Bejeweled/Candy Crush). Grade 2D com tipos de gemas, detecção de combinações horizontais/verticais, remoção, gravidade, preenchimento e cascata. Ideal como núcleo de puzzles match-3.",
+  "description_en": "Node implementing core match-3 game logic (Bejeweled/Candy Crush). 2D grid with gem types, horizontal/vertical match detection, removal, gravity, refill and cascade. Ideal as the core of match-3 puzzles.",
+  "synonyms": {
+    "pt": ["match3", "puzzle", "gemas", "combinacao", "grade", "bejeweled", "candy"],
+    "en": ["match3", "puzzle", "gems", "match", "grid", "bejeweled", "candy"]
+  },
+  "parameters": [
+    {"name": "grid_width", "type": "int", "description_pt": "Largura da grade (colunas).", "range": {"min": 3, "max": 12}, "default": 8},
+    {"name": "grid_height", "type": "int", "description_pt": "Altura da grade (linhas).", "range": {"min": 3, "max": 12}, "default": 8},
+    {"name": "gem_types", "type": "int", "description_pt": "Número de tipos de gemas diferentes (3-7).", "range": {"min": 3, "max": 7}, "default": 5},
+    {"name": "min_match", "type": "int", "description_pt": "Mínimo de gemas iguais consecutivas para formar combinação.", "range": {"min": 3, "max": 5}, "default": 3}
+  ],
+  "signals": [
+    {"name": "match_found", "description_pt": "Emitido ao detectar combinação. Inclui posições e tipo.", "params": [{"name": "positions", "type": "Array"}, {"name": "gem_type", "type": "int"}]},
+    {"name": "grid_settled", "description_pt": "Emitido quando a grade estabiliza (sem mais combinações após cascata).", "params": []},
+    {"name": "combo", "description_pt": "Emitido a cada cascata bem-sucedida.", "params": [{"name": "count", "type": "int"}]}
+  ],
+  "dependencies": [],
+  "genres": ["puzzle", "casual", "match3"],
+  "conflicts": [],
+  "tags": ["match3", "puzzle", "gemas", "grade"]
+}
