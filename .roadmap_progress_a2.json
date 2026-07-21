@@ -41,8 +41,9 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 119,
+    "implementados": 120,
     "lista": [
+      {"id": 123, "nome": "hand", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + mao de cartas. add/remove/draw_from_deck/play/discard. Fan layout. 24 testes."},
       {"id": 143, "nome": "character_creator", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + partes customizaveis. add_part/set_part_option/set_part_color. Presets ConfigFile via SaveLoad. 28 testes."},
       {"id": 69, "nome": "camera_follow", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Camera2D follow. damping, offset, look_ahead. 8 testes."},
       {"id": 141, "nome": "element_system", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + weakness/resistance table. fire>ice>lightning>water. 11 testes."},

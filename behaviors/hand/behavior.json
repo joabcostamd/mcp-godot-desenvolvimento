@@ -1,0 +1,22 @@
+{
+  "name": "hand", "version": "1.0.0", "godot_version": "4.7",
+  "description_pt": "Node que gerencia a mão de cartas do jogador. Suporta compra do deck, jogar/descartar cartas, limite máximo, e layout em leque com ângulo e espaçamento configuráveis. Integra com Card e Deck siblings.",
+  "description_en": "Node managing the player's card hand. Supports drawing from deck, playing/discarding cards, max card limit, and fan layout with configurable angle and spacing. Integrates with Card and Deck siblings.",
+  "synonyms": {
+    "pt": ["mao", "cartas", "hand", "leque", "jogar", "descartar", "compra"],
+    "en": ["hand", "cards", "fan", "play", "discard", "draw"]
+  },
+  "parameters": [
+    {"name": "max_cards", "type": "int", "description_pt": "Número máximo de cartas na mão.", "range": {"min": 1, "max": 10}, "default": 7},
+    {"name": "fan_angle", "type": "float", "description_pt": "Ângulo total do leque em graus (0 = linha reta, 180 = semicírculo).", "range": {"min": 0.0, "max": 180.0}, "default": 30.0},
+    {"name": "card_spacing", "type": "float", "description_pt": "Espaçamento horizontal entre cartas em pixels.", "range": {"min": 10.0, "max": 500.0}, "default": 80.0}
+  ],
+  "signals": [
+    {"name": "card_added", "description_pt": "Emitido quando uma carta é adicionada à mão.", "params": [{"name": "card", "type": "Card"}]},
+    {"name": "card_removed", "description_pt": "Emitido quando uma carta é removida da mão.", "params": [{"name": "card", "type": "Card"}]}
+  ],
+  "dependencies": ["card", "deck"],
+  "genres": ["card"],
+  "conflicts": [],
+  "tags": ["card", "hand", "leque", "mao"]
+}
