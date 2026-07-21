@@ -433,20 +433,29 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "render_get_settings",
         "csharp_scaffold_project",
         "csharp_generate_script",
+        # ── Movidos do PROTOTIPO (F5 prep) ──
+        "physics_create_joint", "physics_configure_body",
+        "physics_query_area_overlap", "physics_raycast_query",
+        "camera_configure_attributes",
+        "runtime_connect_signal", "runtime_disconnect_signal",
+        "runtime_emit_signal", "runtime_watch_signal",
+        "shader_generate", "shader_list_templates",
 },
     "PROTOTIPO": {
+        # ── Execução runtime (core do prototipar) ──
         "runtime_manage",
         "godot_run_project", "godot_stop_project", "godot_wait_for_bridge",
         "execute_gdscript_runtime",
-        "capture_game_screenshot", "godot_screenshot", "take_screenshot",
-        "get_runtime_state_digest", "capture_runtime_errors",
         "godot_exec", "godot_runtime_info",
         "godot_custom_command", "godot_list_custom_commands",
         "godot_keep_alive",
+        # ── Observação ──
+        "capture_game_screenshot", "godot_screenshot", "take_screenshot",
+        "get_runtime_state_digest", "capture_runtime_errors",
         "effect_probe",
-        "freeze_game_clock", "unfreeze_game_clock",
-        "step_game_time", "step_until",
+        # ── Game bridge ──
         "game_bridge_manage",
+        # ── Rollups de prototipagem rápida ──
         "physics_manage",
         "asset_manage",
         "audio_manage", "generate_audio_sfx",
@@ -454,37 +463,19 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "camera_manage",
         "vfx_manage",
         "shader_manage",
-        "shader_generate", "shader_list_templates",
         "raycast_manage",
-        "create_light_2d",
         "load_scene_async",
-        "batch_atomic_edit", "add_nodes_batch",
-        "set_properties_batch",
-        "inject_input_event", "simulate_input_sequence",
-        "watch_signal", "watch_state_start", "watch_state_collect",
-        # ── F5 preparação: movidos para fases corretas ──
-        # generate_game_art* → CONTEUDO (geração de assets é conteúdo)
-        # generate_3d_* → CONTEUDO
-        # record_* → POLIMENTO (gravação é polimento)
-        # analyze_signal_flow → já está em DESIGN, removido daqui
-    
-        "skeleton_set_bone_pose",
-        "skeleton_create_bone",
-        "skeleton_create_ik_chain",
-        "csg_create_node",
-        "gi_create_node",
-        "scene_fx_create_node",
-        "sky_create_procedural",
-        "camera_configure_attributes",
-        "multimesh_create_instance",
-        "physics_create_joint",
-        "physics_configure_body",
-        "physics_query_area_overlap",
-        "physics_raycast_query",
-        "runtime_connect_signal",
-        "runtime_disconnect_signal",
-        "runtime_emit_signal",
-        "runtime_watch_signal",
+        # ── Movidos para DESIGN: physics_create_joint, physics_configure_body,
+        #     camera_configure_attributes, runtime_connect/disconnect/emit/watch_signal,
+        #     physics_query_area_overlap, physics_raycast_query,
+        #     shader_generate, shader_list_templates
+        # ── Movidos para CONTEUDO: skeleton_*, csg_*, gi_*, scene_fx_*,
+        #     sky_create_procedural, multimesh_create_instance,
+        #     batch_atomic_edit, add_nodes_batch, set_properties_batch,
+        #     create_light_2d
+        # ── Movidos para POLIMENTO: freeze_game_clock, unfreeze_game_clock,
+        #     step_game_time, step_until, watch_signal, watch_state_*,
+        #     inject_input_event, simulate_input_sequence
 },
     "CONTEUDO": {
         "tilemap_manage",
@@ -521,6 +512,15 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "generate_game_art", "generate_game_art_flux",
         "apply_game_art",
         "generate_3d_asset", "generate_3d_placeholder",
+        # ── Movidos do PROTOTIPO (F5 prep) ──
+        "skeleton_set_bone_pose", "skeleton_create_bone",
+        "skeleton_create_ik_chain",
+        "csg_create_node", "gi_create_node",
+        "scene_fx_create_node", "sky_create_procedural",
+        "multimesh_create_instance",
+        "batch_atomic_edit", "add_nodes_batch",
+        "set_properties_batch",
+        "create_light_2d",
 },
     "POLIMENTO": {
         "run_gut_tests", "run_scripted_tests",
@@ -548,6 +548,11 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "runtime_list_signals",
         # ── F5 prep: recording moved from PROTOTIPO ──
         "record_gameplay_gif", "start_recording", "stop_recording",
+        # ── Movidos do PROTOTIPO (F5 prep) ──
+        "freeze_game_clock", "unfreeze_game_clock",
+        "step_game_time", "step_until",
+        "watch_signal", "watch_state_start", "watch_state_collect",
+        "inject_input_event", "simulate_input_sequence",
 },
     "PRONTO_PARA_LANCAR": {
         "export_manage",
