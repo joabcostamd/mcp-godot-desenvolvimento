@@ -1,0 +1,317 @@
+C:\Users\joabc\OneDrive\Documentos\VSCODE\NUCLEO\projetos\mcp-godot-desenvolvimento\.venv\Lib\site-packages\pydantic\main.py:542: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected `ToolAnnotations` - serialized value may not be as expected [field_name='annotations', input_value={'operationCategory': 'read'}, input_type=dict])
+  return self.__pydantic_serializer__.to_json(
+C:\Users\joabc\OneDrive\Documentos\VSCODE\NUCLEO\projetos\mcp-godot-desenvolvimento\.venv\Lib\site-packages\pydantic\main.py:542: UserWarning: Pydantic serializer warnings:
+  PydanticSerializationUnexpectedValue(Expected `ToolAnnotations` - serialized value may not be as expected [field_name='annotations', input_value={'operationCategory': 're...', 'deferLoading': True}, input_type=dict])
+  return self.__pydantic_serializer__.to_json(
+============================================================
+CONTAGENS
+============================================================
+defs_total = 287
+defs_raw = 287
+defs_rollup = 32
+handlers_total = 307
+handlers_rollup = 32
+manage_em_raw = ['budget_manage', 'community_manage', 'complexity_gate_manage', 'fun_report_manage', 'mcp_telemetry_manage', 'playtest_manage', 'polish_manage', 'publish_manage', 'quickstart_manage', 'reviewer_manage', 'scope_manage', 'teacher_manage', 'version_history_manage']
+manage_em_rollup = ['analysis_manage', 'anim_manage', 'asset_manage', 'audio_manage', 'camera_manage', 'config_manage', 'd3_manage', 'debug_manage', 'dialogue_manage', 'export_manage', 'file_manage', 'game_bridge_manage', 'gamestate_manage', 'inventory_manage', 'localization_manage', 'music_manage', 'navigation_manage', 'node_manage', 'physics_manage', 'playtest_manage', 'project_manage', 'raycast_manage', 'runtime_manage', 'safety_manage', 'scene_manage', 'script_manage', 'shader_manage', 'test_manage', 'tilemap_manage', 'ui_manage', 'vfx_manage', 'vision_manage']
+toolsets_entradas_soma = 306
+toolsets_nomes_unicos = 306
+phase_nomes_unicos = 244
+
+============================================================
+DIVERGENCIAS
+============================================================
+
+--- SEM_HANDLER (em _tool_defs() mas NAO em _build_handlers()) ---
+Total: 11
+  configure_particles_2d
+  configure_standard_material_3d
+  create_joint_2d
+  create_light_2d
+  create_light_3d
+  create_navigation_agent_2d
+  create_navigation_region_2d
+  create_particles_2d
+  create_particles_3d
+  generate_shader_2d
+  setup_camera_2d
+
+--- SEM_DEF (em _build_handlers() mas NAO em _tool_defs()) ---
+Total: 31
+  analysis_manage
+  anim_manage
+  asset_manage
+  audio_manage
+  camera_manage
+  config_manage
+  d3_manage
+  debug_manage
+  dialogue_manage
+  export_manage
+  file_manage
+  game_bridge_manage
+  gamestate_manage
+  inventory_manage
+  localization_manage
+  music_manage
+  navigation_manage
+  node_manage
+  physics_manage
+  project_manage
+  raycast_manage
+  runtime_manage
+  safety_manage
+  scene_manage
+  script_manage
+  shader_manage
+  test_manage
+  tilemap_manage
+  ui_manage
+  vfx_manage
+  vision_manage
+
+--- DUPLICADOS_NS (nome em 2+ namespaces) ---
+Total: 0
+
+--- NS_FANTASMA (em TOOLSETS mas NAO em _tool_defs()) ---
+Total: 31
+  analysis_manage
+  anim_manage
+  asset_manage
+  audio_manage
+  camera_manage
+  config_manage
+  d3_manage
+  debug_manage
+  dialogue_manage
+  export_manage
+  file_manage
+  game_bridge_manage
+  gamestate_manage
+  inventory_manage
+  localization_manage
+  music_manage
+  navigation_manage
+  node_manage
+  physics_manage
+  project_manage
+  raycast_manage
+  runtime_manage
+  safety_manage
+  scene_manage
+  script_manage
+  shader_manage
+  test_manage
+  tilemap_manage
+  ui_manage
+  vfx_manage
+  vision_manage
+
+--- PHASE_FANTASMA (em PHASE_TOOLSETS mas NAO em _tool_defs()) ---
+Total: 29
+  analysis_manage
+  anim_manage
+  asset_manage
+  audio_manage
+  camera_manage
+  config_manage
+  d3_manage
+  debug_manage
+  dialogue_manage
+  export_manage
+  file_manage
+  game_bridge_manage
+  gamestate_manage
+  inventory_manage
+  navigation_manage
+  node_manage
+  physics_manage
+  project_manage
+  raycast_manage
+  runtime_manage
+  safety_manage
+  scene_manage
+  script_manage
+  shader_manage
+  test_manage
+  tilemap_manage
+  ui_manage
+  vfx_manage
+  vision_manage
+
+--- SEM_NAMESPACE (em _tool_defs() mas NAO em TOOLSETS) ---
+Total: 12
+  budget_manage
+  community_manage
+  complexity_gate_manage
+  fun_report_manage
+  mcp_telemetry_manage
+  polish_manage
+  publish_manage
+  quickstart_manage
+  reviewer_manage
+  scope_manage
+  teacher_manage
+  version_history_manage
+
+--- SEM_FASE (em _tool_defs() mas NAO em PHASE_TOOLSETS nem CORE) ---
+Total: 72
+  accessibility_add_subtitles
+  accessibility_apply_colorblind_filter
+  accessibility_audit_scene
+  accessibility_certification_checklist
+  accessibility_remap_controls
+  adaptive_difficulty_adjust
+  add_raycast_2d
+  add_shapecast_2d
+  assert_node_exists
+  budget_manage
+  capsule_generate_store_image
+  cloud_save_configure
+  community_manage
+  complexity_gate_manage
+  configure_particles_2d
+  configure_standard_material_3d
+  create_achievement_system
+  create_joint_2d
+  create_light_3d
+  create_navigation_agent_2d
+  create_navigation_region_2d
+  create_particles_2d
+  create_particles_3d
+  cutscene_add_camera_shot
+  cutscene_add_dialogue_event
+  cutscene_create_timeline
+  dialogue_generate_npc_lines
+  dialogue_generate_personality
+  edit_shader
+  fun_report_manage
+  game_await_signal
+  game_call_method
+  game_find_nodes_by_class
+  game_get_camera
+  game_http_request
+  game_input_state
+  game_multiplayer
+  game_pause
+  game_performance
+  game_play_animation
+  game_raycast
+  game_serialize_state
+  game_spawn_node
+  game_window
+  generate_shader_2d
+  get_shader_params
+  mcp_telemetry_manage
+  mod_manifest_generate
+  onboarding_check_first_experience
+  onboarding_create_guided_tour
+  onboarding_create_tutorial_step
+  playtest_manage
+  polish_manage
+  publish_manage
+  quest_generate
+  quickstart_manage
+  read_shader
+  remote_balance_config
+  reviewer_manage
+  run_stress_test
+  scope_manage
+  setup_camera_2d
+  teacher_manage
+  telemetry_get_funnel
+  telemetry_heatmap
+  telemetry_session_summary
+  telemetry_track_event
+  trailer_capture_clip
+  trailer_render_sequence
+  validate_achievement_config
+  validate_mod_compatibility
+  version_history_manage
+
+--- COLISAO_ROLLUP (em _raw_tool_defs() E em get_rollup_tool_defs()) ---
+Total: 1
+  playtest_manage
+
+============================================================
+TOOLS VISIVEIS POR FASE (CORE + fase)
+============================================================
+  IDEIA: 52 tools visiveis (CORE=34 + fase=36)
+  DESIGN: 66 tools visiveis (CORE=34 + fase=41)
+  PROTOTIPO: 94 tools visiveis (CORE=34 + fase=60)
+  CONTEUDO: 82 tools visiveis (CORE=34 + fase=48)
+  POLIMENTO: 68 tools visiveis (CORE=34 + fase=34)
+  PRONTO_PARA_LANCAR: 53 tools visiveis (CORE=34 + fase=19)
+
+============================================================
+JSON DE 3 TOOLS (pos-processadas)
+============================================================
+
+--- read_file ---
+{
+  "name": "read_file",
+  "title": "Ler Arquivo",
+  "description": "Lê o conteúdo de um arquivo do projeto (.gd, .tscn, .tres, etc.). Use para examinar scripts, cenas ou qualquer arquivo de texto do projeto. Quando NÃO usar: para listar arquivos (use inspect_project). Pré-condições: o arquivo deve existir no projeto. Exemplo de input: {\"path\": \"scripts/player.gd\"}. Erro mais comum: arquivo não encontrado — use inspect_project para listar arquivos disponíveis.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "type": "string",
+        "description": "Caminho relativo ao projeto."
+      },
+      "start_line": {
+        "type": "integer",
+        "description": "Linha inicial (1-indexed, opcional)."
+      },
+      "end_line": {
+        "type": "integer",
+        "description": "Linha final inclusiva (opcional)."
+      }
+    },
+    "required": [
+      "path"
+    ],
+    "additionalProperties": false
+  },
+  "outputSchema": null,
+  "icons": null,
+  "annotations": {
+    "operationCategory": "read"
+  },
+  "meta": null,
+  "execution": null,
+  "readOnlyHint": true,
+  "idempotentHint": true,
+  "openWorldHint": true
+}
+
+--- scene_manage: NAO ENCONTRADA em _tool_defs() ---
+
+--- godot_exec ---
+{
+  "name": "godot_exec",
+  "title": null,
+  "description": "Executa codigo GDScript DENTRO do jogo rodando. Use para setup de cenarios de teste: spawnar inimigos, modificar estado. Use 'return' para obter valores.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "string",
+        "description": "Codigo GDScript a executar no jogo"
+      }
+    },
+    "required": [
+      "code"
+    ],
+    "additionalProperties": false
+  },
+  "outputSchema": null,
+  "icons": null,
+  "annotations": {
+    "operationCategory": "read+write",
+    "deferLoading": true
+  },
+  "meta": null,
+  "execution": null,
+  "openWorldHint": true
+}

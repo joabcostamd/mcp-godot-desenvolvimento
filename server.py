@@ -449,9 +449,6 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "game_bridge_manage",
         "physics_manage",
         "asset_manage",
-        "generate_game_art", "generate_game_art_flux",
-        "apply_game_art",
-        "generate_3d_asset", "generate_3d_placeholder",
         "audio_manage", "generate_audio_sfx",
         "anim_manage", "create_animation_tree",
         "camera_manage",
@@ -465,8 +462,11 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "set_properties_batch",
         "inject_input_event", "simulate_input_sequence",
         "watch_signal", "watch_state_start", "watch_state_collect",
-        "record_gameplay_gif", "start_recording", "stop_recording",
-        "analyze_signal_flow",
+        # ── F5 preparação: movidos para fases corretas ──
+        # generate_game_art* → CONTEUDO (geração de assets é conteúdo)
+        # generate_3d_* → CONTEUDO
+        # record_* → POLIMENTO (gravação é polimento)
+        # analyze_signal_flow → já está em DESIGN, removido daqui
     
         "skeleton_set_bone_pose",
         "skeleton_create_bone",
@@ -517,6 +517,10 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "render_set_antialiasing",
         "render_set_scaling",
         "render_set_quality",
+        # ── F5 prep: assets generation moved from PROTOTIPO ──
+        "generate_game_art", "generate_game_art_flux",
+        "apply_game_art",
+        "generate_3d_asset", "generate_3d_placeholder",
 },
     "POLIMENTO": {
         "run_gut_tests", "run_scripted_tests",
@@ -542,6 +546,8 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "vibe_coding_mode", "get_vibe_context",
     
         "runtime_list_signals",
+        # ── F5 prep: recording moved from PROTOTIPO ──
+        "record_gameplay_gif", "start_recording", "stop_recording",
 },
     "PRONTO_PARA_LANCAR": {
         "export_manage",
