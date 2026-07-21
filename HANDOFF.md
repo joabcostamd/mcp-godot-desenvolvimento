@@ -3,7 +3,53 @@
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo
 > para que o outro agente saiba o estado do projeto na próxima sessão.
 
-## Último Handoff (AGENTE 01 — 2026-07-21 — Fatia 1.Q)
+## ⚠️ AVISO AO AGENTE 2 (2026-07-21)
+
+**ONDA 3 iniciada pelo Agente 1. Não interfira nos seguintes arquivos:**
+- `tools/playtest_ops.py`
+- `core/tool_definitions.py`
+- `server.py`
+- `tests/test_playtest.py`
+- `.roadmap_progress.json`
+
+Continue seu trabalho na ONDA 2 normalmente nos seus territórios.
+
+## Último Handoff (AGENTE 01 — 2026-07-21 — Fatia 3.A)
+
+- **Data:** 2026-07-21
+- **De:** AGENTE 01 (Arquitetura & Core)
+- **Ação:** Implementação da Fatia 3.A — Playtest camada 1: smoke automático [AUTO]
+
+### O que foi feito
+
+- `tools/playtest_ops.py` — estendido (+175 linhas): rollup `playtest_manage(op=smoke)`
+- Smoke test do JOGO via runtime bridge (:8790): coleta FPS, draw_calls, memória
+- Detecta crash (bridge para de responder), FPS abaixo do threshold
+- Valida viewport ativo (screenshot)
+- `core/tool_definitions.py` — tool `playtest_manage` registrada
+- `server.py` — handler `_handle_playtest_manage` registrado
+- `tests/test_playtest.py` — 10 testes pytest
+
+### Como usar
+- `playtest_manage op=smoke duration=10 fps_threshold=30` — smoke test do jogo
+- Requer jogo rodando em debug (F5 no Godot)
+- NÃO usa --headless (R12: não funciona no Windows 4.7)
+
+### Métricas
+- **ONDA 1:** ✅ 17/17
+- **ONDA 3:** 1/11 (3.A concluída)
+- **Total tools:** 279 (+1)
+- **C1:** PASS (0 breaking)
+- **C3:** PASS (smoke_test)
+- **C5:** pre-existente (8 fases overflow)
+- **Testes:** 10/10 pytest + regressão 26/26
+
+### Próximo passo
+- **3.B — Playtest camada 2: personas scriptadas** [SÊNIOR] — ou continuar ONDA 2 com Agente 2
+
+---
+
+## Handoff anterior (AGENTE 01 — 2026-07-21 — Fatia 1.Q)
 
 - **Data:** 2026-07-21
 - **De:** AGENTE 01 (Arquitetura & Core)

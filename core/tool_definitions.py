@@ -2379,6 +2379,39 @@ def _raw_tool_defs() -> list[Tool]:
             description="Captura informacoes de runtime: FPS, contagem de objetos, estado da arvore.",
             inputSchema={"type": "object", "properties": {}, "required": []},
         ),
+        # ── Playtest Onda 3 (smoke test do jogo) ────────────────
+        Tool(
+            name="playtest_manage",
+            description=(
+                "🎮 Playtest automatizado do jogo (ONDA 3 — Fatia 3.A). "
+                "Smoke test: verifica se o jogo abre, nao crasha e mantem FPS minimo. "
+                "Usa o runtime bridge (porta 8790) — requer jogo rodando em debug (F5 no Godot). "
+                "Quando usar: validar que o jogo esta saudavel apos alteracoes, "
+                "antes de um playtest humano, ou como gate de CI. "
+                "Operacoes: smoke (teste de sanidade). "
+                "Exemplo: {\"op\": \"smoke\", \"duration\": 10, \"fps_threshold\": 30}. "
+                "Pré-condições: jogo rodando em modo debug (F5 no Godot)."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "op": {
+                        "type": "string",
+                        "description": "Operacao: 'smoke'.",
+                        "enum": ["smoke"],
+                    },
+                    "duration": {
+                        "type": "integer",
+                        "description": "Segundos de observacao (default: 10).",
+                    },
+                    "fps_threshold": {
+                        "type": "integer",
+                        "description": "FPS minimo aceitavel (default: 30).",
+                    },
+                },
+                "required": [],
+            },
+        ),
         # ── Playtest Onda 1 (watch_state, godot_exec, effect_probe) ──
         Tool(
             name="watch_state_start",

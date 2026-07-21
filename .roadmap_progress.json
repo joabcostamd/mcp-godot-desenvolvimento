@@ -1,4 +1,14 @@
 {
+  "onda_3_iniciada_por": "AGENTE 01 — 2026-07-21",
+  "aviso_agente_2": "ONDA 3 em andamento pelo Agente 1. NAO INTERFIRA nos arquivos: tools/playtest_ops.py, core/tool_definitions.py, server.py, tests/test_playtest.py.",
+  "fatia_3.A": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "2cffa92",
+    "resultado": "Playtest camada 1: smoke automatico. Estendido tools/playtest_ops.py (+175 linhas): rollup playtest_manage(op=smoke). Smoke test do JOGO via runtime bridge (:8790): metricas FPS/draw_calls/memoria, deteccao de crash, validacao de viewport. NAO usa --headless (R12). 279 tools (+1). C1 PASS (0 breaking), C3 PASS. 10/10 testes pytest passam."
+  },
   "fatia_1.Q": {
     "status": "concluida",
     "data": "2026-07-21",

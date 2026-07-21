@@ -2240,6 +2240,8 @@ def _build_handlers() -> dict:
         "step_until": _handle_step_until,
         "get_runtime_state_digest": _handle_get_runtime_state_digest,
         "capture_runtime_errors": _handle_capture_runtime_errors,
+        # Playtest Onda 3 (smoke test do jogo)
+        "playtest_manage": _handle_playtest_manage,
         # Playtest Onda 1 (watch_state, godot_exec, effect_probe)
         "watch_state_start": watch_state_start,
         "watch_state_collect": watch_state_collect,
@@ -4051,6 +4053,16 @@ def _handle_get_runtime_state_digest(args: dict) -> dict:
 
 def _handle_capture_runtime_errors(args: dict) -> dict:
     return capture_runtime_errors()
+
+
+# ── Playtest Onda 3 (smoke test do jogo) ────────────────────────────
+
+def _handle_playtest_manage(args: dict) -> dict:
+    """Handler para playtest_manage — playtest automatizado (Fatia 3.A)."""
+    from tools.playtest_ops import playtest_manage
+    op = args.get("op", "smoke")
+    params = {k: v for k, v in args.items() if k != "op"}
+    return playtest_manage(op=op, params=params)
 
 
 # ── Auto-Config Handlers (Fase 2C) ──────────────────────────────────

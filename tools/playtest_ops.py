@@ -945,3 +945,212 @@ def _interpret_curve(completed: int, crashes: int, softlocks: int, errors: int,
     if fail_rate > 0.5:
         return f"Dificuldade ALTA: {fail_rate:.0%} das sessões falham. Considere reduzir dificuldade inicial."
     return f"Curva mista: {completed} completas, {crashes} crashes, {softlocks} softlocks, {errors} erros. Ajuste balanceamento."
+
+
+# ══════════════════════════════════════════════════════════════
+# ONDA 3: Rollup playtest_manage (Fatia 3.A — smoke test do jogo)
+# ══════════════════════════════════════════════════════════════
+
+import time as _time
+
+# Constantes do smoke test
+_DEFAULT_SMOKE_DURATION = 10
+_DEFAULT_FPS_THRESHOLD = 30
+_DEFAULT_DRAW_CALL_LIMIT = 1000
+
+
+def _is_runtime_bridge_available(timeout: float = 2.0) -> bool:
+    """Verifica se o runtime bridge (:8790) esta respondendo."""
+    try:
+        from runtime_bridge_client import send_bridge_command
+        result = send_bridge_command({"cmd": "runtime_info"}, timeout=timeout)
+        return result.get("ok", False)
+    except Exception:
+        return False
+
+
+def _collect_playtest_metrics() -> dict | None:
+    """Coleta metricas do jogo via runtime bridge.
+
+    Returns:
+        dict com fps, draw_calls, memory_mb ou None.
+    """
+    try:
+        from runtime_bridge_client import send_bridge_command
+        result = send_bridge_command({"cmd": "runtime_info"}, timeout=3.0)
+        if result.get("ok"):
+            return {
+                "fps": result.get("fps", 0),
+                "draw_calls": result.get("draw_calls", 0),
+                "memory_mb": round(result.get("static_memory_mb", 0), 1),
+                "physics_ms": round(result.get("physics_process_time_ms", 0), 1),
+            }
+        return None
+    except Exception:
+        return None
+
+
+def _capture_viewport_screenshot() -> dict | None:
+    """Captura screenshot para confirmar viewport ativo."""
+    try:
+        from runtime_bridge_client import send_bridge_command
+        result = send_bridge_command({"cmd": "screenshot"}, timeout=5.0)
+        if result.get("ok"):
+            return {
+                "width": result.get("width", 0),
+                "height": result.get("height", 0),
+            }
+        return None
+    except Exception:
+        return None
+
+
+def _op_playtest_smoke(params: dict) -> dict:
+    """Smoke test do jogo: abre, aguenta N segundos sem crash, FPS ok.
+
+    Usa o runtime bridge (:8790) para metricas em tempo real.
+    NAO requer Godot editor fechado — requer jogo rodando em debug (F5).
+
+    Campos em params:
+        duration: int (default 10) — segundos de observacao
+        fps_threshold: int (default 30) — FPS minimo aceitavel
+    """
+    duration = params.get("duration", _DEFAULT_SMOKE_DURATION)
+    fps_threshold = params.get("fps_threshold", _DEFAULT_FPS_THRESHOLD)
+
+    if not isinstance(duration, (int, float)) or duration < 1:
+        return {
+            "status": "error",
+            "message": f"Duracao invalida: {duration}. Use um valor >= 1 segundo.",
+        }
+    if not isinstance(fps_threshold, (int, float)) or fps_threshold < 1:
+        return {
+            "status": "error",
+            "message": f"FPS threshold invalido: {fps_threshold}. Use um valor >= 1.",
+        }
+
+    duration = int(duration)
+    fps_threshold = int(fps_threshold)
+
+    if not _is_runtime_bridge_available():
+        return {
+            "status": "error",
+            "message": (
+                "Jogo nao esta rodando em modo debug. "
+                "Abra o Godot e rode o jogo (F5) antes do smoke test. "
+                "O runtime bridge (porta 8790) precisa estar ativo."
+            ),
+        }
+
+    initial = _collect_playtest_metrics()
+    if initial is None:
+        return {
+            "status": "error",
+            "message": "Falha ao coletar metricas iniciais. Bridge respondeu mas runtime_info falhou.",
+        }
+
+    viewport = _capture_viewport_screenshot()
+    viewport_ok = viewport is not None and viewport.get("width", 0) > 0
+
+    _time.sleep(duration)
+
+    final = _collect_playtest_metrics()
+    if final is None:
+        return {
+            "status": "fail",
+            "message": (
+                "Jogo crashou durante o smoke test. "
+                f"Metricas iniciais OK (FPS: {initial['fps']}), "
+                f"mas bridge parou de responder apos {duration}s."
+            ),
+            "initial_metrics": initial,
+            "duration_s": duration,
+            "crashed": True,
+        }
+
+    warnings = []
+    fps_min = min(initial["fps"], final["fps"])
+    fps_avg = round((initial["fps"] + final["fps"]) / 2, 1)
+    fps_max = max(initial["fps"], final["fps"])
+
+    if fps_min < fps_threshold:
+        warnings.append(
+            f"FPS abaixo do threshold: minimo {fps_min} < {fps_threshold}."
+        )
+
+    if fps_avg < 60:
+        warnings.append(
+            f"FPS medio baixo: {fps_avg}. "
+            "No editor, FPS < 60 e esperado em modo debug."
+        )
+
+    max_draw = max(initial["draw_calls"], final["draw_calls"])
+    if max_draw > _DEFAULT_DRAW_CALL_LIMIT:
+        warnings.append(
+            f"Draw calls elevadas: {max_draw} > {_DEFAULT_DRAW_CALL_LIMIT}."
+        )
+
+    if not viewport_ok:
+        warnings.append(
+            "Viewport nao retornou screenshot valida. Camera ou cena podem estar vazias."
+        )
+
+    passed = fps_min >= fps_threshold
+
+    return {
+        "status": "pass" if passed else "warn",
+        "message": (
+            f"Smoke test concluido em {duration}s. "
+            f"FPS: {fps_min}/{fps_avg}/{fps_max} (min/med/max). "
+            + (f"{len(warnings)} alerta(s)." if warnings else "Sem alertas.")
+        ),
+        "metrics": {
+            "initial": initial,
+            "final": final,
+            "fps_min": fps_min,
+            "fps_avg": fps_avg,
+            "fps_max": fps_max,
+            "fps_threshold": fps_threshold,
+            "draw_calls_max": max_draw,
+        },
+        "viewport_active": viewport_ok,
+        "viewport_width": viewport.get("width", 0) if viewport else 0,
+        "viewport_height": viewport.get("height", 0) if viewport else 0,
+        "duration_s": duration,
+        "warnings": warnings,
+        "crashed": False,
+        "note": (
+            "Metricas coletadas no editor (debug). "
+            "FPS no export tende a ser maior. "
+            "Este teste NAO substitui playtest humano — "
+            "verifica apenas que o jogo abre e nao crasha."
+        ),
+    }
+
+
+_PLAYTEST_OPS = {
+    "smoke": _op_playtest_smoke,
+}
+
+
+def playtest_manage(op: str, params: dict | None = None) -> dict:
+    """Gerencia playtesting automatizado do jogo (ONDA 3).
+
+    Args:
+        op: Operacao ('smoke').
+        params: Parametros especificos da operacao.
+
+    Returns:
+        dict com resultado da operacao.
+    """
+    if op not in _PLAYTEST_OPS:
+        from difflib import get_close_matches
+        suggestions = get_close_matches(op, list(_PLAYTEST_OPS.keys()), n=3)
+        return {
+            "status": "error",
+            "message": f"Operacao '{op}' desconhecida.",
+            "available_ops": list(_PLAYTEST_OPS.keys()),
+            "suggestions": suggestions,
+        }
+
+    return _PLAYTEST_OPS[op](params or {})
