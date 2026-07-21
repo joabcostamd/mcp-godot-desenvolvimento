@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 49,
+    "implementados": 50,
     "lista": [
       {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido"},
       {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido"},
@@ -87,8 +87,9 @@
       {"id": 42, "nome": "scene_transition", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "CanvasLayer + ColorRect fullscreen. transition_to(scene_path,dur) fade-out -> change_scene_to_file -> fade-in. 2 params, sinais started/finished. 5 testes. Fonte: Godot 4.7 ClassDB."},
       {"id": 43, "nome": "audio_manager", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + AudioServer bus control. play_sfx/play_music com auto-limpeza. Volume Master/Music/SFX. 3 params. 6 testes. Fonte: Godot 4.7 ClassDB."},
       {"id": 40, "nome": "main_menu", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "CanvasLayer + VBoxContainer + botoes Play/Settings/Quit. Config: play_scene, settings_scene, show_quit, show_settings. 3 sinais. Usa SceneTransition. 7 testes. Fonte: Godot 4.7 ClassDB."},
-      {"id": 83, "nome": "sfx_player", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + AudioStreamPlayer wrapper one-shot. play/play_stream com auto-limpeza. 5 params, sinais played/finished. 5 testes. Fonte: Godot 4.7 ClassDB."}
+      {"id": 83, "nome": "sfx_player", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + AudioStreamPlayer wrapper one-shot. play/play_stream com auto-limpeza. 5 params, sinais played/finished. 5 testes. Fonte: Godot 4.7 ClassDB."},
+      {"id": 41, "nome": "settings", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "CanvasLayer + sliders Master/Music/SFX + toggle fullscreen. Integracao SaveLoad. apply(). 5 params, sinal setting_changed. 5 testes. Fonte: Godot 4.7 ClassDB."}
     ]
   },
-  "proximo": "settings (#41) — depende de save_load + audio_manager (OK). Grupo: Sistema."
+  "proximo": "music_playlist (#84) — depende de audio_manager (OK). Grupo: Audio."
 }
