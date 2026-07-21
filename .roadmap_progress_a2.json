@@ -41,8 +41,9 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 121,
+    "implementados": 122,
     "lista": [
+      {"id": 70, "nome": "camera_shake", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + tremor sinusoidal. sin() com frequency/amplitude/duration/decay. Distinto de screen_shake (random). 13 testes."},
       {"id": 128, "nome": "idle_generator", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + geracao idle/clicker. _physics_process, max_storage, upgrade com custo escalavel. 3 sinais, 20 testes."},
       {"id": 123, "nome": "hand", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + mao de cartas. add/remove/draw_from_deck/play/discard. Fan layout. 24 testes."},
       {"id": 143, "nome": "character_creator", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + partes customizaveis. add_part/set_part_option/set_part_color. Presets ConfigFile via SaveLoad. 28 testes."},
