@@ -41,8 +41,11 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 115,
+    "implementados": 118,
     "lista": [
+      {"id": 69, "nome": "camera_follow", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Camera2D follow. damping, offset, look_ahead. 8 testes."},
+      {"id": 141, "nome": "element_system", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + weakness/resistance table. fire>ice>lightning>water. 11 testes."},
+      {"id": 139, "nome": "skill_tree", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + nos conectados com custo/prereqs. Integra CharacterStats. 16 testes."},
       {"id": 142, "nome": "equipment_slot", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + equip/unequip. Integra Inventory + CharacterStats. 8 testes."},
       {"id": 138, "nome": "character_stats", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + STR/DEX/INT/VIT. Derivados fisico/magico/atk_speed. Modifiers. 11 testes."},
       {"id": 140, "nome": "status_effect", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + DoT/HoT buff/debuff. Stacks, refresh, ticks. Integra Health. 18 testes."},

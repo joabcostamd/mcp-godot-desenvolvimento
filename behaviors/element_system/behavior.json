@@ -1,0 +1,21 @@
+{
+  "name": "element_system", "version": "1.0.0", "godot_version": "4.7",
+  "description_pt": "Sistema de elementos e resistências. Define fraquezas e resistências entre elementos (fogo > gelo > raio > agua > fogo). Modifica dano recebido baseado no elemento do ataque. Integra com Health sibling via sinal damage_taken.",
+  "description_en": "Element and resistance system. Defines weaknesses and resistances between elements (fire > ice > lightning > water > fire). Modifies received damage based on attack element. Integrates with Health sibling via damage_taken signal.",
+  "synonyms": {
+    "pt": ["elementos", "fraqueza", "resistencia", "fogo", "gelo", "raio", "agua", "type_chart"],
+    "en": ["elements", "weakness", "resistance", "fire", "ice", "lightning", "water", "type_chart"]
+  },
+  "parameters": [
+    {"name": "entity_element", "type": "String", "description_pt": "Elemento desta entidade (ex: fire, ice, lightning, water, physical).", "default": "physical"},
+    {"name": "weakness_multiplier", "type": "float", "description_pt": "Multiplicador ao receber dano de elemento fraco.", "range": {"min": 1.0, "max": 5.0}, "default": 2.0},
+    {"name": "resistance_multiplier", "type": "float", "description_pt": "Multiplicador ao receber dano de elemento resistido.", "range": {"min": 0.0, "max": 1.0}, "default": 0.5}
+  ],
+  "signals": [
+    {"name": "damage_modified", "description_pt": "Emitido quando o dano e modificado por elemento.", "params": [{"name": "original", "type": "int"}, {"name": "modified", "type": "int"}, {"name": "element", "type": "String"}]}
+  ],
+  "dependencies": ["health"],
+  "genres": ["rpg", "roguelike", "generic"],
+  "conflicts": [],
+  "tags": ["rpg", "elementos", "combate"]
+}

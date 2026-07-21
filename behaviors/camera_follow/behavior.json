@@ -1,0 +1,20 @@
+{
+  "name": "camera_follow", "version": "1.0.0", "godot_version": "4.7",
+  "description_pt": "Node que faz a Camera2D seguir um alvo Node2D suavemente. Offset, damping, look_ahead e limites de cena configuráveis. Suavidade ajustável por eixo.",
+  "description_en": "Node making Camera2D smoothly follow a Node2D target. Configurable offset, damping, look_ahead and scene limits. Adjustable smoothness per axis.",
+  "synonyms": {
+    "pt": ["camera", "seguir", "follow", "suave", "look_ahead"],
+    "en": ["camera", "follow", "smooth", "tracking", "look_ahead"]
+  },
+  "parameters": [
+    {"name": "target", "type": "NodePath", "description_pt": "Caminho para o Node2D alvo (vazio = parent).", "default": ""},
+    {"name": "offset", "type": "Vector2", "default": {"x":0,"y":0}},
+    {"name": "damping", "type": "float", "description_pt": "Suavidade (0=instantaneo, 1=muito lento).", "range":{"min":0,"max":1}, "default":0.1},
+    {"name": "look_ahead", "type": "float", "description_pt": "Distancia de antecipacao na direcao do movimento.", "range":{"min":0,"max":200}, "default":0, "unit":"px"}
+  ],
+  "signals": [],
+  "dependencies": [],
+  "genres": ["platformer", "topdown_shooter", "metroidvania", "generic"],
+  "conflicts": [],
+  "tags": ["camera", "follow"]
+}
