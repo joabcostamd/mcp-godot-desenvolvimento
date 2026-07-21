@@ -41,8 +41,11 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 75,
+    "implementados": 78,
     "lista": [
+      {"id": 93, "nome": "lerp_smooth", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Tween wrapper. move_to/rotate_to/scale_to/modulate_to. 7 testes."},
+      {"id": 88, "nome": "follow_path", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Path2D child. loop, look_along. 4 testes."},
+      {"id": 89, "nome": "look_at_target", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + lerp_angle. set_target/set_target_position. 6 testes."},
       {"id": 90, "nome": "trigger_zone", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + CollisionShape2D auto. trigger_group, trigger_once, reset_trigger. 11 testes."},
       {"id": 87, "nome": "counter", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + min/max/step. increment/decrement/add com clamp. Sinais value_changed/min/max_reached. 16 testes."},
       {"id": 3, "nome": "player_vehicle", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + rotacao + drift. Impulso frontal, turn_rate, max_speed. move_and_slide. 11 testes. Fonte: Godot 4.7 ClassDB."},

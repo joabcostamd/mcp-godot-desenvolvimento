@@ -1,0 +1,22 @@
+{
+  "name": "follow_path",
+  "description_pt": "Faz o parent Node2D seguir um Path2D filho com velocidade configurável. Suporta loop e look_along (rotaciona na direção do path).",
+  "description_en": "Makes the parent Node2D follow a child Path2D with configurable speed. Supports loop and look_along (rotate along path direction).",
+  "synonyms": {
+    "pt": ["seguir_caminho", "patrulha", "trilha", "waypoints"],
+    "en": ["follow_path", "patrol", "track", "waypoints"]
+  },
+  "parameters": [
+    {"name": "speed", "type": "float", "range": {"min": 10, "max": 2000}, "default": 100, "unit": "px/s"},
+    {"name": "loop", "type": "bool", "default": true},
+    {"name": "look_along", "type": "bool", "description_pt": "Rotaciona o parent na direção do movimento.", "default": false}
+  ],
+  "signals": [
+    {"name": "path_finished", "params": []}
+  ],
+  "dependencies": [],
+  "genres": ["generic"],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["path", "movimento", "util"]
+}

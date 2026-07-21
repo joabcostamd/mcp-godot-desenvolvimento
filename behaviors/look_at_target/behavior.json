@@ -1,0 +1,23 @@
+{
+  "name": "look_at_target",
+  "description_pt": "Rotaciona o parent Node2D suavemente para mirar um alvo (Node2D ou posição fixa). Velocidade de rotação configurável e offset angular. Útil para torres, inimigos, NPCs.",
+  "description_en": "Smoothly rotates the parent Node2D to look at a target (Node2D or fixed position). Configurable rotation speed and angular offset. Useful for turrets, enemies, NPCs.",
+  "synonyms": {
+    "pt": ["mirar", "rotacionar", "apontar", "torre", "face_target"],
+    "en": ["aim", "rotate", "face", "turret", "look_at"]
+  },
+  "parameters": [
+    {"name": "rotation_speed", "type": "float", "description_pt": "Velocidade de rotação (rad/s). 0 = instantâneo.", "range": {"min": 0.0, "max": 50.0}, "default": 5.0, "unit": "rad/s"},
+    {"name": "angle_offset", "type": "float", "description_pt": "Deslocamento angular em radianos (ex: PI/2 para sprite virado).", "default": 0.0, "unit": "rad"}
+  ],
+  "signals": [
+    {"name": "target_acquired", "description_pt": "Emitido quando o alvo é definido.", "params": [{"name": "target", "type": "Node2D"}]},
+    {"name": "target_lost", "description_pt": "Emitido quando o alvo é removido.", "params": []}
+  ],
+  "dependencies": [],
+  "genres": ["generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["rotacao", "mirar", "util"]
+}
