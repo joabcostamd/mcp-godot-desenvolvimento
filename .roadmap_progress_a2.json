@@ -41,22 +41,23 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 16,
+    "implementados": 17,
     "lista": [
-      {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido", "data": "2026-07-20", "hash": "0fddd1c"},
-      {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "893be48"},
-      {"id": 11, "nome": "hitbox", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "f2d5df8", "nota": "Area2D + Health. 4 params, 3 sinais, 21 testes."},
-      {"id": 12, "nome": "hurtbox", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "f2d5df8", "nota": "Area2D passiva + Health. Detecta Hitbox e Projectile. 27 testes."},
-      {"id": 13, "nome": "fire_rate", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "f2d5df8", "nota": "Node + Timer. Cooldown + burst. 19 testes."},
-      {"id": 14, "nome": "knockback", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "f2d5df8", "nota": "Node + impulso ao CharacterBody2D pai. 17 testes."},
-      {"id": 19, "nome": "beam_laser", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "RayCast2D + Line2D. Dano contínuo (dps). 17 testes."},
-      {"id": 20, "nome": "hitscan", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "RayCast2D one-shot. 4 params, 2 sinais, flash visual. 18 testes."},
-      {"id": 21, "nome": "enemy_chase", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "f2d5df8", "nota": "Node + perseguição ao player. P1-P8 checklist. 17 testes."},
-      {"id": 22, "nome": "enemy_patrol", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "Node + waypoints. 5 params, loop/ping_pong. StateMachine sibling. 12 testes."},
-      {"id": 23, "nome": "line_of_sight", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "Area2D + CircleShape2D. Cone de visão com dot product. 4 params. 14 testes."},
-      {"id": 25, "nome": "state_machine", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "hash": "f2d5df8", "nota": "FSM leve. 16 testes."}
+      {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido"},
+      {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido"},
+      {"id": 11, "nome": "hitbox", "versao": "1.0.0", "status": "concluido"},
+      {"id": 12, "nome": "hurtbox", "versao": "1.0.0", "status": "concluido"},
+      {"id": 13, "nome": "fire_rate", "versao": "1.0.0", "status": "concluido"},
+      {"id": 14, "nome": "knockback", "versao": "1.0.0", "status": "concluido"},
+      {"id": 19, "nome": "beam_laser", "versao": "1.0.0", "status": "concluido"},
+      {"id": 20, "nome": "hitscan", "versao": "1.0.0", "status": "concluido"},
+      {"id": 21, "nome": "enemy_chase", "versao": "1.0.0", "status": "concluido"},
+      {"id": 22, "nome": "enemy_patrol", "versao": "1.0.0", "status": "concluido"},
+      {"id": 23, "nome": "line_of_sight", "versao": "1.0.0", "status": "concluido"},
+      {"id": 25, "nome": "state_machine", "versao": "1.0.0", "status": "concluido"},
+      {"id": 27, "nome": "flee", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "Node + fuga condicional. 4 params, 3 condições. StateMachine sibling. 14 testes."}
     ]
   },
-  "proximo": "flee (#27) — health + state_machine. Ou object_pool (#47) para destravar spawner_wave."
+  "proximo": "turret_aim (#29) — fire_rate + projectile. Ou object_pool (#47) para destravar spawner_wave."
   "proximo": "spawner_wave (#24) — Node + spawn_table, wave_interval, max_active."
 }
