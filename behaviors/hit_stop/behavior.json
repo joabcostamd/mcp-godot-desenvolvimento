@@ -1,0 +1,24 @@
+{
+  "name": "hit_stop",
+  "description_pt": "Congelamento momentâneo do jogo (hit-stop / impact-freeze) para dar peso a golpes e impactos. Reduz Engine.time_scale por uma duração curta e restaura suavemente. Ignora triggers durante freeze ativo.",
+  "description_en": "Momentary game freeze (hit-stop / impact-freeze) to add weight to hits and impacts. Reduces Engine.time_scale for a short duration and restores smoothly. Ignores triggers during active freeze.",
+  "synonyms": {
+    "pt": ["hit_stop", "congelamento", "freeze", "impacto", "pausa_curta", "impact_freezing"],
+    "en": ["hit_stop", "freeze", "impact", "hit_pause", "impact_freeze"]
+  },
+  "parameters": [
+    {"name": "freeze_scale", "type": "float", "description_pt": "Engine.time_scale durante o freeze (nunca 0).", "range": {"min": 0.01, "max": 0.5}, "default": 0.05},
+    {"name": "default_duration", "type": "float", "description_pt": "Duração padrão do freeze.", "range": {"min": 0.01, "max": 2.0}, "default": 0.1, "unit": "s"},
+    {"name": "restore_duration", "type": "float", "description_pt": "Duração da transição de volta para 1.0 (0 = instantâneo).", "range": {"min": 0.0, "max": 1.0}, "default": 0.05, "unit": "s"}
+  ],
+  "signals": [
+    {"name": "hit_stopped", "description_pt": "Emitido quando o freeze começa.", "params": []},
+    {"name": "resumed", "description_pt": "Emitido quando o freeze termina e a escala é restaurada.", "params": []}
+  ],
+  "dependencies": ["time_scale"],
+  "genres": ["generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["feedback", "hit_stop", "freeze", "impacto", "game_feel"]
+}
