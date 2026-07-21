@@ -1,0 +1,21 @@
+{
+  "name": "equipment_slot", "version": "1.0.0", "godot_version": "4.7",
+  "description_pt": "Node que gerencia um slot de equipamento. Cada slot tem um tipo (weapon, armor, accessory) e um item equipado. Aplica bônus do item aos atributos do personagem. Integra com CharacterStats e Inventory siblings.",
+  "description_en": "Node managing an equipment slot. Each slot has a type (weapon, armor, accessory) and an equipped item. Applies item bonuses to character stats. Integrates with CharacterStats and Inventory siblings.",
+  "synonyms": {
+    "pt": ["equipar", "slot", "arma", "armadura", "acessorio", "gear"],
+    "en": ["equip", "slot", "weapon", "armor", "accessory", "gear"]
+  },
+  "parameters": [
+    {"name": "slot_type", "type": "String", "description_pt": "Tipo do slot (ex: weapon, armor, accessory).", "default": "weapon"},
+    {"name": "slot_bonus", "type": "float", "description_pt": "Bônus base do slot (multiplicador).", "range": {"min": 0.0, "max": 5.0}, "default": 1.0}
+  ],
+  "signals": [
+    {"name": "equipped", "description_pt": "Emitido ao equipar item.", "params": [{"name": "item_id", "type": "String"}]},
+    {"name": "unequipped", "description_pt": "Emitido ao desequipar.", "params": [{"name": "item_id", "type": "String"}]}
+  ],
+  "dependencies": ["inventory", "character_stats"],
+  "genres": ["rpg", "roguelike", "generic"],
+  "conflicts": [],
+  "tags": ["rpg", "equipamento", "gear"]
+}

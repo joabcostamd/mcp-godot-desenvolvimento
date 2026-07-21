@@ -1,0 +1,22 @@
+{
+  "name": "character_stats", "version": "1.0.0", "godot_version": "4.7",
+  "description_pt": "Sistema de atributos de personagem RPG (força, destreza, inteligência, vitalidade). Cada atributo afeta derivados (dano, velocidade, vida). Suporta modificadores temporários e permanentes. Integra com Health sibling.",
+  "description_en": "RPG character stats system (strength, dexterity, intelligence, vitality). Each stat affects derived values (damage, speed, health). Supports temporary and permanent modifiers. Integrates with Health sibling.",
+  "synonyms": {
+    "pt": ["atributos", "stats", "forca", "destreza", "inteligencia", "vitalidade", "rpg"],
+    "en": ["attributes", "stats", "strength", "dexterity", "intelligence", "vitality", "rpg"]
+  },
+  "parameters": [
+    {"name": "strength", "type": "int", "description_pt": "Força — afeta dano físico.", "range": {"min": 1, "max": 999}, "default": 10},
+    {"name": "dexterity", "type": "int", "description_pt": "Destreza — afeta velocidade de ataque.", "range": {"min": 1, "max": 999}, "default": 10},
+    {"name": "intelligence", "type": "int", "description_pt": "Inteligência — afeta dano mágico.", "range": {"min": 1, "max": 999}, "default": 10},
+    {"name": "vitality", "type": "int", "description_pt": "Vitalidade — afeta HP máximo.", "range": {"min": 1, "max": 999}, "default": 10}
+  ],
+  "signals": [
+    {"name": "stat_changed", "description_pt": "Emitido quando qualquer atributo muda.", "params": [{"name": "stat_name", "type": "String"}, {"name": "new_value", "type": "int"}]}
+  ],
+  "dependencies": ["health"],
+  "genres": ["rpg", "roguelike", "generic"],
+  "conflicts": [],
+  "tags": ["rpg", "atributos", "personagem"]
+}

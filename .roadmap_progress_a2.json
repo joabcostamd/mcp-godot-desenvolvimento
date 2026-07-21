@@ -41,8 +41,11 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 112,
+    "implementados": 115,
     "lista": [
+      {"id": 142, "nome": "equipment_slot", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + equip/unequip. Integra Inventory + CharacterStats. 8 testes."},
+      {"id": 138, "nome": "character_stats", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + STR/DEX/INT/VIT. Derivados fisico/magico/atk_speed. Modifiers. 11 testes."},
+      {"id": 140, "nome": "status_effect", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + DoT/HoT buff/debuff. Stacks, refresh, ticks. Integra Health. 18 testes."},
       {"id": 82, "nome": "patrol_route", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + waypoints sequenciais. loop, wait_time, add_waypoint. 5 testes."},
       {"id": 81, "nome": "avoidance", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + NavigationAgent2D. radius/priority/max_speed. 3 testes."},
       {"id": 80, "nome": "pathfinding", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + NavigationAgent2D. set_target/arrived. move_and_slide. 4 testes."},
