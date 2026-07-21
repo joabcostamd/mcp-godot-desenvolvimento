@@ -5,9 +5,23 @@
 
 ---
 
-## Último Handoff (AGENTE 01 — 2026-07-21 — Sincronização completa)
+## Último Handoff (AGENTE 01 — 2026-07-21 — F5.3-F5.5)
 
 - **Data:** 2026-07-21
+- **Commit:** a82c8ef (main, pushed to origin)
+- **O que foi feito:**
+  - F5.3: Domínio shader (5 ops) — KW-only handlers + manifest + aliases
+  - F5.4: Domínio camera (3 ops) — KW-only handlers + manifest + aliases
+  - F5.5: Domínio navigation (3 ops) — KW-only handlers + manifest + aliases
+  - 7 atômicas removidas de core/tool_definitions.py
+  - Auditoria: C1 0 breaking, C3 smoke_test pass
+  - Testes: 146/148 passam (2 pré-existentes: test_remix)
+- **Decisões:** KW-only handlers como padrão; aliases no manifest; commit automático pós-/act
+- **Pendências:**
+  - F5.2 ui: handlers.py ainda usa re-exports (precisa KW-only wrappers) — ALTA
+  - F5.6+: Continuar migração dos domínios restantes
+  - test_remix: falha pré-existente por diretórios sujos
+- **Próximo:** Corrigir F5.2 ui → /plan para F5.6
 - **De:** AGENTE 01 (Arquitetura & Core)
 - **Ação:** Sincronização completa do repositório + push para GitHub
 

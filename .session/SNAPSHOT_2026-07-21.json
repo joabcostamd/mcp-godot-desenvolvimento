@@ -1,69 +1,32 @@
-{
-  "date": "2026-07-21T23:59:00Z",
+﻿{
+  "date": "2026-07-21T21:00:00-03:00",
   "project": "mcp-godot-desenvolvimento",
-  "version": "3.7.0",
-  "commit": "c4a3872",
+  "version": "v3.8.0",
+  "commit": "a82c8ef",
   "branch": "main",
-  "remote": "origin/main (sincronizado)",
   "files_changed": [
-    "tools/publish_ops.py (NOVO, 289 linhas)",
-    "tools/community_ops.py (NOVO, 260 linhas)",
-    "tests/test_publish.py (NOVO, 18 testes)",
-    "tests/test_community.py (NOVO, 19 testes)",
-    "assets/badge.svg (NOVO)",
-    ".github/ISSUE_TEMPLATE/bug_report.md (NOVO)",
-    ".github/ISSUE_TEMPLATE/feature_request.md (NOVO)",
-    ".github/DISCUSSIONS.md (NOVO)",
-    ".github/audit/tool_organization_audit.md (NOVO, 934 linhas)",
-    "core/tool_definitions.py (+2 tools: publish_manage, community_manage)",
-    "server.py (+2 handlers)",
-    "docs/PESQUISA_EXTERNA.md (+Secoes 7 e 8, ~900 linhas)",
-    ".github/instructions/fontes.instructions.md (+ONDA 4)",
-    "tests/test_budget_gate.py (B5: return→assert + limits)",
-    "tests/test_code_quality_ops.py (B5: return→assert)",
-    "CHANGELOG.md (229 commits)",
-    "README.md (docs_sync)",
-    "HANDOFF.md (atualizado)",
-    ".session/NEXT_SESSION.md (atualizado)",
-    ".roadmap_progress.json (+3 entradas)",
-    ".gitignore (+ROADMAP.md)"
+    ".roadmap_progress.json",
+    "core/tool_definitions.py",
+    "domains/camera/handlers.py",
+    "domains/camera/manifest.py",
+    "domains/navigation/handlers.py",
+    "domains/navigation/manifest.py",
+    "domains/shader/handlers.py",
+    "domains/shader/manifest.py"
   ],
   "features": [
-    "4.A — publish_manage: empacotar addons para AssetLib (package/validate/metadata/preview)",
-    "Gap Comunidade — community_manage: changelog, release_notes, roadmap_public, badge",
-    "4.F — GitHub Discussions: guia de ativacao + templates",
-    "Pesquisa ONDA 4 completa: distribuicao, monetizacao, comunidade, identidade, metricas",
-    "Pesquisa Organizacao de Tools: 287 tools, 75 orfas, 33 familias, recomendacoes",
-    "Documento de auditoria para Claude (.github/audit/tool_organization_audit.md)"
+    "F5.3: Dominio shader (5 ops)",
+    "F5.4: Dominio camera (3 ops)",
+    "F5.5: Dominio navigation (3 ops)",
+    "7 atomicas removidas de core/tool_definitions.py",
+    "KW-only handlers padronizados"
   ],
-  "bugs_fixed": [
-    "B5: 6 warnings PytestReturnNotNoneWarning (return→assert)",
-    "Budget limits atualizados (287 tools: PHASE_LIMIT=110, TOTAL_LIMIT=300)",
-    "test_remix: diagnosticado como sujeira de diretorios",
-    "Handlers orfaos: falso positivo (cached_tool wrapper)"
-  ],
-  "bugs_known": [
-    "C5 orcamento: pre-existente (commit f056aed8, responsabilidade fatia 0.7)",
-    "test_remix: diretorios sujos entre execucoes (nao tem cleanup)",
-    "3 budget gate tests falham: limits desatualizados para 287 tools (esperado apos correcao B5)"
-  ],
+  "bugs_fixed": [],
   "pending": [
-    "Aguardar auditoria do Claude sobre tools",
-    "4.D — Nome e identidade (decisao do Joab)",
-    "Implementar consolidacao de tools conforme recomendacao do Claude",
-    "4.E — Shardbreaker (quando jogo pronto)",
-    "4.F — Ativar GitHub Discussions (1 clique nas settings)"
+    "F5.2 ui: handlers com re-exports (precisa KW-only)",
+    "F5.6 audio: proximo dominio",
+    "test_remix: 2 falhas pre-existentes"
   ],
-  "risks": [
-    "Concorrencia na AssetLib: 6 MCPs ja publicados",
-    "AssetLib em maintenance mode",
-    "287 tools em lista plana — modelo recebe 97 opcoes no PROTOTIPO",
-    "75 tools orfas de fase (26%) — nunca visiveis por curadoria"
-  ],
-  "next_priorities": [
-    "Aguardar feedback do Claude sobre ferramentas",
-    "Decidir nome do produto",
-    "Implementar R1: hints MCP nas 287 tools (readOnlyHint, destructiveHint)",
-    "Implementar consolidacao de rollups prioritaria (game, addon, godot, gdscript)"
-  ]
+  "risks": ["272 raw tools — teto ~70 recomendado"],
+  "next_priorities": ["Corrigir F5.2 ui handlers", "F5.6 dominio audio"]
 }

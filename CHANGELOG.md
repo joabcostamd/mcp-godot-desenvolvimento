@@ -2,6 +2,15 @@
 
 ## v3.8.0 (2026-07-21) — Reorganização de Tools F0-F5
 
+### F5: Migração para domínios (5 concluídos)
+- **physics** (6 ops): add_collision_shape, add_rigid_body, add_static_body, add_character_body, add_raycast_2d, add_shapecast_2d → physics_manage
+- **ui** (12 ops): create_widget, create_tab_with_content, configure_focus_nav, set_tooltip, set_anchor_preset, setup_theme, create_hud, create_menu, create_dialog, create_health_bar, create_stamina_bar, create_minimap → ui_manage
+- **shader** (5 ops): generate_shader_2d, apply_shader_to_node, read_shader, edit_shader, get_shader_params → shader_manage
+- **camera** (3 ops): setup_camera_2d, setup_camera_follow, setup_camera_shake → camera_manage
+- **navigation** (3 ops): create_navigation_region_2d, create_navigation_agent_2d, bake_navigation_polygon → navigation_manage
+- **15 atômicas removidas** de core/tool_definitions.py
+- **Padrão KW-only handlers** estabelecido para todos os domínios
+
 ### Redução de superfície
 - **PROTOTIPO: 100 → 33 tools (-67%)**
 - **CORE: 34 → 23 tools**
