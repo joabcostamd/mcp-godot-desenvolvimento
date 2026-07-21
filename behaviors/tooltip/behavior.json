@@ -1,0 +1,25 @@
+{
+  "name": "tooltip",
+  "description_pt": "Tooltip flutuante para controles UI. Conecta mouse_entered/mouse_exited do parent e exibe um painel com texto após show_delay segundos. Posiciona próximo ao mouse ou com offset fixo.",
+  "description_en": "Floating tooltip for UI controls. Connects to parent's mouse_entered/mouse_exited and shows a text panel after show_delay seconds. Positions near mouse or with fixed offset.",
+  "synonyms": {
+    "pt": ["dica", "info_hover", "balão", "texto_ajuda", "popup_texto"],
+    "en": ["hint", "hover_info", "popup", "help_text", "text_popup"]
+  },
+  "parameters": [
+    {"name": "tooltip_text", "type": "String", "description_pt": "Texto exibido no tooltip.", "default": ""},
+    {"name": "show_delay", "type": "float", "description_pt": "Atraso em segundos antes de mostrar (0 = imediato).", "range": {"min": 0.0, "max": 5.0}, "default": 0.5, "unit": "s"},
+    {"name": "position_offset", "type": "Vector2", "description_pt": "Deslocamento em relação ao canto do parent (ou ao mouse se follow_mouse=true).", "default": {"x":0.0,"y":-40.0}},
+    {"name": "follow_mouse", "type": "bool", "description_pt": "Se true, posiciona próximo ao mouse. Se false, usa position_offset relativo ao parent.", "default": true}
+  ],
+  "signals": [
+    {"name": "tooltip_shown", "description_pt": "Emitido quando o tooltip aparece.", "params": []},
+    {"name": "tooltip_hidden", "description_pt": "Emitido quando o tooltip desaparece.", "params": []}
+  ],
+  "dependencies": [],
+  "genres": ["generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["ui", "tooltip", "hover", "ajuda"]
+}

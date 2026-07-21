@@ -41,8 +41,9 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 63,
+    "implementados": 64,
     "lista": [
+      {"id": 103, "nome": "tooltip", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + PanelContainer/Label flutuante. mouse_entered/mouse_exited + delay. follow_mouse. 12 testes. Fonte: Godot 4.7 ClassDB."},
       {"id": 2, "nome": "player_topdown", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + CharacterBody2D child. InputMap 8-dir com aceleracao/friccao. 4 params, sinal velocity_changed. 17 testes. Fonte: Godot 4.7 ClassDB CharacterBody2D/Input/Vector2.move_toward."},
       {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido"},
       {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido"},
