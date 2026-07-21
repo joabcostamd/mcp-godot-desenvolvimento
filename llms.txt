@@ -1,0 +1,82 @@
+# MCP Godot Agent
+
+> Servidor MCP em Python que e o dono do processo de desenvolvimento de um jogo Godot inteiro — da ideia ao lancamento. Conecta o Godot Engine 4.7 ao VS Code Copilot via protocolo MCP stdio (JSON-RPC 2.0). 277 tools, 6 fases, maquina de estados, auditoria fail-closed.
+
+## Documentacao
+
+- [README](README.md): Visao geral do projeto, instalacao e vitrine de 32 generos de jogos
+- [README.en.md](README.en.md): English version of the project overview
+- [ROADMAP_DEFINITIVO](ROADMAP_DEFINITIVO.md): 5 ondas, 80+ fatias, ordem canonica de desenvolvimento
+- [AGENTS.md](AGENTS.md): Regras de convivencia entre agentes de IA no repositorio
+- [HANDOFF.md](HANDOFF.md): Comunicacao entre sessoes de agentes (passagem de bastao)
+- [CHANGELOG.md](CHANGELOG.md): Historico completo de versoes
+
+## Codigo Principal
+
+- [server.py](server.py): Servidor MCP principal (~3700 linhas, stdio JSON-RPC 2.0, 277 tools)
+- [init.py](init.py): Instalador de 1 comando (stdlib apenas, sem dependencias)
+- [auditar.py](auditar.py): Portao de qualidade fail-closed com 7 criterios (C1 a C7)
+- [launch.py](launch.py): Script de inicializacao do servidor MCP
+- [install.py](install.py): Instalador auxiliar de componentes
+
+## Ferramentas (tools/)
+
+- [tools/quickstart_ops.py](tools/quickstart_ops.py): quickstart_manage — frase em linguagem natural se torna jogo jogavel
+- [tools/project_ops.py](tools/project_ops.py): Criacao, listagem e gestao de projetos Godot
+- [tools/scene_ops.py](tools/scene_ops.py): Manipulacao de cenas (.tscn) — criar, editar nos, propriedades
+- [tools/script_ops.py](tools/script_ops.py): Operacoes de script GDScript — criar, editar, anexar
+- [tools/balance_ops.py](tools/balance_ops.py): Analise e ajuste de balanceamento de jogo
+- [tools/physics_ops.py](tools/physics_ops.py): Operacoes de fisica 2D (joints, corpos, areas)
+- [tools/skeleton_ops.py](tools/skeleton_ops.py): Animacao esqueletica 2D (IK, bone pose)
+- [tools/network_ops.py](tools/network_ops.py): Rede — multiplayer, RPC, WebSocket, lobby
+- [tools/render_ops.py](tools/render_ops.py): Configuracoes de renderizacao (AA, scaling, qualidade)
+- [tools/csharp_ops.py](tools/csharp_ops.py): Scaffold de projetos C#/.NET para Godot
+- [tools/devsolo_ops.py](tools/devsolo_ops.py): Operacoes de desenvolvimento solo (3D, UI, CSG)
+- [tools/runtime_ops.py](tools/runtime_ops.py): Operacoes em runtime — signals, queries de fisica
+- [tools/friendly_errors.py](tools/friendly_errors.py): Tradutor de erros tecnicos para linguagem amigavel (PT-BR)
+- [tools/project_brief_ops.py](tools/project_brief_ops.py): Brief persistente do projeto (genero, plataforma, estilo)
+- [tools/milestone_ops.py](tools/milestone_ops.py): Gestao de milestones e progresso do projeto
+- [tools/test_ops.py](tools/test_ops.py): Smoke tests, regression tests, validacao de projeto
+- [tools/safety.py](tools/safety.py): Gates de seguranca — budget, IP guard, verificacao
+- [tools/verification_ops.py](tools/verification_ops.py): Pipeline de verificacao (compile, headless, screenshot, testes)
+
+## Recursos
+
+- [resources/game_patterns.py](resources/game_patterns.py): 32 padroes de generos 2D (tower defense, plataforma, RPG, puzzle, etc.)
+- [resources/prompts.py](resources/prompts.py): 11 prompts MCP (criar-jogo, revisar-cena, balancear, polir, deploy, debug, etc.)
+- [resources/__init__.py](resources/__init__.py): Inicializacao do modulo de recursos
+
+## Addons Godot
+
+- [addons/mcp_addon/](addons/mcp_addon/): Plugin editor Godot (WebSocket bridge na porta 9082)
+- [addons/mcp_runtime_bridge/](addons/mcp_runtime_bridge/): Bridge runtime para jogos em execucao (TCP 8790)
+- [addons/mcp_dock/](addons/mcp_dock/): Dock panel dentro do editor Godot (3 zonas, 4 botoes)
+- [addons/gdUnit4/](addons/gdUnit4/): Framework de testes unitarios para GDScript
+
+## Testes
+
+- [tests/](tests/): Testes Python — canary queries, contract snapshots, smoke tests
+- [tests/behaviors/](tests/behaviors/): Testes de behaviors (comportamentos de jogo)
+
+## Guias e Tutoriais
+
+- [docs/manual/](docs/manual/): Manual do usuario gerado por codigo (10 secoes)
+- [docs/tutorial/](docs/tutorial/): Tutoriais progressivos (01 a 04)
+- [docs/PESQUISA_EXTERNA.md](docs/PESQUISA_EXTERNA.md): Pesquisa consolidada de estado da arte
+- [docs/arquitetura.md](docs/arquitetura.md): Documento de arquitetura do sistema
+
+## Dados e Configuracao
+
+- [config.json.example](config.json.example): Template de configuracao do servidor
+- [classdb_cache/extension_api.json](classdb_cache/extension_api.json): Cache da API do Godot 4.7 (1074 classes)
+- [blueprints/](blueprints/): Blueprints de generos de jogo (JSON schema)
+- [seeds/](seeds/): Jogos-semente para modo remix (ex: breakout.json)
+- [templates/](templates/): Templates GDScript reutilizaveis (controladores, cenas)
+
+## Comandos Rapidos
+
+- Instalar: `python init.py`
+- Iniciar servidor: `python server.py --profile dev`
+- Auditar: `python auditar.py --fatia <X.Y>`
+- Gerar manual: `python scripts/gerar_manual.py`
+- Sincronizar docs: `python scripts/docs_sync.py`

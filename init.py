@@ -381,6 +381,29 @@ def _is_port_open(host: str, port: int, timeout: float = 1.0) -> bool:
         return False
 
 
+def check_internet(timeout: float = 3.0) -> bool:
+    """Verifica se ha conectividade com a internet (DNS via porta 53).
+
+    Tenta conectar ao DNS publico do Google (8.8.8.8:53).
+    Usa OSError generico para capturar TimeoutError (Windows) e
+    ConnectionRefusedError (R16 dos aprendizados).
+
+    Args:
+        timeout: Tempo maximo de espera em segundos.
+
+    Returns:
+        True se ha internet, False caso contrario.
+    """
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(timeout)
+        sock.connect(("8.8.8.8", 53))
+        sock.close()
+        return True
+    except OSError:
+        return False
+
+
 # ══════════════════════════════════════════════════════════════════════
 # Etapas
 # ══════════════════════════════════════════════════════════════════════
@@ -740,6 +763,13 @@ def step_templates(godot_path: str, skip: bool = False) -> bool:
     if skip:
         print_step(14, "Templates de exportação", True, "pulados (--no-templates)")
         return True
+
+    # ── Verificar internet antes de tentar download ──
+    if not check_internet():
+        print_step(14, "Templates de exportação", True,
+                   "Sem internet — templates nao serao baixados. "
+                   "Use --no-templates para suprimir este aviso.")
+        return True  # fail-open: nao bloqueia a instalacao
 
     # ── Obter versão exata ──
     full_version = get_godot_version(godot_path)

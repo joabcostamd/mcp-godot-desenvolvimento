@@ -195,6 +195,28 @@ FRIENDLY_MAP: dict[str, str] = {
         "Isso é um bug — não é culpa do seu projeto nem da sua ação.\n"
         "Reporte este erro para análise. Enquanto isso, tente a operação novamente."
     ),
+
+    # ── Rede / Internet ──────────────────────────────────────────
+    "socket.gaierror": (
+        "Sem conexão com a internet.\n"
+        "O MCP tentou acessar um recurso online mas não há conexão disponível.\n"
+        "Verifique sua internet. As operações offline (criar cenas, editar scripts, rodar o jogo) continuam funcionando."
+    ),
+    "ConnectionRefusedError": (
+        "O MCP não conseguiu conectar ao serviço necessário.\n"
+        "O serviço (Godot, bridge ou internet) não está respondendo.\n"
+        "Verifique se o Godot está aberto com o plugin MCP ativo. Se for uma operação de internet, verifique sua conexão."
+    ),
+    "TimeoutError": (
+        "A operação excedeu o tempo limite de espera.\n"
+        "O serviço demorou muito para responder — pode ser conexão lenta ou serviço indisponível.\n"
+        "Verifique sua internet ou tente novamente. Se for o Godot, reinicie o editor."
+    ),
+    "URLError": (
+        "Não foi possível acessar o endereço na internet.\n"
+        "O download ou acesso a um recurso online falhou.\n"
+        "Verifique sua conexão. O resto do MCP continua funcionando offline."
+    ),
 }
 
 

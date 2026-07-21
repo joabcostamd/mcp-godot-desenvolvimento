@@ -1,201 +1,152 @@
-# MCP Godot — Desenvolvimento
+﻿# 🎮 MCP Godot Agent
 
-> **Servidor MCP Godot Agent v3.5.0 — Pipeline autonomo multi-agente para Godot Engine 4.7.**
-> Conecta Godot ao VS Code Copilot via protocolo MCP stdio. CI, qualidade de codigo, seguranca, orquestracao.
+> **Seu assistente de IA que cria jogos completos no Godot — da ideia ao lançamento.**
+> Conecte o Godot Engine 4.7 ao VS Code Copilot e comece a criar em minutos.
 
 <!-- BADGES_START -->
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![Godot](https://img.shields.io/badge/Godot-4.7-blue)
 ![Python](https://img.shields.io/badge/Python-3.11+-blue)
 ![MCP](https://img.shields.io/badge/MCP-2025--11--25-orange)
-![Camada 4](https://img.shields.io/badge/Camada%204-100%25-brightgreen)
-![Última atualização](https://img.shields.io/badge/atualizado-2026--07--19-lightgrey)
 <!-- BADGES_END -->
 
-> 📊 **Versão:** <!--DOCS_SYNC:version-->3.2.1<!--/DOCS_SYNC:version--> | **Tools:** <!--DOCS_SYNC:tools-->274<!--/DOCS_SYNC:tools--> | **Handlers:** <!--DOCS_SYNC:handlers-->295<!--/DOCS_SYNC:handlers--> | **Rollups:** <!--DOCS_SYNC:rollups-->32<!--/DOCS_SYNC:rollups-->
-> ⚠️ Números acima são gerados por `scripts/docs_sync.py` — não edite manualmente.
-
-**GitHub:** `https://github.com/joabcostamd/mcp-godot-desenvolvimento`
+> 📊 **Versão:** <!--DOCS_SYNC:version-->3.2.1<!--/DOCS_SYNC:version--> | **Tools:** <!--DOCS_SYNC:tools-->274<!--/DOCS_SYNC:tools--> | **Rollups:** <!--DOCS_SYNC:rollups-->32<!--/DOCS_SYNC:rollups-->
+> ⚠️ Números gerados por `scripts/docs_sync.py` — não edite manualmente.
 
 ---
 
-## � Progresso: Camada 4 — 100% concluída
+## O que é
 
-| Etapa | Nome | Status | Descrição |
-|---|---|---|---|
-| B2 | CI Verificação | ✅ | GitHub Actions, 7 jobs, 295 linhas |
-| B3 | gdtoolkit Gate | ✅ | gdlint 4.5.0 + gdformat + gdradon (19/19 testes) |
-| B4 | Análises Específicas | ✅ | 9 ops: funções não usadas, antipadrões, órfaos, ciclos, naming |
-| B5 | Segurança Supply-Chain | ✅ | Scan de vulnerabilidades + licenças (15+25 testes) |
-| B6 | agent_manage | ✅ | File lock, fila de tarefas, peer review, compare outputs |
-| B7 | Save Schema | ✅ | Geração de schema + migração de saves |
-| B8 | Dead-End Detection | ✅ | Becos sem saída em diálogos e quests |
-| B9 | Documentação Automática | ✅ | Changelog, README, Wiki auto-gerados |
+O **MCP Godot Agent** é um servidor MCP em Python que atua como **dono do processo** de desenvolvimento de um jogo Godot inteiro. Não é só uma ponte entre IA e engine — ele tem travas reais que impedem pular etapas, verificação automatizada e um guia passo a passo.
 
-> **AGENTE 01:** A0-A6 concluidas | **AGENTE 02:** Camadas 0-5 concluidas
-> Próximo: Camada 5 CONCLUIDA | Camada 6 (Profundidade de Engine) [MARGINAL]
+**Para quem é:** Pessoas que querem criar um jogo mas não sabem programar. Você descreve o que quer em linguagem natural e a IA constrói.
+
+**O que ele faz:**
+- Cria projetos Godot completos a partir de uma frase
+- Gerencia 6 fases de desenvolvimento (Ideia → Design → Protótipo → Conteúdo → Polimento → Pronto)
+- Oferece 32 gêneros de jogos prontos para começar
+- Verifica cada etapa automaticamente (compilação, testes, smoke test)
+- Funciona offline para operações que não dependem de IA
 
 ---
 
-## O que tem aqui
+## ⚡ Comece em 1 minuto
 
-| Pasta/Arquivo | O que é |
+```powershell
+# 1. Instale (só Python 3.11+ necessário, sem dependências)
+python init.py
+
+# 2. Abra o VS Code na pasta do projeto
+
+# 3. No chat do Copilot, digite:
+/plan
+```
+
+**Comandos disponíveis após instalação:**
+
+| Comando | O que faz |
 |---|---|
-| `server.py` | Servidor MCP (~3700 linhas, 240 ferramentas, stdio JSON-RPC 2.0) |
-| `tools/` | 115 modulos Python (cenas, scripts, fisica, arte IA, som IA, pipeline, verificacao, gameplay, etc.) |
-| `resources/` | Game patterns (32 gêneros) + MCP Prompts (11 comandos) |
-| `templates/` | Templates GDScript (Jinja2) |
-| `classdb_cache/` | Cache da API do Godot 4.7 (1074 classes) |
-| `addons/` | Plugins Godot (mcp_addon + mcp_runtime_bridge) |
-| `config.json.example` | Template de configuração |
-| `requirements.txt` | Dependências Python |
-| `MCP_ESTADO_ATUAL.md` | 📄 **Substituido** por ROADMAP_UNIFICADO.md + DATA_CONTRACTS.md |
-| `GUIA_CONEXAO.md` | Como usar — passo a passo do zero |
-| `ARQUITETURA_MCP.md` | Como funciona por dentro — 3 camadas, padrões, extensão |
-| `LEARNINGS.md` | 20 regras anti-padrao (R1-R20) |
-| `CHANGELOG.md` | Historico completo de versoes |
+| `/plan` | Planeja a próxima etapa do seu jogo |
+| `/act` | Executa o plano aprovado |
+| `/handoff` | Salva o progresso da sessão |
+| `/manual` | Manual completo de comandos |
+
+**Alternativa sem instalador:**
+```powershell
+git clone https://github.com/joabcostamd/mcp-godot-desenvolvimento
+cd mcp-godot-desenvolvimento
+python -m venv .venv
+.venv\Scripts\pip install -r requirements.txt
+.venv\Scripts\python server.py --profile dev
+```
 
 ---
 
 ## 🎮 Vitrine de Gêneros (32 gêneros)
 
-> Use `quickstart_manage(op="showcase")` para ver a lista completa. Escolha uma frase e crie seu jogo com `quickstart_manage(op="run", phrase="...")`.
+Escolha um gênero e comece a criar. Use `quickstart_manage(op="showcase")` para ver a lista completa.
 
-### ⭐ Fácil (dificuldade total ≤ 5)
-
-| Gênero | Experimente: |
-|---|---|
-| 🐍 Snake | "jogo da cobrinha, controle a cobra no grid, coma a comida para crescer" |
-| 🐦 Flappy Bird | "jogo do passarinho que voa entre canos, toque na tela para pular" |
-| 🏓 Pong | "jogo de ping-pong com dois paddles e uma bola, rebata para marcar ponto" |
-| 📈 Doodle Jump | "jogo de pular de plataforma em plataforma subindo sem parar" |
-| 🧠 Memória | "jogo da memória, vire as cartas e encontre os pares iguais" |
-| 🧱 Breakout | "jogo de quebrar tijolos com bola e paddle, colete power-ups" |
-| 🖱️ Idle Clicker | "jogo de clique incremental, clique para ganhar recursos e automatize" |
-| 🌌 Asteroids | "jogo de nave no espaço, gire e atire em asteroides que se partem" |
-| 💣 Campo Minado | "jogo de campo minado, revele as celulas e deduza onde estão as minas" |
-
-### ⭐⭐ Médio (dificuldade total 6–8)
+### ⭐ Fácil
 
 | Gênero | Experimente: |
 |---|---|
-| 👾 Space Invaders | "jogo de nave que atira em aliens, eles descem em formação" |
-| 🏃 Endless Runner | "jogo de corrida infinita, pule e desvie dos obstáculos" |
-| 🫧 Bubble Shooter | "jogo de atirar bolhas coloridas, forme grupos para estourar" |
-| 🐸 Frogger | "jogo do sapo, atravesse a rua e o rio desviando de carros" |
-| 🎯 Top-Down Shooter | "jogo de nave que atira em asteroides, colete power-ups" |
-| 🔫 Twin-Stick | "jogo de arena com dois controles, mova e atire contra waves" |
-| 🧊 Tetris | "jogo de encaixar peças que caem, complete linhas para eliminá-las" |
-| 📦 Sokoban | "jogo de empurrar caixas, coloque cada caixa no lugar marcado" |
-| 🎮 Plataforma | "jogo de plataforma com pulo, coleta de moedas e inimigos" |
-| 🕹️ Pac-Man | "jogo de labirinto, colete todos os pontos e fuja dos fantasmas" |
-| 🧩 Match-3 | "jogo de combinar 3 peças coloridas no grid, troque posições" |
-| 🏎️ Corrida | "jogo de corrida visto de cima, acelere e derrape nas curvas" |
-| 🧲 Puzzle Física | "jogo de puzzle com física realista, use gravidade e colisões" |
+| 🐍 Snake | "jogo da cobrinha, controle a cobra no grid" |
+| 🐦 Flappy Bird | "jogo do passarinho que voa entre canos" |
+| 🏓 Pong | "jogo de ping-pong com dois paddles e uma bola" |
+| 📈 Doodle Jump | "jogo de pular de plataforma em plataforma subindo" |
+| 🧠 Memória | "jogo da memória, vire as cartas e encontre os pares" |
+| 🧱 Breakout | "jogo de quebrar tijolos com bola e paddle" |
+| 🖱️ Idle Clicker | "jogo de clique incremental, automatize" |
+| 🌌 Asteroids | "jogo de nave no espaço, gire e atire" |
+| 💣 Campo Minado | "jogo de campo minado, deduza onde estão as minas" |
 
-### ⭐⭐⭐ Avançado (dificuldade total ≥ 9)
+### ⭐⭐ Médio
 
 | Gênero | Experimente: |
 |---|---|
-| 🏰 Tower Defense | "jogo de defesa de torre, posicione torres para deter inimigos" |
-| 🧛 Vampire Survivors | "jogo de sobrevivência com ataque automático e waves de inimigos" |
-| ⚔️ RPG Turno | "RPG de turno, explore o mapa e lute em batalhas por turno" |
-| 🗡️ Dungeon Crawler | "dungeon procedural, explore salas aleatórias e colete loot" |
-| 🃏 Deck Builder | "jogo de cartas estratégico, monte seu deck durante a partida" |
-| 🗺️ Metroidvania | "exploração com plataforma, desbloqueie habilidades para avançar" |
-| 📖 Visual Novel | "história interativa com diálogos, suas escolhas mudam o final" |
-| 💥 Bullet Hell | "jogo de esquiva com dezenas de projéteis, derrote chefes difíceis" |
-| 👊 Beat 'em Up | "jogo de luta de rua, derrote ondas de inimigos para avançar" |
-| 🥷 Stealth 2D | "jogo de furtividade, evite guardas e use distrações para passar" |
+| 👾 Space Invaders | "jogo de nave que atira em aliens" |
+| 🏃 Endless Runner | "jogo de corrida infinita, desvie dos obstáculos" |
+| 🫧 Bubble Shooter | "jogo de atirar bolhas coloridas, forme grupos" |
+| 🐸 Frogger | "jogo do sapo, atravesse a rua e o rio" |
+| 🎯 Top-Down Shooter | "jogo de nave que atira em asteroides" |
+| 🔫 Twin-Stick | "jogo de arena, mova e atire contra waves" |
+| 🧊 Tetris | "jogo de encaixar peças que caem" |
+| 📦 Sokoban | "jogo de empurrar caixas no grid" |
+| 🎮 Plataforma | "jogo de plataforma com pulo e coleta de moedas" |
+| 🕹️ Pac-Man | "jogo de labirinto, colete pontos e fuja dos fantasmas" |
+| 🧩 Match-3 | "jogo de combinar 3 peças coloridas no grid" |
+| 🏎️ Corrida | "jogo de corrida visto de cima" |
+| 🧲 Puzzle Física | "jogo de puzzle com física realista" |
+
+### ⭐⭐⭐ Avançado
+
+| Gênero | Experimente: |
+|---|---|
+| 🏰 Tower Defense | "jogo de defesa de torre, posicione torres" |
+| 🧛 Vampire Survivors | "jogo de sobrevivência com ataque automático" |
+| ⚔️ RPG Turno | "RPG de turno, explore o mapa e lute" |
+| 🗡️ Dungeon Crawler | "dungeon procedural, explore salas aleatórias" |
+| 🃏 Deck Builder | "jogo de cartas estratégico, monte seu deck" |
+| 🗺️ Metroidvania | "exploração com plataforma e habilidades" |
+| 📖 Visual Novel | "história interativa com diálogos" |
+| 💥 Bullet Hell | "jogo de esquiva com dezenas de projéteis" |
+| 👊 Beat 'em Up | "jogo de luta de rua, derrote ondas de inimigos" |
+| 🥷 Stealth 2D | "jogo de furtividade, evite guardas nas sombras" |
 
 ---
 
-## �🆕 Novidades da v3.2.1 (2026-07-12)
+## 📂 Estrutura
 
-### Item 1: Pipeline de Verificação (`run_verification_pipeline`)
-| Feature | Descrição |
-|---------|-----------|
-| 🔬 **Pipeline 4 etapas** | Compile check → headless run → screenshot → GUT tests em 1 chamada |
-| 📊 **Relatório JSON** | Status consolidado com evidência bruta de cada etapa + early exit |
-| 📸 **Screenshot automático** | `--write-movie` com SW_HIDE, salva PNG em `verification_screenshots/` |
-| ⚠️ **Ambiguity handling** | Retorna `ambiguous` se cena de teste não definida — não adivinha |
-| 🐛 **6 bugs corrigidos** | BUG-V01 a V06 encontrados e resolvidos na própria implementação |
-
-### Item 2: Fluxo EARS + Pipeline (Padrão de Fechamento de Pendência)
-| Feature | Descrição |
-|---------|-----------|
-| 📋 **Fluxo documentado** | `AGENTS.md` no Star Colony: receber → EARS → aprovar → implementar → pipeline → relatório |
-| 🎨 **EARS-B implementado** | VFX de evolução visual L1→L2→L3 com escala + borda por nível |
-| ⌨️ **Gatilho debug** | Tecla U (provisório) — `spawn_explosion` + `spawn_floating_text` + `add_shake` |
-| ✅ **Pixel evidence** | Análise de screenshot confirma borda prateada L2 (RGB 126,126,147) e dourada L3 (RGB 205,174,64) |
-
-### Segurança & Infra (continuação)
-| Feature | Descrição |
-|---------|-----------|
-| 🛡️ **Sandbox conectado** | `write_file` + `safe_write_gdscript` validam .gd antes de escrever (36/36 padrões) |
-| 🧹 **Normalizador** | Remove comentários, colapsa whitespace, resolve concatenação — fecha 4/6 bypasses |
-| 🔧 **Godot check off** | `tentar_checagem_godot=false` — `--check-only` quebrado no Windows Godot 4.7 (R12) |
-| 🪝 **Hook Stop** | `check-gate-failed.ps1` bloqueia encerramento com gate falho |
+| Pasta/Arquivo | O que é |
+|---|---|
+| `server.py` | Servidor MCP principal (277 ferramentas, stdio JSON-RPC 2.0) |
+| `init.py` | Instalador de 1 comando (só stdlib, zero dependências) |
+| `tools/` | 115+ módulos Python (cenas, scripts, física, arte, som, pipeline) |
+| `resources/` | 32 padrões de gêneros + 11 prompts MCP |
+| `addons/` | Plugins Godot (bridge, dock, runtime) |
+| `llms.txt` | Índice completo do projeto para IAs (padrão llmstxt.org) |
+| `README.en.md` | English version of this document |
 
 ---
 
-## Histórico (v3.2.0 — 2026-07-12)
+## 📖 Documentação
 
-| Feature | Descrição |
-|---------|-----------|
-| 🔬 **Testes roteirizados** | `smoke_test`, `regression_test`, `run_scripted_tests`, `dump_mcp_state`, `estimate_tool_tokens` |
-| 🔍 **Validação de refs** | `validate_project_refs`, `find_usages` (estático, offline) |
-| 📦 **Asset Manifest** | `import_asset_manifest` (5 fontes), `create_asset_manifest` |
-| ⚡ **Runtime Bridge** | Servidor TCP GDScript (8790) + screenshot, runtime_info, custom_command |
-| 🔄 **Process Lifecycle** | `godot_run/stop_project`, `godot_wait_for_bridge` com save-before-kill |
-| 📚 **ClassDB** | `godot_class_ref` via `extension_api.json`, 1074 classes, fuzzy suggestions |
-| 🎯 **Toolsets** | `--toolsets` com 10 grupos + `--profile core/dev/full` (31/80/191 tools) |
-| ✅ **Validação GDScript** | `safe_write_gdscript` com validação dupla (sintaxe local + sandbox) |
-| 🛡️ **Git Checkpoint** | `git_commit_checkpoint` com gates de compilação + GUT |
-| 💰 **Cost Guard** | `allow_paid_generation=False` + `estimated_cost` em tools de arte IA |
-| 🐛 **43 bugs** | Auditoria completa em 5 grupos (10 rodadas) |
+| Documento | Conteúdo |
+|---|---|
+| [ROADMAP_DEFINITIVO.md](ROADMAP_DEFINITIVO.md) | Ordem canônica de desenvolvimento (5 ondas, 80+ fatias) |
+| [AGENTS.md](AGENTS.md) | Regras para agentes de IA no repositório |
+| [docs/manual/](docs/manual/) | Manual do usuário (10 seções, gerado por código) |
+| [docs/tutorial/](docs/tutorial/) | Tutoriais progressivos (01 a 04) |
+| [CHANGELOG.md](CHANGELOG.md) | Histórico completo de versões |
 
 ---
 
-## Instalação (2 minutos)
+## 🔧 Requisitos
 
-```powershell
-# 1. Clone
-git clone https://github.com/joabcostamd/mcp-godot-desenvolvimento
-cd mcp-godot-desenvolvimento
-
-# 2. Ambiente virtual
-python -m venv .venv
-.venv\Scripts\pip install -r requirements.txt
-
-# 3. Configure (copie config.json.example → config.json e ajuste os paths)
-#    godot_path: caminho do Godot 4.7
-#    godot_console_path: mesmo executável (Windows)
-
-# 4. Inicie
-.venv\Scripts\python server.py --profile dev
-```
-
-**Docs:** `MCP_ESTADO_ATUAL.md` (referência canônica) · `GUIA_CONEXAO.md` (passo a passo) · `ARQUITETURA_MCP.md` (internals)
-
----
-
-## Requisitos
-
-- Python 3.12+
+- Python 3.11+
 - Godot 4.7
-- VS Code + Copilot + DeepSeek V4 Pro (ou qualquer IA com suporte MCP)
+- VS Code + Copilot (ou qualquer cliente MCP)
 
 ---
 
-## Para recuperar em outra máquina
-
-1. Instale Python 3.12+ e Godot 4.7
-2. Clone este repositório
-3. Execute os passos de instalação acima
-4. Ajuste `config.json` para os caminhos da máquina
-5. Leia `MCP_ESTADO_ATUAL.md` para referência completa
-
----
-
-**Versão:** 3.2.1 | **Tools:** 191 | **Módulos:** 69 | **Patches:** 18 | **Última atualização:** 2026-07-12
+**English:** [README.en.md](README.en.md) | **llms.txt:** [llms.txt](llms.txt) | **GitHub:** [joabcostamd/mcp-godot-desenvolvimento](https://github.com/joabcostamd/mcp-godot-desenvolvimento)

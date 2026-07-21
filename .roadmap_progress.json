@@ -1,4 +1,20 @@
 {
+  "fatia_1.O": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "ca6e0a0",
+    "resultado": "Degradacao sem internet. check_internet() via DNS 8.8.8.8:53 com OSError generico. step_templates() verifica internet antes de download (fail-open). friendly_errors.py: +4 padroes rede (gaierror, ConnectionRefused, Timeout, URLError). C3 smoke_test: PASS."
+  },
+  "fatia_1.N": {
+    "status": "concluida",
+    "data": "2026-07-20",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "ca6e0a0",
+    "resultado": "llms.txt + README bilingue. llms.txt: indice Markdown puro com 50+ links. README.md reescrito como produto. README.en.md: traducao fiel. 6 secoes identicas PT/EN. C3 smoke_test: PASS."
+  },
   "fatia_1.M": {
     "status": "concluida",
     "data": "2026-07-20",
