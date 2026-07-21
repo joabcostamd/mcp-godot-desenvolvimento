@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://tile_pattern_stamper_v1"][ext_resource type="Script" path="res://behaviors/tile_pattern_stamper/tile_pattern_stamper.gd" id="1_x"][node name="TilePatternStamper" type="Node"]script=ExtResource("1_x")

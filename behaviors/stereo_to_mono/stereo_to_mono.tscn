@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://stereo_to_mono_v1"][ext_resource type="Script" path="res://behaviors/stereo_to_mono/stereo_to_mono.gd" id="1_x"][node name="StereoToMono" type="Node"]script=ExtResource("1_x")

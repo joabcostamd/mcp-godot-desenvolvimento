@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://server_physics_v1"][ext_resource type="Script" path="res://behaviors/server_physics/server_physics.gd" id="1_x"][node name="ServerPhysics" type="Node"]script=ExtResource("1_x")

@@ -1,0 +1,1 @@
+﻿@tool class_name HotReload extends Node;signal reloaded();var _init:=false;func _ready()->void:if _init:return;_init=true;func reload()->void:reloaded.emit();func _get_configuration_warnings()->PackedStringArray:return[]

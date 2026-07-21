@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://animation_layer_v1"][ext_resource type="Script" path="res://behaviors/animation_layer/animation_layer.gd" id="1_x"][node name="AnimationLayer" type="Node"]script=ExtResource("1_x")

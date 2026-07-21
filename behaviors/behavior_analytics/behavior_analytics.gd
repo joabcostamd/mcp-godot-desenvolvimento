@@ -1,0 +1,1 @@
+﻿@tool class_name BehaviorAnalytics extends Node;signal event_tracked(name:String);var _init:=false;func _ready()->void:if _init:return;_init=true;func track(name:String)->void:event_tracked.emit(name);func _get_configuration_warnings()->PackedStringArray:return[]

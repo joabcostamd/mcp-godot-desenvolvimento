@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://deprecation_watcher_v1"][ext_resource type="Script" path="res://behaviors/deprecation_watcher/deprecation_watcher.gd" id="1_x"][node name="DeprecationWatcher" type="Node"]script=ExtResource("1_x")

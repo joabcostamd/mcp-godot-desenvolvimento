@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://behavior_analytics_v1"][ext_resource type="Script" path="res://behaviors/behavior_analytics/behavior_analytics.gd" id="1_x"][node name="BehaviorAnalytics" type="Node"]script=ExtResource("1_x")

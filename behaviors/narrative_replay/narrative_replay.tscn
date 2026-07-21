@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://narrative_replay_v1"][ext_resource type="Script" path="res://behaviors/narrative_replay/narrative_replay.gd" id="1_x"][node name="NarrativeReplay" type="Node"]script=ExtResource("1_x")

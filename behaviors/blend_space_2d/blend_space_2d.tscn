@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://blend_space_2d_v1"][ext_resource type="Script" path="res://behaviors/blend_space_2d/blend_space_2d.gd" id="1_x"][node name="BlendSpace2D" type="Node"]script=ExtResource("1_x")

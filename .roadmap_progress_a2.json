@@ -40,8 +40,8 @@
     "resultado": "100% dos problemas corrigidos. contract_snapshot: TODOS OS CHECKS PASSARAM. merge-tree: LIMPO."
   },
   "comportamentos": {
-    "total_catalogo": 224,
-    "implementados": 201,
+    "total_catalogo": 249,
+    "implementados": 249,
     "lista": [
       {
         "nome": "accordion",
@@ -80,6 +80,30 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "animation_blender",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "animation_curve_table",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "animation_layer",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "animation_state_machine",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "area_damage",
         "versao": "1.0.0",
         "status": "concluido",
@@ -110,6 +134,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "auto_aim",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "auto_save",
         "versao": "1.0.0",
         "status": "concluido",
@@ -128,7 +158,31 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "batch_renderer",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "beam_laser",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "behavior_analytics",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "behavior_registry",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "behavior_sandbox",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -141,6 +195,24 @@
       },
       {
         "nome": "blackboard",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "blend_space_1d",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "blend_space_2d",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "blood_gore_toggle",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -159,6 +231,12 @@
       },
       {
         "nome": "button_mash_protection",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "bypass_gate",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -332,6 +410,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "curve_table",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "custom_node",
         "versao": "1.0.0",
         "status": "concluido",
@@ -357,6 +441,12 @@
       },
       {
         "nome": "dash",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "data_table",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -410,6 +500,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "deprecation_watcher",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "destructible",
         "versao": "1.0.0",
         "status": "concluido",
@@ -422,7 +518,19 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "difficulty_adjust",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "difficulty_curve",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "dirty_flag",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -441,6 +549,12 @@
       },
       {
         "nome": "drag_drop",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "draw_call_optimizer",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -488,6 +602,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "error_boundary",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "event_bus",
         "versao": "1.0.0",
         "status": "concluido",
@@ -524,6 +644,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "flexible_text_entry",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "floating_text",
         "versao": "1.0.0",
         "status": "concluido",
@@ -537,6 +663,12 @@
       },
       {
         "nome": "follow_path",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "font_size_global",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -644,6 +776,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "hot_reload",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "hurtbox",
         "versao": "1.0.0",
         "status": "concluido",
@@ -668,6 +806,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "input_cooldown",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "input_manager",
         "versao": "1.0.0",
         "status": "concluido",
@@ -675,6 +819,18 @@
       },
       {
         "nome": "interactable",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "interface_rearrange",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "interface_resize",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -746,6 +902,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "lod_controller",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "logger",
         "versao": "1.0.0",
         "status": "concluido",
@@ -771,6 +933,12 @@
       },
       {
         "nome": "match3_grid",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "migration_runner",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -818,6 +986,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "narrative_replay",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "network_sync",
         "versao": "1.0.0",
         "status": "concluido",
@@ -831,6 +1005,12 @@
       },
       {
         "nome": "object_pool",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "one_shot_animation",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -890,6 +1070,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "physics_tick_optimizer",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "player_controller",
         "versao": "1.0.0",
         "status": "concluido",
@@ -914,6 +1100,18 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "practice_mode",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "profile_manager",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "profiler_hook",
         "versao": "1.0.0",
         "status": "concluido",
@@ -927,6 +1125,12 @@
       },
       {
         "nome": "quest",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "quick_time_alternative",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -956,6 +1160,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "resource_factory",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "resource_override",
         "versao": "1.0.0",
         "status": "concluido",
@@ -968,6 +1178,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "root_motion_controller",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "round_timer",
         "versao": "1.0.0",
         "status": "concluido",
@@ -975,6 +1191,12 @@
       },
       {
         "nome": "rpc_bridge",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "safe_space",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -1034,6 +1256,24 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "screenreader_support",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "server_physics",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "server_sprite",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "settings",
         "versao": "1.0.0",
         "status": "concluido",
@@ -1052,7 +1292,19 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "skeleton_ik",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "skill_tree",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "spatial_hash",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -1071,6 +1323,12 @@
       },
       {
         "nome": "spring_joint",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "sprite_animator",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -1100,6 +1358,12 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "stereo_to_mono",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "storage",
         "versao": "1.0.0",
         "status": "concluido",
@@ -1124,7 +1388,25 @@
         "data": "2026-07-21"
       },
       {
+        "nome": "terrain_autotiler",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
         "nome": "text_size",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "tile_pattern_stamper",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "tilemap_layer_manager",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
@@ -1179,6 +1461,12 @@
       },
       {
         "nome": "tween_player",
+        "versao": "1.0.0",
+        "status": "concluido",
+        "data": "2026-07-21"
+      },
+      {
+        "nome": "undo_redo",
         "versao": "1.0.0",
         "status": "concluido",
         "data": "2026-07-21"
