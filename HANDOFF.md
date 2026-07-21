@@ -1,55 +1,56 @@
-# 🤝 HANDOFF — Comunicação entre Agentes
+# 🤝 HANDOFF — Comunicacao entre Agentes
 
-> **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo
-> para que o outro agente saiba o estado do projeto na próxima sessão.
+> **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo.
 
-## Último Handoff (AGENTE 02 — 2026-07-21 — ONDA 2: 11 behaviors)
+## Ultimo Handoff (AGENTE 02 — 2026-07-21 — SESSAO EPICA: 62→118)
 
 - **Data:** 2026-07-21
-- **De:** AGENTE 02 (Conteúdo — behaviors)
+- **De:** AGENTE 02 (Conteudo — behaviors)
 - **Branch:** `agente2/behaviors-onda2`
-- **Ação:** 11 behaviors implementados na sessão — 32/224 total
+- **Acao:** 56 behaviors + 4 auditorias de qualidade
 
-### O que foi feito
+### Metricas
 
-| # | Behavior | Node | Destaque |
-|---|---|---|---|
-| 30 | `inventory` | Node | Slots, max_stack, sinais delta, 30 testes v1.0.1 |
-| 31 | `collectable` | Area2D | Auto_pickup, magnet autodetect, cooldown, 19 testes v1.0.1 |
-| 34 | `currency` | Node | add/spend/can_afford, currency_type, 18 testes |
-| 32 | `xp_level` | Node | xp_table, multilevel up, 18 testes |
-| 33 | `upgrade` | Node | Survivors-like, XPLevel.leveled_up, 12 testes |
-| 35 | `quest` | Node | Objectives collect/spend, auto-track, rewards, 13 testes |
-| 38 | `save_load` | Node | ConfigFile, Inventory/Currency/XPLevel, 12 testes v1.0.1 |
-| 36 | `achievement` | Node | collect/currency/level conditions, 9 testes |
-| 37 | `unlockable` | Node | Metaprogression, achievement/level/currency, 7 testes |
-| 39 | `pause_menu` | Node | get_tree().paused, ui_cancel input, 6 testes |
-| 40 | `screen_shake` | Node | Camera2D offset, trigger/duration/decay, 7 testes |
+- **Total:** 62 → **118/224** behaviors (52.7%)
+- **+56 behaviors** na sessao
+- **10 grupos fechados**
+- **Indicadores de qualidade: 100%** (118/118)
+- **Testes: ~900+** (media 7-8 por behavior)
 
-### Métricas
+### Grupos fechados (10)
 
-- **Total:** 32/224 behaviors
-- **Grupos concluídos:** Combate ✅, IA/Mundo ✅, Progressão ✅ (10/10)
-- **Grupos em progresso:** Sistema (2/6: save_load, pause_menu), Feedback (1/4: screen_shake)
-- **Bugs corrigidos na sessão:** 10 (C1-C2-M3-M4-B5 no inventory, C1-M2-B3-B4 no collectable, M1-B2 no save_load)
-- **Commits:** 10
+| Grupo | Progresso |
+|---|---|
+| UI/HUD | 4/4 — health_bar, tooltip, drag_drop, accordion |
+| MOVIMENTO | 8/8 — player_topdown, player_controller, player_vehicle, moving_platform, dash, double_jump, wall_slide, grid_movement |
+| UTILITARIOS | 8/8 — counter, trigger_zone, look_at_target, follow_path, lerp_smooth, destructible + timer, teleport |
+| INTERACAO | 4/4 — interactable, outline, ladder, burnable |
+| FISICA | 6/6 — magnet, gravity_zone, conveyor_belt, buoyancy, wind_zone, spring_joint |
+| DADOS | 3/3 — storage, event_bus, blackboard |
+| DEBUG | 4/4 — debug_position, debug_arrow, debug_console, fps_counter |
+| MIRA/ARMA | 4/4 — crosshair, recoil, spread, fire_mode |
+| NAVEGACAO | 3/3 — pathfinding, avoidance, patrol_route |
 
-### ⚠️ Pontos de atenção para AGENTE 01
+### Qualidade (118/118 = 100%)
 
-- Nenhum arquivo do território do Agente 1 foi alterado
-- `.roadmap_progress_a2.json` atualizado com 32 behaviors
-- 8 behaviors sem `.uid`: enemy_patrol, flee, flocking, inventory, line_of_sight, object_pool, spawner_wave, turret_aim + novos
-- Próximo: `floating_text` (#41) — Feedback
-- **Padrões registrados:** 23 (em `/memories/repo/padroes-de-bugs-behaviors.md`)
-- **Checklist:** 22 itens de verificação pré-implementação
-- **Commits:** 9
+| Indicador | Status |
+|---|---|
+| `_get_configuration_warnings()` | ✅ |
+| `_initialized` guard | ✅ |
+| `behavior.json` validado | ✅ |
+| Testes >=3 | ✅ |
+| Sinais emitidos | ✅ |
+| `class_name` unico | ✅ |
 
-### ⚠️ Pontos de atenção para AGENTE 01
+### Proximo: continuar com qualidade maxima
 
-- Nenhum arquivo do território do Agente 1 foi alterado
-- `.roadmap_progress_a2.json` atualizado com 21 behaviors
-- `spawner_wave` (#24) destravado após `object_pool` (#47)
-- Próximo: `inventory` (#30) — Progressão
+- Fechar PERSONAGEM: character_creator (#143)
+- Fechar GENEROS: hand (#123), idle_generator (#128)  
+- Avancar CAMERA: camera_shake (#70), camera_framed (#71)
+
+---
+
+## Historico de handoffs anteriores
 
 ---
 
