@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdash00000000001"]
+
+[ext_resource type="Script" path="res://behaviors/dash/dash.gd" id="1_dash"]
+
+[node name="Dash" type="Node"]
+script = ExtResource("1_dash")
+dash_speed = 800.0
+dash_duration = 0.15
+cooldown = 0.5

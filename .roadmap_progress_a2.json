@@ -41,8 +41,9 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 67,
+    "implementados": 68,
     "lista": [
+      {"id": 5, "nome": "dash", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Timer duracao/cooldown. Override velocidade na direcao do input. cancel_dash(). 13 testes. Fonte: Godot 4.7 ClassDB."},
       {"id": 1, "nome": "player_controller", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + CharacterBody2D child. Gravidade, pulo (is_on_floor), move_and_slide, kill_plane. 14 testes. Fonte: Godot 4.7 ClassDB."},
       {"id": 102, "nome": "accordion", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + VBoxContainer com secoes Button/Control toggle. allow_multiple, collapse_all/expand_all. 14 testes. Fonte: Godot 4.7 ClassDB."},
       {"id": 104, "nome": "drag_drop", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + set_drag_forwarding(). Snap grid, drop_group, preview. 3 params, 3 sinais. 12 testes. Fonte: Godot 4.7 ClassDB."},
