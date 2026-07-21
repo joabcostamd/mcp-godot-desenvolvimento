@@ -1032,30 +1032,7 @@ def _raw_tool_defs() -> list[Tool]:
                 "required": ["scene_path", "parent_node_path"],
             },
         ),
-        Tool(
-            name="create_joint_2d",
-            description=(
-                "Cria uma junta 2D (PinJoint2D) conectando dois nós. "
-                "Use para portas giratórias, pontes basculantes, cordas, alavancas. "
-                "Suporta PinJoint2D (ponto fixo) e GrooveJoint2D (trilho). "
-                "Quando usar: para objetos que precisam de conexão física entre si. "
-                "Pré-condições: ambos os nós devem existir na cena. "
-                "Exemplo: {\"scene_path\": \"...\", \"node_a_path\": \"./Door\", \"node_b_path\": \"./Wall\", \"joint_type\": \"pin\"}. "
-                "Erro mais comum: um dos nós não encontrado."
-            ),
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "scene_path": {"type": "string"},
-                    "node_a_path": {"type": "string"},
-                    "node_b_path": {"type": "string"},
-                    "joint_type": {"type": "string", "enum": ["pin", "groove"]},
-                    "softness": {"type": "number"},
-                    "bias": {"type": "number"},
-                },
-                "required": ["scene_path", "node_a_path", "node_b_path"],
-            },
-        ),
+        # ── create_joint_2d migrado para physics_manage (F5.1) ──
         Tool(
             name="import_3d_model",
             description=(
@@ -1484,53 +1461,8 @@ def _raw_tool_defs() -> list[Tool]:
                 "required": ["target_scene"],
             },
         ),
-        # ── Onda 11: Complementos ──
-        Tool(
-            name="add_raycast_2d",
-            description=(
-                "Adiciona um RayCast2D a um no para deteccao de linha de visao. "
-                "Use para: verificar se ha chao a frente, detectar obstaculos, mirar armas. "
-                "Configura posicao alvo (target_position), collision_mask e enabled. "
-                "Pre-condicoes: cena e no pai devem existir. "
-                "Exemplo: {'scene_path': 'scenes/player.tscn', 'parent_node_path': '.', 'target_position': 'Vector2(100, 0)', 'collision_mask': 2}. "
-                "Erro mais comum: raycast nao detecta nada — verifique collision_mask e layers."
-            ),
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "scene_path": {"type": "string", "description": "Caminho da cena."},
-                    "parent_node_path": {"type": "string", "description": "No pai que recebera o RayCast2D."},
-                    "target_position": {"type": "string", "description": "Posicao alvo (ex: 'Vector2(100, 0)')."},
-                    "collision_mask": {"type": "integer", "description": "Mascara de colisao (default 1)."},
-                    "enabled": {"type": "boolean", "description": "Se esta ativo (default true)."},
-                    "node_name": {"type": "string", "description": "Nome do no (default 'RayCast2D')."},
-                },
-                "required": ["scene_path", "parent_node_path"],
-            },
-        ),
-        Tool(
-            name="add_shapecast_2d",
-            description=(
-                "Adiciona um ShapeCast2D para deteccao de area em linha. "
-                "Use para deteccao mais robusta que RayCast: ataques melee, sensores de chao largos. "
-                "Suporta formas: rectangle, circle, capsule. "
-                "Pre-condicoes: cena e no pai devem existir. "
-                "Exemplo: {'scene_path': 'scenes/player.tscn', 'parent_node_path': '.', 'shape_type': 'rectangle', 'shape_size': 'Vector2(40, 10)'}. "
-                "Erro mais comum: shape_size invalido — use 'Vector2(w, h)'."
-            ),
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "scene_path": {"type": "string", "description": "Caminho da cena."},
-                    "parent_node_path": {"type": "string", "description": "No pai."},
-                    "shape_type": {"type": "string", "description": "Forma: rectangle, circle, capsule (default 'rectangle')."},
-                    "shape_size": {"type": "string", "description": "Tamanho (ex: 'Vector2(40, 10)')."},
-                    "collision_mask": {"type": "integer", "description": "Mascara de colisao (default 1)."},
-                    "node_name": {"type": "string", "description": "Nome do no (default 'ShapeCast2D')."},
-                },
-                "required": ["scene_path", "parent_node_path"],
-            },
-        ),
+        # ── add_raycast_2d migrado para physics_manage (F5.1) ──
+        # ── add_shapecast_2d migrado para physics_manage (F5.1) ──
         Tool(
             name="setup_localization",
             description=(

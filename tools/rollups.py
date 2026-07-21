@@ -370,19 +370,29 @@ def _build_asset_manage():
 # ── Ondas 3-5: Physics, Anim, UI, Tilemap, Audio, Export, 3D, Debug, Config, Gamestate
 
 def _build_physics_manage():
-    """physics_manage: 4 operações de física."""
+    """physics_manage: 6 operações de física (F5.1: +raycast/shape)."""
     return create_manage_tool(
         tool_name="physics_manage",
-        description="Gerencia física 2D/3D: colisões, camadas, materiais e juntas.",
+        description=(
+            "Gerencia física 2D/3D: colisões (add_collision), camadas (set_layers), "
+            "materiais (set_material), juntas (create_joint), raycasts (add_raycast) "
+            "e shapecasts (add_shapecast). "
+            "QUANDO USAR: configurar física de objetos, detectar colisões e linha de visão. "
+            "QUANDO NÃO USAR: para criar nós físicos (use node_manage). "
+            "PRÉ-CONDIÇÕES: cena e nó pai devem existir no projeto. "
+            "ERRO COMUM: tipo de shape inválido — use 'rectangle', 'circle' ou 'capsule'."
+        ),
         ops={
             "add_collision": add_collision_shape,
             "set_layers": set_collision_layer_mask,
             "set_material": set_physics_material,
             "create_joint": create_joint_2d,
+            "add_raycast": add_raycast_2d,
+            "add_shapecast": add_shapecast_2d,
         },
         tool_hints={"destructiveHint": True, "idempotentHint": False, "openWorldHint": True},
         title="Gerenciar Física",
-        tags=["física", "colisão", "2D"],
+        tags=["física", "colisão", "raycast", "joint", "2D"],
     )
 
 

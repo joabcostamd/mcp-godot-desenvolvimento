@@ -1,4 +1,12 @@
 {
+  "fatia_F5.1_physics": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "pendente-commit",
+    "resultado": "F5.1 — Migrar dominio physics (MASTER_IMPLEMENTATION_ROADMAP). Criado domains/physics/ (manifest.py, handlers.py, schemas.py, examples.py, tests/). physics_manage rollup expandido de 4 para 6 ops (+add_raycast, +add_shapecast). Removidas 3 atômicas do wire: create_joint_2d, add_raycast_2d, add_shapecast_2d. 9/9 testes dominio passam. 115/116 regressao (1 pre-existente: remix). C1: 0 breaking. DESIGN: -3 tools."
+  },
   "sync_github": {
     "status": "concluida",
     "data": "2026-07-21",
