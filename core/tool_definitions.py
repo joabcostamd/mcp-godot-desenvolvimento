@@ -4250,5 +4250,36 @@ def _raw_tool_defs() -> list[Tool]:
                 "required": ["project_path", "configuration"],
             },
         ),
+        Tool(
+            name="quickstart_manage",
+            description=(
+                "⚡ QUICK START: frase → jogo jogável em minutos. "
+                "Recebe uma frase em linguagem natural descrevendo o jogo desejado, "
+                "cria o projeto Godot completo com cena jogável (personagem + inimigo + colisão). "
+                "Usa difflib para match automático com o blueprint mais próximo. "
+                "Quando usar: primeira ferramenta após instalar o MCP, ou para começar um jogo novo. "
+                "Operações: run (cria projeto a partir da frase). "
+                "Exemplo: {\"op\": \"run\", \"phrase\": \"jogo de plataforma com herói que atira\"}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "op": {
+                        "type": "string",
+                        "description": "Operação: 'run' para criar projeto.",
+                        "enum": ["run"],
+                    },
+                    "phrase": {
+                        "type": "string",
+                        "description": "Frase descrevendo o jogo. Ex: 'jogo de plataforma com herói que pula'.",
+                    },
+                    "project_name": {
+                        "type": "string",
+                        "description": "Nome do projeto (opcional, gerado da frase se vazio).",
+                    },
+                },
+                "required": ["phrase"],
+            },
+        ),
     ]
 

@@ -2106,6 +2106,7 @@ def _build_handlers() -> dict:
         # Fase 2: Input e Autoload
         "install_mcp_addon": _handle_install_mcp_addon,
         "bootstrap_godot_mcp": _handle_bootstrap_godot_mcp,
+        "quickstart_manage": _handle_quickstart_manage,
         "godot_keep_alive": godot_keep_alive,
         # Fase 2: Runtime
         # Fase 3: Editor
@@ -3243,6 +3244,16 @@ def _handle_bootstrap_godot_mcp(args: dict) -> dict:
         launch_editor=args.get("launch_editor", True),
         timeout_godot=args.get("timeout_godot", 30),
         timeout_addon=args.get("timeout_addon", 15),
+    )
+
+
+def _handle_quickstart_manage(args: dict) -> dict:
+    """Handler para quickstart_manage — frase → projeto jogável."""
+    from tools.quickstart_ops import quickstart_manage
+    return quickstart_manage(
+        op=args.get("op", "run"),
+        phrase=args.get("phrase", ""),
+        project_name=args.get("project_name", ""),
     )
 
 
