@@ -1,0 +1,12 @@
+{
+  "name": "avoidance", "version": "1.0.0", "godot_version": "4.7",
+  "description_pt": "Node que adiciona avoidance (desvio de obstáculos) ao parent CharacterBody2D. Usa NavigationAgent2D interno. Raio, prioridade e velocidade máxima configuráveis.",
+  "description_en": "Node adding obstacle avoidance to parent CharacterBody2D. Uses internal NavigationAgent2D. Configurable radius, priority and max speed.",
+  "synonyms": {"pt": ["desvio", "evitar", "colisao", "steer"], "en": ["avoidance", "steer", "collision_avoidance"]},
+  "parameters": [
+    {"name": "radius", "type": "float", "range":{"min":4,"max":128}, "default":32, "unit":"px"},
+    {"name": "priority", "type": "float", "range":{"min":0,"max":10}, "default":1},
+    {"name": "max_speed", "type": "float", "range":{"min":10,"max":2000}, "default":200, "unit":"px/s"}
+  ],
+  "signals": [], "dependencies": ["pathfinding"], "genres": ["topdown_shooter", "rpg", "generic"], "tags": ["navegacao","ai"]
+}

@@ -41,8 +41,15 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 105,
+    "implementados": 112,
     "lista": [
+      {"id": 82, "nome": "patrol_route", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + waypoints sequenciais. loop, wait_time, add_waypoint. 5 testes."},
+      {"id": 81, "nome": "avoidance", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + NavigationAgent2D. radius/priority/max_speed. 3 testes."},
+      {"id": 80, "nome": "pathfinding", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + NavigationAgent2D. set_target/arrived. move_and_slide. 4 testes."},
+      {"id": 79, "nome": "fire_mode", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + auto/burst/semi. can_fire/reset_semi. 5 testes."},
+      {"id": 78, "nome": "spread", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + angulo aleatorio acumulativo. base/per_shot/max/recovery. 5 testes."},
+      {"id": 77, "nome": "recoil", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + offset position com recovery. apply_recoil(). 4 testes."},
+      {"id": 76, "nome": "crosshair", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node2D + _draw cross/circle/dot. Segue mouse. 5 testes."},
       {"id": 115, "nome": "outline_shader", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + shader outline. outline_color/width. gdshader incluso."},
       {"id": 118, "nome": "dissolve", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + shader dissolve. set_progress(0-1). edge_color/width. gdshader."},
       {"id": 127, "nome": "rhythm_timing", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + BPM/beat detection. perfect/good/miss signals."},

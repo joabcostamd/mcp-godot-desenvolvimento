@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://bavoidance0000001"]
+[ext_resource type="Script" path="res://behaviors/avoidance/avoidance.gd" id="1_av"]
+[node name="Avoidance" type="Node"]
+script = ExtResource("1_av")

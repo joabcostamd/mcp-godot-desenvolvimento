@@ -1,0 +1,12 @@
+{
+  "name": "recoil", "version": "1.0.0", "godot_version": "4.7",
+  "description_pt": "Node que aplica recoil (recuo) ao parent Node2D ao disparar. Desloca a posição e recupera suavemente. recoil_amount e recovery_speed configuráveis.",
+  "description_en": "Node applying recoil to parent Node2D on fire. Shifts position and smoothly recovers. Configurable recoil_amount and recovery_speed.",
+  "synonyms": {"pt": ["recuo", "coice", "arma"], "en": ["recoil", "kickback", "gun"]},
+  "parameters": [
+    {"name": "recoil_amount", "type": "float", "range":{"min":1,"max":200}, "default":20, "unit":"px"},
+    {"name": "recovery_speed", "type": "float", "range":{"min":1,"max":500}, "default":100, "unit":"px/s"},
+    {"name": "recoil_direction", "type": "Vector2", "description_pt": "Direção do recuo (ex: (-1,0) = para trás).", "default":{"x":-1,"y":0}}
+  ],
+  "signals": [], "dependencies": [], "genres": ["topdown_shooter", "platformer", "generic"], "tags": ["mira", "arma"]
+}
