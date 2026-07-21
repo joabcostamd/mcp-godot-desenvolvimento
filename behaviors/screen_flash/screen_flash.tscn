@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bscreenflash00001"]
+
+[ext_resource type="Script" path="res://behaviors/screen_flash/screen_flash.gd" id="1_sf"]
+
+[node name="ScreenFlash" type="CanvasLayer"]
+script = ExtResource("1_sf")
+default_color = Color(1, 1, 1, 1)
+default_duration = 0.3
+fade_in = 0.05
+fade_out = 0.15
