@@ -1310,9 +1310,345 @@ def _op_persona_run(params: dict) -> dict:
     }
 
 
+# ── Operacao agent_observe / agent_step (Fatia 3.C) ─────────────────
+
+def _op_agent_observe(params: dict) -> dict:  # noqa: ARG001
+    """Captura o estado completo do jogo para o agente (Copilot) decidir.
+
+    Retorna metricas, viewport e acoes disponiveis.
+    O agente analisa e decide a proxima acao, depois chama agent_step.
+
+    Uso tipico:
+      1. playtest_manage op=agent_observe → recebe estado
+      2. Agente decide: {"action": "ui_right", "hold_ms": 300}
+      3. playtest_manage op=agent_step action=ui_right hold_ms=300
+    """
+    if not _is_runtime_bridge_available():
+        return {
+            "status": "error",
+            "message": "Jogo nao esta rodando. Abra o Godot e rode (F5).",
+        }
+
+    metrics = _collect_playtest_metrics()
+    viewport = _capture_viewport_screenshot()
+
+    from tools.personas import KEY_MAP
+
+    return {
+        "status": "success",
+        "metrics": metrics,
+        "viewport_active": viewport is not None and viewport.get("width", 0) > 0,
+        "viewport": viewport,
+        "available_actions": sorted(KEY_MAP.keys()),
+        "suggestion": (
+            "Analise o estado acima e decida a proxima acao. "
+            "Use playtest_manage op=agent_step action=<acao> hold_ms=<ms>. "
+            "Acoes disponiveis: " + ", ".join(sorted(KEY_MAP.keys())) + "."
+        ),
+        "cost_estimate": {
+            "note": "Cada chamada agent_observe + agent_step ≈ 1K tokens (~R$0.005).",
+            "estimated_brl_per_step": 0.005,
+        },
+    }
+
+
+def _op_agent_step(params: dict) -> dict:
+    """Executa uma acao decidida pelo agente no jogo rodando.
+
+    Campos em params:
+        action: str — acao a executar (ex: 'ui_right', 'space')
+        hold_ms: int (default 200) — milissegundos de hold
+    """
+    action = params.get("action", "").strip().lower()
+    hold_ms = params.get("hold_ms", 200)
+
+    if not action:
+        return {
+            "status": "error",
+            "message": "Campo 'action' e obrigatorio.",
+        }
+
+    if not isinstance(hold_ms, (int, float)) or hold_ms < 10:
+        return {
+            "status": "error",
+            "message": f"hold_ms invalido: {hold_ms}. Use >= 10ms.",
+        }
+
+    hold_ms = int(hold_ms)
+
+    if not _is_runtime_bridge_available():
+        return {
+            "status": "error",
+            "message": "Jogo nao esta rodando.",
+        }
+
+    result = _send_key_event(action, hold_ms)
+
+    # Coleta estado pós-ação
+    metrics = _collect_playtest_metrics()
+
+    return {
+        "status": result.get("status", "error"),
+        "action": action,
+        "hold_ms": hold_ms,
+        "result": result,
+        "metrics_after": metrics,
+        "next": (
+            "Para continuar: playtest_manage op=agent_observe para ver novo estado, "
+            "depois agent_step para agir."
+        ),
+    }
+
+
+# ── Operacao agent_run (Fatia 3.C) — LLM real ──────────────────────
+
+def _get_deepseek_api_key() -> str | None:
+    """Detecta chave de API do DeepSeek do ambiente.
+
+    Procura por DEEPSEEK_API_KEY ou ANTHROPIC_API_KEY.
+    Retorna None se nenhuma encontrada.
+    """
+    import os
+    for var in ("DEEPSEEK_API_KEY", "ANTHROPIC_API_KEY"):
+        key = os.environ.get(var, "").strip()
+        if key:
+            return key
+    return None
+
+
+def _call_deepseek(prompt: str, api_key: str, model: str = "deepseek-v4-flash") -> dict:
+    """Chama a API do DeepSeek para decidir uma acao de jogo.
+
+    Args:
+        prompt: O prompt com estado do jogo e acoes disponiveis.
+        api_key: Chave de API do DeepSeek.
+        model: Modelo a usar (default: deepseek-v4-flash, o mais barato).
+
+    Returns:
+        {"status": "success", "action": str, "hold_ms": int, "tokens": int}
+        ou {"status": "error", "message": str}
+    """
+    import json as _json
+    import urllib.request
+    import urllib.error
+
+    url = "https://api.deepseek.com/chat/completions"
+    payload = _json.dumps({
+        "model": model,
+        "messages": [
+            {"role": "system", "content": (
+                "You are a game playtester. Analyze the game state and decide the next action. "
+                "Respond ONLY with a JSON object: {\"action\": \"<action_name>\", \"hold_ms\": <milliseconds>}. "
+                "No explanation, no markdown, just the JSON."
+            )},
+            {"role": "user", "content": prompt},
+        ],
+        "max_tokens": 50,
+        "temperature": 0.3,
+        "stream": False,
+    }).encode("utf-8")
+
+    req = urllib.request.Request(url, data=payload, headers={
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}",
+    })
+
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            body = _json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        return {"status": "error", "message": f"API HTTP {e.code}: {e.reason}"}
+    except Exception as e:
+        return {"status": "error", "message": f"Erro de rede: {e}"}
+
+    # Extrai resposta
+    try:
+        content = body["choices"][0]["message"]["content"].strip()
+        # Remove marcadores markdown se houver
+        if content.startswith("```"):
+            content = content.split("\n", 1)[-1]
+            if content.endswith("```"):
+                content = content[:-3]
+            content = content.strip()
+        decision = _json.loads(content)
+        return {
+            "status": "success",
+            "action": decision.get("action", "ui_right"),
+            "hold_ms": decision.get("hold_ms", 200),
+            "tokens": body.get("usage", {}).get("total_tokens", 0),
+            "model": model,
+        }
+    except (KeyError, IndexError, _json.JSONDecodeError) as e:
+        return {"status": "error", "message": f"Resposta invalida do modelo: {e}"}
+
+
+def _estimate_agent_cost(steps: int, model: str = "deepseek-v4-flash") -> dict:
+    """Estima custo de agent_run em reais.
+
+    DeepSeek V4 Flash: ~$0.14/1M input, ~$0.28/1M output (~R$0.80/1M).
+    Estimativa conservadora: ~500 tokens/step.
+    """
+    tokens_per_step = 500
+    total_tokens = steps * tokens_per_step
+    # Preco em USD por 1M tokens (flash)
+    price_per_1m_usd = 0.14 + 0.28  # input + output
+    # Conversao aproximada USD → BRL
+    usd_to_brl = 5.50
+    cost_brl = (total_tokens / 1_000_000) * price_per_1m_usd * usd_to_brl
+
+    return {
+        "steps": steps,
+        "model": model,
+        "estimated_tokens": total_tokens,
+        "estimated_cost_brl": round(cost_brl, 4),
+        "note": "Estimativa conservadora. Custo real pode ser menor.",
+    }
+
+
+def _agent_heuristic_action(metrics: dict | None) -> dict:
+    """Heuristica fallback: decide acao sem LLM (modo offline)."""
+    if metrics is None:
+        return {"action": "ui_accept", "hold_ms": 100}
+
+    fps = metrics.get("fps", 60)
+    # Heuristica simples: alterna entre mover e interagir
+    import random
+    actions = ["ui_right", "ui_right", "ui_right", "ui_up", "space", "ui_accept"]
+    action = random.choice(actions)
+
+    if fps < 30:
+        action = "ui_accept"  # espera/pausa se FPS baixo
+
+    return {"action": action, "hold_ms": random.choice([100, 200, 300, 500])}
+
+
+def _op_agent_run(params: dict) -> dict:
+    """Agente LLM joga o jogo por N steps, decidindo acoes via DeepSeek API.
+
+    Coleta estado do jogo, envia para o modelo DeepSeek decidir a acao,
+    executa via bridge, repete. Com fallback para heuristica offline.
+
+    Campos em params:
+        steps: int (default 5) — numero de passos
+        model: str (default 'deepseek-v4-flash') — modelo a usar
+        api_key: str (opcional) — chave de API (detecta do ambiente se ausente)
+    """
+    steps = params.get("steps", 5)
+    model = params.get("model", "deepseek-v4-flash")
+
+    if not isinstance(steps, (int, float)) or steps < 1 or steps > 20:
+        return {
+            "status": "error",
+            "message": f"steps invalido: {steps}. Use entre 1 e 20.",
+        }
+
+    steps = int(steps)
+
+    if not _is_runtime_bridge_available():
+        return {
+            "status": "error",
+            "message": "Jogo nao esta rodando. Abra o Godot e rode (F5).",
+        }
+
+    # Detecta API key
+    api_key = params.get("api_key", "") or _get_deepseek_api_key()
+    use_llm = bool(api_key)
+
+    # Estima custo
+    cost = _estimate_agent_cost(steps, model)
+
+    if not use_llm:
+        cost["mode"] = "heuristic"
+        cost["note"] = (
+            "Nenhuma chave de API encontrada (DEEPSEEK_API_KEY ou ANTHROPIC_API_KEY). "
+            "Usando heuristica offline. Para usar LLM real, configure a chave no ambiente."
+        )
+
+    # Executa steps
+    history: list[dict] = []
+    total_tokens = 0
+    errors = 0
+
+    for i in range(steps):
+        metrics = _collect_playtest_metrics()
+
+        if use_llm:
+            # Monta prompt para o modelo
+            from tools.personas import KEY_MAP
+            actions_list = ", ".join(sorted(KEY_MAP.keys()))
+            prompt = (
+                f"Game state (step {i+1}/{steps}):\n"
+                f"- FPS: {metrics.get('fps', '?') if metrics else '?'}\n"
+                f"- Draw calls: {metrics.get('draw_calls', '?') if metrics else '?'}\n"
+                f"- Memory: {metrics.get('memory_mb', '?') if metrics else '?'}MB\n"
+                f"Available actions: {actions_list}\n"
+                f"Decide the next action for playtesting."
+            )
+
+            decision = _call_deepseek(prompt, api_key, model)
+            total_tokens += decision.get("tokens", 0)
+
+            if decision.get("status") == "error":
+                errors += 1
+                # Fallback para heuristica
+                decision = _agent_heuristic_action(metrics)
+                decision["fallback"] = True
+        else:
+            decision = _agent_heuristic_action(metrics)
+            decision["mode"] = "heuristic"
+
+        action = decision.get("action", "ui_right")
+        hold_ms = decision.get("hold_ms", 200)
+
+        # Executa
+        result = _send_key_event(action, hold_ms)
+
+        history.append({
+            "step": i + 1,
+            "action": action,
+            "hold_ms": hold_ms,
+            "result": result.get("status", "?"),
+            "fps": metrics.get("fps", 0) if metrics else 0,
+            "tokens": decision.get("tokens", 0),
+            "mode": decision.get("mode", decision.get("model", "llm")),
+        })
+
+        if result.get("status") == "error":
+            errors += 1
+            if errors >= 3:
+                break
+
+        # Cooldown entre steps
+        _time.sleep(0.3)
+
+    # Metricas finais
+    final_metrics = _collect_playtest_metrics()
+
+    return {
+        "status": "success" if errors == 0 else "warn",
+        "mode": "llm" if use_llm else "heuristic",
+        "model": model if use_llm else None,
+        "steps": steps,
+        "completed": len(history),
+        "errors": errors,
+        "total_tokens": total_tokens,
+        "cost_estimate": cost,
+        "history": history,
+        "final_metrics": final_metrics,
+        "note": (
+            "Playtest por agente LLM. "
+            + ("Modelo real (DeepSeek API). " if use_llm else "Heuristica offline. ")
+            + "NAO substitui playtest humano."
+        ),
+    }
+
+
 _PLAYTEST_OPS = {
     "smoke": _op_playtest_smoke,
     "persona_run": _op_persona_run,
+    "agent_observe": _op_agent_observe,
+    "agent_step": _op_agent_step,
+    "agent_run": _op_agent_run,
 }
 
 

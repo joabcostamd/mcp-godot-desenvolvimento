@@ -2397,8 +2397,8 @@ def _raw_tool_defs() -> list[Tool]:
                 "properties": {
                     "op": {
                         "type": "string",
-                        "description": "Operacao: 'smoke' ou 'persona_run'.",
-                        "enum": ["smoke", "persona_run"],
+                        "description": "Operacao: 'smoke', 'persona_run', 'agent_observe', 'agent_step' ou 'agent_run'.",
+                        "enum": ["smoke", "persona_run", "agent_observe", "agent_step", "agent_run"],
                     },
                     "duration": {
                         "type": "integer",
@@ -2412,6 +2412,23 @@ def _raw_tool_defs() -> list[Tool]:
                         "type": "string",
                         "description": "ID da persona para op='persona_run': 'apressado', 'cauteloso' ou 'explorador'.",
                         "enum": ["apressado", "cauteloso", "explorador"],
+                    },
+                    "action": {
+                        "type": "string",
+                        "description": "Acao para op='agent_step': ui_right, ui_left, ui_up, ui_down, space, ui_accept, etc.",
+                    },
+                    "hold_ms": {
+                        "type": "integer",
+                        "description": "Milissegundos de hold para op='agent_step' (default: 200).",
+                    },
+                    "steps": {
+                        "type": "integer",
+                        "description": "Numero de passos para op='agent_run' (default: 5, max: 20).",
+                    },
+                    "model": {
+                        "type": "string",
+                        "description": "Modelo DeepSeek para op='agent_run': 'deepseek-v4-flash' (mais barato) ou 'deepseek-v4-pro'.",
+                        "enum": ["deepseek-v4-flash", "deepseek-v4-pro"],
                     },
                 },
                 "required": [],

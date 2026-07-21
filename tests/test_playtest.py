@@ -74,3 +74,52 @@ class TestRollupContract:
         r = playtest_manage(op="smoke")
         if r["status"] == "error":
             assert "message" in r
+
+
+class TestAgentObserve:
+    def test_observe_without_game(self):
+        r = playtest_manage(op="agent_observe")
+        assert r["status"] == "error"
+        assert "rodando" in r["message"].lower()
+
+    def test_observe_returns_available_actions(self):
+        """Mesmo sem jogo, a estrutura de resposta deve ser coerente."""
+        r = playtest_manage(op="agent_observe")
+        if r["status"] == "success":
+            assert "available_actions" in r
+            assert "cost_estimate" in r
+
+
+class TestAgentStep:
+    def test_step_without_action(self):
+        r = playtest_manage(op="agent_step")
+        assert r["status"] == "error"
+        assert "action" in r["message"].lower()
+
+    def test_step_invalid_hold(self):
+        r = playtest_manage(op="agent_step", params={"action": "ui_right", "hold_ms": 5})
+        assert r["status"] == "error"
+
+    def test_step_without_game(self):
+        r = playtest_manage(op="agent_step", params={"action": "ui_right", "hold_ms": 200})
+        assert r["status"] == "error"
+
+
+class TestAgentRun:
+    def test_run_without_game(self):
+        r = playtest_manage(op="agent_run")
+        assert r["status"] == "error"
+        assert "rodando" in r["message"].lower()
+
+    def test_run_invalid_steps(self):
+        r = playtest_manage(op="agent_run", params={"steps": 0})
+        assert r["status"] == "error"
+
+    def test_run_too_many_steps(self):
+        r = playtest_manage(op="agent_run", params={"steps": 50})
+        assert r["status"] == "error"
+
+    def test_run_default_params(self):
+        """Sem jogo, mesmo agent_run deve retornar erro claro."""
+        r = playtest_manage(op="agent_run", params={"steps": 3})
+        assert r["status"] == "error"

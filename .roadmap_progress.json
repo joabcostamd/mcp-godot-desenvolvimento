@@ -9,6 +9,15 @@
     "checkpoint": "f4b6d75",
     "resultado": "Playtest camada 2: personas scriptadas. tools/personas.py (NOVO, 153 linhas): 3 personas (apressado/cauteloso/explorador) com KEY_MAP Godot 4. playtest_manage op=persona_run: envia sequencia de inputs via runtime bridge (:8790), simula hold com taps a 50ms. Coleta: completed, total_time_s, inputs_total, input_errors. 279 tools. C1 PASS, C3 PASS. 47/47 testes (10 personas + 11 smoke + 26 version_history). Bug encontrado na autocrítica: bridge usa cmd=input_event, nao custom/send_input — corrigido."
   },
+  "fatia_3.C": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "c6a2e02",
+    "resultado": "Playtest camada 3: agente LLM pontual. IMPLEMENTACAO COMPLETA: agent_run chama DeepSeek API real (deepseek-v4-flash/pro) via urllib. Detecta DEEPSEEK_API_KEY ou ANTHROPIC_API_KEY do ambiente. Fallback heuristico offline se sem chave. Estima custo (~R$0.001/step). agent_observe + agent_step como ferramentas auxiliares. 279 tools. C1 PASS, C3 PASS. 20/20 testes playtest. Pesquisa externa: api.deepseek.com/chat/completions, OpenAI-compativel.",
+    "pesquisa_externa": "api-docs.deepseek.com — endpoint /chat/completions, model deepseek-v4-flash, auth Bearer token, OpenAI-compatible format"
+  },
   "fatia_3.A": {
     "status": "concluida",
     "data": "2026-07-21",
