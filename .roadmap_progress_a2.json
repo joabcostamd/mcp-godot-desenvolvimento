@@ -41,8 +41,9 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 65,
+    "implementados": 66,
     "lista": [
+      {"id": 102, "nome": "accordion", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + VBoxContainer com secoes Button/Control toggle. allow_multiple, collapse_all/expand_all. 14 testes. Fonte: Godot 4.7 ClassDB."},
       {"id": 104, "nome": "drag_drop", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + set_drag_forwarding(). Snap grid, drop_group, preview. 3 params, 3 sinais. 12 testes. Fonte: Godot 4.7 ClassDB."},
       {"id": 103, "nome": "tooltip", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + PanelContainer/Label flutuante. mouse_entered/mouse_exited + delay. follow_mouse. 12 testes. Fonte: Godot 4.7 ClassDB."},
       {"id": 2, "nome": "player_topdown", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + CharacterBody2D child. InputMap 8-dir com aceleracao/friccao. 4 params, sinal velocity_changed. 17 testes. Fonte: Godot 4.7 ClassDB CharacterBody2D/Input/Vector2.move_toward."},
