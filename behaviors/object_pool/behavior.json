@@ -1,0 +1,25 @@
+{
+  "name": "object_pool",
+  "description_pt": "Pool de objetos reutilizável: pré-instancia N cópias de uma PackedScene, gerencia take/return. Evita custo de instantiate/queue_free repetidos. Infraestrutura para spawners.",
+  "description_en": "Reusable object pool: pre-instantiates N copies of a PackedScene, manages take/return. Avoids repeated instantiate/queue_free cost. Infrastructure for spawners.",
+  "synonyms": {
+    "pt": ["pool", "piscina", "reserva", "cache", "reciclagem"],
+    "en": ["pool", "cache", "recycle", "reserve", "preload"]
+  },
+  "parameters": [
+    {"name": "pool_size", "type": "int", "description_pt": "Número inicial de objetos no pool.", "range": {"min": 1, "max": 1000}, "default": 20},
+    {"name": "prefab", "type": "PackedScene", "description_pt": "Cena a ser instanciada no pool.", "default": null},
+    {"name": "expandable", "type": "bool", "description_pt": "Se true, cria mais objetos quando o pool esgota.", "default": true}
+  ],
+  "signals": [
+    {"name": "object_taken", "description_pt": "Emitido quando um objeto é retirado do pool.", "params": [{"name": "obj", "type": "Node"}]},
+    {"name": "object_returned", "description_pt": "Emitido quando um objeto é devolvido ao pool.", "params": [{"name": "obj", "type": "Node"}]},
+    {"name": "pool_empty", "description_pt": "Emitido quando o pool esgota e não é expansível.", "params": []}
+  ],
+  "dependencies": [],
+  "genres": ["generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["sistema", "pool", "performance", "spawn", "infraestrutura"]
+}

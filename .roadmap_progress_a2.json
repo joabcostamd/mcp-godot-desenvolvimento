@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 19,
+    "implementados": 20,
     "lista": [
       {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido"},
       {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido"},
@@ -57,8 +57,9 @@
       {"id": 25, "nome": "state_machine", "versao": "1.0.0", "status": "concluido"},
       {"id": 27, "nome": "flee", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "Node + fuga condicional. 4 params, 3 condições. StateMachine sibling. 14 testes."},
       {"id": 28, "nome": "flocking", "versao": "1.0.0", "status": "concluido"},
-      {"id": 29, "nome": "turret_aim", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "Node2D + rotação suave. FireRate + Projectile. 10 testes."}
+      {"id": 29, "nome": "turret_aim", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "Node2D + rotação suave. FireRate + Projectile. 10 testes."},
+      {"id": 47, "nome": "object_pool", "versao": "1.0.0", "status": "concluido"}
     ]
   },
-  "proximo": "object_pool (#47) — sem dependências, destrava spawner_wave."
+  "proximo": "spawner_wave (#24) — object_pool destravado."
 }
