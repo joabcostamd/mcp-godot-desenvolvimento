@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://idle_generator_v1"]
+
+[ext_resource type="Script" path="res://behaviors/idle_generator/idle_generator.gd" id="1_ig"]
+
+[node name="IdleGenerator" type="Node"]
+script = ExtResource("1_ig")
+resource_per_second = 1.0
+max_storage = 100.0
+upgrade_cost = 10
+upgrade_cost_multiplier = 1.5
+upgrade_rate_multiplier = 2.0
+enabled = true

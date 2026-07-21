@@ -41,8 +41,9 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 120,
+    "implementados": 121,
     "lista": [
+      {"id": 128, "nome": "idle_generator", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + geracao idle/clicker. _physics_process, max_storage, upgrade com custo escalavel. 3 sinais, 20 testes."},
       {"id": 123, "nome": "hand", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + mao de cartas. add/remove/draw_from_deck/play/discard. Fan layout. 24 testes."},
       {"id": 143, "nome": "character_creator", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Control + partes customizaveis. add_part/set_part_option/set_part_color. Presets ConfigFile via SaveLoad. 28 testes."},
       {"id": 69, "nome": "camera_follow", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Camera2D follow. damping, offset, look_ahead. 8 testes."},
