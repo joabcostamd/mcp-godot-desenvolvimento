@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 26,
+    "implementados": 27,
     "lista": [
       {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido"},
       {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido"},
@@ -64,8 +64,9 @@
       {"id": 31, "nome": "collectable", "versao": "1.0.1", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + auto_pickup/pickup/magnet_range(autodetection). 19 testes. Auditoria: corrigidos C1(auto_pickup setter dinamico), M2(pickup_failed cooldown 0.5s), B3(warning inalcancavel), B4(magnet autodetect). Fonte: Nodot RigidCollectable3D."},
       {"id": 34, "nome": "currency", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + add/spend/can_afford. currency_type. Sinais gained/spent/insufficient. 18 testes."},
       {"id": 32, "nome": "xp_level", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + xp_table/add_xp/leveled_up. Multiplos level ups. 18 testes."},
-      {"id": 33, "nome": "upgrade", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + escuta XPLevel.leveled_up. Opcoes aleatorias, max_level. 12 testes."}
+      {"id": 33, "nome": "upgrade", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + escuta XPLevel.leveled_up. Opcoes aleatorias, max_level. 12 testes."},
+      {"id": 35, "nome": "quest", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + objectives collect/spend. Auto-detecta Inventory+Currency. Rewards. 13 testes."}
     ]
   },
-  "proximo": "quest (#35) — depende de inventory, currency. Grupo: Progressão."
+  "proximo": "save_load (#38) — sem dependências. Grupo: Sistema."
 }

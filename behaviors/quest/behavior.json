@@ -1,0 +1,46 @@
+{
+  "name": "quest",
+  "description_pt": "Sistema de quests com objetivos rastreáveis (coletar itens, gastar moeda), progresso automático via sinais do Inventory e Currency irmãos, e recompensas. Emite quest_started, quest_completed e quest_failed.",
+  "description_en": "Quest system with trackable objectives (collect items, spend currency), automatic progress via sibling Inventory and Currency signals, and rewards. Emits quest_started, quest_completed, and quest_failed.",
+  "synonyms": {
+    "pt": ["missão", "tarefa", "objetivo", "journal", "diário"],
+    "en": ["mission", "task", "objective", "journal", "log"]
+  },
+  "parameters": [
+    {
+      "name": "quests",
+      "type": "Array",
+      "description_pt": "Lista de quests: [{id, name, objectives: [{type: collect|spend, target_id, required}], rewards: [{type, target_id, quantity}]}].",
+      "default": []
+    }
+  ],
+  "signals": [
+    {
+      "name": "quest_started",
+      "description_pt": "Emitido quando uma quest é iniciada.",
+      "params": [
+        {"name": "quest_id", "type": "String"}
+      ]
+    },
+    {
+      "name": "quest_completed",
+      "description_pt": "Emitido quando uma quest é concluída (todos objetivos cumpridos).",
+      "params": [
+        {"name": "quest_id", "type": "String"}
+      ]
+    },
+    {
+      "name": "quest_failed",
+      "description_pt": "Emitido quando uma quest falha.",
+      "params": [
+        {"name": "quest_id", "type": "String"}
+      ]
+    }
+  ],
+  "dependencies": ["inventory", "currency"],
+  "genres": ["rpg", "roguelike", "platformer", "topdown_shooter", "generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["progressao", "quest", "missão", "objetivo", "recompensa"]
+}
