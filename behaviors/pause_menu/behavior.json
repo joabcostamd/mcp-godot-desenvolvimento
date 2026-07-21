@@ -1,0 +1,27 @@
+{
+  "name": "pause_menu",
+  "description_pt": "Sistema de pausa: pausa/retoma a árvore de cena via get_tree().paused. Detecta input configurável (ui_cancel por padrão). Emite paused e resumed.",
+  "description_en": "Pause system: pauses/resumes the scene tree via get_tree().paused. Detects configurable input (ui_cancel by default). Emits paused and resumed.",
+  "synonyms": {
+    "pt": ["pausa", "menu", "pause", "parar", "congelar"],
+    "en": ["pause", "menu", "stop", "freeze", "break"]
+  },
+  "parameters": [
+    {
+      "name": "pause_action",
+      "type": "String",
+      "description_pt": "Nome da InputMap action para toggle de pausa.",
+      "default": "ui_cancel"
+    }
+  ],
+  "signals": [
+    {"name": "paused", "description_pt": "Emitido quando o jogo é pausado.", "params": []},
+    {"name": "resumed", "description_pt": "Emitido quando o jogo é retomado.", "params": []}
+  ],
+  "dependencies": [],
+  "genres": ["generic"],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": ["sistema", "pausa", "menu"]
+}
