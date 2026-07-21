@@ -1,4 +1,12 @@
 {
+  "estabilizacao_E1_E6": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "996d588",
+    "resultado": "PARADA DE ESTABILIZACAO concluida. E1: .reorg_progress.json recriado valido. E2: audit_fase.py corrigido + test_invariants.py criado. E3: SEM_HANDLER 40→0 (filtro DEPRECATED_TOOLS em _tool_defs). E4: NS_FANTASMA resolvido (INV-10/INV-11 passam). E5: test_remix isolamento corrigido. E6: gates reconciliados (Secao 15 A01-A12). AUDITORIA F5: APROVADA. 173/173 testes passam. defs_total=268, handlers_total=268."
+  },
   "fatia_F5.5_navigation": {
     "status": "concluida",
     "data": "2026-07-21",
