@@ -1,4 +1,12 @@
 {
+  "fatia_F5.6_vfx": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "pendente-commit",
+    "resultado": "F5.6 — Migrar dominio vfx/particulas. Criado domains/vfx/ (manifest.py, handlers.py, examples.py, schemas.py, test_vfx_domain.py). 5 ops: create_particles, config_particles, create_particles_3d, screen_flash, world_env. vfx_manage: +1 op (create_particles_3d). Removidas 2 atômicas do wire: create_particles_2d, configure_particles_2d (+create_particles_3d ja era DEPRECATED). +3 aliases. 184/184 regressao (+8 testes vfx). AUDITORIA F5: APROVADA."
+  },
   "estabilizacao_E1_E6": {
     "status": "concluida",
     "data": "2026-07-21",

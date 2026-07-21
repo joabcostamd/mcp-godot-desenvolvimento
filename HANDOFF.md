@@ -5,7 +5,52 @@
 
 ---
 
-## Último Handoff (AGENTE 01 — 2026-07-21 — FECHAMENTO DA ESTABILIZAÇÃO)
+## Último Handoff (AGENTE 01 — 2026-07-21 — F5.6 VFX)
+
+- **Data:** 2026-07-21
+- **Fatia:** F5.6 — Migrar domínio vfx/partículas
+- **O que foi feito:** Criado `domains/vfx/` com 6 arquivos. 5 ops no rollup (+create_particles_3d). 2 atômicas removidas do wire. +3 aliases.
+
+### Estado do wire
+
+```
+defs_total=269, handlers_total=268
+SEM_HANDLER=0, SEM_DEF=0, NS_FANTASMA=0, PHASE_FANTASMA=0
+AUDITORIA F5: APROVADA
+184/184 testes passam (8 xfailed) — +8 testes domínio vfx
+```
+
+### Arquivos criados/alterados
+
+- `domains/vfx/` — NOVO: `__init__.py`, `manifest.py`, `handlers.py`, `examples.py`, `schemas.py`, `test_vfx_domain.py`
+- `tools/rollups.py` — `_build_vfx_manage()`: +1 op `create_particles_3d`
+- `tools/deprecated.py` — +2 DEPRECATED_TOOLS, +3 ALIAS_MAP (42→45)
+- `server.py` — -3 TOOL_LABELS, -3 TOOL_TAGS (atômicas vfx)
+- `.reorg_progress.json` — fatia_atual: 5.5→5.6
+- `.roadmap_progress.json` — +fatia_F5.6_vfx
+
+### Decisões
+
+- `create_particles_3d` adicionado como op ao `vfx_manage` (antes só existia como atômica DEPRECATED sem rollup)
+- As 3 atômicas eram ORFAS (sem fase). Agora cobertas por `vfx_manage` em PROTOTIPO+CONTEUDO.
+- Nenhuma regressão de fase — rollup já estava em PROTOTIPO.
+
+### Pendências (inalteradas)
+
+- **F5.7+**: ~7 domínios restantes (render, skeleton, debug, lsp, godot, network, lights + screenshot?)
+- **F3 completa**: Unificação dos 3 caminhos de rollup pendente
+- **F4 completa**: Descoberta progressiva por fase pendente
+- **59 tools SEM_FASE** (inalterado)
+- **Aliases**: 45 entradas, expiram em F6
+
+### Próximo
+
+- `/plan` para F5.7 — próximo domínio com rollup funcional (render, skeleton, debug, lsp, godot, network)
+- Rodar `audit_fase.py --fase F5` e `pytest tests/ domains/ -q` antes de começar
+
+---
+
+## Handoff Anterior (AGENTE 01 — 2026-07-21 — FECHAMENTO DA ESTABILIZAÇÃO)
 
 - **Data:** 2026-07-21
 - **Commit:** 3f109f2 (main, pushed to origin)

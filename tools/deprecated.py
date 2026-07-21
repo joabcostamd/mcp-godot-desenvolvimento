@@ -89,6 +89,8 @@ DEPRECATED_TOOLS: set[str] = {
     "read_shader", "edit_shader", "get_shader_params",
     # raycast atomics → physics_manage (F5.1)
     "add_raycast_2d", "add_shapecast_2d",
+    # vfx atomics → vfx_manage (F5.6)
+    "create_particles_2d", "configure_particles_2d",
 }
 
 
@@ -146,4 +148,8 @@ ALIAS_MAP: dict[str, tuple[str, str]] = {
     # ── raycast atomics → physics_manage ──
     "add_raycast_2d": ("physics_manage", "add_raycast"),
     "add_shapecast_2d": ("physics_manage", "add_shapecast"),
+    # ── vfx atomics → vfx_manage (F5.6) ──
+    "create_particles_2d": ("vfx_manage", "create_particles"),
+    "configure_particles_2d": ("vfx_manage", "config_particles"),
+    "create_particles_3d": ("vfx_manage", "create_particles_3d"),
 }

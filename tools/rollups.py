@@ -649,10 +649,11 @@ def _build_inventory_manage():
 def _build_vfx_manage():
     return create_manage_tool(
         tool_name="vfx_manage",
-        description="Gerencia efeitos visuais: criar partículas 2D, configurar, screen flash e ambiente.",
+        description="Gerencia efeitos visuais: criar partículas 2D/3D, configurar, screen flash e ambiente.",
         ops={
             "create_particles": create_particles_2d,
             "config_particles": configure_particles_2d,
+            "create_particles_3d": create_particles_3d,
             "screen_flash": setup_screen_flash,
             "world_env": setup_world_environment,
         },
