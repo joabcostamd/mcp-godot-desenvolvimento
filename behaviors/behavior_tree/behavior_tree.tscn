@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://behavior_tree_v1"]
+[ext_resource type="Script" path="res://behaviors/behavior_tree/behavior_tree.gd" id="1_bt"]
+[node name="BehaviorTree" type="Node"]
+script = ExtResource("1_bt")
