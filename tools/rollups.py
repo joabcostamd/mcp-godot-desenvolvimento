@@ -498,15 +498,28 @@ def _build_3d_manage():
 
 
 def _build_debug_manage():
-    """debug_manage: 4 operações."""
+    """debug_manage: 9 operações (debug + debugger)."""
+    from tools.debugger_ops import (
+        debugger_set_breakpoint, debugger_status, debugger_step,
+        debugger_get_stack, debugger_get_variables,
+    )
     return create_manage_tool(
         tool_name="debug_manage",
-        description="Gerencia debug: performance, colisões, navegação e regressão de performance.",
-        ops={"perf_stats": get_performance_stats, "collision_debug": enable_debug_collisions,
-            "nav_debug": enable_debug_navigation, "perf_regression": perf_regression_track},
+        description="Gerencia debug: performance, colisões, navegação, breakpoints, stack e variáveis.",
+        ops={
+            "perf_stats": get_performance_stats,
+            "collision_debug": enable_debug_collisions,
+            "nav_debug": enable_debug_navigation,
+            "perf_regression": perf_regression_track,
+            "set_breakpoint": debugger_set_breakpoint,
+            "status": debugger_status,
+            "step": debugger_step,
+            "get_stack": debugger_get_stack,
+            "get_vars": debugger_get_variables,
+        },
         tool_hints={"destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
         title="Gerenciar Debug",
-        tags=["debug", "diagnóstico", "visualização"],
+        tags=["debug", "diagnóstico", "visualização", "debugger"],
     )
 
 
@@ -986,6 +999,31 @@ def _build_skeleton_manage():
     )
 
 
+def _build_network_manage():
+    """network_manage: 5 operações de rede (F5 consolidation)."""
+    from tools.network_ops import (
+        setup_multiplayer_peer, create_rpc_method, create_websocket_client,
+        configure_dedicated_server, create_lobby_system,
+    )
+    return create_manage_tool(
+        tool_name="network_manage",
+        description=(
+            "Gerencia rede multiplayer: configurar peer, criar RPCs, "
+            "WebSocket client, servidor dedicado e sistema de lobby."
+        ),
+        ops={
+            "setup_peer": setup_multiplayer_peer,
+            "create_rpc": create_rpc_method,
+            "create_ws": create_websocket_client,
+            "config_server": configure_dedicated_server,
+            "create_lobby": create_lobby_system,
+        },
+        tool_hints={"destructiveHint": True, "idempotentHint": False, "openWorldHint": True},
+        title="Gerenciar Rede",
+        tags=["network", "multiplayer", "rpc", "websocket"],
+    )
+
+
 # ── Builders registry ───────────────────────────────────────────────
 
 _ROLLUP_BUILDERS = [
@@ -1036,6 +1074,8 @@ _ROLLUP_BUILDERS = [
     _build_lsp_manage,
     # F5: skeleton consolidation
     _build_skeleton_manage,
+    # F5: network consolidation
+    _build_network_manage,
 ]
 
 # Cache interno — garante que cada builder só executa UMA vez.
