@@ -41,8 +41,11 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 83,
+    "implementados": 86,
     "lista": [
+      {"id": 110, "nome": "conveyor_belt", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + direction velocity. CharacterBody2D + RigidBody2D. 2 testes."},
+      {"id": 112, "nome": "gravity_zone", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + gravity_direction/strength/override. 2 testes."},
+      {"id": 111, "nome": "magnet", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + attraction force/falloff (const/linear/quad). 3 testes."},
       {"id": 97, "nome": "burnable", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Health sibling. fire damage ignite, burn DPS, spread. 7 testes."},
       {"id": 96, "nome": "ladder", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Area2D + climbers dict. ui_up/down override gravity. 5 testes."},
       {"id": 95, "nome": "outline", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + shader outline. Cor/largura/enabled. gdshader incluso. 3 testes."},

@@ -1,0 +1,13 @@
+{
+  "name": "magnet", "version": "1.0.0", "godot_version": "4.7",
+  "description_pt": "Area2D que atrai corpos do target_group para o centro. Força e falloff configuráveis (constante, linear, quadrático).",
+  "description_en": "Area2D that attracts bodies from target_group to center. Configurable force and falloff (constant, linear, quadratic).",
+  "synonyms": {"pt": ["ima", "atracao", "puxar", "gravidade_local"], "en": ["magnet", "attract", "pull", "local_gravity"]},
+  "parameters": [
+    {"name": "force", "type": "float", "range": {"min": 10, "max": 5000}, "default": 500, "unit": "px/s²"},
+    {"name": "target_group", "type": "String", "default": ""},
+    {"name": "falloff", "type": "int", "description_pt": "0=constante, 1=linear, 2=quadrático", "range": {"min": 0, "max": 2}, "default": 1}
+  ],
+  "signals": [{"name": "attracted", "params": [{"name": "body", "type": "Node2D"}]}],
+  "dependencies": [], "genres": ["generic"], "conflicts": [], "tags": ["fisica", "atracao"]
+}

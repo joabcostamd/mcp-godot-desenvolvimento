@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://bconveyorbelt0001"]
+[ext_resource type="Script" path="res://behaviors/conveyor_belt/conveyor_belt.gd" id="1_cb"]
+[node name="ConveyorBelt" type="Area2D"]
+script = ExtResource("1_cb")

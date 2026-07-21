@@ -1,0 +1,11 @@
+{
+  "name": "conveyor_belt", "version": "1.0.0", "godot_version": "4.7",
+  "description_pt": "Area2D que move corpos sobre ela em uma direção. Aplica velocidade constante a CharacterBody2D dentro da área. Útil para esteiras, escadas rolantes, rios.",
+  "description_en": "Area2D that moves bodies on top in a direction. Applies constant velocity to CharacterBody2D inside. Useful for conveyor belts, escalators, rivers.",
+  "synonyms": {"pt": ["esteira", "rio", "correnteza", "escada_rolante"], "en": ["conveyor", "river", "current", "escalator"]},
+  "parameters": [
+    {"name": "direction", "type": "Vector2", "description_pt": "Direção do movimento (magnitude = velocidade px/s).", "default": {"x":100,"y":0}},
+    {"name": "target_group", "type": "String", "default": ""}
+  ],
+  "signals": [], "dependencies": [], "genres": ["platformer", "generic"], "conflicts": [], "tags": ["fisica", "movimento"]
+}
