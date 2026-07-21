@@ -34,6 +34,14 @@
     "checkpoint": "e20f2c4",
     "resultado": "Gate dos primeiros 5 minutos. playtest_manage op=gate_first_5min: roda persona apressado 30s, verifica 3 condicoes (entendeu/vitoria/nao-morreu). Integrado com advance_phase em phase_ops.py: bloqueia avanco alem de PROTOTIPO se gate falhou. Estado salvo em .mcp_gate_first_5min.json. 280 tools. C1 PASS, C3 PASS. 33/33 testes."
   },
+  "fatia_3.F": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "e757878",
+    "resultado": "Gate de divida de complexidade. complexity_gate_manage(op=baseline|check): conta scripts .gd e linhas, compara com baseline. Bloqueia se >50%% crescimento. Integrado com advance_phase. 281 tools (+1). C1 PASS, C3 PASS."
+  },
   "fatia_3.A": {
     "status": "concluida",
     "data": "2026-07-21",

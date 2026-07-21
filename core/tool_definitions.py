@@ -2459,6 +2459,29 @@ def _raw_tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
+        # ── Complexity Gate (ONDA 3 — Fatia 3.F) ────────────────
+        Tool(
+            name="complexity_gate_manage",
+            description=(
+                "📏 Gate de divida de complexidade (ONDA 3 — Fatia 3.F). "
+                "Mede scripts .gd e linhas de codigo por fase. "
+                "Bloqueia avanco se complexidade crescer >50%% sem justificativa. "
+                "Operacoes: baseline (salva snapshot), check (compara com baseline). "
+                "Exemplo baseline: {\"op\": \"baseline\"}. "
+                "Exemplo check: {\"op\": \"check\"}."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "op": {
+                        "type": "string",
+                        "description": "Operacao: 'baseline' ou 'check'.",
+                        "enum": ["baseline", "check"],
+                    },
+                },
+                "required": [],
+            },
+        ),
         # ── Playtest Onda 1 (watch_state, godot_exec, effect_probe) ──
         Tool(
             name="watch_state_start",

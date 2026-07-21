@@ -393,6 +393,22 @@ def advance_phase(force: bool = False, reason: str = "") -> dict:
                 "current_phase": phase,
             }
 
+    # ── Gate de divida de complexidade (Fatia 3.F) ────────────────
+    if not force and phase in _GATE_PHASES:
+        complexity = _check_complexity_gate()
+        if complexity == "block":
+            return {
+                "status": "error",
+                "message": (
+                    "📏 Gate de complexidade BLOQUEADO. "
+                    "O codigo cresceu >50% sem justificativa. "
+                    "Rode complexity_gate_manage op=check para diagnostico, "
+                    "ou use force=True para pular."
+                ),
+                "gate": "complexity",
+                "current_phase": phase,
+            }
+
     return _phase_state.advance(next_phase, force=force, reason=reason)
 
 
@@ -431,6 +447,20 @@ def _save_first_5min_gate(status: str, details: dict | None = None) -> None:
         }, indent=2, ensure_ascii=False), encoding="utf-8")
     except Exception:
         pass
+
+
+def _check_complexity_gate() -> str:
+    """Verifica estado do gate de complexidade.
+
+    Returns:
+        'pass', 'block', ou 'not_run'.
+    """
+    try:
+        from tools.complexity_gate_ops import complexity_gate_manage
+        result = complexity_gate_manage(op="check")
+        return result.get("status", "not_run")
+    except Exception:
+        return "not_run"
 
 
 def get_phase_history() -> dict:
