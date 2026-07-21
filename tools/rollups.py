@@ -809,6 +809,116 @@ def _build_vision_manage():
     )
 
 
+def _build_godot_manage():
+    """godot_manage: 6 operações de execução Godot (F5 consolidation)."""
+    return create_manage_tool(
+        tool_name="godot_manage",
+        description=(
+            "Gerencia a execução do Godot: rodar/parar projeto, executar GDScript, "
+            "obter runtime info, esperar bridge. "
+            "Use para controlar o ciclo de vida do jogo durante prototipagem."
+        ),
+        ops={
+            "run_project": _godot_run_handler,
+            "stop_project": _godot_stop_handler,
+            "wait_bridge": _godot_wait_handler,
+            "exec_gdscript": _godot_exec_handler,
+            "runtime_info": _godot_info_handler,
+        },
+        tool_hints={"destructiveHint": True, "idempotentHint": False, "openWorldHint": True},
+        title="Gerenciar Execução Godot",
+        tags=["godot", "runtime", "execução", "prototipo"],
+    )
+
+
+# ── Handlers godot_manage (wrappers) ──────────────────────────────
+
+def _godot_run_handler(**params) -> dict:
+    """Lança o projeto Godot. params: project_path, godot_executable."""
+    import json as _json, subprocess, sys, os
+    pp = params.get("project_path", "")
+    ge = params.get("godot_executable", "")
+    if not pp or not ge:
+        return {"status": "error", "message": "project_path e godot_executable obrigatorios"}
+    try:
+        proc = subprocess.Popen(
+            [ge, "--path", pp],
+            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            close_fds=True,
+        )
+        return {"status": "success", "pid": proc.pid}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+def _godot_stop_handler(**params) -> dict:
+    """Para o processo Godot. params: pid."""
+    import json as _json, subprocess, sys, os
+    pid = params.get("pid", 0)
+    if not pid:
+        return {"status": "error", "message": "pid obrigatorio"}
+    try:
+        if sys.platform == "win32":
+            from tools.subprocess_utils import run_subprocess_safe
+            result = run_subprocess_safe(["taskkill", "/F", "/PID", str(pid)], timeout=10)
+            if result.returncode != 0:
+                return {"status": "error", "message": f"taskkill falhou: {result.stderr.strip()}"}
+        else:
+            import signal
+            os.kill(pid, signal.SIGKILL)
+        return {"status": "success", "pid": pid}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+def _godot_wait_handler(**params) -> dict:
+    """Espera o bridge responder. params: timeout_sec (default 10)."""
+    import time, json as _json
+    timeout = params.get("timeout_sec", 10)
+    try:
+        from server import send_bridge_command, BridgeUnavailable
+    except ImportError:
+        return {"status": "error", "message": "Bridge não disponível neste contexto"}
+    start = time.time()
+    while time.time() - start < timeout:
+        try:
+            result = send_bridge_command({"cmd": "runtime_info"})
+            return {"status": "success", "data": result}
+        except BridgeUnavailable:
+            time.sleep(0.3)
+    return {"status": "error", "message": f"bridge não respondeu em {timeout}s"}
+
+
+def _godot_exec_handler(**params) -> dict:
+    """Executa GDScript no jogo. params: code."""
+    import json as _json
+    code = params.get("code", "")
+    if not code:
+        return {"status": "error", "message": "code obrigatorio"}
+    try:
+        from tools.playtest_ops import godot_exec
+        result = godot_exec(code=code)
+        if isinstance(result, str):
+            result = _json.loads(result)
+        return result if isinstance(result, dict) else {"status": "success", "data": result}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+def _godot_info_handler(**params) -> dict:
+    """Obtém FPS, draw calls, memória. Sem params."""
+    import json as _json
+    try:
+        from server import send_bridge_command, BridgeUnavailable
+    except ImportError:
+        return {"status": "error", "message": "Bridge não disponível"}
+    try:
+        result = send_bridge_command({"cmd": "runtime_info"})
+        return {"status": "success", "data": result}
+    except BridgeUnavailable as e:
+        return {"status": "error", "message": str(e)}
+
+
 # ── Builders registry ───────────────────────────────────────────────
 
 _ROLLUP_BUILDERS = [
@@ -853,6 +963,8 @@ _ROLLUP_BUILDERS = [
     _build_playtest_manage,
     # Etapa 6: i18n (FATIA 4.1)
     _build_localization_manage,
+    # F5: godot execution consolidation
+    _build_godot_manage,
 ]
 
 # Cache interno — garante que cada builder só executa UMA vez.

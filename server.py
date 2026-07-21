@@ -408,6 +408,7 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "audit_input_map", "audit_autoloads", "audit_scene_reachability",
         "audit_uid_consistency", "audit_save_compatibility",
         "validate_mcp_registry",
+        "project_progress",
     },
     "DESIGN": {
         "scene_manage", "node_manage",
@@ -452,13 +453,13 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "load_scene_async",
         "godot_custom_command", "godot_list_custom_commands",
         "godot_keep_alive",
+        # ── Movidos do PROTOTIPO (F5 final) ──
+        "execute_gdscript_runtime", "raycast_manage",
 },
     "PROTOTIPO": {
         # ── Execução runtime (core do prototipar) ──
         "runtime_manage",
-        "godot_run_project", "godot_stop_project", "godot_wait_for_bridge",
-        "execute_gdscript_runtime",
-        "godot_exec", "godot_runtime_info",
+        "godot_manage",
         # ── Game bridge ──
         "game_bridge_manage",
         # ── Rollups de prototipagem rápida ──
@@ -469,7 +470,7 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "camera_manage",
         "vfx_manage",
         "shader_manage",
-        "raycast_manage",
+        # ── Movidos para DESIGN: execute_gdscript_runtime, raycast_manage
         # ── Movidos para DESIGN: create_animation_tree, generate_audio_sfx,
         #     load_scene_async, godot_custom_command, godot_list_custom_commands,
         #     godot_keep_alive
@@ -579,7 +580,7 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
 PHASE_ORDER_FILTER = ["IDEIA", "DESIGN", "PROTOTIPO", "CONTEUDO", "POLIMENTO", "PRONTO_PARA_LANCAR"]
 
 # ── Opcao C: CORE sempre visivel + ferramentas da fase atual ──
-# CORE = tools essenciais em QUALQUER fase (27 ferramentas).
+# CORE = tools essenciais em QUALQUER fase (22 ferramentas).
 # As fases sao nao-cumulativas: cada fase ve CORE + suas proprias tools.
 PHASE_TOOLS_CORE = {
     "godot",
@@ -588,14 +589,8 @@ PHASE_TOOLS_CORE = {
     "get_next_step", "resume_session",
     "read_file", "write_file", "file_manage",
     "safe_write_gdscript", "script_manage",
-    "project_manage", "project_status",
     "safety_manage", "capture_proof", "verify_proof",
-    "dump_mcp_state",
-    "tool_catalog", "tool_groups", "godot_class_ref",
     "scene_manage", "node_manage",
-    "validate_project_refs", "find_usages",
-    "create_entity", "create_entities",
-    "project_progress",
     # ── F4.1: Descoberta progressiva (padrão MCP 3 camadas) ──
     "catalog_search", "describe_tool", "invoke_by_name",
 }
