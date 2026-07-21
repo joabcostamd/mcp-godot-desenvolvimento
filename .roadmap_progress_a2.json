@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 37,
+    "implementados": 38,
     "lista": [
       {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido"},
       {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido"},
@@ -75,8 +75,9 @@
       {"id": 50, "nome": "particle_impact", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node2D + GPUParticles2D/CpuParticles2D one-shot. emit(pos,color). 4 params, sinal particles_emitted. 13 testes. Fonte: Godot 4.7 ClassDB GPUParticles2D."},
       {"id": 52, "nome": "screen_flash", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "CanvasLayer + ColorRect fullscreen. flash(color,duration). Fade-in/out + reinício seguro. 15 testes. Fonte: Godot 4.7 ClassDB CanvasLayer/ColorRect/Tween."},
       {"id": 45, "nome": "time_scale", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Engine.time_scale com Tween. set_scale(target,duration). tree_exiting restaura 1.0. 4 params, sinal scale_changed. 14 testes. Fonte: Godot 4.7 ClassDB + Nodot TimeScale."},
-      {"id": 51, "nome": "hit_stop", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Timer + Engine.time_scale. trigger(duration) freeze momentâneo. Ignora duplo trigger. tree_exiting restaura 1.0. 3 params, sinais hit_stopped/resumed. 11 testes. Fonte: Godot 4.7 ClassDB + Juicee."}
+      {"id": 51, "nome": "hit_stop", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Timer + Engine.time_scale. trigger(duration) freeze momentâneo. Ignora duplo trigger. tree_exiting restaura 1.0. 3 params, sinais hit_stopped/resumed. 11 testes. Fonte: Godot 4.7 ClassDB + Juicee."},
+      {"id": 59, "nome": "freeze_frame", "versao": "1.0.0", "status": "concluido", "data": "2026-07-21", "nota": "Node + Timer(ignore_time_scale=true) + Engine.time_scale=0. freeze(duration) total. tree_exiting restaura 1.0. 2 params, sinais frozen/resumed. 11 testes. Fonte: Godot 4.7 ClassDB + Juicee."}
     ]
   },
-  "proximo": "freeze_frame (#59) — depende de time_scale. Grupo: Feedback (Efeitos visuais)."
+  "proximo": "camera_zoom (#53) — sem dependências. Grupo: Efeitos visuais."
 }
