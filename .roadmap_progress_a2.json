@@ -1,6 +1,6 @@
 {
   "agente": "AGENTE 02",
-  "ultima_atualizacao": "2026-07-20",
+  "ultima_atualizacao": "2026-07-21",
   "branch": "agente2/behaviors-onda2",
   "onda_0": "pulado",
   "fase_1_fundacao": {
@@ -41,7 +41,7 @@
   },
   "comportamentos": {
     "total_catalogo": 224,
-    "implementados": 21,
+    "implementados": 22,
     "lista": [
       {"id": 9, "nome": "health", "versao": "1.1.0", "status": "concluido"},
       {"id": 10, "nome": "projectile", "versao": "1.0.0", "status": "concluido"},
@@ -59,8 +59,9 @@
       {"id": 27, "nome": "flee", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "Node + fuga condicional. 4 params, 3 condições. StateMachine sibling. 14 testes."},
       {"id": 28, "nome": "flocking", "versao": "1.0.0", "status": "concluido"},
       {"id": 29, "nome": "turret_aim", "versao": "1.0.0", "status": "concluido", "data": "2026-07-20", "nota": "Node2D + rotação suave. FireRate + Projectile. 10 testes."},
-      {"id": 47, "nome": "object_pool", "versao": "1.0.0", "status": "concluido"}
+      {"id": 47, "nome": "object_pool", "versao": "1.0.0", "status": "concluido"},
+      {"id": 30, "nome": "inventory", "versao": "1.0.1", "status": "concluido", "data": "2026-07-21", "nota": "Node + slots. add/remove/has/get_count/clear. max_stack. 30 testes. Auditoria: corrigidos C1(_resize_slots perda dados), C2(inventory_full parcial), M3(_set_slot delta), M4(has_item<=0). Fonte: Nodot CollectableInventory."}
     ]
   },
-  "proximo": "inventory (#30) — sem dependências. Novo grupo: Progressão."
+  "proximo": "collectable (#31) — depende de inventory (#30). Grupo: Progressão."
 }
