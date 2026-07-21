@@ -1,0 +1,35 @@
+{
+  "name": "save_load",
+  "description_pt": "Sistema de save/load via ConfigFile. Salva estado de behaviors irmãos (Inventory, Currency, XPLevel) em slots nomeados no diretório user://saves/. Carrega restaurando estado. Suporta múltiplos slots.",
+  "description_en": "Save/load system via ConfigFile. Saves state of sibling behaviors (Inventory, Currency, XPLevel) to named slots in user://saves/. Loads restoring state. Supports multiple slots.",
+  "synonyms": {
+    "pt": ["salvar", "carregar", "persistência", "arquivo", "slot", "checkpoint"],
+    "en": ["save", "load", "persistence", "file", "slot", "checkpoint"]
+  },
+  "parameters": [
+    {
+      "name": "save_dir",
+      "type": "String",
+      "description_pt": "Diretório onde os saves são armazenados.",
+      "default": "user://saves/"
+    }
+  ],
+  "signals": [
+    {
+      "name": "saved",
+      "description_pt": "Emitido quando o estado é salvo com sucesso.",
+      "params": [{"name": "slot", "type": "String"}]
+    },
+    {
+      "name": "loaded",
+      "description_pt": "Emitido quando o estado é carregado com sucesso.",
+      "params": [{"name": "slot", "type": "String"}]
+    }
+  ],
+  "dependencies": [],
+  "genres": ["rpg", "roguelike", "platformer", "topdown_shooter", "generic"],
+  "conflicts": [],
+  "version": "1.0.1",
+  "godot_version": "4.7",
+  "tags": ["sistema", "save", "load", "persistência"]
+}
