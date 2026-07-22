@@ -76,6 +76,14 @@ Responda estas 3 perguntas antes de declarar vitória:
 Checklists mecânicos completos (AC1-AC9, GF1-GF5, S1-S4) estão em
 `.github/instructions/autogovernanca.instructions.md`.
 
+### 3.3 Ao ser perguntado "onde paramos"
+
+Se o usuário perguntar "onde paramos", "o que falta", "resuma o progresso" ou
+equivalente: NUNCA responda só repetindo o contexto injetado. Primeiro rode
+`git log -3 --oneline` e `git status --porcelain`, compare o hash do último commit
+citado no `HANDOFF.md` com `HEAD`. Se forem diferentes, há trabalho não registrado —
+liste os commits entre um e outro e avise antes de responder.
+
 ---
 
 ## 4. CONSULTE A FONTE ANTES DE IMPLEMENTAR
