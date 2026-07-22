@@ -32,9 +32,9 @@ Declare em uma linha: `Sou o Agente N. Territorio: ...`
 
 Leia, nesta ordem:
 
-1. [AGENTS.md](../../AGENTS.md) — regras de convivencia
+1. [AGENTS.md](../../AGENTS.md) — regras de convivencia e modelo de worktrees
 2. [ROADMAP_DEFINITIVO.md](../../ROADMAP_DEFINITIVO.md) — ondas e fatias
-3. `.roadmap_progress.json` (Agente 1) ou `.roadmap_progress_a2.json` (Agente 2)
+3. `.roadmap_progress.json` — progresso atual
 4. A ficha da onda atual em `.github/roadmap/ONDA_*.md`
 5. [aprendizados](../instructions/aprendizados.instructions.md) — o que ja quebrou antes
 
@@ -43,15 +43,26 @@ Se o arquivo de progresso nao existir, crie-o mentalmente como vazio
 
 ---
 
+## PASSO 2.5 — Verificar coordenacao com outro worktree
+
+Se houver outro worktree ativo (ver AGENTS.md):
+1. Rode `git rev-parse --git-common-dir` e leia `<git-common-dir>/coordenacao.json`.
+2. NUNCA escolha uma etapa que ja apareca como "item" de um claim ativo de OUTRO worktree.
+3. Claims com mais de 4h sem atualizacao: avise no relatorio mas NAO remova.
+
+---
+
 ## PASSO 3 — Escolha UMA fatia
 
 Criterios, em ordem:
 
 1. A onda anterior precisa estar fechada. Nao pule onda.
-2. A fatia precisa estar no **seu** territorio.
+2. A fatia nao pode estar reivindicada por outro worktree (ver PASSO 2.5).
 3. As dependencias dela precisam estar concluidas.
 4. Escolha a primeira que satisfaz 1, 2 e 3. Nao escolha a mais facil.
 5. **Uma so.** Nunca planeje duas.
+6. Ao escolher, escreva seu claim no coordenacao.json ANTES de comecar:
+   `{"agente": "<nome-do-worktree>", "worktree": "<caminho>", "item": "<etapa>", "desde": "<ISO timestamp>"}`
 
 Se nao houver fatia elegivel no seu territorio: diga isso, liste o que esta
 bloqueando, e pare.

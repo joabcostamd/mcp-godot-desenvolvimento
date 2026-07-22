@@ -45,6 +45,24 @@ R20: Agent hooks do VS Code NAO disparam com extensoes third-party — nao depen
 
 $additionalContext += $regrasCriticas
 
+# Le coordenacao.json da pasta .git comum (coordenacao entre worktrees)
+Push-Location $projectRoot
+$commonDir = git rev-parse --git-common-dir 2>$null
+Pop-Location
+if ($commonDir) {
+    # Resolve caminho absoluto se for relativo
+    if (-not [System.IO.Path]::IsPathRooted($commonDir)) {
+        $commonDir = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($projectRoot, $commonDir))
+    }
+    $coordFile = Join-Path $commonDir "coordenacao.json"
+    if (Test-Path $coordFile) {
+        $coordContent = Get-Content $coordFile -Raw -Encoding UTF8
+        $additionalContext += "`n`n=== COORDENACAO ENTRE WORKTREES ==="
+        $additionalContext += "`nClaims ativos no coordenacao.json: $coordContent"
+        $additionalContext += "`n(Nao escolha etapa ja reivindicada por outro worktree.)"
+    }
+}
+
 # Escapa para JSON seguro
 $escapedContext = $additionalContext -replace '\\', '\\' -replace '"', '\"' -replace "`n", '\n' -replace "`r", ''
 

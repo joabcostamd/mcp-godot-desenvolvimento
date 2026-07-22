@@ -30,8 +30,11 @@ Regras que valem em TODOS os modos:
 
 1. Leia `docs/ROADMAP_DEFINITIVO.md` completamente.
 2. Você é o agente único — opera em TODO o repositório.
-3. Localize a PRÓXIMA etapa com status ⬜ no roadmap.
-4. No modo 'onda' ou 'tudo': identifique o bloco/onda INTEIRO (todas as etapas da onda atual), não só a primeira. Monte a lista de etapas do bloco ANTES de começar a implementar.
+3. **Coordenação:** Rode `git rev-parse --git-common-dir` e leia `<git-common-dir>/coordenacao.json`. NUNCA escolha uma etapa que já apareça como "item" de um claim ativo de OUTRO worktree. Claims com +4h sem atualização: avise, mas NÃO remova.
+4. Localize a PRÓXIMA etapa com status ⬜ no roadmap (que não esteja reivindicada).
+5. Ao escolher, escreva seu claim no `coordenacao.json` ANTES de começar:
+   `{"agente": "<nome-do-worktree>", "worktree": "<caminho>", "item": "<etapa>", "desde": "<ISO timestamp>"}`
+6. No modo 'onda' ou 'tudo': identifique o bloco/onda INTEIRO (todas as etapas da onda atual), não só a primeira. Monte a lista de etapas do bloco ANTES de começar a implementar.
 
 ---
 
@@ -87,6 +90,7 @@ Regras que valem em TODOS os modos:
 18. Atualize `.roadmap_progress.json`:
     - Próxima etapa: _____.
 19. Faça commit: `feat(etapa-Y): descrição em português`.
+20. **Remova seu claim** do `coordenacao.json` — a etapa está concluída e não está mais reivindicada.
 
 ---
 
@@ -107,14 +111,16 @@ Regras que valem em TODOS os modos:
 20. Se ainda há etapas neste bloco → volte para ETAPA 0 com a PRÓXIMA etapa do mesmo bloco (sem perguntar ao humano, sem pausa).
 21. Se esta foi a ÚLTIMA etapa do bloco:
     a. Execute a auditoria adversarial via `runSubagent`: passe ANTES "ESCOPO DESTA AUDITORIA: audite exatamente os commits feitos nesta onda (rode git log para identificar os commits desde o início deste bloco até HEAD) e os arquivos listados nesse intervalo. Não audite nada fora deste escopo." Depois anexe o conteúdo completo de `audit.prompt.md`. Execute sobre o conjunto de mudanças do bloco inteiro.
-    b. Informe ao humano:
+    b. **Sincronize com o outro agente:** rode `git fetch origin` e verifique se a branch principal recebeu commits novos do outro worktree desde o início desta onda. Se sim, faça merge/rebase ANTES de continuar — isso evita que os dois agentes trabalhem sobre bases divergentes.
+    c. Informe ao humano:
        - 📦 Bloco concluído: [nome da onda].
        - 📁 Total de arquivos modificados no bloco: [lista].
        - 🔍 Validação por etapa: [resumo PASS/FAIL].
        - 🔎 Auditoria adversarial (runSubagent com audit.prompt.md): [resultado].
+       - 🔄 Sincronização com outro worktree: [status].
        - ⚠️ Se houver Bloqueantes na auditoria: destaque em NEGRITO no topo do relatório, não apenas como mais um item.
        - 🎯 Próximo bloco: [nome da próxima onda].
-    c. **Pare** e aguarde.
+    d. **Pare** e aguarde.
 
 ### Modo 'tudo'
 
