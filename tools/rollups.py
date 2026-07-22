@@ -161,7 +161,9 @@ from tools.devsolo_ops import add_raycast_2d, add_shapecast_2d
 # ── Stress Test ───────────────────────────────────────────────
 
 from tools.stress_test_ops import run_stress_test
-from tools.test_ops import test_coverage_report, generate_test_cases_from_gdd, run_canary_queries
+from tools.test_ops import test_coverage_report, generate_test_cases_from_gdd, run_canary_queries, run_scripted_tests, smoke_test, regression_test
+from tools.gut_ops import run_gut_tests
+from tools.verification_ops import run_verification_pipeline
 from tools.perf_ops import perf_regression_track
 from tools.music_ops import generate_music, make_seamless_loop, place_and_normalize, bind_to_event
 from tools.playtest_ops import self_play, regression_from_recording, difficulty_curve
@@ -698,13 +700,16 @@ def _build_raycast_manage():
 def _build_test_manage():
     return create_manage_tool(
         tool_name="test_manage",
-        description="Gerencia testes: assert_node, stress_test, coverage_report, generate_test_cases, canary.",
+        description="Gerencia testes: assert_node, stress_test, coverage_report, generate_test_cases, canary, GUT, scripted, smoke, regression e verification pipeline.",
         ops={"assert_node": assert_node_exists, "stress_test": run_stress_test,
             "coverage_report": test_coverage_report, "generate_test_cases": generate_test_cases_from_gdd,
-            "canary": run_canary_queries},
+            "canary": run_canary_queries,
+            "gut": run_gut_tests, "scripted": run_scripted_tests,
+            "smoke": smoke_test, "regression": regression_test,
+            "verify_pipeline": run_verification_pipeline},
         tool_hints={"destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
         title="Gerenciar Testes",
-        tags=["teste", "assert", "stress", "performance"],
+        tags=["teste", "assert", "stress", "performance", "GUT", "verificação"],
     )
 
 

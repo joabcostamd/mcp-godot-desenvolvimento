@@ -91,6 +91,9 @@ DEPRECATED_TOOLS: set[str] = {
     "add_raycast_2d", "add_shapecast_2d",
     # vfx atomics → vfx_manage (F5.6)
     "create_particles_2d", "configure_particles_2d",
+    # test/verify atomics → test_manage (F5.14)
+    "run_gut_tests", "run_scripted_tests", "regression_test",
+    "smoke_test", "run_verification_pipeline",
 }
 
 
@@ -152,4 +155,10 @@ ALIAS_MAP: dict[str, tuple[str, str]] = {
     "create_particles_2d": ("vfx_manage", "create_particles"),
     "configure_particles_2d": ("vfx_manage", "config_particles"),
     "create_particles_3d": ("vfx_manage", "create_particles_3d"),
+    # ── test/verify atomics → test_manage (F5.14) ──
+    "run_gut_tests": ("test_manage", "gut"),
+    "run_scripted_tests": ("test_manage", "scripted"),
+    "regression_test": ("test_manage", "regression"),
+    "smoke_test": ("test_manage", "smoke"),
+    "run_verification_pipeline": ("test_manage", "verify_pipeline"),
 }

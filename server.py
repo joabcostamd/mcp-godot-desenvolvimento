@@ -152,8 +152,7 @@ TOOLSETS = {
         "debug_manage",
         # Testes
         "test_manage",
-        "run_gut_tests", "run_scripted_tests", "regression_test", "smoke_test",
-        "run_verification_pipeline", "run_stress_test",
+        "run_stress_test",
         "assert_node_exists",
         # Bridge
         "game_bridge_manage",
@@ -486,9 +485,6 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "set_properties_batch",
 },
     "POLIMENTO": {
-        "run_gut_tests", "run_scripted_tests",
-        "regression_test", "smoke_test",
-        "run_verification_pipeline",
         "debug_manage",
         "vision_manage",
         "profile_frame", "profile_memory",
@@ -1621,7 +1617,6 @@ def _tool_defs() -> list[Tool]:
         "self_test": "Auto-Teste do MCP",
         "generate_game_art": "Gerar Arte do Jogo (IA)",
         "apply_game_art": "Aplicar Arte no Jogo",
-        "run_verification_pipeline": "Pipeline de Verificação (Compilar + Rodar + Screenshot + GUT)",
 }
     _TAGS = {
         "capture_game_screenshot": ["visão", "screenshot"],
@@ -1719,7 +1714,6 @@ def _tool_defs() -> list[Tool]:
         "get_runtime_state_digest": ["playtest", "state", "json"],
         "capture_runtime_errors": ["playtest", "debug", "diagnostico"],
         # Pipeline de Verificação
-        "run_verification_pipeline": ["verificacao", "pipeline", "teste", "diagnostico"],
     }
     # ── Hints: openWorldHint (Fase 2A / C4) ─────────────────────
     # Tools que NÃO são puro servidor interagem com mundo externo.
