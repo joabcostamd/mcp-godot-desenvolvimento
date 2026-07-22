@@ -2,6 +2,66 @@
 
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo.
 
+## ULTIMO HANDOFF (AGENTE 02 — 2026-07-21 — FATIA 2.AV: EDITOR VISUAL BT)
+
+- **Data:** 2026-07-21
+- **De:** AGENTE 02 (Conteudo — behaviors)
+- **Branch:** `agente2/behaviors-onda2`
+- **Acao:** Implementacao completa da FATIA 2.AV — Editor Visual de Behavior Trees
+
+### RESUMO EXECUTIVO
+
+Editor Visual de Behavior Trees 100% GDScript implementado.
+10 arquivos em `addons/mcp_bt_editor/` — ~2.600 linhas GDScript total.
+16 features implementadas conforme ficha em `.github/roadmap/ONDA_2_fosso.md`.
+Integracao com 5 sistemas existentes: discover_behaviors, mcp_dock WebSocket 9082,
+.tres Resource, behavior.json, e behavior_tree.gd executor.
+
+### ARQUIVOS NOVOS (10)
+
+addons/mcp_bt_editor/: plugin.cfg, README.md, generate_icons.gd
+bt_editor_plugin.gd (318 linhas), bt_editor_node.gd (210 linhas),
+bt_editor_palette.gd (369 linhas), bt_editor_graph.gd (578 linhas),
+bt_editor_inspector.gd (340 linhas), bt_editor_serializer.gd (311 linhas),
+bt_editor_debugger.gd (458 linhas), bt_tree_resource.gd (25 linhas)
+
+### 16 FEATURES IMPLEMENTADAS
+
+1. Dock abre/fecha (EditorPlugin) · 2. Paleta com 249 behaviors (DirAccess + JSON)
+3. Drag-drop paleta→grafo · 4. 4 tipos de porta coloridos (FLOW/CONDITION/DATA/EVENT)
+5. Validacao de conexoes + deteccao de ciclos (DAG) · 6. Reroute nodes
+7. Expression nodes (GDScript inline) · 8. Auto-Arrange hierarquico
+9. Show Generated Code · 10. Undo/Redo (EditorUndoRedoManager)
+11. Preview ao vivo (WebSocket 9082) · 12. Drag-from-Port → Add Node dialog
+13. GraphFrame nativo · 14. Minimap ativado · 15. Breakpoints visuais
+16. Watch Window (valores de variaveis em tempo real)
+
+### VALIDACAO
+
+validate_gdscript.py: 8/8 arquivos PASS
+Regras R1, R2, R9, R19: todas respeitadas
+Falsos positivos do analisador (call() com has_method() guard): 3 ocorrencias documentadas
+
+### FONTES CITADAS (12)
+
+Godot 4.7 Docs: GraphEdit, GraphNode, EditorPlugin, EngineDebugger,
+EditorUndoRedoManager, GraphFrame, VisualShader · LimboAI v1.8.0 ·
+mcp_dock (WebSocket 9082) · behavior.schema.json · discover_behaviors ·
+behavior_tree.gd executor
+
+### PROXIMA SESSAO
+
+1. **2.AW** — Preparar estrutura para AssetLib (plugin.cfg, icone, screenshots) [AUTO]
+2. **2.AX** — +4 jogos-exemplo [SENIOR]
+3. Resolver escaladas ONDA 2 (decisao Joab)
+
+### ARQUIVOS CRITICOS ATUALIZADOS
+
+.roadmap_progress.json (fatia_2.AV: concluida) · HANDOFF.md (este arquivo)
+addons/mcp_bt_editor/ (10 arquivos novos)
+
+---
+
 ## ULTIMO HANDOFF (AGENTE 02 — 2026-07-21 — ENCERRAMENTO: 15 FATIAS ONDA 2)
 
 - **Data:** 2026-07-21

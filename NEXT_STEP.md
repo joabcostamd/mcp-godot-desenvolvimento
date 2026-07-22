@@ -21,9 +21,9 @@
 
 ## AGENTE 02 — Próximas etapas (prioridade)
 
-1. **2.D** — Criar `.tres` por behavior com parâmetros exportados [SÊNIOR]
-2. **2.AD** — CHANGELOG.md + versionamento por behavior [SÊNIOR]
-3. **2.AC** — +2 jogos-semente (total 3) [SÊNIOR]
+1. ~~**2.AV** — Editor Visual de Behavior Trees~~ ✅ CONCLUIDO 2026-07-21
+2. **2.AW** — Preparar estrutura para AssetLib [AUTO]
+3. **2.AX** — +4 jogos-exemplo (platformer, rpg, puzzle, shooter) [SÊNIOR]
 
 ## Bloqueios (precisam de decisão do Joab)
 
