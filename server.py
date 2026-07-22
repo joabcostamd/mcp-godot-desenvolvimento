@@ -156,11 +156,6 @@ TOOLSETS = {
         "assert_node_exists",
         # Bridge
         "game_bridge_manage",
-        "game_http_request", "game_multiplayer",
-        "game_call_method", "game_spawn_node", "game_raycast", "game_get_camera",
-        "game_play_animation", "game_find_nodes_by_class", "game_await_signal",
-        "game_pause", "game_performance", "game_window", "game_input_state",
-        "game_serialize_state",
         # Input/Recording
         "inject_input_event", "simulate_input_sequence",
         "watch_signal", "watch_state_start", "watch_state_collect",

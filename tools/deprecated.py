@@ -101,6 +101,12 @@ DEPRECATED_TOOLS: set[str] = {
     "addon_get_scene_tree", "addon_take_screenshot",
     "addon_create_node", "addon_delete_node", "addon_set_property",
     "addon_duplicate_node", "addon_reparent_node", "addon_batch_edit",
+    # game_* atomics → game_bridge_manage (F6.3)
+    "game_http_request", "game_multiplayer",
+    "game_call_method", "game_spawn_node", "game_raycast", "game_get_camera",
+    "game_play_animation", "game_find_nodes_by_class", "game_await_signal",
+    "game_pause", "game_performance", "game_window", "game_input_state",
+    "game_serialize_state",
 }
 
 
@@ -185,4 +191,19 @@ ALIAS_MAP: dict[str, tuple[str, str]] = {
     "addon_batch_edit": ("editor_manage", "batch_edit"),
     "addon_take_screenshot": ("editor_manage", "take_screenshot"),
     "addon_get_scene_tree": ("editor_manage", "get_scene_tree"),
+    # ── game_* → game_bridge_manage (F6.3) ──
+    "game_http_request": ("game_bridge_manage", "http_request"),
+    "game_multiplayer": ("game_bridge_manage", "multiplayer"),
+    "game_call_method": ("game_bridge_manage", "call_method"),
+    "game_spawn_node": ("game_bridge_manage", "spawn_node"),
+    "game_raycast": ("game_bridge_manage", "raycast"),
+    "game_get_camera": ("game_bridge_manage", "get_camera"),
+    "game_play_animation": ("game_bridge_manage", "play_animation"),
+    "game_find_nodes_by_class": ("game_bridge_manage", "find_by_class"),
+    "game_await_signal": ("game_bridge_manage", "await_signal"),
+    "game_pause": ("game_bridge_manage", "pause"),
+    "game_performance": ("game_bridge_manage", "performance"),
+    "game_window": ("game_bridge_manage", "window"),
+    "game_input_state": ("game_bridge_manage", "input_state"),
+    "game_serialize_state": ("game_bridge_manage", "serialize_state"),
 }
