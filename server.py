@@ -141,8 +141,7 @@ TOOLSETS = {
         # Execução, debug, testes, bridge, jogo rodando
         "runtime_manage",
         "godot_manage",
-        "execute_gdscript_runtime", "capture_game_screenshot", "take_screenshot",
-        "godot_screenshot",
+        "screenshot_manage",
         "godot_custom_command", "godot_list_custom_commands",
         "godot_keep_alive",
         "get_runtime_state_digest", "capture_runtime_errors",
@@ -504,8 +503,8 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "step_game_time", "step_until",
         "watch_signal", "watch_state_start", "watch_state_collect",
         "inject_input_event", "simulate_input_sequence",
-        # ── Screenshots e debug (movidos do PROTOTIPO) ──
-        "capture_game_screenshot", "godot_screenshot", "take_screenshot",
+        # ── Screenshots e debug ──
+        "screenshot_manage",
         "get_runtime_state_digest", "capture_runtime_errors",
         "effect_probe",
 },

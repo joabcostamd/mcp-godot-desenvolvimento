@@ -107,6 +107,9 @@ DEPRECATED_TOOLS: set[str] = {
     "game_play_animation", "game_find_nodes_by_class", "game_await_signal",
     "game_pause", "game_performance", "game_window", "game_input_state",
     "game_serialize_state",
+    # screenshot atomics → screenshot_manage (F6.4)
+    "capture_game_screenshot", "godot_screenshot", "take_screenshot",
+    "auto_screenshot",
 }
 
 
@@ -206,4 +209,9 @@ ALIAS_MAP: dict[str, tuple[str, str]] = {
     "game_window": ("game_bridge_manage", "window"),
     "game_input_state": ("game_bridge_manage", "input_state"),
     "game_serialize_state": ("game_bridge_manage", "serialize_state"),
+    # ── screenshot → screenshot_manage (F6.4) ──
+    "capture_game_screenshot": ("screenshot_manage", "capture_game"),
+    "godot_screenshot": ("screenshot_manage", "capture_game"),
+    "take_screenshot": ("screenshot_manage", "capture_editor"),
+    "auto_screenshot": ("screenshot_manage", "auto_capture"),
 }

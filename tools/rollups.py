@@ -1099,6 +1099,28 @@ def _build_editor_manage():
     )
 
 
+# ── F6: Screenshot consolidation ──────────────────────────────────
+
+from tools.runtime_ops import take_screenshot, capture_game_screenshot
+from tools.deploy_ops import auto_screenshot
+
+
+def _build_screenshot_manage():
+    """screenshot_manage: 3 operações de captura de tela (F6.4)."""
+    return create_manage_tool(
+        tool_name="screenshot_manage",
+        description="Gerencia screenshots: capturar do jogo, do editor e em lote automático.",
+        ops={
+            "capture_game": capture_game_screenshot,
+            "capture_editor": take_screenshot,
+            "auto_capture": auto_screenshot,
+        },
+        tool_hints={"destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
+        title="Gerenciar Screenshots",
+        tags=["screenshot", "captura", "visão"],
+    )
+
+
 # ── Builders registry ───────────────────────────────────────────────
 
 _ROLLUP_BUILDERS = [
@@ -1155,6 +1177,8 @@ _ROLLUP_BUILDERS = [
     _build_render_manage,
     # F6: editor consolidation (addon_* → editor_manage)
     _build_editor_manage,
+    # F6: screenshot consolidation
+    _build_screenshot_manage,
 ]
 
 # Cache interno — garante que cada builder só executa UMA vez.
