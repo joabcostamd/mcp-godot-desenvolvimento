@@ -1,0 +1,22 @@
+{
+  "name": "crash_reporter",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior crash_reporter para Godot 4.7.",
+  "description_en": "crash_reporter behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "crash_reporter"
+    ],
+    "en": [
+      "crash_reporter"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

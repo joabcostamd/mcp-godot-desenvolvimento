@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/floating_text/floating_text.gd" id="1_floating_text"]
+
+[resource]
+script = ExtResource("1_floating_text")
+speed = 100.0
+lifetime = 1.0
+fade_duration = 0.3
+font_size = 24
+outline_size = 2

@@ -1,0 +1,30 @@
+{
+  "name": "rpg",
+  "display_name": "MCP Example — RPG",
+  "genre": "rpg",
+  "blueprint_ref": "blueprints/topdown_shooter.json",
+  "description_pt": "RPG top-down 2D: movimento livre, combate com hitbox/hurtbox, sistema de XP e nivel, NPCs com dialogo, loja e quests. Usa 20 behaviors do arsenal.",
+  "description_en": "Top-down 2D RPG: free movement, hitbox/hurtbox combat, XP/level system, NPCs with dialogue, shop, and quests. Uses 20 behaviors from the arsenal.",
+  "scenes": [
+    {"path": "scenes/menu.tscn", "purpose": "main_menu"},
+    {"path": "scenes/game.tscn", "purpose": "game"},
+    {"path": "scenes/dialogue.tscn", "purpose": "dialogue"},
+    {"path": "scenes/inventory.tscn", "purpose": "inventory"},
+    {"path": "scenes/game_over.tscn", "purpose": "defeat"}
+  ],
+  "behaviors_used": [
+    "player_topdown", "health", "hitbox", "hurtbox", "enemy_chase",
+    "enemy_patrol", "xp_level", "character_stats", "inventory",
+    "currency", "shop", "dialogue", "quest", "interactable",
+    "save_load", "camera_follow", "health_bar", "floating_text",
+    "screen_shake", "day_night_cycle"
+  ],
+  "estimated_playtime": 20,
+  "difficulty": "medium",
+  "controls": {
+    "keyboard": "WASD ou Setas para mover, Espaco para atacar, E para interagir, I para inventario, ESC para pausar.",
+    "gamepad": "Analogico esquerdo para mover, A/South para atacar, X/West para interagir."
+  },
+  "clone_prompt_pt": "Quero um RPG top-down simples: andar pelo mapa, lutar com espada contra slimes, ganhar XP e ouro, comprar pocoes na loja, falar com NPCs que dao missoes. 2 missoes: matar 5 slimes e entregar pocao ao ferreiro.",
+  "version": "1.0.0"
+}

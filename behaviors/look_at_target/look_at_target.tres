@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/look_at_target/look_at_target.gd" id="1_look_at_target"]
+
+[resource]
+script = ExtResource("1_look_at_target")
+rotation_speed = 5.0
+angle_offset = 0.0

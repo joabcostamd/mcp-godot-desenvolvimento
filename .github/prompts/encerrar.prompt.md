@@ -7,6 +7,8 @@ user-invocable: true
 
 # /encerrar — Protocolo Universal de Encerramento
 
+> Use este comando ao final da sessao de trabalho. Para um checkpoint rapido no meio do dia, use /handoff.
+
 Pipeline de 15 fases. Cada fase: pré-condições → execução → validação → tratamento de erro. Uma fase só avança se a anterior concluir. Erro crítico registra e segue nas fases independentes.
 
 **Universal:** funciona em qualquer projeto — Python, JS, Godot, Rust, Go, web, CLI. Sem caminho fixo, sem nome fixo, sem suposição.
@@ -251,42 +253,52 @@ Crie `.session/SNAPSHOT_<YYYY-MM-DD>.json`:
 
 ---
 
-## 🔜 FASE 11 — NEXT SESSION
+## 🔜 FASE 11 — HANDOFF (ESTADO)
 
 **Pré-condição:** Fases 2 e 8 OK.
 
 **Execução:**
-Crie/atualize `.session/NEXT_SESSION.md`:
+Atualize `HANDOFF.md` (fonte única de estado do projeto) com a seção de encerramento:
 ```markdown
-# 🔄 PRÓXIMA SESSÃO
+## Encerramento — <data>
 
-## Resumo
+**Worktree/Agente:** <resultado de git rev-parse --show-toplevel>
+**Peso:** O que aconteceu nos ultimos minutos merece mais detalhe.
+
+### Resumo
 (2-3 linhas do que foi feito)
 
-## Estado
-- Versão: X | Módulos: Y | Progresso: Z%
+### Estado
+- Versão: X | Commit: <hash> | Branch: <branch>
 
-## Última tarefa
-- Nome e breve descrição
-
-## Pendências
+### Pendências
 - [ ] Item 1 (prioridade: alta/média/baixa)
 - [ ] Item 2
 
-## Arquivos-chave
+### Contexto que nao esta no codigo (nao mexer sem saber disso)
+Convencoes nao obvias, decisoes de arquitetura propositais. Se nada,
+ escreva 'nada alem do documentado nas instructions'.
+
+### Decisoes que so um humano pode tomar
+Pergunta em aberto. Se nenhuma, escreva 'nenhuma'.
+
+### Arquivos-chave
 - path/importante.py
 
-## Fluxo sugerido
-1. Leia NEXT_SESSION.md e decisions.md
+### Fluxo sugerido
+1. Leia HANDOFF.md
 2. Rode validação (testes, lint)
 3. Continue de <ponto específico>
 
-## Decisões da sessão
+### Decisões da sessão
 - Decisão → motivo (1 linha)
 
-## ⚠️ Atenção
+### ⚠️ Atenção
 - Bugs conhecidos, armadilhas, restrições
 ```
+
+Antes de commitar esta seção, rode `.github/scripts/rotacionar-handoff.ps1`
+para manter o HANDOFF.md enxuto (só as 5 seções mais recentes).
 
 **Validação:** todas as seções preenchidas (mesmo que com "nada a declarar").
 

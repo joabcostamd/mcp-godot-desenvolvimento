@@ -1,0 +1,22 @@
+{
+  "name": "resource_override",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior resource_override para Godot 4.7.",
+  "description_en": "resource_override behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "resource_override"
+    ],
+    "en": [
+      "resource_override"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

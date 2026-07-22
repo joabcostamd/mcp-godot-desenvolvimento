@@ -1,0 +1,62 @@
+{
+  "name": "random_loot",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que implementa tabela de loot aleatório com pesos de raridade. Gera drops baseados em loot_table configurável. Ideal para RPGs e jogos com sistema de recompensas.",
+  "synonyms": {
+    "pt": [
+      "loot",
+      "drop",
+      "recompensa",
+      "raridade",
+      "saque"
+    ],
+    "en": [
+      "loot",
+      "drop",
+      "reward",
+      "rarity"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "loot_table",
+      "type": "Array",
+      "description_pt": "Array de {id, weight, rarity}. Soma de weights não precisa ser 1.0."
+    }
+  ],
+  "signals": [
+    {
+      "name": "loot_dropped",
+      "params": [
+        {
+          "name": "item_id",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "rare_drop",
+      "params": [
+        {
+          "name": "item_id",
+          "type": "String"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    "inventory"
+  ],
+  "genres": [
+    "rpg",
+    "roguelike",
+    "generic"
+  ],
+  "tags": [
+    "loot",
+    "drop",
+    "recompensa",
+    "estrutura"
+  ]
+}

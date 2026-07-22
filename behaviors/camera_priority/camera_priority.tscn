@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://camera_priority_v1"]
+[ext_resource type="Script" path="res://behaviors/camera_priority/camera_priority.gd" id="1_cp"]
+[node name="CameraPriority" type="Node"]
+script = ExtResource("1_cp")

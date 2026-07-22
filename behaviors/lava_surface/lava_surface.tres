@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/lava_surface/lava_surface.gd" id="1_lava_surface"]
+
+[resource]
+script = ExtResource("1_lava_surface")
+flow_speed = 0.5
+glow_intensity = 1.5

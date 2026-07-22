@@ -1,0 +1,22 @@
+{
+  "name": "hold_alternative",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior hold_alternative para Godot 4.7.",
+  "description_en": "hold_alternative behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "hold_alternative"
+    ],
+    "en": [
+      "hold_alternative"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

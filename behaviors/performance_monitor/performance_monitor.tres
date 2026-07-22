@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/performance_monitor/performance_monitor.gd" id="1_performance_monitor"]
+
+[resource]
+script = ExtResource("1_performance_monitor")
+sample_rate = 0.5

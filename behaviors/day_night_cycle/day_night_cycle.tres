@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/day_night_cycle/day_night_cycle.gd" id="1_day_night_cycle"]
+
+[resource]
+script = ExtResource("1_day_night_cycle")
+cycle_duration = 300.0
+auto_start = true

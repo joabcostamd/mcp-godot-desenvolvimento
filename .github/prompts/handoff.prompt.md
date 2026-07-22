@@ -1,14 +1,16 @@
 ---
-description: 'Escreve o resumo de passagem de bastao para o outro agente ou para a proxima sessao.'
+description: 'Escreve o resumo de passagem de bastao para a proxima sessao.'
 mode: 'agent'
 ---
 
 # /handoff — Passar o bastao
 
-O outro agente **nao tem o seu historico de conversa**. So existe o que estiver
-em arquivo. Este comando transforma o que voce sabe em algo que ele consegue ler.
+> Use este comando para um checkpoint rapido no meio da sessao ou ao trocar de tarefa. Para o fechamento completo do dia, com testes e auditoria, use /encerrar.
 
-Use quando: terminar uma fatia, trocar de agente, ou a sessao estiver ficando longa.
+A proxima sessao **nao tem o seu historico de conversa**. So existe o que estiver
+em arquivo. Este comando transforma o que voce sabe em algo que a proxima sessao consegue ler.
+
+Use quando: terminar uma fatia, ou a sessao estiver ficando longa.
 
 ---
 
@@ -20,68 +22,83 @@ git --no-pager log --oneline -5
 git status --porcelain
 ```
 
-Leia tambem `.roadmap_progress.json` e `.roadmap_progress_a2.json`
-(os dois, para saber o que o outro agente andou fazendo).
+Leia tambem `.roadmap_progress.json`.
 
 ---
 
 ## PASSO 2 — Escreva o arquivo
 
-Crie ou sobrescreva `journal/HANDOFF_<agente>.md`
-(exemplo: `journal/HANDOFF_agente1.md`).
+Atualize `HANDOFF.md` com uma nova secao de handoff
+(exemplo: adicione `## Handoff — <data>` ao final de `HANDOFF.md`).
 
 Use exatamente este formato. Seja curto: quem le quer saber onde pegar, nao ler um livro.
 
 ```markdown
-# HANDOFF — Agente <N> — <data>
+## Handoff — <data>
 
-## Onde estou
+**Worktree/Agente:** <resultado de git rev-parse --show-toplevel>
+**Peso:** O que aconteceu nos ultimos minutos da sessao merece mais detalhe;
+  o que aconteceu no inicio pode ser resumido em 1 linha ou omitido se ja
+  esta no roadmap.
+
+### Onde estou
 Branch: <branch>
 Ultimo commit: <hash curto> <mensagem>
 Arvore limpa: sim/nao
 
-## O que eu terminei
+### O que eu terminei
 - Fatia X.Y — <nome> — concluida e aprovada
 - Fatia X.Z — <nome> — escalada, esperando decisao do humano
 
-## O que ficou pendente
+### O que ficou pendente
 Descreva o estado exato, nao a intencao.
 Errado: "vou terminar o dock"
 Certo: "dock_v1.gd criado com as 3 zonas; falta ligar o botao Reverter ao git_checkpoint"
 
-## Decisoes tomadas nesta sessao
-Uma linha cada, com o motivo. Isto evita que o proximo agente desfaca sem saber.
+### Decisoes tomadas nesta sessao
+Uma linha cada, com o motivo.
 
-## Armadilhas que eu encontrei
-O que quebrou e como contornei. Se for regra nova, ela tambem vai para
-aprendizados.instructions.md — aqui e so o aviso rapido.
+### Armadilhas que eu encontrei
+O que quebrou e como contornei.
 
-## Arquivos que eu toquei
-Lista de caminhos. O outro agente usa isto para checar conflito.
+### Contexto que nao esta no codigo (nao mexer sem saber disso)
+O que um agente novo mexeria por engano se nao soubesse: convencoes nao obvias,
+ decisoes de arquitetura que parecem estranhas mas sao propositais, partes que
+ parecem redundantes mas nao sao. Se nada se aplica, escreva 'nada alem do que
+ ja esta documentado nas instructions'.
 
-## Proxima fatia sugerida
+### Decisoes que so um humano pode tomar (separado de pendencia tecnica)
+Pergunta em aberto que precisa da palavra do usuario, nao de mais trabalho de
+ agente. Se nao houver nenhuma, escreva 'nenhuma'.
+
+### Arquivos que eu toquei
+Lista de caminhos.
+
+### Proxima fatia sugerida
 X.Y — <nome> — [AUTO|SENIOR]
 
-## Como voltar atras
+### Como voltar atras
 git reset --hard <hash>
 ```
 
 ---
 
-## PASSO 3 — Avise sobre conflito
+## PASSO 2.5 — Varredura de seguranca rapida
 
-Se voce tocou em algum arquivo do territorio do outro agente, ou em algum arquivo
-de terra de ninguem (`requirements.txt`, `pyproject.toml`, `.gitignore`,
-`CHANGELOG.md`), **escreva isso em negrito no topo do handoff**.
+Antes de confirmar o handoff, rode:
+```
+git diff --cached -- HANDOFF.md | Select-String -Pattern 'api[_-]?key|password|secret|token' -CaseSensitive:$false
+```
+Se encontrar QUALQUER ocorrencia, NAO grave o handoff — pare e avise o usuario
+qual linha disparou o alerta.
 
 ---
 
-## PASSO 4 — Confirme
+## PASSO 3 — Confirme
 
-Cole o caminho do arquivo criado e as 10 primeiras linhas dele.
+Cole a secao adicionada ao `HANDOFF.md`.
 
-`journal/` esta no `.gitignore`, entao este arquivo nao vai para o repositorio
-publico — e proposital. Ele e nota de trabalho, nao documentacao.
+`HANDOFF.md` e tracked pelo git — e o estado oficial do projeto.
 
 ---
 

@@ -1,0 +1,22 @@
+{
+  "name": "behavior_analytics",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior behavior_analytics para Godot 4.7.",
+  "description_en": "behavior_analytics behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "behavior_analytics"
+    ],
+    "en": [
+      "behavior_analytics"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

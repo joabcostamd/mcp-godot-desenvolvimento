@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/beam_laser/beam_laser.gd" id="1_beam_laser"]
+
+[resource]
+script = ExtResource("1_beam_laser")
+damage_per_second = 30.0
+beam_width = 4.0
+max_range = 500.0
+beam_color = Color(Color.RED)

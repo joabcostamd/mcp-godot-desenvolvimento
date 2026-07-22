@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/accordion/accordion.gd" id="1_accordion"]
+
+[resource]
+script = ExtResource("1_accordion")
+animation_duration = 0.2
+allow_multiple = false

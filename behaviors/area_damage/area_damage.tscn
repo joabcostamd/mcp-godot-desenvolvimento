@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://areadamage00000001"]
+
+[ext_resource type="Script" path="res://behaviors/area_damage/area_damage.gd" id="1_ad"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_100px"]
+radius = 100.0
+
+[node name="AreaDamage" type="Area2D"]
+script = ExtResource("1_ad")
+damage = 50
+radius = 100.0
+falloff = 0.5
+explosion_force = 300.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_100px")

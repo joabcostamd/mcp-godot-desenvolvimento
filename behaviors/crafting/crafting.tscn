@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://bcrafting00000001"]
+[ext_resource type="Script" path="res://behaviors/crafting/crafting.gd" id="1_cr"]
+[node name="Crafting" type="Node"]
+script = ExtResource("1_cr")

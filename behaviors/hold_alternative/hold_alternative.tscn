@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://hold_alternative_v1"][ext_resource type="Script" path="res://behaviors/hold_alternative/hold_alternative.gd" id="1_x"][node name="HoldAlternative" type="Node"]script=ExtResource("1_x")

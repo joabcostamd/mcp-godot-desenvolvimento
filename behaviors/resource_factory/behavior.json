@@ -1,0 +1,22 @@
+{
+  "name": "resource_factory",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior resource_factory para Godot 4.7.",
+  "description_en": "resource_factory behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "resource_factory"
+    ],
+    "en": [
+      "resource_factory"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

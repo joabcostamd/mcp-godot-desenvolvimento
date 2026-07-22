@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/vignette/vignette.gd" id="1_vignette"]
+
+[resource]
+script = ExtResource("1_vignette")
+vignette_color = Color(Color.BLACK)
+default_intensity = 0.5
+default_duration = 0.5

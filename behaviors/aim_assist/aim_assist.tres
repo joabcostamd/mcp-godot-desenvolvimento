@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/aim_assist/aim_assist.gd" id="1_aim_assist"]
+
+[resource]
+script = ExtResource("1_aim_assist")
+friction = 0.3
+magnetism = 0.5
+assist_radius = 200.0

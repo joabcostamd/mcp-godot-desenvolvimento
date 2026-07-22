@@ -1,0 +1,22 @@
+{
+  "name": "performance_monitor",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior performance_monitor para Godot 4.7.",
+  "description_en": "performance_monitor behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "performance_monitor"
+    ],
+    "en": [
+      "performance_monitor"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

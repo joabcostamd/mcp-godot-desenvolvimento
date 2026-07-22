@@ -178,6 +178,111 @@ func test_max_hp_cannot_be_zero() -> void:
 	assert_int(health.max_hp).is_equal(1)
 
 
+# ── Control Booleans (v1.1) ──────────────────────────────────────────────────
+
+func test_damageable_false_blocks_damage() -> void:
+	var health := _make_health(100)
+	health.damageable = false
+	var blocked := 0
+	health.damage_blocked.connect(func(a): blocked = a)
+	var result := health.take_damage(30)
+	assert_int(result).is_equal(0)
+	assert_int(health.current_hp).is_equal(100)
+	assert_int(blocked).is_equal(30)
+
+
+func test_healable_false_blocks_heal() -> void:
+	var health := _make_health(100)
+	health.take_damage(40)
+	health.healable = false
+	var blocked := 0
+	health.heal_blocked.connect(func(a): blocked = a)
+	var result := health.heal(20)
+	assert_int(result).is_equal(0)
+	assert_int(health.current_hp).is_equal(60)
+	assert_int(blocked).is_equal(20)
+
+
+func test_killable_false_prevents_death() -> void:
+	var health := _make_health(10)
+	health.killable = false
+	health.take_damage(999)
+	assert_int(health.current_hp).is_equal(1)
+	assert_bool(health.is_alive()).is_true()
+
+
+func test_revivable_false_blocks_heal_after_death() -> void:
+	var health := _make_health(50)
+	health.revivable = false
+	health.take_damage(50)  # morto
+	var blocked := 0
+	health.heal_blocked.connect(func(a): blocked = a)
+	var result := health.heal(20)
+	assert_int(result).is_equal(0)
+	assert_int(health.current_hp).is_equal(0)
+	assert_int(blocked).is_equal(20)
+
+
+func test_revivable_true_allows_revive() -> void:
+	var health := _make_health(50)
+	health.revivable = true
+	health.take_damage(50)  # morto
+	var result := health.heal(20)
+	assert_int(result).is_equal(20)
+	assert_int(health.current_hp).is_equal(20)
+	assert_bool(health.is_alive()).is_true()
+
+
+func test_damage_multiplier_critical_hit() -> void:
+	var health := _make_health(100)
+	var effective := health.take_damage(10, 2.0)  # 10 * 2 = 20
+	assert_int(effective).is_equal(20)
+	assert_int(health.current_hp).is_equal(80)
+
+
+func test_heal_multiplier() -> void:
+	var health := _make_health(100)
+	health.take_damage(40)
+	var effective := health.heal(10, 1.5)  # 10 * 1.5 = 15
+	assert_int(effective).is_equal(15)
+	assert_int(health.current_hp).is_equal(75)
+
+
+func test_first_hit_signal() -> void:
+	var health := _make_health(100)
+	var hit_count := 0
+	health.first_hit.connect(func(): hit_count += 1)
+	health.take_damage(10)
+	assert_int(hit_count).is_equal(1)
+	# Segundo hit não reemite first_hit
+	health.take_damage(10)
+	assert_int(hit_count).is_equal(1)
+
+
+func test_full_signal_on_max_heal() -> void:
+	var health := _make_health(100)
+	health.take_damage(30)
+	var full_count := 0
+	health.full.connect(func(): full_count += 1)
+	health.heal(30)
+	assert_int(full_count).is_equal(1)
+	assert_int(health.current_hp).is_equal(100)
+
+
+func test_damage_blocked_signal_on_invulnerable() -> void:
+	var health := _make_health(100)
+	health.invulnerable_time = 999.0
+	add_child(health)
+	health.take_damage(30)
+	var blocked := 0
+	health.damage_blocked.connect(func(a): blocked = a)
+	var result := health.take_damage(20)
+	assert_int(result).is_equal(0)
+	assert_int(blocked).is_equal(20)
+	remove_child(health)
+	health.queue_free()
+
+
 # ── Helper ────────────────────────────────────────────────────────────────────
 
 func _make_health(hp: int) -> Health:

@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/haptic_manager/haptic_manager.gd" id="1_haptic_manager"]
+
+[resource]
+script = ExtResource("1_haptic_manager")
+intensity = 1.0

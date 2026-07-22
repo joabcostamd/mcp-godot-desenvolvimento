@@ -1,0 +1,22 @@
+{
+  "name": "screenreader_support",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior screenreader_support para Godot 4.7.",
+  "description_en": "screenreader_support behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "screenreader_support"
+    ],
+    "en": [
+      "screenreader_support"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

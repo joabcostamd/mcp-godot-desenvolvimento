@@ -1,6 +1,7 @@
-# 🤝 HANDOFF — Comunicação entre Agentes
+# 🤝 HANDOFF.md — Estado do Projeto (fonte única de verdade)
 
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo.
+> **Este é o "onde paramos" canônico.** Nenhum outro arquivo de estado (.session/NEXT_SESSION.md, etc.) deve ser usado.
 
 ---
 
@@ -706,3 +707,95 @@ que têm o padrão completo: checkpoint → modificar → deduplicar → **write
 
 ### AGENTE 02 — B2 (2026-07-19)
 - Criado `.github/workflows/verification.yml` — CI com 7 jobs
+
+
+
+## Pendências registradas
+
+**Auditoria de consistência de domínios:** nem todos os domínios em domains/
+seguem o mesmo conjunto de arquivos do template _template/ (ex.: camera tem
+menos arquivos que physics). Precisa de uma sessão dedicada, separada de
+documentação, porque mexe em código.
+
+
+
+## Pendência: features do Agente 02 não integradas
+
+Os seguintes arquivos da branch `agente2/behaviors-onda2` NÃO foram mergeados
+porque têm conflitos com a reorganização feita no `chore/limpeza-agent-only`:
+
+- `server.py` — handlers das ONDAs 3+4 (reviewer_manage, teacher_manage,
+  playtest_manage) precisam ser reimplementados na arquitetura nova
+  (rollup-first, KW-only handlers, filtro DEPRECATED_TOOLS).
+- `core/tool_definitions.py` — definições de tools das ONDAs 3+4 precisam
+  ser registradas como ops de rollup, não como tools de topo.
+- `tools/behavior_ops.py` — operações expandidas pelo Agente 02 conflitam
+  com a reorganização de tools.
+- `auditar.py` — critérios expandidos (C1-C6) precisam ser consolidados
+  com a versão reorganizada.
+
+Branch de referência preservada: `agente2/behaviors-onda2` (commit `eef0ffe`).
+
+Todo o conteúdo não-código (behaviors, example_project, seeds, templates,
+scripts de auditoria, bt_editor, tools novas) já foi integrado com sucesso.
+
+
+## Encerramento — 2026-07-22
+
+**Worktree/Agente:** C:\Users\joabc\OneDrive\Documentos\VSCODE\NUCLEO\projetos\mcp-godot-desenvolvimento
+**Peso:** Sessao longa de reorganizacao. Destaque para a integracao do Agente 02 e criacao do sistema de coordenacao entre worktrees.
+
+### Resumo
+Sessao de reorganizacao completa do projeto MCP Godot Agent: modelo agente nativo + comandos /, integracao do trabalho do Agente 02 (behaviors, example_project, seeds, templates, scripts, tools, bt_editor), sistema de coordenacao entre dois worktrees, enriquecimento do handoff com contexto e decisoes abertas, rotacao automatica do HANDOFF.md.
+
+### Estado
+- Branch: chore/limpeza-agent-only (commit e4a980b)
+- Worktrees: principal (chore/limpeza-agent-only) + agente02 (agente2/trabalho)
+- Integracao Agente 02: concluida (behaviors, example_project, seeds, templates, scripts, bt_editor, 12 tools)
+- Coordenacao: coordenacao.json na pasta .git comum, prompts e hook de estado atualizados
+- Handoff: formato enriquecido (worktree, peso, contexto nao-codigo, decisoes humanas), rotacao automatica
+
+### Pendências
+- [ ] Reimplementar features ONDAs 3+4 do Agente 02 na arquitetura nova (server.py, core/tool_definitions.py, tools/behavior_ops.py, auditar.py) — branch agente2/behaviors-onda2 preservada
+- [ ] Auditoria de consistencia de dominios (nem todos seguem template _template/)
+- [ ] CHECKPOINT.md aguarda revisao manual (nao versionado, no .gitignore)
+
+### Contexto que nao esta no codigo
+- PowerShell 5.1 exige UTF-8 com BOM — create_file nao gera, usar [System.Text.UTF8Encoding]::new($true)
+- injetar-estado.ps1 usa 3 niveis de Split-Path porque esta em .github/hooks/scripts/
+- Os dois worktrees compartilham o MESMO repositorio Git — edicoes em .github/ aparecem nos dois
+- agente2/behaviors-onda2 foi restaurada do origin apos reset acidental — commit eef0ffe
+
+### Decisoes que so um humano pode tomar
+- Fazer merge da branch chore/limpeza-agent-only na main? (45 arquivos, +582/-607 linhas de reorganizacao + 1700+ arquivos de conteudo do Agente 02)
+- Apagar branch agente2/behaviors-onda2 apos confirmar que tudo foi integrado?
+- Mover MCP_Backup, DEEP-SEEK, clinica-idle, Protto Games para um local de arquivo morto?
+- Configurar remote no repositorio Git pessoal ($HOME/.copilot)?
+
+### Arquivos que eu toquei
+- .github/agents/ (removidos 4 agentes)
+- .github/prompts/ (plan, act, audit, handoff, encerrar, seguir-roadmap — todos reescritos/atualizados)
+- .github/instructions/ (autogovernanca, behaviors — novos; camada-5/6/7 applyTo ajustado; glossario/pesquisa → skills)
+- .github/skills/ (glossario, pesquisa — novos)
+- .github/hooks/ (estado.json, injetar-estado.ps1 — criados/atualizados)
+- .github/scripts/ (rotacionar-handoff.ps1 — novo)
+- .github/copilot-instructions.md (atualizado)
+- AGENTS.md (reescrito para agente unico + 2 worktrees)
+- HANDOFF.md (atualizado)
+- README.md (adicionado mapa do projeto)
+- docs/ (DATA_CONTRACTS.md, DUMP_T1R.md, MASTER_IMPLEMENTATION_ROADMAP.md, ROADMAP.md, ROADMAP_DEFINITIVO.md, SUTURE_ISSUES.md movidos da raiz)
+- docs/archive/ (journal/ e .session/ arquivados)
+- behaviors/ (1700+ arquivos do Agente 02)
+- example_project/, seeds/, templates/ (conteudo Agente 02)
+- scripts/ (10 scripts de auditoria Agente 02)
+- addons/mcp_bt_editor/ (Behavior Tree Editor)
+- tools/ (12 tools novas do Agente 02)
+- .git/coordenacao.json (mecanismo de coordenacao entre worktrees)
+- $HOME/.copilot/ (hooks de seguranca, skill fw-init, repositorio Git pessoal)
+- settings.json (removido agentFilesLocations e autostart invalido, adicionado hookFilesLocations)
+
+### Proxima fatia sugerida
+Revisao humana do merge da branch chore/limpeza-agent-only na main.
+
+### Como voltar atras
+git checkout main

@@ -1,0 +1,22 @@
+{
+  "name": "interface_rearrange",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior interface_rearrange para Godot 4.7.",
+  "description_en": "interface_rearrange behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "interface_rearrange"
+    ],
+    "en": [
+      "interface_rearrange"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

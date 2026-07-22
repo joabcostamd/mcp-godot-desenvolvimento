@@ -1,0 +1,22 @@
+{
+  "name": "game_speed_control",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior game_speed_control para Godot 4.7.",
+  "description_en": "game_speed_control behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "game_speed_control"
+    ],
+    "en": [
+      "game_speed_control"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

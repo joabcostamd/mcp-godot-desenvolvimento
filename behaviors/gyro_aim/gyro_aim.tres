@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/gyro_aim/gyro_aim.gd" id="1_gyro_aim"]
+
+[resource]
+script = ExtResource("1_gyro_aim")
+sensitivity = 1.0
+smoothing = 0.8

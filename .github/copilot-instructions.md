@@ -27,8 +27,8 @@ e **termina** um jogo indie.
 
 ## 2. LEIA NESTA ORDEM, SEMPRE
 
-1. `AGENTS.md` — descubra qual agente você é e qual é o seu território
-2. `ROADMAP_DEFINITIVO.md` — a ordem das ondas e fatias
+1. `AGENTS.md` — fluxo de trabalho e regras de convivência
+2. `docs/ROADMAP_DEFINITIVO.md` — a ordem das ondas e fatias
 3. `.github/roadmap/ONDA_*.md` — a ficha da fatia atual
 4. `.github/instructions/aprendizados.instructions.md` — o que já quebrou antes
 5. `.github/instructions/fontes.instructions.md` — onde pesquisar antes de escrever
@@ -57,6 +57,32 @@ escale para o humano.
 
 Se não tiver certeza se pode prosseguir: **pare e escale.** O custo de parar é baixo.
 O custo de prosseguir errado com confiança é alto.
+
+### 3.1 Regra de ouro (autogovernança)
+
+**Nenhuma fatia é "concluída" até que você tenha tentado ativamente prová-la
+errada e falhado.** A pergunta não é "isso funcionou?" — é "se eu fosse tentar
+provar que NÃO funcionou, o que eu tentaria primeiro, e eu já tentei?"
+
+### 3.2 Antes de reportar queda de métrica (ex: SEM_HANDLER caiu)
+
+Responda estas 3 perguntas antes de declarar vitória:
+1. **O que exatamente mudou?** Liste os NOMES, não só o número.
+2. **Cada item saiu porque foi CORRIGIDO ou porque parou de ser MEDIDO?**
+   Remover da contagem não é corrigir.
+3. **Se eu desfizesse esta fatia, o número voltaria a subir?**
+   Se não, você só mudou o que é contado, não o que existe.
+
+Checklists mecânicos completos (AC1-AC9, GF1-GF5, S1-S4) estão em
+`.github/instructions/autogovernanca.instructions.md`.
+
+### 3.3 Ao ser perguntado "onde paramos"
+
+Se o usuário perguntar "onde paramos", "o que falta", "resuma o progresso" ou
+equivalente: NUNCA responda só repetindo o contexto injetado. Primeiro rode
+`git log -3 --oneline` e `git status --porcelain`, compare o hash do último commit
+citado no `HANDOFF.md` com `HEAD`. Se forem diferentes, há trabalho não registrado —
+liste os commits entre um e outro e avise antes de responder.
 
 ---
 

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bcheckpoint000001"]
+
+[ext_resource type="Script" path="res://behaviors/checkpoint/checkpoint.gd" id="1_cp"]
+
+[node name="Checkpoint" type="Area2D"]
+script = ExtResource("1_cp")
+checkpoint_id = "default"
+spawn_offset = Vector2(0, 0)

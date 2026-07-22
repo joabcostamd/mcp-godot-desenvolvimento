@@ -1,0 +1,22 @@
+{
+  "name": "interface_resize",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior interface_resize para Godot 4.7.",
+  "description_en": "interface_resize behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "interface_resize"
+    ],
+    "en": [
+      "interface_resize"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

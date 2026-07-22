@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://damageovertime0001"]
+
+[ext_resource type="Script" path="res://behaviors/damage_over_time/damage_over_time.gd" id="1_dot"]
+
+[node name="DamageOverTime" type="Node"]
+script = ExtResource("1_dot")
+damage_per_tick = 5
+tick_interval = 1.0
+duration = 5.0

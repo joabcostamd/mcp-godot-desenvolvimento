@@ -1,0 +1,43 @@
+[gd_scene load_steps=2 format=3 uid="uid://dplatformergame00000000000002"]
+
+[ext_resource type="Script" path="res://scripts/platformer_main.gd" id="1_main"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="Camera" type="Camera2D" parent="."]
+position = Vector2(240, 135)
+zoom = Vector2(1, 1)
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(100, 200)
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="Coins" type="Node2D" parent="."]
+
+[node name="Flag" type="Area2D" parent="."]
+position = Vector2(1200, 200)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="HealthBar" type="Control" parent="HUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 0.0
+anchor_right = 0.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 150.0
+offset_bottom = 30.0
+
+[node name="ScoreLabel" type="Label" parent="HUD"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 0.0
+anchor_right = 1.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 30.0
+text = "Score: 0"
+horizontal_alignment = 2

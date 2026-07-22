@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/teleport/teleport.gd" id="1_teleport"]
+
+[resource]
+script = ExtResource("1_teleport")
+target_position = Vector2(Vector2.ZERO)
+target_scene = ""
+player_group = "players"

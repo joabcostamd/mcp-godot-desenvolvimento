@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/drag_drop/drag_drop.gd" id="1_drag_drop"]
+
+[resource]
+script = ExtResource("1_drag_drop")
+drag_preview = true
+snap_size = Vector2(Vector2.ZERO)
+drop_group = ""

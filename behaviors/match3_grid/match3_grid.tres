@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/match3_grid/match3_grid.gd" id="1_match3_grid"]
+
+[resource]
+script = ExtResource("1_match3_grid")
+grid_width = 8
+grid_height = 8
+gem_types = 5
+min_match = 3

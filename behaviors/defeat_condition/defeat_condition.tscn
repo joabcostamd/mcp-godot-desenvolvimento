@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdefeatcond000001"]
+
+[ext_resource type="Script" path="res://behaviors/defeat_condition/defeat_condition.gd" id="1_dc"]
+
+[node name="DefeatCondition" type="Node"]
+script = ExtResource("1_dc")
+condition_type = 0
+player_group = "players"

@@ -1,0 +1,57 @@
+{
+  "name": "color_blind_mode",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que aplica filtro de daltonismo (protanopia/deuteranopia/tritanopia) via shader na viewport.",
+  "synonyms": {
+    "pt": [
+      "daltonismo",
+      "color_blind",
+      "acessibilidade",
+      "filtro"
+    ],
+    "en": [
+      "color_blind",
+      "accessibility",
+      "filter"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "mode",
+      "type": "int",
+      "range": {
+        "min": 0,
+        "max": 3
+      },
+      "default": 0
+    },
+    {
+      "name": "intensity",
+      "type": "float",
+      "range": {
+        "min": 0.0,
+        "max": 1.0
+      },
+      "default": 0.8
+    }
+  ],
+  "signals": [
+    {
+      "name": "mode_changed",
+      "params": [
+        {
+          "name": "mode",
+          "type": "int"
+        }
+      ]
+    }
+  ],
+  "genres": [
+    "generic"
+  ],
+  "tags": [
+    "acessibilidade",
+    "daltonismo"
+  ]
+}

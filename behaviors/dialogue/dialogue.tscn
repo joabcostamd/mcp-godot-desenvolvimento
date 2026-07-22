@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdialogue0000001"]
+
+[ext_resource type="Script" path="res://behaviors/dialogue/dialogue.gd" id="1_dl"]
+
+[node name="Dialogue" type="CanvasLayer"]
+script = ExtResource("1_dl")
+auto_advance = false
+auto_delay = 3.0
+advance_input = "ui_accept"

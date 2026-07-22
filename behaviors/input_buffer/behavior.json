@@ -1,0 +1,55 @@
+{
+  "name": "input_buffer",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "synonyms": {
+    "pt": [
+      "input",
+      "buffer",
+      "buffer"
+    ],
+    "en": [
+      "input",
+      "buffer"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "buffer_window",
+      "type": "float",
+      "range": {
+        "min": 0.05,
+        "max": 1.0
+      },
+      "default": 0.2
+    }
+  ],
+  "signals": [
+    {
+      "name": "buffered",
+      "params": [
+        {
+          "name": "action",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "executed",
+      "params": [
+        {
+          "name": "action",
+          "type": "String"
+        }
+      ]
+    }
+  ],
+  "genres": [
+    "fighting"
+  ],
+  "tags": [
+    "input"
+  ],
+  "description_pt": "Behavior Input Buffer para Godot 4.7. Componente plugavel para jogos 2D.",
+  "description_en": "Input Buffer behavior for Godot 4.7. Pluggable component for 2D games."
+}

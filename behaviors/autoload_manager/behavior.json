@@ -1,0 +1,22 @@
+{
+  "name": "autoload_manager",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior autoload_manager para Godot 4.7.",
+  "description_en": "autoload_manager behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "autoload_manager"
+    ],
+    "en": [
+      "autoload_manager"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

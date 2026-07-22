@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bstatuseffect0001"]
+
+[ext_resource type="Script" path="res://behaviors/status_effect/status_effect.gd" id="1_se"]
+
+[node name="StatusEffect" type="Node"]
+script = ExtResource("1_se")
+effect_type = "custom"
+duration = 5.0
+tick_interval = 1.0
+tick_damage = 0
+max_stacks = 1

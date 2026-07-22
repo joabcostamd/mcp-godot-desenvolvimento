@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/blood_gore_toggle/blood_gore_toggle.gd" id="1_blood_gore_toggle"]
+
+[resource]
+script = ExtResource("1_blood_gore_toggle")
+enabled = true

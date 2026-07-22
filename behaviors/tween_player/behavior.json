@@ -1,0 +1,100 @@
+{
+  "name": "tween_player",
+  "description_pt": "Player de Tween reutilizável. Anima qualquer propriedade de qualquer nó com easing e delay configuráveis. play(node, prop, target, duration). Suporta cancelamento e callback ao final.",
+  "description_en": "Reusable Tween player. Animates any property of any node with configurable easing and delay. play(node, prop, target, duration). Supports cancellation and callback on finish.",
+  "synonyms": {
+    "pt": [
+      "tween",
+      "animar",
+      "interpolar",
+      "transicao",
+      "mover"
+    ],
+    "en": [
+      "tween",
+      "animate",
+      "interpolate",
+      "transition",
+      "move"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "default_duration",
+      "type": "float",
+      "description_pt": "Duração padrão.",
+      "range": {
+        "min": 0.01,
+        "max": 10.0
+      },
+      "default": 0.5,
+      "unit": "s"
+    },
+    {
+      "name": "default_easing",
+      "type": "int",
+      "description_pt": "Easing padrão (Tween.EASE_IN=0, EASE_OUT=1, EASE_IN_OUT=2, EASE_OUT_IN=3).",
+      "range": {
+        "min": 0,
+        "max": 3
+      },
+      "default": 1
+    },
+    {
+      "name": "default_transition",
+      "type": "int",
+      "description_pt": "Transição padrão (Tween.TRANS_LINEAR=0, TRANS_SINE=1, TRANS_QUAD=2, etc.).",
+      "range": {
+        "min": 0,
+        "max": 5
+      },
+      "default": 2
+    },
+    {
+      "name": "default_delay",
+      "type": "float",
+      "description_pt": "Delay padrão antes de iniciar.",
+      "range": {
+        "min": 0.0,
+        "max": 5.0
+      },
+      "default": 0.0,
+      "unit": "s"
+    }
+  ],
+  "signals": [
+    {
+      "name": "tween_started",
+      "description_pt": "Emitido ao iniciar o tween.",
+      "params": [
+        {
+          "name": "property",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "tween_finished",
+      "description_pt": "Emitido ao terminar o tween.",
+      "params": [
+        {
+          "name": "property",
+          "type": "String"
+        }
+      ]
+    }
+  ],
+  "dependencies": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": [
+    "animacao",
+    "tween",
+    "transicao",
+    "interpolacao"
+  ]
+}

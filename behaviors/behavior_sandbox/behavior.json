@@ -1,0 +1,22 @@
+{
+  "name": "behavior_sandbox",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior behavior_sandbox para Godot 4.7.",
+  "description_en": "behavior_sandbox behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "behavior_sandbox"
+    ],
+    "en": [
+      "behavior_sandbox"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

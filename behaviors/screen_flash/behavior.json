@@ -1,0 +1,89 @@
+{
+  "name": "screen_flash",
+  "description_pt": "Flash de tela (pisca cor sólida) usando ColorRect fullscreen em CanvasLayer. Disparado por flash(color, duration). Fade-in e fade-out configuráveis. Não bloqueia input do mouse.",
+  "description_en": "Screen flash (solid color blink) using fullscreen ColorRect in a CanvasLayer. Triggered via flash(color, duration). Configurable fade-in and fade-out. Does not block mouse input.",
+  "synonyms": {
+    "pt": [
+      "flash",
+      "piscar",
+      "clarão",
+      "estouro",
+      "branco",
+      "transição"
+    ],
+    "en": [
+      "flash",
+      "blink",
+      "whiteout",
+      "fade",
+      "transition"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "default_color",
+      "type": "Color",
+      "description_pt": "Cor padrão do flash.",
+      "default": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    },
+    {
+      "name": "default_duration",
+      "type": "float",
+      "description_pt": "Duração total padrão do flash (inclui fade-in e fade-out).",
+      "range": {
+        "min": 0.02,
+        "max": 5.0
+      },
+      "default": 0.3,
+      "unit": "s"
+    },
+    {
+      "name": "fade_in",
+      "type": "float",
+      "description_pt": "Duração do fade-in (0 → opaco).",
+      "range": {
+        "min": 0.0,
+        "max": 1.0
+      },
+      "default": 0.05,
+      "unit": "s"
+    },
+    {
+      "name": "fade_out",
+      "type": "float",
+      "description_pt": "Duração do fade-out (opaco → 0).",
+      "range": {
+        "min": 0.0,
+        "max": 1.0
+      },
+      "default": 0.15,
+      "unit": "s"
+    }
+  ],
+  "signals": [
+    {
+      "name": "flashed",
+      "description_pt": "Emitido ao fim da animação (após fade-out completo).",
+      "params": []
+    }
+  ],
+  "dependencies": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": [
+    "feedback",
+    "flash",
+    "screen",
+    "ui",
+    "transicao"
+  ]
+}

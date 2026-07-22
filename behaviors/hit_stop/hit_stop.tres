@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/hit_stop/hit_stop.gd" id="1_hit_stop"]
+
+[resource]
+script = ExtResource("1_hit_stop")
+freeze_scale = 0.05
+default_duration = 0.1
+restore_duration = 0.05

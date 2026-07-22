@@ -1,0 +1,40 @@
+{
+  "name": "high_contrast",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "synonyms": {
+    "pt": [
+      "contraste",
+      "alto"
+    ],
+    "en": [
+      "contrast",
+      "high"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "contrast_level",
+      "type": "float",
+      "range": {
+        "min": 0.5,
+        "max": 3.0
+      },
+      "default": 1.0
+    }
+  ],
+  "signals": [
+    {
+      "name": "contrast_changed",
+      "params": []
+    }
+  ],
+  "genres": [
+    "generic"
+  ],
+  "tags": [
+    "acessibilidade"
+  ],
+  "description_pt": "Behavior High Contrast para Godot 4.7. Componente plugavel para jogos 2D.",
+  "description_en": "High Contrast behavior for Godot 4.7. Pluggable component for 2D games."
+}

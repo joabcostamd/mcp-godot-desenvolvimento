@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://one_shot_animation_v1"][ext_resource type="Script" path="res://behaviors/one_shot_animation/one_shot_animation.gd" id="1_x"][node name="OneShotAnimation" type="Node"]script=ExtResource("1_x")

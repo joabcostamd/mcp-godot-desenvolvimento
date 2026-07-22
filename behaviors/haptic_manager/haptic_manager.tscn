@@ -1,0 +1,1 @@
+[gd_scene load_steps=2 format=3 uid="uid://haptic_manager_v1"][ext_resource type="Script" path="res://behaviors/haptic_manager/haptic_manager.gd" id="1_hm"][node name="HapticManager" type="Node"]script=ExtResource("1_hm")

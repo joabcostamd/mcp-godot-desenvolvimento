@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/outline/outline.gd" id="1_outline"]
+
+[resource]
+script = ExtResource("1_outline")
+outline_color = Color(Color.WHITE)
+outline_width = 2.0
+show_on_focus = false

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/crosshair/crosshair.gd" id="1_crosshair"]
+
+[resource]
+script = ExtResource("1_crosshair")
+crosshair_color = Color(Color.RED)
+crosshair_size = 16.0
+crosshair_style = 0
+gap = 4.0

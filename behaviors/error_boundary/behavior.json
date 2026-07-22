@@ -1,0 +1,22 @@
+{
+  "name": "error_boundary",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior error_boundary para Godot 4.7.",
+  "description_en": "error_boundary behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "error_boundary"
+    ],
+    "en": [
+      "error_boundary"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

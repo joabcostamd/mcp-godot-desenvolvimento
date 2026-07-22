@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://mod_config_v1"][ext_resource type="Script" path="res://behaviors/mod_config/mod_config.gd" id="1_x"][node name="ModConfig" type="Node"]script=ExtResource("1_x")

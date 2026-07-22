@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/lerp_smooth/lerp_smooth.gd" id="1_lerp_smooth"]
+
+[resource]
+script = ExtResource("1_lerp_smooth")
+duration = 0.5
+easing = 3

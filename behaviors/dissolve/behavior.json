@@ -1,0 +1,53 @@
+{
+  "name": "dissolve",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que aplica efeito de dissolução via shader ao parent CanvasItem. Progress, edge_width, edge_color e noise_texture configuráveis.",
+  "synonyms": {
+    "pt": [
+      "dissolver",
+      "desaparecer",
+      "queimar",
+      "particulas"
+    ],
+    "en": [
+      "dissolve",
+      "fade",
+      "burn"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "edge_color",
+      "type": "Color",
+      "default": {
+        "r": 1,
+        "g": 0.5,
+        "b": 0,
+        "a": 1
+      }
+    },
+    {
+      "name": "edge_width",
+      "type": "float",
+      "range": {
+        "min": 0,
+        "max": 0.5
+      },
+      "default": 0.1
+    }
+  ],
+  "signals": [
+    {
+      "name": "dissolve_finished",
+      "params": []
+    }
+  ],
+  "genres": [
+    "generic"
+  ],
+  "tags": [
+    "shader",
+    "visual"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": "authority",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que gerencia autoridade de rede (server/client). Suporta transferência de autoridade entre peers.",
+  "synonyms": {
+    "pt": [
+      "autoridade",
+      "authority",
+      "servidor",
+      "dono"
+    ],
+    "en": [
+      "authority",
+      "server",
+      "owner"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "authority_type",
+      "type": "String",
+      "default": "server"
+    }
+  ],
+  "signals": [
+    {
+      "name": "authority_changed",
+      "params": [
+        {
+          "name": "new_peer_id",
+          "type": "int"
+        }
+      ]
+    }
+  ],
+  "genres": [
+    "multiplayer"
+  ],
+  "tags": [
+    "multiplayer",
+    "authority"
+  ]
+}

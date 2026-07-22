@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bcharstats0000001"]
+
+[ext_resource type="Script" path="res://behaviors/character_stats/character_stats.gd" id="1_cs"]
+
+[node name="CharacterStats" type="Node"]
+script = ExtResource("1_cs")
+strength = 10
+dexterity = 10
+intelligence = 10
+vitality = 10

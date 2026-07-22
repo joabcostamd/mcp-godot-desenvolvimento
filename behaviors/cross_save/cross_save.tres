@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/cross_save/cross_save.gd" id="1_cross_save"]
+
+[resource]
+script = ExtResource("1_cross_save")
+platforms = Array[String](["windows", "linux"])

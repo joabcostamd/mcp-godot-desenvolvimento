@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bvignette0000001"]
+
+[ext_resource type="Script" path="res://behaviors/vignette/vignette.gd" id="1_vg"]
+
+[node name="Vignette" type="CanvasLayer"]
+script = ExtResource("1_vg")
+vignette_color = Color(0, 0, 0, 1)
+default_intensity = 0.5
+default_duration = 0.5

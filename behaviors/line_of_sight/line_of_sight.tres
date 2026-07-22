@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/line_of_sight/line_of_sight.gd" id="1_line_of_sight"]
+
+[resource]
+script = ExtResource("1_line_of_sight")
+view_angle = 90.0
+view_range = 300.0
+ray_count = 0
+target_group = "player"

@@ -1,0 +1,62 @@
+{
+  "name": "teleport",
+  "description_pt": "Teletransporte via Area2D. Ao entrar, move o player para target_position ou troca de cena via target_scene + SceneTransition. Filtra por player_group.",
+  "description_en": "Teleport via Area2D. On enter, moves player to target_position or changes scene via target_scene + SceneTransition. Filters by player_group.",
+  "synonyms": {
+    "pt": [
+      "teletransporte",
+      "portal",
+      "tp",
+      "viagem"
+    ],
+    "en": [
+      "teleport",
+      "portal",
+      "warp"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "target_position",
+      "type": "Vector2",
+      "description_pt": "Posição global de destino.",
+      "default": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    {
+      "name": "target_scene",
+      "type": "String",
+      "description_pt": "Cena de destino (opcional, usa SceneTransition).",
+      "default": ""
+    },
+    {
+      "name": "player_group",
+      "type": "String",
+      "description_pt": "Grupo do player.",
+      "default": "players"
+    }
+  ],
+  "signals": [
+    {
+      "name": "teleported",
+      "description_pt": "Emitido ao teleportar.",
+      "params": []
+    }
+  ],
+  "dependencies": [
+    "scene_transition"
+  ],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": [
+    "mecanica",
+    "teleport",
+    "portal"
+  ]
+}

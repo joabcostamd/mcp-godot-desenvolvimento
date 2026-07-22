@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/wall_slide/wall_slide.gd" id="1_wall_slide"]
+
+[resource]
+script = ExtResource("1_wall_slide")
+slide_speed = 60.0
+wall_jump_horizontal = 300.0
+wall_jump_vertical = -350.0
+wall_detection_distance = 16.0
+enabled = true

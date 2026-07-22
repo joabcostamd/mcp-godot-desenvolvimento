@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://water_surface_v1"]
+[ext_resource type="Script" path="res://behaviors/water_surface/water_surface.gd" id="1_ws2"]
+[node name="WaterSurface" type="Node2D"]
+script = ExtResource("1_ws2")

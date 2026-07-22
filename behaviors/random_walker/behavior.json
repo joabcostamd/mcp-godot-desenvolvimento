@@ -1,0 +1,22 @@
+{
+  "name": "random_walker",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior random_walker para Godot 4.7.",
+  "description_en": "random_walker behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "random_walker"
+    ],
+    "en": [
+      "random_walker"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

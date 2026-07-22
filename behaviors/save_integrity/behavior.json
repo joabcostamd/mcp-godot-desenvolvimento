@@ -1,0 +1,22 @@
+{
+  "name": "save_integrity",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior save_integrity para Godot 4.7.",
+  "description_en": "save_integrity behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "save_integrity"
+    ],
+    "en": [
+      "save_integrity"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

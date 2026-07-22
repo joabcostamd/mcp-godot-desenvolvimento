@@ -1,0 +1,26 @@
+{
+  "name": "puzzle",
+  "display_name": "MCP Example — Puzzle",
+  "genre": "puzzle",
+  "blueprint_ref": "blueprints/puzzle.json",
+  "description_pt": "Puzzle estilo Sokoban: empurre caixas para posicoes alvo num grid. 3 niveis de dificuldade crescente. Contador de movimentos, desfazer e reiniciar. Usa 10 behaviors do arsenal.",
+  "description_en": "Sokoban-style puzzle: push boxes to target positions on a grid. 3 levels of increasing difficulty. Move counter, undo and reset. Uses 10 behaviors from the arsenal.",
+  "scenes": [
+    {"path": "scenes/menu.tscn", "purpose": "main_menu"},
+    {"path": "scenes/level.tscn", "purpose": "game"},
+    {"path": "scenes/victory.tscn", "purpose": "victory"}
+  ],
+  "behaviors_used": [
+    "grid_movement", "pushable", "target_zone", "victory_condition",
+    "undo_move", "move_counter", "level_manager", "reset_button",
+    "screen_transition", "save_load"
+  ],
+  "estimated_playtime": 15,
+  "difficulty": "easy",
+  "controls": {
+    "keyboard": "Setas para mover, Z para desfazer, R para reiniciar, ESC para menu.",
+    "gamepad": "D-Pad para mover, X/West para desfazer, Y/North para reiniciar."
+  },
+  "clone_prompt_pt": "Quero um puzzle estilo Sokoban: empurrar caixas para posicoes alvo num grid. 3 niveis de dificuldade crescente. Contador de movimentos. Botao de desfazer e reiniciar.",
+  "version": "1.0.0"
+}

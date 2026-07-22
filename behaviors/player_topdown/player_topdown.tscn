@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bplayertopdown01"]
+
+[ext_resource type="Script" path="res://behaviors/player_topdown/player_topdown.gd" id="1_ptd"]
+
+[node name="PlayerTopDown" type="Node"]
+script = ExtResource("1_ptd")
+speed = 200.0
+acceleration = 1000.0
+friction = 1000.0
+enabled = true

@@ -144,8 +144,12 @@ e uma linha do que foi feito.
    ```
    Sugestao de commit:
    git add <arquivos exatos>
-   git commit -m "<tipo>: <descricao curta>"
+   git commit -m "<tipo>: <descricao curta>" -m "<motivo em 1-2 linhas>"
    ```
+   No corpo do commit (nao so no titulo), inclua em 1-2 linhas o motivo da
+   abordagem escolhida, especialmente se havia alternativa obvia descartada.
+   O commit e lido por sessoes futuras que nao tem a conversa — o historico
+   do Git precisa carregar o raciocinio, nao so a mudanca.
    Nao execute. Espere aprovacao.
 
 2. Depois da minha aprovacao do commit, **prepare a proxima fatia**:

@@ -30,6 +30,23 @@ O **MCP Godot Agent** é um servidor MCP em Python que atua como **dono do proce
 
 ---
 
+## 🗺️ Mapa do projeto
+
+Se você vai contribuir com o desenvolvimento do **próprio MCP** (não de um jogo):
+
+| Arquivo/Pasta | O que é |
+|---|---|
+| [`.github/copilot-instructions.md`](.github/copilot-instructions.md) | Regras-mestre: o que é o projeto, 5 regras absolutas, teto de ferramentas, padrões técnicos |
+| [`AGENTS.md`](AGENTS.md) | Fluxo de trabalho do agente: comandos `/`, regras de convivência, o que nunca fazer |
+| [`HANDOFF.md`](HANDOFF.md) | Estado atual do projeto ("onde paramos") — atualizado a cada `/handoff` ou `/encerrar` |
+| [`docs/ROADMAP_DEFINITIVO.md`](docs/ROADMAP_DEFINITIVO.md) | Ordem das ondas e fatias do roadmap |
+| [`.github/instructions/`](.github/instructions/) | Regras técnicas por tema: aprendizados, camadas 0-7, fontes, autogovernança, behaviors |
+| [`.github/skills/`](.github/skills/) | Skills sob demanda (glossário, protocolo de pesquisa) |
+| [`.github/prompts/`](.github/prompts/) | Comandos `/` (`plan`, `act`, `handoff`, `audit`, `encerrar`, `manual`) |
+| [`docs/archive/`](docs/archive/) | 🗄️ Histórico — versões antigas de prompts, sessões passadas. Não é documentação ativa |
+
+---
+
 ## ⚡ Comece em 1 minuto
 
 ```powershell

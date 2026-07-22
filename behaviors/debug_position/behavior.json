@@ -1,0 +1,56 @@
+{
+  "name": "debug_position",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node2D que renderiza um ponto/cruz colorido na posição do parent para debug visual. Cor e tamanho configuráveis.",
+  "description_en": "Node2D rendering a colored dot/cross at parent position for visual debug. Configurable color and size.",
+  "synonyms": {
+    "pt": [
+      "debug",
+      "posicao",
+      "ponto",
+      "marcador"
+    ],
+    "en": [
+      "debug",
+      "position",
+      "dot",
+      "marker"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "color",
+      "type": "Color",
+      "default": {
+        "r": 1,
+        "g": 0,
+        "b": 1,
+        "a": 1
+      }
+    },
+    {
+      "name": "size",
+      "type": "float",
+      "range": {
+        "min": 4,
+        "max": 64
+      },
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "name": "show_label",
+      "type": "bool",
+      "default": false
+    }
+  ],
+  "signals": [],
+  "dependencies": [],
+  "genres": [
+    "generic"
+  ],
+  "tags": [
+    "debug"
+  ]
+}

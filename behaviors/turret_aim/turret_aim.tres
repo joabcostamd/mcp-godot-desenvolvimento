@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/turret_aim/turret_aim.gd" id="1_turret_aim"]
+
+[resource]
+script = ExtResource("1_turret_aim")
+rotation_speed = 3.0
+detection_range = 400.0
+predict_movement = false
+aim_tolerance_deg = 5.0

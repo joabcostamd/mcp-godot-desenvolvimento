@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/racing_lap/racing_lap.gd" id="1_racing_lap"]
+
+[resource]
+script = ExtResource("1_racing_lap")
+total_laps = 3

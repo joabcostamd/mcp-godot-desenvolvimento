@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://auto_aim_v1"][ext_resource type="Script" path="res://behaviors/auto_aim/auto_aim.gd" id="1_x"][node name="AutoAim" type="Node"]script=ExtResource("1_x")

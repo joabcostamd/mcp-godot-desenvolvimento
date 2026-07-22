@@ -1,0 +1,1 @@
+[gd_scene load_steps=2 format=3 uid="uid://text_size_v1"][ext_resource type="Script" path="res://behaviors/text_size/text_size.gd" id="1_ts"][node name="TextSize" type="Node"]script=ExtResource("1_ts")

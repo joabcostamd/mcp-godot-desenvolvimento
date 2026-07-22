@@ -1,0 +1,22 @@
+{
+  "name": "debug_overlay",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior debug_overlay para Godot 4.7.",
+  "description_en": "debug_overlay behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "debug_overlay"
+    ],
+    "en": [
+      "debug_overlay"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

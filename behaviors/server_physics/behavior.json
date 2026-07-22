@@ -1,0 +1,22 @@
+{
+  "name": "server_physics",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior server_physics para Godot 4.7.",
+  "description_en": "server_physics behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "server_physics"
+    ],
+    "en": [
+      "server_physics"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

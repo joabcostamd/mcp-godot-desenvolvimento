@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://beamlaser001"]
+
+[ext_resource type="Script" uid="uid://beamlaserscript" path="res://behaviors/beam_laser/beam_laser.gd" id="1_beam"]
+
+[node name="BeamLaser" type="RayCast2D"]
+script = ExtResource("1_beam")
+enabled = true
+target_position = Vector2(500, 0)

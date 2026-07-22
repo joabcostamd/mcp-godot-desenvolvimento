@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://blookattarget0001"]
+
+[ext_resource type="Script" path="res://behaviors/look_at_target/look_at_target.gd" id="1_la"]
+
+[node name="LookAtTarget" type="Node"]
+script = ExtResource("1_la")

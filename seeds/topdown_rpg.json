@@ -1,0 +1,53 @@
+{
+  "name": "topdown_rpg",
+  "display_name": "RPG Top-Down",
+  "genre": "rpg",
+  "blueprint_ref": "blueprints/topdown_shooter.json",
+  "_blueprint_note": "Estende o blueprint top-down com elementos de RPG (XP, nível, inventário, diálogo).",
+  "description_pt": "RPG top-down 2D: movimento livre, combate com hitbox/hurtbox, sistema de XP e nível, NPCs com diálogo, loja e quests. Usa 20+ behaviors do arsenal.",
+  "description_en": "Top-down 2D RPG: free movement, hitbox/hurtbox combat, XP/level system, NPCs with dialogue, shop, and quests. Uses 20+ behaviors from the arsenal.",
+  "scenes": [
+    {"path": "scenes/game.tscn", "purpose": "game", "description": "Mundo principal: jogador, inimigos, NPCs, loja."},
+    {"path": "scenes/menu.tscn", "purpose": "main_menu", "description": "Menu com Novo Jogo, Continuar, Configurações."},
+    {"path": "scenes/dialogue.tscn", "purpose": "dialogue", "description": "Sistema de diálogo com NPCs."}
+  ],
+  "behaviors_used": [
+    {"name": "player_topdown", "purpose": "Movimento 8 direções."},
+    {"name": "health", "purpose": "Vida do jogador e inimigos."},
+    {"name": "hitbox", "purpose": "Área de ataque da espada."},
+    {"name": "hurtbox", "purpose": "Área que recebe dano."},
+    {"name": "enemy_chase", "purpose": "Inimigo persegue ao detectar."},
+    {"name": "xp_level", "purpose": "Ganhar XP e subir de nível."},
+    {"name": "character_stats", "purpose": "Força, destreza, inteligência."},
+    {"name": "inventory", "purpose": "Mochila com itens."},
+    {"name": "currency", "purpose": "Moedas de ouro."},
+    {"name": "shop", "purpose": "Loja para comprar itens."},
+    {"name": "dialogue", "purpose": "Conversas com NPCs."},
+    {"name": "quest", "purpose": "Missões com objetivos."},
+    {"name": "interactable", "purpose": "Objetos e NPCs interagíveis."},
+    {"name": "save_load", "purpose": "Salvar e carregar progresso."},
+    {"name": "camera_follow", "purpose": "Câmera segue o jogador."},
+    {"name": "health_bar", "purpose": "HUD de vida."},
+    {"name": "floating_text", "purpose": "Números de dano flutuantes."},
+    {"name": "screen_shake", "purpose": "Tremer tela em hits críticos."},
+    {"name": "audio_manager", "purpose": "Música de fundo e SFX."},
+    {"name": "day_night_cycle", "purpose": "Ciclo dia/noite visual."}
+  ],
+  "assets": [
+    {"path": "assets/player.png", "type": "texture", "license": "CC0", "source": "kenney.nl (Tiny Dungeon)"},
+    {"path": "assets/enemy.png", "type": "texture", "license": "CC0", "source": "kenney.nl"},
+    {"path": "assets/npc.png", "type": "texture", "license": "CC0", "source": "kenney.nl"},
+    {"path": "assets/tiles.png", "type": "texture", "license": "CC0", "source": "kenney.nl"},
+    {"path": "assets/sword_hit.wav", "type": "sound", "license": "CC0", "source": "kenney.nl"},
+    {"path": "assets/level_up.wav", "type": "sound", "license": "CC0", "source": "kenney.nl"}
+  ],
+  "estimated_playtime": 20,
+  "difficulty": "medium",
+  "controls": {
+    "keyboard": "WASD ou Setas para mover, Espaço para atacar, E para interagir, I para inventário, ESC para pausar.",
+    "gamepad": "Analógico esquerdo para mover, A para atacar, X para interagir, Y para inventário.",
+    "touch": "Joystick virtual + botões de ação."
+  },
+  "clone_prompt_pt": "Quero um RPG top-down simples: andar pelo mapa, lutar com espada contra slimes, ganhar XP e ouro, comprar poções na loja, falar com NPCs que dão missões. 2 missões: matar 5 slimes e entregar poção ao ferreiro.",
+  "version": "1.0.0"
+}

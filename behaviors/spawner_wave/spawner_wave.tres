@@ -1,0 +1,12 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/spawner_wave/spawner_wave.gd" id="1_spawner_wave"]
+
+[resource]
+script = ExtResource("1_spawner_wave")
+spawn_count_per_wave = 10
+wave_interval = 10.0
+spawn_delay = 0.5
+max_active = 50
+spawn_radius = 300.0
+total_waves = 0

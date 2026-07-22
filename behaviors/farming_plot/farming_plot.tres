@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/farming_plot/farming_plot.gd" id="1_farming_plot"]
+
+[resource]
+script = ExtResource("1_farming_plot")
+growth_time = 30.0
+stages = 3

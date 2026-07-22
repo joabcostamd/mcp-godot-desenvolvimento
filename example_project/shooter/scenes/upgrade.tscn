@@ -1,0 +1,47 @@
+[gd_scene load_steps=1 format=3 uid="uid://dshooterupgrade0000000000003"]
+
+[node name="Upgrade" type="Control"]
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -150.0
+offset_right = 180.0
+offset_bottom = 150.0
+
+[node name="Title" type="Label" parent="Panel"]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 35.0
+text = "LEVEL UP! Escolha um upgrade:"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 14
+
+[node name="Options" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 45.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="BtnOption1" type="Button" parent="Panel/Options"]
+layout_mode = 2
+text = "+Dano (+25%)"
+
+[node name="BtnOption2" type="Button" parent="Panel/Options"]
+layout_mode = 2
+text = "+Velocidade (+15%)"
+
+[node name="BtnOption3" type="Button" parent="Panel/Options"]
+layout_mode = 2
+text = "+Cadencia (-20%)"

@@ -1,0 +1,22 @@
+{
+  "name": "behavior_registry",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior behavior_registry para Godot 4.7.",
+  "description_en": "behavior_registry behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "behavior_registry"
+    ],
+    "en": [
+      "behavior_registry"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

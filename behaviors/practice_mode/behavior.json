@@ -1,0 +1,22 @@
+{
+  "name": "practice_mode",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior practice_mode para Godot 4.7.",
+  "description_en": "practice_mode behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "practice_mode"
+    ],
+    "en": [
+      "practice_mode"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

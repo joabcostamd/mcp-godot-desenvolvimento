@@ -1,0 +1,49 @@
+{
+  "name": "localization",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que gerencia localização multi-idioma via TranslationServer. Suporta troca de locale em runtime, fallback e detecção automática.",
+  "synonyms": {
+    "pt": [
+      "localizacao",
+      "idioma",
+      "traducao",
+      "locale"
+    ],
+    "en": [
+      "localization",
+      "language",
+      "translation",
+      "locale"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "locale",
+      "type": "String",
+      "default": "en"
+    },
+    {
+      "name": "fallback_locale",
+      "type": "String",
+      "default": "en"
+    }
+  ],
+  "signals": [
+    {
+      "name": "locale_changed",
+      "params": [
+        {
+          "name": "new_locale",
+          "type": "String"
+        }
+      ]
+    }
+  ],
+  "genres": [
+    "generic"
+  ],
+  "tags": [
+    "localizacao"
+  ]
+}

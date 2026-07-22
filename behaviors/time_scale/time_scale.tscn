@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://btimescale0000001"]
+
+[ext_resource type="Script" path="res://behaviors/time_scale/time_scale.gd" id="1_ts"]
+
+[node name="TimeScale" type="Node"]
+script = ExtResource("1_ts")
+default_scale = 1.0
+transition_duration = 0.3
+min_scale = 0.05
+max_scale = 10.0

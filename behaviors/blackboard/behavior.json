@@ -1,0 +1,50 @@
+{
+  "name": "blackboard",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que funciona como quadro de variáveis compartilhadas. set_var/get_var com escopos (global, scene, entity). Suporta triggers que disparam callbacks quando valor muda.",
+  "description_en": "Node acting as shared variable blackboard. set_var/get_var with scopes (global, scene, entity). Supports triggers firing callbacks on value change.",
+  "synonyms": {
+    "pt": [
+      "quadro",
+      "variaveis",
+      "contexto",
+      "estado_compartilhado"
+    ],
+    "en": [
+      "blackboard",
+      "variables",
+      "context",
+      "shared_state"
+    ]
+  },
+  "parameters": [],
+  "signals": [
+    {
+      "name": "var_set",
+      "params": [
+        {
+          "name": "key",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "trigger_activated",
+      "params": [
+        {
+          "name": "key",
+          "type": "String"
+        }
+      ]
+    }
+  ],
+  "dependencies": [],
+  "genres": [
+    "generic"
+  ],
+  "tags": [
+    "dados",
+    "contexto"
+  ]
+}

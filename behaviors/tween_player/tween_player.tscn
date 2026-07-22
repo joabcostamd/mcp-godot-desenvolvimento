@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://btweenplayer00001"]
+
+[ext_resource type="Script" path="res://behaviors/tween_player/tween_player.gd" id="1_tp"]
+
+[node name="TweenPlayer" type="Node"]
+script = ExtResource("1_tp")
+default_duration = 0.5
+default_easing = 1
+default_transition = 2
+default_delay = 0.0
