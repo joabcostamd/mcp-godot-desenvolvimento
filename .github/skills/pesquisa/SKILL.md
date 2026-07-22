@@ -1,6 +1,6 @@
 ---
-applyTo: '**'
-description: Protocolo oficial de pesquisa externa do MCP Godot Agent. Toda pesquisa segue este protocolo.
+name: pesquisa
+description: 'Protocolo de pesquisa externa sistemática. Use ao iniciar fatia com tecnologia nova, quando /plan revela lacuna de conhecimento, ou quando a ficha da fatia exige consulta a fontes externas. Cobre: fontes obrigatórias, saturação, avaliação técnica, pesquisa de problemas, implementações reais, e auto-auditoria.'
 ---
 
 # Protocolo de Pesquisa — MCP Godot Agent
@@ -37,7 +37,7 @@ confiável, atualizada e aplicável possível para enriquecer o projeto.
 ### 2.1 Fase 0 — Determinar o alvo
 
 1. Ler `.roadmap_progress.json` → identificar a fatia ativa (primeira `status != concluida`)
-2. Ler `ROADMAP_DEFINITIVO.md` → confirmar a ordem e dependências
+2. Ler `docs/ROADMAP_DEFINITIVO.md` → confirmar a ordem e dependências
 3. Ler a ficha da fatia em `.github/roadmap/ONDA_*.md` → extrair o campo "Fonte"
 4. Ler `docs/PESQUISA_EXTERNA.md` → verificar o que já foi pesquisado sobre este tema
 5. Se a ficha tem fonte explícita ("Fonte: Doc do Godot sobre X"): **a fonte é o ponto de partida**
@@ -150,7 +150,7 @@ Durante a pesquisa, atualizar continuamente:
 2. `.github/instructions/fontes.instructions.md` — se nova fonte relevante for descoberta
 3. `.github/instructions/aprendizados.instructions.md` — se novo anti-padrão for identificado
 4. A ficha da fatia (`.github/roadmap/ONDA_*.md`) — se a pesquisa revelar nova fonte relevante
-5. `HANDOFF.md` — resumo da pesquisa para o próximo agente
+5. `HANDOFF.md` — resumo da pesquisa para a próxima sessão
 
 ---
 
@@ -178,4 +178,3 @@ Ao final, entregar relatório com:
 4. **Recomendações** priorizadas por custo-benefício
 5. **Riscos e problemas** identificados
 6. **Documentação atualizada** (lista de arquivos modificados)
-7. **Auto-auditoria** (resultado da fase 8)

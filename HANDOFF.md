@@ -707,3 +707,12 @@ que têm o padrão completo: checkpoint → modificar → deduplicar → **write
 
 ### AGENTE 02 — B2 (2026-07-19)
 - Criado `.github/workflows/verification.yml` — CI com 7 jobs
+
+
+
+## Pendências registradas
+
+**Auditoria de consistência de domínios:** nem todos os domínios em domains/
+seguem o mesmo conjunto de arquivos do template _template/ (ex.: camera tem
+menos arquivos que physics). Precisa de uma sessão dedicada, separada de
+documentação, porque mexe em código.

@@ -1,5 +1,6 @@
 ---
-applyTo: '**'
+name: glossario
+description: 'Glossário de termos técnicos específicos deste projeto (Godot, MCP, domínios). Use quando precisar entender ou usar um termo do projeto que não é óbvio pelo nome.'
 ---
 
 # 09 — GLOSSÁRIO E REFERÊNCIAS
@@ -73,7 +74,7 @@ applyTo: '**'
 
 **Canary query** — 2–3 chamadas conhecidas-boas de uma tool, com saída esperada, rodadas periodicamente. Pega drift de **comportamento** (a tool tem o mesmo schema mas passou a retornar coisa diferente). Base do critério C2. Fatia 2.7.
 
-**Schema drift / mismatch** — quando o schema de uma tool muda e quebra quem dependia dele. 38% das falhas de MCP em produção. Pego pelo contract snapshot.
+**Schema drift / mismatch** — quando o schema de uma tool muda e quebra quem dependia dela. 38% das falhas de MCP em produção. Pego pelo contract snapshot.
 
 **Compounding de falha** — 5 chamadas em cadeia a 71% de sucesso cada = 18% de sucesso ponta a ponta. Por isso tools em cadeia precisam de idempotência + retry.
 
