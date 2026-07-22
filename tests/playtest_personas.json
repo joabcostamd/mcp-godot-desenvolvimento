@@ -1,0 +1,148 @@
+{
+  "version": "1.0.0",
+  "description_pt": "Personas de playtest para o MCP Godot Agent. Cada persona representa um perfil de jogador real com preferencias, habilidades e expectativas diferentes. Usado pelo playtest_manage para simular sessoes de jogo com diferentes perfis.",
+  "description_en": "Playtest personas for MCP Godot Agent. Each persona represents a real player profile with different preferences, skills and expectations. Used by playtest_manage to simulate game sessions with different profiles.",
+  "personas": [
+    {
+      "id": "joao_novato",
+      "name": "João Novato",
+      "profile": "Jogador casual, primeira experiência com games",
+      "age_range": "25-35",
+      "gaming_experience": "beginner",
+      "preferences": {
+        "genres": ["puzzle", "idle", "casual"],
+        "difficulty": "easy",
+        "session_length": "5-15 min",
+        "controls": "touch",
+        "language": "pt"
+      },
+      "expectations": [
+        "Tutorial claro nos primeiros 2 minutos",
+        "Controles simples (máximo 2 ações)",
+        "Feedback visual imediato para cada ação",
+        "Não pode morrer nos primeiros 5 minutos",
+        "Botão de pular tutorial disponível"
+      ],
+      "frustration_triggers": [
+        "Morrer sem entender por quê",
+        "Muitos botões na tela",
+        "Texto pequeno ou em inglês",
+        "Precisar ler manual para jogar"
+      ]
+    },
+    {
+      "id": "maria_gamer",
+      "name": "Maria Gamer",
+      "profile": "Jogadora experiente, joga todo dia",
+      "age_range": "18-28",
+      "gaming_experience": "hardcore",
+      "preferences": {
+        "genres": ["roguelike", "platformer", "rpg"],
+        "difficulty": "hard",
+        "session_length": "30-120 min",
+        "controls": "keyboard+mouse",
+        "language": "pt"
+      },
+      "expectations": [
+        "Gameplay profundo com mecânicas para dominar",
+        "Curva de dificuldade crescente",
+        "Segredos e conteúdo opcional para descobrir",
+        "Sistema de progressão com escolhas significativas",
+        "Performance suave (60fps estável)"
+      ],
+      "frustration_triggers": [
+        "Tutorial muito longo ou não pulável",
+        "Dificuldade artificial (inimigos com mais vida = difícil)",
+        "Falta de profundidade nas mecânicas",
+        "Bugs que quebram a imersão"
+      ]
+    },
+    {
+      "id": "pedro_mobile",
+      "name": "Pedro Mobile",
+      "profile": "Jogador de celular, sessões curtas",
+      "age_range": "15-22",
+      "gaming_experience": "intermediate",
+      "preferences": {
+        "genres": ["idle", "puzzle", "casual", "shooter"],
+        "difficulty": "easy",
+        "session_length": "2-5 min",
+        "controls": "touch",
+        "language": "pt"
+      },
+      "expectations": [
+        "Jogar com uma mão só (modo retrato)",
+        "Sessões de 2-3 minutos",
+        "Progresso salvo automaticamente",
+        "Notificações push opcionais",
+        "Modo offline funciona"
+      ],
+      "frustration_triggers": [
+        "Precisar de duas mãos para jogar",
+        "Perder progresso por não salvar",
+        "Anúncios invasivos",
+        "Carregamento lento (>5 segundos)"
+      ]
+    },
+    {
+      "id": "ana_acessibilidade",
+      "name": "Ana Acessibilidade",
+      "profile": "Jogadora com necessidades de acessibilidade",
+      "age_range": "30-50",
+      "gaming_experience": "intermediate",
+      "preferences": {
+        "genres": ["puzzle", "visual_novel", "rpg"],
+        "difficulty": "easy",
+        "session_length": "15-30 min",
+        "controls": "keyboard",
+        "language": "pt"
+      },
+      "expectations": [
+        "Todo texto tem alternativa em áudio (leitor de tela)",
+        "Contraste alto entre texto e fundo (WCAG AA mínimo)",
+        "Controles 100% remapeáveis",
+        "Velocidade do jogo ajustável",
+        "Sem dependência de cor para informação essencial"
+      ],
+      "frustration_triggers": [
+        "Informação transmitida só por cor",
+        "Texto muito pequeno ou baixo contraste",
+        "Eventos com tempo limite não ajustável",
+        "Vibração/feedback háptico sem alternativa visual"
+      ],
+      "accessibility_needs": {
+        "vision": "baixa_visao",
+        "hearing": "normal",
+        "motor": "normal",
+        "cognitive": "tdah"
+      }
+    },
+    {
+      "id": "carlos_criador",
+      "name": "Carlos Criador",
+      "profile": "Criador de conteúdo, streamer",
+      "age_range": "20-30",
+      "gaming_experience": "hardcore",
+      "preferences": {
+        "genres": ["roguelike", "platformer", "shooter"],
+        "difficulty": "hard",
+        "session_length": "60-180 min",
+        "controls": "gamepad",
+        "language": "pt"
+      },
+      "expectations": [
+        "Momentos 'clipáveis' (bosses difíceis, combos, reviravoltas)",
+        "Modo espectador limpo (sem HUD poluído)",
+        "Integração com OBS (game capture funciona)",
+        "Chat interage com o jogo (Twitch/YouTube integration)",
+        "Runs rápidas para speedrun (30-60 min)"
+      ],
+      "frustration_triggers": [
+        "Cutscenes não puláveis",
+        "RNG injusto sem contramedida",
+        "Bugs visuais em stream",
+        "Áudio do jogo conflita com microfone"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+---
+name: "💡 Ideia / Feature Request"
+about: "Sugira uma ideia ou comportamento novo para o arsenal"
+title: "[IDEIA] "
+labels: ["enhancement"]
+---
+
+## Qual é a sua ideia?
+
+<!-- Descreva o comportamento ou feature que você gostaria de ver -->
+
+## Qual problema isso resolve?
+
+<!-- Que tipo de jogo ou situação se beneficiaria disso? -->
+
+## Existe algum jogo que já faz isso?
+
+<!-- Referências ajudam a entender o escopo -->
+
+## Você gostaria de implementar?
+
+- [ ] Sim, posso contribuir com o código
+- [ ] Não, é só uma sugestão
