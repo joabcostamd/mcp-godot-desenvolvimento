@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/color_blind_mode/color_blind_mode.gd" id="1_color_blind_mode"]
+
+[resource]
+script = ExtResource("1_color_blind_mode")
+mode = 0
+intensity = 0.8

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/trail/trail.gd" id="1_trail"]
+
+[resource]
+script = ExtResource("1_trail")
+max_points = 20
+point_spacing = 5.0
+fade = true
+trail_width = 3.0

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/homing_projectile/homing_projectile.gd" id="1_homing_projectile"]
+
+[resource]
+script = ExtResource("1_homing_projectile")
+speed = 300.0
+turn_rate = 3.0
+damage = 20
+lifetime = 5.0

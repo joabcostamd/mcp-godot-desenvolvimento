@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/health/health.gd" id="1_health"]
+
+[resource]
+script = ExtResource("1_health")
+max_hp = 100
+current_hp = 100
+invulnerable_time = 0.0
+damageable = true
+healable = true
+killable = true
+revivable = true

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/parallax_background/parallax_background.gd" id="1_parallax_background"]
+
+[resource]
+script = ExtResource("1_parallax_background")
+auto_scroll = Vector2(Vector2.ZERO)
+follow_camera = true

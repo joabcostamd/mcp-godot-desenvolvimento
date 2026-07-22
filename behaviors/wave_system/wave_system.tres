@@ -1,0 +1,12 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/wave_system/wave_system.gd" id="1_wave_system"]
+
+[resource]
+script = ExtResource("1_wave_system")
+total_waves = 10
+spawn_interval = 1.0
+wave_duration = 30.0
+rest_duration = 5.0
+enemies_per_wave_base = 5
+enemies_increment = 3

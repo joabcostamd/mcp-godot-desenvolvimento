@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/ladder/ladder.gd" id="1_ladder"]
+
+[resource]
+script = ExtResource("1_ladder")
+climb_speed = 150.0
+player_group = "players"

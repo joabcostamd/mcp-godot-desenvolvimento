@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/camera_path/camera_path.gd" id="1_camera_path"]
+
+[resource]
+script = ExtResource("1_camera_path")
+speed = 100.0
+loop = false

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/damage_over_time/damage_over_time.gd" id="1_damage_over_time"]
+
+[resource]
+script = ExtResource("1_damage_over_time")
+damage_per_tick = 5
+tick_interval = 1.0
+duration = 5.0

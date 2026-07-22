@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/knockback/knockback.gd" id="1_knockback"]
+
+[resource]
+script = ExtResource("1_knockback")
+force = 200.0
+duration = 0.3
+damping = 0.0

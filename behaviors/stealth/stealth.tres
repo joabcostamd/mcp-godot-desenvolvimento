@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/stealth/stealth.gd" id="1_stealth"]
+
+[resource]
+script = ExtResource("1_stealth")
+visibility = 0.5
+noise_radius = 100.0
+detection_decay = 0.5

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/double_jump/double_jump.gd" id="1_double_jump"]
+
+[resource]
+script = ExtResource("1_double_jump")
+jump_count = 2
+jump_velocity = -400.0
+coyote_time = 0.1
+enabled = true

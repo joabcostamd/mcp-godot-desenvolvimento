@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/flee/flee.gd" id="1_flee"]
+
+[resource]
+script = ExtResource("1_flee")
+flee_speed = 200.0
+safe_distance = 400.0
+flee_condition = "health_below_30%"
+health_threshold_pct = 0.3

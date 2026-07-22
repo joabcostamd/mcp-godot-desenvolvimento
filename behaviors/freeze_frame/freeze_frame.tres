@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/freeze_frame/freeze_frame.gd" id="1_freeze_frame"]
+
+[resource]
+script = ExtResource("1_freeze_frame")
+default_duration = 0.3
+restore_duration = 0.1

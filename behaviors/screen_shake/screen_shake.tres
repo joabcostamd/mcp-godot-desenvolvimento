@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/screen_shake/screen_shake.gd" id="1_screen_shake"]
+
+[resource]
+script = ExtResource("1_screen_shake")
+intensity = 5.0
+duration = 0.3
+decay = 0.8

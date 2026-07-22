@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/storage/storage.gd" id="1_storage"]
+
+[resource]
+script = ExtResource("1_storage")
+file_path = "user"
+auto_save = true
+section = "data"

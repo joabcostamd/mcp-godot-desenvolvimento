@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/ambience_zone/ambience_zone.gd" id="1_ambience_zone"]
+
+[resource]
+script = ExtResource("1_ambience_zone")
+volume_db = 0.0
+max_distance = 500.0
+attenuation = 0.5
+auto_play = false

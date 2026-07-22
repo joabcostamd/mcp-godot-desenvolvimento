@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/physics_tick_optimizer/physics_tick_optimizer.gd" id="1_physics_tick_optimizer"]
+
+[resource]
+script = ExtResource("1_physics_tick_optimizer")
+rate = 60.0

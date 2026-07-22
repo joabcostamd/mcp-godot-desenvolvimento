@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/moving_platform/moving_platform.gd" id="1_moving_platform"]
+
+[resource]
+script = ExtResource("1_moving_platform")
+speed = 100.0
+loop = true
+pause_at_ends = 0.0
+enabled = true
