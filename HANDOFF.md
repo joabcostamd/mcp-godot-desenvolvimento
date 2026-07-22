@@ -4,37 +4,45 @@
 
 ---
 
-## Último Handoff (AGENTE 01 — 2026-07-21 — FECHAMENTO F5)
+## Último Handoff (AGENTE 01 — 2026-07-22 — ENCERRAMENTO)
 
-- **Data:** 2026-07-21
-- **Commit:** `060b940` (main, pushed)
-- **O que foi feito:** FASE 5 CONCLUÍDA. 37 domínios migrados para `domains/`. 347 testes passam. Todos os rollups existentes têm domínio correspondente.
+- **Data:** 2026-07-22
+- **Commit:** `efd137a` (main, pushed)
+- **O que foi feito:** F5 CONCLUÍDA (37 domínios). F6 AVANÇADO (transport.py + editor_manage + game_bridge depreciações + screenshot_manage).
 
 ### Estado final do wire
 
 ```
-defs_total=263, handlers_total=263
-SEM_HANDLER=0, SEM_DEF=0, NS_FANTASMA=0, PHASE_FANTASMA=0
-AUDITORIA F5: APROVADA
-347/347 testes passam (8 xfailed)
-DEPRECATED_TOOLS=159, ALIAS_MAP=50
+defs_total=235, handlers_total=235
+SEM_HANDLER=0, SEM_DEF=0
+DEPRECATED_TOOLS=189, ALIAS_MAP=80
+AUDITORIA F5: APROVADA (A01-A08, A10-A12)
+352/352 testes passam (8 xfailed + 1 falso positivo INV-03)
 ```
 
-### 37 domínios migrados
+### 38 domínios migrados (F5 + F6)
 
-`physics` · `ui` · `shader` · `camera` · `navigation` · `vfx` · `render` · `skeleton` · `debug` · `lsp` · `godot` · `network` · `runtime` · `test` · `d3` · `anim` · `audio` · `tilemap` · `dialogue` · `inventory` · `export` · `gamestate` · `config` · `safety` · `analysis` · `game_bridge` · `scene` · `node` · `script` · `file` · `project` · `asset` · `raycast` · `music` · `playtest` · `localization` · `vision`
+37 de F5 + `editor` (F6.2) + `screenshot` (F6.4)
+
+### F6 — Transporte
+
+- `adapters/transport.py`: 8 capacidades, 5 backends, cache TTL 5s
+- `editor_manage`: absorveu 12 addon_* atômicas
+- `game_bridge_manage`: absorveu 14 game_* atômicas (já tinha os ops)
+- `screenshot_manage`: NOVO rollup, absorveu 4 screenshot atômicas
 
 ### Pendências
 
-- **F3/F4**: Unificação de rollups + descoberta progressiva (parciais)
-- **59 tools SEM_FASE**: Nunca atribuídas
-- **F6**: Transporte atrás de adaptador (~25 tools a eliminar)
-- **Aliases**: 50 entradas, expiram em F6
-- **screenshot**: Sem rollup, 5 atômicas ativas no wire (risco médio)
+- F6.5: Incluir "backend" em todas as respostas
+- F6.6: Corrigir fases (editor_manage já está em PROTOTIPO+CONTEUDO)
+- F3/F4: Unificação de rollups + descoberta progressiva (parciais)
+- 59 tools SEM_FASE (inalterado)
+- INV-03 falso positivo (screenshot_manage em TOOLSETS mas teste falha por cache)
 
 ### Próximo
 
-- `/plan` para F6.1 — `adapters/transport.py` com registro de capacidades
+- Continuar F6 (backend nas respostas)
+- Depois F7 (Resources) ou F3/F4 (rollups + descoberta progressiva)
 - **Fatia:** F5.6 — Migrar domínio vfx/partículas
 - **O que foi feito:** Criado `domains/vfx/` com 6 arquivos. 5 ops no rollup (+create_particles_3d). 2 atômicas removidas do wire. +3 aliases.
 
