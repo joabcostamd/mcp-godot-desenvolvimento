@@ -15,8 +15,8 @@ Você é o agente único do projeto MCP Godot. Siga este processo EXATO, sem pul
 Determine o modo pelo argumento recebido:
 
 - **Sem argumento ou 'uma':** Execute UMA etapa (comportamento padrão). Após concluir a etapa, faça handoff e pergunte ao humano se quer continuar. Não chame /audit automaticamente.
-- **'onda':** Execute TODAS as etapas do bloco/onda atual do roadmap em sequência, sem parar para perguntar entre elas. Ao final do bloco, execute a auditoria adversarial: use a ferramenta `runSubagent` para delegar a auditoria. Passe como instrução do subagente o CONTEÚDO INTEIRO de `.github/prompts/audit.prompt.md` (leia o arquivo primeiro e inclua o texto completo no prompt do subagente, não apenas o nome). Isso garante execução isolada e rigorosa do roteiro de 7 passos. Pare e reporte o resultado.
-- **'tudo':** Execute etapas em sequência até o fim do roadmap. Ao final de CADA bloco/onda, execute a auditoria adversarial (use `runSubagent` com o conteúdo completo de `audit.prompt.md`, igual ao modo 'onda') sobre aquele bloco antes de seguir para o próximo. **Limite padrão: 5 ondas por chamada.** Ao completar a 5ª onda (ou quando o argumento especificar outro número, ex.: `tudo max=10`), pare e reporte, mesmo sem bloqueio real — isso é um check-in de segurança, não uma falha. O humano só precisa rodar `/seguir-roadmap tudo` de novo para continuar de onde parou (o `HANDOFF.md` já tem o estado). Se o argumento for `tudo sem-limite`, ignore o teto. Mantenha um contador de ondas completadas nesta execução, comparando com o limite.
+- **'onda':** Execute TODAS as etapas do bloco/onda atual do roadmap em sequência, sem parar para perguntar entre elas. Ao final do bloco, execute a auditoria adversarial: use a ferramenta `runSubagent` para delegar a auditoria. Passe como instrução do subagente, ANTES do conteúdo de `audit.prompt.md`: "ESCOPO DESTA AUDITORIA: audite exatamente os commits feitos nesta onda (rode git log para identificar os commits desde o início deste bloco até HEAD) e os arquivos listados nesse intervalo. Não audite nada fora deste escopo." Depois anexe o CONTEÚDO INTEIRO de `.github/prompts/audit.prompt.md` (leia o arquivo primeiro e inclua o texto completo, não apenas o nome). Isso garante execução isolada e rigorosa do roteiro de 7 passos. Pare e reporte o resultado.
+- **'tudo':** Execute etapas em sequência até o fim do roadmap. Ao final de CADA bloco/onda, execute a auditoria adversarial (use `runSubagent`: passe ANTES o escopo dos commits desta onda, depois o conteúdo completo de `audit.prompt.md`, igual ao modo 'onda') sobre aquele bloco antes de seguir para o próximo. **Limite padrão: 5 ondas por chamada.** Ao completar a 5ª onda (ou quando o argumento especificar outro número, ex.: `tudo max=10`), pare e reporte, mesmo sem bloqueio real — isso é um check-in de segurança, não uma falha. O humano só precisa rodar `/seguir-roadmap tudo` de novo para continuar de onde parou (o `HANDOFF.md` já tem o estado). Se o argumento for `tudo sem-limite`, ignore o teto. Mantenha um contador de ondas completadas nesta execução, comparando com o limite.
 
 Regras que valem em TODOS os modos:
 - Bloqueio encontrado → PARE imediatamente (ETAPA 2.9).
@@ -106,7 +106,7 @@ Regras que valem em TODOS os modos:
 
 20. Se ainda há etapas neste bloco → volte para ETAPA 0 com a PRÓXIMA etapa do mesmo bloco (sem perguntar ao humano, sem pausa).
 21. Se esta foi a ÚLTIMA etapa do bloco:
-    a. Execute a auditoria adversarial via `runSubagent` com o conteúdo completo de `audit.prompt.md` sobre o conjunto de mudanças do bloco inteiro.
+    a. Execute a auditoria adversarial via `runSubagent`: passe ANTES "ESCOPO DESTA AUDITORIA: audite exatamente os commits feitos nesta onda (rode git log para identificar os commits desde o início deste bloco até HEAD) e os arquivos listados nesse intervalo. Não audite nada fora deste escopo." Depois anexe o conteúdo completo de `audit.prompt.md`. Execute sobre o conjunto de mudanças do bloco inteiro.
     b. Informe ao humano:
        - 📦 Bloco concluído: [nome da onda].
        - 📁 Total de arquivos modificados no bloco: [lista].
@@ -118,7 +118,7 @@ Regras que valem em TODOS os modos:
 
 ### Modo 'tudo'
 
-20. Se esta foi a ÚLTIMA etapa de um bloco/onda → execute a auditoria adversarial via `runSubagent` com o conteúdo completo de `audit.prompt.md` sobre aquele bloco antes de seguir.
+20. Se esta foi a ÚLTIMA etapa de um bloco/onda → execute a auditoria adversarial via `runSubagent`: passe ANTES "ESCOPO DESTA AUDITORIA: audite exatamente os commits feitos nesta onda (rode git log para identificar os commits desde o início deste bloco até HEAD) e os arquivos listados nesse intervalo. Não audite nada fora deste escopo." Depois anexe o conteúdo completo de `audit.prompt.md` sobre aquele bloco antes de seguir.
 21. **Regra de bloqueante:** Se o subagente de auditoria retornar QUALQUER achado classificado como Bloqueante, NÃO continue para o próximo bloco/onda. Registre os bloqueantes em `docs/SUTURE_ISSUES.md`, informe o humano, e PARE — com o mesmo peso de uma falha de validação (ETAPA 4.15).
 22. Se atingiu o limite de ondas (padrão 5, ou o valor de `max=N`) → informe o progresso, registre handoff, e PARE (check-in de segurança).
 23. Se ainda há etapas no roadmap E não há bloqueantes E não atingiu o limite → volte para ETAPA 0 com a PRÓXIMA etapa (sem perguntar, sem pausa).
