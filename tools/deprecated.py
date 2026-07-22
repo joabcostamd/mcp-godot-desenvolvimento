@@ -96,6 +96,11 @@ DEPRECATED_TOOLS: set[str] = {
     "smoke_test", "run_verification_pipeline",
     # d3 atomics → d3_manage (F5.15)
     "create_light_3d", "create_csg_shape", "configure_standard_material_3d",
+    # addon_* atomics → editor_manage (F6.2)
+    "addon_connect", "addon_disconnect", "addon_ping", "addon_is_available",
+    "addon_get_scene_tree", "addon_take_screenshot",
+    "addon_create_node", "addon_delete_node", "addon_set_property",
+    "addon_duplicate_node", "addon_reparent_node", "addon_batch_edit",
 }
 
 
@@ -167,4 +172,17 @@ ALIAS_MAP: dict[str, tuple[str, str]] = {
     "create_light_3d": ("d3_manage", "create_light"),
     "create_csg_shape": ("d3_manage", "create_csg"),
     "configure_standard_material_3d": ("d3_manage", "config_material"),
+    # ── addon_* → editor_manage (F6.2) ──
+    "addon_connect": ("editor_manage", "connect"),
+    "addon_disconnect": ("editor_manage", "disconnect"),
+    "addon_is_available": ("editor_manage", "is_available"),
+    "addon_ping": ("editor_manage", "ping"),
+    "addon_create_node": ("editor_manage", "create_node"),
+    "addon_delete_node": ("editor_manage", "delete_node"),
+    "addon_set_property": ("editor_manage", "set_property"),
+    "addon_reparent_node": ("editor_manage", "reparent_node"),
+    "addon_duplicate_node": ("editor_manage", "duplicate_node"),
+    "addon_batch_edit": ("editor_manage", "batch_edit"),
+    "addon_take_screenshot": ("editor_manage", "take_screenshot"),
+    "addon_get_scene_tree": ("editor_manage", "get_scene_tree"),
 }

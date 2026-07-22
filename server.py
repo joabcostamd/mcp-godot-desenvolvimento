@@ -165,11 +165,8 @@ TOOLSETS = {
         "inject_input_event", "simulate_input_sequence",
         "watch_signal", "watch_state_start", "watch_state_collect",
         "record_gameplay_gif", "start_recording", "stop_recording",
-        # Addon Bridge
-        "addon_connect", "addon_disconnect", "addon_ping", "addon_is_available",
-        "addon_get_scene_tree", "addon_take_screenshot",
-        "addon_create_node", "addon_delete_node", "addon_set_property",
-        "addon_duplicate_node", "addon_reparent_node", "addon_batch_edit",
+        # Editor ao vivo
+        "editor_manage",
         "read_console_output",
         # Performance
         "profile_frame", "profile_memory",
@@ -431,6 +428,7 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         # ── Execução runtime (core do prototipar) ──
         "runtime_manage",
         "godot_manage",
+        "editor_manage",
         # ── Game bridge ──
         "game_bridge_manage",
         # ── Rollups de prototipagem rápida ──
@@ -452,6 +450,7 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
     "CONTEUDO": {
         "tilemap_manage",
         "navigation_manage",
+        "editor_manage",
         "create_parallax_background", "add_parallax_layer", "create_spritesheet",
         "optimize_sprite", "remove_background",
         "create_path_2d", "create_patrol_route",
@@ -521,12 +520,7 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "configure_export_preset",
         "deploy_itch",
         "release_checklist",
-        "addon_connect", "addon_disconnect", "addon_ping",
-        "addon_is_available", "addon_get_scene_tree",
-        "addon_take_screenshot",
-        "addon_create_node", "addon_delete_node", "addon_set_property",
-        "addon_duplicate_node", "addon_reparent_node",
-        "addon_batch_edit",
+        "editor_manage",
         "read_console_output",
     
         "csharp_build_project",
@@ -1687,19 +1681,8 @@ def _tool_defs() -> list[Tool]:
         "gdscript_rename": ["lsp", "refatoração", "gdscript"],
         "gdscript_diagnostics": ["lsp", "diagnóstico", "gdscript"],
         "gdscript_sync_file": ["lsp", "sync", "gdscript"],
-        # Addon Bridge (Fase 2B)
-        "addon_connect": ["addon", "conexão", "websocket"],
-        "addon_disconnect": ["addon", "conexão"],
-        "addon_is_available": ["addon", "diagnóstico"],
-        "addon_ping": ["addon", "diagnóstico"],
-        "addon_create_node": ["addon", "editor", "undo"],
-        "addon_delete_node": ["addon", "editor", "undo"],
-        "addon_set_property": ["addon", "editor", "undo"],
-        "addon_reparent_node": ["addon", "editor", "undo"],
-        "addon_duplicate_node": ["addon", "editor", "undo"],
-        "addon_batch_edit": ["addon", "editor", "batch", "undo"],
-        "addon_take_screenshot": ["addon", "screenshot", "visão"],
-        "addon_get_scene_tree": ["addon", "cena", "debug"],
+        # Editor ao vivo (F6.2)
+        "editor_manage": ["editor", "addon", "godot", "undo"],
         # Playtest (Fase 2B)
         "freeze_game_clock": ["playtest", "clock", "debug"],
         "unfreeze_game_clock": ["playtest", "clock"],

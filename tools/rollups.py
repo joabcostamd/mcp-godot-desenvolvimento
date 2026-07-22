@@ -1060,6 +1060,45 @@ def _build_render_manage():
     )
 
 
+# ── F6: Editor consolidation ──────────────────────────────────────
+
+from tools.addon_bridge import (
+    addon_connect, addon_disconnect, addon_is_available, addon_ping,
+    addon_create_node, addon_delete_node, addon_set_property,
+    addon_reparent_node, addon_duplicate_node, addon_batch_edit,
+    addon_take_screenshot, addon_get_scene_tree,
+)
+
+
+def _build_editor_manage():
+    """editor_manage: 12 operações de editor via addon bridge (F6.2)."""
+    return create_manage_tool(
+        tool_name="editor_manage",
+        description=(
+            "Gerencia o editor Godot ao vivo via addon bridge: conectar, criar/editar/remover nós, "
+            "screenshot, scene tree, batch edit. O backend (addon_ws ou headless_cli) é selecionado "
+            "automaticamente pelo adapters/transport.py."
+        ),
+        ops={
+            "connect": addon_connect,
+            "disconnect": addon_disconnect,
+            "is_available": addon_is_available,
+            "ping": addon_ping,
+            "create_node": addon_create_node,
+            "delete_node": addon_delete_node,
+            "set_property": addon_set_property,
+            "reparent_node": addon_reparent_node,
+            "duplicate_node": addon_duplicate_node,
+            "batch_edit": addon_batch_edit,
+            "take_screenshot": addon_take_screenshot,
+            "get_scene_tree": addon_get_scene_tree,
+        },
+        tool_hints={"destructiveHint": True, "idempotentHint": False, "openWorldHint": True},
+        title="Gerenciar Editor",
+        tags=["editor", "addon", "godot"],
+    )
+
+
 # ── Builders registry ───────────────────────────────────────────────
 
 _ROLLUP_BUILDERS = [
@@ -1114,6 +1153,8 @@ _ROLLUP_BUILDERS = [
     _build_network_manage,
     # F5: render consolidation
     _build_render_manage,
+    # F6: editor consolidation (addon_* → editor_manage)
+    _build_editor_manage,
 ]
 
 # Cache interno — garante que cada builder só executa UMA vez.
