@@ -94,6 +94,8 @@ DEPRECATED_TOOLS: set[str] = {
     # test/verify atomics → test_manage (F5.14)
     "run_gut_tests", "run_scripted_tests", "regression_test",
     "smoke_test", "run_verification_pipeline",
+    # d3 atomics → d3_manage (F5.15)
+    "create_light_3d", "create_csg_shape", "configure_standard_material_3d",
 }
 
 
@@ -161,4 +163,8 @@ ALIAS_MAP: dict[str, tuple[str, str]] = {
     "regression_test": ("test_manage", "regression"),
     "smoke_test": ("test_manage", "smoke"),
     "run_verification_pipeline": ("test_manage", "verify_pipeline"),
+    # ── d3 atomics → d3_manage (F5.15) ──
+    "create_light_3d": ("d3_manage", "create_light"),
+    "create_csg_shape": ("d3_manage", "create_csg"),
+    "configure_standard_material_3d": ("d3_manage", "config_material"),
 }
