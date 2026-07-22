@@ -1,0 +1,24 @@
+{
+  "name": "topdown_shooter",
+  "display_name_pt": "Tiro Top-Down",
+  "display_name_en": "Top-Down Shooter",
+  "genre": "topdown_shooter",
+  "description_pt": "Template de jogo de tiro com visao superior. Jogador move livremente, mira e atira em inimigos. Suporta bullet hell, survivors-like e twin-stick.",
+  "description_en": "Top-down shooter template. Player moves freely, aims and shoots enemies. Supports bullet hell, survivors-like and twin-stick.",
+  "core_loop": "Mover → Mirar → Atirar → Desviar → Coletar drops → Sobreviver",
+  "scene_structure": {
+    "main_menu": "Menu com titulo, Jogar, Configuracoes",
+    "game": "Arena + Player + Spawner + HUD (vida, pontuacao, wave)",
+    "game_over": "Tela de derrota com estatisticas",
+    "upgrade": "Tela de escolha de upgrade entre ondas"
+  },
+  "recommended_behaviors": [
+    "player_topdown", "health", "auto_aim", "fire_rate",
+    "projectile", "enemy_chase", "spawner_wave", "xp_level",
+    "upgrade", "object_pool", "floating_text", "screen_shake"
+  ],
+  "viewport": "480x270",
+  "difficulty": "medium",
+  "estimated_dev_time": "2-4 horas",
+  "version": "1.0.0"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "visual_novel",
+  "display_name_pt": "Visual Novel",
+  "display_name_en": "Visual Novel",
+  "genre": "visual_novel",
+  "description_pt": "Template de visual novel com dialogos ramificados. Personagens, backgrounds, escolhas que afetam a historia, sistema de saves e galeria de CGs.",
+  "description_en": "Visual novel template with branching dialogues. Characters, backgrounds, choices affecting the story, save system and CG gallery.",
+  "core_loop": "Ler dialogo → Fazer escolha → Ver consequencia → Avancar na historia → Desbloquear final",
+  "scene_structure": {
+    "main_menu": "Titulo, Novo Jogo, Continuar, Galeria, Configuracoes",
+    "game": "Background + Personagem + Caixa de dialogo + Botoes de escolha",
+    "gallery": "Galeria de CGs desbloqueadas",
+    "endings": "Tela de final com estatisticas"
+  },
+  "recommended_behaviors": [
+    "dialogue", "choice_system", "character_portrait",
+    "save_load", "screen_transition", "audio_manager",
+    "achievement", "flag_system", "cg_gallery",
+    "text_speed", "auto_advance", "history_log"
+  ],
+  "viewport": "960x540",
+  "difficulty": "easy",
+  "estimated_dev_time": "3-6 horas",
+  "version": "1.0.0"
+}

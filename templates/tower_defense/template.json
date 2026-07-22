@@ -1,0 +1,25 @@
+{
+  "name": "tower_defense",
+  "display_name_pt": "Tower Defense",
+  "display_name_en": "Tower Defense",
+  "genre": "tower_defense",
+  "description_pt": "Template de tower defense com grid de construcao. Jogador posiciona torres para defender o caminho dos inimigos. Suporta multiplos tipos de torre, upgrade in-game e ondas.",
+  "description_en": "Tower defense template with build grid. Player places towers to defend the enemy path. Supports multiple tower types, in-game upgrades and waves.",
+  "core_loop": "Planejar → Construir torre → Iniciar onda → Inimigos percorrem caminho → Torres atiram → Coletar ouro → Upgrade/Construir → Proxima onda",
+  "scene_structure": {
+    "main_menu": "Titulo, Jogar, Selecionar Mapa",
+    "game": "Grid + Caminho + HUD (ouro, vidas, onda) + Painel de torres",
+    "victory": "Tela de vitoria com pontuacao",
+    "game_over": "Tela de derrota (inimigos passaram)"
+  },
+  "recommended_behaviors": [
+    "grid_placement", "tower_base", "turret_aim",
+    "projectile", "enemy_pathfinding", "wave_system",
+    "currency", "upgrade", "health", "path_drawer",
+    "tower_upgrade", "enemy_health_bar", "round_timer"
+  ],
+  "viewport": "960x540",
+  "difficulty": "medium",
+  "estimated_dev_time": "4-8 horas",
+  "version": "1.0.0"
+}

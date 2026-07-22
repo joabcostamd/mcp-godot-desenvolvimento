@@ -1,0 +1,25 @@
+{
+  "name": "roguelike",
+  "display_name_pt": "Roguelike / Roguelite",
+  "display_name_en": "Roguelike / Roguelite",
+  "genre": "roguelike",
+  "description_pt": "Template de roguelike com geracao procedural, morte permanente, upgrades entre runs e combate por turnos ou em tempo real. Suporta grid-based e free movement.",
+  "description_en": "Roguelike template with procedural generation, permadeath, between-run upgrades and turn-based or real-time combat. Supports grid-based and free movement.",
+  "core_loop": "Explorar sala → Combater inimigos → Coletar loot → Avancar andar → Morrer → Gastar moeda persistente → Repetir",
+  "scene_structure": {
+    "main_menu": "Titulo, Nova Run, Upgrades, Estatisticas",
+    "game": "Mapa procedural + Player + Inimigos + Itens + HUD (vida, ouro, andar)",
+    "upgrade_shop": "Loja de upgrades persistentes entre runs",
+    "game_over": "Resumo da run: andares, inimigos, ouro coletado"
+  },
+  "recommended_behaviors": [
+    "player_topdown", "health", "hitbox", "hurtbox",
+    "dungeon_generator", "enemy_spawner", "random_loot",
+    "inventory", "currency", "xp_level", "save_load",
+    "minimap", "fog_of_war", "turn_manager"
+  ],
+  "viewport": "480x270",
+  "difficulty": "hard",
+  "estimated_dev_time": "6-12 horas",
+  "version": "1.0.0"
+}

@@ -1089,6 +1089,28 @@ from tools.reproducibility_seed import (
     list_seeds,
     verify_seed,
 )
+from tools.context_compaction import (
+    log_event,
+    get_context_summary,
+    estimate_tokens,
+)
+from tools.model_routing import (
+    classify_task,
+    estimate_cost,
+)
+from tools.undo_unify import (
+    checkpoint,
+    undo,
+    redo,
+    get_history,
+)
+from tools.seed_ops import (
+    derive_seed,
+    set_session_seed,
+    get_session_seed,
+    verify_reproducibility,
+    seed_gdscript_inject,
+)
 from tools.devsolo_ops import (
     setup_camera_2d,
     setup_camera_follow,
@@ -2235,6 +2257,24 @@ def _build_handlers() -> dict:
         "replay_seed": replay_seed,
         "list_seeds": list_seeds,
         "verify_seed": verify_seed,
+        # FATIA 2.AQ: Context Compaction
+        "log_event": log_event,
+        "get_context_summary": get_context_summary,
+        "estimate_tokens": estimate_tokens,
+        # FATIA 2.AR: Model Routing
+        "classify_task": classify_task,
+        "estimate_cost": estimate_cost,
+        # FATIA 2.AT: Undo Unify
+        "checkpoint": checkpoint,
+        "undo": undo,
+        "redo": redo,
+        "get_history": get_history,
+        # Seed Ops (complementa 2.AS)
+        "derive_seed": derive_seed,
+        "set_session_seed": set_session_seed,
+        "get_session_seed": get_session_seed,
+        "verify_reproducibility": verify_reproducibility,
+        "seed_gdscript_inject": seed_gdscript_inject,
         # Onda 8: DevSolo Crítico
         "setup_camera_2d": _handle_setup_camera_2d,
         "create_navigation_region_2d": _handle_create_navigation_region_2d,
