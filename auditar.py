@@ -42,6 +42,7 @@ def _result_template(fatia_id: str) -> dict:
             "C5_orcamento": {"status": "skipped", "detail": ""},
             "C6_distinguibilidade": {"status": "skipped", "detail": ""},
             "C7_visual": {"status": "skipped", "detail": ""},
+            "C8_behavior_audit": {"status": "skipped", "detail": ""},
         },
         "errors": [],
     }
@@ -522,6 +523,87 @@ def _run_c7_visual(result: dict, baseline_name: str = "baseline", threshold: flo
 
 
 # ══════════════════════════════════════════════════════════════════
+# C8 — BEHAVIOR AUDIT (FATIA 2.C)
+# ══════════════════════════════════════════════════════════════════
+
+def _run_c8_behavior_audit(result: dict) -> bool:
+    """Roda scripts/audit_behaviors.py e verifica 0 problemas criticos.
+
+    Fail-closed: qualquer comportamento sem @tool, _get_configuration_warnings,
+    sinal nao emitido, ou class_name mismatch -> FALHA.
+    """
+    import subprocess
+
+    try:
+        audit_script = ROOT / "scripts" / "audit_behaviors.py"
+        if not audit_script.exists():
+            result["criteria"]["C8_behavior_audit"]["status"] = "error"
+            result["criteria"]["C8_behavior_audit"]["detail"] = (
+                "Script scripts/audit_behaviors.py nao encontrado."
+            )
+            result["errors"].append("C8: audit script missing")
+            return False
+
+        proc = subprocess.run(
+            ["python", str(audit_script)],
+            capture_output=True,
+            text=True,
+            timeout=30,
+            cwd=str(ROOT),
+        )
+
+        output = proc.stdout + proc.stderr
+
+        # Parseia a saida para extrair metricas
+        critical_ok = "no @tool: 0" in output and "no _get_configuration_warnings: 0" in output
+        signals_ok = "signals not emitted: 0" in output
+        warnings_ok = "class_name mismatch: 0" in output
+
+        all_ok = critical_ok and signals_ok and warnings_ok
+
+        if all_ok:
+            result["criteria"]["C8_behavior_audit"]["status"] = "pass"
+            result["criteria"]["C8_behavior_audit"]["detail"] = (
+                "Todos os behaviors passaram: @tool, warnings, sinais emitidos, class_name OK."
+            )
+            return True
+        else:
+            # Extrai contagens para o detail
+            import re
+            no_tool_match = re.search(r"no @tool: (\d+)", output)
+            no_warn_match = re.search(r"no _get_configuration_warnings: (\d+)", output)
+            sig_match = re.search(r"signals not emitted: (\d+)", output)
+            mismatch_match = re.search(r"class_name mismatch: (\d+)", output)
+
+            detail_parts = []
+            if no_tool_match and int(no_tool_match.group(1)) > 0:
+                detail_parts.append(f"no @tool: {no_tool_match.group(1)}")
+            if no_warn_match and int(no_warn_match.group(1)) > 0:
+                detail_parts.append(f"no warnings: {no_warn_match.group(1)}")
+            if sig_match and int(sig_match.group(1)) > 0:
+                detail_parts.append(f"signals not emitted: {sig_match.group(1)}")
+            if mismatch_match and int(mismatch_match.group(1)) > 0:
+                detail_parts.append(f"class_name mismatch: {mismatch_match.group(1)}")
+
+            detail = "; ".join(detail_parts) if detail_parts else "Problemas detectados na auditoria de behaviors."
+            result["criteria"]["C8_behavior_audit"]["status"] = "fail"
+            result["criteria"]["C8_behavior_audit"]["detail"] = detail
+            result["errors"].append(f"C8: {detail}")
+            return False
+
+    except subprocess.TimeoutExpired:
+        result["criteria"]["C8_behavior_audit"]["status"] = "error"
+        result["criteria"]["C8_behavior_audit"]["detail"] = "Timeout ao rodar audit_behaviors.py."
+        result["errors"].append("C8: timeout")
+        return False
+    except Exception as e:
+        result["criteria"]["C8_behavior_audit"]["status"] = "error"
+        result["criteria"]["C8_behavior_audit"]["detail"] = f"Erro: {e}"
+        result["errors"].append(f"C8: excecao — {e}")
+        return False
+
+
+# ══════════════════════════════════════════════════════════════════
 # ORQUESTRADOR PRINCIPAL
 # ══════════════════════════════════════════════════════════════════
 
@@ -563,6 +645,9 @@ def run_audit(
 
     c6_ok = _run_c6(result, tool_name)
 
+    # C8 — Behavior Audit (FATIA 2.C)
+    c8_ok = _run_c8_behavior_audit(result)
+
     # C7 — Regressao Visual (opcional, via --visual)
     if visual:
         c7_ok = _run_c7_visual(result, visual_baseline, visual_threshold)
@@ -570,7 +655,7 @@ def run_audit(
         c7_ok = True  # skipped — nao conta como falha
 
     # Consolida
-    all_ok = all([c1_ok, c2_ok, c3_ok, c4_ok, c5_ok, c6_ok, c7_ok])
+    all_ok = all([c1_ok, c2_ok, c3_ok, c4_ok, c5_ok, c6_ok, c7_ok, c8_ok])
     result["exit_code"] = 0 if all_ok else 1
 
     # Grava resultado
