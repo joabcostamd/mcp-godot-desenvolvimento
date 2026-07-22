@@ -1,7 +1,7 @@
-# ARQUITETURA MCP — Godot Agent v3.5.0
+# ARQUITETURA MCP — Godot Agent v3.2.1
 
 > **Leia este documento para ENTENDER o MCP por dentro.** Não é um tutorial de uso
-> (para isso veja `GUIA_CONEXAO.md`). É o mapa do código: como as peças se encaixam,
+> (para isso veja `docs/getting-started.md`). É o mapa do código: como as peças se encaixam,
 > por que cada decisão foi tomada, e como estender o sistema sem quebrá-lo.
 >
 > **Público:** IAs agênticas e desenvolvedores que precisam modificar ou entender o MCP.
@@ -12,9 +12,19 @@
 ## 1. VISÃO GERAL — O que o MCP faz
 
 O MCP (Model Context Protocol) é uma ponte entre **linguagem natural** e **Godot Engine**.
-Ele expoe 240 ferramentas que uma IA pode chamar para criar jogos completos —
+Ele expõe **285+ ferramentas** que uma IA pode chamar para criar jogos completos —
 cenas, scripts, física, UI, áudio, partículas, exportação — sem que o usuário
 precise abrir o editor Godot ou escrever uma linha de código.
+
+### Números atuais (2026-07-22)
+- **285+ tools** MCP registradas
+- **249 behaviors** plugáveis (100% qualidade)
+- **4 jogos-exemplo** completos
+- **5 templates** de gênero
+- **3 seeds** de jogo
+- **3 blueprints** de gênero
+- **6 fases** com máquina de estados (IDEIA → PRONTO_PARA_LANCAR)
+- **135+ módulos** em `tools/`
 
 ### Fluxo de uma chamada
 
