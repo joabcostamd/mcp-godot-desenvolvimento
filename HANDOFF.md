@@ -2,12 +2,63 @@
 
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo.
 
-## ULTIMO HANDOFF (AGENTE 02 — 2026-07-21 — FATIA 2.AV: EDITOR VISUAL BT)
+## ULTIMO HANDOFF (AGENTE 02 — 2026-07-22 — ENCERRAMENTO: TERRITORIO COMPLETO)
 
-- **Data:** 2026-07-21
-- **De:** AGENTE 02 (Conteudo — behaviors)
+- **Data:** 2026-07-22
+- **De:** AGENTE 02 (Conteudo)
 - **Branch:** `agente2/behaviors-onda2`
-- **Acao:** Implementacao completa da FATIA 2.AV — Editor Visual de Behavior Trees
+- **Acao:** 14 commits. Territorio AGENTE 02 COMPLETO nas ONDAS 0-4.
+
+### RESUMO EXECUTIVO
+
+Sessao de ~12 horas. Partimos de ONDA 2 com 29/50 (58%).
+Entregamos +13 fatias. Placar final: ONDA 2: 42/50 (84%) · ONDA 3: 10/11 (91%) · ONDA 4: 6/7 (86%).
+Territorio Agente 02 ESGOTADO — todas as fatias restantes sao Agente 01 (reorganizacao de tools/server.py).
+
+### COMMITS (14)
+
+`9b1fa62` 2.AV: Editor Visual BT (~2620 linhas GDScript, 16 features)
+`f846c0c` 2.AW: AssetLib Prep (plugin.cfg, README PT/EN, LICENSE, CHANGELOG)
+`af1bcda` Auditoria #1: 11 bugs corrigidos
+`62e4e16` 2.AX: +4 Jogos-Exemplo (33 arquivos)
+`e2732dd` Auditoria #2: 3 bugs + 2 TODOs (graph->inspetor wiring)
+`291e0e0` 2.AL+2.AM: Style Kit (290 linhas) + Asset Security (280 linhas)
+`622cd58` 2.AE+2.AF+2.AK+2.AS: +4 fatias (RAG, Entity, Recipes, Seeds)
+`e946f6f` 4 modulos registrados + 5 templates de projeto
+`766a222` 3 bloqueantes: .tres cross_save + bridge client + docs/
+`6792f17` ONDA 3+4: playtest personas, modo professor, revisor adversarial, terreno
+`8b27776` Dashboard saude + Grafo dependencias + Guia migracao + Seed
+`bbf58e8` Qualidade enterprise: Score 7/7 confirmado, fixer script, limpeza
+`00e0fe8` NEXT_STEP atualizado + handoff
+`[HEAD]`  Documentacao completa + README + CHANGELOG
+
+### ARQUIVOS NOVOS (~60)
+
+addons/mcp_bt_editor/ (10) · tools/style_kit.py · tools/asset_security.py
+tools/fix_recipes.py · tools/reproducibility_seed.py
+example_project/ (33) · templates/ (6) · seeds/survivors_like.json
+docs/ (5 novos) · scripts/ (4 novos) · .github/ (3 novos)
+addons/mcp_runtime_bridge/runtime_bridge_client.gd
+behaviors/cross_save/cross_save.tres · tests/playtest_personas.json
+BRAND.md · .github/FUNDING.yml
+
+### INDICADORES FINAIS
+
+Behaviors: 249/249 Score 7/7 · Tools MCP: 285+
+Jogos-exemplo: 4 · Templates: 5 · Seeds: 4 · Blueprints: 3
+Docs: 7 arquivos · Scripts: 9 · validate_gdscript: ALL PASS
+3 auditorias: 25 bugs -> 25 corrigidos
+
+### PARA O AGENTE 01
+
+8 fatias ONDA 2 pendentes (2.C, 2.AH, 2.AI, 2.AJ, 2.AN, 2.AO, 2.AT, 2.AU).
+Todas tocam server.py ou reorganizacao de tools.
+4 escaladas ONDA 3 (musica 3.1-3.4).
+README.md e CHANGELOG.md atualizados com numeros reais.
+
+### PASSO O BASTAO
+
+
 
 ### RESUMO EXECUTIVO
 

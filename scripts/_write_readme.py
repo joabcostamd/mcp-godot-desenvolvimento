@@ -1,4 +1,7 @@
-# MCP Godot Agent v3.2.1
+#!/usr/bin/env python3
+"""Escreve o README.md completo com dados atuais."""
+
+README = r"""# MCP Godot Agent v3.2.1
 
 > **Da ideia ao lancamento. Sem pular etapas.**
 > Servidor MCP dono do processo inteiro de fazer um jogo em Godot 4.7.
@@ -150,3 +153,9 @@ python install.py
 ---
 
 **Licenca:** MIT · **Autor:** Joab Costa · **Versao:** 3.2.1 · **Atualizado:** 2026-07-22
+"""
+
+with open("README.md", "w", encoding="utf-8") as f:
+    f.write(README)
+
+print("README.md escrito com sucesso.")

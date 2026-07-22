@@ -1,4 +1,53 @@
-# CHANGELOG — mcp-godot-desenvolvimento
+# CHANGELOG — MCP Godot Agent
+
+## v3.2.1 (2026-07-22) — Editor Visual + ONDA 2~4 (AGENTE 02)
+
+### Editor Visual de Behavior Trees (FATIA 2.AV)
+- addons/mcp_bt_editor/ — 10 arquivos, ~2.620 linhas GDScript
+- 16 features: dock, paleta 249 behaviors, drag-drop, 4 portas coloridas,
+  validacao DAG, reroute, expression, auto-arrange, undo/redo, preview WS 9082,
+  GraphFrame, minimap, breakpoints, watch window
+- Integrado com discover_behaviors, mcp_dock, .tres, behavior.json
+
+### AssetLib Prep + Style Kit + Seguranca (FATIAS 2.AW, 2.AL, 2.AM)
+- addons/mcp_addon/: plugin.cfg completo, README PT/EN, LICENSE, CHANGELOG
+- tools/style_kit.py (290 linhas): 4 presets de estilo visual
+- tools/asset_security.py (280 linhas): 7 verificacoes, 8 padroes suspeitos
+
+### Jogos-Exemplo + Templates (FATIAS 2.AX)
+- example_project/: platformer (15b), rpg (20b), puzzle (10b), shooter (14b)
+- templates/: 5 generos (shooter, idle, visual novel, roguelike, tower defense)
+- seeds/: +1 survivors_like (total 4 seeds)
+
+### Infraestrutura (FATIAS 2.AE, 2.AF, 2.AK, 2.AS, 2.AQ, 2.AR, 2.AT)
+- RAG local, Entity Index, Fix Recipes (7 receitas), Reproducibility Seed
+- Context Compaction, Model Routing, Undo Unify — registrados no server.py
+- +16 tools registradas sem reorganizar grupos
+
+### Qualidade Enterprise
+- Score 7/7: 249/249 @tool, warnings, behavior.json, CHANGELOG, README, testes
+- 189/189 .tres para behaviors com parametros
+- runtime_bridge_client.gd (151 linhas) criado
+- docs/: +5 arquivos (getting-started, tools, guia-migracao, modo-professor, guia-publicacao)
+
+### ONDA 3+4 — Preparacao
+- tests/playtest_personas.json: 5 personas de playtest
+- docs/modo-professor.md: template didatico com exemplos
+- scripts/adversarial_review.py: revisor standalone (230 linhas)
+- .github/FUNDING.yml, BRAND.md, DISCUSSION_TEMPLATES/
+- ONDA 4 terreno preparado (nada publicado)
+
+### Scripts
+- scripts/project_health.py: dashboard de saude
+- scripts/behavior_deps.py: grafo de dependencias
+- scripts/fix_behavior_quality.py: fixer com --dry-run
+- scripts/adversarial_review.py: revisor adversarial
+- 9 scripts de manutencao no total
+
+### Auditorias
+- 3 auditorias completas: 25 bugs encontrados -> 25 corrigidos
+- validate_gdscript.py: todos PASS
+- 14 commits na sessao
 
 ## v4.0.0 (2026-07-21) — Arsenal Completo de Behaviors (AGENTE 02)
 
