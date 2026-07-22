@@ -231,7 +231,191 @@ Serao expandidas pelo `/plan` quando chegar a vez.
 | 2.AS | Semente de reprodutibilidade | Mesma frase, mesmo resultado. Permite testar regressao de comportamento | `[AUTO]` |
 | 2.AT | Unificar os 3 desfazer | UndoRedo + git + botao Reverter sao 3 historicos independentes hoje. Definir quem manda e mostrar **um** historico | `[SENIOR]` |
 | 2.AU | Orcamento de tempo por gate | Gate de 3 minutos ninguem usa. Teto de tempo + modo rapido/completo | `[AUTO]` |
-| 2.AV | **Editor visual de BT no Godot** | Editor dock integrado ao Godot para montar behaviors visualmente (drag-and-drop). Inspirado no LimboAI (2.9k⭐): nos, conexoes, blackboard, debug ao vivo. Permite nao-programadores ajustarem comportamentos sem codigo. GDScript puro (sem C++). | `[SENIOR]` |
-| 2.AW | **Preparar estrutura para AssetLib** | Organizar addons/ para publicacao na AssetLib oficial do Godot: plugin.cfg, icone, descricao, tags, capturas de tela, tutorial. **Sem publicar** — apenas deixar a estrutura pronta para quando a ONDA 4 chegar. | `[AUTO]` |
-| 2.AX | **+4 jogos-exemplo** | Criar 4 jogos completos usando behaviors do arsenal: (1) platformer — pulo, inimigos, moedas, (2) rpg — combate, npcs, xp, loja, (3) puzzle — combinacao, grid, (4) shooter — top-down, waves, power-ups. Cada um em `example_project/<genero>/`. Complementam o Breakout existente. | `[SENIOR]` |
+| 2.AV | **Editor visual de BT no Godot** | Dock com GraphEdit+GraphNode. Paleta com 249 behaviors. Drag-drop, conexoes validadas, debug ao vivo, exporta GDScript | `[SENIOR]` |
+| 2.AW | **Preparar estrutura para AssetLib** | plugin.cfg + icone + descricao + tags + screenshots + tutorial. Sem publicar | `[AUTO]` |
+| 2.AX | **+4 jogos-exemplo** | Platformer, RPG, Puzzle, Shooter em example_project/<genero>/ | `[SENIOR]` |
+
+
+---
+
+## Fatia 2.AV — Editor Visual de Behavior Trees
+
+**1. O que e** Um dock no editor Godot (EditorPlugin) com GraphEdit + GraphNode
+para montar behaviors visualmente: arrastar nos da paleta, conectar ports,
+editar parametros no inspetor, salvar como .tres e exportar GDScript.
+
+**2. Por que agora** E a barreira de entrada para nao-programadores. Sem editor
+visual, behaviors so existem no codigo. Com ele, qualquer pessoa monta
+comportamentos arrastando caixinhas — igual ao LimboAI (2.9k estrelas).
+
+**3. Arquivos** `addons/mcp_bt_editor/` (novo) — 8 arquivos GDScript + icons/
+
+**4. Fonte** Godot 4.7 Docs: `GraphEdit`, `GraphNode`, `EditorPlugin`.
+LimboAI v1.8.0 (arquitetura do editor). Nosso `addons/mcp_dock/` (dock existente).
+
+**5. Como fazer**
+
+Estrutura:
+```
+addons/mcp_bt_editor/
+  plugin.cfg               — Metadados do plugin
+  bt_editor_plugin.gd       — EditorPlugin (dock principal, tabs)
+  bt_editor_graph.gd        — GraphEdit com validacao de conexoes
+  bt_editor_node.gd         — GraphNode customizado (1 por behavior)
+  bt_editor_palette.gd      — Paleta com busca e categorias
+  bt_editor_inspector.gd    — Edicao de parametros do behavior
+  bt_editor_serializer.gd   — Salvar/Carregar .tres + Exportar GDScript
+  bt_editor_debugger.gd     — Debug ao vivo via WebSocket 9082
+  icons/                    — Icones por categoria
+```
+
+Sistema de tipos de porta (GraphNode slots):
+- FLOW (0): sequencia de execucao — azul
+- CONDITION (1): ramo sim/nao — amarelo
+- DATA (2): passagem de dados (blackboard) — verde
+- EVENT (3): eventos/sinais — vermelho
+
+Validacao de conexoes: `add_valid_connection_type(FLOW, FLOW)`,
+`add_valid_connection_type(FLOW, CONDITION)`, etc.
+
+Layout do dock: 3 zonas — paleta (esquerda), graph editor (centro),
+inspetor (direita/dock inferior).
+
+Integracao com projeto existente:
+- Paleta usa `discover_behaviors` tool para listar 249 behaviors
+- Titulo/descricao/icone do no vem do `behavior.json`
+- Parametros editaveis vem do `.tres` Resource
+- Debug ao vivo usa WebSocket do `mcp_dock` (porta 9082)
+- Exporta GDScript compativel com `behavior_tree` generator existente
+
+**6. Armadilhas**
+- GraphEdit lento com >100 nos — virtualizar nos fora da view
+- Conexao circular — validar grafo aciclico (DAG) antes de salvar
+- Divergencia visual vs codigo — teste de contrato: mesma arvore = mesmo GDScript
+- Behaviors sem icone — fallback: cor solida + letra da categoria
+
+**7. Criterios de aceite**
+- Dock abre/fecha via menu `Project > MCP BT Editor`
+- Paleta lista behaviors por categoria (usa discover_behaviors)
+- Drag-drop da paleta para o GraphEdit cria GraphNode com ports
+- Conexoes validadas por tipo (FLOW/CONDITION/DATA/EVENT)
+- Salvar/Carregar arvore como `.tres` Resource
+- Exportar arvore como GDScript executavel
+- Parametros de behavior editaveis no inspetor
+- Botao Play executa arvore no jogo rodando (WebSocket)
+- Debug ao vivo: nos ativos piscam (set_connection_activity)
+- Ctrl+Z / Ctrl+Y para undo/redo no grafo
+
+**8. Como provar** Criar arvore "Patrulha → Detectar → Perseguir → Atacar"
+no editor visual → exportar GDScript → compilar com `validate_gdscript` → PASS.
+
+**9. Regressao** Behaviors existentes continuam funcionando como nos filhos.
+`behavior.json` e `.gd` nao sao alterados. Editor visual e alternativa, nao
+substituicao.
+
+**10. Marcacao** `[SENIOR]` — integra 5 sistemas existentes, requer GraphEdit
+avancado, debug ao vivo, e exportacao de codigo.
+
+
+---
+
+## Fatia 2.AW — Preparar Estrutura para AssetLib
+
+**1. O que e** Organizar a pasta `addons/` com `plugin.cfg`, icone, descricao,
+tags, capturas de tela e tutorial para publicacao futura na AssetLib oficial
+do Godot. **Sem publicar** — apenas deixar pronto.
+
+**2. Por que agora** A AssetLib e o canal de descoberta numero um do Godot.
+Nodot, Phantom Camera, Dialogic — todos estao la. Sem essa preparacao, o
+projeto e invisivel para 99% dos usuarios de Godot.
+
+**3. Arquivos** `addons/mcp_addon/plugin.cfg` · icone · README com screenshots
+
+**4. Fonte** Godot Docs: Asset Library submission guidelines.
+Nodot, Phantom Camera, Dialogic (exemplos de plugin.cfg bem feito).
+
+**5. Como fazer**
+- Criar/atualizar `plugin.cfg` com nome, descricao, autor, versao, repo
+- Criar icone 128x128 PNG para a AssetLib
+- Escrever descricao curta (1 paragrafo) e longa (3 paragrafos) em PT+EN
+- Adicionar tags: `behavior`, `component`, `mcp`, `ai`, `tools`
+- Tirar 3-5 screenshots do projeto funcionando
+- Escrever README.md no formato AssetLib (instalacao, uso, exemplos)
+- Criar `addons/mcp_addon/LICENSE` e `addons/mcp_addon/CHANGELOG.md`
+
+**6. Armadilhas**
+- Nao publicar antes da ONDA 4 — a estrutura fica pronta, mas o botao
+  "Publicar" nao e apertado ainda
+- Plugin.cfg com versao desatualizada — sincronizar com CHANGELOG.md
+- Screenshot com dados pessoais ou projetos privados
+
+**7. Criterios de aceite**
+- `plugin.cfg` valido e completo
+- Icone 128x128 PNG
+- README.md com instrucoes de instalacao, uso e exemplos
+- Tags e descricao em PT+EN
+- 3+ screenshots do projeto
+
+**8. Como provar** Abrir o Godot, ir na AssetLib, verificar que o plugin.cfg
+e valido (sem publicar).
+
+**9. Regressao** Nenhuma. So adiciona arquivos de documentacao.
+
+**10. Marcacao** `[AUTO]`
+
+
+---
+
+## Fatia 2.AX — +4 Jogos-Exemplo
+
+**1. O que e** Criar 4 jogos completos e funcionais usando os behaviors do
+arsenal, cada um em `example_project/<genero>/`, para demonstrar o potencial
+do sistema.
+
+**2. Por que agora** So temos 1 exemplo (Breakout). Nodot tem 4 (FPS, RTS,
+Platformer, Multiplayer). Sem exemplos variados, ninguem acredita que o
+sistema funciona para o genero deles.
+
+**3. Arquivos** `example_project/platformer/` · `example_project/rpg/` ·
+`example_project/puzzle/` · `example_project/shooter/` (novos)
+
+**4. Fonte** Nodot (4 exemplos), seeds/ (3 seeds existentes),
+blueprints/ (3 blueprints).
+
+**5. Como fazer**
+
+Para cada jogo-exemplo:
+1. Criar pasta `example_project/<genero>/` com `project.godot`
+2. Selecionar 10-15 behaviors relevantes do arsenal
+3. Criar cenas principais (game, menu, hud, game_over)
+4. Configurar behaviors como nos filhos (composicao)
+5. Ajustar parametros via `.tres`
+6. Testar jogabilidade basica (iniciar → jogar → vencer/perder)
+7. Escrever README.md com instrucoes e lista de behaviors usados
+8. Tirar screenshot do jogo rodando
+
+Jogos:
+1. **Platformer** — pulo, inimigos que patrulham, moedas, checkpoint, bandeira
+2. **RPG** — movimento top-down, combate (hitbox/hurtbox), NPCs com dialogo, XP/nivel, loja
+3. **Puzzle** — grid match-3, score, timer, efeitos visuais
+4. **Shooter** — top-down, waves de inimigos, power-ups, score, boss
+
+**6. Armadilhas**
+- Nao reinventar behaviors — usar os existentes, nao criar novos
+- Manter escopo minimo — cada jogo e 1-2 minutos de gameplay
+- Testar no Windows (Godot 4.7) — nao assumir que funciona em outras plataformas
+
+**7. Criterios de aceite**
+- 4 pastas em `example_project/` com `project.godot` funcional
+- Cada jogo abre no Godot e roda sem erros
+- Cada jogo usa 10+ behaviors do arsenal
+- Cada jogo tem README.md com lista de behaviors
+- Screenshot de cada jogo rodando
+
+**8. Como provar** `godot --headless --quit --path example_project/<genero>`
+exit code 0 para cada um.
+
+**9. Regressao** Nenhuma. Codigo novo, pastas separadas.
+
+**10. Marcacao** `[SENIOR]` — 4 jogos completos, cada um com 10+ behaviors.
 
