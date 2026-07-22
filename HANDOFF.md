@@ -716,3 +716,25 @@ que têm o padrão completo: checkpoint → modificar → deduplicar → **write
 seguem o mesmo conjunto de arquivos do template _template/ (ex.: camera tem
 menos arquivos que physics). Precisa de uma sessão dedicada, separada de
 documentação, porque mexe em código.
+
+
+
+## Pendência: features do Agente 02 não integradas
+
+Os seguintes arquivos da branch `agente2/behaviors-onda2` NÃO foram mergeados
+porque têm conflitos com a reorganização feita no `chore/limpeza-agent-only`:
+
+- `server.py` — handlers das ONDAs 3+4 (reviewer_manage, teacher_manage,
+  playtest_manage) precisam ser reimplementados na arquitetura nova
+  (rollup-first, KW-only handlers, filtro DEPRECATED_TOOLS).
+- `core/tool_definitions.py` — definições de tools das ONDAs 3+4 precisam
+  ser registradas como ops de rollup, não como tools de topo.
+- `tools/behavior_ops.py` — operações expandidas pelo Agente 02 conflitam
+  com a reorganização de tools.
+- `auditar.py` — critérios expandidos (C1-C6) precisam ser consolidados
+  com a versão reorganizada.
+
+Branch de referência preservada: `agente2/behaviors-onda2` (commit `eef0ffe`).
+
+Todo o conteúdo não-código (behaviors, example_project, seeds, templates,
+scripts de auditoria, bt_editor, tools novas) já foi integrado com sucesso.
