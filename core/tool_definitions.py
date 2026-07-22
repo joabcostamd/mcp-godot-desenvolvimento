@@ -2481,6 +2481,25 @@ def _raw_tool_defs() -> list[Tool]:
                         "patrol_chase_attack_flee, guard_alert_chase, idle_wander_flee, boss_phases.",
             inputSchema={"type": "object", "properties": {}},
         ),
+        Tool(
+            name="discover_behaviors",
+            description="Descobre e lista behaviors do arsenal (249+ componentes plugaveis). "
+                        "Filtre por query (busca textual em nome/descricao), tag (ex: 'combate', 'input'), "
+                        "genre (ex: 'platformer', 'rpg') ou category. "
+                        "Retorna nome, versao, descricao, tags, generos, sinais e dependencias de cada behavior. "
+                        "Use para encontrar componentes reutilizaveis antes de criar logica do zero.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "Busca textual em nome e descricao (ex: 'dash', 'vida')"},
+                    "tag": {"type": "string", "description": "Filtra por tag (ex: 'combate', 'sistema', 'fisica')"},
+                    "category": {"type": "string", "description": "Filtra por genero/categoria (ex: 'platformer', 'rpg')"},
+                    "genre": {"type": "string", "description": "Alias para category"},
+                    "limit": {"type": "integer", "description": "Maximo de resultados (default 50)"},
+                },
+                "required": [],
+            },
+        ),
         # ── Performance Profiler (Onda 2) ───────────────────────
         Tool(
             name="profile_frame",

@@ -55,6 +55,11 @@
       "status": "concluida",
       "data_conclusao": "2026-07-21",
       "resultado": "4 bugs corrigidos (debug_console:ctrl_pressed→Input.is_key_pressed, particle_impact:var duplicada, player_vehicle:var duplicada, vignette:ColorRect→TextureRect). 105 behaviors com testes expandidos via scripts/expand_tests.py. Distribuicao: 0 com 1 teste, 66 com 2, 183 com >=3. Scripts: generate_doc_headers.py + expand_tests.py. audit_behaviors.py: 0 CRITICAL, 0 WARNINGS. validate_gdscript: 5/5 test sample + 4/4 bugfixes PASS."
+    },
+    "fatia_2e_discover_behaviors": {
+      "status": "concluida",
+      "data_conclusao": "2026-07-21",
+      "resultado": "Nova tool discover_behaviors no MCP (server.py). Escaneia behaviors/, le behavior.json, suporta filtros por query/tag/genre/category/limit. Retorna nome, versao, descricao, tags, generos, sinais, dependencias. 275 tools total (+1). server.py import OK. Handler registrado. Testado: query='dash'→1, genre='platformer'→10, tag='combate'→7, total→249. Cross-territory autorizado."
     }
   },
   "auditoria": {

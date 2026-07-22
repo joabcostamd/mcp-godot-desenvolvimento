@@ -79,6 +79,7 @@ TOOLSETS = {
         "setup_localization", "add_translation_string",
         "create_animation_tree",
         "behavior_tree_generate", "behavior_tree_list_templates",
+        "discover_behaviors",
         "world_describe",
         # Batch/atômico
         "batch_atomic_edit", "add_nodes_batch", "set_properties_batch",
@@ -419,6 +420,7 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "validate_project_refs", "find_usages",
         "analyze_signal_flow",
         "behavior_tree_generate", "behavior_tree_list_templates",
+        "discover_behaviors",
         "generate_project_structure",
         "world_describe",
     
@@ -1167,6 +1169,7 @@ from tools.balance_ops import (
 # ── Behavior Trees (Onda 2) ───────────────────────────────────
 from tools.behavior_ops import (
     behavior_tree_generate, behavior_tree_list_templates,
+    discover_behaviors,
 )
 
 # ── Performance Profiler (Onda 2) ──────────────────────────────
@@ -2249,6 +2252,8 @@ def _build_handlers() -> dict:
         # Behavior Trees (Onda 2)
         "behavior_tree_generate": behavior_tree_generate,
         "behavior_tree_list_templates": behavior_tree_list_templates,
+        # Behavior Discovery (FATIA 2.E)
+        "discover_behaviors": discover_behaviors,
         # Performance Profiler (Onda 2)
         "profile_frame": profile_frame,
         "profile_memory": profile_memory,

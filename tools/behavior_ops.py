@@ -263,3 +263,90 @@ def behavior_tree_list_templates() -> dict:
         "total": len(templates),
         "message": "Use behavior_tree_generate() com um template ou descreva seu proprio comportamento.",
     }
+
+
+# ── Behavior Discovery (FATIA 2.E) ───────────────────────────────
+
+def discover_behaviors(
+    query: str = "",
+    category: str = "",
+    tag: str = "",
+    genre: str = "",
+    limit: int = 50,
+) -> dict:
+    """Descobre e lista behaviors do arsenal disponivel.
+
+    Escaneia behaviors/ e le behavior.json de cada um.
+    Suporta filtros por nome (query), tag, categoria (genero) e limite.
+    Retorna lista de behaviors com metadados essenciais.
+    """
+    import json
+    import os
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parent.parent
+    behaviors_dir = root / "behaviors"
+
+    if not behaviors_dir.is_dir():
+        return {"status": "error", "message": "Diretorio behaviors/ nao encontrado."}
+
+    results = []
+    count = 0
+
+    for entry in sorted(behaviors_dir.iterdir()):
+        if not entry.is_dir():
+            continue
+        json_path = entry / "behavior.json"
+        if not json_path.exists():
+            continue
+
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            continue
+
+        name = data.get("name", entry.name)
+        desc = data.get("description_pt", "")[:120]
+        tags = data.get("tags", [])
+        genres = data.get("genres", [])
+        signals = [s["name"] for s in data.get("signals", [])]
+        deps = data.get("dependencies", [])
+        version = data.get("version", "0.0.0")
+
+        # Filtros
+        if query and query.lower() not in name.lower() and query.lower() not in desc.lower():
+            continue
+        if tag and tag.lower() not in [t.lower() for t in tags]:
+            continue
+        if category and category.lower() not in [g.lower() for g in genres]:
+            continue
+        if genre and genre.lower() not in [g.lower() for g in genres]:
+            continue
+
+        results.append({
+            "name": name,
+            "version": version,
+            "description": desc,
+            "tags": tags,
+            "genres": genres,
+            "signals": signals,
+            "dependencies": deps,
+            "path": f"behaviors/{name}/",
+        })
+        count += 1
+        if count >= limit:
+            break
+
+    return {
+        "status": "success",
+        "total": len(results),
+        "behaviors": results,
+        "filters_applied": {
+            "query": query or None,
+            "tag": tag or None,
+            "category": category or None,
+            "genre": genre or None,
+        },
+        "message": f"{len(results)} behavior(s) encontrado(s). Use 'query' para busca textual, 'tag' ou 'genre' para filtrar.",
+    }
