@@ -1,0 +1,2 @@
+"""domains/asset/examples.py"""
+EXAMPLES = {"import_texture": {"file_path": "assets/player.png"}, "import_spritesheet": {"file_path": "assets/player_ss.png", "tile_width": 64, "tile_height": 64}, "import_audio": {"file_path": "assets/explosion.wav"}, "placeholder_sprite": {}, "placeholder_atlas": {}, "bg_gradient": {}, "tileset_colors": {}, "palette": {"theme": "fantasy"}, "validate_game_ready": {"asset_path": "assets/player.png"}, "sprite_animation": {"sprite_name": "player_run", "frame_count": 4}, "license_audit": {"asset_path": "assets/player.png"}}

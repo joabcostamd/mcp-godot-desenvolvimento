@@ -1,0 +1,3 @@
+"""domains/playtest/manifest.py"""
+from registry.types import DomainManifest, OpSpec, Phase; from . import handlers
+MANIFEST = DomainManifest(domain="playtest", tool_name="playtest_manage", title="Playtest", namespace="project", version="1.0.0", description="Playtest autônomo.", phases=[Phase.POLIMENTO], annotations={}, ops=[OpSpec("self_play", handlers.self_play, "Self-play", {}, [{}]), OpSpec("regression", handlers.regression_from_recording, "Regressão de gravação", {"recording_path": {"type": "string", "required": True}}, [{"recording_path": "recordings/session1.json"}]), OpSpec("difficulty", handlers.difficulty_curve, "Curva de dificuldade", {}, [{}])], tags=["playtest"])

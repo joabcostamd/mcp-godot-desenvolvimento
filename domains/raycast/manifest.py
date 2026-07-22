@@ -1,0 +1,3 @@
+"""domains/raycast/manifest.py"""
+from registry.types import DomainManifest, OpSpec, Phase; from . import handlers
+MANIFEST = DomainManifest(domain="raycast", tool_name="raycast_manage", title="Raycast", namespace="project", version="1.0.0", description="Raycast/ShapeCast 2D.", phases=[Phase.DESIGN, Phase.PROTOTIPO], annotations={"destructiveHint": True}, ops=[OpSpec("raycast", handlers.add_raycast_2d, "Adiciona RayCast2D", {"scene_path": {"type": "string", "required": True}}, [{"scene_path": "scenes/game.tscn", "parent_node_path": "."}]), OpSpec("shapecast", handlers.add_shapecast_2d, "Adiciona ShapeCast2D", {"scene_path": {"type": "string", "required": True}}, [{"scene_path": "scenes/game.tscn", "parent_node_path": "."}])], tags=["raycast", "2D"])

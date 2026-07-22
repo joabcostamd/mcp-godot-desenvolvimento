@@ -1,0 +1,1 @@
+"""domains/playtest — Playtest autônomo."""
