@@ -15,7 +15,7 @@ if (-not (Test-Path $HandoffPath)) {
 $content = Get-Content $HandoffPath -Raw -Encoding UTF8
 if (-not $content -or $content.Trim().Length -eq 0) { exit 0 }
 
-$secoes = [regex]::Split($content, '(?=## (Handoff|Encerramento)\b)') | Where-Object { $_.Trim().Length -gt 0 }
+$secoes = [regex]::Split($content, '(?=## (?:Handoff|Encerramento)\b)') | Where-Object { $_.Trim().Length -gt 0 }
 
 $firstSectionIndex = $content.IndexOf('## Handoff')
 if ($firstSectionIndex -lt 0) { $firstSectionIndex = $content.IndexOf('## Encerramento') }
