@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/area_damage/area_damage.gd" id="1_area_damage"]
+
+[resource]
+script = ExtResource("1_area_damage")
+damage = 50
+radius = 100.0
+falloff = 0.5
+explosion_force = 300.0

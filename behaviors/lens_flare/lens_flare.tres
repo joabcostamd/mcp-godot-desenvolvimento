@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/lens_flare/lens_flare.gd" id="1_lens_flare"]
+
+[resource]
+script = ExtResource("1_lens_flare")
+flare_intensity = 1.0

@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://baudiomanager0001"]
+
+[ext_resource type="Script" path="res://behaviors/audio_manager/audio_manager.gd" id="1_am"]
+
+[node name="AudioManager" type="Node"]
+script = ExtResource("1_am")
+master_volume_db = 0.0
+music_volume_db = 0.0
+sfx_volume_db = 0.0

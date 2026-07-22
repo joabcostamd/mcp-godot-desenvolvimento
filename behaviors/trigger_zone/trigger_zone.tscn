@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://btriggerzone00001"]
+
+[ext_resource type="Script" path="res://behaviors/trigger_zone/trigger_zone.gd" id="1_tz"]
+
+[node name="TriggerZone" type="Area2D"]
+script = ExtResource("1_tz")
+trigger_group = ""
+trigger_once = false
+shape_size = Vector2(64, 64)

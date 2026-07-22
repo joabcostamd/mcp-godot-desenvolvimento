@@ -1,0 +1,48 @@
+{
+  "name": "parallax_background",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node2D com camadas de parallax. Cada camada (Sprite2D filho) rola em velocidade proporcional ao movimento da câmera. Ideal para fundos com profundidade.",
+  "description_en": "Node2D with parallax layers. Each child Sprite2D scrolls at speed proportional to camera movement. Ideal for depth backgrounds.",
+  "synonyms": {
+    "pt": [
+      "parallax",
+      "fundo",
+      "profundidade",
+      "scroll"
+    ],
+    "en": [
+      "parallax",
+      "background",
+      "depth",
+      "scroll"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "auto_scroll",
+      "type": "Vector2",
+      "description_pt": "Velocidade de scroll automático (independente da câmera).",
+      "default": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "name": "follow_camera",
+      "type": "bool",
+      "description_pt": "Se true, acompanha a câmera ativa automaticamente.",
+      "default": true
+    }
+  ],
+  "signals": [],
+  "dependencies": [],
+  "genres": [
+    "platformer",
+    "generic"
+  ],
+  "tags": [
+    "visual",
+    "parallax"
+  ]
+}

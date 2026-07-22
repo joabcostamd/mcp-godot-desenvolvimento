@@ -1,0 +1,22 @@
+{
+  "name": "l_system",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior l_system para Godot 4.7.",
+  "description_en": "l_system behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "l_system"
+    ],
+    "en": [
+      "l_system"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

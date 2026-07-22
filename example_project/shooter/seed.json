@@ -1,0 +1,28 @@
+{
+  "name": "shooter",
+  "display_name": "MCP Example — Shooter",
+  "genre": "survivors_like",
+  "blueprint_ref": "blueprints/topdown_shooter.json",
+  "description_pt": "Survivors-like top-down: mova-se com WASD, atire automaticamente, mate inimigos, colete XP, escolha upgrades a cada nivel. 14 behaviors do arsenal.",
+  "description_en": "Top-down survivors-like: move with WASD, auto-shoot, kill enemies, collect XP, choose upgrades on level up. 14 behaviors from the arsenal.",
+  "scenes": [
+    {"path": "scenes/menu.tscn", "purpose": "main_menu"},
+    {"path": "scenes/game.tscn", "purpose": "game"},
+    {"path": "scenes/upgrade.tscn", "purpose": "upgrade_select"},
+    {"path": "scenes/game_over.tscn", "purpose": "defeat"}
+  ],
+  "behaviors_used": [
+    "player_topdown", "health", "auto_aim", "fire_rate",
+    "projectile", "enemy_chase", "spawner_wave", "xp_level",
+    "upgrade", "object_pool", "defeat_condition", "floating_text",
+    "screen_shake", "camera_follow"
+  ],
+  "estimated_playtime": 15,
+  "difficulty": "hard",
+  "controls": {
+    "keyboard": "WASD ou Setas para mover. Tiro e automatico. ESC para pausar.",
+    "gamepad": "Analogico esquerdo para mover. Tiro automatico."
+  },
+  "clone_prompt_pt": "Quero um survivors-like: WASD para mover, tiro automatico, matar monstros, coletar XP, subir nivel, escolher upgrade. Sobreviver o maximo de tempo possivel.",
+  "version": "1.0.0"
+}

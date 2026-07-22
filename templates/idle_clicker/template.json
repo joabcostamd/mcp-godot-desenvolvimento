@@ -1,0 +1,23 @@
+{
+  "name": "idle_clicker",
+  "display_name_pt": "Idle Clicker",
+  "display_name_en": "Idle Clicker",
+  "genre": "idle",
+  "description_pt": "Template de jogo idle/clicker. Jogador clica para ganhar recursos, compra upgrades, desbloqueia automacao. Progressao infinita com numeros crescentes.",
+  "description_en": "Idle/clicker game template. Player clicks to earn resources, buys upgrades, unlocks automation. Infinite progression with growing numbers.",
+  "core_loop": "Clicar → Ganhar recurso → Comprar upgrade → Automatizar → Prestigio → Repetir",
+  "scene_structure": {
+    "main_menu": "Menu com titulo, Jogar, Prestigio",
+    "game": "Area de clique + Loja de upgrades + Barras de progresso + HUD de recursos",
+    "prestige": "Tela de prestigio com bonus permanentes"
+  },
+  "recommended_behaviors": [
+    "currency", "upgrade", "auto_clicker", "progress_bar",
+    "save_load", "floating_text", "achievement",
+    "idle_generator", "prestige_system", "screen_transition"
+  ],
+  "viewport": "480x270",
+  "difficulty": "easy",
+  "estimated_dev_time": "1-2 horas",
+  "version": "1.0.0"
+}

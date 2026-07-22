@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/wind_zone/wind_zone.gd" id="1_wind_zone"]
+
+[resource]
+script = ExtResource("1_wind_zone")
+wind_strength = 300.0
+turbulence = 0.0

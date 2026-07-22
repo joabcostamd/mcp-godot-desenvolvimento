@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://screenreader_support_v1"][ext_resource type="Script" path="res://behaviors/screenreader_support/screenreader_support.gd" id="1_x"][node name="ScreenreaderSupport" type="Node"]script=ExtResource("1_x")

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdaynightcyc00001"]
+
+[ext_resource type="Script" path="res://behaviors/day_night_cycle/day_night_cycle.gd" id="1_dn"]
+
+[node name="DayNightCycle" type="Node"]
+script = ExtResource("1_dn")
+cycle_duration = 300.0
+auto_start = true

@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://save_migration_v1"][ext_resource type="Script" path="res://behaviors/save_migration/save_migration.gd" id="1_x"][node name="SaveMigration" type="Node"]script=ExtResource("1_x")

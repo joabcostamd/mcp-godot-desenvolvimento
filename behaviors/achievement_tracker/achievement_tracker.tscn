@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://achievement_tracker_v1"]
+[ext_resource type="Script" path="res://behaviors/achievement_tracker/achievement_tracker.gd" id="1_at"]
+[node name="AchievementTracker" type="Node"]
+script = ExtResource("1_at")

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/destructible/destructible.gd" id="1_destructible"]
+
+[resource]
+script = ExtResource("1_destructible")
+destroy_effect = ""
+auto_detect_health = true

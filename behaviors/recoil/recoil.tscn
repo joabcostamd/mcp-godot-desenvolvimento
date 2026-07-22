@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://brecoil0000000001"]
+[ext_resource type="Script" path="res://behaviors/recoil/recoil.gd" id="1_rc"]
+[node name="Recoil" type="Node"]
+script = ExtResource("1_rc")

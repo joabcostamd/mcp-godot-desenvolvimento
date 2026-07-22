@@ -1,0 +1,70 @@
+{
+  "name": "spring_joint",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que conecta dois Node2D com uma mola física. Stiffness, damping e rest_length configuráveis. Aplica força nos dois corpos a cada frame.",
+  "description_en": "Node connecting two Node2D with a physics spring. Configurable stiffness, damping and rest_length. Applies force on both bodies each frame.",
+  "synonyms": {
+    "pt": [
+      "mola",
+      "elastico",
+      "conexao",
+      "junta"
+    ],
+    "en": [
+      "spring",
+      "elastic",
+      "joint",
+      "connection"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "anchor_a",
+      "type": "NodePath",
+      "default": ""
+    },
+    {
+      "name": "anchor_b",
+      "type": "NodePath",
+      "default": ""
+    },
+    {
+      "name": "stiffness",
+      "type": "float",
+      "range": {
+        "min": 1,
+        "max": 1000
+      },
+      "default": 100
+    },
+    {
+      "name": "damping",
+      "type": "float",
+      "range": {
+        "min": 0,
+        "max": 50
+      },
+      "default": 5
+    },
+    {
+      "name": "rest_length",
+      "type": "float",
+      "range": {
+        "min": 1,
+        "max": 1000
+      },
+      "default": 100,
+      "unit": "px"
+    }
+  ],
+  "signals": [],
+  "dependencies": [],
+  "genres": [
+    "generic"
+  ],
+  "tags": [
+    "fisica",
+    "mola"
+  ]
+}

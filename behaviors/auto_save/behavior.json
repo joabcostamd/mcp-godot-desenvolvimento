@@ -1,0 +1,22 @@
+{
+  "name": "auto_save",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior auto_save para Godot 4.7.",
+  "description_en": "auto_save behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "auto_save"
+    ],
+    "en": [
+      "auto_save"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

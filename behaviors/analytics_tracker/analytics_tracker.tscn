@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://analytics_tracker_v1"][ext_resource type="Script" path="res://behaviors/analytics_tracker/analytics_tracker.gd" id="1_x"][node name="AnalyticsTracker" type="Node"]script=ExtResource("1_x")

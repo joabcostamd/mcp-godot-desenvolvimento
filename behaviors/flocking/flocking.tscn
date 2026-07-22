@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://flocking001"]
+
+[ext_resource type="Script" uid="uid://flockingscript" path="res://behaviors/flocking/flocking.gd" id="1_flk"]
+
+[node name="Flocking" type="Node"]
+script = ExtResource("1_flk")

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/screen_flash/screen_flash.gd" id="1_screen_flash"]
+
+[resource]
+script = ExtResource("1_screen_flash")
+default_color = Color(Color.WHITE)
+default_duration = 0.3
+fade_in = 0.05
+fade_out = 0.15

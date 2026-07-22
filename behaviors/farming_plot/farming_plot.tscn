@@ -1,0 +1,1 @@
+[gd_scene load_steps=2 format=3 uid="uid://farming_plot_v1"][ext_resource type="Script" path="res://behaviors/farming_plot/farming_plot.gd" id="1_fp"][node name="FarmingPlot" type="Node2D"]script=ExtResource("1_fp")

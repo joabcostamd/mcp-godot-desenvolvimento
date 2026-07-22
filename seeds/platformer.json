@@ -1,0 +1,47 @@
+{
+  "name": "platformer",
+  "display_name": "Plataforma",
+  "genre": "platformer",
+  "blueprint_ref": "blueprints/platformer.json",
+  "description_pt": "Jogo de plataforma 2D completo: personagem com pulo, inimigos que patrulham, moedas coletáveis, checkpoint e condição de vitória. Usa 15+ behaviors do arsenal — referência de projeto completo para o gênero.",
+  "description_en": "Complete 2D platformer: character with jump, patrolling enemies, collectible coins, checkpoint, and victory condition. Uses 15+ behaviors from the arsenal — complete project reference for the genre.",
+  "scenes": [
+    {"path": "scenes/game.tscn", "purpose": "game", "description": "Cena principal: jogador, inimigos, moedas, plataformas, HUD."},
+    {"path": "scenes/menu.tscn", "purpose": "main_menu", "description": "Menu inicial com título, botão Jogar e Configurações."},
+    {"path": "scenes/victory.tscn", "purpose": "victory", "description": "Tela de vitória com score final e tempo."}
+  ],
+  "behaviors_used": [
+    {"name": "player_controller", "purpose": "Movimento horizontal, pulo, gravidade."},
+    {"name": "health", "purpose": "Vida do jogador (3 hits)."},
+    {"name": "enemy_patrol", "purpose": "Inimigos que andam entre pontos."},
+    {"name": "enemy_chase", "purpose": "Inimigo que persegue ao detectar."},
+    {"name": "collectable", "purpose": "Moedas e power-ups."},
+    {"name": "checkpoint", "purpose": "Ponto de respawn."},
+    {"name": "victory_condition", "purpose": "Chegar ao fim da fase."},
+    {"name": "defeat_condition", "purpose": "Vida zerada = derrota."},
+    {"name": "camera_follow", "purpose": "Câmera segue o jogador."},
+    {"name": "score", "purpose": "Pontuação por moedas e inimigos."},
+    {"name": "health_bar", "purpose": "HUD de vida."},
+    {"name": "damage_over_time", "purpose": "Espinhos causam dano contínuo."},
+    {"name": "ladder", "purpose": "Escadas para subir/descer."},
+    {"name": "moving_platform", "purpose": "Plataformas móveis."},
+    {"name": "screen_shake", "purpose": "Tremer tela ao tomar dano."}
+  ],
+  "assets": [
+    {"path": "assets/player.png", "type": "texture", "license": "CC0", "source": "kenney.nl (Platformer Pack)"},
+    {"path": "assets/enemy.png", "type": "texture", "license": "CC0", "source": "kenney.nl"},
+    {"path": "assets/coin.png", "type": "texture", "license": "CC0", "source": "kenney.nl"},
+    {"path": "assets/tiles.png", "type": "texture", "license": "CC0", "source": "kenney.nl"},
+    {"path": "assets/jump.wav", "type": "sound", "license": "CC0", "source": "kenney.nl"},
+    {"path": "assets/coin.wav", "type": "sound", "license": "CC0", "source": "kenney.nl"}
+  ],
+  "estimated_playtime": 10,
+  "difficulty": "medium",
+  "controls": {
+    "keyboard": "Setas ← → para andar, Espaço para pular, ESC para pausar.",
+    "gamepad": "Analógico/D-Pad para andar, A para pular.",
+    "touch": "Botões virtuais na tela."
+  },
+  "clone_prompt_pt": "Quero um jogo de plataforma 2D com pulo, inimigos que patrulham, moedas para coletar e uma bandeira no final da fase. 3 vidas. Fase com plataformas, espinhos e checkpoints.",
+  "version": "1.0.0"
+}

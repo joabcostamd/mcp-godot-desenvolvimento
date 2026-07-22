@@ -1,0 +1,22 @@
+{
+  "name": "migration_runner",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior migration_runner para Godot 4.7.",
+  "description_en": "migration_runner behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "migration_runner"
+    ],
+    "en": [
+      "migration_runner"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

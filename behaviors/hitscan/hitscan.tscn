@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://hitscan001"]
+
+[ext_resource type="Script" uid="uid://hitscanscript" path="res://behaviors/hitscan/hitscan.gd" id="1_hitscan"]
+
+[node name="Hitscan" type="RayCast2D"]
+script = ExtResource("1_hitscan")
+enabled = true
+target_position = Vector2(1000, 0)

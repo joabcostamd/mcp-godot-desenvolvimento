@@ -1,0 +1,22 @@
+{
+  "name": "profiler_hook",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior profiler_hook para Godot 4.7.",
+  "description_en": "profiler_hook behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "profiler_hook"
+    ],
+    "en": [
+      "profiler_hook"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

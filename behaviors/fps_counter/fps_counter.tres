@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/fps_counter/fps_counter.gd" id="1_fps_counter"]
+
+[resource]
+script = ExtResource("1_fps_counter")
+update_interval = 0.5
+show_min_max = true

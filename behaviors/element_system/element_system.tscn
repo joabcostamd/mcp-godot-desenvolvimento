@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://belementsys000001"]
+
+[ext_resource type="Script" path="res://behaviors/element_system/element_system.gd" id="1_el"]
+
+[node name="ElementSystem" type="Node"]
+script = ExtResource("1_el")
+entity_element = "physical"
+weakness_multiplier = 2.0
+resistance_multiplier = 0.5

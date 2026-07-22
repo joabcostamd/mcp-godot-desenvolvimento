@@ -1,0 +1,1 @@
+[gd_scene load_steps=2 format=3 uid="uid://color_blind_mode_v1"][ext_resource type="Script" path="res://behaviors/color_blind_mode/color_blind_mode.gd" id="1_cbm"][node name="ColorBlindMode" type="Node"]script=ExtResource("1_cbm")

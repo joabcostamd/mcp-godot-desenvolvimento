@@ -1,0 +1,22 @@
+{
+  "name": "tilemap_layer_manager",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior tilemap_layer_manager para Godot 4.7.",
+  "description_en": "tilemap_layer_manager behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "tilemap_layer_manager"
+    ],
+    "en": [
+      "tilemap_layer_manager"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

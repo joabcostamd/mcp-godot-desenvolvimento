@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://resource_override_v1"][ext_resource type="Script" path="res://behaviors/resource_override/resource_override.gd" id="1_x"][node name="ResourceOverride" type="Node"]script=ExtResource("1_x")

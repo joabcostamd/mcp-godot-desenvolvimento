@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/text_size/text_size.gd" id="1_text_size"]
+
+[resource]
+script = ExtResource("1_text_size")
+scale_multiplier = 1.0

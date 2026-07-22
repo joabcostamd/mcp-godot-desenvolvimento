@@ -1,0 +1,50 @@
+{
+  "name": "tutorial_overlay",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Control que exibe overlay de tutorial com passos destacados.",
+  "synonyms": {
+    "pt": [
+      "tutorial",
+      "overlay",
+      "destaque"
+    ],
+    "en": [
+      "tutorial",
+      "overlay",
+      "highlight"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "steps",
+      "type": "Array"
+    },
+    {
+      "name": "skip_enabled",
+      "type": "bool",
+      "default": true
+    }
+  ],
+  "signals": [
+    {
+      "name": "step_completed",
+      "params": [
+        {
+          "name": "index",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "tutorial_finished",
+      "params": []
+    }
+  ],
+  "genres": [
+    "generic"
+  ],
+  "tags": [
+    "tutorial"
+  ]
+}

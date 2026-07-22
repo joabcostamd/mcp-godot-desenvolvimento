@@ -1,0 +1,22 @@
+{
+  "name": "animation_layer",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior animation_layer para Godot 4.7.",
+  "description_en": "animation_layer behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "animation_layer"
+    ],
+    "en": [
+      "animation_layer"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

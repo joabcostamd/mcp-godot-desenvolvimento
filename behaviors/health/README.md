@@ -1,4 +1,4 @@
-# Health — Componente de Vida (Padrão-Ouro)
+# Health — Componente de Vida (Padrão-Ouro) v1.1
 
 Componente plugável de vida para Godot 4.7. Adicione como nó filho de qualquer
 entidade que precise tomar dano, curar ou morrer.
@@ -18,6 +18,10 @@ entidade que precise tomar dano, curar ou morrer.
 | `damage_taken` | Após tomar dano | `amount: int`, `remaining: int` |
 | `healed` | Após receber cura | `amount: int`, `current: int` |
 | `hp_changed` | Sempre que HP muda | `old_hp: int`, `new_hp: int` |
+| `first_hit` | Primeiro dano recebido | — |
+| `full` | HP atinge o máximo | — |
+| `damage_blocked` | Dano bloqueado | `amount: int` |
+| `heal_blocked` | Cura bloqueada | `amount: int` |
 
 ## Parâmetros
 
@@ -27,21 +31,27 @@ entidade que precise tomar dano, curar ou morrer.
 | `current_hp` | int | 0–9999 | 100 |
 | `invulnerable_time` | float | 0–10s | 0.0 |
 
-## Invulnerabilidade
+## Booleans de Controle (v1.1)
 
-Se `invulnerable_time > 0`, após tomar dano o componente ignora novos danos
-pelo tempo configurado. Útil para evitar dano por frame em colisões contínuas.
+| Controle | Padrão | Quando false |
+|----------|--------|-------------|
+| `damageable` | true | Ignora todo dano (invencível) |
+| `healable` | true | Ignora toda cura |
+| `killable` | true | HP mínimo = 1 (nunca morre) |
+| `revivable` | true | Impede curar após morte (morte permanente) |
 
-## Exemplo de composição
+## Multiplier (Critical Hit)
 
+`take_damage(amount, multiplier)` e `heal(amount, multiplier)` aceitam
+um segundo parâmetro opcional para dano/cura multiplicado:
+
+```gdscript
+health.take_damage(10, 2.0)  # Dano crítico: 20
+health.heal(10, 1.5)         # Cura turbinada: 15
 ```
-Inimigo (CharacterBody2D)
-  ├── health (Health)       ← este componente
-  ├── hitbox (Hitbox)       ← behavior futuro
-  └── enemy_chase (EnemyChase) ← behavior futuro
-```
 
-## Referência
+## Auto-documentação
 
-Padrão: *Game Development Patterns with Godot 4* — Composição sobre herança.
-Demo oficial: godot-demo-projects/2d/platformer.
+O componente implementa `_get_configuration_warnings()` — se `max_hp <= 0`
+ou `damageable` e `healable` estiverem ambos desabilitados, o nó mostra
+⚠️ no editor com a mensagem apropriada.

@@ -1,0 +1,86 @@
+{
+  "name": "fire_rate",
+  "description_pt": "Controlador de cadência de tiro com suporte a rajada (burst). Emite sinais fired/ready para spawners de projétil. Node puro, sem física.",
+  "description_en": "Fire rate controller with burst support. Emits fired/ready signals for projectile spawners. Pure Node, no physics.",
+  "synonyms": {
+    "pt": [
+      "cadência",
+      "cooldown",
+      "rajada",
+      "burst",
+      "disparo",
+      "tiro",
+      "intervalo",
+      "ritmo de tiro"
+    ],
+    "en": [
+      "cadence",
+      "cooldown",
+      "burst",
+      "fire",
+      "shot",
+      "interval",
+      "rate of fire",
+      "rof"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "fire_interval",
+      "type": "float",
+      "description_pt": "Intervalo entre disparos/rajadas em segundos.",
+      "range": {
+        "min": 0.05,
+        "max": 60.0
+      },
+      "default": 0.5,
+      "unit": "s"
+    },
+    {
+      "name": "burst_count",
+      "type": "int",
+      "description_pt": "Tiros por rajada. 1 = tiro único (semi-auto).",
+      "range": {
+        "min": 1,
+        "max": 20
+      },
+      "default": 1
+    },
+    {
+      "name": "burst_delay",
+      "type": "float",
+      "description_pt": "Intervalo entre tiros dentro da rajada.",
+      "range": {
+        "min": 0.01,
+        "max": 5.0
+      },
+      "default": 0.1,
+      "unit": "s"
+    }
+  ],
+  "signals": [
+    {
+      "name": "fired",
+      "description_pt": "Emitido a cada tiro individual (inclusive dentro da rajada).",
+      "params": []
+    },
+    {
+      "name": "cooldown_ready",
+      "description_pt": "Emitido quando o cooldown total termina e pode atirar novamente.",
+      "params": []
+    }
+  ],
+  "dependencies": [],
+  "genres": [
+    "topdown_shooter",
+    "platformer",
+    "bullet_hell",
+    "roguelike",
+    "tower_defense",
+    "generic"
+  ],
+  "version": "1.0.0",
+  "category": "combate",
+  "status": "implementado",
+  "godot_version": "4.7"
+}

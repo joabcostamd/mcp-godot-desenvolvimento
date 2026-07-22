@@ -1,0 +1,42 @@
+{
+  "name": "encrypted_save",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "synonyms": {
+    "pt": [
+      "save",
+      "criptografado",
+      "aes"
+    ],
+    "en": [
+      "save",
+      "encrypted",
+      "aes"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "encryption_key",
+      "type": "String",
+      "default": ""
+    }
+  ],
+  "signals": [
+    {
+      "name": "encrypted",
+      "params": []
+    },
+    {
+      "name": "decrypted",
+      "params": []
+    }
+  ],
+  "genres": [
+    "generic"
+  ],
+  "tags": [
+    "save"
+  ],
+  "description_pt": "Behavior Encrypted Save para Godot 4.7. Componente plugavel para jogos 2D.",
+  "description_en": "Encrypted Save behavior for Godot 4.7. Pluggable component for 2D games."
+}

@@ -1,0 +1,22 @@
+{
+  "name": "button_mash_protection",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior button_mash_protection para Godot 4.7.",
+  "description_en": "button_mash_protection behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "button_mash_protection"
+    ],
+    "en": [
+      "button_mash_protection"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

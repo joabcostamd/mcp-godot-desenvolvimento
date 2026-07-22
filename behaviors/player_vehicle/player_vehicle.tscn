@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bplayervehicle001"]
+
+[ext_resource type="Script" path="res://behaviors/player_vehicle/player_vehicle.gd" id="1_pv"]
+
+[node name="PlayerVehicle" type="Node"]
+script = ExtResource("1_pv")
+acceleration = 500.0
+max_speed = 400.0
+turn_rate = 3.0
+drift = 0.9
+enabled = true

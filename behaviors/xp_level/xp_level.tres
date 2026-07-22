@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/xp_level/xp_level.gd" id="1_xp_level"]
+
+[resource]
+script = ExtResource("1_xp_level")
+current_xp = 0
+current_level = 1

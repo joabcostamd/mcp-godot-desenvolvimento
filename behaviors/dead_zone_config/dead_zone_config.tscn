@@ -1,0 +1,1 @@
+[gd_scene load_steps=2 format=3 uid="uid://dead_zone_config_v1"][ext_resource type="Script" path="res://behaviors/dead_zone_config/dead_zone_config.gd" id="1_dz"][node name="DeadZoneConfig" type="Node"]script=ExtResource("1_dz")

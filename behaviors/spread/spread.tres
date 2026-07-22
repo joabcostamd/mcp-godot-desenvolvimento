@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/spread/spread.gd" id="1_spread"]
+
+[resource]
+script = ExtResource("1_spread")
+base_spread = 2.0
+spread_per_shot = 1.0
+max_spread = 15.0
+recovery_speed = 10.0

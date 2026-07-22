@@ -1,0 +1,75 @@
+{
+  "name": "fire_mode",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que gerencia modos de disparo (auto, burst, semi). Controla cadência, burst_count e modo. Emite sinal mode_changed. Integra com FireRate sibling.",
+  "description_en": "Node managing fire modes (auto, burst, semi). Controls fire rate, burst_count and mode. Emits mode_changed signal. Integrates with FireRate sibling.",
+  "synonyms": {
+    "pt": [
+      "modo_tiro",
+      "automatico",
+      "rajada",
+      "semi"
+    ],
+    "en": [
+      "fire_mode",
+      "auto",
+      "burst",
+      "semi"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "mode",
+      "type": "int",
+      "description_pt": "0=auto, 1=burst, 2=semi",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "default": 0
+    },
+    {
+      "name": "burst_count",
+      "type": "int",
+      "range": {
+        "min": 2,
+        "max": 10
+      },
+      "default": 3
+    },
+    {
+      "name": "burst_interval",
+      "type": "float",
+      "description_pt": "Intervalo entre tiros da rajada (s).",
+      "range": {
+        "min": 0.02,
+        "max": 0.5
+      },
+      "default": 0.05,
+      "unit": "s"
+    }
+  ],
+  "signals": [
+    {
+      "name": "mode_changed",
+      "params": [
+        {
+          "name": "new_mode",
+          "type": "int"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    "fire_rate"
+  ],
+  "genres": [
+    "topdown_shooter",
+    "generic"
+  ],
+  "tags": [
+    "arma",
+    "tiro"
+  ]
+}

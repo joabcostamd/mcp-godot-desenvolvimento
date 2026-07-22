@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bmainmenu0000001"]
+
+[ext_resource type="Script" path="res://behaviors/main_menu/main_menu.gd" id="1_mm"]
+
+[node name="MainMenu" type="CanvasLayer"]
+script = ExtResource("1_mm")
+play_scene = "res://scenes/game.tscn"
+settings_scene = "res://scenes/settings.tscn"
+show_quit = true
+show_settings = true

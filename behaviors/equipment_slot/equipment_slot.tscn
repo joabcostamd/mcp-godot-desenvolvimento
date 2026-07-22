@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bequipslot0000001"]
+
+[ext_resource type="Script" path="res://behaviors/equipment_slot/equipment_slot.gd" id="1_es"]
+
+[node name="EquipmentSlot" type="Node"]
+script = ExtResource("1_es")
+slot_type = "weapon"
+slot_bonus = 1.0

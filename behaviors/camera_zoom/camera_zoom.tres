@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/camera_zoom/camera_zoom.gd" id="1_camera_zoom"]
+
+[resource]
+script = ExtResource("1_camera_zoom")
+default_duration = 0.5

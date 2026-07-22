@@ -1,0 +1,54 @@
+{
+  "name": "camera_priority",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que ativa automaticamente a Camera2D parent quando ela tem a maior prioridade entre câmeras irmãs. Permite transições suaves entre câmeras. Ideal para jogos com múltiplas câmeras (cutscenes, salas).",
+  "synonyms": {
+    "pt": [
+      "camera",
+      "prioridade",
+      "transicao",
+      "ativacao"
+    ],
+    "en": [
+      "camera",
+      "priority",
+      "transition",
+      "activation"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "priority",
+      "type": "int",
+      "range": {
+        "min": 0,
+        "max": 100
+      },
+      "default": 0
+    },
+    {
+      "name": "transition_duration",
+      "type": "float",
+      "range": {
+        "min": 0.0,
+        "max": 5.0
+      },
+      "default": 0.5
+    }
+  ],
+  "signals": [
+    {
+      "name": "camera_activated",
+      "params": []
+    }
+  ],
+  "genres": [
+    "platformer",
+    "generic"
+  ],
+  "tags": [
+    "camera",
+    "prioridade"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "name": "victory_condition",
+  "description_pt": "Condição de vitória monitorando grupo de inimigos, score, tempo ou custom. check() manual ou polling automático. Emite victory_achieved.",
+  "description_en": "Victory condition monitoring enemy group, score, time, or custom. Manual check() or automatic polling. Emits victory_achieved.",
+  "synonyms": {
+    "pt": [
+      "vitoria",
+      "ganhar",
+      "win",
+      "completar"
+    ],
+    "en": [
+      "victory",
+      "win",
+      "complete"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "condition_type",
+      "type": "int",
+      "description_pt": "ALL_ENEMIES_DEAD=0, SCORE_REACHED=1, TIME_SURVIVED=2, CUSTOM=3.",
+      "default": 0
+    },
+    {
+      "name": "target_value",
+      "type": "float",
+      "description_pt": "Valor alvo (score ou tempo).",
+      "default": 0.0
+    },
+    {
+      "name": "enemy_group",
+      "type": "String",
+      "description_pt": "Grupo de inimigos para ALL_ENEMIES_DEAD.",
+      "default": "enemies"
+    }
+  ],
+  "signals": [
+    {
+      "name": "victory_achieved",
+      "description_pt": "Emitido quando a condição é satisfeita.",
+      "params": []
+    }
+  ],
+  "dependencies": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": [
+    "estrutura",
+    "vitoria",
+    "condicao"
+  ]
+}

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/spring_joint/spring_joint.gd" id="1_spring_joint"]
+
+[resource]
+script = ExtResource("1_spring_joint")
+stiffness = 100.0
+damping = 5.0
+rest_length = 100.0

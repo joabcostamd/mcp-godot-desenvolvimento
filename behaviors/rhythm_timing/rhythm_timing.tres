@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/rhythm_timing/rhythm_timing.gd" id="1_rhythm_timing"]
+
+[resource]
+script = ExtResource("1_rhythm_timing")
+bpm = 120.0
+tolerance = 0.1
+input_action = "ui_accept"

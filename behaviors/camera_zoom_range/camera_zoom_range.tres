@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/camera_zoom_range/camera_zoom_range.gd" id="1_camera_zoom_range"]
+
+[resource]
+script = ExtResource("1_camera_zoom_range")
+zoom_speed = 2.0

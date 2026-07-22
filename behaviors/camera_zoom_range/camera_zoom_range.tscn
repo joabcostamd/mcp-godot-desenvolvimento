@@ -1,0 +1,1 @@
+[gd_scene load_steps=2 format=3 uid="uid://camera_zoom_range_v1"][ext_resource type="Script" path="res://behaviors/camera_zoom_range/camera_zoom_range.gd" id="1_czr"][node name="CameraZoomRange" type="Node"]script=ExtResource("1_czr")

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/virtual_joystick/virtual_joystick.gd" id="1_virtual_joystick"]
+
+[resource]
+script = ExtResource("1_virtual_joystick")
+radius = 80.0
+dead_zone = 10.0

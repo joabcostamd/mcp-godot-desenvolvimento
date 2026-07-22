@@ -1,0 +1,74 @@
+{
+  "name": "crosshair",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node2D que renderiza uma mira (crosshair) na posição do mouse. Estilo (cross, circle, dot), cor e tamanho configuráveis. Segue o mouse globalmente.",
+  "description_en": "Node2D rendering a crosshair at mouse position. Style (cross, circle, dot), color and size configurable. Follows mouse globally.",
+  "synonyms": {
+    "pt": [
+      "mira",
+      "alvo",
+      "cursor",
+      "aim"
+    ],
+    "en": [
+      "crosshair",
+      "reticle",
+      "aim",
+      "cursor"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "crosshair_color",
+      "type": "Color",
+      "default": {
+        "r": 1,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      }
+    },
+    {
+      "name": "crosshair_size",
+      "type": "float",
+      "range": {
+        "min": 4,
+        "max": 64
+      },
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "name": "crosshair_style",
+      "type": "int",
+      "description_pt": "0=cross, 1=circle, 2=dot",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "default": 0
+    },
+    {
+      "name": "gap",
+      "type": "float",
+      "description_pt": "Espaço central da cruz (0=fechada).",
+      "range": {
+        "min": 0,
+        "max": 32
+      },
+      "default": 4,
+      "unit": "px"
+    }
+  ],
+  "signals": [],
+  "dependencies": [],
+  "genres": [
+    "topdown_shooter",
+    "generic"
+  ],
+  "tags": [
+    "mira",
+    "ui"
+  ]
+}

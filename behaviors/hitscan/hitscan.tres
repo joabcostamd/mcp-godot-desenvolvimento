@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/hitscan/hitscan.gd" id="1_hitscan"]
+
+[resource]
+script = ExtResource("1_hitscan")
+damage = 25
+max_range = 1000.0
+flash_duration = 0.05
+beam_color = Color(Color.YELLOW)

@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/dissolve/dissolve.gd" id="1_dissolve"]
+
+[resource]
+script = ExtResource("1_dissolve")
+edge_width = 0.1

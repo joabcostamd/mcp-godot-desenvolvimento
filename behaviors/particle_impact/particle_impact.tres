@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/particle_impact/particle_impact.gd" id="1_particle_impact"]
+
+[resource]
+script = ExtResource("1_particle_impact")
+default_count = 10
+spread = 30.0
+auto_free = true

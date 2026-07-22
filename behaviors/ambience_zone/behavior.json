@@ -1,0 +1,93 @@
+{
+  "name": "ambience_zone",
+  "description_pt": "Zona de som ambiente 2D. Area2D com AudioStreamPlayer2D filho. Toca ao detectar body (player) e para ao sair. Com atenuação espacial configurável.",
+  "description_en": "2D ambience sound zone. Area2D with child AudioStreamPlayer2D. Plays on body entered (player) and stops on exit. Configurable spatial attenuation.",
+  "synonyms": {
+    "pt": [
+      "ambiente",
+      "zona",
+      "som_3d",
+      "atmosfera",
+      "area_sonora"
+    ],
+    "en": [
+      "ambience",
+      "zone",
+      "3d_sound",
+      "atmosphere",
+      "sound_area"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "audio_stream",
+      "type": "AudioStream",
+      "description_pt": "Stream de áudio ambiente.",
+      "default": null
+    },
+    {
+      "name": "volume_db",
+      "type": "float",
+      "description_pt": "Volume em dB.",
+      "range": {
+        "min": -80.0,
+        "max": 24.0
+      },
+      "default": 0.0
+    },
+    {
+      "name": "max_distance",
+      "type": "float",
+      "description_pt": "Distância máxima de audição (px).",
+      "range": {
+        "min": 10.0,
+        "max": 5000.0
+      },
+      "default": 500.0,
+      "unit": "px"
+    },
+    {
+      "name": "attenuation",
+      "type": "float",
+      "description_pt": "Atenuação (0 = nenhuma, 1 = máxima).",
+      "range": {
+        "min": 0.0,
+        "max": 1.0
+      },
+      "default": 0.5
+    },
+    {
+      "name": "auto_play",
+      "type": "bool",
+      "description_pt": "Se true, toca ao iniciar (sem esperar body).",
+      "default": false
+    }
+  ],
+  "signals": [
+    {
+      "name": "entered_zone",
+      "description_pt": "Emitido quando um body entra.",
+      "params": []
+    },
+    {
+      "name": "exited_zone",
+      "description_pt": "Emitido quando um body sai.",
+      "params": []
+    }
+  ],
+  "dependencies": [
+    "audio_manager"
+  ],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": [
+    "audio",
+    "ambiente",
+    "zona",
+    "area2d"
+  ]
+}

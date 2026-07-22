@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://tilemap_layer_manager_v1"][ext_resource type="Script" path="res://behaviors/tilemap_layer_manager/tilemap_layer_manager.gd" id="1_x"][node name="TilemapLayerManager" type="Node"]script=ExtResource("1_x")

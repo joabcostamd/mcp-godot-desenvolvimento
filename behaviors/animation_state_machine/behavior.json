@@ -1,0 +1,22 @@
+{
+  "name": "animation_state_machine",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior animation_state_machine para Godot 4.7.",
+  "description_en": "animation_state_machine behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "animation_state_machine"
+    ],
+    "en": [
+      "animation_state_machine"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

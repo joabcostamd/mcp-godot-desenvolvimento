@@ -1,0 +1,69 @@
+{
+  "name": "ladder",
+  "description_pt": "Area2D que permite subir/descer escada. Detecta player e sobrepõe gravidade com climb_speed. Sai automaticamente ao chegar em top_exit ou bottom_exit.",
+  "description_en": "Area2D that allows climbing up/down. Detects player and overrides gravity with climb_speed. Auto-exits at top_exit or bottom_exit.",
+  "synonyms": {
+    "pt": [
+      "escada",
+      "subir",
+      "descer",
+      "climb",
+      "trepar"
+    ],
+    "en": [
+      "ladder",
+      "climb",
+      "ascend",
+      "descend"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "climb_speed",
+      "type": "float",
+      "range": {
+        "min": 10,
+        "max": 1000
+      },
+      "default": 150,
+      "unit": "px/s"
+    },
+    {
+      "name": "player_group",
+      "type": "String",
+      "default": "players"
+    }
+  ],
+  "signals": [
+    {
+      "name": "climbing_started",
+      "params": [
+        {
+          "name": "body",
+          "type": "Node2D"
+        }
+      ]
+    },
+    {
+      "name": "climbing_ended",
+      "params": [
+        {
+          "name": "body",
+          "type": "Node2D"
+        }
+      ]
+    }
+  ],
+  "dependencies": [],
+  "genres": [
+    "platformer",
+    "generic"
+  ],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": [
+    "escada",
+    "movimento",
+    "plataforma"
+  ]
+}

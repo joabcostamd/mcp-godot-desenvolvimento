@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/debug_console/debug_console.gd" id="1_debug_console"]
+
+[resource]
+script = ExtResource("1_debug_console")
+max_lines = 200
+auto_scroll = true
+font_size = 12

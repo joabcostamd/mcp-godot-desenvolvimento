@@ -1,0 +1,101 @@
+{
+  "name": "hurtbox",
+  "description_pt": "Área passiva que recebe dano de hitboxes externas. Aplica multiplicador de dano (headshot, armadura) e encaminha ao componente Health via NodePath. Permite múltiplas hurtboxes por entidade.",
+  "description_en": "Passive area that receives damage from external hitboxes. Applies damage multiplier (headshot, armor) and forwards to Health component via NodePath. Allows multiple hurtboxes per entity.",
+  "synonyms": {
+    "pt": [
+      "receber dano",
+      "ponto fraco",
+      "headshot",
+      "armadura",
+      "área de hit",
+      "colisão defensiva",
+      "weak spot"
+    ],
+    "en": [
+      "damage receiver",
+      "weak point",
+      "headshot",
+      "armor",
+      "hit area",
+      "defensive collision",
+      "weak spot"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "damage_multiplier",
+      "type": "float",
+      "description_pt": "Multiplicador aplicado ao dano recebido. 2.0 = dano duplo (headshot), 0.5 = metade (armadura), 0.0 = bloqueio total.",
+      "range": {
+        "min": 0.0,
+        "max": 10.0
+      },
+      "default": 1.0
+    },
+    {
+      "name": "hurt_type",
+      "type": "String",
+      "description_pt": "Tipo da hurtbox para filtragem futura (body, head, legs, shield, weak_point). Pode ser usado pelo hitbox para decidir comportamento.",
+      "default": "body"
+    },
+    {
+      "name": "health_path",
+      "type": "NodePath",
+      "description_pt": "Caminho relativo ao nó Health do dono (ex: '../Health'). Se vazio, dano é ignorado.",
+      "default": null
+    }
+  ],
+  "signals": [
+    {
+      "name": "hit_received",
+      "description_pt": "Emitido quando a hurtbox recebe um hit e aplica dano ao Health.",
+      "params": [
+        {
+          "name": "original_damage",
+          "type": "int"
+        },
+        {
+          "name": "modified_damage",
+          "type": "int"
+        },
+        {
+          "name": "hit_type",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "hit_blocked",
+      "description_pt": "Emitido quando a hurtbox recebe um hit mas o dano é bloqueado (damage_multiplier=0 ou health_path inválido).",
+      "params": [
+        {
+          "name": "original_damage",
+          "type": "int"
+        },
+        {
+          "name": "reason",
+          "type": "String"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    "health",
+    "projectile"
+  ],
+  "genres": [
+    "platformer",
+    "topdown_shooter",
+    "rpg",
+    "roguelike",
+    "fighting",
+    "metroidvania",
+    "bullet_hell",
+    "generic"
+  ],
+  "version": "1.0.0",
+  "category": "combate",
+  "status": "implementado",
+  "godot_version": "4.7"
+}

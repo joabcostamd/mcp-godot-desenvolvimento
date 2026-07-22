@@ -1,0 +1,22 @@
+{
+  "name": "data_table",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior data_table para Godot 4.7.",
+  "description_en": "data_table behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "data_table"
+    ],
+    "en": [
+      "data_table"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

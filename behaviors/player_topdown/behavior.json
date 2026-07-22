@@ -1,0 +1,94 @@
+{
+  "name": "player_topdown",
+  "description_pt": "Controle de movimento top-down para CharacterBody2D. Lê input do InputMap (ui_up/down/left/right) e aplica velocidade com aceleração e fricção configuráveis. Deve ser filho de um CharacterBody2D que chama move_and_slide().",
+  "description_en": "Top-down movement controller for CharacterBody2D. Reads input from InputMap (ui_up/down/left/right) and applies velocity with configurable acceleration and friction. Must be a child of a CharacterBody2D that calls move_and_slide().",
+  "synonyms": {
+    "pt": [
+      "movimento_topdown",
+      "andar",
+      "controlador_jogador",
+      "wasd",
+      "movimento_8_direcoes"
+    ],
+    "en": [
+      "topdown_movement",
+      "move",
+      "player_movement",
+      "wasd",
+      "8_direction_movement"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "speed",
+      "type": "float",
+      "description_pt": "Velocidade máxima (px/s).",
+      "range": {
+        "min": 10.0,
+        "max": 2000.0
+      },
+      "default": 200.0,
+      "unit": "px/s"
+    },
+    {
+      "name": "acceleration",
+      "type": "float",
+      "description_pt": "Taxa de aceleração até speed máxima (px/s²). Quanto maior, mais responsivo.",
+      "range": {
+        "min": 10.0,
+        "max": 10000.0
+      },
+      "default": 1000.0,
+      "unit": "px/s²"
+    },
+    {
+      "name": "friction",
+      "type": "float",
+      "description_pt": "Taxa de desaceleração quando sem input (px/s²). Quanto maior, mais rápido para.",
+      "range": {
+        "min": 10.0,
+        "max": 10000.0
+      },
+      "default": 1000.0,
+      "unit": "px/s²"
+    },
+    {
+      "name": "enabled",
+      "type": "bool",
+      "description_pt": "Se false, não processa input nem move.",
+      "default": true
+    }
+  ],
+  "signals": [
+    {
+      "name": "velocity_changed",
+      "description_pt": "Emitido a cada frame com a velocidade atual (útil para animações).",
+      "params": [
+        {
+          "name": "velocity",
+          "type": "Vector2"
+        }
+      ]
+    }
+  ],
+  "dependencies": [],
+  "genres": [
+    "topdown_shooter",
+    "roguelike",
+    "bullet_hell",
+    "puzzle",
+    "rpg",
+    "generic"
+  ],
+  "conflicts": [
+    "player_controller"
+  ],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": [
+    "movimento",
+    "topdown",
+    "input",
+    "jogador"
+  ]
+}

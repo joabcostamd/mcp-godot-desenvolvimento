@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/counter/counter.gd" id="1_counter"]
+
+[resource]
+script = ExtResource("1_counter")
+initial_value = 0
+min_value = 0
+max_value = 0
+step = 1

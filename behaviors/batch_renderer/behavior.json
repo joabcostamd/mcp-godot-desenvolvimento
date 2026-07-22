@@ -1,0 +1,22 @@
+{
+  "name": "batch_renderer",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior batch_renderer para Godot 4.7.",
+  "description_en": "batch_renderer behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "batch_renderer"
+    ],
+    "en": [
+      "batch_renderer"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

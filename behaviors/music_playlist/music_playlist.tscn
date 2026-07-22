@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bmusicplist000001"]
+
+[ext_resource type="Script" path="res://behaviors/music_playlist/music_playlist.gd" id="1_mp"]
+
+[node name="MusicPlaylist" type="Node"]
+script = ExtResource("1_mp")
+shuffle = false
+crossfade_duration = 0.0
+volume_db = 0.0
+auto_play = false

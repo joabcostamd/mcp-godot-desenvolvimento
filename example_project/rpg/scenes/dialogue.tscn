@@ -1,0 +1,30 @@
+[gd_scene load_steps=1 format=3 uid="uid://drpgdialogue000000000000003"]
+
+[node name="Dialogue" type="Control"]
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchor_left = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.25
+offset_bottom = 67.0
+
+[node name="NameLabel" type="Label" parent="Panel"]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 5.0
+offset_right = -10.0
+offset_bottom = 25.0
+text = "NPC Name"
+
+[node name="TextLabel" type="Label" parent="Panel"]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 30.0
+offset_right = -10.0
+offset_bottom = 62.0
+text = "Dialogo aqui..."
+autowrap_mode = 2

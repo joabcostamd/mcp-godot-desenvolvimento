@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://autoload_manager_v1"][ext_resource type="Script" path="res://behaviors/autoload_manager/autoload_manager.gd" id="1_x"][node name="AutoloadManager" type="Node"]script=ExtResource("1_x")

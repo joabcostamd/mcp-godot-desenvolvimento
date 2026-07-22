@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/encrypted_save/encrypted_save.gd" id="1_encrypted_save"]
+
+[resource]
+script = ExtResource("1_encrypted_save")
+encryption_key = ""

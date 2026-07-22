@@ -1,0 +1,22 @@
+{
+  "name": "dungeon_generator",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior dungeon_generator para Godot 4.7.",
+  "description_en": "dungeon_generator behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "dungeon_generator"
+    ],
+    "en": [
+      "dungeon_generator"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

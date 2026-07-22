@@ -1,0 +1,60 @@
+{
+  "name": "camera_path",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que move a Camera2D parent ao longo de um Path2D child. Suporta velocidade, loop e look_ahead. Ideal para cutscenes e câmeras de apresentação.",
+  "synonyms": {
+    "pt": [
+      "camera",
+      "caminho",
+      "path",
+      "trilha",
+      "cutscene"
+    ],
+    "en": [
+      "camera",
+      "path",
+      "track",
+      "cutscene"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "speed",
+      "type": "float",
+      "range": {
+        "min": 1.0,
+        "max": 1000.0
+      },
+      "default": 100.0
+    },
+    {
+      "name": "loop",
+      "type": "bool",
+      "default": false
+    }
+  ],
+  "signals": [
+    {
+      "name": "waypoint_reached",
+      "params": [
+        {
+          "name": "index",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "path_completed",
+      "params": []
+    }
+  ],
+  "genres": [
+    "platformer",
+    "generic"
+  ],
+  "tags": [
+    "camera",
+    "path"
+  ]
+}

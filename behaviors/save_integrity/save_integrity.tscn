@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://save_integrity_v1"][ext_resource type="Script" path="res://behaviors/save_integrity/save_integrity.gd" id="1_x"][node name="SaveIntegrity" type="Node"]script=ExtResource("1_x")

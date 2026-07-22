@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/game_speed_control/game_speed_control.gd" id="1_game_speed_control"]
+
+[resource]
+script = ExtResource("1_game_speed_control")
+speed_multiplier = 1.0

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/burnable/burnable.gd" id="1_burnable"]
+
+[resource]
+script = ExtResource("1_burnable")
+ignition_time = 0.5
+burn_duration = 5.0
+burn_dps = 10.0
+spread_radius = 100.0
