@@ -1,4 +1,12 @@
 {
+  "fatia_F5.13_runtime": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "3aaf160",
+    "resultado": "F5.13 — Migrar dominio runtime. Criado domains/runtime/ (6 arquivos). 6 ops: compile, run, stop, restart, launch_editor, close_editor. Nenhuma atômica nova a depreciar (ja estavam em DEPRECATED_TOOLS). Corrigido bug A01 em domains/godot/handlers.py (importlib no lugar de from server import). 240/240 regressao. AUDITORIA F5: APROVADA."
+  },
   "fatia_F5.6_vfx": {
     "status": "concluida",
     "data": "2026-07-21",

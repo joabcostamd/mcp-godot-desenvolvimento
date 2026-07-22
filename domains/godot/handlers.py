@@ -42,9 +42,12 @@ def stop_project(*, pid: int) -> dict:
 
 def wait_bridge(*, timeout_sec: float = 10.0) -> dict:
     """Espera o bridge do Godot responder."""
+    import importlib, time
     try:
-        from server import send_bridge_command, BridgeUnavailable
-    except ImportError:
+        server = importlib.import_module('server')
+        send_bridge_command = server.send_bridge_command
+        BridgeUnavailable = server.BridgeUnavailable
+    except (ImportError, AttributeError):
         return {"status": "error", "message": "Bridge não disponível neste contexto"}
     start = time.time()
     while time.time() - start < timeout_sec:
@@ -73,9 +76,12 @@ def exec_gdscript(*, code: str) -> dict:
 
 def runtime_info() -> dict:
     """Obtém FPS, draw calls, memória do jogo rodando."""
+    import importlib
     try:
-        from server import send_bridge_command, BridgeUnavailable
-    except ImportError:
+        server = importlib.import_module('server')
+        send_bridge_command = server.send_bridge_command
+        BridgeUnavailable = server.BridgeUnavailable
+    except (ImportError, AttributeError):
         return {"status": "error", "message": "Bridge não disponível"}
     try:
         result = send_bridge_command({"cmd": "runtime_info"})
