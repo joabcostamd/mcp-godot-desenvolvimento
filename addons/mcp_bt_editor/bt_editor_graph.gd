@@ -381,6 +381,7 @@ func _show_add_behavior_dialog(at_position: Vector2) -> void:
 		dialog.queue_free()
 	)
 
+	dialog.close_requested.connect(dialog.queue_free)
 	dialog.confirmed.connect(dialog.queue_free)
 	dialog.canceled.connect(dialog.queue_free)
 	add_child(dialog)
@@ -418,6 +419,8 @@ func _show_generated_code() -> void:
 	code_edit.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	dialog.add_child(code_edit)
 
+	dialog.confirmed.connect(dialog.queue_free)
+	dialog.canceled.connect(dialog.queue_free)
 	add_child(dialog)
 	dialog.popup_centered()
 

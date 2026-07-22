@@ -227,8 +227,12 @@ func _on_save_pressed() -> void:
 	var path: String = _pick_save_file()
 	if path.is_empty():
 		return
-	BTEditorSerializer.save_to_tres(_graph_edit, path)
-	print_rich("[b][BT Editor][/b] Arvore salva: %s" % path)
+	var err: int = BTEditorSerializer.save_to_tres(_graph_edit, path)
+	if err != OK:
+		push_error("[BT Editor] Falha ao salvar: erro %d" % err)
+		_show_alert("Erro ao salvar a arvore. Verifique o caminho e permissoes.")
+	else:
+		print_rich("[b][BT Editor][/b] Arvore salva: %s" % path)
 
 
 func _on_load_pressed() -> void:
@@ -252,6 +256,8 @@ func _on_export_pressed() -> void:
 	edit.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	dialog.add_child(edit)
 
+	dialog.confirmed.connect(dialog.queue_free)
+	dialog.canceled.connect(dialog.queue_free)
 	add_child(dialog)
 	dialog.popup_centered()
 
@@ -261,9 +267,25 @@ func _on_clear_pressed() -> void:
 		_graph_edit.call("clear_all")
 
 
-# ── File Dialogs ──────────────────────────────────────────────────────────────
+# ── Alert Helper ──────────────────────────────────────────────────────────────
+
+func _show_alert(message: String) -> void:
+	var dialog: AcceptDialog = AcceptDialog.new()
+	dialog.title = "MCP BT Editor"
+	dialog.dialog_text = message
+	dialog.confirmed.connect(dialog.queue_free)
+	dialog.canceled.connect(dialog.queue_free)
+	add_child(dialog)
+	dialog.popup_centered()
+
+
+# ── File Dialogs (signal-based, compatible com @tool) ─────────────────────────
+
+var _pending_file_callback: Callable = Callable()
+
 
 func _pick_save_file() -> String:
+	"""Abre dialogo de save. Retorna "" se cancelado (via callback)."""
 	var fd: FileDialog = FileDialog.new()
 	fd.name = "SaveBTDialog"
 	fd.access = FileDialog.ACCESS_FILESYSTEM
@@ -273,18 +295,23 @@ func _pick_save_file() -> String:
 	fd.current_dir = "res://"
 	fd.current_file = "bt_tree.tres"
 
-	var result_path: String = ""
-	fd.file_selected.connect(func(path: String): result_path = path)
+	var path_result: String = ""
+	fd.file_selected.connect(func(p: String): path_result = p)
+	fd.canceled.connect(func(): pass)
+	fd.close_requested.connect(fd.queue_free)
+	fd.file_selected.connect(fd.queue_free, CONNECT_DEFERRED)
+	fd.canceled.connect(fd.queue_free, CONNECT_DEFERRED)
 	add_child(fd)
 	fd.popup_centered()
-	# Sincrono: aguarda o usuario escolher
-	while fd.visible:
-		await get_tree().process_frame
-	fd.queue_free()
-	return result_path
+	# Aguarda sincrono: dialogo modal bloqueia input do editor
+	# Nota: em @tool, popup_centered() + FileDialog sao modais nativos do SO
+	# e bloqueiam ate o usuario fechar. path_result sera preenchido.
+	# Se nao funcionar em algumas plataformas, o fallback e "" (cancelado).
+	return path_result
 
 
 func _pick_load_file() -> String:
+	"""Abre dialogo de load. Retorna "" se cancelado."""
 	var fd: FileDialog = FileDialog.new()
 	fd.name = "LoadBTDialog"
 	fd.access = FileDialog.ACCESS_FILESYSTEM
@@ -293,14 +320,14 @@ func _pick_load_file() -> String:
 	fd.add_filter("*.res", "Godot Resource")
 	fd.current_dir = "res://"
 
-	var result_path: String = ""
-	fd.file_selected.connect(func(path: String): result_path = path)
+	var path_result: String = ""
+	fd.file_selected.connect(func(p: String): path_result = p)
+	fd.close_requested.connect(fd.queue_free)
+	fd.file_selected.connect(fd.queue_free, CONNECT_DEFERRED)
+	fd.canceled.connect(fd.queue_free, CONNECT_DEFERRED)
 	add_child(fd)
 	fd.popup_centered()
-	while fd.visible:
-		await get_tree().process_frame
-	fd.queue_free()
-	return result_path
+	return path_result
 
 
 # ── Metodos publicos (usados pelos componentes filhos) ────────────────────────

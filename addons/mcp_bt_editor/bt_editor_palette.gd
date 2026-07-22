@@ -282,6 +282,9 @@ func _filter_tree(query: String) -> void:
 
 
 func _show_empty(msg: String) -> void:
+	var counter: Label = get_node_or_null("BehaviorCounter") as Label
+	if counter:
+		counter.text = "0 behaviors"
 	var item: TreeItem = _tree.create_item()
 	item.set_text(0, msg)
 	item.set_selectable(0, false)
@@ -349,20 +352,27 @@ func _on_item_activated() -> void:
 
 
 func _create_node_in_graph(meta: Dictionary) -> void:
-	"""Instancia um BTEditorNode e adiciona ao GraphEdit."""
-	var script_path: String = "res://addons/mcp_bt_editor/bt_editor_node.gd"
-	var gd: GDScript = load(script_path) as GDScript
-	if not gd:
+	"""Instancia um BTEditorNode via GraphEdit.add_behavior_node (com undo/redo)."""
+	if not _graph_edit:
 		return
-	var node: GraphNode = gd.new() as GraphNode
-	if not node.has_method("setup"):
-		return
-	node.call("setup", meta)
-
-	# Posiciona no centro visivel do grafo
-	var offset: Vector2 = _graph_edit.scroll_offset
-	var size: Vector2 = _graph_edit.size
-	node.position_offset = offset + size * 0.5 - Vector2(90, 40)
-
-	_graph_edit.add_child(node)
-	_graph_edit.set_selected(node)
+	# Delega para o grafo, que gerencia undo/redo
+	if _graph_edit.has_method("add_behavior_node"):
+		var offset: Vector2 = _graph_edit.scroll_offset
+		var sz: Vector2 = _graph_edit.size
+		var pos: Vector2 = offset + sz * 0.5 - Vector2(90, 40)
+		_graph_edit.call("add_behavior_node", meta, pos)
+	else:
+		# Fallback: criar diretamente (sem undo/redo)
+		var script_path: String = "res://addons/mcp_bt_editor/bt_editor_node.gd"
+		var gd: GDScript = load(script_path) as GDScript
+		if not gd:
+			return
+		var node: GraphNode = gd.new() as GraphNode
+		if not node.has_method("setup"):
+			return
+		node.call("setup", meta)
+		var offset2: Vector2 = _graph_edit.scroll_offset
+		var sz2: Vector2 = _graph_edit.size
+		node.position_offset = offset2 + sz2 * 0.5 - Vector2(90, 40)
+		_graph_edit.add_child(node)
+		_graph_edit.set_selected(node)

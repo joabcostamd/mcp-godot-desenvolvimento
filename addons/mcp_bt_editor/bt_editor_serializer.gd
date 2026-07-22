@@ -63,7 +63,9 @@ static func load_from_tres(graph: GraphEdit, path: String) -> bool:
 	for nd in nodes_data:
 		var nd_dict: Dictionary = nd
 		var node_type: String = nd_dict.get("type", "behavior")
-		var pos: Vector2 = str_to_var("Vector2" + str(nd_dict.get("position", Vector2.ZERO)))
+		# var_to_str ja inclui o prefixo Vector2(...), str_to_var faz o parse reverso
+		var pos_str: String = nd_dict.get("position", "Vector2(0,0)")
+		var pos: Vector2 = str_to_var(pos_str) if pos_str.begins_with("Vector2") else Vector2.ZERO
 
 		var gn: GraphNode
 		match node_type:
@@ -247,7 +249,7 @@ static func _serialize_graph(graph: GraphEdit) -> Dictionary:
 	}
 
 
-static func _add_frame(graph: GraphEdit, pos: Vector2, data: Dictionary) -> GraphNode:
+static func _add_frame(graph: GraphEdit, pos: Vector2, data: Dictionary) -> GraphElement:
 	var frame: GraphFrame = GraphFrame.new()
 	frame.name = data.get("id", "GraphFrame")
 	frame.title = data.get("title", "Grupo")

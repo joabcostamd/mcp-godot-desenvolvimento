@@ -54,7 +54,7 @@ func setup(meta: Dictionary) -> void:
 	title_style.bg_color = Color(behavior_icon_color, 0.3)
 	title_style.border_color = Color(behavior_icon_color, 0.8)
 	title_style.border_width_left = 4
-	set_theme_stylebox_override("titlebar", title_style)
+	add_theme_stylebox_override("titlebar", title_style)
 
 	# Limpar slots existentes
 	_clear_slots()
