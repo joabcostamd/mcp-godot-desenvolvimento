@@ -144,6 +144,8 @@ TOOLSETS = {
         "generate_3d_asset", "generate_3d_placeholder",
         "import_asset_manifest", "create_asset_manifest",
         "download_asset", "import_downloaded_asset",
+        "create_style_kit", "validate_style_kit", "apply_style_kit", "list_style_presets",
+        "validate_asset_security", "scan_asset_directory", "asset_security_report",
         "audio_manage", "music_manage",
         "generate_audio_sfx", "generate_voice",
         "shader_manage", "shader_generate", "shader_list_templates",
@@ -1056,6 +1058,17 @@ from tools.refs_ops import (
 from tools.asset_manifest import (
     import_asset_manifest,
     create_asset_manifest,
+)
+from tools.style_kit import (
+    create_style_kit,
+    validate_style_kit,
+    apply_style_kit,
+    list_style_presets,
+)
+from tools.asset_security import (
+    validate_asset_security,
+    scan_asset_directory,
+    asset_security_report,
 )
 from tools.devsolo_ops import (
     setup_camera_2d,
@@ -2179,6 +2192,15 @@ def _build_handlers() -> dict:
         # PATCH 16: Asset Manifest
         "import_asset_manifest": import_asset_manifest,
         "create_asset_manifest": create_asset_manifest,
+        # FATIA 2.AL: Style Kit
+        "create_style_kit": create_style_kit,
+        "validate_style_kit": validate_style_kit,
+        "apply_style_kit": apply_style_kit,
+        "list_style_presets": list_style_presets,
+        # FATIA 2.AM: Asset Security
+        "validate_asset_security": validate_asset_security,
+        "scan_asset_directory": scan_asset_directory,
+        "asset_security_report": asset_security_report,
         # Onda 8: DevSolo Crítico
         "setup_camera_2d": _handle_setup_camera_2d,
         "create_navigation_region_2d": _handle_create_navigation_region_2d,
