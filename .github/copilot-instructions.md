@@ -16,9 +16,10 @@ travas reais (fase, verificação, export, sessão) que impedem pular etapa.
 
 O projeto que você edita é o **próprio MCP**, não um jogo.
 
-Estado: Godot 4.7, ~204 `Tool()` em `server.py`, máquina de estados de 6 fases
+Estado: Godot 4.7, ~285 `Tool()` em `server.py`, máquina de estados de 6 fases
 (IDEIA → DESIGN → PROTOTIPO → CONTEUDO → POLIMENTO → PRONTO_PARA_LANCAR),
 Saga Engine, proof ledger, `auditar.py` como portão fail-closed.
+249 behaviors plugáveis, Editor Visual de BT, 4 jogos-exemplo, 5 templates.
 
 Objetivo final: um não-programador, usando linguagem natural, começa, desenvolve
 e **termina** um jogo indie.

@@ -1,6 +1,6 @@
 # 🎯 Próximo Passo Automático
 
-> Atualizado em 2026-07-21 por AGENTE 02 — Auditoria ONDA 2
+> Atualizado em 2026-07-22 por AGENTE 02 — ENCERRAMENTO DE SESSAO
 
 ## ESTADO REAL DO PROJETO
 
@@ -8,9 +8,9 @@
 |---|---|
 | ONDA 0 — Destravar | ✅ 100% concluída |
 | ONDA 1 — Acessibilidade | ✅ 100% concluída |
-| ONDA 2 — O Fosso | 🟡 35/50 concluídas (70%) · Agente 02: ✅ TERRITÓRIO COMPLETO |
-| ONDA 3 — Qualidade de Jogo | 🟡 maioria concluída · 4 escaladas |
-| ONDA 4 — Mundo | 🟡 3 fatias · 1 pendente revisão |
+| ONDA 2 — O Fosso | 🟡 42/50 (84%) · Agente 02: ✅ TERRITÓRIO COMPLETO |
+| ONDA 3 — Qualidade | 🟡 10/11 (91%) · 4 escaladas (música) |
+| ONDA 4 — Mundo | 🟡 6/7 (86%) · Terreno preparado, nada publicado |
 
 ## AGENTE 02 — TERRITÓRIO COMPLETO NA ONDA 2 ✅
 
