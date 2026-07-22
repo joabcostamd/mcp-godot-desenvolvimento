@@ -1,0 +1,22 @@
+{
+  "name": "spatial_hash",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior spatial_hash para Godot 4.7.",
+  "description_en": "spatial_hash behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "spatial_hash"
+    ],
+    "en": [
+      "spatial_hash"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

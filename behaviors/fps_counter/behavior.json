@@ -1,0 +1,46 @@
+{
+  "name": "fps_counter",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Control que exibe FPS na tela. Mostra current, min, max e avg com update_interval configurável. Útil para debug de performance.",
+  "description_en": "Control displaying FPS on screen. Shows current, min, max and avg with configurable update_interval. Useful for performance debugging.",
+  "synonyms": {
+    "pt": [
+      "fps",
+      "performance",
+      "frame_rate",
+      "debug_performance"
+    ],
+    "en": [
+      "fps",
+      "framerate",
+      "performance"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "update_interval",
+      "type": "float",
+      "range": {
+        "min": 0.1,
+        "max": 5
+      },
+      "default": 0.5,
+      "unit": "s"
+    },
+    {
+      "name": "show_min_max",
+      "type": "bool",
+      "default": true
+    }
+  ],
+  "signals": [],
+  "dependencies": [],
+  "genres": [
+    "generic"
+  ],
+  "tags": [
+    "debug",
+    "performance"
+  ]
+}

@@ -1,0 +1,1 @@
+[gd_scene load_steps=2 format=3 uid="uid://racing_lap_v1"][ext_resource type="Script" path="res://behaviors/racing_lap/racing_lap.gd" id="1_rl2"][node name="RacingLap" type="Node"]script=ExtResource("1_rl2")

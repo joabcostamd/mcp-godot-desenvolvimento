@@ -1,0 +1,22 @@
+{
+  "name": "assist_mode",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior assist_mode para Godot 4.7.",
+  "description_en": "assist_mode behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "assist_mode"
+    ],
+    "en": [
+      "assist_mode"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

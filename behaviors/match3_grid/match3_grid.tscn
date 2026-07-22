@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://match3_grid_v1"]
+
+[ext_resource type="Script" path="res://behaviors/match3_grid/match3_grid.gd" id="1_m3"]
+
+[node name="Match3Grid" type="Node"]
+script = ExtResource("1_m3")
+grid_width = 8
+grid_height = 8
+gem_types = 5
+min_match = 3

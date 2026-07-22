@@ -1,0 +1,81 @@
+{
+  "name": "chromatic_aberration",
+  "description_pt": "Simulação de aberração cromática via flicker RGB no modulate do nó pai. trigger(intensity, duration) aplica oscilação rápida entre canais de cor e restaura o original. Para impacto, glitch e dano.",
+  "description_en": "Chromatic aberration simulation via RGB flicker on the parent node's modulate. trigger(intensity, duration) applies fast oscillation between color channels and restores the original. For impact, glitch, and damage effects.",
+  "synonyms": {
+    "pt": [
+      "aberração",
+      "cromatica",
+      "glitch",
+      "rgb_split",
+      "distorcao"
+    ],
+    "en": [
+      "aberration",
+      "chromatic",
+      "glitch",
+      "rgb_split",
+      "distortion"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "default_intensity",
+      "type": "float",
+      "description_pt": "Intensidade padrão do efeito (0–1).",
+      "range": {
+        "min": 0.0,
+        "max": 1.0
+      },
+      "default": 0.5
+    },
+    {
+      "name": "default_duration",
+      "type": "float",
+      "description_pt": "Duração padrão do efeito.",
+      "range": {
+        "min": 0.05,
+        "max": 3.0
+      },
+      "default": 0.3,
+      "unit": "s"
+    },
+    {
+      "name": "flicker_speed",
+      "type": "float",
+      "description_pt": "Velocidade da oscilação RGB (Hz).",
+      "range": {
+        "min": 5.0,
+        "max": 60.0
+      },
+      "default": 20.0,
+      "unit": "Hz"
+    }
+  ],
+  "signals": [
+    {
+      "name": "aberration_started",
+      "description_pt": "Emitido ao iniciar o efeito.",
+      "params": []
+    },
+    {
+      "name": "aberration_finished",
+      "description_pt": "Emitido ao terminar e restaurar modulate.",
+      "params": []
+    }
+  ],
+  "dependencies": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": [
+    "efeitos_visuais",
+    "chromatic",
+    "glitch",
+    "rgb",
+    "distorcao"
+  ]
+}

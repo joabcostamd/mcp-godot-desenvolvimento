@@ -1,0 +1,22 @@
+{
+  "name": "sprite_animator",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior sprite_animator para Godot 4.7.",
+  "description_en": "sprite_animator behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "sprite_animator"
+    ],
+    "en": [
+      "sprite_animator"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

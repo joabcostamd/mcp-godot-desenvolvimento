@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://animation_blender_v1"][ext_resource type="Script" path="res://behaviors/animation_blender/animation_blender.gd" id="1_x"][node name="AnimationBlender" type="Node"]script=ExtResource("1_x")

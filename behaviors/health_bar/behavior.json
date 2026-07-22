@@ -1,0 +1,97 @@
+{
+  "name": "health_bar",
+  "description_pt": "Barra de vida visual (ColorRect) que espelha current_hp/max_hp do Health. Busca sibling Health automaticamente ou usa target_health. Suporte a texto e interpolação suave.",
+  "description_en": "Visual health bar (ColorRect) mirroring current_hp/max_hp of Health. Auto-finds sibling Health or uses target_health. Text and smooth interpolation support.",
+  "synonyms": {
+    "pt": [
+      "vida",
+      "barra",
+      "hp",
+      "healthbar"
+    ],
+    "en": [
+      "health",
+      "bar",
+      "hp",
+      "healthbar"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "target_health",
+      "type": "NodePath",
+      "description_pt": "Caminho para o nó Health.",
+      "default": ""
+    },
+    {
+      "name": "bar_color",
+      "type": "Color",
+      "description_pt": "Cor da barra.",
+      "default": {
+        "r": 1.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 1.0
+      }
+    },
+    {
+      "name": "background_color",
+      "type": "Color",
+      "description_pt": "Cor do fundo.",
+      "default": {
+        "r": 0.2,
+        "g": 0.2,
+        "b": 0.2,
+        "a": 1.0
+      }
+    },
+    {
+      "name": "show_text",
+      "type": "bool",
+      "description_pt": "Mostrar texto HP.",
+      "default": false
+    },
+    {
+      "name": "smooth",
+      "type": "bool",
+      "description_pt": "Interpolação suave.",
+      "default": true
+    },
+    {
+      "name": "bar_width",
+      "type": "float",
+      "description_pt": "Largura da barra.",
+      "range": {
+        "min": 10,
+        "max": 1000
+      },
+      "default": 100.0
+    },
+    {
+      "name": "bar_height",
+      "type": "float",
+      "description_pt": "Altura da barra.",
+      "range": {
+        "min": 4,
+        "max": 200
+      },
+      "default": 12.0
+    }
+  ],
+  "signals": [],
+  "dependencies": [
+    "health"
+  ],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": [
+    "ui",
+    "hud",
+    "vida",
+    "barra"
+  ]
+}

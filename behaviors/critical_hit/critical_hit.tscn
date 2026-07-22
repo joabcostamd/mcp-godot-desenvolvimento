@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://criticalhit0000001"]
+
+[ext_resource type="Script" path="res://behaviors/critical_hit/critical_hit.gd" id="1_ch"]
+
+[node name="CriticalHit" type="Node"]
+script = ExtResource("1_ch")
+crit_chance = 0.1
+crit_multiplier = 2.0

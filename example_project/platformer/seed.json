@@ -1,0 +1,28 @@
+{
+  "name": "platformer",
+  "display_name": "MCP Example — Platformer",
+  "genre": "platformer",
+  "blueprint_ref": "blueprints/platformer.json",
+  "description_pt": "Jogo de plataforma 2D completo: personagem com pulo, inimigos que patrulham, moedas coletaveis, checkpoint e condicao de vitoria. Usa 15 behaviors do arsenal MCP Godot Agent.",
+  "description_en": "Complete 2D platformer: character with jump, patrolling enemies, collectible coins, checkpoint, and victory condition. Uses 15 behaviors from the MCP Godot Agent arsenal.",
+  "scenes": [
+    {"path": "scenes/menu.tscn", "purpose": "main_menu"},
+    {"path": "scenes/game.tscn", "purpose": "game"},
+    {"path": "scenes/victory.tscn", "purpose": "victory"},
+    {"path": "scenes/game_over.tscn", "purpose": "defeat"}
+  ],
+  "behaviors_used": [
+    "player_controller", "health", "enemy_patrol", "enemy_chase",
+    "collectable", "checkpoint", "victory_condition", "defeat_condition",
+    "camera_follow", "score", "health_bar", "damage_over_time",
+    "moving_platform", "screen_shake", "audio_manager"
+  ],
+  "estimated_playtime": 10,
+  "difficulty": "medium",
+  "controls": {
+    "keyboard": "Setas ← → para andar, Espaco para pular, ESC para pausar.",
+    "gamepad": "Analogico/D-Pad para andar, A/South para pular."
+  },
+  "clone_prompt_pt": "Quero um jogo de plataforma 2D com pulo, inimigos que patrulham, moedas para coletar e uma bandeira no final da fase. 3 vidas. Fase com plataformas, espinhos e checkpoints.",
+  "version": "1.0.0"
+}

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://camera_shake_v1"]
+
+[ext_resource type="Script" path="res://behaviors/camera_shake/camera_shake.gd" id="1_cs"]
+
+[node name="CameraShake" type="Node"]
+script = ExtResource("1_cs")
+amplitude = 5.0
+frequency = 10.0
+duration = 0.5
+decay = 0.8
+direction = Vector2(1, 1)

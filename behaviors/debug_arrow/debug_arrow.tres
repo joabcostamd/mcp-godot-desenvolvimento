@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/debug_arrow/debug_arrow.gd" id="1_debug_arrow"]
+
+[resource]
+script = ExtResource("1_debug_arrow")
+color = Color(Color.GREEN)
+length = 64.0

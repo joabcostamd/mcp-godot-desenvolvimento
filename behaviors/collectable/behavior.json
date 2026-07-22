@@ -1,0 +1,107 @@
+{
+  "name": "collectable",
+  "description_pt": "Componente Area2D que detecta o jogador e coleta um item (ID + quantidade), adicionando-o a um Inventory no nó pai. Suporta auto-pickup por colisão, pickup manual e atração magnética (magnet_range). Emite collected e pickup_failed.",
+  "description_en": "Area2D component that detects the player and collects an item (ID + quantity), adding it to an Inventory on the parent node. Supports auto-pickup on collision, manual pickup, and magnetic attraction (magnet_range). Emits collected and pickup_failed.",
+  "synonyms": {
+    "pt": [
+      "coletável",
+      "item",
+      "pickup",
+      "pegar",
+      "coletar",
+      "drop",
+      "loot"
+    ],
+    "en": [
+      "collectable",
+      "item",
+      "pickup",
+      "loot",
+      "drop",
+      "gather"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "item_id",
+      "type": "String",
+      "description_pt": "ID do item a ser coletado (corresponde ao item_id no Inventory).",
+      "default": ""
+    },
+    {
+      "name": "quantity",
+      "type": "int",
+      "description_pt": "Quantidade a adicionar ao inventário por coleta.",
+      "range": {
+        "min": 1,
+        "max": 999
+      },
+      "default": 1
+    },
+    {
+      "name": "auto_pickup",
+      "type": "bool",
+      "description_pt": "Se true, coleta automaticamente quando um corpo entra na área.",
+      "default": true
+    },
+    {
+      "name": "magnet_range",
+      "type": "float",
+      "description_pt": "Distância de atração magnética (0 = sem atração).",
+      "range": {
+        "min": 0.0,
+        "max": 500.0
+      },
+      "default": 0.0,
+      "unit": "px"
+    }
+  ],
+  "signals": [
+    {
+      "name": "collected",
+      "description_pt": "Emitido quando o item é coletado com sucesso.",
+      "params": [
+        {
+          "name": "item_id",
+          "type": "String"
+        },
+        {
+          "name": "quantity",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "pickup_failed",
+      "description_pt": "Emitido quando a coleta falha (inventário cheio, sem inventário, item inválido).",
+      "params": [
+        {
+          "name": "reason",
+          "type": "String"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    "inventory"
+  ],
+  "genres": [
+    "platformer",
+    "topdown_shooter",
+    "rpg",
+    "roguelike",
+    "tower_defense",
+    "metroidvania",
+    "generic"
+  ],
+  "conflicts": [],
+  "version": "1.0.1",
+  "godot_version": "4.7",
+  "tags": [
+    "progressao",
+    "coleta",
+    "item",
+    "pickup",
+    "loot"
+  ]
+}

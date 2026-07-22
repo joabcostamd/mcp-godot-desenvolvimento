@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/follow_path/follow_path.gd" id="1_follow_path"]
+
+[resource]
+script = ExtResource("1_follow_path")
+speed = 100.0
+loop = true
+look_along = false

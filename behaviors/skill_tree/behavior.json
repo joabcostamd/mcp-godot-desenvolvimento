@@ -1,0 +1,73 @@
+{
+  "name": "skill_tree",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Sistema de árvore de habilidades (skill tree). Nós conectados com custo em pontos e pré-requisitos. Desbloqueio gasta pontos e aplica bônus via CharacterStats. Suporta reset total. Inspirado em Path of Exile e RPGs de ação.",
+  "description_en": "Skill tree system. Connected nodes with point cost and prerequisites. Unlocking spends points and applies bonuses via CharacterStats. Supports full reset. Inspired by Path of Exile and action RPGs.",
+  "synonyms": {
+    "pt": [
+      "arvore_habilidades",
+      "talentos",
+      "perks",
+      "passive_tree",
+      "skill_tree",
+      "build"
+    ],
+    "en": [
+      "skill_tree",
+      "talent_tree",
+      "perks",
+      "passives",
+      "build"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "available_points",
+      "type": "int",
+      "description_pt": "Pontos disponíveis para gastar.",
+      "default": 0
+    }
+  ],
+  "signals": [
+    {
+      "name": "node_unlocked",
+      "description_pt": "Emitido quando um nó é desbloqueado.",
+      "params": [
+        {
+          "name": "node_id",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "tree_reset",
+      "description_pt": "Emitido quando a árvore é resetada.",
+      "params": []
+    },
+    {
+      "name": "points_changed",
+      "description_pt": "Emitido quando os pontos disponíveis mudam.",
+      "params": [
+        {
+          "name": "available",
+          "type": "int"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    "character_stats"
+  ],
+  "genres": [
+    "rpg",
+    "roguelike",
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": [
+    "rpg",
+    "skill_tree",
+    "progressao"
+  ]
+}

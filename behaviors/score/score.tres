@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/score/score.gd" id="1_score"]
+
+[resource]
+script = ExtResource("1_score")
+combo_multiplier = 0.1
+combo_window = 2.0

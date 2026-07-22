@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/victory_condition/victory_condition.gd" id="1_victory_condition"]
+
+[resource]
+script = ExtResource("1_victory_condition")
+target_value = 0.0
+enemy_group = "enemies"

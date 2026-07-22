@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://skeleton_ik_v1"][ext_resource type="Script" path="res://behaviors/skeleton_ik/skeleton_ik.gd" id="1_x"][node name="SkeletonIk" type="Node"]script=ExtResource("1_x")

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/player_controller/player_controller.gd" id="1_player_controller"]
+
+[resource]
+script = ExtResource("1_player_controller")
+speed = 300.0
+jump_velocity = -400.0
+gravity = 980.0
+acceleration = 1000.0
+friction = 1000.0
+kill_plane_y = 0.0
+enabled = true

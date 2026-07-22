@@ -1,0 +1,73 @@
+{
+  "name": "spread",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que aplica dispersão (spread) a projéteis. Ângulo aleatório dentro do cone de spread. Acumula spread por tiro e recupera com o tempo.",
+  "description_en": "Node applying spread to projectiles. Random angle within spread cone. Accumulates spread per shot and recovers over time.",
+  "synonyms": {
+    "pt": [
+      "dispersao",
+      "cone",
+      "precisao",
+      "bloom"
+    ],
+    "en": [
+      "spread",
+      "cone",
+      "accuracy",
+      "bloom"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "base_spread",
+      "type": "float",
+      "range": {
+        "min": 0,
+        "max": 45
+      },
+      "default": 2,
+      "unit": "graus"
+    },
+    {
+      "name": "spread_per_shot",
+      "type": "float",
+      "range": {
+        "min": 0,
+        "max": 20
+      },
+      "default": 1,
+      "unit": "graus"
+    },
+    {
+      "name": "max_spread",
+      "type": "float",
+      "range": {
+        "min": 0,
+        "max": 90
+      },
+      "default": 15,
+      "unit": "graus"
+    },
+    {
+      "name": "recovery_speed",
+      "type": "float",
+      "range": {
+        "min": 0.1,
+        "max": 100
+      },
+      "default": 10,
+      "unit": "graus/s"
+    }
+  ],
+  "signals": [],
+  "dependencies": [],
+  "genres": [
+    "topdown_shooter",
+    "generic"
+  ],
+  "tags": [
+    "mira",
+    "arma"
+  ]
+}

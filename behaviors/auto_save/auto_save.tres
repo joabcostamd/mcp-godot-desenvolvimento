@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/auto_save/auto_save.gd" id="1_auto_save"]
+
+[resource]
+script = ExtResource("1_auto_save")
+interval = 60.0
+save_on_scene_change = true

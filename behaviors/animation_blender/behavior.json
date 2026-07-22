@@ -1,0 +1,22 @@
+{
+  "name": "animation_blender",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior animation_blender para Godot 4.7.",
+  "description_en": "animation_blender behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "animation_blender"
+    ],
+    "en": [
+      "animation_blender"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bglitch000000001"]
+
+[ext_resource type="Script" path="res://behaviors/glitch/glitch.gd" id="1_gl"]
+
+[node name="Glitch" type="Node"]
+script = ExtResource("1_gl")
+default_intensity = 0.5
+default_duration = 0.3
+max_offset = 10.0
+flicker_speed = 20.0

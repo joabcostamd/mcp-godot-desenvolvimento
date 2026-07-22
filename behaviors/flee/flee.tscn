@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://flee001"]
+
+[ext_resource type="Script" uid="uid://fleeescript" path="res://behaviors/flee/flee.gd" id="1_flee"]
+
+[node name="Flee" type="Node"]
+script = ExtResource("1_flee")

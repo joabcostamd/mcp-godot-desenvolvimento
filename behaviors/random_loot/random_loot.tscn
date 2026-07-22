@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://random_loot_v1"]
+[ext_resource type="Script" path="res://behaviors/random_loot/random_loot.gd" id="1_rl"]
+[node name="RandomLoot" type="Node"]
+script = ExtResource("1_rl")
+loot_table = []

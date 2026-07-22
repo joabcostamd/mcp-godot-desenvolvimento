@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bsfxplayer0000001"]
+
+[ext_resource type="Script" path="res://behaviors/sfx_player/sfx_player.gd" id="1_sp"]
+
+[node name="SfxPlayer" type="Node"]
+script = ExtResource("1_sp")
+volume_db = 0.0
+pitch_scale = 1.0
+bus = "SFX"
+auto_play = false

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/scene_transition/scene_transition.gd" id="1_scene_transition"]
+
+[resource]
+script = ExtResource("1_scene_transition")
+fade_color = Color(Color.BLACK)
+default_duration = 0.5

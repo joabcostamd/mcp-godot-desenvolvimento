@@ -1,0 +1,22 @@
+{
+  "name": "draw_call_optimizer",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior draw_call_optimizer para Godot 4.7.",
+  "description_en": "draw_call_optimizer behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "draw_call_optimizer"
+    ],
+    "en": [
+      "draw_call_optimizer"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

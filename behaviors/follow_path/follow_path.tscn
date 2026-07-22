@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfollowpath000001"]
+
+[ext_resource type="Script" path="res://behaviors/follow_path/follow_path.gd" id="1_fp"]
+
+[node name="FollowPath" type="Node"]
+script = ExtResource("1_fp")

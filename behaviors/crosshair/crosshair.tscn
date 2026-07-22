@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://bcrosshair0000001"]
+[ext_resource type="Script" path="res://behaviors/crosshair/crosshair.gd" id="1_ch"]
+[node name="Crosshair" type="Node2D"]
+script = ExtResource("1_ch")

@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://dungeon_generator_v1"][ext_resource type="Script" path="res://behaviors/dungeon_generator/dungeon_generator.gd" id="1_x"][node name="DungeonGenerator" type="Node"]script=ExtResource("1_x")

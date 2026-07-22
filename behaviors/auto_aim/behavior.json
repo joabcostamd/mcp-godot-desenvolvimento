@@ -1,0 +1,22 @@
+{
+  "name": "auto_aim",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior auto_aim para Godot 4.7.",
+  "description_en": "auto_aim behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "auto_aim"
+    ],
+    "en": [
+      "auto_aim"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

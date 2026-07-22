@@ -1,0 +1,46 @@
+{
+  "name": "survivors_like",
+  "display_name": "Survivors-Like",
+  "genre": "survivors_like",
+  "blueprint_ref": "blueprints/topdown_shooter.json",
+  "description_pt": "Jogo survivors-like top-down: WASD para mover, tiro automatico, mate inimigos, colete XP, escolha upgrades a cada nivel. 14 behaviors do arsenal. Referencia completa para o genero.",
+  "description_en": "Top-down survivors-like: WASD to move, auto-shoot, kill enemies, collect XP, choose upgrades on level up. 14 behaviors from the arsenal. Complete reference for the genre.",
+  "scenes": [
+    {"path": "scenes/menu.tscn", "purpose": "main_menu", "description": "Menu com titulo e botao Sobreviver."},
+    {"path": "scenes/game.tscn", "purpose": "game", "description": "Arena + Player + Spawner + HUD (HP, XP, Timer)."},
+    {"path": "scenes/upgrade.tscn", "purpose": "upgrade_select", "description": "Tela de escolha de upgrade (3 opcoes aleatorias)."},
+    {"path": "scenes/game_over.tscn", "purpose": "defeat", "description": "Tela de derrota com estatisticas da run."}
+  ],
+  "behaviors_used": [
+    {"name": "player_topdown", "purpose": "Movimento 8 direcoes (WASD)."},
+    {"name": "health", "purpose": "Vida do jogador (100 HP base)."},
+    {"name": "auto_aim", "purpose": "Mira automatica no inimigo mais proximo."},
+    {"name": "fire_rate", "purpose": "Cadencia de tiro (0.5s entre disparos)."},
+    {"name": "projectile", "purpose": "Projetil que causa 10 de dano."},
+    {"name": "enemy_chase", "purpose": "Inimigos perseguem o jogador (speed 80)."},
+    {"name": "spawner_wave", "purpose": "Ondas de inimigos a cada 30s."},
+    {"name": "xp_level", "purpose": "Coletar XP para subir nivel."},
+    {"name": "upgrade", "purpose": "8 opcoes de upgrade (dano, speed, cadencia, etc.)."},
+    {"name": "object_pool", "purpose": "Pool de projeteis (max 200) e inimigos (max 100)."},
+    {"name": "defeat_condition", "purpose": "HP=0 dispara derrota."},
+    {"name": "floating_text", "purpose": "Numeros de dano flutuantes (amarelo)."},
+    {"name": "screen_shake", "purpose": "Tremer tela ao tomar dano >20."},
+    {"name": "camera_follow", "purpose": "Camera segue jogador com damping 0.1."}
+  ],
+  "assets": [
+    {"path": "assets/player.png", "type": "texture", "license": "CC0", "source": "kenney.nl"},
+    {"path": "assets/enemy_basic.png", "type": "texture", "license": "CC0", "source": "kenney.nl"},
+    {"path": "assets/xp_gem.png", "type": "texture", "license": "CC0", "source": "kenney.nl"},
+    {"path": "assets/bullet.png", "type": "texture", "license": "CC0", "source": "kenney.nl"},
+    {"path": "assets/shoot.wav", "type": "sound", "license": "CC0", "source": "kenney.nl"},
+    {"path": "assets/level_up.wav", "type": "sound", "license": "CC0", "source": "kenney.nl"}
+  ],
+  "estimated_playtime": 15,
+  "difficulty": "hard",
+  "controls": {
+    "keyboard": "WASD ou Setas para mover. Tiro automatico. ESC para pausar/upgrade.",
+    "gamepad": "Analogico esquerdo para mover. Tiro automatico."
+  },
+  "clone_prompt_pt": "Quero um survivors-like: WASD para mover, tiro automatico, matar monstros, coletar XP, subir nivel, escolher upgrade entre 3 opcoes. Sobreviver o maximo de tempo. Inimigos ficam mais rapidos e numerosos com o tempo.",
+  "version": "1.0.0"
+}

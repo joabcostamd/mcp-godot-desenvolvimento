@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/fishing_cast/fishing_cast.gd" id="1_fishing_cast"]
+
+[resource]
+script = ExtResource("1_fishing_cast")
+cast_power = 1.0
+minigame_difficulty = 1.0

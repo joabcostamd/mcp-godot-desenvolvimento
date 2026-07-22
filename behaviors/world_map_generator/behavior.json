@@ -1,0 +1,22 @@
+{
+  "name": "world_map_generator",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior world_map_generator para Godot 4.7.",
+  "description_en": "world_map_generator behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "world_map_generator"
+    ],
+    "en": [
+      "world_map_generator"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

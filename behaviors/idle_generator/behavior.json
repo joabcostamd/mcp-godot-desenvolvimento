@@ -1,0 +1,125 @@
+{
+  "name": "idle_generator",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que gera recursos automaticamente ao longo do tempo (idle/clicker). Acumula até max_storage, transfere para Currency sibling via collect(). Suporta upgrade com custo escalável que aumenta a taxa de produção. Ideal para jogos idle, clicker e sistemas de produção passiva.",
+  "description_en": "Node that generates resources automatically over time (idle/clicker). Accumulates up to max_storage, transfers to Currency sibling via collect(). Supports upgrade with scalable cost that increases production rate. Ideal for idle games, clickers, and passive production systems.",
+  "synonyms": {
+    "pt": [
+      "idle",
+      "clicker",
+      "gerador",
+      "producao",
+      "passivo",
+      "incremental",
+      "fabrica"
+    ],
+    "en": [
+      "idle",
+      "clicker",
+      "generator",
+      "production",
+      "passive",
+      "incremental",
+      "factory"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "resource_per_second",
+      "type": "float",
+      "description_pt": "Taxa base de produção (unidades/segundo) no nível 1.",
+      "range": {
+        "min": 0.1,
+        "max": 1000.0
+      },
+      "default": 1.0
+    },
+    {
+      "name": "max_storage",
+      "type": "float",
+      "description_pt": "Capacidade máxima de armazenamento antes de parar de acumular.",
+      "range": {
+        "min": 1.0,
+        "max": 1000000.0
+      },
+      "default": 100.0
+    },
+    {
+      "name": "upgrade_cost",
+      "type": "int",
+      "description_pt": "Custo base (em moeda) para o primeiro upgrade.",
+      "range": {
+        "min": 1,
+        "max": 999999
+      },
+      "default": 10
+    },
+    {
+      "name": "upgrade_cost_multiplier",
+      "type": "float",
+      "description_pt": "Multiplicador do custo a cada upgrade (ex: 1.5 = +50% por nível).",
+      "range": {
+        "min": 1.0,
+        "max": 10.0
+      },
+      "default": 1.5
+    },
+    {
+      "name": "upgrade_rate_multiplier",
+      "type": "float",
+      "description_pt": "Multiplicador da taxa de produção a cada upgrade.",
+      "range": {
+        "min": 1.0,
+        "max": 5.0
+      },
+      "default": 2.0
+    }
+  ],
+  "signals": [
+    {
+      "name": "generated",
+      "description_pt": "Emitido ao transferir recursos para Currency.",
+      "params": [
+        {
+          "name": "amount",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "storage_full",
+      "description_pt": "Emitido quando o armazenamento atinge o máximo.",
+      "params": []
+    },
+    {
+      "name": "upgraded",
+      "description_pt": "Emitido ao realizar upgrade com sucesso.",
+      "params": [
+        {
+          "name": "new_level",
+          "type": "int"
+        },
+        {
+          "name": "new_rate",
+          "type": "float"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    "currency"
+  ],
+  "genres": [
+    "idle",
+    "clicker",
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": [
+    "idle",
+    "clicker",
+    "gerador",
+    "producao"
+  ]
+}

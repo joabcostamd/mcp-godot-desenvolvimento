@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bvictorycond00001"]
+
+[ext_resource type="Script" path="res://behaviors/victory_condition/victory_condition.gd" id="1_vc"]
+
+[node name="VictoryCondition" type="Node"]
+script = ExtResource("1_vc")
+condition_type = 0
+target_value = 0.0
+enemy_group = "enemies"

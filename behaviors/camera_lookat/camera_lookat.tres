@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/camera_lookat/camera_lookat.gd" id="1_camera_lookat"]
+
+[resource]
+script = ExtResource("1_camera_lookat")
+look_offset = Vector2(Vector2.ZERO)
+damping = 0.1

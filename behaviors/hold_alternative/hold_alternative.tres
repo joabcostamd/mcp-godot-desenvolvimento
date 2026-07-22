@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/hold_alternative/hold_alternative.gd" id="1_hold_alternative"]
+
+[resource]
+script = ExtResource("1_hold_alternative")
+hold_threshold = 0.5

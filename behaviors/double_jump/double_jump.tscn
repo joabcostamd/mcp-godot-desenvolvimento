@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdoublejump00001"]
+
+[ext_resource type="Script" path="res://behaviors/double_jump/double_jump.gd" id="1_dj"]
+
+[node name="DoubleJump" type="Node"]
+script = ExtResource("1_dj")
+jump_count = 2
+jump_velocity = -400.0
+coyote_time = 0.1
+enabled = true

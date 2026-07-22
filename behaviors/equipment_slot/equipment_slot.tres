@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/equipment_slot/equipment_slot.gd" id="1_equipment_slot"]
+
+[resource]
+script = ExtResource("1_equipment_slot")
+slot_type = "weapon"
+slot_bonus = 1.0

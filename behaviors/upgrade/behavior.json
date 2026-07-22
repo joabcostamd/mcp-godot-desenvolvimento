@@ -1,0 +1,88 @@
+{
+  "name": "upgrade",
+  "description_pt": "Sistema de upgrade ao subir de nível (estilo Survivors-like). Escuta leveled_up do XPLevel irmão, oferece escolhas aleatórias de upgrades, aplica o escolhido com nível máximo por opção. Emite choices_ready e upgrade_applied.",
+  "description_en": "Level-up upgrade system (Survivors-like). Listens to leveled_up from sibling XPLevel, offers random upgrade choices, applies the selected one with max level per option. Emits choices_ready and upgrade_applied.",
+  "synonyms": {
+    "pt": [
+      "melhoria",
+      "evolução",
+      "skill",
+      "poder",
+      "talento",
+      "perk",
+      "atributo"
+    ],
+    "en": [
+      "upgrade",
+      "skill",
+      "power",
+      "talent",
+      "perk",
+      "attribute",
+      "ability"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "upgrade_options",
+      "type": "Array",
+      "description_pt": "Lista de upgrades disponíveis: [{id, name, max_level, effects: [{stat, value}]}].",
+      "default": []
+    },
+    {
+      "name": "choices_per_level",
+      "type": "int",
+      "description_pt": "Quantas opções mostrar por level up.",
+      "range": {
+        "min": 1,
+        "max": 10
+      },
+      "default": 3
+    }
+  ],
+  "signals": [
+    {
+      "name": "choices_ready",
+      "description_pt": "Emitido quando há opções de upgrade disponíveis após level up.",
+      "params": [
+        {
+          "name": "options",
+          "type": "Array"
+        }
+      ]
+    },
+    {
+      "name": "upgrade_applied",
+      "description_pt": "Emitido quando um upgrade é aplicado com sucesso.",
+      "params": [
+        {
+          "name": "upgrade_id",
+          "type": "String"
+        },
+        {
+          "name": "new_level",
+          "type": "int"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    "xp_level"
+  ],
+  "genres": [
+    "roguelike",
+    "rpg",
+    "idle",
+    "generic"
+  ],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": [
+    "progressao",
+    "upgrade",
+    "skill",
+    "level",
+    "survivors"
+  ]
+}

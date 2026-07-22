@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://profiler_hook_v1"][ext_resource type="Script" path="res://behaviors/profiler_hook/profiler_hook.gd" id="1_x"][node name="ProfilerHook" type="Node"]script=ExtResource("1_x")

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bskilltree0000001"]
+
+[ext_resource type="Script" path="res://behaviors/skill_tree/skill_tree.gd" id="1_sk"]
+
+[node name="SkillTree" type="Node"]
+script = ExtResource("1_sk")
+available_points = 0

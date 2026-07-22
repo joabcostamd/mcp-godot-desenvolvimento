@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dinventory00000000000001"]
+
+[ext_resource type="Script" path="res://behaviors/inventory/inventory.gd" id="1_inventory"]
+
+[node name="Inventory" type="Node"]
+script = ExtResource("1_inventory")
+slot_count = 20
+max_stack = 99

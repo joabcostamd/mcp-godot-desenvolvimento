@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/dungeon_generator/dungeon_generator.gd" id="1_dungeon_generator"]
+
+[resource]
+script = ExtResource("1_dungeon_generator")
+room_count = 10
+seed_val = -1

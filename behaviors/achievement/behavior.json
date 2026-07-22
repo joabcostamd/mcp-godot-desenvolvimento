@@ -1,0 +1,77 @@
+{
+  "name": "achievement",
+  "description_pt": "Sistema de conquistas com condições rastreáveis. Auto-detecta Inventory, Currency e XPLevel irmãos. Desbloqueia quando a condição é atingida. Emite unlocked e progress_updated.",
+  "description_en": "Achievement system with trackable conditions. Auto-detects sibling Inventory, Currency, and XPLevel. Unlocks when condition is met. Emits unlocked and progress_updated.",
+  "synonyms": {
+    "pt": [
+      "conquista",
+      "troféu",
+      "medalha",
+      "desafio",
+      "meta"
+    ],
+    "en": [
+      "achievement",
+      "trophy",
+      "badge",
+      "challenge",
+      "goal",
+      "milestone"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "achievements",
+      "type": "Array",
+      "description_pt": "Lista de conquistas: [{id, name, condition: {type: collect|currency|level, target_id, required}}].",
+      "default": []
+    }
+  ],
+  "signals": [
+    {
+      "name": "unlocked",
+      "description_pt": "Emitido quando uma conquista é desbloqueada.",
+      "params": [
+        {
+          "name": "achievement_id",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "progress_updated",
+      "description_pt": "Emitido quando o progresso de uma conquista muda.",
+      "params": [
+        {
+          "name": "achievement_id",
+          "type": "String"
+        },
+        {
+          "name": "current",
+          "type": "int"
+        },
+        {
+          "name": "required",
+          "type": "int"
+        }
+      ]
+    }
+  ],
+  "dependencies": [],
+  "genres": [
+    "platformer",
+    "topdown_shooter",
+    "rpg",
+    "roguelike",
+    "generic"
+  ],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": [
+    "progressao",
+    "conquista",
+    "achievement",
+    "trophy"
+  ]
+}

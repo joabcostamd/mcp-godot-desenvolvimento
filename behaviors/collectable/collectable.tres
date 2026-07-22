@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/collectable/collectable.gd" id="1_collectable"]
+
+[resource]
+script = ExtResource("1_collectable")
+item_id = ""
+quantity = 1
+auto_pickup = true
+magnet_range = 0.0

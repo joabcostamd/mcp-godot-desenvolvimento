@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfreezeframe00001"]
+
+[ext_resource type="Script" path="res://behaviors/freeze_frame/freeze_frame.gd" id="1_ff"]
+
+[node name="FreezeFrame" type="Node"]
+script = ExtResource("1_ff")
+default_duration = 0.3
+restore_duration = 0.1

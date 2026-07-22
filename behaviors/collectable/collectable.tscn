@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://collectable000000001"]
+
+[ext_resource type="Script" path="res://behaviors/collectable/collectable.gd" id="1_collectable"]
+
+[node name="Collectable" type="Area2D"]
+script = ExtResource("1_collectable")
+item_id = ""
+quantity = 1
+auto_pickup = true
+magnet_range = 0.0

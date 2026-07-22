@@ -1,0 +1,56 @@
+{
+  "name": "unlockable",
+  "description_pt": "Metaprogression: desbloqueia conteúdo baseado em condições (achievement, level, currency). Persiste entre sessões. Auto-detecta Achievement, XPLevel e Currency irmãos. Emite unlocked.",
+  "description_en": "Metaprogression: unlocks content based on conditions (achievement, level, currency). Persists across sessions. Auto-detects sibling Achievement, XPLevel, and Currency. Emits unlocked.",
+  "synonyms": {
+    "pt": [
+      "desbloqueio",
+      "metaprogression",
+      "conteúdo",
+      "personagem",
+      "fase"
+    ],
+    "en": [
+      "unlock",
+      "metaprogression",
+      "content",
+      "character",
+      "stage"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "unlocks",
+      "type": "Array",
+      "description_pt": "Lista de desbloqueios: [{id, name, conditions: [{type: achievement|level|currency, target_id, required}]}].",
+      "default": []
+    }
+  ],
+  "signals": [
+    {
+      "name": "unlocked",
+      "description_pt": "Emitido quando um conteúdo é desbloqueado.",
+      "params": [
+        {
+          "name": "unlock_id",
+          "type": "String"
+        }
+      ]
+    }
+  ],
+  "dependencies": [],
+  "genres": [
+    "roguelike",
+    "rpg",
+    "platformer",
+    "generic"
+  ],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": [
+    "progressao",
+    "metaprogression",
+    "desbloqueio"
+  ]
+}

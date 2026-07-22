@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bgridmove0000001"]
+
+[ext_resource type="Script" path="res://behaviors/grid_movement/grid_movement.gd" id="1_gm"]
+
+[node name="GridMovement" type="Node"]
+script = ExtResource("1_gm")
+grid_size = Vector2(32, 32)
+move_duration = 0.15
+snap_on_start = true
+enabled = true

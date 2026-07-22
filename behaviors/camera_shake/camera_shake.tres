@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/camera_shake/camera_shake.gd" id="1_camera_shake"]
+
+[resource]
+script = ExtResource("1_camera_shake")
+amplitude = 5.0
+frequency = 10.0
+duration = 0.5
+decay = 0.8

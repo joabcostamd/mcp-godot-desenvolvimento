@@ -1,0 +1,115 @@
+{
+  "name": "projectile",
+  "description_pt": "Projétil que se move em linha reta, causa dano ao colidir e se autodestroi. Plugável em qualquer cena de arma ou spawner.",
+  "description_en": "Projectile that moves in a straight line, deals damage on collision, and self-destructs. Plug into any weapon or spawner scene.",
+  "synonyms": {
+    "pt": [
+      "projétil",
+      "tiro",
+      "bala",
+      "disparo",
+      "flecha",
+      "míssil"
+    ],
+    "en": [
+      "bullet",
+      "shot",
+      "arrow",
+      "missile",
+      "laser",
+      "fireball"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "speed",
+      "type": "float",
+      "description_pt": "Velocidade do projétil em pixels por segundo.",
+      "range": {
+        "min": 10.0,
+        "max": 2000.0
+      },
+      "default": 400.0,
+      "unit": "px/s"
+    },
+    {
+      "name": "damage",
+      "type": "int",
+      "description_pt": "Dano causado ao atingir um alvo.",
+      "range": {
+        "min": 1,
+        "max": 9999
+      },
+      "default": 10
+    },
+    {
+      "name": "lifetime",
+      "type": "float",
+      "description_pt": "Tempo máximo de vida antes de se autodestruir (0 = infinito).",
+      "range": {
+        "min": 0.0,
+        "max": 60.0
+      },
+      "default": 5.0,
+      "unit": "s"
+    },
+    {
+      "name": "max_distance",
+      "type": "float",
+      "description_pt": "Distância máxima percorrida antes de se autodestruir (0 = infinito).",
+      "range": {
+        "min": 0.0,
+        "max": 10000.0
+      },
+      "default": 1000.0,
+      "unit": "px"
+    },
+    {
+      "name": "piercing",
+      "type": "bool",
+      "description_pt": "Se true, o projétil não se destrói ao atingir um alvo (atravessa).",
+      "default": false
+    }
+  ],
+  "signals": [
+    {
+      "name": "hit",
+      "description_pt": "Emitido quando o projétil atinge algo.",
+      "params": [
+        {
+          "name": "target",
+          "type": "Node"
+        },
+        {
+          "name": "damage_dealt",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "expired",
+      "description_pt": "Emitido quando o projétil expira (tempo ou distância).",
+      "params": []
+    }
+  ],
+  "dependencies": [],
+  "genres": [
+    "topdown_shooter",
+    "platformer",
+    "bullet_hell",
+    "roguelike",
+    "tower_defense",
+    "metroidvania",
+    "generic"
+  ],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": [
+    "combate",
+    "projetil",
+    "tiro",
+    "dano",
+    "movimento"
+  ]
+}

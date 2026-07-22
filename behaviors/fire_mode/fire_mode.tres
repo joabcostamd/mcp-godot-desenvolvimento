@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/fire_mode/fire_mode.gd" id="1_fire_mode"]
+
+[resource]
+script = ExtResource("1_fire_mode")
+mode = 0
+burst_count = 3
+burst_interval = 0.05

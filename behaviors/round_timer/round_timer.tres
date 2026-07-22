@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/round_timer/round_timer.gd" id="1_round_timer"]
+
+[resource]
+script = ExtResource("1_round_timer")
+duration = 60.0
+countdown = true
+pause_on_end = false

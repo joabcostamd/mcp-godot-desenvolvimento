@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bcamerafollow0001"]
+
+[ext_resource type="Script" path="res://behaviors/camera_follow/camera_follow.gd" id="1_cf"]
+
+[node name="CameraFollow" type="Node"]
+script = ExtResource("1_cf")
+target = NodePath()
+offset = Vector2(0, 0)
+damping = 0.1
+look_ahead = 0.0

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/music_playlist/music_playlist.gd" id="1_music_playlist"]
+
+[resource]
+script = ExtResource("1_music_playlist")
+shuffle = false
+crossfade_duration = 0.0
+volume_db = 0.0
+auto_play = false

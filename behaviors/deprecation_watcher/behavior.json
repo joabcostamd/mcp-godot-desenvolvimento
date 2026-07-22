@@ -1,0 +1,22 @@
+{
+  "name": "deprecation_watcher",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior deprecation_watcher para Godot 4.7.",
+  "description_en": "deprecation_watcher behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "deprecation_watcher"
+    ],
+    "en": [
+      "deprecation_watcher"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

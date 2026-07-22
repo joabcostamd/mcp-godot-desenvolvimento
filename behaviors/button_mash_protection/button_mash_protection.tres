@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/button_mash_protection/button_mash_protection.gd" id="1_button_mash_protection"]
+
+[resource]
+script = ExtResource("1_button_mash_protection")
+enabled = true

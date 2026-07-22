@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/element_system/element_system.gd" id="1_element_system"]
+
+[resource]
+script = ExtResource("1_element_system")
+entity_element = "physical"
+weakness_multiplier = 2.0
+resistance_multiplier = 0.5

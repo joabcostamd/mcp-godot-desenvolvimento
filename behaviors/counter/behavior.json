@@ -1,0 +1,89 @@
+{
+  "name": "counter",
+  "description_pt": "Contador com valor mínimo e máximo. Incrementa/decrementa com step configurável. Emite sinais ao atingir limites. Útil para pontuação, recursos, progresso.",
+  "description_en": "Counter with min and max value. Increment/decrement with configurable step. Emits signals on limit reached. Useful for scoring, resources, progress.",
+  "synonyms": {
+    "pt": [
+      "contador",
+      "valor",
+      "pontuacao",
+      "recursos",
+      "incremento"
+    ],
+    "en": [
+      "counter",
+      "value",
+      "score_tracker",
+      "resources",
+      "increment"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "initial_value",
+      "type": "int",
+      "description_pt": "Valor inicial do contador.",
+      "default": 0
+    },
+    {
+      "name": "min_value",
+      "type": "int",
+      "description_pt": "Valor mínimo permitido.",
+      "default": 0
+    },
+    {
+      "name": "max_value",
+      "type": "int",
+      "description_pt": "Valor máximo permitido (0 = sem limite).",
+      "default": 0
+    },
+    {
+      "name": "step",
+      "type": "int",
+      "description_pt": "Valor de incremento/decremento por operação.",
+      "range": {
+        "min": 1,
+        "max": 1000
+      },
+      "default": 1
+    }
+  ],
+  "signals": [
+    {
+      "name": "value_changed",
+      "description_pt": "Emitido quando o valor muda.",
+      "params": [
+        {
+          "name": "new_value",
+          "type": "int"
+        },
+        {
+          "name": "old_value",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "min_reached",
+      "description_pt": "Emitido ao atingir o valor mínimo.",
+      "params": []
+    },
+    {
+      "name": "max_reached",
+      "description_pt": "Emitido ao atingir o valor máximo.",
+      "params": []
+    }
+  ],
+  "dependencies": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": [
+    "util",
+    "contador",
+    "valor"
+  ]
+}

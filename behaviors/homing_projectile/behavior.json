@@ -1,0 +1,101 @@
+{
+  "name": "homing_projectile",
+  "description_pt": "Projétil teleguiado que persegue um alvo com steering (turn_rate). Similar ao projectile mas com tracking.",
+  "description_en": "Homing projectile that pursues a target with steering (turn_rate). Similar to projectile but with tracking.",
+  "synonyms": {
+    "pt": [
+      "míssil",
+      "teleguiado",
+      "perseguidor",
+      "bomba inteligente",
+      "magia guiada"
+    ],
+    "en": [
+      "missile",
+      "homing",
+      "seeker",
+      "tracking",
+      "guided",
+      "heat-seeking"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "speed",
+      "type": "float",
+      "description_pt": "Velocidade (px/s).",
+      "range": {
+        "min": 10.0,
+        "max": 2000.0
+      },
+      "default": 300.0,
+      "unit": "px/s"
+    },
+    {
+      "name": "turn_rate",
+      "type": "float",
+      "description_pt": "Taxa de curva (rad/s). Quanto maior, mais rápido vira.",
+      "range": {
+        "min": 0.1,
+        "max": 20.0
+      },
+      "default": 3.0,
+      "unit": "rad/s"
+    },
+    {
+      "name": "damage",
+      "type": "int",
+      "description_pt": "Dano ao atingir.",
+      "range": {
+        "min": 1,
+        "max": 9999
+      },
+      "default": 20
+    },
+    {
+      "name": "lifetime",
+      "type": "float",
+      "description_pt": "Tempo máximo de vida (0 = infinito).",
+      "range": {
+        "min": 0.0,
+        "max": 60.0
+      },
+      "default": 5.0,
+      "unit": "s"
+    }
+  ],
+  "signals": [
+    {
+      "name": "hit",
+      "description_pt": "Emitido ao atingir algo.",
+      "params": [
+        {
+          "name": "target",
+          "type": "Node"
+        },
+        {
+          "name": "damage_dealt",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "expired",
+      "description_pt": "Emitido quando expira.",
+      "params": []
+    }
+  ],
+  "dependencies": [
+    "projectile"
+  ],
+  "genres": [
+    "topdown_shooter",
+    "bullet_hell",
+    "roguelike",
+    "generic"
+  ],
+  "version": "1.0.0",
+  "category": "combate",
+  "status": "implementado",
+  "godot_version": "4.7"
+}

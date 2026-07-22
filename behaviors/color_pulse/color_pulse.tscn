@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bcolorpulse000001"]
+
+[ext_resource type="Script" path="res://behaviors/color_pulse/color_pulse.gd" id="1_cp"]
+
+[node name="ColorPulse" type="Node"]
+script = ExtResource("1_cp")
+pulse_color = Color(1, 0, 0, 1)
+frequency = 2.0
+amplitude = 0.5
+auto_start = true

@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://btimerbhv0000001"]
+
+[ext_resource type="Script" path="res://behaviors/timer_behavior/timer_behavior.gd" id="1_tb"]
+
+[node name="TimerBehavior" type="Node"]
+script = ExtResource("1_tb")
+wait_time = 1.0
+one_shot = false
+auto_start = false

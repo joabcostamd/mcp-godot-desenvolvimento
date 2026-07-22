@@ -1,0 +1,1 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://physics_tick_optimizer_v1"][ext_resource type="Script" path="res://behaviors/physics_tick_optimizer/physics_tick_optimizer.gd" id="1_x"][node name="PhysicsTickOptimizer" type="Node"]script=ExtResource("1_x")

@@ -1,0 +1,1 @@
+[gd_scene load_steps=2 format=3 uid="uid://boutline_shdr0001"][ext_resource type="Script" path="res://behaviors/outline_shader/outline_shader.gd" id="1_os"][node name="OutlineShader" type="Node"]script=ExtResource("1_os")

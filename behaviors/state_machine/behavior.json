@@ -1,0 +1,82 @@
+{
+  "name": "state_machine",
+  "description_pt": "Máquina de estados finita (FSM) leve. Define estados nomeados e transições por condição. Outros behaviors consultam get_state() para decidir comportamento.",
+  "description_en": "Lightweight Finite State Machine (FSM). Defines named states and condition-based transitions. Other behaviors query get_state() to decide behavior.",
+  "synonyms": {
+    "pt": [
+      "FSM",
+      "estados",
+      "transição",
+      "máquina de estados",
+      "modo",
+      "fase"
+    ],
+    "en": [
+      "FSM",
+      "states",
+      "transition",
+      "mode",
+      "phase",
+      "automaton"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "default_state",
+      "type": "String",
+      "description_pt": "Estado inicial ao entrar na cena.",
+      "default": "idle"
+    }
+  ],
+  "signals": [
+    {
+      "name": "state_changed",
+      "description_pt": "Emitido em toda transição de estado.",
+      "params": [
+        {
+          "name": "from_state",
+          "type": "String"
+        },
+        {
+          "name": "to_state",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "state_entered",
+      "description_pt": "Emitido ao entrar em um novo estado.",
+      "params": [
+        {
+          "name": "state",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "state_exited",
+      "description_pt": "Emitido ao sair de um estado.",
+      "params": [
+        {
+          "name": "state",
+          "type": "String"
+        }
+      ]
+    }
+  ],
+  "dependencies": [],
+  "genres": [
+    "platformer",
+    "topdown_shooter",
+    "rpg",
+    "roguelike",
+    "fighting",
+    "metroidvania",
+    "bullet_hell",
+    "generic"
+  ],
+  "version": "1.0.0",
+  "category": "inimigo",
+  "status": "implementado",
+  "godot_version": "4.7"
+}

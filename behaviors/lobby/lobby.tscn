@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://lobby_v1"]
+[ext_resource type="Script" path="res://behaviors/lobby/lobby.gd" id="1_lo"]
+[node name="Lobby" type="Node"]
+script = ExtResource("1_lo")

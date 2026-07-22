@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/main_menu/main_menu.gd" id="1_main_menu"]
+
+[resource]
+script = ExtResource("1_main_menu")
+play_scene = "res"
+settings_scene = "res"
+show_quit = true
+show_settings = true

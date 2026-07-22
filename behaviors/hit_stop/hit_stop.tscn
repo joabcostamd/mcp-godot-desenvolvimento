@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhitstop000000001"]
+
+[ext_resource type="Script" path="res://behaviors/hit_stop/hit_stop.gd" id="1_hs"]
+
+[node name="HitStop" type="Node"]
+script = ExtResource("1_hs")
+freeze_scale = 0.05
+default_duration = 0.1
+restore_duration = 0.05

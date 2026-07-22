@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/settings/settings.gd" id="1_settings"]
+
+[resource]
+script = ExtResource("1_settings")
+default_master_vol = 0.0
+default_music_vol = 0.0
+default_sfx_vol = 0.0
+show_fullscreen = true
+show_language = false

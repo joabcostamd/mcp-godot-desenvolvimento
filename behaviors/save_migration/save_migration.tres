@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/save_migration/save_migration.gd" id="1_save_migration"]
+
+[resource]
+script = ExtResource("1_save_migration")
+from_version = "1.0.0"
+to_version = "1.1.0"

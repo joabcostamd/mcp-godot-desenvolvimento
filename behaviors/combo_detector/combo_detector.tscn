@@ -1,0 +1,1 @@
+[gd_scene load_steps=2 format=3 uid="uid://combo_detector_v1"][ext_resource type="Script" path="res://behaviors/combo_detector/combo_detector.gd" id="1_cd"][node name="ComboDetector" type="Node"]script=ExtResource("1_cd")

@@ -1,0 +1,21 @@
+; Shooter — MCP Godot Agent Example
+; Godot 4.7 | Top-Down Survivors-like
+; 14 behaviors | 4 scenes
+
+[application]
+config/name="MCP Example - Shooter"
+config/description="Survivors-like top-down: mova-se com WASD, atire automaticamente, mate inimigos, colete XP, escolha upgrades. 14 behaviors do arsenal MCP."
+config/features=PackedStringArray("2d")
+run/main_scene="res://scenes/menu.tscn"
+
+[display]
+window/size/viewport_width=480
+window/size/viewport_height=270
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
+
+[rendering]
+environment/default_clear_color=Color(0.08, 0.08, 0.12, 1)
+
+[editor_plugins]
+enabled=PackedStringArray("res://addons/mcp_addon/plugin.cfg", "res://addons/mcp_dock/plugin.cfg")

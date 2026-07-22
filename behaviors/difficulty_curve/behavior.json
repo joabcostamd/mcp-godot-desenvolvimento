@@ -1,0 +1,69 @@
+{
+  "name": "difficulty_curve",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Node que gerencia curva de dificuldade progressiva. Multiplicadores escalam com o tempo/onda. Ideal para jogos com dificuldade crescente.",
+  "synonyms": {
+    "pt": [
+      "dificuldade",
+      "curva",
+      "progressao",
+      "scaling"
+    ],
+    "en": [
+      "difficulty",
+      "curve",
+      "progression",
+      "scaling"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "start_multiplier",
+      "type": "float",
+      "range": {
+        "min": 0.1,
+        "max": 10.0
+      },
+      "default": 1.0
+    },
+    {
+      "name": "increase_per_minute",
+      "type": "float",
+      "range": {
+        "min": 0.0,
+        "max": 5.0
+      },
+      "default": 0.1
+    },
+    {
+      "name": "max_multiplier",
+      "type": "float",
+      "range": {
+        "min": 1.0,
+        "max": 100.0
+      },
+      "default": 10.0
+    }
+  ],
+  "signals": [
+    {
+      "name": "difficulty_changed",
+      "params": [
+        {
+          "name": "multiplier",
+          "type": "float"
+        }
+      ]
+    }
+  ],
+  "genres": [
+    "survivors_like",
+    "generic"
+  ],
+  "tags": [
+    "dificuldade",
+    "curva",
+    "estrutura"
+  ]
+}

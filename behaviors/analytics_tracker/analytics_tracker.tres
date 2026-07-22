@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/analytics_tracker/analytics_tracker.gd" id="1_analytics_tracker"]
+
+[resource]
+script = ExtResource("1_analytics_tracker")
+tracking_id = ""

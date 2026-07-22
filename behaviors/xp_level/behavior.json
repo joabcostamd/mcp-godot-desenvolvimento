@@ -1,0 +1,100 @@
+{
+  "name": "xp_level",
+  "description_pt": "Sistema de XP e nível com tabela de progressão configurável. Ganha XP, sobe de nível automaticamente ao atingir o threshold. Emite xp_gained e leveled_up. Suporta múltiplos level ups em uma chamada.",
+  "description_en": "XP and level system with configurable progression table. Gains XP, levels up automatically when reaching the threshold. Emits xp_gained and leveled_up. Supports multiple level ups in one call.",
+  "synonyms": {
+    "pt": [
+      "experiência",
+      "nível",
+      "level",
+      "evolução",
+      "progressão",
+      "ranking"
+    ],
+    "en": [
+      "experience",
+      "level",
+      "progression",
+      "ranking",
+      "growth"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "xp_table",
+      "type": "Array[int]",
+      "description_pt": "Thresholds de XP por nível. xp_table[n] = XP necessário para atingir o nível n+1. Ex: [0, 100, 300, 600].",
+      "default": [
+        0,
+        100,
+        300,
+        600
+      ]
+    },
+    {
+      "name": "current_xp",
+      "type": "int",
+      "description_pt": "XP acumulado atual.",
+      "range": {
+        "min": 0,
+        "max": 999999
+      },
+      "default": 0
+    },
+    {
+      "name": "current_level",
+      "type": "int",
+      "description_pt": "Nível atual (mínimo 1).",
+      "range": {
+        "min": 1,
+        "max": 999
+      },
+      "default": 1
+    }
+  ],
+  "signals": [
+    {
+      "name": "xp_gained",
+      "description_pt": "Emitido ao ganhar XP (value > 0).",
+      "params": [
+        {
+          "name": "value",
+          "type": "int"
+        },
+        {
+          "name": "total_xp",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "leveled_up",
+      "description_pt": "Emitido a cada nível ganho.",
+      "params": [
+        {
+          "name": "new_level",
+          "type": "int"
+        }
+      ]
+    }
+  ],
+  "dependencies": [],
+  "genres": [
+    "rpg",
+    "roguelike",
+    "platformer",
+    "topdown_shooter",
+    "idle",
+    "generic"
+  ],
+  "conflicts": [],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": [
+    "progressao",
+    "xp",
+    "nível",
+    "level",
+    "rpg"
+  ]
+}

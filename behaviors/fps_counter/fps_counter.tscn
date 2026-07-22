@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfpscounter000001"]
+[ext_resource type="Script" path="res://behaviors/fps_counter/fps_counter.gd" id="1_fc"]
+[node name="FPSCounter" type="Control"]
+script = ExtResource("1_fc")
+layout_mode=3; anchors_preset=0

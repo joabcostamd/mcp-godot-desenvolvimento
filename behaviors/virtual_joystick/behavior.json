@@ -1,0 +1,47 @@
+{
+  "name": "virtual_joystick",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "synonyms": {
+    "pt": [
+      "joystick",
+      "virtual",
+      "touch"
+    ],
+    "en": [
+      "joystick",
+      "virtual",
+      "touch"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "radius",
+      "type": "float",
+      "range": {
+        "min": 30.0,
+        "max": 300.0
+      },
+      "default": 80.0
+    }
+  ],
+  "signals": [
+    {
+      "name": "joystick_moved",
+      "params": [
+        {
+          "name": "direction",
+          "type": "Vector2"
+        }
+      ]
+    }
+  ],
+  "genres": [
+    "mobile"
+  ],
+  "tags": [
+    "touch"
+  ],
+  "description_pt": "Behavior Virtual Joystick para Godot 4.7. Componente plugavel para jogos 2D.",
+  "description_en": "Virtual Joystick behavior for Godot 4.7. Pluggable component for 2D games."
+}

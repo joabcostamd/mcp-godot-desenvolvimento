@@ -1,0 +1,75 @@
+{
+  "name": "audio_manager",
+  "description_pt": "Gerenciador central de áudio. Controla volume dos buses Master/Music/SFX e fornece play_sfx/play_music. Destrava sfx_player, music_playlist e ambience_zone.",
+  "description_en": "Central audio manager. Controls Master/Music/SFX bus volumes and provides play_sfx/play_music. Unlocks sfx_player, music_playlist, and ambience_zone.",
+  "synonyms": {
+    "pt": [
+      "audio",
+      "som",
+      "musica",
+      "volume",
+      "sfx",
+      "trilha"
+    ],
+    "en": [
+      "audio",
+      "sound",
+      "music",
+      "volume",
+      "sfx",
+      "soundtrack"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "master_volume_db",
+      "type": "float",
+      "description_pt": "Volume do bus Master em dB.",
+      "range": {
+        "min": -80.0,
+        "max": 24.0
+      },
+      "default": 0.0,
+      "unit": "dB"
+    },
+    {
+      "name": "music_volume_db",
+      "type": "float",
+      "description_pt": "Volume do bus Music em dB.",
+      "range": {
+        "min": -80.0,
+        "max": 24.0
+      },
+      "default": 0.0,
+      "unit": "dB"
+    },
+    {
+      "name": "sfx_volume_db",
+      "type": "float",
+      "description_pt": "Volume do bus SFX em dB.",
+      "range": {
+        "min": -80.0,
+        "max": 24.0
+      },
+      "default": 0.0,
+      "unit": "dB"
+    }
+  ],
+  "signals": [],
+  "dependencies": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [
+    "Apenas um AudioManager por cena."
+  ],
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "tags": [
+    "sistema",
+    "audio",
+    "som",
+    "musica",
+    "volume"
+  ]
+}

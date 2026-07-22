@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/health_bar/health_bar.gd" id="1_health_bar"]
+
+[resource]
+script = ExtResource("1_health_bar")
+bar_color = Color(Color.RED)
+show_text = false
+smooth = true
+bar_width = 100.0
+bar_height = 12.0

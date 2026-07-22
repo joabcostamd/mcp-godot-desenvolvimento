@@ -1,0 +1,65 @@
+{
+  "name": "debug_console",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Control que exibe um console de debug in-game. Histórico de linhas com scroll, entrada de comando por texto. Comandos registráveis via register_command.",
+  "description_en": "Control displaying an in-game debug console. Scrollable line history, text command input. Commands registerable via register_command.",
+  "synonyms": {
+    "pt": [
+      "console",
+      "terminal",
+      "comando",
+      "log"
+    ],
+    "en": [
+      "console",
+      "terminal",
+      "command",
+      "log"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "max_lines",
+      "type": "int",
+      "range": {
+        "min": 10,
+        "max": 1000
+      },
+      "default": 200
+    },
+    {
+      "name": "auto_scroll",
+      "type": "bool",
+      "default": true
+    },
+    {
+      "name": "font_size",
+      "type": "int",
+      "range": {
+        "min": 8,
+        "max": 24
+      },
+      "default": 12
+    }
+  ],
+  "signals": [
+    {
+      "name": "command_entered",
+      "params": [
+        {
+          "name": "command",
+          "type": "String"
+        }
+      ]
+    }
+  ],
+  "dependencies": [],
+  "genres": [
+    "generic"
+  ],
+  "tags": [
+    "debug",
+    "console"
+  ]
+}

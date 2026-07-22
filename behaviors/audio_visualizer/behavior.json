@@ -1,0 +1,22 @@
+{
+  "name": "audio_visualizer",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior audio_visualizer para Godot 4.7.",
+  "description_en": "audio_visualizer behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "audio_visualizer"
+    ],
+    "en": [
+      "audio_visualizer"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

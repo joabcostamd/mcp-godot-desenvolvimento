@@ -1,0 +1,22 @@
+{
+  "name": "mod_loader",
+  "version": "1.0.0",
+  "godot_version": "4.7",
+  "description_pt": "Behavior mod_loader para Godot 4.7.",
+  "description_en": "mod_loader behavior for Godot 4.7.",
+  "synonyms": {
+    "pt": [
+      "mod_loader"
+    ],
+    "en": [
+      "mod_loader"
+    ]
+  },
+  "parameters": [],
+  "signals": [],
+  "genres": [
+    "generic"
+  ],
+  "conflicts": [],
+  "tags": []
+}

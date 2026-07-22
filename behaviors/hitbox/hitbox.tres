@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://behaviors/hitbox/hitbox.gd" id="1_hitbox"]
+
+[resource]
+script = ExtResource("1_hitbox")
+damage = 10
+knockback_force = 200.0
+hit_type = "melee"
+active = false

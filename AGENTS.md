@@ -5,6 +5,12 @@
 > **Modelo:** agente nativo + comandos `/`. Não há mais agentes personalizados.
 > **O VS Code lê este arquivo automaticamente.**
 > **Local correto:** raiz do repositório.
+> **Infraestrutura:** Este projeto roda em dois worktrees do mesmo repositório:
+> `mcp-godot-desenvolvimento` (agente principal) e `mcp-godot-agente02`
+> (segundo agente, trabalho paralelo). Os dois compartilham histórico Git.
+> Coordenação automática via `coordenacao.json` na pasta `.git` comum —
+> nenhum agente escolhe etapa já reivindicada pelo outro. Sincronização
+> ao final de cada onda (ver `/seguir-roadmap`).
 
 ---
 
