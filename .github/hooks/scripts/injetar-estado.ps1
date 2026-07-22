@@ -39,6 +39,25 @@ if (-not $stateContent -or $stateContent.Trim().Length -eq 0) {
     }
     # === FIM DO DETECTOR DE DERIVA ===
 
+    # === VERIFICACAO DIARIA DA TRAVA DE SEGURANCA ===
+    $travaWarning = ""
+    $hoje = (Get-Date).ToString("yyyy-MM-dd")
+    $ultimoAutotesteFile = "$env:USERPROFILE\.copilot\hooks\.ultimo-autoteste"
+    $rodarAutoteste = $true
+    if (Test-Path $ultimoAutotesteFile) {
+        $ultimaData = (Get-Content $ultimoAutotesteFile -Raw).Trim()
+        if ($ultimaData -eq $hoje) { $rodarAutoteste = $false }
+    }
+    if ($rodarAutoteste) {
+        $autotesteResult = powershell -NoProfile -File "$env:USERPROFILE\.copilot\hooks\scripts\autoteste.ps1" 2>&1
+        if ($LASTEXITCODE -ne 0 -or $autotesteResult -notmatch "TRAVA OK") {
+            $travaWarning = "`n`n⚠️ A TRAVA DE SEGURANCA FALHOU NO AUTOTESTE — verifique antes de continuar.`n"
+        }
+        # Atualiza a data (mesmo se falhou — ja avisamos)
+        $hoje | Out-File $ultimoAutotesteFile -Encoding UTF8 -Force
+    }
+    # === FIM DA VERIFICACAO DIARIA ===
+
     # Verifica se o arquivo tem mais de 6 meses sem atualizar
     $lastWrite = (Get-Item "$projectRoot\$stateFile").LastWriteTime
     $sixMonthsAgo = (Get-Date).AddMonths(-6)
@@ -49,7 +68,7 @@ if (-not $stateContent -or $stateContent.Trim().Length -eq 0) {
         $ageWarning = "`n`n[AVISO: $stateFile nao e atualizado ha $daysOld dias (desde $($lastWrite.ToString('yyyy-MM-dd'))). O estado pode estar desatualizado.]"
     }
 
-    $additionalContext = "$driftWarning=== ESTADO DO PROJETO ($stateFile) ===`n$stateContent$ageWarning"
+    $additionalContext = "$travaWarning$driftWarning=== ESTADO DO PROJETO ($stateFile) ===`n$stateContent$ageWarning"
     # Informa sobre historico arquivado
     $additionalContext += "`n`n(Historico de sessoes mais antigas esta em docs/archive/handoffs/ — consulte la se precisar de contexto anterior a 5 sessoes.)"
 }
