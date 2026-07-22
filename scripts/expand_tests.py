@@ -74,6 +74,18 @@ def generate_edge_tests(behavior_name: str) -> str | None:
 
     tests = []
 
+    # Se ja tem 2 testes, so gera o 3o (integracao)
+    if current_count == 2:
+        tests.append(f"""
+func test_integration_add_child() -> void:
+\tvar c := {class_name}.new()
+\tadd_child(c)
+\t# Deve inicializar sem crash quando adicionado a arvore
+\tassert_bool(c.is_inside_tree()).is_true()
+\tremove_child(c)
+\tc.queue_free()""")
+        return "\n".join(tests) if tests else None
+
     # Teste 1: Edge case - zero ou disabled
     if bool_exports:
         # Para behaviors com booleanos, testa disabled

@@ -2,6 +2,53 @@
 
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo.
 
+## ULTIMO HANDOFF (AGENTE 02 — 2026-07-21 — ONDA QUALIDADE: 5 FATIAS)
+
+- **Data:** 2026-07-21
+- **De:** AGENTE 02 (Conteudo — behaviors)
+- **Branch:** `agente2/behaviors-onda2`
+- **Acao:** 5 fatias de qualidade enterprise + discover_behaviors no MCP
+
+### Fatias concluidas
+
+| Fatia | Commit | Descricao |
+|---|---|---|
+| 2.A | `a10ebfd` | 10 class_name mismatches → 0 |
+| 2.B | `08e6497` | 15 exports com setters/validacao |
+| 2.C | `9b9868b` | 142 doc headers ## → 249/249 (100%) |
+| 2.D | `bf4efa1` | 4 bugs + 105 testes expandidos |
+| 2.E | `b2c4791` | discover_behaviors tool no MCP |
+
+### Indicadores finais (TUDO VERDE)
+
+| Metrica | Valor |
+|---|---|
+| @tool | 249/249 |
+| _get_configuration_warnings | 249/249 |
+| Sinais nao emitidos | 0 |
+| class_name mismatches | 0 |
+| _initialized faltando | 0 |
+| Doc headers ## | 249/249 (100%) |
+| Exports sem setter (antigos) | 0 |
+| Behaviors com >=3 testes | 249/249 (100%) |
+| Bugs validate_gdscript | 0 |
+| Tools MCP | 275 (+1 discover_behaviors) |
+
+### Scripts criados
+- `scripts/generate_doc_headers.py` — gera doc headers de behavior.json
+- `scripts/expand_tests.py` — expande testes de borda automaticamente
+
+### Arquivos alterados cross-territory (autorizado)
+- `server.py` — +1 tool, +2 TOOLSETS, +1 import, +1 handler
+- `core/tool_definitions.py` — +1 Tool definition
+- `tools/behavior_ops.py` — +discover_behaviors()
+
+### Proximo Agente
+- Agente 1: validar que discover_behaviors nao quebrou contratos no server.py
+- Merge para main apos validacao
+
+---
+
 ## ULTIMO HANDOFF (AGENTE 02 — 2026-07-21 — SESSAO DEFINITIVA: 118→249)
 
 - **Data:** 2026-07-21
