@@ -1,0 +1,3 @@
+"""domains/gamestate/schemas.py"""
+INPUT_SCHEMAS = {"create_save": {"type": "object", "properties": {"scene_path": {"type": "string"}}, "required": ["scene_path"]}, "define_save": {"type": "object", "properties": {"scene_path": {"type": "string"}}, "required": ["scene_path"]}, "create_fsm": {"type": "object", "properties": {"scene_path": {"type": "string"}}, "required": ["scene_path"]}, "add_transition": {"type": "object", "properties": {"scene_path": {"type": "string"}, "from_state": {"type": "string"}, "to_state": {"type": "string"}}, "required": ["scene_path", "from_state", "to_state"]}}
+OUTPUT_SCHEMA = {"type": "object", "properties": {"status": {"type": "string"}}}

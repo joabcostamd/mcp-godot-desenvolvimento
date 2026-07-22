@@ -1,0 +1,18 @@
+"""domains/export/test_export_domain.py — F5.21."""
+import inspect
+def test_manifest_valido():
+    from domains.export.manifest import MANIFEST; from registry.types import DomainManifest
+    assert isinstance(MANIFEST, DomainManifest); assert MANIFEST.domain == "export"; assert len(MANIFEST.ops) == 3
+def test_ops():
+    from domains.export.manifest import MANIFEST
+    for op in MANIFEST.ops:
+        assert op.summary and len(op.summary) > 2
+        assert op.examples
+        assert op.schema is not None
+        assert op.fn and callable(op.fn)
+def test_handlers_kw():
+    from domains.export import handlers
+    for name in handlers.__all__:
+        fn = getattr(handlers, name); sig = inspect.signature(fn); params = list(sig.parameters.values())
+        if not params or params[0].name == "self": continue
+        for p in params: assert p.kind in (inspect.Parameter.KEYWORD_ONLY, inspect.Parameter.VAR_KEYWORD, inspect.Parameter.VAR_POSITIONAL) or p.default is not inspect.Parameter.empty

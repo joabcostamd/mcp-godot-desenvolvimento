@@ -1,0 +1,20 @@
+"""domains/game_bridge/manifest.py — F5.26."""
+from registry.types import DomainManifest, OpSpec, Phase; from . import handlers
+MANIFEST = DomainManifest(domain="game_bridge", tool_name="game_bridge_manage", title="Game Bridge", namespace="project", version="1.0.0",
+    description="Gerencia o jogo em execução via Runtime Bridge.\nQUANDO USAR: para controlar jogo rodando.\nQUANDO NÃO USAR: para editor (use scene_manage/node_manage).",
+    phases=[Phase.PROTOTIPO], annotations={"readOnlyHint": False, "destructiveHint": True, "idempotentHint": False, "openWorldHint": True},
+    ops=[OpSpec("call_method", handlers.game_call_method, "Chama método em nó", {"node_path": {"type": "string", "required": True}, "method": {"type": "string", "required": True}}, [{"node_path": "./Player", "method": "take_damage", "args": [10]}]),
+         OpSpec("spawn_node", handlers.game_spawn_node, "Spawna nó no jogo", {"scene_path": {"type": "string", "required": True}}, [{"scene_path": "res://scenes/enemy.tscn"}]),
+         OpSpec("raycast", handlers.game_raycast, "Raycast no jogo", {"from_pos": {"type": "array", "required": True}, "to_pos": {"type": "array", "required": True}}, [{"from_pos": [0,0,0], "to_pos": [100,0,0]}]),
+         OpSpec("get_camera", handlers.game_get_camera, "Obtém câmera atual", {}, [{}]),
+         OpSpec("find_by_class", handlers.game_find_by_class, "Busca nós por classe", {"class_name": {"type": "string", "required": True}}, [{"class_name": "Enemy"}]),
+         OpSpec("await_signal", handlers.game_await_signal, "Aguarda sinal", {"node_path": {"type": "string", "required": True}, "signal_name": {"type": "string", "required": True}}, [{"node_path": "./Player", "signal_name": "died"}]),
+         OpSpec("pause", handlers.game_pause, "Pausa/despausa", {"paused": {"type": "boolean", "required": False}}, [{"paused": True}]),
+         OpSpec("play_animation", handlers.game_play_animation, "Toca animação", {"node_path": {"type": "string", "required": True}, "anim_name": {"type": "string", "required": True}}, [{"node_path": "./Player", "anim_name": "attack"}]),
+         OpSpec("performance", handlers.game_performance, "Métricas de performance", {}, [{}]),
+         OpSpec("window", handlers.game_window, "Configura janela", {"mode": {"type": "string", "required": False}, "width": {"type": "integer", "required": False}, "height": {"type": "integer", "required": False}}, [{"mode": "fullscreen"}]),
+         OpSpec("input_state", handlers.game_input_state, "Estado de input", {}, [{}]),
+         OpSpec("http_request", handlers.game_http_request, "HTTP request do jogo", {"url": {"type": "string", "required": True}}, [{"url": "https://api.game.com/stats"}]),
+         OpSpec("multiplayer", handlers.game_multiplayer, "Multiplayer status", {"action": {"type": "string", "required": False}}, [{"action": "status"}]),
+         OpSpec("serialize_state", handlers.game_serialize_state, "Serializa estado", {"include_scenes": {"type": "boolean", "required": False}}, [{}])],
+    tags=["game", "runtime", "bridge"])
