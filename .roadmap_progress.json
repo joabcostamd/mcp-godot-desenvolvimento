@@ -1144,10 +1144,12 @@
     "resultado": "Editor Visual de Behavior Trees implementado. 10 arquivos em addons/mcp_bt_editor/: plugin.cfg, bt_editor_plugin.gd (EditorPlugin principal 318 linhas), bt_editor_node.gd (GraphNode customizado 210 linhas), bt_editor_palette.gd (paleta com busca 369 linhas), bt_editor_graph.gd (GraphEdit com validacao 578 linhas), bt_editor_inspector.gd (inspetor de parametros 340 linhas), bt_editor_serializer.gd (save/load .tres + export GDScript 311 linhas), bt_editor_debugger.gd (debug ao vivo WebSocket 9082 458 linhas), bt_tree_resource.gd (Resource 25 linhas), generate_icons.gd (gerador de icones). 16 features implementadas: dock, paleta com 249 behaviors, drag-drop, 4 tipos de porta coloridos, validacao de conexoes, reroute nodes, expression nodes, auto-arrange, show generated code, undo/redo, preview ao vivo, drag-from-port, graph frames, minimap, breakpoints visuais, watch window. 8/8 validate_gdscript PASS. ~2.600 linhas GDScript total. Integracao com discover_behaviors, mcp_dock WebSocket 9082, .tres Resource, behavior.json, e behavior_tree.gd executor."
   },
   "fatia_2.AW": {
-    "status": "pendente",
-    "data_registro": "2026-07-21",
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
     "agente": "AGENTE 02",
-    "descricao": "Preparar estrutura para AssetLib: plugin.cfg, icone, descricao, tags, screenshots, tutorial. Sem publicar ainda."
+    "checkpoint": "pendente",
+    "resultado": "Estrutura AssetLib preparada. plugin.cfg atualizado com nome, descricao, autor, versao, tags (10), repositorio, licenca, godot_version. README.md bilingue (PT+EN) com descricao curta/longa, instalacao, exemplo rapido, screenshots placeholder. LICENSE (MIT) e CHANGELOG.md criados. generate_icon.gd (46 linhas) para gerar icone 128x128. Screenshots: 5 placeholders documentados. Sem publicar — pronto para ONDA 4."
   },
   "fatia_2.AX": {
     "status": "pendente",
