@@ -1009,7 +1009,7 @@
   "auditoria_onda_2_fosso": {
     "data": "2026-07-21",
     "agente": "AGENTE 02",
-    "total_fatias": 47,
+    "total_fatias": 50,
     "resumo": "Auditoria completa das 47 fatias da ONDA 2 contra codigo real.",
     "fatias": {
       "2.A": {
@@ -1115,12 +1115,42 @@
       "2.AU": {
         "status": "pendente",
         "evidencia": "Sem orcamento de tempo por gate."
+      },
+      "2.AV": {
+        "status": "pendente",
+        "evidencia": "NOVO — Editor visual de BT no Godot."
+      },
+      "2.AW": {
+        "status": "pendente",
+        "evidencia": "NOVO — Preparar estrutura para AssetLib."
+      },
+      "2.AX": {
+        "status": "pendente",
+        "evidencia": "NOVO — +4 jogos-exemplo."
       }
     },
     "metricas": {
       "concluidas": 11,
       "parciais": 4,
-      "pendentes": 32
+      "pendentes": 35
     }
+  },
+  "fatia_2.AV": {
+    "status": "pendente",
+    "data_registro": "2026-07-21",
+    "agente": "AGENTE 02",
+    "descricao": "Editor visual de Behavior Trees no Godot. Dock integrado com drag-and-drop, nos, conexoes, blackboard, debug ao vivo. GDScript puro. Inspirado no LimboAI."
+  },
+  "fatia_2.AW": {
+    "status": "pendente",
+    "data_registro": "2026-07-21",
+    "agente": "AGENTE 02",
+    "descricao": "Preparar estrutura para AssetLib: plugin.cfg, icone, descricao, tags, screenshots, tutorial. Sem publicar ainda."
+  },
+  "fatia_2.AX": {
+    "status": "pendente",
+    "data_registro": "2026-07-21",
+    "agente": "AGENTE 02",
+    "descricao": "+4 jogos-exemplo: platformer, rpg, puzzle, shooter. Cada um em example_project/<genero>/."
   }
 }

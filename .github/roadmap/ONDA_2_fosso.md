@@ -231,4 +231,7 @@ Serao expandidas pelo `/plan` quando chegar a vez.
 | 2.AS | Semente de reprodutibilidade | Mesma frase, mesmo resultado. Permite testar regressao de comportamento | `[AUTO]` |
 | 2.AT | Unificar os 3 desfazer | UndoRedo + git + botao Reverter sao 3 historicos independentes hoje. Definir quem manda e mostrar **um** historico | `[SENIOR]` |
 | 2.AU | Orcamento de tempo por gate | Gate de 3 minutos ninguem usa. Teto de tempo + modo rapido/completo | `[AUTO]` |
+| 2.AV | **Editor visual de BT no Godot** | Editor dock integrado ao Godot para montar behaviors visualmente (drag-and-drop). Inspirado no LimboAI (2.9k⭐): nos, conexoes, blackboard, debug ao vivo. Permite nao-programadores ajustarem comportamentos sem codigo. GDScript puro (sem C++). | `[SENIOR]` |
+| 2.AW | **Preparar estrutura para AssetLib** | Organizar addons/ para publicacao na AssetLib oficial do Godot: plugin.cfg, icone, descricao, tags, capturas de tela, tutorial. **Sem publicar** — apenas deixar a estrutura pronta para quando a ONDA 4 chegar. | `[AUTO]` |
+| 2.AX | **+4 jogos-exemplo** | Criar 4 jogos completos usando behaviors do arsenal: (1) platformer — pulo, inimigos, moedas, (2) rpg — combate, npcs, xp, loja, (3) puzzle — combinacao, grid, (4) shooter — top-down, waves, power-ups. Cada um em `example_project/<genero>/`. Complementam o Breakout existente. | `[SENIOR]` |
 

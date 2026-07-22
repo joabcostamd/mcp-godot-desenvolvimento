@@ -148,6 +148,9 @@ até um jogo rodando em menos de 20 minutos. Testado com gente de verdade, não 
 | 2.AS | Semente de reprodutibilidade | AUTO | L20 |
 | 2.AT | Unificar os 3 históricos de desfazer | SÊNIOR | **L3** |
 | 2.AU | Orçamento de tempo por gate | AUTO | L11 |
+| 2.AV | **Editor visual de Behavior Trees no Godot** | SÊNIOR | NOVO |
+| 2.AW | **Preparar estrutura para AssetLib** (sem publicar) | AUTO | NOVO |
+| 2.AX | **+4 jogos-exemplo** (platformer, rpg, puzzle, shooter) | SÊNIOR | NOVO |
 
 ---
 
