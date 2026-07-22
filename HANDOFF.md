@@ -1,13 +1,40 @@
 # 🤝 HANDOFF — Comunicação entre Agentes
 
-> **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo
-> para que o outro agente saiba o estado do projeto na próxima sessão.
+> **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo.
 
 ---
 
-## Último Handoff (AGENTE 01 — 2026-07-21 — F5.6 VFX)
+## Último Handoff (AGENTE 01 — 2026-07-21 — FECHAMENTO F5)
 
 - **Data:** 2026-07-21
+- **Commit:** `060b940` (main, pushed)
+- **O que foi feito:** FASE 5 CONCLUÍDA. 37 domínios migrados para `domains/`. 347 testes passam. Todos os rollups existentes têm domínio correspondente.
+
+### Estado final do wire
+
+```
+defs_total=263, handlers_total=263
+SEM_HANDLER=0, SEM_DEF=0, NS_FANTASMA=0, PHASE_FANTASMA=0
+AUDITORIA F5: APROVADA
+347/347 testes passam (8 xfailed)
+DEPRECATED_TOOLS=159, ALIAS_MAP=50
+```
+
+### 37 domínios migrados
+
+`physics` · `ui` · `shader` · `camera` · `navigation` · `vfx` · `render` · `skeleton` · `debug` · `lsp` · `godot` · `network` · `runtime` · `test` · `d3` · `anim` · `audio` · `tilemap` · `dialogue` · `inventory` · `export` · `gamestate` · `config` · `safety` · `analysis` · `game_bridge` · `scene` · `node` · `script` · `file` · `project` · `asset` · `raycast` · `music` · `playtest` · `localization` · `vision`
+
+### Pendências
+
+- **F3/F4**: Unificação de rollups + descoberta progressiva (parciais)
+- **59 tools SEM_FASE**: Nunca atribuídas
+- **F6**: Transporte atrás de adaptador (~25 tools a eliminar)
+- **Aliases**: 50 entradas, expiram em F6
+- **screenshot**: Sem rollup, 5 atômicas ativas no wire (risco médio)
+
+### Próximo
+
+- `/plan` para F6.1 — `adapters/transport.py` com registro de capacidades
 - **Fatia:** F5.6 — Migrar domínio vfx/partículas
 - **O que foi feito:** Criado `domains/vfx/` com 6 arquivos. 5 ops no rollup (+create_particles_3d). 2 atômicas removidas do wire. +3 aliases.
 

@@ -1,7 +1,7 @@
 {
-  "fase_atual": "F5",
-  "fatia_atual": "5.9",
-  "fases_fechadas": ["F0", "F1", "F2"],
+  "fase_atual": "F6",
+  "fatia_atual": "6.0",
+  "fases_fechadas": ["F0", "F1", "F2", "F5"],
   "fases_parciais": ["F3", "F4"],
   "bloqueado": false,
   "motivo_bloqueio": "",
@@ -13,7 +13,7 @@
     "F2": {"status": "concluida", "data": "2026-07-21", "resultado": "CONFORMIDADE MCP: annotations nos rollups, _meta_tool.py atualizado com ToolAnnotations."},
     "F3": {"status": "parcial", "data": "2026-07-21", "resultado": "UNIFICAR ROLLUPS: 12 orphan manage tools receberam namespaces. Unificacao completa dos 3 caminhos pendente."},
     "F4": {"status": "parcial", "data": "2026-07-21", "resultado": "DESCOBERTA PROGRESSIVA: discovery.py e catalog_search criados. Descoberta por fase nao implementada."},
-    "F5": {"status": "em_andamento", "data": "2026-07-21", "resultado": "MIGRAR DOMINIOS: 9 dominios migrados (physics, ui, shader, camera, navigation, vfx, render, skeleton, debug). ~4 dominios restantes."},
+    "F5": {"status": "concluida", "data": "2026-07-21", "resultado": "MIGRAR DOMINIOS: 37 dominios migrados. 347 testes. defs_total=263. AUDITORIA F5: APROVADA. Todos os rollups existentes tem dominio correspondente em domains/."},
     "F6": {"status": "nao_iniciada"},
     "F7": {"status": "nao_iniciada"},
     "F8": {"status": "nao_iniciada"},
@@ -21,18 +21,21 @@
     "F10": {"status": "nao_iniciada"}
   },
   "metricas_atuais": {
-    "defs_total": 269,
+    "defs_total": 263,
     "defs_raw": 272,
     "defs_rollup": 37,
-    "handlers_total": 268,
+    "handlers_total": 263,
     "handlers_rollup": 37,
     "SEM_HANDLER": 0,
     "SEM_DEF": 0,
     "NS_FANTASMA": 0,
     "PHASE_FANTASMA": 0,
-    "regressao": "173/173 (0 falhas)"
+    "regressao": "347/347 (0 falhas)",
+    "dominios_migrados": 37,
+    "deprecated_total": 159,
+    "aliases_total": 50
   },
-  "ultima_atualizacao": "2026-07-21T23:20:00-03:00",
+  "ultima_atualizacao": "2026-07-21T23:59:00-03:00",
   "aliases_expirar_em": "F6",
   "aliases_nota": "42 aliases (ALIAS_MAP em tools/deprecated.py) criados em K2 (commit 6d7ca49) conforme Secao 11.9. Devem ser removidos ao fechar F6 (transporte atras de adaptador). Cada alias redireciona old_name -> rollup_manage(op=X) com log deprecated_alias_used."
 }
