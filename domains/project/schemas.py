@@ -1,0 +1,3 @@
+"""domains/project/schemas.py"""
+INPUT_SCHEMAS = {"create": {"type": "object", "properties": {"project_name": {"type": "string"}}, "required": ["project_name"]}, "set_active": {"type": "object", "properties": {"project_path": {"type": "string"}}, "required": ["project_path"]}, "get_settings": {"type": "object", "properties": {}, "required": []}, "set_setting": {"type": "object", "properties": {"key": {"type": "string"}, "value": {"type": "string"}}, "required": ["key", "value"]}, "set_main_scene": {"type": "object", "properties": {"scene_path": {"type": "string"}}, "required": ["scene_path"]}}
+OUTPUT_SCHEMA = {"type": "object", "properties": {"status": {"type": "string"}}}
