@@ -11,6 +11,7 @@ Uso: python scripts/project_health.py [--json] [--onda N]
 
 import json
 import os
+import re
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -54,7 +55,8 @@ def scan_behaviors() -> dict:
             gd_file = next(entry.glob("*.gd"))
             content = gd_file.read_text(encoding="utf-8", errors="ignore")
             lines_total += len(content.splitlines())
-            if "@tool" in content:
+            # Verificar @tool como palavra inteira (nao dentro de comentarios)
+            if re.search(r'\b@tool\b', content):
                 with_tool += 1
             if "_get_configuration_warnings" in content:
                 with_warnings += 1
@@ -256,4 +258,5 @@ if __name__ == "__main__":
     if json_mode:
         print(json.dumps(result, indent=2, ensure_ascii=False))
     else:
-        print(result)
+        # Forcar ASCII-safe output para evitar UnicodeEncodeError no Windows
+        print(result.encode("ascii", errors="replace").decode("ascii"))
