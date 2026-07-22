@@ -262,6 +262,9 @@ Atualize `HANDOFF.md` (fonte única de estado do projeto) com a seção de encer
 ```markdown
 ## Encerramento — <data>
 
+**Worktree/Agente:** <resultado de git rev-parse --show-toplevel>
+**Peso:** O que aconteceu nos ultimos minutos merece mais detalhe.
+
 ### Resumo
 (2-3 linhas do que foi feito)
 
@@ -271,6 +274,13 @@ Atualize `HANDOFF.md` (fonte única de estado do projeto) com a seção de encer
 ### Pendências
 - [ ] Item 1 (prioridade: alta/média/baixa)
 - [ ] Item 2
+
+### Contexto que nao esta no codigo (nao mexer sem saber disso)
+Convencoes nao obvias, decisoes de arquitetura propositais. Se nada,
+ escreva 'nada alem do documentado nas instructions'.
+
+### Decisoes que so um humano pode tomar
+Pergunta em aberto. Se nenhuma, escreva 'nenhuma'.
 
 ### Arquivos-chave
 - path/importante.py
@@ -286,6 +296,9 @@ Atualize `HANDOFF.md` (fonte única de estado do projeto) com a seção de encer
 ### ⚠️ Atenção
 - Bugs conhecidos, armadilhas, restrições
 ```
+
+Antes de commitar esta seção, rode `.github/scripts/rotacionar-handoff.ps1`
+para manter o HANDOFF.md enxuto (só as 5 seções mais recentes).
 
 **Validação:** todas as seções preenchidas (mesmo que com "nada a declarar").
 

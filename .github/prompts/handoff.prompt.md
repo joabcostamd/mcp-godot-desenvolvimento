@@ -36,6 +36,11 @@ Use exatamente este formato. Seja curto: quem le quer saber onde pegar, nao ler 
 ```markdown
 ## Handoff — <data>
 
+**Worktree/Agente:** <resultado de git rev-parse --show-toplevel>
+**Peso:** O que aconteceu nos ultimos minutos da sessao merece mais detalhe;
+  o que aconteceu no inicio pode ser resumido em 1 linha ou omitido se ja
+  esta no roadmap.
+
 ### Onde estou
 Branch: <branch>
 Ultimo commit: <hash curto> <mensagem>
@@ -56,6 +61,16 @@ Uma linha cada, com o motivo.
 ### Armadilhas que eu encontrei
 O que quebrou e como contornei.
 
+### Contexto que nao esta no codigo (nao mexer sem saber disso)
+O que um agente novo mexeria por engano se nao soubesse: convencoes nao obvias,
+ decisoes de arquitetura que parecem estranhas mas sao propositais, partes que
+ parecem redundantes mas nao sao. Se nada se aplica, escreva 'nada alem do que
+ ja esta documentado nas instructions'.
+
+### Decisoes que so um humano pode tomar (separado de pendencia tecnica)
+Pergunta em aberto que precisa da palavra do usuario, nao de mais trabalho de
+ agente. Se nao houver nenhuma, escreva 'nenhuma'.
+
 ### Arquivos que eu toquei
 Lista de caminhos.
 
@@ -65,6 +80,17 @@ X.Y — <nome> — [AUTO|SENIOR]
 ### Como voltar atras
 git reset --hard <hash>
 ```
+
+---
+
+## PASSO 2.5 — Varredura de seguranca rapida
+
+Antes de confirmar o handoff, rode:
+```
+git diff --cached -- HANDOFF.md | Select-String -Pattern 'api[_-]?key|password|secret|token' -CaseSensitive:$false
+```
+Se encontrar QUALQUER ocorrencia, NAO grave o handoff — pare e avise o usuario
+qual linha disparou o alerta.
 
 ---
 

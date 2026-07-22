@@ -27,6 +27,8 @@ if (-not $stateContent -or $stateContent.Trim().Length -eq 0) {
     }
 
     $additionalContext = "=== ESTADO DO PROJETO ($stateFile) ===`n$stateContent$ageWarning"
+    # Informa sobre historico arquivado
+    $additionalContext += "`n`n(Historico de sessoes mais antigas esta em docs/archive/handoffs/ — consulte la se precisar de contexto anterior a 5 sessoes.)"
 }
 
 # Bloco de prevencao de erros — regras que ja causaram retrabalho real
