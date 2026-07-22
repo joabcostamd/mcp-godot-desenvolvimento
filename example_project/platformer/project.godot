@@ -1,0 +1,29 @@
+; Platformer — MCP Godot Agent Example
+; Godot 4.7 | 2D Side-Scrolling Platformer
+; 15 behaviors | 4 scenes
+
+[application]
+config/name="MCP Example - Platformer"
+config/description="Jogo de plataforma 2D: pule, colete moedas, evite inimigos, alcance a bandeira. 15 behaviors do arsenal MCP."
+config/features=PackedStringArray("2d")
+run/main_scene="res://scenes/menu.tscn"
+
+[autoload]
+AudioManager="*res://addons/mcp_runtime_bridge/runtime_bridge_client.gd"
+
+[display]
+window/size/viewport_width=480
+window/size/viewport_height=270
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
+
+[rendering]
+renderer/rendering_method="forward_plus"
+environment/default_clear_color=Color(0.1, 0.15, 0.3, 1)
+
+[physics]
+2d/physics_engine=default
+common/max_physics_steps_per_frame=8
+
+[editor_plugins]
+enabled=PackedStringArray("res://addons/mcp_addon/plugin.cfg", "res://addons/mcp_dock/plugin.cfg")

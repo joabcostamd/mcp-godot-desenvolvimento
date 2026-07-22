@@ -1152,9 +1152,11 @@
     "resultado": "Estrutura AssetLib preparada. plugin.cfg atualizado com nome, descricao, autor, versao, tags (10), repositorio, licenca, godot_version. README.md bilingue (PT+EN) com descricao curta/longa, instalacao, exemplo rapido, screenshots placeholder. LICENSE (MIT) e CHANGELOG.md criados. generate_icon.gd (46 linhas) para gerar icone 128x128. Screenshots: 5 placeholders documentados. Sem publicar — pronto para ONDA 4."
   },
   "fatia_2.AX": {
-    "status": "pendente",
-    "data_registro": "2026-07-21",
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
     "agente": "AGENTE 02",
-    "descricao": "+4 jogos-exemplo: platformer, rpg, puzzle, shooter. Cada um em example_project/<genero>/."
+    "checkpoint": "pendente",
+    "resultado": "+4 jogos-exemplo completos em example_project/: platformer (15 behaviors, 4 cenas), rpg (20 behaviors, 5 cenas), puzzle (10 behaviors, 3 cenas), shooter (14 behaviors, 4 cenas). Total: 59 behaviors referenciados, 16 cenas, 4 scripts GDScript (~177 linhas), 4 project.godot, 4 seed.json, 4 README.md. Assets: placeholders geometricos + guia CC0 (Kenney.nl). Todos validados com validate_gdscript.py: 4/4 PASS. Baseado em pesquisa de 5 fontes (Godot Demo Projects, Nodot, seeds/, blueprints/, arsenal 249 behaviors)."
   }
 }
