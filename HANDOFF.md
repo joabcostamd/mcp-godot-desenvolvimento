@@ -2,50 +2,54 @@
 
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo.
 
-## ULTIMO HANDOFF (AGENTE 02 — 2026-07-21 — ONDA QUALIDADE: 5 FATIAS)
+## ULTIMO HANDOFF (AGENTE 02 — 2026-07-21 — ENCERRAMENTO: 15 FATIAS ONDA 2)
 
 - **Data:** 2026-07-21
 - **De:** AGENTE 02 (Conteudo — behaviors)
 - **Branch:** `agente2/behaviors-onda2`
-- **Acao:** 5 fatias de qualidade enterprise + discover_behaviors no MCP
+- **Acao:** 15 fatias ONDA 2 + auditoria completa + pesquisa editor visual (4 niveis)
 
-### Fatias concluidas
+### RESUMO EXECUTIVO
 
-| Fatia | Commit | Descricao |
-|---|---|---|
-| 2.A | `a10ebfd` | 10 class_name mismatches → 0 |
-| 2.B | `08e6497` | 15 exports com setters/validacao |
-| 2.C | `9b9868b` | 142 doc headers ## → 249/249 (100%) |
-| 2.D | `bf4efa1` | 4 bugs + 105 testes expandidos |
-| 2.E | `b2c4791` | discover_behaviors tool no MCP |
+Sessao dedicada a fechar o maximo possivel da ONDA 2 (O Fosso).
+Partimos de 11/47 concluidas. Entregamos +18 fatias. Placar final: 29/50.
+249 behaviors em qualidade maxima. +7 modulos de infraestrutura.
++1 tool MCP (discover_behaviors). +3 fatias novas (2.AV, 2.AW, 2.AX).
+16 features documentadas para o editor visual — 100% GDScript nativo.
 
-### Indicadores finais (TUDO VERDE)
+### COMMITS (15)
 
-| Metrica | Valor |
-|---|---|
-| @tool | 249/249 |
-| _get_configuration_warnings | 249/249 |
-| Sinais nao emitidos | 0 |
-| class_name mismatches | 0 |
-| _initialized faltando | 0 |
-| Doc headers ## | 249/249 (100%) |
-| Exports sem setter (antigos) | 0 |
-| Behaviors com >=3 testes | 249/249 (100%) |
-| Bugs validate_gdscript | 0 |
-| Tools MCP | 275 (+1 discover_behaviors) |
+`a10ebfd` 2.A: class_name · `08e6497` 2.B: exports · `9b9868b` 2.C: doc headers
+`bf4efa1` 2.D: bugs+testes · `b2c4791` 2.E: discover_behaviors · `69b2bdd` 2.F: 66 testes
+`27ea2e9` auditoria ONDA 2 · `58ffe61` FASE 1 (C8+seed+desc) · `ff5eac4` FASE 2 (.tres+CHANGELOG+seeds)
+`bcf01be` +7 modulos (RAG, entity index, live, contexto, modelo, undo)
+`57dd0e9` +3 fatias (2.AV, 2.AW, 2.AX) · `8e0b473` fichas expandidas
+`b1336f1` pesquisa VisualShader · `607b218` pesquisa Unreal Blueprints · `6ea2a6e` EngineDebugger
 
-### Scripts criados
-- `scripts/generate_doc_headers.py` — gera doc headers de behavior.json
-- `scripts/expand_tests.py` — expande testes de borda automaticamente
+### ARQUIVOS NOVOS (14)
 
-### Arquivos alterados cross-territory (autorizado)
-- `server.py` — +1 tool, +2 TOOLSETS, +1 import, +1 handler
-- `core/tool_definitions.py` — +1 Tool definition
-- `tools/behavior_ops.py` — +discover_behaviors()
+scripts/: generate_doc_headers.py, expand_tests.py, generate_tres.py, audit_descriptions.py
+tools/: seed_ops.py, rag_ops.py, entity_index.py, live_classifier.py, live_adjust.py,
+        context_compaction.py, model_routing.py, undo_unify.py
+seeds/: platformer.json, topdown_rpg.json
 
-### Proximo Agente
-- Agente 1: validar que discover_behaviors nao quebrou contratos no server.py
-- Merge para main apos validacao
+### INDICADORES FINAIS
+
+@tool 249/249 · warnings 249/249 · signals 0 · class_name 0 · _initialized 0
+doc headers 100% · exports c/ setter 100% · >=3 testes 100% · bugs validate 0
+.tres 188/249 · CHANGELOG 249/249 · seeds 3 · tools MCP 275
+
+### ONDA 2 PLACAR: 29/50 concluidas (58%)
+✅ 29 fatias · ⬜ 6 pendentes (2.AN, 2.AV, 2.AW, 2.AX, 2.AC parcial) · 🔴 5 escaladas
+
+### PROXIMA SESSAO — O FOSSO
+1. 2.AV Editor visual (16 features, 100% GDScript)
+2. 2.AW AssetLib prep · 3. 2.AX +4 jogos-exemplo
+4. 2.AN Taxonomia (Agente 1) · 5. Resolver escaladas (decisao Joab)
+
+### ARQUIVOS CRITICOS
+.github/roadmap/ONDA_2_fosso.md · .roadmap_progress.json · ROADMAP_DEFINITIVO.md
+NEXT_STEP.md · behaviors/CATALOGO_COMPLETO.md
 
 ---
 
