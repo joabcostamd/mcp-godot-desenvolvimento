@@ -361,6 +361,44 @@ visualmente (ex: "Combate", "Movimento"). Colapsavel.
 **J. Minimap** — GraphEdit nativo tem minimap. Ativar por padrao
 para arvores com >10 nos.
 
+### 🔬 Pesquisa Nivel 3 — Licoes do Unreal Engine Blueprints
+
+O Unreal Engine Blueprints e o sistema de scripting visual mais maduro
+do mundo (usado em Fortnite, Rocket League, etc.). Extraimos:
+
+**K. Event Dispatchers (Signals)** — Equivalentes aos nossos signals.
+No Blueprint, arrastar o pino vermelho de um evento conecta a uma
+acao. Nosso editor deve permitir arrastar o pino de `signal` de um
+behavior para o pino de `receiver` de outro.
+
+**L. Blueprint Interfaces** — Contratos entre behaviors. Ex: "Todo
+inimigo implementa `take_damage(amount)`". Nosso equivalente:
+validacao de que behaviors conectados compartilham o mesmo sinal.
+
+**M. Breakpoints no Grafo** — Pausar execucao num no especifico e
+inspecionar variaveis. Godot tem `breakpoint` keyword. Nosso debugger
+deve suportar clicar num no → adicionar breakpoint → quando atingido,
+destacar no e mostrar blackboard.
+
+**N. Watch Window** — Painel que mostra valores de variaveis em tempo
+real durante execucao. Integrar com nosso `mcp_dock` WebSocket.
+
+**O. Namespaces** — Blueprint suporta namespaces para organizar nos.
+Nosso equivalente: categorias na paleta (Movimento, Combate, IA, etc.)
+com subcategorias (Combate > Dano, Combate > Defesa).
+
+**P. Performance** — Godot Docs alertam: "It is greatly advised to
+enable low-processor usage mode when using GraphEdits." Nossa
+implementacao deve chamar `OS.low_processor_usage_mode = true`
+enquanto o dock estiver aberto, e restaurar ao fechar.
+
+### 🔬 GraphFrame — Agrupamento Nativo
+
+Godot 4.7 tem `GraphFrame` nativo com autoshrink (redimensiona
+automaticamente para caber os nos filhos), margem de arraste (16px),
+cor de fundo customizavel e barra de titulo editavel. Uso no nosso
+editor: agrupar behaviors por funcionalidade ("Sistema de Vida",
+"IA do Inimigo") com cores diferentes e titulos descritivos.
 
 ---
 
