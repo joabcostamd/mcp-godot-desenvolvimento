@@ -316,6 +316,51 @@ substituicao.
 **10. Marcacao** `[SENIOR]` — integra 5 sistemas existentes, requer GraphEdit
 avancado, debug ao vivo, e exportacao de codigo.
 
+### 🔬 Pesquisa Avancada — Licoes do VisualShader da Godot
+
+O sistema de **VisualShader** nativo do Godot 4.7 e a referencia suprema
+para editores visuais dentro do Godot. Extraimos as seguintes melhorias:
+
+**A. Sistema de Cores por Tipo de Porta** (inspirado no VisualShader)
+- Azul (SCALAR) → FLOW (sequencia)
+- Roxo (VECTOR) → DATA (blackboard)
+- Verde (BOOLEAN) → CONDITION (ramo)
+- Laranja (SAMPLER) → EVENT (sinal)
+
+**B. Reroute Nodes** — nos de organizacao pura, sem logica.
+Permitem ajustar o caminho das conexoes para evitar emaranhados.
+Multiplos reroutes por conexao, arraste para mover. Essencial para
+arvores com >20 nos.
+
+**C. Expression Node** — no customizado onde o usuario escreve
+uma expressao GDScript de uma linha. Ex: `distance_to(target) < 100`.
+Preenche o gap entre no visual e codigo puro.
+
+**D. Auto-Arrange** — botao que reorganiza os nos selecionados
+automaticamente (algoritmo de layout hierarquico). GraphEdit nativo
+tem `arrange_nodes()`.
+
+**E. Show Generated Code** — botao que revela o GDScript gerado
+pela arvore visual. Essencial para aprendizado e debugging.
+
+**F. Undo/Redo** — usar `EditorUndoRedoManager` do Godot para
+historico de operacoes no grafo (add/remove node, connect/disconnect,
+move, edit param). Integrar com nosso `undo_unify.py` (2.AT).
+
+**G. Preview ao Vivo** — preview do comportamento em execucao
+(num viewport separado ou no jogo rodando). Inspirado no material
+preview do VisualShader.
+
+**H. Drag-from-Port** — arrastar de um port para o espaco vazio
+abre o menu "Add Node" filtrado pelo tipo do port. Inspirado no
+`get_default_input_port()` do VisualShaderNode.
+
+**I. Frames/Grupos** — `GraphFrame` para agrupar nos relacionados
+visualmente (ex: "Combate", "Movimento"). Colapsavel.
+
+**J. Minimap** — GraphEdit nativo tem minimap. Ativar por padrao
+para arvores com >10 nos.
+
 
 ---
 
