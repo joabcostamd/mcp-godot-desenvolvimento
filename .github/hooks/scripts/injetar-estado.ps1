@@ -3,7 +3,7 @@
 
 param()
 
-$projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$projectRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
 $stateContent = ""
 $stateFile = ""
 
@@ -28,6 +28,22 @@ if (-not $stateContent -or $stateContent.Trim().Length -eq 0) {
 
     $additionalContext = "=== ESTADO DO PROJETO ($stateFile) ===`n$stateContent$ageWarning"
 }
+
+# Bloco de prevencao de erros — regras que ja causaram retrabalho real
+$regrasCriticas = @"
+`n`n=== REGRAS QUE JA CAUSARAM ERRO ANTES (NAO REPITA) ===
+R1: Nunca declare var com mesmo nome na mesma funcao GDScript.
+R2: Nunca use := com acesso a Dictionary; declare tipo explicito.
+R10: Ciclo declarativo — ler estado, editar, validar, reiniciar, verificar. Nao pule passos.
+R11: Todo handler referenciado no _HANDLERS_CACHE precisa ser definido antes do import.
+R12: godot --headless --script/--check-only NAO funciona no Windows 4.7.
+R17: Alias "no"->"node" causa falso positivo — palavras de 2 letras sem acento nao viram alias.
+R18: PhaseState.load() SEMPRE seguido de self.save() — senao estado some da proxima sessao.
+R19: NUNCA use := em @tool scripts Godot; declare tipo explicito.
+R20: Agent hooks do VS Code NAO disparam com extensoes third-party — nao dependa deles para gates.
+"@
+
+$additionalContext += $regrasCriticas
 
 # Escapa para JSON seguro
 $escapedContext = $additionalContext -replace '\\', '\\' -replace '"', '\"' -replace "`n", '\n' -replace "`r", ''

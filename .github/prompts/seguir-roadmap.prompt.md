@@ -10,16 +10,14 @@ tools: ['read', 'search', 'edit', 'terminal', 'agent']
 Você é um agente do projeto MCP Godot. Siga este processo EXATO, sem pular etapas.
 
 ## ETAPA 0 — Identificação
-1. Leia `ROADMAP_UNIFICADO.md` completamente
-2. Identifique se você é AGENTE 01 (foco: server.py/core) ou AGENTE 02 (foco: tools/.github)
-3. Se não conseguir identificar, PERGUNTE ao humano
-4. Localize a PRÓXIMA etapa com status ⬜ na SUA zona
+1. Leia `docs/ROADMAP_DEFINITIVO.md` completamente
+2. Voce e o agente unico — opera em TODO o repositorio
+3. Localize a PROXIMA etapa com status ⬜ no roadmap
 
 ## ETAPA 1 — Contexto
-5. Leia `HANDOFF.md` (se existir) — entenda o estado da última sessão
-6. Leia `SUTURE_ISSUES.md` — verifique conflitos pendentes
-7. Confirme que a etapa escolhida NÃO pisa em arquivos do outro agente
-   (use a MATRIZ DE CONFLITO no ROADMAP)
+5. Leia `HANDOFF.md` (se existir) — entenda o estado da ultima sessao
+6. Leia `docs/SUTURE_ISSUES.md` — verifique conflitos pendentes
+7. Confirme que a etapa escolhida e viavel
 
 ## ETAPA 2 — Planejamento
 8. Use o modo Plan Agent para pesquisar:
@@ -38,31 +36,29 @@ Você é um agente do projeto MCP Godot. Siga este processo EXATO, sem pular eta
     - Não modificou tool depreciada em `tools/deprecated.py`
 
 ## ETAPA 4 — Auditoria
-14. Rode a validação OBRIGATÓRIA:
-    - AGENTE 01: `validate_tool_registry_consistency()`
-    - AGENTE 02: `auditar.py` com critérios C1-C6
-15. Se FAIL → corrija e repita a validação (máx 3 tentativas)
-16. Se FAIL após 3 tentativas → registre em `SUTURE_ISSUES.md` e PARE
+14. Rode a validacao OBRIGATORIA:
+    - `python auditar.py` com criterios C1-C6
+    - `validate_tool_registry_consistency()` se disponivel
+15. Se FAIL -> corrija e repita a validacao (max 3 tentativas)
+16. Se FAIL apos 3 tentativas -> registre em `SUTURE_ISSUES.md` e PARE
 
 ## ETAPA 5 — Handoff
-17. Atualize `ROADMAP_UNIFICADO.md`:
-    - Marque a etapa concluída como ✅
-    - Adicione data de conclusão
+17. Atualize `docs/ROADMAP_DEFINITIVO.md`:
+    - Marque a etapa concluida como ✅
+    - Adicione data de conclusao
 18. Escreva/atualize `HANDOFF.md`:
     - O que foi feito (arquivos modificados, linhas alteradas)
-    - O que NÃO foi feito (e por quê)
-    - Decisões tomadas (e o racional)
-    - ⚠️ Pontos de atenção para o outro agente
-19. Atualize `NEXT_STEP.md`:
-    - Próxima etapa do AGENTE 01: _____
-    - Próxima etapa do AGENTE 02: _____
-20. Faça commit: `feat(agente-X-etapa-Y): descrição em português`
+    - O que NAO foi feito (e por que)
+    - Decisoes tomadas (e o racional)
+    - Pontos de atencao para a proxima sessao
+19. Atualize `.roadmap_progress.json`:
+    - Proxima etapa: _____
+20. Faca commit: `feat(etapa-Y): descricao em portugues`
 
-## ETAPA 6 — Comunicação
+## ETAPA 6 — Comunicacao
 21. Informe ao humano:
-    - ✅ Etapa concluída: [nome]
+    - ✅ Etapa concluida: [nome]
     - 📁 Arquivos modificados: [lista]
-    - 🔍 Validação: PASS/FAIL
-    - ⚠️ Alertas para o outro agente: [se houver]
-    - 🎯 Próxima etapa automática: [nome da próxima]
-22. Pergunte: "Posso continuar para a próxima etapa ou você quer revisar?"
+    - 🔍 Validacao: PASS/FAIL
+    - 🎯 Proxima etapa automatica: [nome da proxima]
+22. Pergunte: "Posso continuar para a proxima etapa ou voce quer revisar?"

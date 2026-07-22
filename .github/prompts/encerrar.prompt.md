@@ -7,6 +7,8 @@ user-invocable: true
 
 # /encerrar — Protocolo Universal de Encerramento
 
+> Use este comando ao final da sessao de trabalho. Para um checkpoint rapido no meio do dia, use /handoff.
+
 Pipeline de 15 fases. Cada fase: pré-condições → execução → validação → tratamento de erro. Uma fase só avança se a anterior concluir. Erro crítico registra e segue nas fases independentes.
 
 **Universal:** funciona em qualquer projeto — Python, JS, Godot, Rust, Go, web, CLI. Sem caminho fixo, sem nome fixo, sem suposição.

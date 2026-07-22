@@ -5,6 +5,8 @@ mode: 'agent'
 
 # /handoff — Passar o bastao
 
+> Use este comando para um checkpoint rapido no meio da sessao ou ao trocar de tarefa. Para o fechamento completo do dia, com testes e auditoria, use /encerrar.
+
 A proxima sessao **nao tem o seu historico de conversa**. So existe o que estiver
 em arquivo. Este comando transforma o que voce sabe em algo que a proxima sessao consegue ler.
 
