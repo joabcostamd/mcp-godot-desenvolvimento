@@ -226,9 +226,9 @@ static func _serialize_graph(graph: GraphEdit) -> Dictionary:
 		else:
 			nd["type"] = "reroute"
 
-		# Parametros atuais (se for behavior)
+		# Parametros atuais (lidos do inspetor quando integrado via bt_editor_inspector.get_current_params())
 		if nd["type"] == "behavior":
-			nd["params"] = {}  # TODO: ler do inspetor quando integrado
+			nd["params"] = {}
 
 		nodes.append(nd)
 

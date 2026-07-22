@@ -546,17 +546,9 @@ func _get_all_behaviors() -> Array[Dictionary]:
 
 
 func _generate_gdscript() -> String:
-	"""Gera GDScript basico a partir da arvore visual (placeholder — completado no serializer P6)."""
-	var lines: PackedStringArray = []
-	lines.push_back("## GDScript gerado pelo MCP BT Editor")
-	lines.push_back("## Arvore com %d nos" % get_child_count())
-	lines.push_back("")
-	lines.push_back("extends Node")
-	lines.push_back("")
-	lines.push_back("func _ready():")
-	lines.push_back("\t# TODO: Executar arvore de comportamento")
-	lines.push_back("\tpass")
-	return "\n".join(lines)
+	"""Gera GDScript a partir da arvore visual usando o serializer."""
+	# Delega para o serializer (classe BTEditorSerializer)
+	return BTEditorSerializer.export_to_gdscript(self)
 
 
 func get_all_nodes() -> Array[GraphNode]:

@@ -107,7 +107,29 @@ func _create_dock() -> void:
 
 	main_hbox.add_child(right_panel)
 
+	# --- Wiring: conectar componentes entre si ---
+	_wire_components()
+
 	_dock = main_hbox
+
+
+# ── Wiring ────────────────────────────────────────────────────────────────────
+
+func _wire_components() -> void:
+	"""Conecta grafo↔inspetor e debugger↔grafo."""
+	# Grafo conhece inspetor (para _on_node_selected → show_node)
+	if _graph_edit and _graph_edit.has_method("set_inspector"):
+		_graph_edit.call("set_inspector", _inspector)
+	if _graph_edit and _graph_edit.has_method("set_palette"):
+		_graph_edit.call("set_palette", _palette)
+
+	# Debugger conhece o grafo (para highlights e breakpoints)
+	if _debugger and _debugger.has_method("set_graph_edit"):
+		_debugger.call("set_graph_edit", _graph_edit)
+
+	# Atualizar paleta (ja foi criada com set_graph_edit, so refresh)
+	if _palette and _palette.has_method("refresh"):
+		_palette.call_deferred("refresh")
 
 
 # ── Sub-factories ─────────────────────────────────────────────────────────────
