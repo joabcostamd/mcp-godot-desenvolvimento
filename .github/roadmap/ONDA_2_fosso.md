@@ -376,9 +376,9 @@ inimigo implementa `take_damage(amount)`". Nosso equivalente:
 validacao de que behaviors conectados compartilham o mesmo sinal.
 
 **M. Breakpoints no Grafo** — Pausar execucao num no especifico e
-inspecionar variaveis. Godot tem `breakpoint` keyword. Nosso debugger
-deve suportar clicar num no → adicionar breakpoint → quando atingido,
-destacar no e mostrar blackboard.
+inspecionar variaveis. Solucao: `EngineDebugger.insert_breakpoint()`
++ `EngineDebugger.debug()` pausa a execucao. `send_message()` envia
+valores das variaveis para o dock. 100% GDScript nativo, zero C++.
 
 **N. Watch Window** — Painel que mostra valores de variaveis em tempo
 real durante execucao. Integrar com nosso `mcp_dock` WebSocket.
@@ -399,6 +399,44 @@ automaticamente para caber os nos filhos), margem de arraste (16px),
 cor de fundo customizavel e barra de titulo editavel. Uso no nosso
 editor: agrupar behaviors por funcionalidade ("Sistema de Vida",
 "IA do Inimigo") com cores diferentes e titulos descritivos.
+
+### 🔬 Pesquisa Nivel 4 — EngineDebugger: Breakpoints 100% GDScript
+
+**Descoberta:** A classe `EngineDebugger` do Godot 4.7 expoe a API completa
+de debug em GDScript puro. Nao requer C++, GDExtension, nem EditorDebuggerPlugin.
+
+| Metodo | Funcao |
+|---|---|
+| `insert_breakpoint(linha, script)` | Define um breakpoint no script |
+| `remove_breakpoint(linha, script)` | Remove breakpoint |
+| `debug(can_continue, is_error)` | **Pausa a execucao do jogo** |
+| `is_active()` | Verifica se o debugger do editor esta conectado |
+| `send_message(msg, data)` | Envia dados para o editor (ex: valores de variaveis) |
+| `register_message_capture(nome, cb)` | Recebe comandos do editor |
+| `clear_breakpoints()` | Limpa todos os breakpoints |
+| `is_breakpoint(linha, script)` | Verifica se linha tem breakpoint |
+| `line_poll()` | Forca processamento de eventos do debugger |
+
+**Fluxo de debug no editor visual:**
+
+```
+1. Usuario clica num no "Atacar" → "Adicionar Breakpoint"
+2. Editor injeta insert_breakpoint() no .gd do behavior
+3. Jogo roda → chega no no → debug() pausa TUDO
+4. Editor recebe sinal de pause → set_connection_activity() destaca o no
+5. send_message("get_vars") → jogo responde com valores atuais
+6. Watch Window mostra: health=80, damage=25, target="Player"
+7. Usuario aperta "Continuar" → debug(true) → jogo continua
+```
+
+**Integracao:** WebSocket 9082 (`mcp_dock`) transporta os comandos.
+`register_message_capture("mcp_bt")` permite que o jogo receba comandos
+do nosso dock. `send_message()` devolve os valores das variaveis.
+
+**Resultado:** Todas as 16 features do editor visual sao 100% GDScript
+nativo. Zero dependencias externas. Zero C++.
+
+**Fonte:** Godot 4.7 Docs — `EngineDebugger` class reference.
 
 ---
 
