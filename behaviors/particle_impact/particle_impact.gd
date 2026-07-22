@@ -48,28 +48,22 @@ func emit(at_position: Vector2 = Vector2.ZERO, color_override: Color = Color.WHI
 		# Aplica cor
 		_apply_color(particle, color_override)
 
-		# Conecta auto-limpeza
-		if auto_free:
-			var gpup := particle as GPUParticles2D
-			if gpup:
-				gpup.finished.connect(_on_particle_finished.bind(particle), CONNECT_ONE_SHOT)
-			else:
-				var cpup := particle as CPUParticles2D
-				if cpup:
-					cpup.finished.connect(_on_particle_finished.bind(particle), CONNECT_ONE_SHOT)
-
-		add_child(particle)
-
-		# Dispara a emissão
+		# Conecta auto-limpeza e dispara emissao
 		var gpup := particle as GPUParticles2D
+		var cpup := particle as CPUParticles2D
+
 		if gpup:
+			if auto_free:
+				gpup.finished.connect(_on_particle_finished.bind(particle), CONNECT_ONE_SHOT)
 			gpup.one_shot = true
 			gpup.emitting = true
-		else:
-			var cpup := particle as CPUParticles2D
-			if cpup:
-				cpup.one_shot = true
-				cpup.emitting = true
+		elif cpup:
+			if auto_free:
+				cpup.finished.connect(_on_particle_finished.bind(particle), CONNECT_ONE_SHOT)
+			cpup.one_shot = true
+			cpup.emitting = true
+
+		add_child(particle)
 
 		spawned.append(particle)
 

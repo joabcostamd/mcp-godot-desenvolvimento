@@ -49,14 +49,19 @@
     "fatia_2c_doc_headers": {
       "status": "concluida",
       "data_conclusao": "2026-07-21",
-      "resultado": "142 doc headers ## gerados via scripts/generate_doc_headers.py. 249/249 behaviors com doc header (100%). Headers contem: descricao, generos, tags, extends, sinais, dependencias, @behavior. Script reutilizavel para futuros behaviors. audit_behaviors.py: 0 CRITICAL, 0 WARNINGS. validate_gdscript: 10/10 sample PASS. NOTA: 4 erros pre-existentes (debug_console, particle_impact, player_vehicle, vignette) serao tratados na FATIA 2.D."
+      "resultado": "142 doc headers ## gerados via scripts/generate_doc_headers.py. 249/249 behaviors com doc header (100%). Headers contem: descricao, generos, tags, extends, sinais, dependencias, @behavior. Script reutilizavel para futuros behaviors. audit_behaviors.py: 0 CRITICAL, 0 WARNINGS. validate_gdscript: 10/10 sample PASS."
+    },
+    "fatia_2d_testes_e_bugs": {
+      "status": "concluida",
+      "data_conclusao": "2026-07-21",
+      "resultado": "4 bugs corrigidos (debug_console:ctrl_pressed→Input.is_key_pressed, particle_impact:var duplicada, player_vehicle:var duplicada, vignette:ColorRect→TextureRect). 105 behaviors com testes expandidos via scripts/expand_tests.py. Distribuicao: 0 com 1 teste, 66 com 2, 183 com >=3. Scripts: generate_doc_headers.py + expand_tests.py. audit_behaviors.py: 0 CRITICAL, 0 WARNINGS. validate_gdscript: 5/5 test sample + 4/4 bugfixes PASS."
     }
   },
   "auditoria": {
     "data": "2026-07-21",
     "problemas_encontrados": 0,
-    "corrigidos": 10,
-    "resultado": "100% class_name mismatches corrigidos. audit_behaviors.py: 0 CRITICAL, 0 WARNINGS. merge-tree: LIMPO."
+    "corrigidos": 0,
+    "resultado": "100% indicadores verdes. audit_behaviors.py: 0 CRITICAL, 0 WARNINGS. validate_gdscript: ALL PASS. merge-tree: LIMPO."
   },
   "comportamentos": {
     "total_catalogo": 249,

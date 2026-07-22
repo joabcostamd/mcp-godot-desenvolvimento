@@ -26,7 +26,7 @@ func _ready() -> void:
 	visible=false; mouse_filter=Control.MOUSE_FILTER_IGNORE; _initialized=true
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_accept") and event.ctrl_pressed:
+	if event.is_action_pressed("ui_accept") and Input.is_key_pressed(KEY_CTRL):
 		visible=!visible; if visible: _input.grab_focus()
 
 func _on_command(cmd: String) -> void:

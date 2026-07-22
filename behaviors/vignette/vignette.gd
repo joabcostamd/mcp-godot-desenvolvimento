@@ -18,7 +18,7 @@ extends CanvasLayer
 signal vignette_started()
 signal vignette_finished()
 
-var _rect: ColorRect = null
+var _rect: TextureRect = null
 var _tween: Tween = null
 var _initialized: bool = false
 
@@ -31,11 +31,13 @@ func _ready() -> void:
 
 
 func _setup_rect() -> void:
-	_rect = ColorRect.new()
+	_rect = TextureRect.new()
 	_rect.name = "VignetteRect"
 	_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_rect.modulate.a = 0.0
+	_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_rect.stretch_mode = TextureRect.STRETCH_SCALE
 
 	var tex := GradientTexture2D.new()
 	tex.fill = GradientTexture2D.FILL_RADIAL

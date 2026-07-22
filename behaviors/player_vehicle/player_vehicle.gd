@@ -54,10 +54,12 @@ func _physics_process(delta: float) -> void:
 	var turn_input := Input.get_axis("ui_left", "ui_right")
 	body.rotation += turn_input * turn_rate * delta
 
+	# Direção frontal (usada por thrust e drift)
+	var forward := Vector2.RIGHT.rotated(body.rotation)
+
 	# Impulso na direção frontal
 	var thrust := Input.get_axis("ui_down", "ui_up")  # up = 1, down = -1
 	if thrust != 0.0:
-		var forward := Vector2.RIGHT.rotated(body.rotation)
 		body.velocity += forward * thrust * acceleration * delta
 
 	# Limita velocidade máxima
@@ -65,7 +67,6 @@ func _physics_process(delta: float) -> void:
 		body.velocity = body.velocity.normalized() * max_speed
 
 	# Drift: reduz velocidade lateral (perpendicular à direção frontal)
-	var forward := Vector2.RIGHT.rotated(body.rotation)
 	var forward_vel := forward.dot(body.velocity) * forward
 	var lateral_vel := body.velocity - forward_vel
 	body.velocity = forward_vel + lateral_vel * (1.0 - drift)
