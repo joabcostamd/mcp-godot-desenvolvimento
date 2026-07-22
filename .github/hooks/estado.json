@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "powershell -NoProfile -ExecutionPolicy Bypass -File .github/hooks/scripts/injetar-estado.ps1",
+        "timeout": 10
+      }
+    ]
+  }
+}
