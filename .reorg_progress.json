@@ -1,6 +1,6 @@
 {
   "fase_atual": "F5",
-  "fatia_atual": "5.8",
+  "fatia_atual": "5.9",
   "fases_fechadas": ["F0", "F1", "F2"],
   "fases_parciais": ["F3", "F4"],
   "bloqueado": false,
@@ -13,7 +13,7 @@
     "F2": {"status": "concluida", "data": "2026-07-21", "resultado": "CONFORMIDADE MCP: annotations nos rollups, _meta_tool.py atualizado com ToolAnnotations."},
     "F3": {"status": "parcial", "data": "2026-07-21", "resultado": "UNIFICAR ROLLUPS: 12 orphan manage tools receberam namespaces. Unificacao completa dos 3 caminhos pendente."},
     "F4": {"status": "parcial", "data": "2026-07-21", "resultado": "DESCOBERTA PROGRESSIVA: discovery.py e catalog_search criados. Descoberta por fase nao implementada."},
-    "F5": {"status": "em_andamento", "data": "2026-07-21", "resultado": "MIGRAR DOMINIOS: 8 dominios migrados (physics, ui, shader, camera, navigation, vfx, render, skeleton). ~5 dominios restantes."},
+    "F5": {"status": "em_andamento", "data": "2026-07-21", "resultado": "MIGRAR DOMINIOS: 9 dominios migrados (physics, ui, shader, camera, navigation, vfx, render, skeleton, debug). ~4 dominios restantes."},
     "F6": {"status": "nao_iniciada"},
     "F7": {"status": "nao_iniciada"},
     "F8": {"status": "nao_iniciada"},
