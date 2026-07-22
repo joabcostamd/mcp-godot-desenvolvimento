@@ -1070,6 +1070,25 @@ from tools.asset_security import (
     scan_asset_directory,
     asset_security_report,
 )
+from tools.rag_ops import (
+    index_project,
+    search_project,
+)
+from tools.entity_index import (
+    index_scene,
+    query_entities,
+)
+from tools.fix_recipes import (
+    analyze_error,
+    list_recipes,
+    apply_recipe,
+)
+from tools.reproducibility_seed import (
+    generate_seed,
+    replay_seed,
+    list_seeds,
+    verify_seed,
+)
 from tools.devsolo_ops import (
     setup_camera_2d,
     setup_camera_follow,
@@ -2201,6 +2220,21 @@ def _build_handlers() -> dict:
         "validate_asset_security": validate_asset_security,
         "scan_asset_directory": scan_asset_directory,
         "asset_security_report": asset_security_report,
+        # FATIA 2.AE: RAG Local
+        "index_project": index_project,
+        "search_project": search_project,
+        # FATIA 2.AF: Entity Index
+        "index_scene": index_scene,
+        "query_entities": query_entities,
+        # FATIA 2.AK: Fix Recipes
+        "analyze_error": analyze_error,
+        "list_recipes": list_recipes,
+        "apply_recipe": apply_recipe,
+        # FATIA 2.AS: Reproducibility Seed
+        "generate_seed": generate_seed,
+        "replay_seed": replay_seed,
+        "list_seeds": list_seeds,
+        "verify_seed": verify_seed,
         # Onda 8: DevSolo Crítico
         "setup_camera_2d": _handle_setup_camera_2d,
         "create_navigation_region_2d": _handle_create_navigation_region_2d,
