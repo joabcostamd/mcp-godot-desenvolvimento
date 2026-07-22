@@ -1,7 +1,7 @@
 ---
-description: 'Ciclo autônomo — planeja, implementa e valida etapas do roadmap. Aceita argumento: vazio (uma etapa), "onda" (bloco inteiro), "tudo" (roadmap inteiro até bloqueio real).'
+description: 'Ciclo autônomo — planeja, implementa e valida etapas do roadmap. Aceita argumento: vazio (uma etapa), "onda" (bloco inteiro), "tudo" (roadmap inteiro até bloqueio real), "tudo max=N" (com limite de ondas), "tudo sem-limite" (ignora teto).'
 mode: 'agent'
-argument-hint: '<vazio | onda | tudo>'
+argument-hint: '<vazio | onda | tudo | tudo max=N | tudo sem-limite>'
 ---
 
 # /seguir-roadmap — Ciclo Autônomo de Desenvolvimento
@@ -15,8 +15,8 @@ Você é o agente único do projeto MCP Godot. Siga este processo EXATO, sem pul
 Determine o modo pelo argumento recebido:
 
 - **Sem argumento ou 'uma':** Execute UMA etapa (comportamento padrão). Após concluir a etapa, faça handoff e pergunte ao humano se quer continuar. Não chame /audit automaticamente.
-- **'onda':** Execute TODAS as etapas do bloco/onda atual do roadmap em sequência, sem parar para perguntar entre elas. Ao final do bloco, rode `/audit` (o comando de auditoria adversarial) sobre o conjunto de mudanças do bloco inteiro. Pare e reporte.
-- **'tudo':** Execute etapas em sequência até o fim do roadmap. Ao final de CADA bloco/onda, rode `/audit` sobre aquele bloco antes de seguir para o próximo. Pare SÓ em bloqueio real ou fim do roadmap. Não pergunte ao humano durante o percurso.
+- **'onda':** Execute TODAS as etapas do bloco/onda atual do roadmap em sequência, sem parar para perguntar entre elas. Ao final do bloco, execute a auditoria adversarial: use a ferramenta `runSubagent` para delegar a auditoria. Passe como instrução do subagente o CONTEÚDO INTEIRO de `.github/prompts/audit.prompt.md` (leia o arquivo primeiro e inclua o texto completo no prompt do subagente, não apenas o nome). Isso garante execução isolada e rigorosa do roteiro de 7 passos. Pare e reporte o resultado.
+- **'tudo':** Execute etapas em sequência até o fim do roadmap. Ao final de CADA bloco/onda, execute a auditoria adversarial (use `runSubagent` com o conteúdo completo de `audit.prompt.md`, igual ao modo 'onda') sobre aquele bloco antes de seguir para o próximo. **Limite padrão: 5 ondas por chamada.** Ao completar a 5ª onda (ou quando o argumento especificar outro número, ex.: `tudo max=10`), pare e reporte, mesmo sem bloqueio real — isso é um check-in de segurança, não uma falha. O humano só precisa rodar `/seguir-roadmap tudo` de novo para continuar de onde parou (o `HANDOFF.md` já tem o estado). Se o argumento for `tudo sem-limite`, ignore o teto. Mantenha um contador de ondas completadas nesta execução, comparando com o limite.
 
 Regras que valem em TODOS os modos:
 - Bloqueio encontrado → PARE imediatamente (ETAPA 2.9).
@@ -106,21 +106,24 @@ Regras que valem em TODOS os modos:
 
 20. Se ainda há etapas neste bloco → volte para ETAPA 0 com a PRÓXIMA etapa do mesmo bloco (sem perguntar ao humano, sem pausa).
 21. Se esta foi a ÚLTIMA etapa do bloco:
-    a. Rode `/audit` sobre o conjunto de mudanças do bloco inteiro.
+    a. Execute a auditoria adversarial via `runSubagent` com o conteúdo completo de `audit.prompt.md` sobre o conjunto de mudanças do bloco inteiro.
     b. Informe ao humano:
        - 📦 Bloco concluído: [nome da onda].
        - 📁 Total de arquivos modificados no bloco: [lista].
        - 🔍 Validação por etapa: [resumo PASS/FAIL].
-       - 🔎 Auditoria adversarial (/audit): [resultado].
+       - 🔎 Auditoria adversarial (runSubagent com audit.prompt.md): [resultado].
+       - ⚠️ Se houver Bloqueantes na auditoria: destaque em NEGRITO no topo do relatório, não apenas como mais um item.
        - 🎯 Próximo bloco: [nome da próxima onda].
     c. **Pare** e aguarde.
 
 ### Modo 'tudo'
 
-20. Se esta foi a ÚLTIMA etapa de um bloco/onda → rode `/audit` sobre aquele bloco antes de seguir.
-21. Se ainda há etapas no roadmap → volte para ETAPA 0 com a PRÓXIMA etapa (sem perguntar, sem pausa).
-22. Se chegou ao FIM do roadmap (todas as etapas ✅) → informe o resumo completo e PARE.
-23. Se encontrou BLOQUEIO real (ETAPA 2.9 ou 4.15) → registre, informe o ponto exato do bloqueio, e PARE. NÃO tente contornar — bloqueio é parede, não sugestão.
+20. Se esta foi a ÚLTIMA etapa de um bloco/onda → execute a auditoria adversarial via `runSubagent` com o conteúdo completo de `audit.prompt.md` sobre aquele bloco antes de seguir.
+21. **Regra de bloqueante:** Se o subagente de auditoria retornar QUALQUER achado classificado como Bloqueante, NÃO continue para o próximo bloco/onda. Registre os bloqueantes em `docs/SUTURE_ISSUES.md`, informe o humano, e PARE — com o mesmo peso de uma falha de validação (ETAPA 4.15).
+22. Se atingiu o limite de ondas (padrão 5, ou o valor de `max=N`) → informe o progresso, registre handoff, e PARE (check-in de segurança).
+23. Se ainda há etapas no roadmap E não há bloqueantes E não atingiu o limite → volte para ETAPA 0 com a PRÓXIMA etapa (sem perguntar, sem pausa).
+24. Se chegou ao FIM do roadmap (todas as etapas ✅) → informe o resumo completo e PARE.
+25. Se encontrou BLOQUEIO real (ETAPA 2.9 ou 4.15) → registre, informe o ponto exato do bloqueio, e PARE. NÃO tente contornar — bloqueio é parede, não sugestão.
 
 ---
 
@@ -128,6 +131,7 @@ Regras que valem em TODOS os modos:
 
 - Pular handoff individual de etapa.
 - Ignorar bloqueio real — nem no modo 'tudo'.
+- Continuar para o próximo bloco com Bloqueante de auditoria pendente — nem no modo 'tudo'.
 - Continuar após 3 falhas de validação na mesma etapa.
 - Remover `# INTERNAL` ou modificar `tools/deprecated.py`.
 - Fazer commit sem a etapa passar na validação (ETAPA 4).

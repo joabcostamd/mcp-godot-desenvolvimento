@@ -21,7 +21,7 @@ sem divisão de território. Use os comandos `/` para mode-switching:
 | `/audit` | Audita o trabalho feito (adversarial, não corrige) |
 | `/encerrar` | Encerramento completo: audita, documenta, commita |
 | `/manual` | Gera manual do usuário a partir do código |
-| `/seguir-roadmap` | Ciclo autônomo: 3 modos — `uma` (padrão, 1 etapa), `onda` (bloco inteiro + /audit), `tudo` (até o fim ou bloqueio) |
+| `/seguir-roadmap` | Ciclo autônomo: 3 modos — `uma` (padrão, 1 etapa), `onda` (bloco inteiro + runSubagent /audit), `tudo` (até o fim/bloqueio/limite; padrão max=5 ondas, use `tudo max=N` ou `tudo sem-limite`) |
 
 ---
 
