@@ -1,20 +1,31 @@
 # 🎯 Próximo Passo Automático
 
-> Este arquivo é atualizado AUTOMATICAMENTE ao final de cada etapa.
-> O agente lê este arquivo para saber o que fazer na próxima sessão.
+> Atualizado em 2026-07-21 por AGENTE 02 — Auditoria ONDA 2
 
-## AGENTE 01 — Próxima etapa
-- **Etapa:** Camada 6 — Profundidade de Engine CONCLUÍDA ✅
-- **Status:** ✅ 8/8 fatias implementadas (274 tools totais, 0 inconsistências)
-- **Próximo:** Camada 7 (Polimento) [MARGINAL] — aguarda aprovação do Joab
+## ESTADO REAL DO PROJETO
 
-## AGENTE 02 — Próxima etapa
-- **Etapa:** ✅ Camada 4 CONCLUIDA (B2-B9) + Polimento F1-F7 ✅
-- **Status:** 55/96 fatias concluídas
-- **Próximo:** Camada 5 (Gameplay) — TODAS [MARGINAL], requer aprovacao do Joab
-- **Nota:** 28 tools de gameplay agora registradas no server.py — AGENTE 02 pode ativá-las no PHASE_TOOLSETS
+| Onda | Status |
+|---|---|
+| ONDA 0 — Destravar | ✅ 100% concluída |
+| ONDA 1 — Acessibilidade | ✅ 100% concluída |
+| ONDA 2 — O Fosso | 🟡 11/47 concluídas (23%) · 4 parciais · 32 pendentes |
+| ONDA 3 — Qualidade de Jogo | 🟡 maioria concluída · 4 escaladas |
+| ONDA 4 — Mundo | 🟡 3 fatias · 1 pendente revisão |
 
-## Última atualização
-- **Data:** 2026-07-19
-- **Por:** AGENTE 01 — Registro Camada 5 (28 tools)
-- **Commits:** Pendente
+## AGENTE 01 — Próximas etapas (prioridade)
+
+1. **2.C** — Integrar `scripts/audit_behaviors.py` no `auditar.py` [AUTO]
+2. **2.AJ** — Completar captura de erro (error_collector + playtest_ops) [SÊNIOR]
+3. **2.AS** — Semente de reprodutibilidade [AUTO]
+4. **2.AO** — Auditoria de descrições enxutas [AUTO]
+
+## AGENTE 02 — Próximas etapas (prioridade)
+
+1. **2.D** — Criar `.tres` por behavior com parâmetros exportados [SÊNIOR]
+2. **2.AD** — CHANGELOG.md + versionamento por behavior [SÊNIOR]
+3. **2.AC** — +2 jogos-semente (total 3) [SÊNIOR]
+
+## Bloqueios (precisam de decisão do Joab)
+
+- **2.5, 3.1, 3.2, 3.3, 3.4** — status "escalada"
+- **4.3** — status "implementada_pendente_revisao"

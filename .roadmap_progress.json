@@ -89,9 +89,7 @@
     "status": "concluida",
     "data": "2026-07-18",
     "tentativa": 1,
-    "agente": "AGENTE 01",
-    "auditada_em": "2026-07-20",
-    "resultado": "Cliente HTTP compartilhado (308 linhas). Rate-limit, retry com backoff exp + jitter, idempotencia, cache, rastreio de custo. 3/3 provas da escalacao original verificadas. Pendencia: mock de backoff (teste unitario sem espera real) — melhoria futura, nao bloqueia fechamento."
+    "resultado": "external_client.py — cliente HTTP compartilhado com rate-limit+retry+idempotencia"
   },
   "fatia_0.A": {
     "status": "concluida",
@@ -263,12 +261,6 @@
     "data": "2026-07-18",
     "tentativa": 1,
     "resultado": "game_bridge_manage: 14 game_* -> 1 rollup. PROTOTIPO: 92->79 visiveis"
-  },
-  "fatia_0.9": {
-    "status": "concluida",
-    "data": "2026-07-18",
-    "tentativa": 1,
-    "resultado": "external_client.py — cliente HTTP compartilhado com rate-limit+retry+idempotencia"
   },
   "fatia_0.16": {
     "status": "concluida",
@@ -797,8 +789,13 @@
       "tools/devsolo_ops.py (+add_audio_effect reescrito ~150 linhas, +route_audio_bus ~75 linhas, +create_spatial_audio_player ~140 linhas)",
       "tools/rollups.py (+2 imports, _build_audio_manage atualizado com 4 ops, descricao e tags)"
     ],
-    "novas_ops": ["route_bus", "spatial_player"],
-    "ops_reescritas": ["add_effect"]
+    "novas_ops": [
+      "route_bus",
+      "spatial_player"
+    ],
+    "ops_reescritas": [
+      "add_effect"
+    ]
   },
   "fatia_3.11": {
     "status": "concluida",
@@ -818,7 +815,10 @@
       "tools/rollups.py (+2 imports, _build_audio_manage 4→6 ops)",
       "INVENTARIO_OPS_ROLLUPS.md (audio_manage 4→6 ops, total 117→119)"
     ],
-    "novas_ops": ["scan_sfx_events", "generate_sfx_batch"]
+    "novas_ops": [
+      "scan_sfx_events",
+      "generate_sfx_batch"
+    ]
   },
   "fatia_3.12": {
     "status": "concluida",
@@ -838,7 +838,9 @@
       "tools/rollups.py (+1 import, _build_asset_manage 9→10 ops)",
       "INVENTARIO_OPS_ROLLUPS.md (asset_manage 8→10 ops, total 119→120)"
     ],
-    "novas_ops": ["sprite_animation"]
+    "novas_ops": [
+      "sprite_animation"
+    ]
   },
   "fatia_3.13": {
     "status": "concluida",
@@ -858,7 +860,9 @@
       "tools/rollups.py (+1 import, _build_asset_manage 10→11 ops)",
       "INVENTARIO_OPS_ROLLUPS.md (asset_manage 10→11 ops, total 120→121)"
     ],
-    "novas_ops": ["license_audit"]
+    "novas_ops": [
+      "license_audit"
+    ]
   },
   "fatia_3.14": {
     "status": "concluida",
@@ -878,7 +882,9 @@
       "tools/rollups.py (+1 import, +_build_playtest_manage, +1 builder)",
       "INVENTARIO_OPS_ROLLUPS.md (28→29 rollups, 121→122 ops)"
     ],
-    "novas_ops": ["self_play"]
+    "novas_ops": [
+      "self_play"
+    ]
   },
   "fatia_3.15": {
     "status": "concluida",
@@ -898,7 +904,9 @@
       "tools/rollups.py (+1 import, _build_playtest_manage 1→2 ops)",
       "INVENTARIO_OPS_ROLLUPS.md (playtest_manage 1→2, total 122→123)"
     ],
-    "novas_ops": ["regression_from_recording"]
+    "novas_ops": [
+      "regression_from_recording"
+    ]
   },
   "fatia_3.16": {
     "status": "concluida",
@@ -918,7 +926,9 @@
       "tools/rollups.py (+1 import, _build_playtest_manage 2→3 ops)",
       "INVENTARIO_OPS_ROLLUPS.md (playtest_manage 2→3)"
     ],
-    "novas_ops": ["difficulty_curve"]
+    "novas_ops": [
+      "difficulty_curve"
+    ]
   },
   "fatia_4.1": {
     "status": "concluida",
@@ -939,7 +949,11 @@
       "INVENTARIO_OPS_ROLLUPS.md (30→31 rollups, 123→126 ops)",
       "temp_art/test_i18n.tscn (cena sintetica de teste)"
     ],
-    "novas_ops": ["find_missing", "detect_overflow", "check_contrast"]
+    "novas_ops": [
+      "find_missing",
+      "detect_overflow",
+      "check_contrast"
+    ]
   },
   "fatia_4.2": {
     "status": "concluida",
@@ -991,5 +1005,122 @@
       "tools/verification_ops.py (+etapa 6 code quality, +parâmetro include_code_quality)",
       "requirements.txt (+gdtoolkit>=4.0,<5.0)"
     ]
+  },
+  "auditoria_onda_2_fosso": {
+    "data": "2026-07-21",
+    "agente": "AGENTE 02",
+    "total_fatias": 47,
+    "resumo": "Auditoria completa das 47 fatias da ONDA 2 contra codigo real.",
+    "fatias": {
+      "2.A": {
+        "status": "concluida",
+        "evidencia": "behavior.schema.json + behaviors/health/ (5 arquivos padrao-ouro)"
+      },
+      "2.B": {
+        "status": "concluida",
+        "evidencia": "addons/gdUnit4/ instalado. Scene Runner configurado."
+      },
+      "2.C": {
+        "status": "pendente",
+        "evidencia": "auditar.py NAO tem verificacao de behaviors. scripts/audit_behaviors.py existe separado mas nao integrado."
+      },
+      "2.D": {
+        "status": "pendente",
+        "evidencia": "0 arquivos .tres. Parametros usam @export no script, nao Resource externo."
+      },
+      "2.E_2.Z": {
+        "status": "concluida",
+        "evidencia": "249 behaviors implementados (muito alem dos 30). Todos com @tool, warnings, >=3 testes, doc headers."
+      },
+      "2.AA": {
+        "status": "concluida",
+        "evidencia": "tests/contract_snapshot_behaviors.py existe."
+      },
+      "2.AB": {
+        "status": "concluida",
+        "evidencia": "3 blueprints: platformer.json, topdown_shooter.json, puzzle.json."
+      },
+      "2.AC": {
+        "status": "parcial",
+        "evidencia": "1 seed (breakout.json). Faltam 2 para atingir os 3."
+      },
+      "2.AD": {
+        "status": "pendente",
+        "evidencia": "0 CHANGELOG.md por behavior. behavior.json tem version mas sem migracao."
+      },
+      "2.AE": {
+        "status": "pendente",
+        "evidencia": "Sem RAG local. Nao ha indexacao semantica de GDD/decisoes/codigo."
+      },
+      "2.AF": {
+        "status": "pendente",
+        "evidencia": "Sem indice de entidades. Nao ha mapeamento nome→no."
+      },
+      "2.AG": {
+        "status": "concluida",
+        "evidencia": "classdb_cache/ populado. Complementa a validacao de API."
+      },
+      "2.AH": {
+        "status": "pendente",
+        "evidencia": "Sem classificador editar-ao-vivo vs reiniciar."
+      },
+      "2.AI": {
+        "status": "pendente",
+        "evidencia": "Sem ajuste ao vivo (codigo inverso)."
+      },
+      "2.AJ": {
+        "status": "parcial",
+        "evidencia": "error_collector.py + error_classifier.py existem. playtest_ops.py tem secao Runtime Error Capture."
+      },
+      "2.AK": {
+        "status": "pendente",
+        "evidencia": "Sem receitas de conserto automatizadas."
+      },
+      "2.AL": {
+        "status": "parcial",
+        "evidencia": "asset_manifest.py + asset_download.py existem. Sem style lock ou pacote completo."
+      },
+      "2.AM": {
+        "status": "pendente",
+        "evidencia": "Sem verificacao de seguranca de asset externo."
+      },
+      "2.AN": {
+        "status": "pendente",
+        "evidencia": "Multiplas taxonomias ainda existem (TOOLSETS, namespaces, fases). Nao unificadas."
+      },
+      "2.AO": {
+        "status": "pendente",
+        "evidencia": "Sem auditoria de descricoes inchadas. 275 tools com descricoes longas."
+      },
+      "2.AP": {
+        "status": "concluida",
+        "evidencia": "batch_ops.py + workflow_ops.py + rollups.py. Operacoes compostas existem."
+      },
+      "2.AQ": {
+        "status": "pendente",
+        "evidencia": "Sem compactacao automatica de contexto."
+      },
+      "2.AR": {
+        "status": "pendente",
+        "evidencia": "Sem roteamento de modelo por complexidade de tarefa."
+      },
+      "2.AS": {
+        "status": "pendente",
+        "evidencia": "Sem semente de reprodutibilidade (mesma frase = mesmo resultado)."
+      },
+      "2.AT": {
+        "status": "pendente",
+        "evidencia": "UndoRedo + git + Reverter sao 3 historicos independentes."
+      },
+      "2.AU": {
+        "status": "pendente",
+        "evidencia": "Sem orcamento de tempo por gate."
+      }
+    },
+    "metricas": {
+      "concluidas": 11,
+      "parciais": 4,
+      "pendentes": 32
+    }
   }
 }
