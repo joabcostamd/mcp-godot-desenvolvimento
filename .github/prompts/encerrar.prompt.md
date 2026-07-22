@@ -251,40 +251,37 @@ Crie `.session/SNAPSHOT_<YYYY-MM-DD>.json`:
 
 ---
 
-## 🔜 FASE 11 — NEXT SESSION
+## 🔜 FASE 11 — HANDOFF (ESTADO)
 
 **Pré-condição:** Fases 2 e 8 OK.
 
 **Execução:**
-Crie/atualize `.session/NEXT_SESSION.md`:
+Atualize `HANDOFF.md` (fonte única de estado do projeto) com a seção de encerramento:
 ```markdown
-# 🔄 PRÓXIMA SESSÃO
+## Encerramento — <data>
 
-## Resumo
+### Resumo
 (2-3 linhas do que foi feito)
 
-## Estado
-- Versão: X | Módulos: Y | Progresso: Z%
+### Estado
+- Versão: X | Commit: <hash> | Branch: <branch>
 
-## Última tarefa
-- Nome e breve descrição
-
-## Pendências
+### Pendências
 - [ ] Item 1 (prioridade: alta/média/baixa)
 - [ ] Item 2
 
-## Arquivos-chave
+### Arquivos-chave
 - path/importante.py
 
-## Fluxo sugerido
-1. Leia NEXT_SESSION.md e decisions.md
+### Fluxo sugerido
+1. Leia HANDOFF.md
 2. Rode validação (testes, lint)
 3. Continue de <ponto específico>
 
-## Decisões da sessão
+### Decisões da sessão
 - Decisão → motivo (1 linha)
 
-## ⚠️ Atenção
+### ⚠️ Atenção
 - Bugs conhecidos, armadilhas, restrições
 ```
 

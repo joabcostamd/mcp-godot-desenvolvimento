@@ -1,6 +1,5 @@
 # injetar-estado.ps1 — Hook SessionStart
-# Le o arquivo de estado do projeto e injeta como additionalContext.
-# Procura em ordem: HANDOFF.md, .session/NEXT_SESSION.md
+# Le HANDOFF.md (fonte unica de estado) e injeta como additionalContext.
 
 param()
 
@@ -8,15 +7,10 @@ $projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $stateContent = ""
 $stateFile = ""
 
-# Tenta HANDOFF.md primeiro (mantido ativamente, tracked)
+# HANDOFF.md e a fonte unica de estado do projeto
 if (Test-Path "$projectRoot\HANDOFF.md") {
     $stateFile = "HANDOFF.md"
     $stateContent = Get-Content "$projectRoot\HANDOFF.md" -Raw -Encoding UTF8
-}
-# Fallback: .session/NEXT_SESSION.md (criado pelo /encerrar)
-elseif (Test-Path "$projectRoot\.session\NEXT_SESSION.md") {
-    $stateFile = ".session/NEXT_SESSION.md"
-    $stateContent = Get-Content "$projectRoot\.session\NEXT_SESSION.md" -Raw -Encoding UTF8
 }
 
 if (-not $stateContent -or $stateContent.Trim().Length -eq 0) {

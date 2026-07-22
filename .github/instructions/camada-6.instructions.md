@@ -1,5 +1,5 @@
 ---
-applyTo: '**'
+applyTo: 'docs/roadmap/camada-6*'
 ---
 
 # 07 — CAMADA 6 — PROFUNDIDADE DE ENGINE [MARGINAL / Campo A]

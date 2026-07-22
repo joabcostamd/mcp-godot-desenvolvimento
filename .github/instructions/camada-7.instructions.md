@@ -1,5 +1,5 @@
 ---
-applyTo: '**'
+applyTo: 'docs/roadmap/camada-7*'
 ---
 
 # 08 — CAMADA 7 — POLIMENTO FINO [MARGINAL]

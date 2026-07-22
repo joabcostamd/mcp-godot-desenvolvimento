@@ -1,5 +1,5 @@
 ---
-applyTo: '**'
+applyTo: 'docs/roadmap/camada-5*'
 ---
 
 # 06 — CAMADA 5 — GAMEPLAY [MARGINAL]

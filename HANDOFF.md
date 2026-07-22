@@ -1,6 +1,7 @@
-# 🤝 HANDOFF — Comunicação entre Agentes
+# 🤝 HANDOFF.md — Estado do Projeto (fonte única de verdade)
 
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo.
+> **Este é o "onde paramos" canônico.** Nenhum outro arquivo de estado (.session/NEXT_SESSION.md, etc.) deve ser usado.
 
 ---
 
