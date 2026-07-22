@@ -17,6 +17,9 @@ if (-not $content -or $content.Trim().Length -eq 0) { exit 0 }
 
 $secoes = [regex]::Split($content, '(?=## (?:Handoff|Encerramento)\b)') | Where-Object { $_.Trim().Length -gt 0 }
 
+# Filtra o bloco de cabecalho (tudo antes do primeiro ## Handoff/Encerramento)
+$secoes = $secoes | Where-Object { $_ -match '^## (?:Handoff|Encerramento)\b' }
+
 $firstSectionIndex = $content.IndexOf('## Handoff')
 if ($firstSectionIndex -lt 0) { $firstSectionIndex = $content.IndexOf('## Encerramento') }
 $header = ''
