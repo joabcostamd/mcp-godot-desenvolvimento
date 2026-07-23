@@ -162,10 +162,38 @@
     "checkpoint": "acfe25c",
     "resultado": "Gate de design do core loop. Integra fun_report no advance_phase: se detectar modo de falha (sem escalada, estrategia degenerada, recompensa distante, pico escondido), bloqueia avanco. So bloqueia com dados reais (sem dados = nao bloqueia). 281 tools. C1 PASS, C3 PASS."
   },
-  "fatia_3.H": {"status": "concluida", "data": "2026-07-21", "tentativa": 1, "agente": "AGENTE 01", "checkpoint": "acfe25c", "resultado": "Modo professor. teacher_manage(op=explain): explica em 3 partes (o_que/por_que/proximo). Reduz dependencia da IA. 284 tools."},
-  "fatia_3.I": {"status": "concluida", "data": "2026-07-21", "tentativa": 1, "agente": "AGENTE 01", "checkpoint": "acfe25c", "resultado": "Primeiro nao bem feito. scope_manage(op=validate_idea): detecta escopos inviaveis e oferece contraproposta de 2 semanas."},
-  "fatia_3.J": {"status": "concluida", "data": "2026-07-21", "tentativa": 1, "agente": "AGENTE 01", "checkpoint": "acfe25c", "resultado": "Disclosure IA. scope_manage(op=disclosure): gera declaracao Steam + itch.io para publicacao."},
-  "fatia_3.K": {"status": "concluida", "data": "2026-07-21", "tentativa": 1, "agente": "AGENTE 01", "checkpoint": "acfe25c", "resultado": "Revisor adversarial. reviewer_manage(op=enable|disable|status). Estado em .mcp_reviewer_mode.json."},
+  "fatia_3.H": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "acfe25c",
+    "resultado": "Modo professor. teacher_manage(op=explain): explica em 3 partes (o_que/por_que/proximo). Reduz dependencia da IA. 284 tools."
+  },
+  "fatia_3.I": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "acfe25c",
+    "resultado": "Primeiro nao bem feito. scope_manage(op=validate_idea): detecta escopos inviaveis e oferece contraproposta de 2 semanas."
+  },
+  "fatia_3.J": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "acfe25c",
+    "resultado": "Disclosure IA. scope_manage(op=disclosure): gera declaracao Steam + itch.io para publicacao."
+  },
+  "fatia_3.K": {
+    "status": "concluida",
+    "data": "2026-07-21",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "acfe25c",
+    "resultado": "Revisor adversarial. reviewer_manage(op=enable|disable|status). Estado em .mcp_reviewer_mode.json."
+  },
   "fatia_3.A": {
     "status": "concluida",
     "data": "2026-07-21",
@@ -392,9 +420,7 @@
     "status": "concluida",
     "data": "2026-07-18",
     "tentativa": 1,
-    "agente": "AGENTE 01",
-    "auditada_em": "2026-07-20",
-    "resultado": "Cliente HTTP compartilhado (308 linhas). Rate-limit, retry com backoff exp + jitter, idempotencia, cache, rastreio de custo. 3/3 provas da escalacao original verificadas. Pendencia: mock de backoff (teste unitario sem espera real) — melhoria futura, nao bloqueia fechamento."
+    "resultado": "external_client.py — cliente HTTP compartilhado com rate-limit+retry+idempotencia"
   },
   "fatia_0.A": {
     "status": "concluida",
@@ -566,12 +592,6 @@
     "data": "2026-07-18",
     "tentativa": 1,
     "resultado": "game_bridge_manage: 14 game_* -> 1 rollup. PROTOTIPO: 92->79 visiveis"
-  },
-  "fatia_0.9": {
-    "status": "concluida",
-    "data": "2026-07-18",
-    "tentativa": 1,
-    "resultado": "external_client.py — cliente HTTP compartilhado com rate-limit+retry+idempotencia"
   },
   "fatia_0.16": {
     "status": "concluida",
@@ -1100,8 +1120,13 @@
       "tools/devsolo_ops.py (+add_audio_effect reescrito ~150 linhas, +route_audio_bus ~75 linhas, +create_spatial_audio_player ~140 linhas)",
       "tools/rollups.py (+2 imports, _build_audio_manage atualizado com 4 ops, descricao e tags)"
     ],
-    "novas_ops": ["route_bus", "spatial_player"],
-    "ops_reescritas": ["add_effect"]
+    "novas_ops": [
+      "route_bus",
+      "spatial_player"
+    ],
+    "ops_reescritas": [
+      "add_effect"
+    ]
   },
   "fatia_3.11": {
     "status": "concluida",
@@ -1121,7 +1146,10 @@
       "tools/rollups.py (+2 imports, _build_audio_manage 4→6 ops)",
       "INVENTARIO_OPS_ROLLUPS.md (audio_manage 4→6 ops, total 117→119)"
     ],
-    "novas_ops": ["scan_sfx_events", "generate_sfx_batch"]
+    "novas_ops": [
+      "scan_sfx_events",
+      "generate_sfx_batch"
+    ]
   },
   "fatia_3.12": {
     "status": "concluida",
@@ -1141,7 +1169,9 @@
       "tools/rollups.py (+1 import, _build_asset_manage 9→10 ops)",
       "INVENTARIO_OPS_ROLLUPS.md (asset_manage 8→10 ops, total 119→120)"
     ],
-    "novas_ops": ["sprite_animation"]
+    "novas_ops": [
+      "sprite_animation"
+    ]
   },
   "fatia_3.13": {
     "status": "concluida",
@@ -1161,7 +1191,9 @@
       "tools/rollups.py (+1 import, _build_asset_manage 10→11 ops)",
       "INVENTARIO_OPS_ROLLUPS.md (asset_manage 10→11 ops, total 120→121)"
     ],
-    "novas_ops": ["license_audit"]
+    "novas_ops": [
+      "license_audit"
+    ]
   },
   "fatia_3.14": {
     "status": "concluida",
@@ -1181,7 +1213,9 @@
       "tools/rollups.py (+1 import, +_build_playtest_manage, +1 builder)",
       "INVENTARIO_OPS_ROLLUPS.md (28→29 rollups, 121→122 ops)"
     ],
-    "novas_ops": ["self_play"]
+    "novas_ops": [
+      "self_play"
+    ]
   },
   "fatia_3.15": {
     "status": "concluida",
@@ -1201,7 +1235,9 @@
       "tools/rollups.py (+1 import, _build_playtest_manage 1→2 ops)",
       "INVENTARIO_OPS_ROLLUPS.md (playtest_manage 1→2, total 122→123)"
     ],
-    "novas_ops": ["regression_from_recording"]
+    "novas_ops": [
+      "regression_from_recording"
+    ]
   },
   "fatia_3.16": {
     "status": "concluida",
@@ -1221,7 +1257,9 @@
       "tools/rollups.py (+1 import, _build_playtest_manage 2→3 ops)",
       "INVENTARIO_OPS_ROLLUPS.md (playtest_manage 2→3)"
     ],
-    "novas_ops": ["difficulty_curve"]
+    "novas_ops": [
+      "difficulty_curve"
+    ]
   },
   "fatia_4.1": {
     "status": "concluida",
@@ -1242,7 +1280,11 @@
       "INVENTARIO_OPS_ROLLUPS.md (30→31 rollups, 123→126 ops)",
       "temp_art/test_i18n.tscn (cena sintetica de teste)"
     ],
-    "novas_ops": ["find_missing", "detect_overflow", "check_contrast"]
+    "novas_ops": [
+      "find_missing",
+      "detect_overflow",
+      "check_contrast"
+    ]
   },
   "fatia_4.2": {
     "status": "concluida",
@@ -1294,5 +1336,77 @@
       "tools/verification_ops.py (+etapa 6 code quality, +parâmetro include_code_quality)",
       "requirements.txt (+gdtoolkit>=4.0,<5.0)"
     ]
+  },
+  "reorg_R1_gate_git": {
+    "status": "nao verificado",
+    "data": "2026-07-23",
+    "agente": "AGENTE 01",
+    "checkpoint": null,
+    "resultado": "R1 - Gate git real em .githooks (a unica trava que dispara neste ambiente)",
+    "ficha": ".github/roadmap/ONDA_R_reconciliacao.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "reorg_R2_estado_unico": {
+    "status": "nao verificado",
+    "data": "2026-07-23",
+    "agente": "AGENTE 01",
+    "checkpoint": null,
+    "resultado": "R2 - Estado unico: os outros 2 JSON viram arquivo morto",
+    "ficha": ".github/roadmap/ONDA_R_reconciliacao.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "reorg_R3_auditor": {
+    "status": "nao verificado",
+    "data": "2026-07-23",
+    "agente": "AGENTE 01",
+    "checkpoint": null,
+    "resultado": "R3 - auditar.py: C1 tolerancia 0 (DR-6) e --skip-c5 -> baseline (DR-5)",
+    "ficha": ".github/roadmap/ONDA_R_reconciliacao.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "reorg_R4_caminhos": {
+    "status": "nao verificado",
+    "data": "2026-07-23",
+    "agente": "AGENTE 01",
+    "checkpoint": null,
+    "resultado": "R4 - Caminho do roadmap, prompts locais e contradicao /seguir-roadmap x /act",
+    "ficha": ".github/roadmap/ONDA_R_reconciliacao.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "reorg_R5_reauditoria": {
+    "status": "nao verificado",
+    "data": "2026-07-23",
+    "agente": "AGENTE 01",
+    "checkpoint": null,
+    "resultado": "R5 - Reauditar as fatias F1..F5 marcadas concluida contra o criterio real",
+    "ficha": ".github/roadmap/ONDA_R_reconciliacao.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "reorg_R6_branch_agente2": {
+    "status": "nao verificado",
+    "data": "2026-07-23",
+    "agente": "AGENTE 01",
+    "checkpoint": null,
+    "resultado": "R6 - Branch agente2/behaviors-onda2: tag de arquivo morto, sem merge (DR-2)",
+    "ficha": ".github/roadmap/ONDA_R_reconciliacao.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "reorg_R7_medicao": {
+    "status": "nao verificado",
+    "data": "2026-07-23",
+    "agente": "AGENTE 01",
+    "checkpoint": null,
+    "resultado": "R7 - Medicao real por fase via _get_phase_tools()",
+    "ficha": ".github/roadmap/ONDA_R_reconciliacao.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "reorg_R8_fichas": {
+    "status": "nao verificado",
+    "data": "2026-07-23",
+    "agente": "AGENTE 01",
+    "checkpoint": null,
+    "resultado": "R8 - Gerar as fichas das ondas seguintes com os numeros da R7",
+    "ficha": ".github/roadmap/ONDA_R_reconciliacao.md",
+    "marcacao": "[EIXO-CENTRAL]"
   }
 }
