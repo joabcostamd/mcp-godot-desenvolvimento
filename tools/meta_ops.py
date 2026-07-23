@@ -38,7 +38,7 @@ def catalog_search(query: str = "", group: str = "", limit: int = 20) -> dict:
     """
     from tools.dynamic_groups import tool_catalog as _tc
     try:
-        result = _tc({"query": query, "group": group, "limit": limit})
+        result = _tc(query=query, group=group, limit=limit)
         if isinstance(result, dict) and result.get("status") == "success":
             tools = result.get("results", [])
             # ── ONDA 4.3: Enriquecer com ops (operações dos _manage) ──
