@@ -1,0 +1,29 @@
+{
+  "versao": "1.0",
+  "data": "2026-07-23",
+  "onda": "9.1",
+  "descricao": "Tools em quarentena — nunca exercitadas por um jogo real. Só saem quando um jogo precisar da capacidade (ver docs/QUARENTENA_CRITERIO_SAIDA.md).",
+  "tools": [
+    "capsule_generate_store_image",
+    "cloud_save_configure",
+    "community_manage",
+    "cutscene_add_camera_shot",
+    "cutscene_add_dialogue_event",
+    "cutscene_create_timeline",
+    "mod_manifest_generate",
+    "onboarding_check_first_experience",
+    "onboarding_create_guided_tour",
+    "onboarding_create_tutorial_step",
+    "publish_manage",
+    "remote_balance_config",
+    "telemetry_get_funnel",
+    "telemetry_heatmap",
+    "telemetry_session_summary",
+    "telemetry_track_event",
+    "trailer_capture_clip",
+    "trailer_render_sequence",
+    "validate_mod_compatibility"
+  ],
+  "criterio_saida": "Um jogo real (Star Colony ou Shardbreaker) precisou da capacidade e a ferramenta foi exercitada com sucesso.",
+  "nota": "As definições das tools PERMANECEM em core/tool_definitions.py. A quarentena é apenas uma marcação — não remove funcionalidade."
+}

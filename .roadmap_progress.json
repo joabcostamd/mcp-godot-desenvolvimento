@@ -1,4 +1,12 @@
 {
+  "onda_9_quarentena": {
+    "status": "concluida",
+    "data": "2026-07-23",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "3052038",
+    "resultado": "ONDA 9 — QUARENTENA (2 fatias). 9.1: experimental/quarentena.json com 19 tools nunca exercitadas (trailer, telemetria, cutscenes, onboarding, mods, cloud save, publish). 9.2: docs/QUARENTENA_CRITERIO_SAIDA.md — regra: so sai quando jogo real precisar. Regressao: 159 passed, 7 xfailed."
+  },
   "onda_4_descoberta": {
     "status": "concluida",
     "data": "2026-07-23",
