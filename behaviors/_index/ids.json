@@ -1,0 +1,998 @@
+[
+  {
+    "id": "accordion",
+    "name": "accordion"
+  },
+  {
+    "id": "achievement",
+    "name": "achievement"
+  },
+  {
+    "id": "achievement_tracker",
+    "name": "achievement_tracker"
+  },
+  {
+    "id": "aim_assist",
+    "name": "aim_assist"
+  },
+  {
+    "id": "ambience_zone",
+    "name": "ambience_zone"
+  },
+  {
+    "id": "analytics_tracker",
+    "name": "analytics_tracker"
+  },
+  {
+    "id": "animation_blender",
+    "name": "animation_blender"
+  },
+  {
+    "id": "animation_curve_table",
+    "name": "animation_curve_table"
+  },
+  {
+    "id": "animation_layer",
+    "name": "animation_layer"
+  },
+  {
+    "id": "animation_state_machine",
+    "name": "animation_state_machine"
+  },
+  {
+    "id": "area_damage",
+    "name": "area_damage"
+  },
+  {
+    "id": "assist_mode",
+    "name": "assist_mode"
+  },
+  {
+    "id": "audio_manager",
+    "name": "audio_manager"
+  },
+  {
+    "id": "audio_visualizer",
+    "name": "audio_visualizer"
+  },
+  {
+    "id": "authority",
+    "name": "authority"
+  },
+  {
+    "id": "auto_aim",
+    "name": "auto_aim"
+  },
+  {
+    "id": "auto_save",
+    "name": "auto_save"
+  },
+  {
+    "id": "autoload_manager",
+    "name": "autoload_manager"
+  },
+  {
+    "id": "avoidance",
+    "name": "avoidance"
+  },
+  {
+    "id": "batch_renderer",
+    "name": "batch_renderer"
+  },
+  {
+    "id": "beam_laser",
+    "name": "beam_laser"
+  },
+  {
+    "id": "behavior_analytics",
+    "name": "behavior_analytics"
+  },
+  {
+    "id": "behavior_registry",
+    "name": "behavior_registry"
+  },
+  {
+    "id": "behavior_sandbox",
+    "name": "behavior_sandbox"
+  },
+  {
+    "id": "behavior_tree",
+    "name": "behavior_tree"
+  },
+  {
+    "id": "blackboard",
+    "name": "blackboard"
+  },
+  {
+    "id": "blend_space_1d",
+    "name": "blend_space_1d"
+  },
+  {
+    "id": "blend_space_2d",
+    "name": "blend_space_2d"
+  },
+  {
+    "id": "blood_gore_toggle",
+    "name": "blood_gore_toggle"
+  },
+  {
+    "id": "buoyancy",
+    "name": "buoyancy"
+  },
+  {
+    "id": "burnable",
+    "name": "burnable"
+  },
+  {
+    "id": "button_mash_protection",
+    "name": "button_mash_protection"
+  },
+  {
+    "id": "bypass_gate",
+    "name": "bypass_gate"
+  },
+  {
+    "id": "camera_follow",
+    "name": "camera_follow"
+  },
+  {
+    "id": "camera_framed",
+    "name": "camera_framed"
+  },
+  {
+    "id": "camera_lookat",
+    "name": "camera_lookat"
+  },
+  {
+    "id": "camera_path",
+    "name": "camera_path"
+  },
+  {
+    "id": "camera_priority",
+    "name": "camera_priority"
+  },
+  {
+    "id": "camera_sequence",
+    "name": "camera_sequence"
+  },
+  {
+    "id": "camera_shake",
+    "name": "camera_shake"
+  },
+  {
+    "id": "camera_zoom",
+    "name": "camera_zoom"
+  },
+  {
+    "id": "camera_zoom_range",
+    "name": "camera_zoom_range"
+  },
+  {
+    "id": "card",
+    "name": "card"
+  },
+  {
+    "id": "character_creator",
+    "name": "character_creator"
+  },
+  {
+    "id": "character_stats",
+    "name": "character_stats"
+  },
+  {
+    "id": "checkpoint",
+    "name": "checkpoint"
+  },
+  {
+    "id": "chromatic_aberration",
+    "name": "chromatic_aberration"
+  },
+  {
+    "id": "cloud_save",
+    "name": "cloud_save"
+  },
+  {
+    "id": "collectable",
+    "name": "collectable"
+  },
+  {
+    "id": "color_blind_mode",
+    "name": "color_blind_mode"
+  },
+  {
+    "id": "color_pulse",
+    "name": "color_pulse"
+  },
+  {
+    "id": "combo_detector",
+    "name": "combo_detector"
+  },
+  {
+    "id": "controller_remap",
+    "name": "controller_remap"
+  },
+  {
+    "id": "conveyor_belt",
+    "name": "conveyor_belt"
+  },
+  {
+    "id": "counter",
+    "name": "counter"
+  },
+  {
+    "id": "crafting",
+    "name": "crafting"
+  },
+  {
+    "id": "crash_reporter",
+    "name": "crash_reporter"
+  },
+  {
+    "id": "critical_hit",
+    "name": "critical_hit"
+  },
+  {
+    "id": "cross_save",
+    "name": "cross_save"
+  },
+  {
+    "id": "crosshair",
+    "name": "crosshair"
+  },
+  {
+    "id": "currency",
+    "name": "currency"
+  },
+  {
+    "id": "curve_table",
+    "name": "curve_table"
+  },
+  {
+    "id": "custom_node",
+    "name": "custom_node"
+  },
+  {
+    "id": "cutscene",
+    "name": "cutscene"
+  },
+  {
+    "id": "daily_reward",
+    "name": "daily_reward"
+  },
+  {
+    "id": "damage_over_time",
+    "name": "damage_over_time"
+  },
+  {
+    "id": "dash",
+    "name": "dash"
+  },
+  {
+    "id": "data_table",
+    "name": "data_table"
+  },
+  {
+    "id": "day_night_cycle",
+    "name": "day_night_cycle"
+  },
+  {
+    "id": "dead_zone_config",
+    "name": "dead_zone_config"
+  },
+  {
+    "id": "debug_arrow",
+    "name": "debug_arrow"
+  },
+  {
+    "id": "debug_console",
+    "name": "debug_console"
+  },
+  {
+    "id": "debug_overlay",
+    "name": "debug_overlay"
+  },
+  {
+    "id": "debug_position",
+    "name": "debug_position"
+  },
+  {
+    "id": "deck",
+    "name": "deck"
+  },
+  {
+    "id": "defeat_condition",
+    "name": "defeat_condition"
+  },
+  {
+    "id": "deprecation_watcher",
+    "name": "deprecation_watcher"
+  },
+  {
+    "id": "destructible",
+    "name": "destructible"
+  },
+  {
+    "id": "dialogue",
+    "name": "dialogue"
+  },
+  {
+    "id": "difficulty_adjust",
+    "name": "difficulty_adjust"
+  },
+  {
+    "id": "difficulty_curve",
+    "name": "difficulty_curve"
+  },
+  {
+    "id": "dirty_flag",
+    "name": "dirty_flag"
+  },
+  {
+    "id": "dissolve",
+    "name": "dissolve"
+  },
+  {
+    "id": "double_jump",
+    "name": "double_jump"
+  },
+  {
+    "id": "drag_drop",
+    "name": "drag_drop"
+  },
+  {
+    "id": "draw_call_optimizer",
+    "name": "draw_call_optimizer"
+  },
+  {
+    "id": "dungeon_generator",
+    "name": "dungeon_generator"
+  },
+  {
+    "id": "editor_dock",
+    "name": "editor_dock"
+  },
+  {
+    "id": "element_system",
+    "name": "element_system"
+  },
+  {
+    "id": "encrypted_save",
+    "name": "encrypted_save"
+  },
+  {
+    "id": "enemy_chase",
+    "name": "enemy_chase"
+  },
+  {
+    "id": "enemy_patrol",
+    "name": "enemy_patrol"
+  },
+  {
+    "id": "equipment_slot",
+    "name": "equipment_slot"
+  },
+  {
+    "id": "error_boundary",
+    "name": "error_boundary"
+  },
+  {
+    "id": "event_bus",
+    "name": "event_bus"
+  },
+  {
+    "id": "farming_plot",
+    "name": "farming_plot"
+  },
+  {
+    "id": "fire_mode",
+    "name": "fire_mode"
+  },
+  {
+    "id": "fire_rate",
+    "name": "fire_rate"
+  },
+  {
+    "id": "fishing_cast",
+    "name": "fishing_cast"
+  },
+  {
+    "id": "flee",
+    "name": "flee"
+  },
+  {
+    "id": "flexible_text_entry",
+    "name": "flexible_text_entry"
+  },
+  {
+    "id": "floating_text",
+    "name": "floating_text"
+  },
+  {
+    "id": "flocking",
+    "name": "flocking"
+  },
+  {
+    "id": "follow_path",
+    "name": "follow_path"
+  },
+  {
+    "id": "font_size_global",
+    "name": "font_size_global"
+  },
+  {
+    "id": "fps_counter",
+    "name": "fps_counter"
+  },
+  {
+    "id": "freeze_frame",
+    "name": "freeze_frame"
+  },
+  {
+    "id": "game_speed_control",
+    "name": "game_speed_control"
+  },
+  {
+    "id": "glitch",
+    "name": "glitch"
+  },
+  {
+    "id": "gravity_zone",
+    "name": "gravity_zone"
+  },
+  {
+    "id": "grid_movement",
+    "name": "grid_movement"
+  },
+  {
+    "id": "gyro_aim",
+    "name": "gyro_aim"
+  },
+  {
+    "id": "hand",
+    "name": "hand"
+  },
+  {
+    "id": "haptic_manager",
+    "name": "haptic_manager"
+  },
+  {
+    "id": "health",
+    "name": "health"
+  },
+  {
+    "id": "health_bar",
+    "name": "health_bar"
+  },
+  {
+    "id": "high_contrast",
+    "name": "high_contrast"
+  },
+  {
+    "id": "hit_stop",
+    "name": "hit_stop"
+  },
+  {
+    "id": "hitbox",
+    "name": "hitbox"
+  },
+  {
+    "id": "hitscan",
+    "name": "hitscan"
+  },
+  {
+    "id": "hold_alternative",
+    "name": "hold_alternative"
+  },
+  {
+    "id": "homing_projectile",
+    "name": "homing_projectile"
+  },
+  {
+    "id": "hot_reload",
+    "name": "hot_reload"
+  },
+  {
+    "id": "hurtbox",
+    "name": "hurtbox"
+  },
+  {
+    "id": "idle_generator",
+    "name": "idle_generator"
+  },
+  {
+    "id": "infinite_world",
+    "name": "infinite_world"
+  },
+  {
+    "id": "input_buffer",
+    "name": "input_buffer"
+  },
+  {
+    "id": "input_cooldown",
+    "name": "input_cooldown"
+  },
+  {
+    "id": "input_manager",
+    "name": "input_manager"
+  },
+  {
+    "id": "interactable",
+    "name": "interactable"
+  },
+  {
+    "id": "interface_rearrange",
+    "name": "interface_rearrange"
+  },
+  {
+    "id": "interface_resize",
+    "name": "interface_resize"
+  },
+  {
+    "id": "inventory",
+    "name": "inventory"
+  },
+  {
+    "id": "knockback",
+    "name": "knockback"
+  },
+  {
+    "id": "l_system",
+    "name": "l_system"
+  },
+  {
+    "id": "ladder",
+    "name": "ladder"
+  },
+  {
+    "id": "lava_surface",
+    "name": "lava_surface"
+  },
+  {
+    "id": "leaderboard",
+    "name": "leaderboard"
+  },
+  {
+    "id": "lens_flare",
+    "name": "lens_flare"
+  },
+  {
+    "id": "lerp_smooth",
+    "name": "lerp_smooth"
+  },
+  {
+    "id": "line_of_sight",
+    "name": "line_of_sight"
+  },
+  {
+    "id": "lobby",
+    "name": "lobby"
+  },
+  {
+    "id": "localization",
+    "name": "localization"
+  },
+  {
+    "id": "lod_controller",
+    "name": "lod_controller"
+  },
+  {
+    "id": "logger",
+    "name": "logger"
+  },
+  {
+    "id": "look_at_target",
+    "name": "look_at_target"
+  },
+  {
+    "id": "magnet",
+    "name": "magnet"
+  },
+  {
+    "id": "main_menu",
+    "name": "main_menu"
+  },
+  {
+    "id": "match3_grid",
+    "name": "match3_grid"
+  },
+  {
+    "id": "migration_runner",
+    "name": "migration_runner"
+  },
+  {
+    "id": "mod_config",
+    "name": "mod_config"
+  },
+  {
+    "id": "mod_loader",
+    "name": "mod_loader"
+  },
+  {
+    "id": "mod_sandbox",
+    "name": "mod_sandbox"
+  },
+  {
+    "id": "mod_store",
+    "name": "mod_store"
+  },
+  {
+    "id": "modular_weapon",
+    "name": "modular_weapon"
+  },
+  {
+    "id": "moving_platform",
+    "name": "moving_platform"
+  },
+  {
+    "id": "music_playlist",
+    "name": "music_playlist"
+  },
+  {
+    "id": "narrative_replay",
+    "name": "narrative_replay"
+  },
+  {
+    "id": "network_sync",
+    "name": "network_sync"
+  },
+  {
+    "id": "noise_generator",
+    "name": "noise_generator"
+  },
+  {
+    "id": "object_pool",
+    "name": "object_pool"
+  },
+  {
+    "id": "one_shot_animation",
+    "name": "one_shot_animation"
+  },
+  {
+    "id": "outline",
+    "name": "outline"
+  },
+  {
+    "id": "outline_shader",
+    "name": "outline_shader"
+  },
+  {
+    "id": "parallax_background",
+    "name": "parallax_background"
+  },
+  {
+    "id": "particle_impact",
+    "name": "particle_impact"
+  },
+  {
+    "id": "patch_system",
+    "name": "patch_system"
+  },
+  {
+    "id": "pathfinding",
+    "name": "pathfinding"
+  },
+  {
+    "id": "patrol_route",
+    "name": "patrol_route"
+  },
+  {
+    "id": "pause_menu",
+    "name": "pause_menu"
+  },
+  {
+    "id": "performance_monitor",
+    "name": "performance_monitor"
+  },
+  {
+    "id": "physics_tick_optimizer",
+    "name": "physics_tick_optimizer"
+  },
+  {
+    "id": "player_controller",
+    "name": "player_controller"
+  },
+  {
+    "id": "player_topdown",
+    "name": "player_topdown"
+  },
+  {
+    "id": "player_vehicle",
+    "name": "player_vehicle"
+  },
+  {
+    "id": "plugin_creator",
+    "name": "plugin_creator"
+  },
+  {
+    "id": "practice_mode",
+    "name": "practice_mode"
+  },
+  {
+    "id": "profile_manager",
+    "name": "profile_manager"
+  },
+  {
+    "id": "profiler_hook",
+    "name": "profiler_hook"
+  },
+  {
+    "id": "projectile",
+    "name": "projectile"
+  },
+  {
+    "id": "quest",
+    "name": "quest"
+  },
+  {
+    "id": "quick_time_alternative",
+    "name": "quick_time_alternative"
+  },
+  {
+    "id": "racing_lap",
+    "name": "racing_lap"
+  },
+  {
+    "id": "random_loot",
+    "name": "random_loot"
+  },
+  {
+    "id": "random_walker",
+    "name": "random_walker"
+  },
+  {
+    "id": "recoil",
+    "name": "recoil"
+  },
+  {
+    "id": "resource_factory",
+    "name": "resource_factory"
+  },
+  {
+    "id": "resource_override",
+    "name": "resource_override"
+  },
+  {
+    "id": "rhythm_timing",
+    "name": "rhythm_timing"
+  },
+  {
+    "id": "root_motion_controller",
+    "name": "root_motion_controller"
+  },
+  {
+    "id": "round_timer",
+    "name": "round_timer"
+  },
+  {
+    "id": "rpc_bridge",
+    "name": "rpc_bridge"
+  },
+  {
+    "id": "safe_space",
+    "name": "safe_space"
+  },
+  {
+    "id": "save_integrity",
+    "name": "save_integrity"
+  },
+  {
+    "id": "save_load",
+    "name": "save_load"
+  },
+  {
+    "id": "save_migration",
+    "name": "save_migration"
+  },
+  {
+    "id": "save_slots",
+    "name": "save_slots"
+  },
+  {
+    "id": "scene_transition",
+    "name": "scene_transition"
+  },
+  {
+    "id": "score",
+    "name": "score"
+  },
+  {
+    "id": "screen_flash",
+    "name": "screen_flash"
+  },
+  {
+    "id": "screen_shake",
+    "name": "screen_shake"
+  },
+  {
+    "id": "screen_shake_toggle",
+    "name": "screen_shake_toggle"
+  },
+  {
+    "id": "screenreader_support",
+    "name": "screenreader_support"
+  },
+  {
+    "id": "server_physics",
+    "name": "server_physics"
+  },
+  {
+    "id": "server_sprite",
+    "name": "server_sprite"
+  },
+  {
+    "id": "settings",
+    "name": "settings"
+  },
+  {
+    "id": "sfx_player",
+    "name": "sfx_player"
+  },
+  {
+    "id": "shop",
+    "name": "shop"
+  },
+  {
+    "id": "skeleton_ik",
+    "name": "skeleton_ik"
+  },
+  {
+    "id": "skill_tree",
+    "name": "skill_tree"
+  },
+  {
+    "id": "spatial_hash",
+    "name": "spatial_hash"
+  },
+  {
+    "id": "spawner_wave",
+    "name": "spawner_wave"
+  },
+  {
+    "id": "spread",
+    "name": "spread"
+  },
+  {
+    "id": "spring_joint",
+    "name": "spring_joint"
+  },
+  {
+    "id": "sprite_animator",
+    "name": "sprite_animator"
+  },
+  {
+    "id": "state_machine",
+    "name": "state_machine"
+  },
+  {
+    "id": "status_effect",
+    "name": "status_effect"
+  },
+  {
+    "id": "stealth",
+    "name": "stealth"
+  },
+  {
+    "id": "steam_input",
+    "name": "steam_input"
+  },
+  {
+    "id": "stereo_to_mono",
+    "name": "stereo_to_mono"
+  },
+  {
+    "id": "storage",
+    "name": "storage"
+  },
+  {
+    "id": "sub_plugin",
+    "name": "sub_plugin"
+  },
+  {
+    "id": "subtitle",
+    "name": "subtitle"
+  },
+  {
+    "id": "teleport",
+    "name": "teleport"
+  },
+  {
+    "id": "terrain_autotiler",
+    "name": "terrain_autotiler"
+  },
+  {
+    "id": "text_size",
+    "name": "text_size"
+  },
+  {
+    "id": "tile_pattern_stamper",
+    "name": "tile_pattern_stamper"
+  },
+  {
+    "id": "tilemap_layer_manager",
+    "name": "tilemap_layer_manager"
+  },
+  {
+    "id": "time_scale",
+    "name": "time_scale"
+  },
+  {
+    "id": "timer_behavior",
+    "name": "timer_behavior"
+  },
+  {
+    "id": "tooltip",
+    "name": "tooltip"
+  },
+  {
+    "id": "touch_gestures",
+    "name": "touch_gestures"
+  },
+  {
+    "id": "trail",
+    "name": "trail"
+  },
+  {
+    "id": "trigger_zone",
+    "name": "trigger_zone"
+  },
+  {
+    "id": "turret_aim",
+    "name": "turret_aim"
+  },
+  {
+    "id": "tutorial_overlay",
+    "name": "tutorial_overlay"
+  },
+  {
+    "id": "tween_player",
+    "name": "tween_player"
+  },
+  {
+    "id": "undo_redo",
+    "name": "undo_redo"
+  },
+  {
+    "id": "unlockable",
+    "name": "unlockable"
+  },
+  {
+    "id": "upgrade",
+    "name": "upgrade"
+  },
+  {
+    "id": "victory_condition",
+    "name": "victory_condition"
+  },
+  {
+    "id": "vignette",
+    "name": "vignette"
+  },
+  {
+    "id": "virtual_joystick",
+    "name": "virtual_joystick"
+  },
+  {
+    "id": "wall_slide",
+    "name": "wall_slide"
+  },
+  {
+    "id": "water_surface",
+    "name": "water_surface"
+  },
+  {
+    "id": "wave_system",
+    "name": "wave_system"
+  },
+  {
+    "id": "wind_zone",
+    "name": "wind_zone"
+  },
+  {
+    "id": "world_map_generator",
+    "name": "world_map_generator"
+  },
+  {
+    "id": "xp_level",
+    "name": "xp_level"
+  }
+]
