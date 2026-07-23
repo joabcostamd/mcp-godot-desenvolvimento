@@ -1602,11 +1602,11 @@
     "resultado": "2.5 concluida: rollup builders sao factories — rollback ja documentado via create_manage_tool(). Sem ops destrutivas sem rollback detectadas."
   },
   "fatia_3_1": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "3aacb2398ba5b7a1a67b9a7a4043f45cec1d1c70",
     "ficha": ".github/roadmap/ONDA_3_rollups.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "3.1 concluida: 13 manage manuais auditados. Todos funcionais com handlers. playtest_manage com colisao raw/rollup documentada. Migracao para create_manage_tool() postergada (baixa prioridade)."
+    "resultado": "3.1 concluida: budget_manage migrado para tools/rollups.py via create_manage_tool(). Removido de core/tool_definitions.py e server.py."
   },
   "fatia_4_2": {
     "status": "nao verificado",

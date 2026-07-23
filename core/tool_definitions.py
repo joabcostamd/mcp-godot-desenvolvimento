@@ -27,37 +27,6 @@ def _raw_tool_defs() -> list[Tool]:
             inputSchema={"type": "object", "properties": {}, "required": []},
         ),
         Tool(
-            name="budget_manage",
-            description=(
-                "Gerencia o orcamento de tokens da sessao (Fatia 1.D). "
-                "Mostra custo estimado em reais (BRL), define teto e zera contador. "
-                "Precos baseados em DeepSeek V4 (~R$0.003/1K input, ~R$0.010/1K output). "
-                "Valores sao ESTIMATIVAS — custo real pode variar. "
-                "Quando usar: verificar gastos, definir orcamento maximo. "
-                "Operacoes: status (ver custo), set_limit (definir teto em R$), reset (zerar). "
-                "Exemplo: {\"op\": \"status\"} retorna custo, percentual, avisos."
-            ),
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "op": {
-                        "type": "string",
-                        "description": "Operacao: 'status', 'set_limit' ou 'reset'.",
-                        "enum": ["status", "set_limit", "reset"],
-                    },
-                    "limit_brl": {
-                        "type": "number",
-                        "description": "Valor do teto em reais (para op='set_limit'). Ex: 5.00.",
-                    },
-                    "force": {
-                        "type": "boolean",
-                        "description": "Se True, ignora confirmacoes.",
-                    },
-                },
-                "required": [],
-            },
-        ),
-        Tool(
             name="mcp_telemetry_manage",
             description=(
                 "Gerencia a telemetria opt-in do MCP (Fatia 1.P). "

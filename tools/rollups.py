@@ -1105,6 +1105,40 @@ from tools.runtime_ops import take_screenshot, capture_game_screenshot
 from tools.deploy_ops import auto_screenshot
 
 
+# ── ONDA 3: budget_manage (migrado de core/tool_definitions.py) ──
+
+def _build_budget_manage():
+    """budget_manage: 3 operações de orçamento (status, set_limit, reset)."""
+    from tools.budget_ops import budget_manage as _budget
+
+    def _status(**params):
+        return _budget(op="status")
+
+    def _set_limit(**params):
+        return _budget(op="set_limit", limit_brl=params.get("limit_brl", 0))
+
+    def _reset(**params):
+        return _budget(op="reset", force=params.get("force", False))
+
+    return create_manage_tool(
+        tool_name="budget_manage",
+        description=(
+            "Gerencia o orcamento de tokens da sessao (Fatia 1.D). "
+            "Mostra custo estimado em reais (BRL), define teto e zera contador. "
+            "Precos baseados em DeepSeek V4 (~R$0.003/1K input, ~R$0.010/1K output). "
+            "Valores sao ESTIMATIVAS — custo real pode variar."
+        ),
+        ops={
+            "status": _status,
+            "set_limit": _set_limit,
+            "reset": _reset,
+        },
+        tool_hints={"destructiveHint": False, "idempotentHint": True, "openWorldHint": False},
+        title="Gerenciar Orçamento",
+        tags=["orcamento", "tokens", "custo"],
+    )
+
+
 def _build_screenshot_manage():
     """screenshot_manage: 3 operações de captura de tela (F6.4)."""
     return create_manage_tool(
@@ -1179,6 +1213,8 @@ _ROLLUP_BUILDERS = [
     _build_editor_manage,
     # F6: screenshot consolidation
     _build_screenshot_manage,
+    # ONDA 3: budget_manage (migrado)
+    _build_budget_manage,
 ]
 
 # Cache interno — garante que cada builder só executa UMA vez.

@@ -1553,7 +1553,6 @@ def _build_handlers() -> dict:
     _HANDLERS_CACHE = {
         "ping": _handle_ping,
         "validate_godot_version": _handle_validate_godot_version,
-        "budget_manage": _handle_budget_manage,
         "mcp_telemetry_manage": _handle_mcp_telemetry_manage,
         "read_file": _handle_read_file,
         "write_file": _handle_write_file,
@@ -2428,16 +2427,6 @@ def _handle_ping(args: dict) -> dict:
 
 def _handle_validate_godot_version(args: dict) -> dict:
     return validate_godot_version()
-
-
-def _handle_budget_manage(args: dict) -> dict:
-    """Handler da tool budget_manage (Fatia 1.D)."""
-    from tools.budget_ops import budget_manage
-    return budget_manage(
-        op=args.get("op", "status"),
-        limit_brl=args.get("limit_brl", 0),
-        force=args.get("force", False),
-    )
 
 
 def _handle_mcp_telemetry_manage(args: dict) -> dict:
