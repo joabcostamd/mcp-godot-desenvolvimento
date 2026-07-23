@@ -1392,11 +1392,11 @@
     "marcacao": "[EIXO-CENTRAL]"
   },
   "reorg_R7_medicao": {
-    "status": "nao verificado",
+    "status": "concluida",
     "data": "2026-07-23",
     "agente": "AGENTE 01",
-    "checkpoint": null,
-    "resultado": "R7 - Medicao real por fase via _get_phase_tools()",
+    "checkpoint": "734a310971e36c1e4c06d0dc71f29e1b3a7571a2",
+    "resultado": "R7 concluida: MEDICAO_R7.md com contagens por fase. Deterministico (fc sem diferencas).",
     "ficha": ".github/roadmap/ONDA_R_reconciliacao.md",
     "marcacao": "[EIXO-CENTRAL]"
   },
