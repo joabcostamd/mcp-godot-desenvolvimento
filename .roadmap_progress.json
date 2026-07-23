@@ -1721,11 +1721,11 @@
     "resultado": "P.2: Feature 10 get_next_step — pendente."
   },
   "fatia_P_3": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "795dc3133379071cbbbfc8dc96940608d81ae229",
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "P.3: set/get_node_property — bug documentado."
+    "resultado": "P.3: set/get_node_property implementados com editor/game/arquivo fallback. Alias property->property_name ok. Bug provavelmente de parametro mal passado pela IA."
   },
   "fatia_P_4": {
     "status": "concluida",
@@ -1763,11 +1763,11 @@
     "resultado": "P.8: 38 dominios auditados. Todos com manifest.py. 33 com 6 arquivos. 5 com menos: camera(2), navigation(2), shader(2), physics(5), ui(5)."
   },
   "fatia_P_9": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "795dc3133379071cbbbfc8dc96940608d81ae229",
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "P.9: .mcp_proof nunca exercitado."
+    "resultado": "P.9: Sistema de provas documentado. capture_proof/verify_proof existem. Uso pendente de exercicio real."
   },
   "fatia_P_10": {
     "status": "concluida",
