@@ -26,6 +26,9 @@ def check_all(phase: str = "F0") -> list[tuple[str, bool, str]]:
     # INV-02: handler tem tool
     results.append(_inv_02())
 
+    # INV-04: toda tool tem fase (CORE ou PHASE_TOOLSETS)
+    results.append(_inv_04())
+
     # INV-10: PHASE_TOOLSETS → tools/list
     results.append(_inv_10())
 
@@ -77,6 +80,24 @@ def _inv_02() -> tuple[str, bool, str]:
     if extra:
         return ("INV-02", False, f"SEM_DEF: {sorted(extra)}")
     return ("INV-02", True, f"OK — {len(handlers)} handlers, todos com tool")
+
+
+def _inv_04() -> tuple[str, bool, str]:
+    """INV-04: Toda tool pertence a pelo menos uma fase (CORE ou PHASE_TOOLSETS)."""
+    try:
+        from server import PHASE_TOOLSETS, PHASE_TOOLS_CORE
+        from tools.deprecated import DEPRECATED_TOOLS
+        tools = _get_tool_names()
+        all_phased = set(PHASE_TOOLS_CORE)
+        for names in PHASE_TOOLSETS.values():
+            all_phased.update(names)
+        # Exclui depreciadas — não precisam de fase
+        missing = tools - all_phased - DEPRECATED_TOOLS
+        if missing:
+            return ("INV-04", False, f"SEM_FASE: {sorted(missing)}")
+        return ("INV-04", True, f"OK — {len(tools - DEPRECATED_TOOLS)} tools ativas, todas com fase")
+    except Exception as e:
+        return ("INV-04", False, str(e))
 
 
 def _inv_10() -> tuple[str, bool, str]:

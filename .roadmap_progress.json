@@ -1,4 +1,12 @@
 {
+  "fatia_8.1_curadoria_fase": {
+    "status": "concluida",
+    "data": "2026-07-23",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "1e9e8bc",
+    "resultado": "Fatia 8.1 — Atribuir fase a toda tool. 45 tools sem fase atribuídas a CORE(2)+IDEIA(3)+DESIGN(12)+PROTOTIPO(3)+CONTEUDO(11)+POLIMENTO(6)+PRONTO_PARA_LANCAR(8). 3 fantasmas removidos (tool_catalog, tool_groups, auto_screenshot). 16 duplicatas limpas no DESIGN. INV-04 implementado em registry/invariants.py + teste ativado. Regressão: 159 passed, 7 xfailed."
+  },
   "auditoria_ecossistema_2026_07_23": {
     "status": "concluida",
     "data": "2026-07-23",

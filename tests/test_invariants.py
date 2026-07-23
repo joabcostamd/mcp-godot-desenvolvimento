@@ -54,9 +54,10 @@ def test_inv_03():
 
 # ── INV-04: Todas as tools têm fase ────────────────────────────────
 
-@pytest.mark.xfail(reason="NAO_IMPLEMENTADA — Deveria ser criada na Fase 1 (registry). INV-04 verifica que toda tool pertence a pelo menos uma fase em PHASE_TOOLSETS ou CORE.")
 def test_inv_04():
-    pytest.xfail("INV-04 não implementada em registry/invariants.py")
+    """INV-04: Toda tool pertence a pelo menos uma fase em PHASE_TOOLSETS ou CORE."""
+    passed, detail = _run_invariant("INV-04")
+    assert passed, f"INV-04 FALHOU: {detail}"
 
 
 # ── INV-05: Nomes seguem convenção §6.1 ────────────────────────────

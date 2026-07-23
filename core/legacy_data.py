@@ -232,7 +232,6 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "ping", "health_check", "self_test", "bootstrap_godot_mcp",
         "read_file", "write_file", "dump_mcp_state",
         "project_manage", "project_status",
-        "tool_catalog", "tool_groups",
         "get_current_phase", "advance_phase", "get_phase_history",
         "create_milestone_plan", "get_milestone_plan", "advance_milestone",
         "set_project_brief", "get_project_brief", "update_project_brief",
@@ -247,6 +246,8 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "audit_uid_consistency", "audit_save_compatibility",
         "validate_mcp_registry",
         "project_progress",
+        # ── F8.1: Ideação e bootstrap ──
+        "scope_manage", "teacher_manage", "quickstart_manage",
     },
     "DESIGN": {
         "scene_manage", "node_manage",
@@ -266,35 +267,30 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "generate_project_structure",
         "world_describe",
         "skeleton_manage",
-        "ui_manage",
-        "config_manage",
-        "project_map",
-        "resource_dependency_graph",
-        "query_classdb", "search_classdb",
-        "list_valid_node_types",
-        "validate_project_refs", "find_usages",
-        "analyze_signal_flow",
-        "behavior_tree_generate", "behavior_tree_list_templates",
-        "generate_project_structure",
-        "world_describe",
         "render_manage",
         "csharp_scaffold_project",
         "csharp_generate_script",
         # ── Movidos do PROTOTIPO (F5 prep) ──
-        "physics_create_joint", "physics_configure_body",
         "physics_create_joint", "physics_configure_body",
         "physics_query_area_overlap", "physics_raycast_query",
         "camera_configure_attributes",
         "runtime_connect_signal", "runtime_disconnect_signal",
         "runtime_emit_signal", "runtime_watch_signal",
         "shader_generate", "shader_list_templates",
-        # ── Movidos do PROTOTIPO (F5 prep) ──
         "create_animation_tree", "generate_audio_sfx",
         "load_scene_async",
         "godot_custom_command", "godot_list_custom_commands",
         "godot_keep_alive",
         # ── Movidos do PROTOTIPO (F5 final) ──
         "execute_gdscript_runtime", "raycast_manage",
+        # ── F8.1: Gameplay design tools ──
+        "accessibility_add_subtitles", "accessibility_apply_colorblind_filter",
+        "accessibility_remap_controls",
+        "cloud_save_configure", "create_achievement_system",
+        "dialogue_generate_personality",
+        "mod_manifest_generate", "quest_generate",
+        "complexity_gate_manage", "fun_report_manage",
+        "reviewer_manage", "validate_mod_compatibility",
 },
     "PROTOTIPO": {
         # ── Execução runtime (core do prototipar) ──
@@ -311,13 +307,8 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "camera_manage",
         "vfx_manage",
         "shader_manage",
-        # ── Movidos para DESIGN: execute_gdscript_runtime, raycast_manage
-        # ── Movidos para DESIGN: create_animation_tree, generate_audio_sfx,
-        #     load_scene_async, godot_custom_command, godot_list_custom_commands,
-        #     godot_keep_alive
-        # ── Movidos para POLIMENTO: capture_game_screenshot, godot_screenshot,
-        #     take_screenshot, get_runtime_state_digest, capture_runtime_errors,
-        #     effect_probe
+        # ── F8.1: Testes de prototipagem ──
+        "assert_node_exists", "playtest_manage", "run_stress_test",
 },
     "CONTEUDO": {
         "tilemap_manage",
@@ -354,6 +345,13 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "multimesh_create_instance",
         "batch_atomic_edit", "add_nodes_batch",
         "set_properties_batch",
+        # ── F8.1: Produção de conteúdo ──
+        "cutscene_create_timeline", "cutscene_add_camera_shot",
+        "cutscene_add_dialogue_event",
+        "dialogue_generate_npc_lines", "music_manage",
+        "onboarding_create_tutorial_step", "onboarding_create_guided_tour",
+        "telemetry_track_event", "telemetry_get_funnel",
+        "telemetry_session_summary", "telemetry_heatmap",
 },
     "POLIMENTO": {
         "debug_manage",
@@ -364,7 +362,6 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "configure_security",
         "circuit_breaker_status",
         "get_audit_log", "get_audit_replay",
-        "auto_screenshot",
         "estimate_tool_tokens",
         "workflow_handoff", "workflow_snapshot",
         "generate_ci_snippet",
@@ -385,6 +382,10 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "screenshot_manage",
         "get_runtime_state_digest", "capture_runtime_errors",
         "effect_probe",
+        # ── F8.1: Polimento e QA ──
+        "accessibility_audit_scene", "adaptive_difficulty_adjust",
+        "localization_manage", "onboarding_check_first_experience",
+        "polish_manage", "validate_achievement_config",
 },
     "PRONTO_PARA_LANCAR": {
         "export_manage",
@@ -396,6 +397,12 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "read_console_output",
     
         "csharp_build_project",
+        # ── F8.1: Lançamento e publicação ──
+        "accessibility_certification_checklist",
+        "capsule_generate_store_image", "community_manage",
+        "publish_manage", "remote_balance_config",
+        "trailer_capture_clip", "trailer_render_sequence",
+        "version_history_manage",
 },
 }
 
@@ -410,5 +417,7 @@ PHASE_TOOLS_CORE = {
     "scene_manage", "node_manage",
     # ── F4.1: Descoberta progressiva (padrão MCP 3 camadas) ──
     "catalog_search", "describe_tool", "invoke_by_name",
+    # ── F8.1: Meta-tools sempre visíveis ──
+    "budget_manage", "mcp_telemetry_manage",
 }
 
