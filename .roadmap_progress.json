@@ -1338,11 +1338,11 @@
     ]
   },
   "reorg_R1_gate_git": {
-    "status": "nao verificado",
+    "status": "concluida",
     "data": "2026-07-23",
     "agente": "AGENTE 01",
-    "checkpoint": null,
-    "resultado": "R1 - Gate git real em .githooks (a unica trava que dispara neste ambiente)",
+    "checkpoint": "b41db915d829406a1d613df76c9f9ff440621948",
+    "resultado": "R1 concluida: gate git real instalado. .githooks/pre-commit, scripts/gate_reorg.py, .reorg_baseline.json, tests/test_gate_reorg.py (13/13 pass). Regressao autoteste.ps1 4/4.",
     "ficha": ".github/roadmap/ONDA_R_reconciliacao.md",
     "marcacao": "[EIXO-CENTRAL]"
   },

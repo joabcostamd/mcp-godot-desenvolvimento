@@ -1,0 +1,12 @@
+{
+  "tools_por_fase": {
+    "PHASE_TOOLSETS:IDEIA": 48,
+    "PHASE_TOOLSETS:DESIGN": 63,
+    "PHASE_TOOLSETS:PROTOTIPO": 34,
+    "PHASE_TOOLSETS:CONTEUDO": 75,
+    "PHASE_TOOLSETS:POLIMENTO": 60,
+    "PHASE_TOOLSETS:PRONTO_PARA_LANCAR": 31
+  },
+  "_ultima_atualizacao": "b41db915d829406a1d613df76c9f9ff440621948",
+  "_total_tools": 236
+}

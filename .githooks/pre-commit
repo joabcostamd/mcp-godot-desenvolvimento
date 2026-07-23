@@ -1,0 +1,5 @@
+#!/bin/sh
+# Gate de pre-commit — ONDA R, Fatia R1
+# Bloqueia commit que viola G1/G2/G3. Escape hatch: git commit --no-verify
+.venv/Scripts/python scripts/gate_reorg.py --pre-commit
+exit $?
