@@ -16,7 +16,9 @@ travas reais (fase, verificação, export, sessão) que impedem pular etapa.
 
 O projeto que você edita é o **próprio MCP**, não um jogo.
 
-Estado: Godot 4.7, ~204 `Tool()` em `server.py`, máquina de estados de 6 fases
+Estado: Godot 4.7, 236 tools visíveis (272 definições brutas em
+`core/tool_definitions.py`, 189 depreciadas, 80 aliases), 249 behaviors,
+38 domínios, máquina de estados de 6 fases
 (IDEIA → DESIGN → PROTOTIPO → CONTEUDO → POLIMENTO → PRONTO_PARA_LANCAR),
 Saga Engine, proof ledger, `auditar.py` como portão fail-closed.
 

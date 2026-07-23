@@ -2,7 +2,7 @@
 
 **Versão:** 9.0 | **Data:** 2026-07-20
 **Local:** `behaviors/` | **Formato:** `behavior.schema.json` v2.0
-**Total:** 224 behaviors em 27 categorias + Behavior Lifecycle + SemVer + CHANGELOG
+**Total:** 249 behaviors em 27 categorias + Behavior Lifecycle + SemVer + CHANGELOG
 **Pesquisas:** 7 rodadas | **Fontes:** 35+ | **Princípios:** 40
 
 ---

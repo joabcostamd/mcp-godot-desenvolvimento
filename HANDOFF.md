@@ -7,18 +7,17 @@
 
 ## Último Handoff (AGENTE 01 — 2026-07-22 — ENCERRAMENTO)
 
-- **Data:** 2026-07-22
-- **Commit:** `efd137a` (main, pushed)
-- **O que foi feito:** F5 CONCLUÍDA (37 domínios). F6 AVANÇADO (transport.py + editor_manage + game_bridge depreciações + screenshot_manage).
+- **Data:** 2026-07-23
+- **Commit:** `9214970` (agente2/trabalho, HEAD)
+- **O que foi feito:** Auditoria completa de documentos e metricas. Correcao de numeros desatualizados em README.md, README.en.md, llms.txt, pyproject.toml, CHANGELOG.md.
 
 ### Estado final do wire
 
 ```
-defs_total=235, handlers_total=235
+defs_total=236, handlers_total=235
 SEM_HANDLER=0, SEM_DEF=0
-DEPRECATED_TOOLS=189, ALIAS_MAP=80
-AUDITORIA F5: APROVADA (A01-A08, A10-A12)
-352/352 testes passam (8 xfailed + 1 falso positivo INV-03)
+_raw_tool_defs()=272, _manage tools=52
+rollups registrados=39, DEPRECATED_TOOLS=189, ALIAS_MAP=80
 ```
 
 ### 38 domínios migrados (F5 + F6)

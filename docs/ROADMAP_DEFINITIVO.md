@@ -192,7 +192,7 @@ real de design num jogo de teste, confirmado por playtest humano.
 
 ---
 
-## 3. ÍNDICE DAS 80 PENDÊNCIAS
+## 3. ÍNDICE DAS 80+ PENDÊNCIAS (já expandidas para 117 fatias concluídas de 130)
 
 **P1–P8** processo e gaps iniciais · **P9–P17** experiência de não-programador ·
 **P18–P24** documentos (D1–D7) · **P25–P34** interface e host ·

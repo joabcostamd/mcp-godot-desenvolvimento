@@ -10,7 +10,7 @@
 ![MCP](https://img.shields.io/badge/MCP-2025--11--25-orange)
 <!-- BADGES_END -->
 
-> 📊 **Versão:** <!--DOCS_SYNC:version-->3.7.0<!--/DOCS_SYNC:version--> | **Tools:** <!--DOCS_SYNC:tools-->287<!--/DOCS_SYNC:tools--> | **Rollups:** <!--DOCS_SYNC:rollups-->32<!--/DOCS_SYNC:rollups-->
+> 📊 **Versão:** <!--DOCS_SYNC:version-->3.8.0<!--/DOCS_SYNC:version--> | **Tools:** <!--DOCS_SYNC:tools-->272<!--/DOCS_SYNC:tools--> | **Rollups:** <!--DOCS_SYNC:rollups-->39<!--/DOCS_SYNC:rollups-->
 > ⚠️ Números gerados por `scripts/docs_sync.py` — não edite manualmente.
 
 ---
@@ -136,7 +136,7 @@ Escolha um gênero e comece a criar. Use `quickstart_manage(op="showcase")` para
 
 | Pasta/Arquivo | O que é |
 |---|---|
-| `server.py` | Servidor MCP principal (279 ferramentas, stdio JSON-RPC 2.0) |
+| `server.py` | Servidor MCP principal (236 ferramentas, stdio JSON-RPC 2.0) |
 | `init.py` | Instalador de 1 comando (só stdlib, zero dependências) |
 | `tools/` | 115+ módulos Python (cenas, scripts, física, arte, som, pipeline) |
 | `resources/` | 32 padrões de gêneros + 11 prompts MCP |

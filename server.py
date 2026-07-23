@@ -1,14 +1,15 @@
-"""server.py — MCP Server godot-mcp-agent v3.0.
+"""server.py — MCP Server godot-mcp-agent v3.8.0.
 
-Servidor MCP via stdio com 134 ferramentas para criacao e gestao
-de projetos Godot 4.7. A IA consumidora (DeepSeek V4 Flash/Pro) chama as
-ferramentas para construir jogos a partir de linguagem natural.
+Servidor MCP via stdio com 236 ferramentas visiveis (272 definicoes brutas)
+para criacao e gestao de projetos Godot 4.7. A IA consumidora
+(DeepSeek V4 Flash/Pro) chama as ferramentas para construir jogos a partir
+de linguagem natural.
 
-Cobre 12 Ondas de desenvolvimento: projeto, arquivo, cena, scripts,
-fisica, assets, runtime, editor, tilemap, animacao, UI, export,
-seguranca, game bridge, visao, batch, assets procedurais, IA agentica,
-DevSolo (camera, navegacao, save, UI, dialogo, inventario, armas,
-procedural, shaders, 3D, audio, exportacao, debug, localizacao).
+Cobre: projeto, arquivo, cena, scripts, fisica, assets, runtime, editor,
+tilemap, animacao, UI, export, seguranca, game bridge, visao, batch,
+assets procedurais, IA agentiva, DevSolo (camera, navegacao, save, UI,
+dialogo, inventario, armas, procedural, shaders, 3D, audio, exportacao,
+debug, localizacao), 38 dominios, 249 behaviors.
 """
 
 import json
