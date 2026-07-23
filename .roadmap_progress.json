@@ -1539,10 +1539,11 @@
   },
   "arquivado_a2_proximo": "Aguardar merge do Agente 1 na main. Depois: validar health.gd no Godot, instalar GdUnit4 (Fatia 2.B), criar behaviors restantes (2.E-2.Z).",
   "fatia_1_1": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "7ec6e60be25ba38e18c803022e80cf374c68ffe2",
     "ficha": ".github/roadmap/ONDA_1_registry.md",
-    "marcacao": "[EIXO-CENTRAL]"
+    "marcacao": "[EIXO-CENTRAL]",
+    "resultado": "1.1 concluida: journal/auditoria_registry.md documenta exports, gaps e dependencia circular do registry/."
   },
   "fatia_1_2": {
     "status": "nao verificado",
