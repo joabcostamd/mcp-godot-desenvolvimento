@@ -1,0 +1,61 @@
+{
+  "date": "2026-07-23T14:56:01.095074",
+  "project": "mcp-godot-desenvolvimento",
+  "version": "3.8.0",
+  "commit": "a0d1de4a8910a5d4acd300bd1feb0e80ed776215",
+  "branch": "main",
+  "files_changed": [
+    ".github/copilot-instructions.md",
+    ".github/workflows/ci.yml",
+    ".reorg_baseline.json",
+    ".roadmap_progress.json",
+    "INVENTARIO_DOCS.md",
+    "LIMPEZA_DOCS.md",
+    "audit_out.txt",
+    "audit_out_f2.txt",
+    "audit_out_f5.txt",
+    "config.local.json.example",
+    "core/legacy_data.py",
+    "core/tool_definitions.py",
+    "docs/CURADORIA_PRECEDENCIA.md",
+    "docs/QUARENTENA_CRITERIO_SAIDA.md",
+    "docs/auditoria_registry.md",
+    "journal/arquivo-morto/2026-07-23/MASTER_IMPLEMENTATION_ROADMAP.md",
+    "registry/annotations.py",
+    "registry/legacy_adapter.py",
+    "registry/legacy_annotations.py",
+    "scripts/extrair_legacy_data.py",
+    "scripts/gen_catalog.py",
+    "server.py",
+    "tools/deprecated.py",
+    "tools/rollups.py"
+  ],
+  "features": [
+    "ONDA R (gate git, estado unico, auditor, caminhos, reauditoria, branch, medicao, fichas)",
+    "ONDA 1 (registry audit, build_tool_defs, legacy_data, gen_catalog)",
+    "ONDA 2 (ToolAnnotations fix, extra fields, _HINT_RULES, rollback)",
+    "ONDA 3 (budget_manage migration)",
+    "ONDA 4 (descoberta progressiva)",
+    "ONDA 8 (2 eixos, precedencia)"
+  ],
+  "bugs_fixed": [
+    "INV-03 (execute_gdscript_runtime namespace)",
+    "ToolAnnotations substituido por dict (_TAGS)",
+    "C1 NameError (added nao definido)",
+    "G3 loop infinito (_ultima_atualizacao)",
+    "audit_extra_fields Pydantic internals"
+  ],
+  "pending": [
+    "8.1 (45 tools sem fase)",
+    "F5.1-F5.13 (7 fatias)",
+    "P.1 (Feature 9)",
+    "P.2 (Feature 10)"
+  ],
+  "risks": [
+    "C5 test_budget_gate quebrado (pre-existente)"
+  ],
+  "next_priorities": [
+    "8.1 — atribuir fase as 45 tools",
+    "P.1 — Feature 9 build_export"
+  ]
+}

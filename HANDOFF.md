@@ -872,3 +872,60 @@ Revisao humana do merge da branch chore/limpeza-agent-only na main.
 
 ### Como voltar atras
 git checkout main
+
+## Encerramento — 2026-07-23
+
+**Worktree/Agente:** Agente 1 (main)
+**Peso:** Sessao longa — ONDA R + ONDA 1 + ONDA 2 + ONDA 3 + ONDA 4 + parciais 8-9-10-P. 38 fatias concluidas.
+
+### Resumo
+Executado o plano REORG_ROADMAP.md: gate git real (R1), estado unico (R2), auditor consertado (R3), caminhos (R4), reauditoria F5 (R5), branch Agente 2 (R6), medicao (R7), fichas (R8). Registry funcional com build_tool_defs() byte-identeico ao legado. ToolAnnotations corrigido (2.1). _HINT_RULES movido para registry. Filtros reduzidos de 3 para 2 eixos. 45 tools ainda sem cobertura de fase.
+
+### Estado
+- Versao: 3.8.0 | Commit: a0d1de4 | Branch: main
+- server.py: -497 linhas | Tools: 234 | Testes: 170 pass, 8 xfail
+
+### Pendencias
+- [ ] 8.1 — Atribuir fase as 45 tools sem cobertura (prioridade: alta)
+- [ ] F5.1-F5.13 — 7 fatias dependem de F1-F4 fechar (prioridade: media)
+- [ ] P.1 — Feature 9 build_export (prioridade: baixa)
+- [ ] P.2 — Feature 10 get_next_step (prioridade: baixa)
+
+### Contexto que nao esta no codigo
+- Gate G1/G2/G3 ativo em .githooks/pre-commit. Escape hatch: git commit --no-verify
+- registry/legacy_adapter.py usa guarda _in_registry_call para evitar loop
+- core/legacy_data.py e a fonte de TOOLSETS/PHASE_TOOLSETS/TOOL_PROFILES/PHASE_TOOLS_CORE
+- Filtros: toolsets -> fase (2 eixos). Profile removido na 8.2.
+
+### Decisoes que so um humano pode tomar
+- Merge dos behaviors do Agente 2 (branch arquivo-morto/behaviors-onda2)
+- Ativar CI no GitHub Actions
+
+### Arquivos-chave
+- server.py (core)
+- core/legacy_data.py (dados de curadoria)
+- registry/ (fonte de verdade em construcao)
+- tools/rollups.py (builders de rollup)
+- .roadmap_progress.json (status de fatias)
+- .githooks/pre-commit (gate git)
+- scripts/gate_reorg.py (logica do gate)
+
+### Fluxo sugerido
+1. Leia HANDOFF.md
+2. Rode pytest tests/test_gate_reorg.py tests/test_invariants.py
+3. Rode /plan para 8.1 (atribuir fase as 45 tools)
+
+### Decisoes da sessao
+- DR-1: commit automatico so depois do gate git ? satisfeita (R1 commitada)
+- DR-2: branch Agente 2 taggeada como arquivo morto ? executada (R6)
+- DR-3: prompts locais removidos ? executada (R4)
+- DR-4: /act vence /seguir-roadmap ? documentada
+- DR-5: --skip-c5 substituido por baseline ? executada (R3)
+- DR-6: C1 tolerancia 0 ? executada (R3)
+- Profile removido (3 eixos -> 2) ? executada (8.2)
+
+### Atencao
+- C5 (test_budget_gate) quebrado: 'NoneType' object is not iterable
+- auditar.py sempre falha C5 — pre-existente, fora de escopo
+- Nunca usar && no PowerShell
+- Gate G1 bloqueia commit com checkpoint ausente — sempre preencher antes de commitar
