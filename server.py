@@ -1322,16 +1322,19 @@ def _tool_defs() -> list[Tool]:
         if t.name in _TITLES:
             t.title = _TITLES[t.name]
         if t.name in _TAGS:
-            t.annotations = {"tags": _TAGS[t.name]}
+            if t.annotations is None:
+                from mcp.types import ToolAnnotations
+                t.annotations = ToolAnnotations()
+            t.annotations.tags = _TAGS[t.name]
         # ── B6: Read/Write Split ────────────────────────────────
         cat = _classify_operation(t.name)
-        if t.annotations:
-            t.annotations["operationCategory"] = cat
-        else:
-            t.annotations = {"operationCategory": cat}
+        if t.annotations is None:
+            from mcp.types import ToolAnnotations
+            t.annotations = ToolAnnotations()
+        t.annotations.operationCategory = cat
         # ── M3: Defer Loading ───────────────────────────────────
         if t.name not in _CORE_TOOLS:
-            t.annotations["deferLoading"] = True
+            t.annotations.deferLoading = True
     # ── Rollups: adicionar APÓS pós-processamento (trazem próprios hints) ──
     try:
         from tools.rollups import get_rollup_tool_defs
