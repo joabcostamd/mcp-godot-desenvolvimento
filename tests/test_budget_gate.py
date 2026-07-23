@@ -80,19 +80,12 @@ def estimate_definition_tokens(tools: list) -> dict:
     }
 
 
-def test_token_budget(lean_only: bool = False) -> list[str]:
-    """Testa que o consumo de tokens por perfil está dentro do teto.
-
-    Args:
-        lean_only: Se True, só testa o perfil lean.
-
-    Returns:
-        Lista de falhas (vazia = todas ok).
-    """
+def _check_token_budget(lean_only: bool = False) -> list[str]:
+    """Verifica orcamento de tokens (retorna lista de falhas). Usado por run_all_tests()."""
     all_tools = _tool_defs()
     failures = []
 
-    # Perfil lean (CORE + meta-tools) — o cenário real do modo lean
+    # Perfil lean (CORE + meta-tools)
     lean_names = PHASE_TOOLS_CORE | LEAN_META_TOOLS
     lean_tools = [t for t in all_tools if t.name in lean_names]
     lean_est = estimate_definition_tokens(lean_tools)
@@ -103,10 +96,9 @@ def test_token_budget(lean_only: bool = False) -> list[str]:
         )
 
     if lean_only:
-        assert len(failures) == 0, "\n".join(failures)
         return failures
 
-    # Perfil full (todas as tools de topo) — referência
+    # Perfil full
     full_est = estimate_definition_tokens(all_tools)
     if full_est["estimated_tokens"] > TOKEN_BUDGET_FULL:
         failures.append(
@@ -114,7 +106,7 @@ def test_token_budget(lean_only: bool = False) -> list[str]:
             f"({full_est['tool_count']} tools, limite: {TOKEN_BUDGET_FULL})"
         )
 
-    # Por fase — cada fase filtra as tools visíveis
+    # Por fase
     for phase, phase_tools in PHASE_TOOLSETS.items():
         visible = PHASE_TOOLS_CORE | phase_tools
         visible_tools = [t for t in all_tools if t.name in visible]
@@ -126,8 +118,13 @@ def test_token_budget(lean_only: bool = False) -> list[str]:
                 f"({phase_est['tool_count']} tools, limite: {budget})"
             )
 
-    assert len(failures) == 0, "\n".join(failures)
     return failures
+
+
+def test_token_budget() -> None:
+    """Testa que o consumo de tokens esta dentro do teto (pytest)."""
+    failures = _check_token_budget(lean_only=False)
+    assert len(failures) == 0, "\n".join(failures)
 
 
 # ═════════════════════════════════════════════════════════════════════
@@ -330,7 +327,7 @@ def run_all_tests(plant_overflow: bool = False, lean_only: bool = False) -> dict
     errors = []
 
     # Teste de tokens (teto primário)
-    token_failures = test_token_budget(lean_only=lean_only)
+    token_failures = _check_token_budget(lean_only=lean_only)
     if plant_overflow:
         # Se plant, força falha de tokens também
         token_failures.append("❌ (plant) FAKE TOKEN OVERFLOW — limite excedido")
