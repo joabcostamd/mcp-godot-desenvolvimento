@@ -1560,10 +1560,11 @@
     "resultado": "1.3 concluida: TOOLSETS/PHASE_TOOLSETS/TOOL_PROFILES/PHASE_TOOLS_CORE movidos para core/legacy_data.py. Zero declaracoes em server.py."
   },
   "fatia_1_4": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "aefe2d1658b66a2b8c60a1df93df5cbb84bd8746",
     "ficha": ".github/roadmap/ONDA_1_registry.md",
-    "marcacao": "[EIXO-CENTRAL]"
+    "marcacao": "[EIXO-CENTRAL]",
+    "resultado": "1.4 concluida: scripts/gen_catalog.py gera catalogo do registry. Deterministico (fc identico)."
   },
   "fatia_2_1": {
     "status": "nao verificado",
