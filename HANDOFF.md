@@ -5,28 +5,35 @@
 
 ---
 
-## Último Handoff (AGENTE 02 — 2026-07-23 — BLOCO TESTABILIDADE)
+## Último Handoff (AGENTE 02 — 2026-07-23 — ENCERRAMENTO SOTA-1)
 
 **Worktree:** `mcp-godot-agente02` | **Branch:** `agente2/trabalho`
-**Commit:** `12f8d81` | **Push:** pendente
+**Commit:** `0b0fc20` | **Push:** pendente (3 commits à frente de origin)
 
-### Resumo
-Sessão focada no bloco Testabilidade: sota_1.6 (conflitos) + sota_1.7 (pares) +
-sota_1.8 (mutação). Infraestrutura completa de verificação de composição de
-behaviors: matriz de conflito, 1.881 testes de pares GdUnit4, mutation testing
-com 80% de detecção. 3 auditorias enterprise (20 issues corrigidos).
+### Resumo da sessão
+Sessão de alta produtividade. SOTA-1 (Fundação do Cérebro) praticamente concluída:
+7 de 8 fatias implementadas. Stack completa de busca e composição de behaviors
+construída do zero: enriquecimento → busca semântica BGE-M3 → tradutor de intenção
+→ GameSpec DSL → matriz de conflito → testes de pares GdUnit4 → mutation testing.
 
-### Estado
-- Versão: v3.9.0 | Commit: 12f8d81 | Branch: agente2/trabalho
-- sota_1.1: CONCLUÍDA — 249 behavior.json com combina_bem, custo, verbo_pt, verbo_en, nivel
-- sota_1.2: CONCLUÍDA — BGE-M3 indexando 249 behaviors (926 KB), 9/9 pytest
-- sota_1.3: ⚠️ PARCIAL — 249 GIFs + 249 MP4s gerados, mas NÃO FINALIZADOS (ver pendência #1)
-- sota_1.4: CONCLUÍDA — tradutor 4 estágios, fallback heurístico offline, anti-alucinação
-- sota_1.5: CONCLUÍDA — GameSpec v0: schema + validador cross-ref + compilador .tscn
-- sota_1.6: CONCLUÍDA — check_conflicts() com cache thread-safe, 11/11 pytest
-- sota_1.7: CONCLUÍDA — 1.881 testes GdUnit4 gerados, amostra 30 pares validada
-- sota_1.8: CONCLUÍDA — mutation testing 80% detecção, 0 mutantes vivos
-- Templates: 10 cenas visuais + 6 subtipos adaptativos (system)
+### Estado SOTA-1
+- Versão: v3.9.0 | Commit: 0b0fc20 | Branch: agente2/trabalho
+- sota_1.1: ✅ CONCLUÍDA — 249 fichas enriquecidas (combina_bem, custo, verbo_pt, verbo_en, nivel)
+- sota_1.2: ✅ CONCLUÍDA — BGE-M3 249 behaviors, 926 KB, 9/9 pytest, Python 3.12 + FlagEmbedding
+- sota_1.3: ⚠️ PARCIAL — 249 GIFs + 249 MP4s gerados, pipeline funcional, aguardando revisão Joab
+- sota_1.4: ✅ CONCLUÍDA — Tradutor 4 estágios (normalização→recuperação→desambiguação→validação)
+- sota_1.5: ✅ CONCLUÍDA — GameSpec v0: JSON Schema 2020-12, validador cross-ref, compilador .tscn
+- sota_1.6: ✅ CONCLUÍDA — check_conflicts() bidirecional, cache thread-safe, 11/11 pytest
+- sota_1.7: ✅ CONCLUÍDA — 1.881 testes GdUnit4 gerados, template validado
+- sota_1.8: ✅ CONCLUÍDA — 3 mutações, backup seguro, 80% detecção, 0 vivos
+
+### Infraestrutura criada
+- Python 3.12 instalado via winget
+- `.venv_ml` com FlagEmbedding + torch + BGE-M3 (modelo ~2GB cache HF)
+- `scripts/_godot_utils.py` — utilitários compartilhados (elimina duplicação)
+- `.venv_ml/` no `.gitignore`
+- `reports/` e `*.mutar_backup` no `.gitignore`
+- Todos `subprocess.run` com `stdin=DEVNULL` (regra R12)
 
 ### 🚨 PENDÊNCIA BLOQUEANTE: sota_1.3 — GIFs NÃO FINALIZADOS
 

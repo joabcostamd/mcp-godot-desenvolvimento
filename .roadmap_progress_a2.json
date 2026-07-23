@@ -16,6 +16,42 @@
     "hash_checkpoint": "bcece21965c814e763f1286477fde55fa3a9bbed",
     "resultado": "249 GIFs + 249 MP4s gerados (pipeline gifski+FFmpeg+Cairo funcional). 10 templates visuais + 6 subtipos adaptativos. Scripts prontos. PENDENTE: revisao de qualidade visual pelo Joab, decisao sobre MP4s necessarios, overlay de behaviors abstratos."
   },
+  "sota_1.2": {
+    "status": "concluida",
+    "data_conclusao": "2026-07-23",
+    "hash_checkpoint": "da4134b",
+    "resultado": "BGE-M3 indexando 249 behaviors (926 KB). ml/embed_service.py (Python 3.12 + FlagEmbedding). tools/semantic_search.py: fusao 0.7*semantico + 0.3*lexico. Query 'pulo mais macio' → player_controller #2. 9/9 pytest. C1 PASS."
+  },
+  "sota_1.4": {
+    "status": "concluida",
+    "data_conclusao": "2026-07-23",
+    "hash_checkpoint": "34af40b",
+    "resultado": "Tradutor 4 estagios: normalizacao (LLM ou heuristica offline), recuperacao (BGE-M3), desambiguacao (threshold 0.08), validacao (conflitos). Anti-alucinacao: validacao contra ids_disponiveis(). 17 testes (11 rapidos + 6 slow)."
+  },
+  "sota_1.5": {
+    "status": "concluida",
+    "data_conclusao": "2026-07-23",
+    "hash_checkpoint": "34af40b",
+    "resultado": "GameSpec v0: JSON Schema 2020-12. validate_gamespec() com cross-ref. compile_gamespec() gera .tscn com metadata mcp_generated=true. Exemplo breakout: 4 entidades, 10 behaviors validos. 4 testes novos."
+  },
+  "sota_1.6": {
+    "status": "concluida",
+    "data_conclusao": "2026-07-23",
+    "hash_checkpoint": "12f8d81",
+    "resultado": "check_conflicts() bidirecional com alternativa sem conflito. Cache thread-safe. Path absoluto via __file__. 11/11 pytest."
+  },
+  "sota_1.7": {
+    "status": "concluida",
+    "data_conclusao": "2026-07-23",
+    "hash_checkpoint": "12f8d81",
+    "resultado": "1.881 testes GdUnit4 gerados. scripts/gerar_testes_pares.py + rodar_testes_pares.py. Template validado (health+hitbox). Amostra 30 pares. ~3.9MB."
+  },
+  "sota_1.8": {
+    "status": "concluida",
+    "data_conclusao": "2026-07-23",
+    "hash_checkpoint": "12f8d81",
+    "resultado": "3 estrategias de mutacao (comparador, booleano, emissao de sinal). Backup de seguranca. 80% deteccao, 0 vivos em amostra de 10."
+  },
   "fase_1_fundacao": {
     "status": "concluida",
     "data_conclusao": "2026-07-20",
