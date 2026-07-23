@@ -1347,11 +1347,11 @@
     "marcacao": "[EIXO-CENTRAL]"
   },
   "reorg_R2_estado_unico": {
-    "status": "nao verificado",
+    "status": "concluida",
     "data": "2026-07-23",
     "agente": "AGENTE 01",
-    "checkpoint": null,
-    "resultado": "R2 - Estado unico: os outros 2 JSON viram arquivo morto",
+    "checkpoint": "ebfe25227809638248e8ec393adc8c5433d8d87c",
+    "resultado": "R2 concluida. 1 progress na raiz (164 chaves), 25 herdadas dos arquivos mortos com status arquivado.",
     "ficha": ".github/roadmap/ONDA_R_reconciliacao.md",
     "marcacao": "[EIXO-CENTRAL]"
   },
@@ -1408,5 +1408,134 @@
     "resultado": "R8 - Gerar as fichas das ondas seguintes com os numeros da R7",
     "ficha": ".github/roadmap/ONDA_R_reconciliacao.md",
     "marcacao": "[EIXO-CENTRAL]"
-  }
+  },
+  "arquivado_reorg_fase_atual": "F6",
+  "arquivado_reorg_fatia_atual": "6.0",
+  "arquivado_reorg_fases_fechadas": [
+    "F0",
+    "F1",
+    "F2",
+    "F5"
+  ],
+  "arquivado_reorg_fases_parciais": [
+    "F3",
+    "F4"
+  ],
+  "arquivado_reorg_bloqueado": false,
+  "arquivado_reorg_motivo_bloqueio": "",
+  "arquivado_reorg_estabilizacao_concluida": "2026-07-21",
+  "arquivado_reorg_estabilizacao_commits": [
+    "996d588",
+    "d65fe00",
+    "6d7ca49"
+  ],
+  "arquivado_reorg_fases": {
+    "F0": {
+      "status": "concluida",
+      "data": "2026-07-21",
+      "resultado": "MEDIR: scripts/audit_registro.py e scripts/dump_toollist.py criados. Medicoes iniciais: 287 tools, 32 rollups."
+    },
+    "F1": {
+      "status": "concluida",
+      "data": "2026-07-21",
+      "resultado": "REGISTRY: registry/ foundation criado (types.py, annotations.py, discovery.py, invariants.py, legacy_adapter.py). Wire do registry em server.py."
+    },
+    "F2": {
+      "status": "concluida",
+      "data": "2026-07-21",
+      "resultado": "CONFORMIDADE MCP: annotations nos rollups, _meta_tool.py atualizado com ToolAnnotations."
+    },
+    "F3": {
+      "status": "parcial",
+      "data": "2026-07-21",
+      "resultado": "UNIFICAR ROLLUPS: 12 orphan manage tools receberam namespaces. Unificacao completa dos 3 caminhos pendente."
+    },
+    "F4": {
+      "status": "parcial",
+      "data": "2026-07-21",
+      "resultado": "DESCOBERTA PROGRESSIVA: discovery.py e catalog_search criados. Descoberta por fase nao implementada."
+    },
+    "F5": {
+      "status": "concluida",
+      "data": "2026-07-21",
+      "resultado": "MIGRAR DOMINIOS: 37 dominios migrados. 347 testes. defs_total=263. AUDITORIA F5: APROVADA. Todos os rollups existentes tem dominio correspondente em domains/."
+    },
+    "F6": {
+      "status": "nao_iniciada"
+    },
+    "F7": {
+      "status": "nao_iniciada"
+    },
+    "F8": {
+      "status": "nao_iniciada"
+    },
+    "F9": {
+      "status": "nao_iniciada"
+    },
+    "F10": {
+      "status": "nao_iniciada"
+    },
+    "status": "arquivado"
+  },
+  "arquivado_reorg_metricas_atuais": {
+    "defs_total": 263,
+    "defs_raw": 272,
+    "defs_rollup": 37,
+    "handlers_total": 263,
+    "handlers_rollup": 37,
+    "SEM_HANDLER": 0,
+    "SEM_DEF": 0,
+    "NS_FANTASMA": 0,
+    "PHASE_FANTASMA": 0,
+    "regressao": "347/347 (0 falhas)",
+    "dominios_migrados": 37,
+    "deprecated_total": 159,
+    "aliases_total": 50,
+    "status": "arquivado"
+  },
+  "arquivado_reorg_ultima_atualizacao": "2026-07-21T23:59:00-03:00",
+  "arquivado_reorg_aliases_expirar_em": "F6",
+  "arquivado_reorg_aliases_nota": "42 aliases (ALIAS_MAP em tools/deprecated.py) criados em K2 (commit 6d7ca49) conforme Secao 11.9. Devem ser removidos ao fechar F6 (transporte atras de adaptador). Cada alias redireciona old_name -> rollup_manage(op=X) com log deprecated_alias_used.",
+  "arquivado_a2_agente": "AGENTE 02",
+  "arquivado_a2_ultima_atualizacao": "2026-07-20",
+  "arquivado_a2_branch": "agente2/trabalho",
+  "arquivado_a2_onda_0": "pulado",
+  "arquivado_a2_fase_1_fundacao": {
+    "status": "arquivado",
+    "data_conclusao": "2026-07-20",
+    "resultado": "Worktree agente2/trabalho criado. Pastas behaviors/, blueprints/, seeds/ populadas com README.md. .roadmap_progress_a2.json criado."
+  },
+  "arquivado_a2_fase_2_behaviors": {
+    "status": "arquivado",
+    "data_conclusao": "2026-07-20",
+    "resultado": "behavior.schema.json (JSON Schema 2020-12) criado. Termo health padr├úo-ouro completo: behavior.json + health.gd + health.tscn + test_health.gd (16 testes) + README.md. CORRIGIDO: _start_invulnerability() com guard is_inside_tree(). CORRIGIDO: test_invulnerability com add_child()."
+  },
+  "arquivado_a2_fase_3_dock": {
+    "status": "arquivado",
+    "data_conclusao": "2026-07-20",
+    "resultado": "Plugin addons/mcp_dock/ completo: plugin.cfg + plugin.gd (EditorPlugin) + dock.gd (3 zonas, WebSocket 9082) + dock.tscn. CORRIGIDO: vazamento de WebSocketPeer no reconnect (close() antes de new). CORRIGIDO: tratamento de STATE_CONNECTING."
+  },
+  "arquivado_a2_fase_4_blueprints_seeds": {
+    "status": "arquivado",
+    "data_conclusao": "2026-07-20",
+    "resultado": "blueprint.schema.json + seed.schema.json criados. 3 blueprints: platformer.json, topdown_shooter.json, puzzle.json. 1 seed: breakout.json."
+  },
+  "arquivado_a2_fase_5_templates": {
+    "status": "arquivado",
+    "data_conclusao": "2026-07-20",
+    "resultado": "5 templates existentes atualizados com metadados. 3 novos: tutorial_01_basics.gd, quick_start_scene.tscn, menu_main.tscn. CORRIGIDO: quick_start_scene.tscn SubResources definidos (PlaceholderTexture2D + RectangleShape2D). CORRIGIDO: _message_timer morto removido."
+  },
+  "arquivado_a2_fase_6_testes": {
+    "status": "arquivado",
+    "data_conclusao": "2026-07-20",
+    "resultado": "tests/behaviors/test_runner.gd + tests/contract_snapshot_behaviors.py. CORRIGIDO: adicionada valida├º├úo de integridade .tscn (SubResource/ExtResource check). 3 .tscn validados: PASS."
+  },
+  "arquivado_a2_auditoria": {
+    "data": "2026-07-20",
+    "problemas_encontrados": 7,
+    "corrigidos": 7,
+    "resultado": "100% dos problemas corrigidos. contract_snapshot: TODOS OS CHECKS PASSARAM. merge-tree: LIMPO.",
+    "status": "arquivado"
+  },
+  "arquivado_a2_proximo": "Aguardar merge do Agente 1 na main. Depois: validar health.gd no Godot, instalar GdUnit4 (Fatia 2.B), criar behaviors restantes (2.E-2.Z)."
 }
