@@ -83,17 +83,10 @@ def list_extra_fields(tool: Tool) -> list[str]:
     ann = tool.annotations
     if ann is None or not isinstance(ann, ToolAnnotations):
         return []
-    all_fields = set(ann.model_fields.keys()) if hasattr(ann, 'model_fields') else set()
-    # Também verifica atributos setados dinamicamente
-    for attr in dir(ann):
-        if attr.startswith('_'):
-            continue
-        if attr in all_fields:
-            continue
-        val = getattr(ann, attr, None)
-        if val is not None and not callable(val):
-            all_fields.add(attr)
-    return sorted(all_fields - _MCP_SPEC_FIELDS)
+    # Pega campos setados via __setattr__ (model_extra do Pydantic)
+    extra = getattr(ann, 'model_extra', None) or {}
+    # Filtra internos do Pydantic
+    return sorted(k for k in extra if not k.startswith('model_') and k not in _MCP_SPEC_FIELDS)
 
 
 def audit_extra_fields(tools: list[Tool]) -> dict[str, list[str]]:
