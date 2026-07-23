@@ -1,126 +1,76 @@
-# Auditoria do registry/ — Fatia 1.1
+# Auditoria do Registry — ONDA 1.1
 
 **Data:** 2026-07-23
-**Objetivo:** Documentar o estado real de `registry/` antes da migração (Fatia 1.2).
+**Versão:** 1.0
 
 ---
 
-## 1. registry/__init__.py
+## Módulos do `registry/`
 
-### Exports públicos
-| Símbolo | Tipo | Origem |
-|---------|------|--------|
-| `build_tool_defs` | função | `discovery.build_tool_defs` |
-| `build_handlers` | função | `discovery.build_handlers` |
-| `discover` | função | `discovery.discover` |
-| `invalidate_caches` | função | `discovery.invalidate_caches` |
-| `DomainManifest` | classe | `types.DomainManifest` |
-| `OpSpec` | classe | `types.OpSpec` |
-| `Phase` | enum | `types.Phase` |
+### `types.py` — ✅ COMPLETO
+- `Phase` (enum): 6 fases (IDEIA, DESIGN, PROTOTIPO, CONTEUDO, POLIMENTO, PRONTO_PARA_LANCAR)
+- `OpSpec` (dataclass): nome, handler, inputSchema, annotations
+- `DomainManifest` (dataclass): domain_name, version, phase, ops, toolsets, description
+- **Gap:** Nenhum. Tipos canônicos definidos.
 
-### Status: FUNCIONAL. Interface pública definida, imports resolvidos.
+### `discovery.py` — ✅ COMPLETO (infra)
+- `discover()`: Varre `domains/*/manifest.py`, coleta `MANIFEST`. Retorna `dict[str, DomainManifest]`.
+- `build_tool_defs(phase)`: Delega ao `legacy_adapter`. Retorna `list[Tool]`.
+- `build_handlers()`: Delega ao `legacy_adapter`. Retorna `dict[str, Callable]`.
+- `invalidate_caches()`: Limpa cache local + `server._TOOL_DEFS_CACHE` + `server._HANDLERS_CACHE`.
+- **Gap:** `discover()` retorna vazio porque `domains/` não tem manifestos migrados ainda (ONDA 5).
 
----
+### `legacy_adapter.py` — ✅ COMPLETO
+- `build_tool_defs_legacy(phase)`: Ponte para `server._tool_defs()` com guarda de recursão.
+- `build_handlers_legacy()`: Ponte para `server._build_handlers()`.
+- `get_phase_tools_legacy()`: Ponte para `server._get_phase_tools()`.
+- `get_toolsets_legacy()` / `get_phase_toolsets_legacy()`: Lê `TOOLSETS`/`PHASE_TOOLSETS`.
+- **Gap:** Nenhum. Funciona como proxy transparente.
 
-## 2. registry/types.py
+### `invariants.py` — ✅ COMPLETO (6 ativas)
+- `check_all(phase)`: Executa INV-01, INV-02, INV-04, INV-10, INV-11, INV-12, INV-13.
+- `_inv_01()`: Toda tool tem handler — ✅
+- `_inv_02()`: Todo handler tem tool — ✅
+- `_inv_04()`: Toda tool tem fase — ✅ (implementado na ONDA 8.1)
+- `_inv_10()`: PHASE_TOOLSETS → tools/list — ✅
+- `_inv_11()`: TOOLSETS → tools/list — ✅
+- `_inv_12()`: Sem duplicação de namespace — ✅
+- **Gap:** INV-05 a INV-09, INV-14, INV-15 são xfail (fases futuras).
 
-### Classes
-| Classe | Campos | Status |
-|--------|--------|--------|
-| `Phase` | Enum: IDEIA, DESIGN, PROTOTIPO, CONTEUDO, POLIMENTO, PRONTO_PARA_LANCAR | OK |
-| `OpSpec` | dataclass: name, fn, summary, schema, examples, annotations, deprecated_since, replaced_by, rollback | OK |
-| `DomainManifest` | dataclass: domain, tool_name, title, namespace, version, aliases, description, phases, always_visible, internal, named_justification, annotations, ops, tags | OK |
+### `annotations.py` — ✅ COMPLETO
+- `validate_annotations(tool)`: Verifica `ToolAnnotations` e 4 hints obrigatórios.
+- **Gap:** Nenhum.
 
-### Status: COMPLETO. Define a estrutura de dados para manifestos de domínio.
-
----
-
-## 3. registry/discovery.py
-
-### Funções
-| Função | Comportamento | Status |
-|--------|--------------|--------|
-| `discover()` | Varre `domains/*/manifest.py`, carrega `MANIFEST`, cacheia resultado | FUNCIONAL |
-| `build_tool_defs(phase)` | **Delega 100% para `legacy_adapter.build_tool_defs_legacy(phase)`** | WRAPPER |
-| `build_handlers()` | **Delega 100% para `legacy_adapter.build_handlers_legacy()`** | WRAPPER |
-| `invalidate_caches()` | Reseta `_manifests` para None | FUNCIONAL |
-
-### GAP: `build_tool_defs` e `build_handlers` são wrappers puros — não usam `discover()`.
-O código real está em `legacy_adapter`, que chama `server._tool_defs()` e `server._build_handlers()`.
+### `legacy_annotations.py` — ✅ COMPLETO
+- `_HINT_RULES`: Regras estáticas de prefixo/sufixo para hints MCP.
+- **Gap:** Nenhum. Dados extraídos de `server.py` na Onda 2.3.
 
 ---
 
-## 4. registry/legacy_adapter.py
+## Fluxo atual
 
-### Funções
-| Função | Implementação | Dependência de server.py |
-|--------|--------------|--------------------------|
-| `build_tool_defs_legacy(phase)` | `return server._tool_defs()` | `server._tool_defs` |
-| `build_handlers_legacy()` | `return server._build_handlers()` | `server._build_handlers` |
-| `get_phase_tools_legacy()` | `return server._get_phase_tools()` | `server._get_phase_tools` |
-| `get_toolsets_legacy()` | `return dict(server.TOOLSETS)` | `server.TOOLSETS` |
-| `get_phase_toolsets_legacy()` | `return {CORE, PHASE_TOOLSETS}` | `server.PHASE_TOOLS_CORE`, `server.PHASE_TOOLSETS` |
+```
+MCP client
+  → @server.list_tools()
+    → server._tool_defs()
+      → registry.build_tool_defs()          ← ONDA 1.2: server chama registry
+        → legacy_adapter.build_tool_defs_legacy()
+          → server._tool_defs() [guarda]    ← proxy circular com guarda
+            → core.tool_definitions._raw_tool_defs()
+      → pós-processamento (hints, títulos, rollups, filtros)
+      → list[Tool] final (234 tools)
+```
 
-### GAP CRÍTICO: Dependência circular.
-`registry` → `legacy_adapter` → `server` → (ainda não importa `registry`).
-Para a Fatia 1.2 (`server.py` chamar `registry.build_tool_defs()`), teremos:
-`server` → `registry` → `legacy_adapter` → `server` (circular!).
-É necessário quebrar este ciclo antes de 1.2.
-
----
-
-## 5. registry/invariants.py
-
-### Invariantes implementadas
-| ID | Descrição | Status |
-|----|-----------|--------|
-| INV-01 | Toda tool em tools/list tem handler | IMPLEMENTADO |
-| INV-02 | Todo handler tem tool em tools/list | IMPLEMENTADO |
-| INV-10 | PHASE_TOOLSETS ⊆ tools/list | IMPLEMENTADO |
-| INV-11 | TOOLSETS ⊆ tools/list | IMPLEMENTADO |
-| INV-12 | Sem duplicação de namespace | IMPLEMENTADO |
-| INV-13 | Sem colisão de registro | PLACEHOLDER (ativado em F3) |
-
-### Dependências de server.py
-- `server._tool_defs()` — INV-01, INV-02
-- `server._build_handlers()` — INV-01, INV-02
-- `server.TOOLSETS` — INV-11, INV-12
-- `server.PHASE_TOOLSETS`, `server.PHASE_TOOLS_CORE` — INV-10
-- `tools.deprecated.DEPRECATED_TOOLS` — INV-10, INV-11
-
-### GAP: Mesmo problema de dependência circular. `invariants.py` importa `server` diretamente.
+**Paridade:** `registry.build_tool_defs()` ≡ `server._tool_defs()` — 234 tools, 0 diff.
 
 ---
 
-## 6. registry/annotations.py
+## Gaps identificados
 
-### Funções
-| Função | Descrição | Status |
-|--------|-----------|--------|
-| `validate_annotations(tool)` | Valida hints MCP (4 campos) | FUNCIONAL |
-| `create_annotations(...)` | Cria ToolAnnotations limpo | FUNCIONAL |
-| `validate_all(tools)` | Validação em lote | FUNCIONAL |
+| Gap | Impacto | Quando resolver |
+|---|---|---|
+| `domains/` sem manifestos | `discover()` retorna vazio | ONDA 5 (migração) |
+| Fluxo circular server↔registry | Complexidade desnecessária | ONDA 5 (quando discover() tiver dados) |
+| INV-05 a INV-09 xfail | Validações pendentes | ONDA 2 (conformidade) |
 
-### Status: INDEPENDENTE. Não depende de `server.py`, só do SDK MCP.
-Pronto para uso imediato. Já resolve o bug da Fatia 2.1 (tags apagando hints).
-
----
-
-## 7. Resumo de Gaps
-
-| Gap | Severidade | Impacto |
-|-----|-----------|---------|
-| Dependência circular `registry → legacy_adapter → server` | **BLOQUEADOR** | Impede Fatia 1.2 (`server.py` chamar `registry.build_tool_defs()`) |
-| `invariants.py` importa `server` diretamente | **ALTO** | Viola isolamento do registry |
-| `build_tool_defs` não usa `discover()` | **MÉDIO** | Código morto: `discover()` existe mas nunca é chamado em produção |
-| `discover()` varre `domains/*/manifest.py` | **BAIXO** | Funciona, mas domínios ainda não têm manifestos (estão no sistema legado) |
-| INV-13 placeholder | **BAIXO** | Ativado em F3, OK por enquanto |
-
----
-
-## 8. Recomendação para Fatia 1.2
-
-Antes de fazer `server.py` chamar `registry.build_tool_defs()`:
-
-1. **Quebrar o ciclo:** `legacy_adapter` não pode importar `server`. Em vez disso, `server` deve passar as funções legadas como parâmetros (injeção de dependência) ou `legacy_adapter` deve acessar `core/tool_definitions.py` diretamente (não via `server`).
-2. **Mover** `_tool_defs()`, `_build_handlers()`, `TOOLSETS`, `PHASE_TOOLSETS`, `PHASE_TOOLS_CORE` para um módulo separado (ex: `core/legacy_registry.py`) que ambos `server` e `registry` possam importar sem ciclo.
+**Conclusão:** O registry está funcional como infraestrutura. A ONDA 1 atinge seu objetivo: preparar o terreno para a ONDA 5 (migração de domínios).
