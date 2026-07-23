@@ -1651,25 +1651,25 @@
     "resultado": "8.2 concluida: filtros reduzidos de 3 para 2 eixos (toolsets + fase). Profile removido."
   },
   "fatia_8_3": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "dd6a779d90c069acab79c60a7b30a9dc8bc73146",
     "ficha": ".github/roadmap/ONDA_8_curadoria.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "8.3: Precedencia documentada em MEDICAO_R7.md."
+    "resultado": "8.3: docs/CURADORIA_PRECEDENCIA.md — pipeline de filtros documentado."
   },
   "fatia_9_1": {
     "status": "concluida",
-    "checkpoint": "853d53028f06aaf0aeaf62afd0da88f0660f0efe",
+    "checkpoint": "dd6a779d90c069acab79c60a7b30a9dc8bc73146",
     "ficha": ".github/roadmap/ONDA_9_quarentena.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "9.1: experimental/ OK."
+    "resultado": "9.1: experimental/ ativo. Verticais nao exercitadas identificadas."
   },
   "fatia_9_2": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "dd6a779d90c069acab79c60a7b30a9dc8bc73146",
     "ficha": ".github/roadmap/ONDA_9_quarentena.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "9.2: Criterio de saida: jogo real precisou da capacidade."
+    "resultado": "9.2: docs/QUARENTENA_CRITERIO_SAIDA.md — criterio documentado."
   },
   "fatia_10_1": {
     "status": "nao verificado",
@@ -1693,11 +1693,11 @@
     "resultado": "10.3: docs/auditoria_registry.md cobre arquitetura."
   },
   "fatia_10_4": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "dd6a779d90c069acab79c60a7b30a9dc8bc73146",
     "ficha": ".github/roadmap/ONDA_10_congelar.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "10.4: Contagens referencia MEDICAO_R7.md."
+    "resultado": "10.4: copilot-instructions.md referencia MEDICAO_R7.md."
   },
   "fatia_10_5": {
     "status": "nao verificado",
