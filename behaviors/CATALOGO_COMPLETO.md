@@ -1,8 +1,9 @@
-# ARSENAL DEFINITIVO DE BEHAVIORS — Catálogo Completo v9.0
+# ARSENAL DEFINITIVO DE BEHAVIORS — Catálogo Completo v9.1
 
-**Versão:** 9.0 | **Data:** 2026-07-20
+**Versão:** 9.1 | **Data:** 2026-07-23 (auditado)
 **Local:** `behaviors/` | **Formato:** `behavior.schema.json` v2.0
-**Total:** 224 behaviors em 27 categorias + Behavior Lifecycle + SemVer + CHANGELOG
+**Total:** 249 behaviors em 27 categorias + Behavior Lifecycle + SemVer + CHANGELOG
+**Status:** TODOS com behavior.json + .gd + .tscn — nenhum diretório vazio.
 **Pesquisas:** 7 rodadas | **Fontes:** 35+ | **Princípios:** 40
 
 ---

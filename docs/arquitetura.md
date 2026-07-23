@@ -113,7 +113,7 @@ Dois caches globais evitam recriar estruturas pesadas a cada chamada:
 
 | Cache | O que armazena | Quando invalida |
 |---|---|---|
-| `_TOOL_DEFS_CACHE` | Lista das 191 definições de tools | Nunca (tools são estáticas) |
+| `_TOOL_DEFS_CACHE` | Lista das 236 definições de tools (272 brutas, 189 depreciadas) | Invalidado por mudança de fase (Feature 8) |
 | `_HANDLERS_CACHE` | Dict `{nome_da_tool: função_handler}` | Nunca |
 
 ### 3.4 Rate Limiting
@@ -140,7 +140,7 @@ Para controlar quantas tools são expostas (economia de tokens):
 ```bash
 python server.py --profile core   # 16 tools essenciais (~2K tokens)
 python server.py --profile dev    # 31 tools para desenvolvimento (~5K tokens)
-python server.py --profile full   # 191 tools completas (~19K tokens, default)
+python server.py --profile full   # 236 tools completas (~19K tokens, default)
 ```
 
 Também configurável via env var: `MCP_TOOL_PROFILE=dev`.
@@ -534,7 +534,7 @@ Se a IA insistir em chamar uma tool "escondida" (ex: `deploy_itch` na fase IDEIA
 o handler executa normalmente. O bloqueio de progressão entre fases é responsabilidade
 exclusiva da Feature 1 (`advance_phase`), que verifica critérios objetivos.
 
-### 7.1 Por que 191 tools e não 50?
+### 7.1 Por que 236 tools e não 50?
 
 Cada tool faz UMA coisa bem definida. Isso permite que a IA componha operações complexas
 a partir de tools simples. É o princípio UNIX: "faça uma coisa e faça bem".
@@ -542,7 +542,7 @@ a partir de tools simples. É o princípio UNIX: "faça uma coisa e faça bem".
 Para controlar o volume de tools expostas, use perfis:
 - `--profile core`: 16 tools essenciais (~2K tokens)
 - `--profile dev`: 31 tools para desenvolvimento (~5K tokens)
-- `--profile full`: 191 tools completas (default)
+- `--profile full`: 236 tools completas (default)
 
 ### 7.2 Por que JSON-RPC sobre stdio e não HTTP REST?
 
@@ -613,7 +613,7 @@ cd sistema\mcp-godot\servidor
 
 ```
 mcp-godot-desenvolvimento/
-├── server.py              ← CORAÇÃO: ~7400 linhas, 191 tools, roteamento
+├── server.py              ← CORAÇÃO: ~7400 linhas, 236 tools (visíveis), roteamento
 ├── tools/                 ← Implementações (64 módulos)
 │   ├── scene_ops.py       ← Cenas, nós, tilemap, animação, UI
 │   ├── script_ops.py      ← GDScript (gerar, anexar, validar)

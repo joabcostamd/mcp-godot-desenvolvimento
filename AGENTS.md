@@ -8,6 +8,8 @@
 > **Infraestrutura:** Este projeto roda em dois worktrees do mesmo repositório:
 > `mcp-godot-desenvolvimento` (agente principal) e `mcp-godot-agente02`
 > (segundo agente, trabalho paralelo). Os dois compartilham histórico Git.
+> Main e agente2/trabalho estão sincronizados no commit `3c28cfb`.
+> A branch `agente2/behaviors-onda2` tem 160 commits de behaviors não mergeados.
 > Coordenação automática via `coordenacao.json` na pasta `.git` comum —
 > nenhum agente escolhe etapa já reivindicada pelo outro. Sincronização
 > ao final de cada onda (ver `/seguir-roadmap`).
@@ -69,8 +71,9 @@ atualizar `HANDOFF.md`. A próxima sessão não tem seu histórico de conversa.
 
 **5. Um commit de cada vez.** Nunca dois commits em paralelo em branches diferentes.
 
-**6. Estado único.** Só existe `.roadmap_progress.json`. Não há mais
-`.roadmap_progress_a2.json`.
+**6. Estado único.** `.roadmap_progress.json` é a fonte oficial.
+`.roadmap_progress_a2.json` ainda existe como registro histórico do
+Agente 2 (6 fases concluídas) mas não é mais usado ativamente.
 
 ---
 
@@ -101,7 +104,7 @@ Para auditar o trabalho feito sem corrigir nada:
 /audit
 ```
 
-O comando `/audit` (`.github/prompts/audit.prompt.md`) executa o revisor adversarial:
+O comando `/audit` (`%APPDATA%\Code\User\prompts\audit.prompt.md`) executa o revisor adversarial:
 - não escreve código;
 - roda `auditar.py` de forma independente;
 - tenta **quebrar** a implementação, não confirmá-la;

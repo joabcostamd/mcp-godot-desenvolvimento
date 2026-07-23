@@ -12,7 +12,7 @@ Continue o desenvolvimento do **mcp-godot-desenvolvimento**.
 - **Commit:** efd137a (push OK para origin/main)
 - **F5:** 37 domínios migrados ✅ CONCLUÍDA
 - **F6:** Transporte AVANÇADO (F6.1-F6.4 concluídos)
-- **Testes:** 352/352 passam (8 xfailed + 1 falso positivo INV-03)
+- **Testes:** 352/352 reportados em 2026-07-22 (⚠️ auditoria 2026-07-23: 157 pass, 1 fail, 8 xfail = 166 reais)
 - **defs_total=235, DEPRECATED_TOOLS=189, ALIAS_MAP=80**
 
 ## ⚠️ INV-03 falso positivo — NÃO refazer

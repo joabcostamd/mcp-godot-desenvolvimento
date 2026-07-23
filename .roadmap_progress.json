@@ -1,4 +1,12 @@
 {
+  "auditoria_ecossistema_2026_07_23": {
+    "status": "concluida",
+    "data": "2026-07-23",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "3c28cfb",
+    "resultado": "Auditoria completa do ecossistema (2 partes). Métricas reais: 236 tools visíveis, 249 behaviors, 38 domínios, 157/166 testes passam. 5/6 fases excedem teto de 40 tools. Docs atualizados: server.py, pyproject.toml, _meta_tool.py, copilot-instructions.md, CATALOGO_COMPLETO.md, AGENTS.md, HANDOFF.md, CHANGELOG.md."
+  },
   "fatia_F5.13_runtime": {
     "status": "concluida",
     "data": "2026-07-21",

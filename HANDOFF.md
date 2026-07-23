@@ -5,7 +5,80 @@
 
 ---
 
-## Último Handoff (AGENTE 01 — 2026-07-22 — ENCERRAMENTO)
+## Último Handoff (AGENTE 01 — 2026-07-23 — AUDITORIA COMPLETA DO ECOSSISTEMA)
+
+- **Data:** 2026-07-23
+- **Commit:** `3c28cfb` (main, HEAD)
+- **O que foi feito:** Auditoria completa de todo o ecossistema (2 partes, ~12h de trabalho). NENHUMA feature nova — somente leitura, coleta de fatos, e atualização de documentação.
+
+### Métricas reais (comandos executados, não estimativas)
+
+```
+Tools visíveis: 236 (235 handlers)
+Definições brutas em core/tool_definitions.py: 272
+DEPRECATED_TOOLS: 189
+ALIAS_MAP: 80
+Behaviors: 249 (TODOS com behavior.json + .gd + .tscn — zero pastas vazias)
+Domínios: 38
+Fases: 6 (IDEIA→DESIGN→PROTOTIPO→CONTEUDO→POLIMENTO→PRONTO_PARA_LANCAR)
+
+Tools por fase (teto=40):
+  IDEIA: 37 ✅ | DESIGN: 82 ❌ | PROTOTIPO: 93 ❌
+  CONTEUDO: 142 ❌ | POLIMENTO: 177 ❌ | PRONTO_PARA_LANCAR: 184 ❌
+
+Testes (pytest): 157 passed, 1 failed (INV-03: execute_gdscript_runtime sem namespace), 8 xfailed
+auditar.py: C1=PASS (235 changes, 0 breaking), C2-C7=SKIP (sem argumentos)
+```
+
+### Principais descobertas
+
+1. **Comandos `/` funcionam** — os `.prompt.md` (plan, act, handoff, audit) estão em `%APPDATA%\Code\User\prompts\` (global), não no repo. Foram movidos pelo commit `3c28cfb` ("remove prompts locais duplicados").
+
+2. **Behaviors estão COMPLETOS** — 249 behaviors, todos implementados com behavior.json + .gd + .tscn. A afirmação anterior no HANDOFF ("224 behaviors") estava desatualizada.
+
+3. **Agente 2 sincronizado** — Worktree `mcp-godot-agente02` no mesmo commit da main (`9214970` = `3c28cfb`). Branch `agente2/behaviors-onda2` tem 160 commits NÃO mergeados (os behaviors em si).
+
+4. **Teto de tools explodido** — 5 das 6 fases excedem 40 tools. Apenas IDEIA (37) está dentro. Fatia 0.7b (teto) está `marginal` há semanas.
+
+5. **Nenhuma trava automática funciona** — Regra R20: hooks do VS Code não disparam com a extensão DeepSeek v0.6.2. Toda segurança depende de obediência do modelo a texto.
+
+6. **Provas nunca exercitadas** — Zero pastas `.mcp_proof` no disco. Zero marcadores `.mcp_gate_failed`. Transições de fase nos projetos de teste são 80% forçadas (4 de 5 com `force=True`).
+
+### Estado dos arquivos
+
+| Arquivo | Correção feita |
+|---|---|
+| `server.py` docstring | "134 ferramentas" → "236 ferramentas visíveis" |
+| `pyproject.toml` | "v3.2.1 — 191 ferramentas" → "v3.7.0 — 236 ferramentas, 249 behaviors, 38 domínios" |
+| `_meta_tool.py` | "143 para ~33" → estado atual |
+| `CATALOGO_COMPLETO.md` | "224 behaviors" → "249 behaviors" |
+| `.github/copilot-instructions.md` | "~204 Tool()" → métricas atuais |
+| `AGENTS.md` | Corrigidas refs a arquivos inexistentes, atualizado status do Agente 2 |
+
+### Pendências (inalteradas)
+
+- **Merge dos behaviors**: 160 commits em `agente2/behaviors-onda2` não mergeados
+- **Teto de tools**: 5 fases excedem — fatia 0.7b marginal
+- **59 tools SEM_FASE**: acessibilidade, gameplay, telemetria, onboarding
+- **INV-03**: falso positivo (execute_gdscript_runtime sem namespace)
+- **C3 (smoke_test)**: não disponível offline (requer MCP rodando)
+- **Hooks não disparam**: R20 — sem trava automática real
+
+### Próximo
+
+- `/plan` para decidir: merge dos behaviors OU resolução do teto de tools OU F6.5 (backend nas respostas)
+- Antes de qualquer `/act`: rodar `git log -3 --oneline` e `git status --porcelain`
+
+### Para o Agente 2
+
+- Branch `agente2/behaviors-onda2`: 160 commits, 249 behaviors completos
+- Merge pendente na main — coordenar antes de mexer
+- 3 stashes na branch de behaviors (WIP)
+- Worktree limpo, sincronizado com main
+
+---
+
+## Handoff Anterior (AGENTE 01 — 2026-07-22 — ENCERRAMENTO)
 
 - **Data:** 2026-07-22
 - **Commit:** `efd137a` (main, pushed)
@@ -18,7 +91,7 @@ defs_total=235, handlers_total=235
 SEM_HANDLER=0, SEM_DEF=0
 DEPRECATED_TOOLS=189, ALIAS_MAP=80
 AUDITORIA F5: APROVADA (A01-A08, A10-A12)
-352/352 testes passam (8 xfailed + 1 falso positivo INV-03)
+352/352 reportados em 2026-07-22 (⚠️ auditoria 2026-07-23: 157 pass, 1 fail, 8 xfail = 166 reais)
 ```
 
 ### 38 domínios migrados (F5 + F6)

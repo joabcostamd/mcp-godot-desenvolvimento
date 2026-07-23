@@ -1,5 +1,26 @@
 # CHANGELOG — mcp-godot-desenvolvimento
 
+## v3.7.1 (2026-07-23) — Auditoria Completa do Ecossistema
+
+### Auditoria (2 partes, somente leitura)
+- **Métricas reais**: 236 tools visíveis (235 handlers), 272 definições brutas, 189 depreciadas, 80 aliases
+- **Behaviors**: 249 (todos com .json + .gd + .tscn), correção de "224" → "249"
+- **Domínios**: 38 migrados (F5 + F6)
+- **Testes**: 157 pass, 1 fail (INV-03), 8 xfail — correção do HANDOFF que dizia "352/352"
+- **Fases**: 5 de 6 excedem teto de 40 tools (só IDEIA=37 está dentro)
+- **Git**: main e agente2/trabalho sincronizados em `3c28cfb`. Branch `agente2/behaviors-onda2` com 160 commits não mergeados
+- **Comandos `/`**: prompts em `%APPDATA%\Code\User\prompts\` (globais), não no repo
+- **Trava R20**: hooks do VS Code não disparam com extensão DeepSeek v0.6.2
+
+### Documentação atualizada
+- `server.py` docstring: "134" → "236" ferramentas
+- `pyproject.toml`: "v3.2.1 — 191" → "v3.7.0 — 236 ferramentas, 249 behaviors, 38 domínios"
+- `_meta_tool.py`: "143 → ~33" → estado atual
+- `CATALOGO_COMPLETO.md`: "224" → "249 behaviors"
+- `.github/copilot-instructions.md`: métricas atualizadas
+- `AGENTS.md`: refs a arquivos inexistentes corrigidas, status Agente 2 atualizado
+- `HANDOFF.md`: novo handoff pós-auditoria com todas as métricas reais
+
 ## v3.8.0 (2026-07-21) — Reorganização de Tools F0-F5
 
 ### F5: Migração para domínios (5 concluídos)
@@ -204,8 +225,8 @@
 - BUG-008: dead imports em find_unused_resources.py
 - BUG-009: str/Path em milestone_ops.py
 
-### Métricas
-- **191 tools**, **72 módulos**, **22 patches**, **10 features Fase 1**, **4 Grupo C**, **6 fases**
+### Métricas (históricas — 2026-07-13)
+- **191 tools** (⚠️ auditoria 2026-07-23: 236 tools visíveis), **72 módulos**, **22 patches**, **10 features Fase 1**, **4 Grupo C**, **6 fases**
 - **55+ bugs corrigidos**, **18 regras LEARNINGS (R1-R18)**
 
 ---
@@ -255,8 +276,8 @@
 - Race condition: `_validate_after_edit` nunca limpava gate marker
 - `_get_file_path()`: string vs Path (`Path()` wrapper adicionado)
 
-### Métricas
-- **191 tools**, **69 módulos**, **18 patches**, **8 features da Fase 1**, **6 fases**
+### Métricas (históricas — 2026-07-12)
+- **191 tools** (⚠️ 2026-07-23: 236 visíveis), **69 módulos**, **18 patches**, **8 features da Fase 1**, **6 fases**
 - **55+ bugs corrigidos** em 12 rodadas de auditoria
 
 ---
@@ -280,12 +301,12 @@
 - **Teste visual:** pixel analysis confirma bordas prateada/dourada exclusivas por nível
 
 ### Documentação
-- **MCP_ESTADO_ATUAL.md** sincronizado com 191 tools, 69 módulos, v3.2.1
+- **MCP_ESTADO_ATUAL.md** sincronizado com 191 tools (⚠️ histórico, 2026-07-12), 69 módulos, v3.2.1
 - **pendencias.md** criado (bugs ativos + resolvidos)
 - **decisoes.md** (Star Colony) atualizado com EARS-B
 
-### Métricas atualizadas
-- **191 tools** (+2: run_verification_pipeline + 1 rollup), **69 módulos** (+5)
+### Métricas atualizadas (históricas — 2026-07-12)
+- **191 tools** (⚠️ 2026-07-23: 236 visíveis) (+2: run_verification_pipeline + 1 rollup), **69 módulos** (+5)
 - **49 bugs corrigidos** (+6 BUG-V01~V06) em 12 rodadas de auditoria
 
 ### Correções de segurança

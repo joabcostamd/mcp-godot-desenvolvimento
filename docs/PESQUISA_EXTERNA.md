@@ -4,6 +4,7 @@
 > Objetivo: enriquecer a solução com conhecimento externo validado, sem regressões.
 > **Protocolo canônico:** `.github/instructions/pesquisa.instructions.md`
 > **Comando rápido:** `/pesquise` no chat do VS Code
+> ⚠️ **Nota (auditoria 2026-07-23):** Este documento menciona "287 tools" — era o número real em 2026-07-21. Hoje: 236 visíveis (272 brutas). O diagnóstico de organização de tools continua válido.
 
 ---
 

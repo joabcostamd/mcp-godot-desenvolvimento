@@ -216,7 +216,7 @@ godot://registry/health     godot://roadmap
 - §3.3 diz que `_TOOL_DEFS_CACHE` "nunca invalida"; §7.0b diz que invalida por callback.
 - §3.5.2 descreve 10 toolsets (`scene_ops`, `script_ops`, `git_ops`…) que **não existem no código**.
 - §4.3 e §6 (Passo 3) ensinam a usar `_READONLY`, `_TITLES`, `_TAGS` — suspeitos de código morto.
-- `core/tool_definitions.py`, onde vivem as 287 `Tool()`, **não é mencionado em nenhum documento**.
+- `core/tool_definitions.py`, onde vivem as 272 `Tool()` (236 visíveis após filtros), **não é mencionado em nenhum documento**.
 
 ### 3.2 Estado desejado
 

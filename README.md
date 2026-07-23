@@ -10,7 +10,7 @@
 ![MCP](https://img.shields.io/badge/MCP-2025--11--25-orange)
 <!-- BADGES_END -->
 
-> 📊 **Versão:** <!--DOCS_SYNC:version-->3.7.0<!--/DOCS_SYNC:version--> | **Tools:** <!--DOCS_SYNC:tools-->287<!--/DOCS_SYNC:tools--> | **Rollups:** <!--DOCS_SYNC:rollups-->32<!--/DOCS_SYNC:rollups-->
+> 📊 **Versão:** <!--DOCS_SYNC:version-->3.7.0<!--/DOCS_SYNC:version--> | **Tools:** <!--DOCS_SYNC:tools-->236<!--/DOCS_SYNC:tools--> | **Behaviors:** <!--DOCS_SYNC:behaviors-->249<!--/DOCS_SYNC:behaviors--> | **Domínios:** <!--DOCS_SYNC:domains-->38<!--/DOCS_SYNC:domains-->
 > ⚠️ Números gerados por `scripts/docs_sync.py` — não edite manualmente.
 
 ---

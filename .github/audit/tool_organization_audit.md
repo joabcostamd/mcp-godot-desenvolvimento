@@ -1,6 +1,6 @@
 # CATALOGO COMPLETO DE TOOLS — MCP Godot Agent
 
-> Total: 287 tools | Data: 2026-07-21
+> Total: 287 tools | Data: 2026-07-21 (⚠️ snapshot histórico. Auditoria 2026-07-23: 236 tools visíveis, 272 definições brutas, 189 depreciadas)
 > TOOLSETS: 5 namespaces | Fases: 6
 
 ## 1. ARQUITETURA DE CURADORIA

@@ -372,12 +372,12 @@ Eles servem a públicos diferentes no mesmo arquivo, e por isso se contradizem.
 
 Divergências reais já confirmadas por leitura do código:
 
-| Documento | Diz que tem | Código real |
+| Documento | Diz que tem | Código real (auditoria 2026-07-23) |
 |---|---|---|
-| README | 193 tools, v3.4.0 | 204 `Tool()` em `server.py` |
-| MCP_ESTADO_ATUAL | 191 tools, v3.3.0 | idem |
-| NEXT_SESSION | 212 tools | idem |
-| CONTEXTO_PROJETO | 248 / 201 | idem |
+| README (antes) | 193 tools, v3.4.0 | 236 tools visíveis, 272 brutas |
+| MCP_ESTADO_ATUAL (antes) | 191 tools, v3.3.0 | 236 tools visíveis |
+| NEXT_SESSION (antes) | 212 tools | 236 tools visíveis |
+| CONTEXTO_PROJETO (antes) | 248 / 201 | 236 tools visíveis |
 
 **A causa não é desleixo: é número escrito à mão.** A correção estrutural é gerar
 todo número a partir do código. Depois desta reestruturação, número escrito à mão
@@ -745,7 +745,9 @@ travas reais (fase, verificação, export, sessão) que impedem pular etapa.
 
 O projeto que você edita é o **próprio MCP**, não um jogo.
 
-Estado: Godot 4.7, ~204 `Tool()` em `server.py`, máquina de estados de 6 fases
+Estado: Godot 4.7, 236 ferramentas visíveis (272 definições brutas em
+`core/tool_definitions.py`, 189 depreciadas, 80 aliases), 249 behaviors,
+38 domínios, máquina de estados de 6 fases
 (IDEIA → DESIGN → PROTOTIPO → CONTEUDO → POLIMENTO → PRONTO_PARA_LANCAR),
 Saga Engine, proof ledger, `auditar.py` como portão fail-closed.
 

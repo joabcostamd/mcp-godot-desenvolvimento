@@ -4,7 +4,8 @@ Colapsa múltiplas tools de um mesmo domínio em uma única tool
 <domain>_manage com parâmetro `op` (Literal enum) + `params` dict.
 
 Baseado no padrão hi-godot/godot-ai (`src/godot_ai/tools/_meta_tool.py`).
-Meta: reduzir tool count de 143 para ~33 (18 rollups + 15 named).
+Estado atual: ~272 definicoes brutas em core/tool_definitions.py, 236 visiveis
+apos filtros de fase (189 depreciadas, 80 aliases), ~40 rollups _manage ativos.
 
 Exemplo de uso:
     from _meta_tool import create_manage_tool
