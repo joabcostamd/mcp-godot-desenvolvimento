@@ -1,4 +1,12 @@
 {
+  "fatia_8.3_curadoria_precedencia": {
+    "status": "concluida",
+    "data": "2026-07-23",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "a998ce8",
+    "resultado": "Fatia 8.3 — Documentar precedencia atual. docs/CURADORIA_PRECEDENCIA.md atualizado para v2.0 pos-8.2: 2 eixos (toolsets + fase), ordem de aplicacao, intersecao AND, exemplo concreto, regras. Numeros atualizados: CORE 25, fases com contagens reais. TOOL_PROFILES removido da doc."
+  },
   "fatia_8.2_curadoria_2eixos": {
     "status": "concluida",
     "data": "2026-07-23",
