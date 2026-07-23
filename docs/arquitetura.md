@@ -1,4 +1,4 @@
-# ARQUITETURA MCP — Godot Agent v3.5.0
+# ARQUITETURA MCP — Godot Agent v3.8.0
 
 > **Leia este documento para ENTENDER o MCP por dentro.** Não é um tutorial de uso
 > (para isso veja `GUIA_CONEXAO.md`). É o mapa do código: como as peças se encaixam,
@@ -12,7 +12,7 @@
 ## 1. VISÃO GERAL — O que o MCP faz
 
 O MCP (Model Context Protocol) é uma ponte entre **linguagem natural** e **Godot Engine**.
-Ele expoe 240 ferramentas que uma IA pode chamar para criar jogos completos —
+Ele expoe 236 ferramentas (272 definicoes brutas) que uma IA pode chamar para criar jogos completos —
 cenas, scripts, física, UI, áudio, partículas, exportação — sem que o usuário
 precise abrir o editor Godot ou escrever uma linha de código.
 
@@ -58,9 +58,9 @@ Isso reduz erros, acelera a construção e mantém a coerência.
 ┌────────────────────▼────────────────────────────┐
 │  CAMADA 2 — Tool Definitions + Handlers          │
 │  ─────────────────────────────────────────────  │
-│  • 240 tools com schema JSON completo            │
-│  • 32 rollups (<domain>_manage)                  │
-│  • 3 perfis (core=31, dev=80, full=240)          │
+│  • 236 tools com schema JSON completo (272 brutas)    │
+│  • 52 rollups (<domain>_manage)                       │
+│  • 4 perfis (core=15, dev=41, lean=16, full=236)      │
 │  • 5 namespaces (project, assets, runtime, analysis, orchestration) │
 │  • Annotations: readOnlyHint, destructiveHint    │
 │  • Títulos em português (PT-BR)                  │
@@ -138,8 +138,8 @@ Cada erro também recebe uma mensagem amigável em português via `tools/friendl
 Para controlar quantas tools são expostas (economia de tokens):
 
 ```bash
-python server.py --profile core   # 16 tools essenciais (~2K tokens)
-python server.py --profile dev    # 31 tools para desenvolvimento (~5K tokens)
+python server.py --profile core   # 15 tools essenciais (~2K tokens)
+python server.py --profile dev    # 41 tools para desenvolvimento (~7K tokens)
 python server.py --profile full   # 236 tools completas (~19K tokens, default)
 ```
 

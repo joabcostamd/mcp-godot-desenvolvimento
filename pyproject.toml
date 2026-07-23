@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "godot-mcp-agent"
-version = "3.7.0"
-description = "MCP Godot Agent v3.7.0 — 236 ferramentas (235 handlers, 189 depreciadas, 80 aliases), 249 behaviors, 38 domínios, 6 fases. Servidor MCP stdio para criação de jogos Godot 4.7 via IA agêntica (DeepSeek V4 Pro). Pipeline de verificação, sandbox GDScript, ClassDB introspecção, Runtime Bridge TCP, Proof Ledger, Saga Engine."
+version = "3.8.0"
+description = "MCP Godot Agent v3.8.0 — 236 ferramentas (235 handlers, 189 depreciadas, 80 aliases), 249 behaviors, 38 dominios, 6 fases. Servidor MCP stdio para criacao de jogos Godot 4.7 via IA agentiva (DeepSeek V4 Pro). Pipeline de verificacao, sandbox GDScript, ClassDB introspeccao, Runtime Bridge TCP, Proof Ledger, Saga Engine."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

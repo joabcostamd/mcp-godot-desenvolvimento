@@ -1,6 +1,6 @@
 # MCP Godot Agent
 
-> Servidor MCP em Python que e o dono do processo de desenvolvimento de um jogo Godot inteiro — da ideia ao lancamento. Conecta o Godot Engine 4.7 ao VS Code Copilot via protocolo MCP stdio (JSON-RPC 2.0). 285 tools, 6 fases, maquina de estados, playtest automatizado, relatorio de qualidade, auditoria fail-closed.
+> Servidor MCP em Python que e o dono do processo de desenvolvimento de um jogo Godot inteiro — da ideia ao lancamento. Conecta o Godot Engine 4.7 ao VS Code Copilot via protocolo MCP stdio (JSON-RPC 2.0). 236 tools visiveis (272 brutas), 6 fases, maquina de estados, playtest automatizado, relatorio de qualidade, auditoria fail-closed.
 
 ## Documentacao
 
@@ -15,7 +15,7 @@
 
 ## Codigo Principal
 
-- [server.py](server.py): Servidor MCP principal (~3700 linhas, stdio JSON-RPC 2.0, 277 tools)
+- [server.py](server.py): Servidor MCP principal (~3700 linhas, stdio JSON-RPC 2.0, 236 tools)
 - [init.py](init.py): Instalador de 1 comando (stdlib apenas, sem dependencias)
 - [auditar.py](auditar.py): Portao de qualidade fail-closed com 7 criterios (C1 a C7)
 - [launch.py](launch.py): Script de inicializacao do servidor MCP
