@@ -1616,25 +1616,25 @@
     "resultado": "4.2 concluida: tool_catalog+tool_groups depreciados. catalog_search unificado. 234 tools."
   },
   "fatia_4_3": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "d37f43847109d97e6c804b1f918d7718cb1b0b4d",
     "ficha": ".github/roadmap/ONDA_4_descoberta.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "4.3: catalog_search ja indexa ops via rollup builders. OK."
+    "resultado": "4.3: catalog_search ja indexa tools com ops (meta_ops.py). Rollup builders expoem ops."
   },
   "fatia_4_4": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "d37f43847109d97e6c804b1f918d7718cb1b0b4d",
     "ficha": ".github/roadmap/ONDA_4_descoberta.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "4.4: describe_tool ja aceita parametro tool. Op detail pendente."
+    "resultado": "4.4: describe_tool aceita name e retorna schema+hints+operation. Op detail via rollup builders."
   },
   "fatia_4_5": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "d37f43847109d97e6c804b1f918d7718cb1b0b4d",
     "ficha": ".github/roadmap/ONDA_4_descoberta.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "4.5: trio de descoberta ja em CORE (B29 l.540). Guia pendente."
+    "resultado": "4.5: trio catalog_search/describe_tool/invoke_by_name ja em CORE. Documentado em copilot-instructions.md."
   },
   "fatia_8_1": {
     "status": "nao verificado",
