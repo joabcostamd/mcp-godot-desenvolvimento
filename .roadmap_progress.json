@@ -8,20 +8,20 @@
     "resultado": "Auditoria completa do ecossistema (2 partes). Métricas reais: 236 tools visíveis, 249 behaviors, 38 domínios, 157/166 testes passam. 5/6 fases excedem teto de 40 tools. Docs atualizados: server.py, pyproject.toml, _meta_tool.py, copilot-instructions.md, CATALOGO_COMPLETO.md, AGENTS.md, HANDOFF.md, CHANGELOG.md."
   },
   "fatia_F5.13_runtime": {
-    "status": "concluida",
+    "status": "nao verificado",
     "data": "2026-07-21",
     "tentativa": 1,
     "agente": "AGENTE 01",
     "checkpoint": "3aaf160",
-    "resultado": "F5.13 — Migrar dominio runtime. Criado domains/runtime/ (6 arquivos). 6 ops: compile, run, stop, restart, launch_editor, close_editor. Nenhuma atômica nova a depreciar (ja estavam em DEPRECATED_TOOLS). Corrigido bug A01 em domains/godot/handlers.py (importlib no lugar de from server import). 240/240 regressao. AUDITORIA F5: APROVADA."
+    "resultado": "F5.13 — Migrar dominio runtime. Criado domains/runtime/ (6 arquivos). 6 ops: compile, run, stop, restart, launch_editor, close_editor. Nenhuma atômica nova a depreciar (ja estavam em DEPRECATED_TOOLS). Corrigido bug A01 em domains/godot/handlers.py (importlib no lugar de from server import). 240/240 regressao. AUDITORIA F5: APROVADA. [REBAIXADO R5: dependencia F1 nao fechada — TOOLSETS/TOOL_PROFILES/PHASE_TOOLS_CORE ainda em server.py]"
   },
   "fatia_F5.6_vfx": {
-    "status": "concluida",
+    "status": "nao verificado",
     "data": "2026-07-21",
     "tentativa": 1,
     "agente": "AGENTE 01",
     "checkpoint": "pendente-commit",
-    "resultado": "F5.6 — Migrar dominio vfx/particulas. Criado domains/vfx/ (manifest.py, handlers.py, examples.py, schemas.py, test_vfx_domain.py). 5 ops: create_particles, config_particles, create_particles_3d, screen_flash, world_env. vfx_manage: +1 op (create_particles_3d). Removidas 2 atômicas do wire: create_particles_2d, configure_particles_2d (+create_particles_3d ja era DEPRECATED). +3 aliases. 184/184 regressao (+8 testes vfx). AUDITORIA F5: APROVADA."
+    "resultado": "F5.6 — Migrar dominio vfx/particulas. Criado domains/vfx/ (manifest.py, handlers.py, examples.py, schemas.py, test_vfx_domain.py). 5 ops: create_particles, config_particles, create_particles_3d, screen_flash, world_env. vfx_manage: +1 op (create_particles_3d). Removidas 2 atômicas do wire: create_particles_2d, configure_particles_2d (+create_particles_3d ja era DEPRECATED). +3 aliases. 184/184 regressao (+8 testes vfx). AUDITORIA F5: APROVADA. [REBAIXADO R5: dependencia F1 nao fechada — TOOLSETS/TOOL_PROFILES/PHASE_TOOLS_CORE ainda em server.py]"
   },
   "estabilizacao_E1_E6": {
     "status": "concluida",
@@ -32,44 +32,44 @@
     "resultado": "PARADA DE ESTABILIZACAO concluida. E1: .reorg_progress.json recriado valido. E2: audit_fase.py corrigido + test_invariants.py criado. E3: SEM_HANDLER 40→0 (filtro DEPRECATED_TOOLS em _tool_defs). E4: NS_FANTASMA resolvido (INV-10/INV-11 passam). E5: test_remix isolamento corrigido. E6: gates reconciliados (Secao 15 A01-A12). AUDITORIA F5: APROVADA. 173/173 testes passam. defs_total=268, handlers_total=268."
   },
   "fatia_F5.5_navigation": {
-    "status": "concluida",
+    "status": "nao verificado",
     "data": "2026-07-21",
     "tentativa": 1,
     "agente": "AGENTE 01",
     "checkpoint": "pendente-commit",
-    "resultado": "F5.5 — Migrar dominio navigation. Criado domains/navigation/ (manifest.py, handlers.py). 3 ops: create_navigation_region_2d, create_navigation_agent_2d, bake_navigation_polygon. Removidas 2 atômicas do wire: create_navigation_region_2d, create_navigation_agent_2d. Aliases→navigation_manage. 146/148 regressao (2 pre-existentes: remix). DESIGN: -2 tools."
+    "resultado": "F5.5 — Migrar dominio navigation. Criado domains/navigation/ (manifest.py, handlers.py). 3 ops: create_navigation_region_2d, create_navigation_agent_2d, bake_navigation_polygon. Removidas 2 atômicas do wire: create_navigation_region_2d, create_navigation_agent_2d. Aliases→navigation_manage. 146/148 regressao (2 pre-existentes: remix). DESIGN: -2 tools. [REBAIXADO R5: dependencia F1 nao fechada — TOOLSETS/TOOL_PROFILES/PHASE_TOOLS_CORE ainda em server.py]"
   },
   "fatia_F5.4_camera": {
-    "status": "concluida",
+    "status": "nao verificado",
     "data": "2026-07-21",
     "tentativa": 1,
     "agente": "AGENTE 01",
     "checkpoint": "pendente-commit",
-    "resultado": "F5.4 — Migrar dominio camera. Criado domains/camera/ (manifest.py, handlers.py). 3 ops: setup_camera_2d, setup_camera_follow, setup_camera_shake. Removida 1 atômica do wire: setup_camera_2d. Aliases→camera_manage. 146/148 regressao (2 pre-existentes: remix). DESIGN: -1 tool."
+    "resultado": "F5.4 — Migrar dominio camera. Criado domains/camera/ (manifest.py, handlers.py). 3 ops: setup_camera_2d, setup_camera_follow, setup_camera_shake. Removida 1 atômica do wire: setup_camera_2d. Aliases→camera_manage. 146/148 regressao (2 pre-existentes: remix). DESIGN: -1 tool. [REBAIXADO R5: dependencia F1 nao fechada — TOOLSETS/TOOL_PROFILES/PHASE_TOOLS_CORE ainda em server.py]"
   },
   "fatia_F5.3_shader": {
-    "status": "concluida",
+    "status": "nao verificado",
     "data": "2026-07-21",
     "tentativa": 1,
     "agente": "AGENTE 01",
     "checkpoint": "pendente-commit",
-    "resultado": "F5.3 — Migrar dominio shader. Criado domains/shader/ (manifest.py, handlers.py). 5 ops: generate_shader_2d, apply_shader_to_node, read_shader, edit_shader, get_shader_params. Removidas 4 atômicas do wire: generate_shader_2d, read_shader, get_shader_params, edit_shader. Aliases→shader_manage. 146/148 regressao (2 pre-existentes: remix). DESIGN: -4 tools."
+    "resultado": "F5.3 — Migrar dominio shader. Criado domains/shader/ (manifest.py, handlers.py). 5 ops: generate_shader_2d, apply_shader_to_node, read_shader, edit_shader, get_shader_params. Removidas 4 atômicas do wire: generate_shader_2d, read_shader, get_shader_params, edit_shader. Aliases→shader_manage. 146/148 regressao (2 pre-existentes: remix). DESIGN: -4 tools. [REBAIXADO R5: dependencia F1 nao fechada — TOOLSETS/TOOL_PROFILES/PHASE_TOOLS_CORE ainda em server.py]"
   },
   "fatia_F5.2_ui": {
-    "status": "concluida",
+    "status": "nao verificado",
     "data": "2026-07-21",
     "tentativa": 2,
     "agente": "AGENTE 01",
     "checkpoint": "f260f3f",
-    "resultado": "F5.2 — CORRIGIDO: handlers.py convertido de re-exports para KW-only wrappers (*), padrao physics. 12 wrappers com type hints completos, lazy imports, chamada posicional. Testes: 9/9 dominio ui, 164/166 regressao (2 pre-existentes: remix). Auditoria: C1 0 breaking, C3 smoke OK, exit 0. DESIGN: -5 tools (mantido)."
+    "resultado": "F5.2 — CORRIGIDO: handlers.py convertido de re-exports para KW-only wrappers (*), padrao physics. 12 wrappers com type hints completos, lazy imports, chamada posicional. Testes: 9/9 dominio ui, 164/166 regressao (2 pre-existentes: remix). Auditoria: C1 0 breaking, C3 smoke OK, exit 0. DESIGN: -5 tools (mantido). [REBAIXADO R5: dependencia F1 nao fechada — TOOLSETS/TOOL_PROFILES/PHASE_TOOLS_CORE ainda em server.py]"
   },
   "fatia_F5.1_physics": {
-    "status": "concluida",
+    "status": "nao verificado",
     "data": "2026-07-21",
     "tentativa": 1,
     "agente": "AGENTE 01",
     "checkpoint": "ac6292b",
-    "resultado": "F5.1 — Migrar dominio physics (MASTER_IMPLEMENTATION_ROADMAP). Criado domains/physics/ (manifest.py, handlers.py, schemas.py, examples.py, tests/). physics_manage rollup expandido de 4 para 6 ops (+add_raycast, +add_shapecast). Removidas 3 atômicas do wire: create_joint_2d, add_raycast_2d, add_shapecast_2d. 9/9 testes dominio passam. 115/116 regressao (1 pre-existente: remix). C1: 0 breaking. DESIGN: -3 tools."
+    "resultado": "F5.1 — Migrar dominio physics (MASTER_IMPLEMENTATION_ROADMAP). Criado domains/physics/ (manifest.py, handlers.py, schemas.py, examples.py, tests/). physics_manage rollup expandido de 4 para 6 ops (+add_raycast, +add_shapecast). Removidas 3 atômicas do wire: create_joint_2d, add_raycast_2d, add_shapecast_2d. 9/9 testes dominio passam. 115/116 regressao (1 pre-existente: remix). C1: 0 breaking. DESIGN: -3 tools. [REBAIXADO R5: dependencia F1 nao fechada — TOOLSETS/TOOL_PROFILES/PHASE_TOOLS_CORE ainda em server.py]"
   },
   "sync_github": {
     "status": "concluida",
@@ -1374,11 +1374,11 @@
     "marcacao": "[EIXO-CENTRAL]"
   },
   "reorg_R5_reauditoria": {
-    "status": "nao verificado",
+    "status": "concluida",
     "data": "2026-07-23",
     "agente": "AGENTE 01",
-    "checkpoint": null,
-    "resultado": "R5 - Reauditar as fatias F1..F5 marcadas concluida contra o criterio real",
+    "checkpoint": "f8286dee5a8f25f789bd90f57c7f403849c0e40d",
+    "resultado": "R5 concluida: 7 fatias F5 rebaixadas de concluida para nao verificado. Dependencia F1 nao fechada (TOOLSETS/TOOL_PROFILES/PHASE_TOOLS_CORE ainda em server.py).",
     "ficha": ".github/roadmap/ONDA_R_reconciliacao.md",
     "marcacao": "[EIXO-CENTRAL]"
   },
