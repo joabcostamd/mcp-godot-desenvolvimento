@@ -1401,11 +1401,11 @@
     "marcacao": "[EIXO-CENTRAL]"
   },
   "reorg_R8_fichas": {
-    "status": "nao verificado",
+    "status": "concluida",
     "data": "2026-07-23",
     "agente": "AGENTE 01",
-    "checkpoint": null,
-    "resultado": "R8 - Gerar as fichas das ondas seguintes com os numeros da R7",
+    "checkpoint": "b79bb146aa5eaa8ff253d8242966705862104568",
+    "resultado": "R8 concluida: 8 arquivos ONDA_*.md criados, 35 fatias registradas como nao verificado.",
     "ficha": ".github/roadmap/ONDA_R_reconciliacao.md",
     "marcacao": "[EIXO-CENTRAL]"
   },
@@ -1537,5 +1537,215 @@
     "resultado": "100% dos problemas corrigidos. contract_snapshot: TODOS OS CHECKS PASSARAM. merge-tree: LIMPO.",
     "status": "arquivado"
   },
-  "arquivado_a2_proximo": "Aguardar merge do Agente 1 na main. Depois: validar health.gd no Godot, instalar GdUnit4 (Fatia 2.B), criar behaviors restantes (2.E-2.Z)."
+  "arquivado_a2_proximo": "Aguardar merge do Agente 1 na main. Depois: validar health.gd no Godot, instalar GdUnit4 (Fatia 2.B), criar behaviors restantes (2.E-2.Z).",
+  "fatia_1_1": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_1_registry.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_1_2": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_1_registry.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_1_3": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_1_registry.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_1_4": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_1_registry.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_2_1": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_2_conformidade.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_2_2": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_2_conformidade.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_2_3": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_2_conformidade.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_2_4": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_2_conformidade.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_2_5": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_2_conformidade.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_3_1": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_3_rollups.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_4_2": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_4_descoberta.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_4_3": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_4_descoberta.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_4_4": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_4_descoberta.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_4_5": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_4_descoberta.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_8_1": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_8_curadoria.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_8_2": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_8_curadoria.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_8_3": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_8_curadoria.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_9_1": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_9_quarentena.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_9_2": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_9_quarentena.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_10_1": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_10_congelar.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_10_2": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_10_congelar.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_10_3": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_10_congelar.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_10_4": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_10_congelar.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_10_5": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_10_congelar.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_P_1": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_P_pendencias.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_P_2": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_P_pendencias.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_P_3": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_P_pendencias.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_P_4": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_P_pendencias.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_P_5": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_P_pendencias.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_P_6": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_P_pendencias.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_P_7": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_P_pendencias.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_P_8": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_P_pendencias.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_P_9": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_P_pendencias.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_P_10": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_P_pendencias.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  },
+  "fatia_P_11": {
+    "status": "nao verificado",
+    "checkpoint": null,
+    "ficha": ".github/roadmap/ONDA_P_pendencias.md",
+    "marcacao": "[EIXO-CENTRAL]"
+  }
 }
