@@ -294,9 +294,6 @@ VERB_MAP = {
     "accordion": ("expandir", "expand"),
     "authority": ("autorizar", "authorize"),
     "achievement_tracker": ("rastrear_conquista", "track_achievement"),
-    "cloud_save": ("salvar_nuvem", "cloud_save"),
-    "cross_save": ("sincronizar", "sync_save"),
-    "difficulty_adjust": ("ajustar_dificuldade", "adjust_difficulty"),
 
     # FALTANTES (adicionados na auditoria de 23/07)
     "camera_sequence": ("sequenciar", "sequence"),
@@ -434,7 +431,7 @@ def infer_custo(data, gd_content):
         ])
         has_raycast = ("RayCast" in gd_content or "raycast" in gd_content)
         has_tree_scan = "get_tree().get_nodes_in_group" in gd_content
-        has_heavy_loop = bool(__import__("re").search(r"for.*range.*\d{3,}", gd_content))
+        has_heavy_loop = bool(re.search(r"for.*range.*\d{3,}", gd_content))
 
         # So e pesado se: server bypass, OU raycast+_process, OU tree-scan+_process
         if has_server_bypass:

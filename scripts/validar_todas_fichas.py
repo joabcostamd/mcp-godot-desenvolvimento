@@ -182,7 +182,6 @@ def main():
     passed = 0
     failed = 0
     faltantes = []
-    resultados = {}
 
     for entry in sorted(os.listdir(behaviors_root)):
         path = os.path.join(behaviors_root, entry)
@@ -208,7 +207,13 @@ def main():
             errors.extend(validate_json_schema(data, schema))
 
         # Validação dos novos campos
-        errors.extend(validate_new_fields(data, valid_names))
+        new_field_errors = validate_new_fields(data, valid_names)
+        errors.extend(new_field_errors)
+
+        # Rastreia behaviors que ainda não têm os novos campos
+        has_missing_fields = any("campo ausente" in e for e in new_field_errors)
+        if has_missing_fields:
+            faltantes.append(entry)
 
         if errors:
             print(f"FAIL [{entry}] ({len(errors)} erro(s))")
@@ -217,8 +222,6 @@ def main():
             failed += 1
         else:
             passed += 1
-
-        resultados[entry] = errors
 
     # Resumo
     print()
