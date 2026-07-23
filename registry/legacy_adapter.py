@@ -20,19 +20,22 @@ if str(ROOT) not in sys.path:
 
 from mcp.types import Tool
 
+# Guarda de recursão Onda 1.2: quando server._tool_defs() chama
+# registry.build_tool_defs(), o legacy_adapter usa _raw_tool_defs()
+# direto do core para evitar loop infinito.
+_in_registry_call = False
+
 
 def build_tool_defs_legacy(phase: str | None = None) -> list[Tool]:
     """Constrói tool definitions a partir do sistema legado.
 
-    Wrapper sobre server._tool_defs() que garante compatibilidade
-    byte-idêntica durante a transição.
-
-    Args:
-        phase: Fase opcional (ignorada — o legado usa _get_phase_tools internamente).
-
-    Returns:
-        Lista de Tool objects idêntica à retornada por server._tool_defs().
+    Com guarda de recursão: se chamado via registry→server→registry,
+    usa caminho direto (core.tool_definitions) sem passar por server.
     """
+    global _in_registry_call
+    if _in_registry_call:
+        from core.tool_definitions import _raw_tool_defs
+        return _raw_tool_defs()
     from server import _tool_defs
     return _tool_defs()
 

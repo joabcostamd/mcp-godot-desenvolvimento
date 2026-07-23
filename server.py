@@ -1482,11 +1482,23 @@ def _compact_all_tool_descriptions(tools: list) -> list:
 
 
 def _tool_defs() -> list[Tool]:
-    """Retorna a lista completa de tools registradas (cacheado)."""
+    """Retorna a lista completa de tools registradas (cacheado).
+    
+    Onda 1.2: tools brutas vêm do registry.build_tool_defs().
+    Pós-processamento (hints, rollups, filtros) permanece aqui.
+    """
     global _TOOL_DEFS_CACHE
     if _TOOL_DEFS_CACHE is not None:
         return _TOOL_DEFS_CACHE
-    _TOOL_DEFS_CACHE = _raw_tool_defs()
+    
+    # ── Onda 1.2: tools brutas via registry ──────────────────────
+    import registry.legacy_adapter as _la
+    _la._in_registry_call = True
+    try:
+        from registry import build_tool_defs
+        _TOOL_DEFS_CACHE = build_tool_defs()
+    finally:
+        _la._in_registry_call = False
     # ── Pós-processamento: hints MCP + additionalProperties ────────
     _READONLY = {
         "ping", "validate_godot_version", "get_project_settings",

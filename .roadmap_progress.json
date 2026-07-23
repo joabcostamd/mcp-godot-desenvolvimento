@@ -1546,10 +1546,11 @@
     "resultado": "1.1 concluida: journal/auditoria_registry.md documenta exports, gaps e dependencia circular do registry/."
   },
   "fatia_1_2": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "0e1db420ab7d5e3f4841183892c095de307a5dc6",
     "ficha": ".github/roadmap/ONDA_1_registry.md",
-    "marcacao": "[EIXO-CENTRAL]"
+    "marcacao": "[EIXO-CENTRAL]",
+    "resultado": "1.2 concluida: server._tool_defs() delega ao registry.build_tool_defs() com guarda de recursão. 236 tools, pós-processamento intacto."
   },
   "fatia_1_3": {
     "status": "nao verificado",
