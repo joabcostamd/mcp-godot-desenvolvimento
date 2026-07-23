@@ -1,0 +1,7 @@
+{
+  "_comment": "Exemplo de config.local.json. Copie para config.local.json e ajuste.",
+  "godot_executable": "C:/Godot/Godot_v4.7-stable_win64.exe",
+  "default_project": "",
+  "mcp_port": 9082,
+  "log_level": "INFO"
+}

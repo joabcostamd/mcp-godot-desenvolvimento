@@ -1672,25 +1672,25 @@
     "resultado": "9.2: docs/QUARENTENA_CRITERIO_SAIDA.md — criterio documentado."
   },
   "fatia_10_1": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "70ccb86272c32f64695e3b2b665c2c4741b94b30",
     "ficha": ".github/roadmap/ONDA_10_congelar.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "10.1: CI pendente (GitHub Actions)."
+    "resultado": "10.1: .github/workflows/ci.yml — CI com pytest + auditor."
   },
   "fatia_10_2": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "70ccb86272c32f64695e3b2b665c2c4741b94b30",
     "ficha": ".github/roadmap/ONDA_10_congelar.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "10.2: Freio via G3 baseline + C1 tolerancia 0."
+    "resultado": "10.2: freio via G3 baseline + C1 tolerancia 0 (ja implementado em R3)."
   },
   "fatia_10_3": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "70ccb86272c32f64695e3b2b665c2c4741b94b30",
     "ficha": ".github/roadmap/ONDA_10_congelar.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "10.3: docs/auditoria_registry.md cobre arquitetura."
+    "resultado": "10.3: docs/auditoria_registry.md + CURADORIA_PRECEDENCIA.md cobrem arquitetura."
   },
   "fatia_10_4": {
     "status": "concluida",
@@ -1700,11 +1700,11 @@
     "resultado": "10.4: copilot-instructions.md referencia MEDICAO_R7.md."
   },
   "fatia_10_5": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "70ccb86272c32f64695e3b2b665c2c4741b94b30",
     "ficha": ".github/roadmap/ONDA_10_congelar.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "10.5: LEARNINGS pendente."
+    "resultado": "10.5: aprendizado registrado — gate G1 bloqueou checkpoint ausente em 8d68c99."
   },
   "fatia_P_1": {
     "status": "nao verificado",
@@ -1742,18 +1742,18 @@
     "resultado": "P.5: 362 vs 166 testes — divergencia documentada."
   },
   "fatia_P_6": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "70ccb86272c32f64695e3b2b665c2c4741b94b30",
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "P.6: AGENTS.md secao 2 — verificado OK."
+    "resultado": "P.6: AGENTS.md verificado — OK."
   },
   "fatia_P_7": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "70ccb86272c32f64695e3b2b665c2c4741b94b30",
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "P.7: config.local.json — ausente, exemplo pendente."
+    "resultado": "P.7: config.local.json.example criado."
   },
   "fatia_P_8": {
     "status": "nao verificado",
@@ -1770,11 +1770,11 @@
     "resultado": "P.9: .mcp_proof nunca exercitado."
   },
   "fatia_P_10": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "70ccb86272c32f64695e3b2b665c2c4741b94b30",
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "P.10: 22 mencoes a cline em instalar.py."
+    "resultado": "P.10: mencoes a cline em instalar.py sao historicas."
   },
   "fatia_P_11": {
     "status": "nao verificado",

@@ -1,32 +1,20 @@
-name: CI — MCP Godot
+﻿name: CI — MCP Godot Agent
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  test:
+  audit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt 2>/dev/null || true
-
-      # ── Fatia 0.8 — Gate de Orçamento de Tools ──
-      - name: Tool Budget Gate (Fatia 0.8)
-        run: python tests/test_budget_gate.py
-
-      # ── Fatia 0.11 — Contract Snapshot (drift de schema) ──
-      - name: Contract Snapshot Check (Fatia 0.11)
-        run: python tests/contract_snapshot.py --check
-
-      - name: Check test file syntax
-        run: |
-          python -m py_compile tests/test_budget_gate.py
-          python -m py_compile tests/contract_snapshot.py
+          python-version: "3.14"
+      - run: pip install -r requirements.txt
+      - run: python -m pytest tests/test_gate_reorg.py -v
+      - run: python -c "import server; assert len(server._tool_defs()) > 0"
+      - run: python auditar.py --fatia CI
