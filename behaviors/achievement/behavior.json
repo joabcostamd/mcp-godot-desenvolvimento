@@ -73,5 +73,19 @@
     "conquista",
     "achievement",
     "trophy"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "achievement_tracker",
+    "collectable",
+    "hurtbox",
+    "save_load",
+    "state_machine",
+    "status_effect",
+    "hitbox"
+  ],
+  "custo": "leve",
+  "verbo_pt": "desbloquear_conquista",
+  "verbo_en": "unlock_achievement",
+  "nivel": "intermediario"
 }

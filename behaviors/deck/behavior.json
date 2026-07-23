@@ -48,5 +48,19 @@
   ],
   "tags": [
     "card"
-  ]
+  ],
+  "combina_bem": [
+    "hand",
+    "state_machine",
+    "object_pool",
+    "tween_player",
+    "screen_shake",
+    "health_bar",
+    "floating_text",
+    "sprite_animator"
+  ],
+  "custo": "leve",
+  "verbo_pt": "gerenciar_deck",
+  "verbo_en": "manage_deck",
+  "nivel": "intermediario"
 }

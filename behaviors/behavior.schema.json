@@ -145,6 +145,37 @@
       },
       "uniqueItems": true
     },
+    "combina_bem": {
+      "type": "array",
+      "description": "Behaviors que compõem bem com este. Usado para testes de composição e sugestão ao usuário.",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]*$"
+      },
+      "uniqueItems": true
+    },
+    "custo": {
+      "type": "string",
+      "description": "Custo de performance do behavior: leve (sem _process pesado), medio (algum _process), pesado (raycast/partículas/muitos nós).",
+      "enum": ["leve", "medio", "pesado"]
+    },
+    "verbo_pt": {
+      "type": "string",
+      "description": "Verbo de jogo canônico em português, no infinitivo. Ex: curar, atirar, pular, salvar.",
+      "minLength": 2,
+      "maxLength": 30
+    },
+    "verbo_en": {
+      "type": "string",
+      "description": "Verbo de jogo canônico em inglês, no infinitivo. Ex: heal, shoot, jump, save.",
+      "minLength": 2,
+      "maxLength": 30
+    },
+    "nivel": {
+      "type": "string",
+      "description": "Nível de complexidade de uso/configuração: basico (≤3 params, sem deps), intermediario, avancado (7+ params ou 3+ deps).",
+      "enum": ["basico", "intermediario", "avancado"]
+    },
     "version": {
       "type": "string",
       "description": "Versão semântica (semver) do behavior.",

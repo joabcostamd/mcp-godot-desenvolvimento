@@ -85,5 +85,19 @@
     "dialogo",
     "narrativa",
     "ui"
-  ]
+  ],
+  "combina_bem": [
+    "interactable",
+    "save_load",
+    "hurtbox",
+    "state_machine",
+    "health",
+    "hitbox",
+    "status_effect",
+    "screen_shake"
+  ],
+  "custo": "leve",
+  "verbo_pt": "dialogar",
+  "verbo_en": "dialogue",
+  "nivel": "intermediario"
 }

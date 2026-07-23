@@ -67,5 +67,19 @@
   "version": "1.0.0",
   "category": "combate",
   "status": "implementado",
-  "godot_version": "4.7"
+  "godot_version": "4.7",
+  "combina_bem": [
+    "health",
+    "hitbox",
+    "hurtbox",
+    "status_effect",
+    "state_machine",
+    "save_load",
+    "damage_over_time",
+    "flee"
+  ],
+  "custo": "leve",
+  "verbo_pt": "critar",
+  "verbo_en": "crit",
+  "nivel": "intermediario"
 }

@@ -128,5 +128,19 @@
     "onda",
     "spawn",
     "estrutura"
-  ]
+  ],
+  "combina_bem": [
+    "floating_text",
+    "spawner_wave",
+    "sfx_player",
+    "currency",
+    "achievement",
+    "score",
+    "health",
+    "hurtbox"
+  ],
+  "custo": "medio",
+  "verbo_pt": "gerenciar_ondas",
+  "verbo_en": "manage_waves",
+  "nivel": "avancado"
 }

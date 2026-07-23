@@ -68,5 +68,19 @@
     "time_stop",
     "dramatic",
     "game_feel"
-  ]
+  ],
+  "combina_bem": [
+    "time_scale",
+    "health",
+    "homing_projectile",
+    "hitscan",
+    "projectile",
+    "hit_stop",
+    "screen_shake",
+    "state_machine"
+  ],
+  "custo": "leve",
+  "verbo_pt": "congelar_frame",
+  "verbo_en": "freeze_frame",
+  "nivel": "intermediario"
 }

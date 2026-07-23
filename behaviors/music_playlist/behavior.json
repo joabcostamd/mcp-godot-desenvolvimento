@@ -90,5 +90,19 @@
     "musica",
     "playlist",
     "trilha"
-  ]
+  ],
+  "combina_bem": [
+    "audio_manager",
+    "sfx_player",
+    "health",
+    "hitbox",
+    "hurtbox",
+    "ambience_zone",
+    "particle_impact",
+    "settings"
+  ],
+  "custo": "leve",
+  "verbo_pt": "tocar_musica",
+  "verbo_en": "play_music",
+  "nivel": "intermediario"
 }

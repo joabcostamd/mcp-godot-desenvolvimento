@@ -50,5 +50,19 @@
   "tags": [
     "camera",
     "lookat"
-  ]
+  ],
+  "combina_bem": [
+    "save_load",
+    "hurtbox",
+    "health",
+    "hitbox",
+    "status_effect",
+    "state_machine",
+    "particle_impact",
+    "sfx_player"
+  ],
+  "custo": "medio",
+  "verbo_pt": "olhar_para",
+  "verbo_en": "look_at",
+  "nivel": "basico"
 }

@@ -87,5 +87,19 @@
     "rpg",
     "elementos",
     "combate"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "hitbox",
+    "status_effect",
+    "hurtbox",
+    "health_bar",
+    "save_load",
+    "character_stats",
+    "damage_over_time"
+  ],
+  "custo": "leve",
+  "verbo_pt": "elementar",
+  "verbo_en": "elemental",
+  "nivel": "intermediario"
 }

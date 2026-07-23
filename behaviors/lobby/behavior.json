@@ -65,5 +65,19 @@
   "tags": [
     "multiplayer",
     "lobby"
-  ]
+  ],
+  "combina_bem": [
+    "network_sync",
+    "state_machine",
+    "hitbox",
+    "object_pool",
+    "tween_player",
+    "health_bar",
+    "floating_text",
+    "sprite_animator"
+  ],
+  "custo": "leve",
+  "verbo_pt": "criar_sala",
+  "verbo_en": "create_lobby",
+  "nivel": "intermediario"
 }

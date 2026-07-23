@@ -57,5 +57,19 @@
   "tags": [
     "mira",
     "arma"
-  ]
+  ],
+  "combina_bem": [
+    "hitbox",
+    "save_load",
+    "hurtbox",
+    "state_machine",
+    "health",
+    "status_effect",
+    "screen_shake",
+    "sprite_animator"
+  ],
+  "custo": "medio",
+  "verbo_pt": "recuar",
+  "verbo_en": "recoil",
+  "nivel": "basico"
 }

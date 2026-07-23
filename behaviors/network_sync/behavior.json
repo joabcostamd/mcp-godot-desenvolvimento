@@ -43,5 +43,19 @@
   "tags": [
     "multiplayer",
     "sync"
-  ]
+  ],
+  "combina_bem": [
+    "lobby",
+    "state_machine",
+    "hitbox",
+    "object_pool",
+    "tween_player",
+    "health_bar",
+    "floating_text",
+    "sprite_animator"
+  ],
+  "custo": "medio",
+  "verbo_pt": "sincronizar_rede",
+  "verbo_en": "sync_network",
+  "nivel": "intermediario"
 }

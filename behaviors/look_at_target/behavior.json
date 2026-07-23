@@ -66,5 +66,19 @@
     "rotacao",
     "mirar",
     "util"
-  ]
+  ],
+  "combina_bem": [
+    "enemy_chase",
+    "health",
+    "hitbox",
+    "hurtbox",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool"
+  ],
+  "custo": "medio",
+  "verbo_pt": "olhar_para",
+  "verbo_en": "look_at",
+  "nivel": "intermediario"
 }

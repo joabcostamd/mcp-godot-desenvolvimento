@@ -60,5 +60,19 @@
   "tags": [
     "navegacao",
     "ai"
-  ]
+  ],
+  "combina_bem": [
+    "pathfinding",
+    "save_load",
+    "hurtbox",
+    "state_machine",
+    "health",
+    "hitbox",
+    "status_effect",
+    "screen_shake"
+  ],
+  "custo": "leve",
+  "verbo_pt": "desviar",
+  "verbo_en": "avoid",
+  "nivel": "intermediario"
 }

@@ -71,5 +71,19 @@
     "controle",
     "rebind",
     "sistema"
-  ]
+  ],
+  "combina_bem": [
+    "state_machine",
+    "health",
+    "status_effect",
+    "hitbox",
+    "save_load",
+    "hurtbox",
+    "quest",
+    "currency"
+  ],
+  "custo": "leve",
+  "verbo_pt": "gerenciar_input",
+  "verbo_en": "manage_input",
+  "nivel": "intermediario"
 }

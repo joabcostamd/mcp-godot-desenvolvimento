@@ -101,5 +101,19 @@
     "movimento",
     "grupo",
     "coletivo"
-  ]
+  ],
+  "combina_bem": [
+    "state_machine",
+    "health",
+    "hitbox",
+    "hurtbox",
+    "save_load",
+    "status_effect",
+    "enemy_chase",
+    "projectile"
+  ],
+  "custo": "pesado",
+  "verbo_pt": "agrupar",
+  "verbo_en": "flock",
+  "nivel": "avancado"
 }

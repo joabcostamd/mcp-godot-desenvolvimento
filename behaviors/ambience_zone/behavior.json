@@ -89,5 +89,19 @@
     "ambiente",
     "zona",
     "area2d"
-  ]
+  ],
+  "combina_bem": [
+    "audio_manager",
+    "sfx_player",
+    "gravity_zone",
+    "health",
+    "hitbox",
+    "hurtbox",
+    "particle_impact",
+    "settings"
+  ],
+  "custo": "leve",
+  "verbo_pt": "ambientar",
+  "verbo_en": "ambience",
+  "nivel": "intermediario"
 }

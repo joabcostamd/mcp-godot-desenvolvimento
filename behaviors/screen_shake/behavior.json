@@ -75,5 +75,19 @@
     "screen_shake",
     "tremor",
     "camera"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "player_controller",
+    "hitscan",
+    "projectile",
+    "homing_projectile",
+    "health_bar",
+    "floating_text",
+    "save_load"
+  ],
+  "custo": "medio",
+  "verbo_pt": "tremer",
+  "verbo_en": "shake",
+  "nivel": "intermediario"
 }

@@ -112,5 +112,19 @@
     "dano",
     "arma",
     "instantâneo"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "fire_rate",
+    "hitbox",
+    "hurtbox",
+    "knockback",
+    "status_effect",
+    "particle_impact",
+    "sfx_player"
+  ],
+  "custo": "leve",
+  "verbo_pt": "atingir",
+  "verbo_en": "hitscan",
+  "nivel": "intermediario"
 }

@@ -71,5 +71,19 @@
   ],
   "tags": [
     "rhythm"
-  ]
+  ],
+  "combina_bem": [
+    "state_machine",
+    "hitbox",
+    "object_pool",
+    "tween_player",
+    "health_bar",
+    "floating_text",
+    "sprite_animator",
+    "status_effect"
+  ],
+  "custo": "medio",
+  "verbo_pt": "sincronizar_ritmo",
+  "verbo_en": "sync_rhythm",
+  "nivel": "intermediario"
 }

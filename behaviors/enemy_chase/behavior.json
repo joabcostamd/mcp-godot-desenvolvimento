@@ -79,5 +79,19 @@
   "version": "1.0.0",
   "category": "inimigo",
   "status": "implementado",
-  "godot_version": "4.7"
+  "godot_version": "4.7",
+  "combina_bem": [
+    "health",
+    "hitbox",
+    "hurtbox",
+    "state_machine",
+    "status_effect",
+    "save_load",
+    "line_of_sight",
+    "projectile"
+  ],
+  "custo": "medio",
+  "verbo_pt": "perseguir",
+  "verbo_en": "chase",
+  "nivel": "intermediario"
 }

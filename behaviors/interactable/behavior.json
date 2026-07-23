@@ -81,5 +81,19 @@
     "interacao",
     "dialogo",
     "acao"
-  ]
+  ],
+  "combina_bem": [
+    "sfx_player",
+    "inventory",
+    "checkpoint",
+    "scene_transition",
+    "quest",
+    "dialogue",
+    "screen_shake",
+    "state_machine"
+  ],
+  "custo": "medio",
+  "verbo_pt": "interagir",
+  "verbo_en": "interact",
+  "nivel": "intermediario"
 }

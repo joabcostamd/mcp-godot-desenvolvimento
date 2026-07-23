@@ -84,5 +84,19 @@
     "score",
     "pontuacao",
     "combo"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "wave_system",
+    "spawner_wave",
+    "collectable",
+    "hurtbox",
+    "hitbox",
+    "save_load",
+    "particle_impact"
+  ],
+  "custo": "medio",
+  "verbo_pt": "pontuar",
+  "verbo_en": "score",
+  "nivel": "intermediario"
 }

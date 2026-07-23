@@ -73,5 +73,19 @@
   "tags": [
     "fisica",
     "gravidade"
-  ]
+  ],
+  "combina_bem": [
+    "save_load",
+    "health",
+    "hitbox",
+    "hurtbox",
+    "status_effect",
+    "state_machine",
+    "ambience_zone",
+    "particle_impact"
+  ],
+  "custo": "medio",
+  "verbo_pt": "atrair",
+  "verbo_en": "attract",
+  "nivel": "intermediario"
 }

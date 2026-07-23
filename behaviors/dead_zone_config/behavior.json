@@ -37,5 +37,19 @@
     "input"
   ],
   "description_pt": "Behavior Dead Zone Config para Godot 4.7. Componente plugavel para jogos 2D.",
-  "description_en": "Dead Zone Config behavior for Godot 4.7. Pluggable component for 2D games."
+  "description_en": "Dead Zone Config behavior for Godot 4.7. Pluggable component for 2D games.",
+  "combina_bem": [
+    "hurtbox",
+    "hitbox",
+    "health",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool",
+    "tween_player"
+  ],
+  "custo": "leve",
+  "verbo_pt": "configurar_zona_morta",
+  "verbo_en": "configure_deadzone",
+  "nivel": "basico"
 }

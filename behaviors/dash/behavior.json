@@ -87,5 +87,19 @@
     "dash",
     "impulso",
     "jogador"
-  ]
+  ],
+  "combina_bem": [
+    "hurtbox",
+    "state_machine",
+    "health",
+    "hitbox",
+    "status_effect",
+    "save_load",
+    "enemy_patrol",
+    "collectable"
+  ],
+  "custo": "medio",
+  "verbo_pt": "impulsionar",
+  "verbo_en": "dash",
+  "nivel": "intermediario"
 }

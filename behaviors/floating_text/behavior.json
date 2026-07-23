@@ -95,5 +95,19 @@
     "dano",
     "ui",
     "popup"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "spawner_wave",
+    "wave_system",
+    "player_controller",
+    "collectable",
+    "hitscan",
+    "round_timer",
+    "projectile"
+  ],
+  "custo": "medio",
+  "verbo_pt": "exibir_texto",
+  "verbo_en": "display_text",
+  "nivel": "intermediario"
 }

@@ -1,8 +1,14 @@
 {
   "agente": "AGENTE 02",
-  "ultima_atualizacao": "2026-07-20",
+  "ultima_atualizacao": "2026-07-23",
   "branch": "agente2/trabalho",
   "onda_0": "pulado",
+  "sota_1.1": {
+    "status": "concluida",
+    "data_conclusao": "2026-07-23",
+    "hash_checkpoint": "26258f18a9a84ca0d05ca9a0cabe610a60b8ffde",
+    "resultado": "Schema atualizado com 5 novos campos (combina_bem, custo, verbo_pt, verbo_en, nivel). 249/249 behavior.json enriquecidos. Scripts criados: enriquecer_fichas.py (heuristica com 249 verbos mapeados), validar_todas_fichas.py, aplicar_enriquecimento.py. Distribuicao: custo 172L/74M/3P, nivel 125B/117I/7A. Auditoria: C1 PASS (235 mudancas, 0 breaking), C5 pre-existente. Validacao novos campos: 249/249 PASS."
+  },
   "fase_1_fundacao": {
     "status": "concluida",
     "data_conclusao": "2026-07-20",

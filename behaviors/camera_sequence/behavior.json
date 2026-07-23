@@ -49,5 +49,19 @@
     "camera",
     "sequencia",
     "cinematica"
-  ]
+  ],
+  "combina_bem": [
+    "camera_follow",
+    "health",
+    "hitbox",
+    "hurtbox",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool"
+  ],
+  "custo": "leve",
+  "verbo_pt": "sequenciar",
+  "verbo_en": "sequence",
+  "nivel": "intermediario"
 }

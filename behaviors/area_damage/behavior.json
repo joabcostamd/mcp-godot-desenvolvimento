@@ -90,5 +90,19 @@
   "version": "1.0.0",
   "category": "combate",
   "status": "implementado",
-  "godot_version": "4.7"
+  "godot_version": "4.7",
+  "combina_bem": [
+    "health",
+    "knockback",
+    "hitbox",
+    "hurtbox",
+    "status_effect",
+    "state_machine",
+    "flee",
+    "beam_laser"
+  ],
+  "custo": "medio",
+  "verbo_pt": "explodir",
+  "verbo_en": "explode",
+  "nivel": "intermediario"
 }

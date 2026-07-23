@@ -83,5 +83,19 @@
     "veiculo",
     "drift",
     "nave"
-  ]
+  ],
+  "combina_bem": [
+    "save_load",
+    "hurtbox",
+    "health",
+    "hitbox",
+    "status_effect",
+    "state_machine",
+    "particle_impact",
+    "sfx_player"
+  ],
+  "custo": "medio",
+  "verbo_pt": "dirigir",
+  "verbo_en": "drive",
+  "nivel": "intermediario"
 }

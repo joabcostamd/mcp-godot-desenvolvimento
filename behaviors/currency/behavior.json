@@ -102,5 +102,19 @@
     "moeda",
     "economia",
     "recursos"
-  ]
+  ],
+  "combina_bem": [
+    "quest",
+    "collectable",
+    "idle_generator",
+    "shop",
+    "health",
+    "spawner_wave",
+    "hurtbox",
+    "save_load"
+  ],
+  "custo": "leve",
+  "verbo_pt": "gerenciar_moedas",
+  "verbo_en": "manage_currency",
+  "nivel": "intermediario"
 }

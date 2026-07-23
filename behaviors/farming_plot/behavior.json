@@ -73,5 +73,19 @@
   ],
   "tags": [
     "farming"
-  ]
+  ],
+  "combina_bem": [
+    "inventory",
+    "crafting",
+    "health_bar",
+    "floating_text",
+    "save_load",
+    "hurtbox",
+    "shop",
+    "tween_player"
+  ],
+  "custo": "medio",
+  "verbo_pt": "cultivar",
+  "verbo_en": "farm",
+  "nivel": "intermediario"
 }

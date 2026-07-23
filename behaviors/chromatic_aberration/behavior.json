@@ -77,5 +77,19 @@
     "glitch",
     "rgb",
     "distorcao"
-  ]
+  ],
+  "combina_bem": [
+    "hurtbox",
+    "hitbox",
+    "health",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool",
+    "tween_player"
+  ],
+  "custo": "leve",
+  "verbo_pt": "distorcer_cor",
+  "verbo_en": "aberrate",
+  "nivel": "intermediario"
 }

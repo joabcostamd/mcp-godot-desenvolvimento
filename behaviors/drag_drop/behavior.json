@@ -79,5 +79,19 @@
     "drop",
     "arrastar",
     "inventario"
-  ]
+  ],
+  "combina_bem": [
+    "save_load",
+    "hurtbox",
+    "health",
+    "hitbox",
+    "status_effect",
+    "state_machine",
+    "particle_impact",
+    "sfx_player"
+  ],
+  "custo": "leve",
+  "verbo_pt": "arrastar",
+  "verbo_en": "drag",
+  "nivel": "intermediario"
 }

@@ -61,5 +61,19 @@
   ],
   "tags": [
     "racing"
-  ]
+  ],
+  "combina_bem": [
+    "state_machine",
+    "hitbox",
+    "object_pool",
+    "tween_player",
+    "health_bar",
+    "floating_text",
+    "sprite_animator",
+    "status_effect"
+  ],
+  "custo": "medio",
+  "verbo_pt": "correr",
+  "verbo_en": "race",
+  "nivel": "intermediario"
 }

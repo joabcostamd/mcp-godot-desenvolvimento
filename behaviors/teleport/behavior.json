@@ -58,5 +58,19 @@
     "mecanica",
     "teleport",
     "portal"
-  ]
+  ],
+  "combina_bem": [
+    "scene_transition",
+    "hurtbox",
+    "hitbox",
+    "health",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool"
+  ],
+  "custo": "leve",
+  "verbo_pt": "teletransportar",
+  "verbo_en": "teleport",
+  "nivel": "intermediario"
 }

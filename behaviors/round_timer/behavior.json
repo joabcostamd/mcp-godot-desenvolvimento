@@ -85,5 +85,19 @@
     "timer",
     "round",
     "contagem"
-  ]
+  ],
+  "combina_bem": [
+    "floating_text",
+    "scene_transition",
+    "defeat_condition",
+    "status_effect",
+    "health",
+    "hurtbox",
+    "hitbox",
+    "particle_impact"
+  ],
+  "custo": "leve",
+  "verbo_pt": "cronometrar",
+  "verbo_en": "time",
+  "nivel": "intermediario"
 }

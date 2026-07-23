@@ -82,5 +82,19 @@
     "performance",
     "spawn",
     "infraestrutura"
-  ]
+  ],
+  "combina_bem": [
+    "spawner_wave",
+    "health_bar",
+    "floating_text",
+    "save_load",
+    "hurtbox",
+    "sprite_animator",
+    "status_effect",
+    "particle_impact"
+  ],
+  "custo": "leve",
+  "verbo_pt": "reutilizar_objetos",
+  "verbo_en": "pool_objects",
+  "nivel": "intermediario"
 }

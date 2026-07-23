@@ -78,5 +78,19 @@
   "version": "1.0.0",
   "category": "inimigo",
   "status": "implementado",
-  "godot_version": "4.7"
+  "godot_version": "4.7",
+  "combina_bem": [
+    "enemy_patrol",
+    "flee",
+    "hurtbox",
+    "health",
+    "hitbox",
+    "status_effect",
+    "save_load",
+    "inventory"
+  ],
+  "custo": "leve",
+  "verbo_pt": "gerenciar_estado",
+  "verbo_en": "manage_state",
+  "nivel": "intermediario"
 }

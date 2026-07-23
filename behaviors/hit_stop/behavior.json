@@ -80,5 +80,19 @@
     "freeze",
     "impacto",
     "game_feel"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "time_scale",
+    "homing_projectile",
+    "hitscan",
+    "projectile",
+    "freeze_frame",
+    "screen_shake",
+    "state_machine"
+  ],
+  "custo": "leve",
+  "verbo_pt": "pausar",
+  "verbo_en": "pause",
+  "nivel": "intermediario"
 }

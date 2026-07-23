@@ -102,5 +102,19 @@
     "cone",
     "stealth",
     "npc"
-  ]
+  ],
+  "combina_bem": [
+    "hurtbox",
+    "state_machine",
+    "health",
+    "hitbox",
+    "status_effect",
+    "enemy_chase",
+    "save_load",
+    "enemy_patrol"
+  ],
+  "custo": "leve",
+  "verbo_pt": "avistar",
+  "verbo_en": "spot",
+  "nivel": "intermediario"
 }

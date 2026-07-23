@@ -85,5 +85,19 @@
     "screen",
     "ui",
     "transicao"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "hurtbox",
+    "hitbox",
+    "save_load",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool"
+  ],
+  "custo": "leve",
+  "verbo_pt": "piscar_tela",
+  "verbo_en": "flash_screen",
+  "nivel": "intermediario"
 }

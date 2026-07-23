@@ -96,5 +96,19 @@
     "tween",
     "transicao",
     "interpolacao"
-  ]
+  ],
+  "combina_bem": [
+    "health_bar",
+    "floating_text",
+    "save_load",
+    "hurtbox",
+    "sprite_animator",
+    "status_effect",
+    "particle_impact",
+    "object_pool"
+  ],
+  "custo": "leve",
+  "verbo_pt": "animar_propriedade",
+  "verbo_en": "tween",
+  "nivel": "intermediario"
 }

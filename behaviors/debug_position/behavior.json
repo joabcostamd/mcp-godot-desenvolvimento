@@ -52,5 +52,19 @@
   ],
   "tags": [
     "debug"
-  ]
+  ],
+  "combina_bem": [
+    "hurtbox",
+    "hitbox",
+    "health",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool",
+    "tween_player"
+  ],
+  "custo": "medio",
+  "verbo_pt": "exibir_posicao",
+  "verbo_en": "show_position",
+  "nivel": "basico"
 }

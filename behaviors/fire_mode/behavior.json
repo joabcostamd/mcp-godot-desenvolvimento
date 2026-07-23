@@ -71,5 +71,19 @@
   "tags": [
     "arma",
     "tiro"
-  ]
+  ],
+  "combina_bem": [
+    "fire_rate",
+    "turret_aim",
+    "save_load",
+    "hitscan",
+    "health",
+    "hitbox",
+    "hurtbox",
+    "status_effect"
+  ],
+  "custo": "leve",
+  "verbo_pt": "disparar",
+  "verbo_en": "fire",
+  "nivel": "intermediario"
 }

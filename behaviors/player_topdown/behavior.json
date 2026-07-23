@@ -90,5 +90,19 @@
     "topdown",
     "input",
     "jogador"
-  ]
+  ],
+  "combina_bem": [
+    "hurtbox",
+    "state_machine",
+    "health",
+    "hitbox",
+    "status_effect",
+    "save_load",
+    "enemy_chase",
+    "quest"
+  ],
+  "custo": "medio",
+  "verbo_pt": "mover",
+  "verbo_en": "move",
+  "nivel": "intermediario"
 }

@@ -108,5 +108,19 @@
     "disparo",
     "defesa",
     "rotação"
-  ]
+  ],
+  "combina_bem": [
+    "fire_rate",
+    "projectile",
+    "hurtbox",
+    "hitscan",
+    "health",
+    "homing_projectile",
+    "save_load",
+    "state_machine"
+  ],
+  "custo": "medio",
+  "verbo_pt": "mirar",
+  "verbo_en": "aim",
+  "nivel": "intermediario"
 }

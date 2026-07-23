@@ -122,5 +122,19 @@
     "status",
     "buff",
     "debuff"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "hitbox",
+    "hurtbox",
+    "state_machine",
+    "save_load",
+    "damage_over_time",
+    "critical_hit",
+    "area_damage"
+  ],
+  "custo": "medio",
+  "verbo_pt": "aplicar_efeito",
+  "verbo_en": "apply_effect",
+  "nivel": "avancado"
 }

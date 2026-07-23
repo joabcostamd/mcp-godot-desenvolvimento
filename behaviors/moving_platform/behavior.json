@@ -85,5 +85,19 @@
     "plataforma",
     "path",
     "fisica"
-  ]
+  ],
+  "combina_bem": [
+    "save_load",
+    "health",
+    "hitbox",
+    "hurtbox",
+    "status_effect",
+    "state_machine",
+    "particle_impact",
+    "patrol_route"
+  ],
+  "custo": "medio",
+  "verbo_pt": "deslocar",
+  "verbo_en": "move",
+  "nivel": "intermediario"
 }

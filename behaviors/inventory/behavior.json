@@ -106,5 +106,19 @@
     "itens",
     "slots",
     "coleta"
-  ]
+  ],
+  "combina_bem": [
+    "collectable",
+    "quest",
+    "equipment_slot",
+    "random_loot",
+    "health",
+    "crafting",
+    "shop",
+    "hitbox"
+  ],
+  "custo": "leve",
+  "verbo_pt": "gerenciar_inventario",
+  "verbo_en": "manage_inventory",
+  "nivel": "intermediario"
 }

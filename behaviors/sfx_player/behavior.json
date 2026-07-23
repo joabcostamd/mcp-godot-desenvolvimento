@@ -85,5 +85,19 @@
     "sfx",
     "som",
     "efeito"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "audio_manager",
+    "player_controller",
+    "interactable",
+    "collectable",
+    "hitscan",
+    "spawner_wave",
+    "wave_system"
+  ],
+  "custo": "leve",
+  "verbo_pt": "tocar_som",
+  "verbo_en": "play_sfx",
+  "nivel": "intermediario"
 }

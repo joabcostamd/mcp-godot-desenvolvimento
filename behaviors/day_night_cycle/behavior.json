@@ -73,5 +73,19 @@
     "ciclo",
     "dia_noite",
     "ambiente"
-  ]
+  ],
+  "combina_bem": [
+    "hurtbox",
+    "hitbox",
+    "health",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool",
+    "tween_player"
+  ],
+  "custo": "medio",
+  "verbo_pt": "ciclo_dia_noite",
+  "verbo_en": "day_night_cycle",
+  "nivel": "intermediario"
 }

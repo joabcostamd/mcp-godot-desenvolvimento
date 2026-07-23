@@ -181,5 +181,19 @@
     "dano",
     "cura",
     "composite"
-  ]
+  ],
+  "combina_bem": [
+    "health_bar",
+    "status_effect",
+    "floating_text",
+    "sfx_player",
+    "hitbox",
+    "hurtbox",
+    "hitscan",
+    "spawner_wave"
+  ],
+  "custo": "leve",
+  "verbo_pt": "gerenciar_vida",
+  "verbo_en": "manage_health",
+  "nivel": "avancado"
 }

@@ -70,5 +70,19 @@
     "daily",
     "reward",
     "social"
-  ]
+  ],
+  "combina_bem": [
+    "save_load",
+    "health",
+    "hitbox",
+    "hurtbox",
+    "floating_text",
+    "particle_impact",
+    "settings",
+    "sfx_player"
+  ],
+  "custo": "leve",
+  "verbo_pt": "resgatar",
+  "verbo_en": "claim",
+  "nivel": "intermediario"
 }

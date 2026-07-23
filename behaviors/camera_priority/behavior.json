@@ -50,5 +50,19 @@
   "tags": [
     "camera",
     "prioridade"
-  ]
+  ],
+  "combina_bem": [
+    "save_load",
+    "hurtbox",
+    "health",
+    "hitbox",
+    "status_effect",
+    "state_machine",
+    "particle_impact",
+    "sfx_player"
+  ],
+  "custo": "leve",
+  "verbo_pt": "priorizar_camera",
+  "verbo_en": "prioritize_camera",
+  "nivel": "basico"
 }

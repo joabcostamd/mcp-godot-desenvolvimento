@@ -102,5 +102,19 @@
     "waypoint",
     "npc",
     "inimigo"
-  ]
+  ],
+  "combina_bem": [
+    "state_machine",
+    "health",
+    "hurtbox",
+    "flee",
+    "hitbox",
+    "status_effect",
+    "save_load",
+    "line_of_sight"
+  ],
+  "custo": "medio",
+  "verbo_pt": "patrulhar",
+  "verbo_en": "patrol",
+  "nivel": "intermediario"
 }

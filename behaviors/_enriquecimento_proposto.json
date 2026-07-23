@@ -1,0 +1,3986 @@
+{
+  "accordion": {
+    "custo": "leve",
+    "verbo_pt": "expandir",
+    "verbo_en": "expand",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "achievement": {
+    "custo": "leve",
+    "verbo_pt": "desbloquear_conquista",
+    "verbo_en": "unlock_achievement",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "achievement_tracker",
+      "collectable",
+      "hurtbox",
+      "save_load",
+      "state_machine",
+      "status_effect",
+      "hitbox"
+    ]
+  },
+  "achievement_tracker": {
+    "custo": "leve",
+    "verbo_pt": "rastrear_conquista",
+    "verbo_en": "track_achievement",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "achievement",
+      "health",
+      "hitbox",
+      "hurtbox",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool"
+    ]
+  },
+  "aim_assist": {
+    "custo": "leve",
+    "verbo_pt": "auxiliar_mira",
+    "verbo_en": "assist_aim",
+    "nivel": "basico",
+    "combina_bem": [
+      "state_machine",
+      "hitbox",
+      "object_pool",
+      "tween_player",
+      "health_bar",
+      "floating_text",
+      "sprite_animator",
+      "status_effect"
+    ]
+  },
+  "ambience_zone": {
+    "custo": "leve",
+    "verbo_pt": "ambientar",
+    "verbo_en": "ambience",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "audio_manager",
+      "sfx_player",
+      "gravity_zone",
+      "health",
+      "hitbox",
+      "hurtbox",
+      "particle_impact",
+      "settings"
+    ]
+  },
+  "analytics_tracker": {
+    "custo": "leve",
+    "verbo_pt": "rastrear_analytics",
+    "verbo_en": "track_analytics",
+    "nivel": "basico",
+    "combina_bem": [
+      "health",
+      "hurtbox",
+      "hitbox",
+      "save_load",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool"
+    ]
+  },
+  "animation_blender": {
+    "custo": "leve",
+    "verbo_pt": "misturar_animacao",
+    "verbo_en": "blend_animation",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "animation_curve_table": {
+    "custo": "leve",
+    "verbo_pt": "interpolar_curva",
+    "verbo_en": "interpolate_curve",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "animation_layer": {
+    "custo": "leve",
+    "verbo_pt": "sobrepor_animacao",
+    "verbo_en": "layer_animation",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "animation_state_machine": {
+    "custo": "leve",
+    "verbo_pt": "gerenciar_animacao",
+    "verbo_en": "manage_animation",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "area_damage": {
+    "custo": "medio",
+    "verbo_pt": "explodir",
+    "verbo_en": "explode",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "knockback",
+      "hitbox",
+      "hurtbox",
+      "status_effect",
+      "state_machine",
+      "flee",
+      "beam_laser"
+    ]
+  },
+  "assist_mode": {
+    "custo": "leve",
+    "verbo_pt": "auxiliar",
+    "verbo_en": "assist",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "audio_manager": {
+    "custo": "leve",
+    "verbo_pt": "gerenciar_audio",
+    "verbo_en": "manage_audio",
+    "nivel": "basico",
+    "combina_bem": [
+      "sfx_player",
+      "ambience_zone",
+      "settings",
+      "music_playlist",
+      "health",
+      "hitbox",
+      "hurtbox",
+      "particle_impact"
+    ]
+  },
+  "audio_visualizer": {
+    "custo": "leve",
+    "verbo_pt": "visualizar_audio",
+    "verbo_en": "visualize_audio",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "authority": {
+    "custo": "leve",
+    "verbo_pt": "autorizar",
+    "verbo_en": "authorize",
+    "nivel": "basico",
+    "combina_bem": [
+      "state_machine",
+      "hitbox",
+      "object_pool",
+      "tween_player",
+      "health_bar",
+      "floating_text",
+      "sprite_animator",
+      "status_effect"
+    ]
+  },
+  "auto_aim": {
+    "custo": "leve",
+    "verbo_pt": "mirar",
+    "verbo_en": "aim",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "auto_save": {
+    "custo": "medio",
+    "verbo_pt": "salvar_automatico",
+    "verbo_en": "auto_save",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "autoload_manager": {
+    "custo": "leve",
+    "verbo_pt": "gerenciar_autoloads",
+    "verbo_en": "manage_autoloads",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "avoidance": {
+    "custo": "leve",
+    "verbo_pt": "desviar",
+    "verbo_en": "avoid",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "pathfinding",
+      "save_load",
+      "hurtbox",
+      "state_machine",
+      "health",
+      "hitbox",
+      "status_effect",
+      "screen_shake"
+    ]
+  },
+  "batch_renderer": {
+    "custo": "leve",
+    "verbo_pt": "renderizar_lote",
+    "verbo_en": "batch_render",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "beam_laser": {
+    "custo": "pesado",
+    "verbo_pt": "emitir_raio",
+    "verbo_en": "beam",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "hitbox",
+      "hurtbox",
+      "status_effect",
+      "state_machine",
+      "area_damage",
+      "hitscan",
+      "spawner_wave"
+    ]
+  },
+  "behavior_analytics": {
+    "custo": "leve",
+    "verbo_pt": "analisar_behaviors",
+    "verbo_en": "analyze_behaviors",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "behavior_registry": {
+    "custo": "leve",
+    "verbo_pt": "registrar_behavior",
+    "verbo_en": "register_behavior",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "behavior_sandbox": {
+    "custo": "leve",
+    "verbo_pt": "testar_behavior",
+    "verbo_en": "sandbox_behavior",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "behavior_tree": {
+    "custo": "medio",
+    "verbo_pt": "decidir",
+    "verbo_en": "decide",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "blackboard": {
+    "custo": "leve",
+    "verbo_pt": "compartilhar_dados",
+    "verbo_en": "share_data",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "blend_space_1d": {
+    "custo": "leve",
+    "verbo_pt": "interpolar_1d",
+    "verbo_en": "blend_1d",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "blend_space_2d": {
+    "custo": "leve",
+    "verbo_pt": "interpolar_2d",
+    "verbo_en": "blend_2d",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "blood_gore_toggle": {
+    "custo": "leve",
+    "verbo_pt": "desativar_gore",
+    "verbo_en": "disable_gore",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "buoyancy": {
+    "custo": "medio",
+    "verbo_pt": "flutuar",
+    "verbo_en": "float",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "save_load",
+      "hurtbox",
+      "health",
+      "hitbox",
+      "status_effect",
+      "state_machine",
+      "particle_impact",
+      "sfx_player"
+    ]
+  },
+  "burnable": {
+    "custo": "medio",
+    "verbo_pt": "queimar",
+    "verbo_en": "burn",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "health_bar",
+      "hurtbox",
+      "status_effect",
+      "hitbox",
+      "area_damage",
+      "flee",
+      "beam_laser"
+    ]
+  },
+  "button_mash_protection": {
+    "custo": "leve",
+    "verbo_pt": "proteger_botao",
+    "verbo_en": "protect_button",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "bypass_gate": {
+    "custo": "leve",
+    "verbo_pt": "ignorar_gate",
+    "verbo_en": "bypass_gate",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "camera_follow": {
+    "custo": "medio",
+    "verbo_pt": "seguir_camera",
+    "verbo_en": "follow_camera",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "camera_sequence",
+      "state_machine",
+      "health",
+      "hitbox",
+      "hurtbox",
+      "save_load",
+      "status_effect",
+      "enemy_chase"
+    ]
+  },
+  "camera_framed": {
+    "custo": "medio",
+    "verbo_pt": "enquadrar",
+    "verbo_en": "frame",
+    "nivel": "basico",
+    "combina_bem": [
+      "save_load",
+      "hurtbox",
+      "state_machine",
+      "health",
+      "hitbox",
+      "status_effect",
+      "screen_shake",
+      "sprite_animator"
+    ]
+  },
+  "camera_lookat": {
+    "custo": "medio",
+    "verbo_pt": "olhar_para",
+    "verbo_en": "look_at",
+    "nivel": "basico",
+    "combina_bem": [
+      "save_load",
+      "hurtbox",
+      "health",
+      "hitbox",
+      "status_effect",
+      "state_machine",
+      "particle_impact",
+      "sfx_player"
+    ]
+  },
+  "camera_path": {
+    "custo": "medio",
+    "verbo_pt": "percorrer_camera",
+    "verbo_en": "path_camera",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "save_load",
+      "hitbox",
+      "health",
+      "hurtbox",
+      "status_effect",
+      "state_machine",
+      "moving_platform",
+      "particle_impact"
+    ]
+  },
+  "camera_priority": {
+    "custo": "leve",
+    "verbo_pt": "priorizar_camera",
+    "verbo_en": "prioritize_camera",
+    "nivel": "basico",
+    "combina_bem": [
+      "save_load",
+      "hurtbox",
+      "health",
+      "hitbox",
+      "status_effect",
+      "state_machine",
+      "particle_impact",
+      "sfx_player"
+    ]
+  },
+  "camera_sequence": {
+    "custo": "leve",
+    "verbo_pt": "sequenciar",
+    "verbo_en": "sequence",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "camera_follow",
+      "health",
+      "hitbox",
+      "hurtbox",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool"
+    ]
+  },
+  "camera_shake": {
+    "custo": "medio",
+    "verbo_pt": "tremer_camera",
+    "verbo_en": "shake_camera",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "state_machine",
+      "health",
+      "status_effect",
+      "hitbox",
+      "save_load",
+      "hurtbox",
+      "quest",
+      "currency"
+    ]
+  },
+  "camera_zoom": {
+    "custo": "leve",
+    "verbo_pt": "zoom",
+    "verbo_en": "zoom",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "camera_zoom_range": {
+    "custo": "medio",
+    "verbo_pt": "zoom_range",
+    "verbo_en": "zoom_range",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "card": {
+    "custo": "leve",
+    "verbo_pt": "jogar_carta",
+    "verbo_en": "play_card",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hand",
+      "sfx_player",
+      "state_machine",
+      "object_pool",
+      "tween_player",
+      "screen_shake",
+      "health_bar",
+      "floating_text"
+    ]
+  },
+  "character_creator": {
+    "custo": "leve",
+    "verbo_pt": "criar_personagem",
+    "verbo_en": "create_character",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "save_load",
+      "hurtbox",
+      "state_machine",
+      "health",
+      "hitbox",
+      "status_effect",
+      "screen_shake",
+      "sprite_animator"
+    ]
+  },
+  "character_stats": {
+    "custo": "leve",
+    "verbo_pt": "gerenciar_atributos",
+    "verbo_en": "manage_stats",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "equipment_slot",
+      "skill_tree",
+      "hitbox",
+      "status_effect",
+      "hurtbox",
+      "health_bar",
+      "save_load"
+    ]
+  },
+  "checkpoint": {
+    "custo": "medio",
+    "verbo_pt": "salvar_progresso",
+    "verbo_en": "save_progress",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "save_load",
+      "state_machine",
+      "health",
+      "hitbox",
+      "hurtbox",
+      "interactable",
+      "status_effect",
+      "enemy_chase"
+    ]
+  },
+  "chromatic_aberration": {
+    "custo": "leve",
+    "verbo_pt": "distorcer_cor",
+    "verbo_en": "aberrate",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "cloud_save": {
+    "custo": "leve",
+    "verbo_pt": "salvar_nuvem",
+    "verbo_en": "cloud_save",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "collectable": {
+    "custo": "medio",
+    "verbo_pt": "coletar",
+    "verbo_en": "collect",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "inventory",
+      "quest",
+      "currency",
+      "achievement",
+      "health",
+      "hitbox",
+      "sfx_player",
+      "floating_text"
+    ]
+  },
+  "color_blind_mode": {
+    "custo": "leve",
+    "verbo_pt": "corrigir_cor",
+    "verbo_en": "correct_color",
+    "nivel": "basico",
+    "combina_bem": [
+      "hitbox",
+      "health",
+      "hurtbox",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "color_pulse": {
+    "custo": "medio",
+    "verbo_pt": "pulsar_cor",
+    "verbo_en": "pulse_color",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "hurtbox",
+      "hitbox",
+      "save_load",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool"
+    ]
+  },
+  "combo_detector": {
+    "custo": "leve",
+    "verbo_pt": "combar",
+    "verbo_en": "combo",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "hitbox",
+      "hurtbox",
+      "state_machine",
+      "object_pool",
+      "tween_player",
+      "health_bar",
+      "floating_text"
+    ]
+  },
+  "controller_remap": {
+    "custo": "leve",
+    "verbo_pt": "remapear_controle",
+    "verbo_en": "remap_controller",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "conveyor_belt": {
+    "custo": "medio",
+    "verbo_pt": "transportar",
+    "verbo_en": "convey",
+    "nivel": "basico",
+    "combina_bem": [
+      "save_load",
+      "hurtbox",
+      "health",
+      "hitbox",
+      "status_effect",
+      "state_machine",
+      "particle_impact",
+      "sfx_player"
+    ]
+  },
+  "counter": {
+    "custo": "leve",
+    "verbo_pt": "contar",
+    "verbo_en": "count",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "crafting": {
+    "custo": "leve",
+    "verbo_pt": "criar",
+    "verbo_en": "craft",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "inventory",
+      "save_load",
+      "hurtbox",
+      "shop",
+      "equipment_slot",
+      "state_machine",
+      "random_loot",
+      "collectable"
+    ]
+  },
+  "crash_reporter": {
+    "custo": "leve",
+    "verbo_pt": "reportar_crash",
+    "verbo_en": "report_crash",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "critical_hit": {
+    "custo": "leve",
+    "verbo_pt": "critar",
+    "verbo_en": "crit",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "hitbox",
+      "hurtbox",
+      "status_effect",
+      "state_machine",
+      "save_load",
+      "damage_over_time",
+      "flee"
+    ]
+  },
+  "cross_save": {
+    "custo": "leve",
+    "verbo_pt": "sincronizar",
+    "verbo_en": "sync_save",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "crosshair": {
+    "custo": "medio",
+    "verbo_pt": "mirar",
+    "verbo_en": "aim",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "save_load",
+      "hurtbox",
+      "health",
+      "hitbox",
+      "status_effect",
+      "state_machine",
+      "particle_impact",
+      "sfx_player"
+    ]
+  },
+  "currency": {
+    "custo": "leve",
+    "verbo_pt": "gerenciar_moedas",
+    "verbo_en": "manage_currency",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "quest",
+      "collectable",
+      "idle_generator",
+      "shop",
+      "health",
+      "spawner_wave",
+      "hurtbox",
+      "save_load"
+    ]
+  },
+  "curve_table": {
+    "custo": "leve",
+    "verbo_pt": "tabela_curva",
+    "verbo_en": "curve_table",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "custom_node": {
+    "custo": "leve",
+    "verbo_pt": "criar_no",
+    "verbo_en": "create_node",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "cutscene": {
+    "custo": "leve",
+    "verbo_pt": "tocar_cutscene",
+    "verbo_en": "play_cutscene",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "daily_reward": {
+    "custo": "leve",
+    "verbo_pt": "resgatar",
+    "verbo_en": "claim",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "save_load",
+      "health",
+      "hitbox",
+      "hurtbox",
+      "floating_text",
+      "particle_impact",
+      "settings",
+      "sfx_player"
+    ]
+  },
+  "damage_over_time": {
+    "custo": "leve",
+    "verbo_pt": "envenenar",
+    "verbo_en": "damage_over_time",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "status_effect",
+      "hitbox",
+      "hurtbox",
+      "save_load",
+      "critical_hit",
+      "state_machine",
+      "flee"
+    ]
+  },
+  "dash": {
+    "custo": "medio",
+    "verbo_pt": "impulsionar",
+    "verbo_en": "dash",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "state_machine",
+      "health",
+      "hitbox",
+      "status_effect",
+      "save_load",
+      "enemy_patrol",
+      "collectable"
+    ]
+  },
+  "data_table": {
+    "custo": "leve",
+    "verbo_pt": "tabela_dados",
+    "verbo_en": "data_table",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "day_night_cycle": {
+    "custo": "medio",
+    "verbo_pt": "ciclo_dia_noite",
+    "verbo_en": "day_night_cycle",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "dead_zone_config": {
+    "custo": "leve",
+    "verbo_pt": "configurar_zona_morta",
+    "verbo_en": "configure_deadzone",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "debug_arrow": {
+    "custo": "medio",
+    "verbo_pt": "desenhar_seta",
+    "verbo_en": "draw_arrow",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "debug_console": {
+    "custo": "leve",
+    "verbo_pt": "registrar_console",
+    "verbo_en": "log_console",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "debug_overlay": {
+    "custo": "medio",
+    "verbo_pt": "exibir_debug",
+    "verbo_en": "show_debug",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "debug_position": {
+    "custo": "medio",
+    "verbo_pt": "exibir_posicao",
+    "verbo_en": "show_position",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "deck": {
+    "custo": "leve",
+    "verbo_pt": "gerenciar_deck",
+    "verbo_en": "manage_deck",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hand",
+      "state_machine",
+      "object_pool",
+      "tween_player",
+      "screen_shake",
+      "health_bar",
+      "floating_text",
+      "sprite_animator"
+    ]
+  },
+  "defeat_condition": {
+    "custo": "medio",
+    "verbo_pt": "definir_derrota",
+    "verbo_en": "define_defeat",
+    "nivel": "basico",
+    "combina_bem": [
+      "round_timer",
+      "player_controller",
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake"
+    ]
+  },
+  "deprecation_watcher": {
+    "custo": "leve",
+    "verbo_pt": "alertar_depreciacao",
+    "verbo_en": "warn_deprecation",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "destructible": {
+    "custo": "leve",
+    "verbo_pt": "destruir",
+    "verbo_en": "destroy",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "health_bar",
+      "hurtbox",
+      "status_effect",
+      "hitbox",
+      "area_damage",
+      "flee",
+      "beam_laser"
+    ]
+  },
+  "dialogue": {
+    "custo": "leve",
+    "verbo_pt": "dialogar",
+    "verbo_en": "dialogue",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "interactable",
+      "save_load",
+      "hurtbox",
+      "state_machine",
+      "health",
+      "hitbox",
+      "status_effect",
+      "screen_shake"
+    ]
+  },
+  "difficulty_adjust": {
+    "custo": "leve",
+    "verbo_pt": "ajustar_dificuldade",
+    "verbo_en": "adjust_difficulty",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "difficulty_curve": {
+    "custo": "medio",
+    "verbo_pt": "ajustar_dificuldade",
+    "verbo_en": "adjust_difficulty",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "dirty_flag": {
+    "custo": "leve",
+    "verbo_pt": "marcar_sujo",
+    "verbo_en": "mark_dirty",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "dissolve": {
+    "custo": "leve",
+    "verbo_pt": "dissolver",
+    "verbo_en": "dissolve",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "double_jump": {
+    "custo": "medio",
+    "verbo_pt": "pular",
+    "verbo_en": "jump",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "state_machine",
+      "health",
+      "hitbox",
+      "save_load",
+      "status_effect",
+      "player_controller",
+      "screen_shake"
+    ]
+  },
+  "drag_drop": {
+    "custo": "leve",
+    "verbo_pt": "arrastar",
+    "verbo_en": "drag",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "save_load",
+      "hurtbox",
+      "health",
+      "hitbox",
+      "status_effect",
+      "state_machine",
+      "particle_impact",
+      "sfx_player"
+    ]
+  },
+  "draw_call_optimizer": {
+    "custo": "leve",
+    "verbo_pt": "otimizar_draw",
+    "verbo_en": "optimize_draw",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "dungeon_generator": {
+    "custo": "leve",
+    "verbo_pt": "gerar_masmorra",
+    "verbo_en": "generate_dungeon",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "editor_dock": {
+    "custo": "leve",
+    "verbo_pt": "ancorar_dock",
+    "verbo_en": "dock",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "element_system": {
+    "custo": "leve",
+    "verbo_pt": "elementar",
+    "verbo_en": "elemental",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "hitbox",
+      "status_effect",
+      "hurtbox",
+      "health_bar",
+      "save_load",
+      "character_stats",
+      "damage_over_time"
+    ]
+  },
+  "encrypted_save": {
+    "custo": "leve",
+    "verbo_pt": "criptografar_save",
+    "verbo_en": "encrypt_save",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "enemy_chase": {
+    "custo": "medio",
+    "verbo_pt": "perseguir",
+    "verbo_en": "chase",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "hitbox",
+      "hurtbox",
+      "state_machine",
+      "status_effect",
+      "save_load",
+      "line_of_sight",
+      "projectile"
+    ]
+  },
+  "enemy_patrol": {
+    "custo": "medio",
+    "verbo_pt": "patrulhar",
+    "verbo_en": "patrol",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "state_machine",
+      "health",
+      "hurtbox",
+      "flee",
+      "hitbox",
+      "status_effect",
+      "save_load",
+      "line_of_sight"
+    ]
+  },
+  "equipment_slot": {
+    "custo": "leve",
+    "verbo_pt": "equipar",
+    "verbo_en": "equip",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "character_stats",
+      "inventory",
+      "quest",
+      "save_load",
+      "hurtbox",
+      "state_machine",
+      "collectable",
+      "random_loot"
+    ]
+  },
+  "error_boundary": {
+    "custo": "leve",
+    "verbo_pt": "capturar_erro",
+    "verbo_en": "catch_error",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "event_bus": {
+    "custo": "leve",
+    "verbo_pt": "transmitir_evento",
+    "verbo_en": "broadcast_event",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "farming_plot": {
+    "custo": "medio",
+    "verbo_pt": "cultivar",
+    "verbo_en": "farm",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "inventory",
+      "crafting",
+      "health_bar",
+      "floating_text",
+      "save_load",
+      "hurtbox",
+      "shop",
+      "tween_player"
+    ]
+  },
+  "fire_mode": {
+    "custo": "leve",
+    "verbo_pt": "disparar",
+    "verbo_en": "fire",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "fire_rate",
+      "turret_aim",
+      "save_load",
+      "hitscan",
+      "health",
+      "hitbox",
+      "hurtbox",
+      "status_effect"
+    ]
+  },
+  "fire_rate": {
+    "custo": "leve",
+    "verbo_pt": "disparar",
+    "verbo_en": "fire",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "turret_aim",
+      "hitscan",
+      "fire_mode",
+      "health",
+      "hurtbox",
+      "state_machine",
+      "hitbox",
+      "status_effect"
+    ]
+  },
+  "fishing_cast": {
+    "custo": "leve",
+    "verbo_pt": "pescar",
+    "verbo_en": "fish",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "state_machine",
+      "hitbox",
+      "object_pool",
+      "tween_player",
+      "health_bar",
+      "floating_text",
+      "sprite_animator",
+      "status_effect"
+    ]
+  },
+  "flee": {
+    "custo": "medio",
+    "verbo_pt": "fugir",
+    "verbo_en": "flee",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "state_machine",
+      "health",
+      "hurtbox",
+      "hitbox",
+      "status_effect",
+      "enemy_patrol",
+      "area_damage",
+      "hitscan"
+    ]
+  },
+  "flexible_text_entry": {
+    "custo": "leve",
+    "verbo_pt": "digitar",
+    "verbo_en": "type",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "floating_text": {
+    "custo": "medio",
+    "verbo_pt": "exibir_texto",
+    "verbo_en": "display_text",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "spawner_wave",
+      "wave_system",
+      "player_controller",
+      "collectable",
+      "hitscan",
+      "round_timer",
+      "projectile"
+    ]
+  },
+  "flocking": {
+    "custo": "pesado",
+    "verbo_pt": "agrupar",
+    "verbo_en": "flock",
+    "nivel": "avancado",
+    "combina_bem": [
+      "state_machine",
+      "health",
+      "hitbox",
+      "hurtbox",
+      "save_load",
+      "status_effect",
+      "enemy_chase",
+      "projectile"
+    ]
+  },
+  "follow_path": {
+    "custo": "medio",
+    "verbo_pt": "seguir",
+    "verbo_en": "follow",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "font_size_global": {
+    "custo": "leve",
+    "verbo_pt": "ajustar_fonte",
+    "verbo_en": "adjust_font",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "fps_counter": {
+    "custo": "medio",
+    "verbo_pt": "medir_fps",
+    "verbo_en": "measure_fps",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "freeze_frame": {
+    "custo": "leve",
+    "verbo_pt": "congelar_frame",
+    "verbo_en": "freeze_frame",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "time_scale",
+      "health",
+      "homing_projectile",
+      "hitscan",
+      "projectile",
+      "hit_stop",
+      "screen_shake",
+      "state_machine"
+    ]
+  },
+  "game_speed_control": {
+    "custo": "leve",
+    "verbo_pt": "controlar_velocidade",
+    "verbo_en": "control_speed",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "glitch": {
+    "custo": "leve",
+    "verbo_pt": "glitchar",
+    "verbo_en": "glitch",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "gravity_zone": {
+    "custo": "medio",
+    "verbo_pt": "atrair",
+    "verbo_en": "attract",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "save_load",
+      "health",
+      "hitbox",
+      "hurtbox",
+      "status_effect",
+      "state_machine",
+      "ambience_zone",
+      "particle_impact"
+    ]
+  },
+  "grid_movement": {
+    "custo": "medio",
+    "verbo_pt": "movimentar",
+    "verbo_en": "move",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "save_load",
+      "hurtbox",
+      "health",
+      "hitbox",
+      "status_effect",
+      "state_machine",
+      "particle_impact",
+      "pathfinding"
+    ]
+  },
+  "gyro_aim": {
+    "custo": "leve",
+    "verbo_pt": "mirar_giroscopio",
+    "verbo_en": "gyro_aim",
+    "nivel": "basico",
+    "combina_bem": [
+      "state_machine",
+      "hitbox",
+      "object_pool",
+      "tween_player",
+      "health_bar",
+      "floating_text",
+      "sprite_animator",
+      "status_effect"
+    ]
+  },
+  "hand": {
+    "custo": "leve",
+    "verbo_pt": "segurar",
+    "verbo_en": "hold",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "card",
+      "deck",
+      "state_machine",
+      "object_pool",
+      "tween_player",
+      "health_bar",
+      "floating_text",
+      "sprite_animator"
+    ]
+  },
+  "haptic_manager": {
+    "custo": "leve",
+    "verbo_pt": "vibrar",
+    "verbo_en": "haptic",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "health": {
+    "custo": "leve",
+    "verbo_pt": "gerenciar_vida",
+    "verbo_en": "manage_health",
+    "nivel": "avancado",
+    "combina_bem": [
+      "health_bar",
+      "status_effect",
+      "floating_text",
+      "sfx_player",
+      "hitbox",
+      "hurtbox",
+      "hitscan",
+      "spawner_wave"
+    ]
+  },
+  "health_bar": {
+    "custo": "medio",
+    "verbo_pt": "exibir_vida",
+    "verbo_en": "display_health",
+    "nivel": "avancado",
+    "combina_bem": [
+      "health",
+      "status_effect",
+      "hitbox",
+      "hurtbox",
+      "flee",
+      "hitscan",
+      "floating_text",
+      "save_load"
+    ]
+  },
+  "high_contrast": {
+    "custo": "leve",
+    "verbo_pt": "aumentar_contraste",
+    "verbo_en": "increase_contrast",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "hit_stop": {
+    "custo": "leve",
+    "verbo_pt": "pausar",
+    "verbo_en": "pause",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "time_scale",
+      "homing_projectile",
+      "hitscan",
+      "projectile",
+      "freeze_frame",
+      "screen_shake",
+      "state_machine"
+    ]
+  },
+  "hitbox": {
+    "custo": "leve",
+    "verbo_pt": "causar_dano",
+    "verbo_en": "deal_damage",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "hurtbox",
+      "state_machine",
+      "status_effect",
+      "critical_hit",
+      "area_damage",
+      "beam_laser",
+      "save_load"
+    ]
+  },
+  "hitscan": {
+    "custo": "leve",
+    "verbo_pt": "atingir",
+    "verbo_en": "hitscan",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "fire_rate",
+      "hitbox",
+      "hurtbox",
+      "knockback",
+      "status_effect",
+      "particle_impact",
+      "sfx_player"
+    ]
+  },
+  "hold_alternative": {
+    "custo": "leve",
+    "verbo_pt": "segurar",
+    "verbo_en": "hold",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "homing_projectile": {
+    "custo": "medio",
+    "verbo_pt": "perseguir",
+    "verbo_en": "home",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "projectile",
+      "health",
+      "hurtbox",
+      "particle_impact",
+      "sfx_player",
+      "floating_text",
+      "screen_shake",
+      "knockback"
+    ]
+  },
+  "hot_reload": {
+    "custo": "leve",
+    "verbo_pt": "recarregar",
+    "verbo_en": "reload",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "hurtbox": {
+    "custo": "leve",
+    "verbo_pt": "receber_dano",
+    "verbo_en": "receive_damage",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "projectile",
+      "hitbox",
+      "state_machine",
+      "status_effect",
+      "critical_hit",
+      "area_damage",
+      "beam_laser"
+    ]
+  },
+  "idle_generator": {
+    "custo": "medio",
+    "verbo_pt": "gerar_recurso",
+    "verbo_en": "generate_resource",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "currency",
+      "health",
+      "hitbox",
+      "hurtbox",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "shop"
+    ]
+  },
+  "infinite_world": {
+    "custo": "leve",
+    "verbo_pt": "gerar_mundo_infinito",
+    "verbo_en": "generate_infinite",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "input_buffer": {
+    "custo": "medio",
+    "verbo_pt": "buffer_input",
+    "verbo_en": "buffer_input",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "hitbox",
+      "hurtbox",
+      "state_machine",
+      "object_pool",
+      "tween_player",
+      "health_bar",
+      "floating_text"
+    ]
+  },
+  "input_cooldown": {
+    "custo": "leve",
+    "verbo_pt": "cooldown_input",
+    "verbo_en": "cooldown_input",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "input_manager": {
+    "custo": "leve",
+    "verbo_pt": "gerenciar_input",
+    "verbo_en": "manage_input",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "state_machine",
+      "health",
+      "status_effect",
+      "hitbox",
+      "save_load",
+      "hurtbox",
+      "quest",
+      "currency"
+    ]
+  },
+  "interactable": {
+    "custo": "medio",
+    "verbo_pt": "interagir",
+    "verbo_en": "interact",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "sfx_player",
+      "inventory",
+      "checkpoint",
+      "scene_transition",
+      "quest",
+      "dialogue",
+      "screen_shake",
+      "state_machine"
+    ]
+  },
+  "interface_rearrange": {
+    "custo": "leve",
+    "verbo_pt": "reorganizar_ui",
+    "verbo_en": "rearrange_ui",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "interface_resize": {
+    "custo": "leve",
+    "verbo_pt": "redimensionar_ui",
+    "verbo_en": "resize_ui",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "inventory": {
+    "custo": "leve",
+    "verbo_pt": "gerenciar_inventario",
+    "verbo_en": "manage_inventory",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "collectable",
+      "quest",
+      "equipment_slot",
+      "random_loot",
+      "health",
+      "crafting",
+      "shop",
+      "hitbox"
+    ]
+  },
+  "knockback": {
+    "custo": "leve",
+    "verbo_pt": "empurrar",
+    "verbo_en": "knockback",
+    "nivel": "basico",
+    "combina_bem": [
+      "health",
+      "area_damage",
+      "projectile",
+      "hitscan",
+      "hitbox",
+      "hurtbox",
+      "state_machine",
+      "homing_projectile"
+    ]
+  },
+  "l_system": {
+    "custo": "medio",
+    "verbo_pt": "gerar_lsystem",
+    "verbo_en": "generate_lsystem",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "ladder": {
+    "custo": "medio",
+    "verbo_pt": "escalar",
+    "verbo_en": "climb",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "save_load",
+      "hurtbox",
+      "health",
+      "hitbox",
+      "status_effect",
+      "state_machine",
+      "particle_impact",
+      "sfx_player"
+    ]
+  },
+  "lava_surface": {
+    "custo": "medio",
+    "verbo_pt": "queimar",
+    "verbo_en": "burn",
+    "nivel": "basico",
+    "combina_bem": [
+      "save_load",
+      "hurtbox",
+      "health",
+      "hitbox",
+      "status_effect",
+      "state_machine",
+      "particle_impact",
+      "sfx_player"
+    ]
+  },
+  "leaderboard": {
+    "custo": "leve",
+    "verbo_pt": "ranquear",
+    "verbo_en": "rank",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "lens_flare": {
+    "custo": "medio",
+    "verbo_pt": "brilhar",
+    "verbo_en": "flare",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "lerp_smooth": {
+    "custo": "leve",
+    "verbo_pt": "suavizar",
+    "verbo_en": "smooth",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "line_of_sight": {
+    "custo": "leve",
+    "verbo_pt": "avistar",
+    "verbo_en": "spot",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "state_machine",
+      "health",
+      "hitbox",
+      "status_effect",
+      "enemy_chase",
+      "save_load",
+      "enemy_patrol"
+    ]
+  },
+  "lobby": {
+    "custo": "leve",
+    "verbo_pt": "criar_sala",
+    "verbo_en": "create_lobby",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "network_sync",
+      "state_machine",
+      "hitbox",
+      "object_pool",
+      "tween_player",
+      "health_bar",
+      "floating_text",
+      "sprite_animator"
+    ]
+  },
+  "localization": {
+    "custo": "leve",
+    "verbo_pt": "traduzir",
+    "verbo_en": "translate",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "lod_controller": {
+    "custo": "leve",
+    "verbo_pt": "controlar_lod",
+    "verbo_en": "control_lod",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "logger": {
+    "custo": "leve",
+    "verbo_pt": "registrar_log",
+    "verbo_en": "log",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "look_at_target": {
+    "custo": "medio",
+    "verbo_pt": "olhar_para",
+    "verbo_en": "look_at",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "enemy_chase",
+      "health",
+      "hitbox",
+      "hurtbox",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool"
+    ]
+  },
+  "magnet": {
+    "custo": "medio",
+    "verbo_pt": "atrair",
+    "verbo_en": "attract",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "main_menu": {
+    "custo": "leve",
+    "verbo_pt": "navegar_menu",
+    "verbo_en": "navigate_menu",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "scene_transition",
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool"
+    ]
+  },
+  "match3_grid": {
+    "custo": "leve",
+    "verbo_pt": "combinar_pecas",
+    "verbo_en": "match_gems",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "state_machine",
+      "hitbox",
+      "object_pool",
+      "tween_player",
+      "health_bar",
+      "floating_text",
+      "sprite_animator",
+      "status_effect"
+    ]
+  },
+  "migration_runner": {
+    "custo": "leve",
+    "verbo_pt": "migrar",
+    "verbo_en": "migrate",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "mod_config": {
+    "custo": "leve",
+    "verbo_pt": "configurar_mod",
+    "verbo_en": "configure_mod",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "mod_loader": {
+    "custo": "leve",
+    "verbo_pt": "carregar_mod",
+    "verbo_en": "load_mod",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "mod_sandbox": {
+    "custo": "leve",
+    "verbo_pt": "testar_mod",
+    "verbo_en": "sandbox_mod",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "mod_store": {
+    "custo": "leve",
+    "verbo_pt": "baixar_mod",
+    "verbo_en": "download_mod",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "modular_weapon": {
+    "custo": "leve",
+    "verbo_pt": "montar_arma",
+    "verbo_en": "assemble_weapon",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "moving_platform": {
+    "custo": "medio",
+    "verbo_pt": "deslocar",
+    "verbo_en": "move",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "save_load",
+      "health",
+      "hitbox",
+      "hurtbox",
+      "status_effect",
+      "state_machine",
+      "particle_impact",
+      "patrol_route"
+    ]
+  },
+  "music_playlist": {
+    "custo": "leve",
+    "verbo_pt": "tocar_musica",
+    "verbo_en": "play_music",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "audio_manager",
+      "sfx_player",
+      "health",
+      "hitbox",
+      "hurtbox",
+      "ambience_zone",
+      "particle_impact",
+      "settings"
+    ]
+  },
+  "narrative_replay": {
+    "custo": "leve",
+    "verbo_pt": "reproduzir_narrativa",
+    "verbo_en": "replay_narrative",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "network_sync": {
+    "custo": "medio",
+    "verbo_pt": "sincronizar_rede",
+    "verbo_en": "sync_network",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "lobby",
+      "state_machine",
+      "hitbox",
+      "object_pool",
+      "tween_player",
+      "health_bar",
+      "floating_text",
+      "sprite_animator"
+    ]
+  },
+  "noise_generator": {
+    "custo": "leve",
+    "verbo_pt": "gerar_ruido",
+    "verbo_en": "generate_noise",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "object_pool": {
+    "custo": "leve",
+    "verbo_pt": "reutilizar_objetos",
+    "verbo_en": "pool_objects",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "spawner_wave",
+      "health_bar",
+      "floating_text",
+      "save_load",
+      "hurtbox",
+      "sprite_animator",
+      "status_effect",
+      "particle_impact"
+    ]
+  },
+  "one_shot_animation": {
+    "custo": "leve",
+    "verbo_pt": "tocar_animacao",
+    "verbo_en": "play_animation",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "outline": {
+    "custo": "leve",
+    "verbo_pt": "contornar",
+    "verbo_en": "outline",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "outline_shader": {
+    "custo": "leve",
+    "verbo_pt": "contornar",
+    "verbo_en": "outline",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "parallax_background": {
+    "custo": "medio",
+    "verbo_pt": "paralaxe",
+    "verbo_en": "parallax",
+    "nivel": "basico",
+    "combina_bem": [
+      "save_load",
+      "hurtbox",
+      "health",
+      "hitbox",
+      "status_effect",
+      "state_machine",
+      "particle_impact",
+      "sfx_player"
+    ]
+  },
+  "particle_impact": {
+    "custo": "medio",
+    "verbo_pt": "emitir_particula",
+    "verbo_en": "emit_particle",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "player_controller",
+      "hitscan",
+      "projectile",
+      "homing_projectile",
+      "health_bar",
+      "floating_text",
+      "save_load"
+    ]
+  },
+  "patch_system": {
+    "custo": "leve",
+    "verbo_pt": "aplicar_patch",
+    "verbo_en": "apply_patch",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "pathfinding": {
+    "custo": "medio",
+    "verbo_pt": "navegar",
+    "verbo_en": "navigate",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "avoidance",
+      "state_machine",
+      "health",
+      "status_effect",
+      "hitbox",
+      "save_load",
+      "hurtbox",
+      "quest"
+    ]
+  },
+  "patrol_route": {
+    "custo": "medio",
+    "verbo_pt": "patrulhar",
+    "verbo_en": "patrol",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hitbox",
+      "save_load",
+      "hurtbox",
+      "enemy_patrol",
+      "state_machine",
+      "health",
+      "status_effect",
+      "line_of_sight"
+    ]
+  },
+  "pause_menu": {
+    "custo": "leve",
+    "verbo_pt": "pausar",
+    "verbo_en": "pause",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "hitbox",
+      "hurtbox",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "performance_monitor": {
+    "custo": "medio",
+    "verbo_pt": "monitorar",
+    "verbo_en": "monitor",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "physics_tick_optimizer": {
+    "custo": "leve",
+    "verbo_pt": "otimizar_fisica",
+    "verbo_en": "optimize_physics",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "player_controller": {
+    "custo": "medio",
+    "verbo_pt": "mover",
+    "verbo_en": "move",
+    "nivel": "avancado",
+    "combina_bem": [
+      "particle_impact",
+      "sfx_player",
+      "floating_text",
+      "screen_shake",
+      "scene_transition",
+      "defeat_condition",
+      "hurtbox",
+      "state_machine"
+    ]
+  },
+  "player_topdown": {
+    "custo": "medio",
+    "verbo_pt": "mover",
+    "verbo_en": "move",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "state_machine",
+      "health",
+      "hitbox",
+      "status_effect",
+      "save_load",
+      "enemy_chase",
+      "quest"
+    ]
+  },
+  "player_vehicle": {
+    "custo": "medio",
+    "verbo_pt": "dirigir",
+    "verbo_en": "drive",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "save_load",
+      "hurtbox",
+      "health",
+      "hitbox",
+      "status_effect",
+      "state_machine",
+      "particle_impact",
+      "sfx_player"
+    ]
+  },
+  "plugin_creator": {
+    "custo": "leve",
+    "verbo_pt": "criar_plugin",
+    "verbo_en": "create_plugin",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "practice_mode": {
+    "custo": "leve",
+    "verbo_pt": "praticar",
+    "verbo_en": "practice",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "profile_manager": {
+    "custo": "leve",
+    "verbo_pt": "gerenciar_perfil",
+    "verbo_en": "manage_profile",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "profiler_hook": {
+    "custo": "leve",
+    "verbo_pt": "perfilar",
+    "verbo_en": "profile",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "projectile": {
+    "custo": "medio",
+    "verbo_pt": "atirar",
+    "verbo_en": "shoot",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "health",
+      "homing_projectile",
+      "turret_aim",
+      "knockback",
+      "hitbox",
+      "particle_impact",
+      "sfx_player"
+    ]
+  },
+  "quest": {
+    "custo": "leve",
+    "verbo_pt": "rastrear_missao",
+    "verbo_en": "track_quest",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "collectable",
+      "health",
+      "currency",
+      "inventory",
+      "hurtbox",
+      "save_load",
+      "state_machine",
+      "status_effect"
+    ]
+  },
+  "quick_time_alternative": {
+    "custo": "leve",
+    "verbo_pt": "simplificar_quicktime",
+    "verbo_en": "simplify_qte",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "racing_lap": {
+    "custo": "medio",
+    "verbo_pt": "correr",
+    "verbo_en": "race",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "state_machine",
+      "hitbox",
+      "object_pool",
+      "tween_player",
+      "health_bar",
+      "floating_text",
+      "sprite_animator",
+      "status_effect"
+    ]
+  },
+  "random_loot": {
+    "custo": "leve",
+    "verbo_pt": "dropar",
+    "verbo_en": "drop_loot",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "inventory",
+      "quest",
+      "save_load",
+      "hurtbox",
+      "equipment_slot",
+      "state_machine",
+      "collectable",
+      "health"
+    ]
+  },
+  "random_walker": {
+    "custo": "leve",
+    "verbo_pt": "caminhar_aleatorio",
+    "verbo_en": "random_walk",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "recoil": {
+    "custo": "medio",
+    "verbo_pt": "recuar",
+    "verbo_en": "recoil",
+    "nivel": "basico",
+    "combina_bem": [
+      "hitbox",
+      "save_load",
+      "hurtbox",
+      "state_machine",
+      "health",
+      "status_effect",
+      "screen_shake",
+      "sprite_animator"
+    ]
+  },
+  "resource_factory": {
+    "custo": "leve",
+    "verbo_pt": "criar_resource",
+    "verbo_en": "create_resource",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "resource_override": {
+    "custo": "leve",
+    "verbo_pt": "sobrescrever_recurso",
+    "verbo_en": "override_resource",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "rhythm_timing": {
+    "custo": "medio",
+    "verbo_pt": "sincronizar_ritmo",
+    "verbo_en": "sync_rhythm",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "state_machine",
+      "hitbox",
+      "object_pool",
+      "tween_player",
+      "health_bar",
+      "floating_text",
+      "sprite_animator",
+      "status_effect"
+    ]
+  },
+  "root_motion_controller": {
+    "custo": "leve",
+    "verbo_pt": "animar",
+    "verbo_en": "animate",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "round_timer": {
+    "custo": "leve",
+    "verbo_pt": "cronometrar",
+    "verbo_en": "time",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "floating_text",
+      "scene_transition",
+      "defeat_condition",
+      "status_effect",
+      "health",
+      "hurtbox",
+      "hitbox",
+      "particle_impact"
+    ]
+  },
+  "rpc_bridge": {
+    "custo": "leve",
+    "verbo_pt": "preencher_rpc",
+    "verbo_en": "bridge_rpc",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "state_machine",
+      "hitbox",
+      "object_pool",
+      "tween_player",
+      "health_bar",
+      "floating_text",
+      "sprite_animator",
+      "status_effect"
+    ]
+  },
+  "safe_space": {
+    "custo": "leve",
+    "verbo_pt": "zona_segura",
+    "verbo_en": "safe_zone",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "save_integrity": {
+    "custo": "leve",
+    "verbo_pt": "verificar_integridade",
+    "verbo_en": "verify_integrity",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "save_load": {
+    "custo": "leve",
+    "verbo_pt": "salvar",
+    "verbo_en": "save",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "character_creator",
+      "checkpoint",
+      "settings",
+      "daily_reward",
+      "status_effect",
+      "state_machine",
+      "health",
+      "hitbox"
+    ]
+  },
+  "save_migration": {
+    "custo": "leve",
+    "verbo_pt": "migrar_save",
+    "verbo_en": "migrate_save",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "save_slots": {
+    "custo": "leve",
+    "verbo_pt": "gerenciar_slots",
+    "verbo_en": "manage_slots",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "scene_transition": {
+    "custo": "leve",
+    "verbo_pt": "transicionar",
+    "verbo_en": "transition",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "teleport",
+      "main_menu",
+      "round_timer",
+      "interactable",
+      "player_controller",
+      "screen_shake",
+      "state_machine",
+      "sprite_animator"
+    ]
+  },
+  "score": {
+    "custo": "medio",
+    "verbo_pt": "pontuar",
+    "verbo_en": "score",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "wave_system",
+      "spawner_wave",
+      "collectable",
+      "hurtbox",
+      "hitbox",
+      "save_load",
+      "particle_impact"
+    ]
+  },
+  "screen_flash": {
+    "custo": "leve",
+    "verbo_pt": "piscar_tela",
+    "verbo_en": "flash_screen",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "hurtbox",
+      "hitbox",
+      "save_load",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool"
+    ]
+  },
+  "screen_shake": {
+    "custo": "medio",
+    "verbo_pt": "tremer",
+    "verbo_en": "shake",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "player_controller",
+      "hitscan",
+      "projectile",
+      "homing_projectile",
+      "health_bar",
+      "floating_text",
+      "save_load"
+    ]
+  },
+  "screen_shake_toggle": {
+    "custo": "leve",
+    "verbo_pt": "alternar_tremer",
+    "verbo_en": "toggle_shake",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "screenreader_support": {
+    "custo": "leve",
+    "verbo_pt": "narrar",
+    "verbo_en": "narrate",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "server_physics": {
+    "custo": "leve",
+    "verbo_pt": "servidor_fisica",
+    "verbo_en": "physics_server",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "server_sprite": {
+    "custo": "leve",
+    "verbo_pt": "servidor_sprite",
+    "verbo_en": "sprite_server",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "settings": {
+    "custo": "medio",
+    "verbo_pt": "configurar",
+    "verbo_en": "configure",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "save_load",
+      "audio_manager",
+      "sfx_player",
+      "ambience_zone",
+      "screen_shake",
+      "state_machine",
+      "sprite_animator",
+      "character_creator"
+    ]
+  },
+  "sfx_player": {
+    "custo": "leve",
+    "verbo_pt": "tocar_som",
+    "verbo_en": "play_sfx",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "audio_manager",
+      "player_controller",
+      "interactable",
+      "collectable",
+      "hitscan",
+      "spawner_wave",
+      "wave_system"
+    ]
+  },
+  "shop": {
+    "custo": "leve",
+    "verbo_pt": "comprar",
+    "verbo_en": "shop",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "currency",
+      "inventory",
+      "quest",
+      "save_load",
+      "hurtbox",
+      "equipment_slot",
+      "state_machine",
+      "random_loot"
+    ]
+  },
+  "skeleton_ik": {
+    "custo": "leve",
+    "verbo_pt": "animar_ik",
+    "verbo_en": "animate_ik",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "skill_tree": {
+    "custo": "leve",
+    "verbo_pt": "evoluir_skill",
+    "verbo_en": "upgrade_skill",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "character_stats",
+      "save_load",
+      "hurtbox",
+      "equipment_slot",
+      "state_machine",
+      "health",
+      "hitbox",
+      "status_effect"
+    ]
+  },
+  "spatial_hash": {
+    "custo": "leve",
+    "verbo_pt": "indexar_espaco",
+    "verbo_en": "hash_space",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "spawner_wave": {
+    "custo": "leve",
+    "verbo_pt": "gerar_inimigos",
+    "verbo_en": "spawn",
+    "nivel": "avancado",
+    "combina_bem": [
+      "health",
+      "floating_text",
+      "wave_system",
+      "object_pool",
+      "sfx_player",
+      "hitbox",
+      "currency",
+      "hurtbox"
+    ]
+  },
+  "spread": {
+    "custo": "medio",
+    "verbo_pt": "dispersar",
+    "verbo_en": "spread",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "save_load",
+      "hurtbox",
+      "health",
+      "hitbox",
+      "status_effect",
+      "state_machine",
+      "particle_impact",
+      "sfx_player"
+    ]
+  },
+  "spring_joint": {
+    "custo": "medio",
+    "verbo_pt": "conectar",
+    "verbo_en": "connect",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "sprite_animator": {
+    "custo": "leve",
+    "verbo_pt": "animar_sprite",
+    "verbo_en": "animate_sprite",
+    "nivel": "basico",
+    "combina_bem": [
+      "health_bar",
+      "floating_text",
+      "save_load",
+      "hurtbox",
+      "status_effect",
+      "particle_impact",
+      "tween_player",
+      "object_pool"
+    ]
+  },
+  "state_machine": {
+    "custo": "leve",
+    "verbo_pt": "gerenciar_estado",
+    "verbo_en": "manage_state",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "enemy_patrol",
+      "flee",
+      "hurtbox",
+      "health",
+      "hitbox",
+      "status_effect",
+      "save_load",
+      "inventory"
+    ]
+  },
+  "status_effect": {
+    "custo": "medio",
+    "verbo_pt": "aplicar_efeito",
+    "verbo_en": "apply_effect",
+    "nivel": "avancado",
+    "combina_bem": [
+      "health",
+      "hitbox",
+      "hurtbox",
+      "state_machine",
+      "save_load",
+      "damage_over_time",
+      "critical_hit",
+      "area_damage"
+    ]
+  },
+  "stealth": {
+    "custo": "medio",
+    "verbo_pt": "esconder",
+    "verbo_en": "hide",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "state_machine",
+      "hitbox",
+      "object_pool",
+      "tween_player",
+      "health_bar",
+      "floating_text",
+      "sprite_animator",
+      "status_effect"
+    ]
+  },
+  "steam_input": {
+    "custo": "leve",
+    "verbo_pt": "gerenciar_steam",
+    "verbo_en": "manage_steam",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "stereo_to_mono": {
+    "custo": "leve",
+    "verbo_pt": "converter_mono",
+    "verbo_en": "convert_mono",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "storage": {
+    "custo": "leve",
+    "verbo_pt": "armazenar",
+    "verbo_en": "store",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "save_load",
+      "health",
+      "hitbox",
+      "hurtbox",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool"
+    ]
+  },
+  "sub_plugin": {
+    "custo": "leve",
+    "verbo_pt": "registrar_subplugin",
+    "verbo_en": "register_subplugin",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "subtitle": {
+    "custo": "leve",
+    "verbo_pt": "legendar",
+    "verbo_en": "subtitle",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "teleport": {
+    "custo": "leve",
+    "verbo_pt": "teletransportar",
+    "verbo_en": "teleport",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "scene_transition",
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool"
+    ]
+  },
+  "terrain_autotiler": {
+    "custo": "leve",
+    "verbo_pt": "auto_tile",
+    "verbo_en": "autotile",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "text_size": {
+    "custo": "leve",
+    "verbo_pt": "ajustar_texto",
+    "verbo_en": "adjust_text",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "tile_pattern_stamper": {
+    "custo": "leve",
+    "verbo_pt": "carimbar_tile",
+    "verbo_en": "stamp_tile",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "tilemap_layer_manager": {
+    "custo": "leve",
+    "verbo_pt": "gerenciar_tilemap",
+    "verbo_en": "manage_tilemap",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "time_scale": {
+    "custo": "leve",
+    "verbo_pt": "controlar_tempo",
+    "verbo_en": "control_time",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hit_stop",
+      "freeze_frame",
+      "health",
+      "hitbox",
+      "hurtbox",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake"
+    ]
+  },
+  "timer_behavior": {
+    "custo": "leve",
+    "verbo_pt": "cronometrar",
+    "verbo_en": "time",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "status_effect",
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool"
+    ]
+  },
+  "tooltip": {
+    "custo": "medio",
+    "verbo_pt": "exibir_dica",
+    "verbo_en": "show_tooltip",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "touch_gestures": {
+    "custo": "medio",
+    "verbo_pt": "detectar_gesto",
+    "verbo_en": "detect_gesture",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "state_machine",
+      "hitbox",
+      "object_pool",
+      "tween_player",
+      "health_bar",
+      "floating_text",
+      "sprite_animator",
+      "status_effect"
+    ]
+  },
+  "trail": {
+    "custo": "medio",
+    "verbo_pt": "deixar_rastro",
+    "verbo_en": "leave_trail",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "hurtbox",
+      "hitbox",
+      "save_load",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool"
+    ]
+  },
+  "trigger_zone": {
+    "custo": "leve",
+    "verbo_pt": "detectar",
+    "verbo_en": "detect",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "turret_aim": {
+    "custo": "medio",
+    "verbo_pt": "mirar",
+    "verbo_en": "aim",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "fire_rate",
+      "projectile",
+      "hurtbox",
+      "hitscan",
+      "health",
+      "homing_projectile",
+      "save_load",
+      "state_machine"
+    ]
+  },
+  "tutorial_overlay": {
+    "custo": "leve",
+    "verbo_pt": "ensinar",
+    "verbo_en": "teach",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "tween_player": {
+    "custo": "leve",
+    "verbo_pt": "animar_propriedade",
+    "verbo_en": "tween",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health_bar",
+      "floating_text",
+      "save_load",
+      "hurtbox",
+      "sprite_animator",
+      "status_effect",
+      "particle_impact",
+      "object_pool"
+    ]
+  },
+  "undo_redo": {
+    "custo": "leve",
+    "verbo_pt": "desfazer",
+    "verbo_en": "undo",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "unlockable": {
+    "custo": "leve",
+    "verbo_pt": "desbloquear",
+    "verbo_en": "unlock",
+    "nivel": "basico",
+    "combina_bem": [
+      "state_machine",
+      "health",
+      "status_effect",
+      "hitbox",
+      "save_load",
+      "hurtbox",
+      "achievement",
+      "quest"
+    ]
+  },
+  "upgrade": {
+    "custo": "leve",
+    "verbo_pt": "melhorar",
+    "verbo_en": "upgrade",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "xp_level",
+      "save_load",
+      "hurtbox",
+      "state_machine",
+      "health",
+      "hitbox",
+      "status_effect",
+      "currency"
+    ]
+  },
+  "victory_condition": {
+    "custo": "medio",
+    "verbo_pt": "definir_vitoria",
+    "verbo_en": "define_victory",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "vignette": {
+    "custo": "leve",
+    "verbo_pt": "escurecer_bordas",
+    "verbo_en": "vignette",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "virtual_joystick": {
+    "custo": "medio",
+    "verbo_pt": "joystick_virtual",
+    "verbo_en": "virtual_joystick",
+    "nivel": "basico",
+    "combina_bem": [
+      "state_machine",
+      "hitbox",
+      "object_pool",
+      "tween_player",
+      "health_bar",
+      "floating_text",
+      "sprite_animator",
+      "status_effect"
+    ]
+  },
+  "wall_slide": {
+    "custo": "pesado",
+    "verbo_pt": "escorregar",
+    "verbo_en": "slide",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "hurtbox",
+      "state_machine",
+      "health",
+      "hitbox",
+      "save_load",
+      "status_effect",
+      "screen_shake",
+      "sprite_animator"
+    ]
+  },
+  "water_surface": {
+    "custo": "medio",
+    "verbo_pt": "flutuar",
+    "verbo_en": "float",
+    "nivel": "basico",
+    "combina_bem": [
+      "save_load",
+      "hurtbox",
+      "health",
+      "hitbox",
+      "status_effect",
+      "state_machine",
+      "particle_impact",
+      "sfx_player"
+    ]
+  },
+  "wave_system": {
+    "custo": "medio",
+    "verbo_pt": "gerenciar_ondas",
+    "verbo_en": "manage_waves",
+    "nivel": "avancado",
+    "combina_bem": [
+      "floating_text",
+      "spawner_wave",
+      "sfx_player",
+      "currency",
+      "achievement",
+      "score",
+      "health",
+      "hurtbox"
+    ]
+  },
+  "wind_zone": {
+    "custo": "medio",
+    "verbo_pt": "soprar",
+    "verbo_en": "blow",
+    "nivel": "basico",
+    "combina_bem": [
+      "save_load",
+      "hurtbox",
+      "health",
+      "hitbox",
+      "status_effect",
+      "state_machine",
+      "particle_impact",
+      "sfx_player"
+    ]
+  },
+  "world_map_generator": {
+    "custo": "leve",
+    "verbo_pt": "gerar_mapa",
+    "verbo_en": "generate_map",
+    "nivel": "basico",
+    "combina_bem": [
+      "hurtbox",
+      "hitbox",
+      "health",
+      "particle_impact",
+      "sfx_player",
+      "screen_shake",
+      "object_pool",
+      "tween_player"
+    ]
+  },
+  "xp_level": {
+    "custo": "leve",
+    "verbo_pt": "evoluir",
+    "verbo_en": "level_up",
+    "nivel": "intermediario",
+    "combina_bem": [
+      "health",
+      "upgrade",
+      "hurtbox",
+      "save_load",
+      "state_machine",
+      "status_effect",
+      "hitbox",
+      "currency"
+    ]
+  }
+}

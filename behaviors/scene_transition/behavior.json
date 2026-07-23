@@ -66,5 +66,19 @@
     "transicao",
     "cena",
     "fade"
-  ]
+  ],
+  "combina_bem": [
+    "teleport",
+    "main_menu",
+    "round_timer",
+    "interactable",
+    "player_controller",
+    "screen_shake",
+    "state_machine",
+    "sprite_animator"
+  ],
+  "custo": "leve",
+  "verbo_pt": "transicionar",
+  "verbo_en": "transition",
+  "nivel": "intermediario"
 }

@@ -18,5 +18,19 @@
     "generic"
   ],
   "conflicts": [],
-  "tags": []
+  "tags": [],
+  "combina_bem": [
+    "hurtbox",
+    "hitbox",
+    "health",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool",
+    "tween_player"
+  ],
+  "custo": "leve",
+  "verbo_pt": "reproduzir_narrativa",
+  "verbo_en": "replay_narrative",
+  "nivel": "basico"
 }

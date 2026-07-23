@@ -93,5 +93,19 @@
     "movimento",
     "npc",
     "inimigo"
-  ]
+  ],
+  "combina_bem": [
+    "state_machine",
+    "health",
+    "hurtbox",
+    "hitbox",
+    "status_effect",
+    "enemy_patrol",
+    "area_damage",
+    "hitscan"
+  ],
+  "custo": "medio",
+  "verbo_pt": "fugir",
+  "verbo_en": "flee",
+  "nivel": "intermediario"
 }

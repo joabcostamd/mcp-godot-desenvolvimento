@@ -97,5 +97,19 @@
   "version": "1.0.0",
   "category": "combate",
   "status": "implementado",
-  "godot_version": "4.7"
+  "godot_version": "4.7",
+  "combina_bem": [
+    "health",
+    "projectile",
+    "hitbox",
+    "state_machine",
+    "status_effect",
+    "critical_hit",
+    "area_damage",
+    "beam_laser"
+  ],
+  "custo": "leve",
+  "verbo_pt": "receber_dano",
+  "verbo_en": "receive_damage",
+  "nivel": "intermediario"
 }

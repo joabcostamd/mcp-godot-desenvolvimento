@@ -76,5 +76,19 @@
     "rpg",
     "equipamento",
     "gear"
-  ]
+  ],
+  "combina_bem": [
+    "character_stats",
+    "inventory",
+    "quest",
+    "save_load",
+    "hurtbox",
+    "state_machine",
+    "collectable",
+    "random_loot"
+  ],
+  "custo": "leve",
+  "verbo_pt": "equipar",
+  "verbo_en": "equip",
+  "nivel": "intermediario"
 }

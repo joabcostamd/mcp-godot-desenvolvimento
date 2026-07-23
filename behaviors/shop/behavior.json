@@ -71,5 +71,19 @@
   "tags": [
     "loja",
     "economia"
-  ]
+  ],
+  "combina_bem": [
+    "currency",
+    "inventory",
+    "quest",
+    "save_load",
+    "hurtbox",
+    "equipment_slot",
+    "state_machine",
+    "random_loot"
+  ],
+  "custo": "leve",
+  "verbo_pt": "comprar",
+  "verbo_en": "shop",
+  "nivel": "intermediario"
 }

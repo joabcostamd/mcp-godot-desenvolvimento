@@ -69,5 +69,19 @@
   "tags": [
     "camera",
     "follow"
-  ]
+  ],
+  "combina_bem": [
+    "camera_sequence",
+    "state_machine",
+    "health",
+    "hitbox",
+    "hurtbox",
+    "save_load",
+    "status_effect",
+    "enemy_chase"
+  ],
+  "custo": "medio",
+  "verbo_pt": "seguir_camera",
+  "verbo_en": "follow_camera",
+  "nivel": "intermediario"
 }

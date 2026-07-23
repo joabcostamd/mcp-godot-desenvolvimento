@@ -56,5 +56,19 @@
   "tags": [
     "achievement",
     "social"
-  ]
+  ],
+  "combina_bem": [
+    "achievement",
+    "health",
+    "hitbox",
+    "hurtbox",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool"
+  ],
+  "custo": "leve",
+  "verbo_pt": "rastrear_conquista",
+  "verbo_en": "track_achievement",
+  "nivel": "intermediario"
 }

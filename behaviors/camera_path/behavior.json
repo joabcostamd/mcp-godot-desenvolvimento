@@ -56,5 +56,19 @@
   "tags": [
     "camera",
     "path"
-  ]
+  ],
+  "combina_bem": [
+    "save_load",
+    "hitbox",
+    "health",
+    "hurtbox",
+    "status_effect",
+    "state_machine",
+    "moving_platform",
+    "particle_impact"
+  ],
+  "custo": "medio",
+  "verbo_pt": "percorrer_camera",
+  "verbo_en": "path_camera",
+  "nivel": "intermediario"
 }

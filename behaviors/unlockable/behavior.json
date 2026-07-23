@@ -52,5 +52,19 @@
     "progressao",
     "metaprogression",
     "desbloqueio"
-  ]
+  ],
+  "combina_bem": [
+    "state_machine",
+    "health",
+    "status_effect",
+    "hitbox",
+    "save_load",
+    "hurtbox",
+    "achievement",
+    "quest"
+  ],
+  "custo": "leve",
+  "verbo_pt": "desbloquear",
+  "verbo_en": "unlock",
+  "nivel": "basico"
 }

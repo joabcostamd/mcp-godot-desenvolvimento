@@ -43,5 +43,19 @@
     "touch"
   ],
   "description_pt": "Behavior Virtual Joystick para Godot 4.7. Componente plugavel para jogos 2D.",
-  "description_en": "Virtual Joystick behavior for Godot 4.7. Pluggable component for 2D games."
+  "description_en": "Virtual Joystick behavior for Godot 4.7. Pluggable component for 2D games.",
+  "combina_bem": [
+    "state_machine",
+    "hitbox",
+    "object_pool",
+    "tween_player",
+    "health_bar",
+    "floating_text",
+    "sprite_animator",
+    "status_effect"
+  ],
+  "custo": "medio",
+  "verbo_pt": "joystick_virtual",
+  "verbo_en": "virtual_joystick",
+  "nivel": "basico"
 }

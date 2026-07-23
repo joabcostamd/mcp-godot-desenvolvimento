@@ -111,5 +111,19 @@
     "tiro",
     "dano",
     "movimento"
-  ]
+  ],
+  "combina_bem": [
+    "hurtbox",
+    "health",
+    "homing_projectile",
+    "turret_aim",
+    "knockback",
+    "hitbox",
+    "particle_impact",
+    "sfx_player"
+  ],
+  "custo": "medio",
+  "verbo_pt": "atirar",
+  "verbo_en": "shoot",
+  "nivel": "intermediario"
 }

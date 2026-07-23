@@ -100,5 +100,19 @@
     "parede",
     "wall_jump",
     "metroidvania"
-  ]
+  ],
+  "combina_bem": [
+    "hurtbox",
+    "state_machine",
+    "health",
+    "hitbox",
+    "save_load",
+    "status_effect",
+    "screen_shake",
+    "sprite_animator"
+  ],
+  "custo": "pesado",
+  "verbo_pt": "escorregar",
+  "verbo_en": "slide",
+  "nivel": "intermediario"
 }

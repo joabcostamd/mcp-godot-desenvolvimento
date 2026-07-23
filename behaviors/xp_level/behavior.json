@@ -96,5 +96,19 @@
     "nível",
     "level",
     "rpg"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "upgrade",
+    "hurtbox",
+    "save_load",
+    "state_machine",
+    "status_effect",
+    "hitbox",
+    "currency"
+  ],
+  "custo": "leve",
+  "verbo_pt": "evoluir",
+  "verbo_en": "level_up",
+  "nivel": "intermediario"
 }

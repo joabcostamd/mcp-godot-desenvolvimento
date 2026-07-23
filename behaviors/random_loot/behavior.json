@@ -58,5 +58,19 @@
     "drop",
     "recompensa",
     "estrutura"
-  ]
+  ],
+  "combina_bem": [
+    "inventory",
+    "quest",
+    "save_load",
+    "hurtbox",
+    "equipment_slot",
+    "state_machine",
+    "collectable",
+    "health"
+  ],
+  "custo": "leve",
+  "verbo_pt": "dropar",
+  "verbo_en": "drop_loot",
+  "nivel": "intermediario"
 }

@@ -69,5 +69,19 @@
   "tags": [
     "navegacao",
     "ai"
-  ]
+  ],
+  "combina_bem": [
+    "avoidance",
+    "state_machine",
+    "health",
+    "status_effect",
+    "hitbox",
+    "save_load",
+    "hurtbox",
+    "quest"
+  ],
+  "custo": "medio",
+  "verbo_pt": "navegar",
+  "verbo_en": "navigate",
+  "nivel": "intermediario"
 }

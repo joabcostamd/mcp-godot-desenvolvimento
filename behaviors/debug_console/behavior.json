@@ -61,5 +61,19 @@
   "tags": [
     "debug",
     "console"
-  ]
+  ],
+  "combina_bem": [
+    "hurtbox",
+    "hitbox",
+    "health",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool",
+    "tween_player"
+  ],
+  "custo": "leve",
+  "verbo_pt": "registrar_console",
+  "verbo_en": "log_console",
+  "nivel": "basico"
 }

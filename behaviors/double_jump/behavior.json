@@ -89,5 +89,19 @@
     "pulo",
     "double_jump",
     "jogador"
-  ]
+  ],
+  "combina_bem": [
+    "hurtbox",
+    "state_machine",
+    "health",
+    "hitbox",
+    "save_load",
+    "status_effect",
+    "player_controller",
+    "screen_shake"
+  ],
+  "custo": "medio",
+  "verbo_pt": "pular",
+  "verbo_en": "jump",
+  "nivel": "intermediario"
 }

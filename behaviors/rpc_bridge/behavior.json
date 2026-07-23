@@ -59,5 +59,19 @@
   "tags": [
     "multiplayer",
     "rpc"
-  ]
+  ],
+  "combina_bem": [
+    "state_machine",
+    "hitbox",
+    "object_pool",
+    "tween_player",
+    "health_bar",
+    "floating_text",
+    "sprite_animator",
+    "status_effect"
+  ],
+  "custo": "leve",
+  "verbo_pt": "preencher_rpc",
+  "verbo_en": "bridge_rpc",
+  "nivel": "intermediario"
 }

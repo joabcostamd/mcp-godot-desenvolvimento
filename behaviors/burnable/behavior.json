@@ -89,5 +89,19 @@
     "fogo",
     "combate",
     "status"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "health_bar",
+    "hurtbox",
+    "status_effect",
+    "hitbox",
+    "area_damage",
+    "flee",
+    "beam_laser"
+  ],
+  "custo": "medio",
+  "verbo_pt": "queimar",
+  "verbo_en": "burn",
+  "nivel": "intermediario"
 }

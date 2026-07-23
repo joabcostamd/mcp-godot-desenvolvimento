@@ -84,5 +84,19 @@
     "skill",
     "level",
     "survivors"
-  ]
+  ],
+  "combina_bem": [
+    "xp_level",
+    "save_load",
+    "hurtbox",
+    "state_machine",
+    "health",
+    "hitbox",
+    "status_effect",
+    "currency"
+  ],
+  "custo": "leve",
+  "verbo_pt": "melhorar",
+  "verbo_en": "upgrade",
+  "nivel": "intermediario"
 }

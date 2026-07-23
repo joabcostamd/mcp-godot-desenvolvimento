@@ -95,5 +95,19 @@
     "rpg",
     "atributos",
     "personagem"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "equipment_slot",
+    "skill_tree",
+    "hitbox",
+    "status_effect",
+    "hurtbox",
+    "health_bar",
+    "save_load"
+  ],
+  "custo": "leve",
+  "verbo_pt": "gerenciar_atributos",
+  "verbo_en": "manage_stats",
+  "nivel": "intermediario"
 }

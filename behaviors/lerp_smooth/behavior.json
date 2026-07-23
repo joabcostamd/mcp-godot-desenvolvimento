@@ -56,5 +56,19 @@
     "util",
     "tween",
     "animacao"
-  ]
+  ],
+  "combina_bem": [
+    "hurtbox",
+    "hitbox",
+    "health",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool",
+    "tween_player"
+  ],
+  "custo": "leve",
+  "verbo_pt": "suavizar",
+  "verbo_en": "smooth",
+  "nivel": "basico"
 }

@@ -83,5 +83,19 @@
     "vfx",
     "explosao",
     "impacto"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "player_controller",
+    "hitscan",
+    "projectile",
+    "homing_projectile",
+    "health_bar",
+    "floating_text",
+    "save_load"
+  ],
+  "custo": "medio",
+  "verbo_pt": "emitir_particula",
+  "verbo_en": "emit_particle",
+  "nivel": "intermediario"
 }

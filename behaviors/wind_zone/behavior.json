@@ -55,5 +55,19 @@
   "tags": [
     "fisica",
     "vento"
-  ]
+  ],
+  "combina_bem": [
+    "save_load",
+    "hurtbox",
+    "health",
+    "hitbox",
+    "status_effect",
+    "state_machine",
+    "particle_impact",
+    "sfx_player"
+  ],
+  "custo": "medio",
+  "verbo_pt": "soprar",
+  "verbo_en": "blow",
+  "nivel": "basico"
 }

@@ -38,5 +38,19 @@
     "input"
   ],
   "description_pt": "Behavior Aim Assist para Godot 4.7. Componente plugavel para jogos 2D.",
-  "description_en": "Aim Assist behavior for Godot 4.7. Pluggable component for 2D games."
+  "description_en": "Aim Assist behavior for Godot 4.7. Pluggable component for 2D games.",
+  "combina_bem": [
+    "state_machine",
+    "hitbox",
+    "object_pool",
+    "tween_player",
+    "health_bar",
+    "floating_text",
+    "sprite_animator",
+    "status_effect"
+  ],
+  "custo": "leve",
+  "verbo_pt": "auxiliar_mira",
+  "verbo_en": "assist_aim",
+  "nivel": "basico"
 }

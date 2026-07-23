@@ -103,5 +103,19 @@
     "dano",
     "hitscan",
     "contínuo"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "hitbox",
+    "hurtbox",
+    "status_effect",
+    "state_machine",
+    "area_damage",
+    "hitscan",
+    "spawner_wave"
+  ],
+  "custo": "pesado",
+  "verbo_pt": "emitir_raio",
+  "verbo_en": "beam",
+  "nivel": "intermediario"
 }

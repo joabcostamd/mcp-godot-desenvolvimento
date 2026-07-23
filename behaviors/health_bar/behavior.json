@@ -93,5 +93,19 @@
     "hud",
     "vida",
     "barra"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "status_effect",
+    "hitbox",
+    "hurtbox",
+    "flee",
+    "hitscan",
+    "floating_text",
+    "save_load"
+  ],
+  "custo": "medio",
+  "verbo_pt": "exibir_vida",
+  "verbo_en": "display_health",
+  "nivel": "avancado"
 }

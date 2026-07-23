@@ -71,5 +71,19 @@
     "som",
     "musica",
     "volume"
-  ]
+  ],
+  "combina_bem": [
+    "sfx_player",
+    "ambience_zone",
+    "settings",
+    "music_playlist",
+    "health",
+    "hitbox",
+    "hurtbox",
+    "particle_impact"
+  ],
+  "custo": "leve",
+  "verbo_pt": "gerenciar_audio",
+  "verbo_en": "manage_audio",
+  "nivel": "basico"
 }

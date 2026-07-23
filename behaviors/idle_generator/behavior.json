@@ -121,5 +121,19 @@
     "clicker",
     "gerador",
     "producao"
-  ]
+  ],
+  "combina_bem": [
+    "currency",
+    "health",
+    "hitbox",
+    "hurtbox",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "shop"
+  ],
+  "custo": "medio",
+  "verbo_pt": "gerar_recurso",
+  "verbo_en": "generate_resource",
+  "nivel": "intermediario"
 }

@@ -61,5 +61,19 @@
   "tags": [
     "crafting",
     "economia"
-  ]
+  ],
+  "combina_bem": [
+    "inventory",
+    "save_load",
+    "hurtbox",
+    "shop",
+    "equipment_slot",
+    "state_machine",
+    "random_loot",
+    "collectable"
+  ],
+  "custo": "leve",
+  "verbo_pt": "criar",
+  "verbo_en": "craft",
+  "nivel": "intermediario"
 }

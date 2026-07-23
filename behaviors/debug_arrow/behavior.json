@@ -55,5 +55,19 @@
   ],
   "tags": [
     "debug"
-  ]
+  ],
+  "combina_bem": [
+    "hurtbox",
+    "hitbox",
+    "health",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool",
+    "tween_player"
+  ],
+  "custo": "medio",
+  "verbo_pt": "desenhar_seta",
+  "verbo_en": "draw_arrow",
+  "nivel": "basico"
 }

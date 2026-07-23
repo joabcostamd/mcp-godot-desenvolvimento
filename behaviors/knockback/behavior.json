@@ -77,5 +77,19 @@
   "version": "1.0.0",
   "category": "combate",
   "status": "implementado",
-  "godot_version": "4.7"
+  "godot_version": "4.7",
+  "combina_bem": [
+    "health",
+    "area_damage",
+    "projectile",
+    "hitscan",
+    "hitbox",
+    "hurtbox",
+    "state_machine",
+    "homing_projectile"
+  ],
+  "custo": "leve",
+  "verbo_pt": "empurrar",
+  "verbo_en": "knockback",
+  "nivel": "basico"
 }

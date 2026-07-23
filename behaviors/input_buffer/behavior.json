@@ -51,5 +51,19 @@
     "input"
   ],
   "description_pt": "Behavior Input Buffer para Godot 4.7. Componente plugavel para jogos 2D.",
-  "description_en": "Input Buffer behavior for Godot 4.7. Pluggable component for 2D games."
+  "description_en": "Input Buffer behavior for Godot 4.7. Pluggable component for 2D games.",
+  "combina_bem": [
+    "health",
+    "hitbox",
+    "hurtbox",
+    "state_machine",
+    "object_pool",
+    "tween_player",
+    "health_bar",
+    "floating_text"
+  ],
+  "custo": "medio",
+  "verbo_pt": "buffer_input",
+  "verbo_en": "buffer_input",
+  "nivel": "intermediario"
 }

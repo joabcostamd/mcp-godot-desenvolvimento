@@ -72,5 +72,19 @@
     "deadzone",
     "framed",
     "suave"
-  ]
+  ],
+  "combina_bem": [
+    "save_load",
+    "hurtbox",
+    "state_machine",
+    "health",
+    "hitbox",
+    "status_effect",
+    "screen_shake",
+    "sprite_animator"
+  ],
+  "custo": "medio",
+  "verbo_pt": "enquadrar",
+  "verbo_en": "frame",
+  "nivel": "basico"
 }

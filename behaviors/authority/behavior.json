@@ -40,5 +40,19 @@
   "tags": [
     "multiplayer",
     "authority"
-  ]
+  ],
+  "combina_bem": [
+    "state_machine",
+    "hitbox",
+    "object_pool",
+    "tween_player",
+    "health_bar",
+    "floating_text",
+    "sprite_animator",
+    "status_effect"
+  ],
+  "custo": "leve",
+  "verbo_pt": "autorizar",
+  "verbo_en": "authorize",
+  "nivel": "basico"
 }

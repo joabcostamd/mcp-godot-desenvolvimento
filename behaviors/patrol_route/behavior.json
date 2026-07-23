@@ -71,5 +71,19 @@
     "navegacao",
     "ai",
     "patrulha"
-  ]
+  ],
+  "combina_bem": [
+    "hitbox",
+    "save_load",
+    "hurtbox",
+    "enemy_patrol",
+    "state_machine",
+    "health",
+    "status_effect",
+    "line_of_sight"
+  ],
+  "custo": "medio",
+  "verbo_pt": "patrulhar",
+  "verbo_en": "patrol",
+  "nivel": "intermediario"
 }

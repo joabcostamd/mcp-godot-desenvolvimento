@@ -65,5 +65,19 @@
     "dificuldade",
     "curva",
     "estrutura"
-  ]
+  ],
+  "combina_bem": [
+    "hurtbox",
+    "hitbox",
+    "health",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool",
+    "tween_player"
+  ],
+  "custo": "medio",
+  "verbo_pt": "ajustar_dificuldade",
+  "verbo_en": "adjust_difficulty",
+  "nivel": "basico"
 }

@@ -38,5 +38,19 @@
     "input"
   ],
   "description_pt": "Behavior Gyro Aim para Godot 4.7. Componente plugavel para jogos 2D.",
-  "description_en": "Gyro Aim behavior for Godot 4.7. Pluggable component for 2D games."
+  "description_en": "Gyro Aim behavior for Godot 4.7. Pluggable component for 2D games.",
+  "combina_bem": [
+    "state_machine",
+    "hitbox",
+    "object_pool",
+    "tween_player",
+    "health_bar",
+    "floating_text",
+    "sprite_animator",
+    "status_effect"
+  ],
+  "custo": "leve",
+  "verbo_pt": "mirar_giroscopio",
+  "verbo_en": "gyro_aim",
+  "nivel": "basico"
 }

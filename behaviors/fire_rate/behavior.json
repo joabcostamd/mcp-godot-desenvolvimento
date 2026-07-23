@@ -82,5 +82,19 @@
   "version": "1.0.0",
   "category": "combate",
   "status": "implementado",
-  "godot_version": "4.7"
+  "godot_version": "4.7",
+  "combina_bem": [
+    "turret_aim",
+    "hitscan",
+    "fire_mode",
+    "health",
+    "hurtbox",
+    "state_machine",
+    "hitbox",
+    "status_effect"
+  ],
+  "custo": "leve",
+  "verbo_pt": "disparar",
+  "verbo_en": "fire",
+  "nivel": "intermediario"
 }

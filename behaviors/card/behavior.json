@@ -45,5 +45,19 @@
   ],
   "tags": [
     "card"
-  ]
+  ],
+  "combina_bem": [
+    "hand",
+    "sfx_player",
+    "state_machine",
+    "object_pool",
+    "tween_player",
+    "screen_shake",
+    "health_bar",
+    "floating_text"
+  ],
+  "custo": "leve",
+  "verbo_pt": "jogar_carta",
+  "verbo_en": "play_card",
+  "nivel": "intermediario"
 }

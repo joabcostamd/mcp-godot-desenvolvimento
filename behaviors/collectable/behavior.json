@@ -103,5 +103,19 @@
     "item",
     "pickup",
     "loot"
-  ]
+  ],
+  "combina_bem": [
+    "inventory",
+    "quest",
+    "currency",
+    "achievement",
+    "health",
+    "hitbox",
+    "sfx_player",
+    "floating_text"
+  ],
+  "custo": "medio",
+  "verbo_pt": "coletar",
+  "verbo_en": "collect",
+  "nivel": "intermediario"
 }

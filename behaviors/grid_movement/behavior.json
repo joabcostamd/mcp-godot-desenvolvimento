@@ -87,5 +87,19 @@
     "grid",
     "turno",
     "roguelike"
-  ]
+  ],
+  "combina_bem": [
+    "save_load",
+    "hurtbox",
+    "health",
+    "hitbox",
+    "status_effect",
+    "state_machine",
+    "particle_impact",
+    "pathfinding"
+  ],
+  "custo": "medio",
+  "verbo_pt": "movimentar",
+  "verbo_en": "move",
+  "nivel": "intermediario"
 }

@@ -49,5 +49,19 @@
     "sistema",
     "pausa",
     "menu"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "hitbox",
+    "hurtbox",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool",
+    "tween_player"
+  ],
+  "custo": "leve",
+  "verbo_pt": "pausar",
+  "verbo_en": "pause",
+  "nivel": "intermediario"
 }

@@ -98,5 +98,19 @@
   "version": "1.0.0",
   "category": "combate",
   "status": "implementado",
-  "godot_version": "4.7"
+  "godot_version": "4.7",
+  "combina_bem": [
+    "health",
+    "hurtbox",
+    "state_machine",
+    "status_effect",
+    "critical_hit",
+    "area_damage",
+    "beam_laser",
+    "save_load"
+  ],
+  "custo": "leve",
+  "verbo_pt": "causar_dano",
+  "verbo_en": "deal_damage",
+  "nivel": "intermediario"
 }

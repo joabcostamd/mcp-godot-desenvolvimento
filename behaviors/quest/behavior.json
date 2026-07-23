@@ -78,5 +78,19 @@
     "missão",
     "objetivo",
     "recompensa"
-  ]
+  ],
+  "combina_bem": [
+    "collectable",
+    "health",
+    "currency",
+    "inventory",
+    "hurtbox",
+    "save_load",
+    "state_machine",
+    "status_effect"
+  ],
+  "custo": "leve",
+  "verbo_pt": "rastrear_missao",
+  "verbo_en": "track_quest",
+  "nivel": "intermediario"
 }

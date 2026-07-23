@@ -61,5 +61,19 @@
     "destrutivel",
     "combate",
     "util"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "health_bar",
+    "hurtbox",
+    "status_effect",
+    "hitbox",
+    "area_damage",
+    "flee",
+    "beam_laser"
+  ],
+  "custo": "leve",
+  "verbo_pt": "destruir",
+  "verbo_en": "destroy",
+  "nivel": "intermediario"
 }

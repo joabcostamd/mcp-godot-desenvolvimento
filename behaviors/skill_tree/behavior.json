@@ -69,5 +69,19 @@
     "rpg",
     "skill_tree",
     "progressao"
-  ]
+  ],
+  "combina_bem": [
+    "character_stats",
+    "save_load",
+    "hurtbox",
+    "equipment_slot",
+    "state_machine",
+    "health",
+    "hitbox",
+    "status_effect"
+  ],
+  "custo": "leve",
+  "verbo_pt": "evoluir_skill",
+  "verbo_en": "upgrade_skill",
+  "nivel": "intermediario"
 }

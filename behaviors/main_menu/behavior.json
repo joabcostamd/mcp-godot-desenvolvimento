@@ -75,5 +75,19 @@
     "menu",
     "ui",
     "principal"
-  ]
+  ],
+  "combina_bem": [
+    "scene_transition",
+    "hurtbox",
+    "hitbox",
+    "health",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool"
+  ],
+  "custo": "leve",
+  "verbo_pt": "navegar_menu",
+  "verbo_en": "navigate_menu",
+  "nivel": "intermediario"
 }

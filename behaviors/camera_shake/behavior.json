@@ -99,5 +99,19 @@
     "shake",
     "tremor",
     "vibracao"
-  ]
+  ],
+  "combina_bem": [
+    "state_machine",
+    "health",
+    "status_effect",
+    "hitbox",
+    "save_load",
+    "hurtbox",
+    "quest",
+    "currency"
+  ],
+  "custo": "medio",
+  "verbo_pt": "tremer_camera",
+  "verbo_en": "shake_camera",
+  "nivel": "intermediario"
 }

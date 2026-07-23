@@ -63,5 +63,19 @@
     "checkpoint",
     "respawn",
     "save"
-  ]
+  ],
+  "combina_bem": [
+    "save_load",
+    "state_machine",
+    "health",
+    "hitbox",
+    "hurtbox",
+    "interactable",
+    "status_effect",
+    "enemy_chase"
+  ],
+  "custo": "medio",
+  "verbo_pt": "salvar_progresso",
+  "verbo_en": "save_progress",
+  "nivel": "intermediario"
 }

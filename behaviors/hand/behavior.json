@@ -90,5 +90,19 @@
     "hand",
     "leque",
     "mao"
-  ]
+  ],
+  "combina_bem": [
+    "card",
+    "deck",
+    "state_machine",
+    "object_pool",
+    "tween_player",
+    "health_bar",
+    "floating_text",
+    "sprite_animator"
+  ],
+  "custo": "leve",
+  "verbo_pt": "segurar",
+  "verbo_en": "hold",
+  "nivel": "intermediario"
 }

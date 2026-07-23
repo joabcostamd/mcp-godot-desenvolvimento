@@ -36,5 +36,19 @@
     "acessibilidade"
   ],
   "description_pt": "Behavior High Contrast para Godot 4.7. Componente plugavel para jogos 2D.",
-  "description_en": "High Contrast behavior for Godot 4.7. Pluggable component for 2D games."
+  "description_en": "High Contrast behavior for Godot 4.7. Pluggable component for 2D games.",
+  "combina_bem": [
+    "hurtbox",
+    "hitbox",
+    "health",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool",
+    "tween_player"
+  ],
+  "custo": "leve",
+  "verbo_pt": "aumentar_contraste",
+  "verbo_en": "increase_contrast",
+  "nivel": "basico"
 }

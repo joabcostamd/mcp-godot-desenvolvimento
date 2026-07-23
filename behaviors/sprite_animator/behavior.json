@@ -18,5 +18,19 @@
     "generic"
   ],
   "conflicts": [],
-  "tags": []
+  "tags": [],
+  "combina_bem": [
+    "health_bar",
+    "floating_text",
+    "save_load",
+    "hurtbox",
+    "status_effect",
+    "particle_impact",
+    "tween_player",
+    "object_pool"
+  ],
+  "custo": "leve",
+  "verbo_pt": "animar_sprite",
+  "verbo_en": "animate_sprite",
+  "nivel": "basico"
 }

@@ -138,5 +138,19 @@
     "avatar",
     "preset",
     "criacao"
-  ]
+  ],
+  "combina_bem": [
+    "save_load",
+    "hurtbox",
+    "state_machine",
+    "health",
+    "hitbox",
+    "status_effect",
+    "screen_shake",
+    "sprite_animator"
+  ],
+  "custo": "leve",
+  "verbo_pt": "criar_personagem",
+  "verbo_en": "create_character",
+  "nivel": "intermediario"
 }

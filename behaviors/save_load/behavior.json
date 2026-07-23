@@ -66,5 +66,19 @@
     "save",
     "load",
     "persistência"
-  ]
+  ],
+  "combina_bem": [
+    "character_creator",
+    "checkpoint",
+    "settings",
+    "daily_reward",
+    "status_effect",
+    "state_machine",
+    "health",
+    "hitbox"
+  ],
+  "custo": "leve",
+  "verbo_pt": "salvar",
+  "verbo_en": "save",
+  "nivel": "intermediario"
 }

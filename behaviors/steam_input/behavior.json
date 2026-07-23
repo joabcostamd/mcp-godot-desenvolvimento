@@ -40,5 +40,19 @@
     "steam"
   ],
   "description_pt": "Behavior Steam Input para Godot 4.7. Componente plugavel para jogos 2D.",
-  "description_en": "Steam Input behavior for Godot 4.7. Pluggable component for 2D games."
+  "description_en": "Steam Input behavior for Godot 4.7. Pluggable component for 2D games.",
+  "combina_bem": [
+    "hurtbox",
+    "hitbox",
+    "health",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake",
+    "object_pool",
+    "tween_player"
+  ],
+  "custo": "leve",
+  "verbo_pt": "gerenciar_steam",
+  "verbo_en": "manage_steam",
+  "nivel": "basico"
 }

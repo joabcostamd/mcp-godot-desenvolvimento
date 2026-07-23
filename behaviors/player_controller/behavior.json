@@ -117,5 +117,19 @@
     "plataforma",
     "pulo",
     "jogador"
-  ]
+  ],
+  "combina_bem": [
+    "particle_impact",
+    "sfx_player",
+    "floating_text",
+    "screen_shake",
+    "scene_transition",
+    "defeat_condition",
+    "hurtbox",
+    "state_machine"
+  ],
+  "custo": "medio",
+  "verbo_pt": "mover",
+  "verbo_en": "move",
+  "nivel": "avancado"
 }

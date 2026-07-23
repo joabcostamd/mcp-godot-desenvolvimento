@@ -96,5 +96,19 @@
     "configuracoes",
     "ui",
     "settings"
-  ]
+  ],
+  "combina_bem": [
+    "save_load",
+    "audio_manager",
+    "sfx_player",
+    "ambience_zone",
+    "screen_shake",
+    "state_machine",
+    "sprite_animator",
+    "character_creator"
+  ],
+  "custo": "medio",
+  "verbo_pt": "configurar",
+  "verbo_en": "configure",
+  "nivel": "intermediario"
 }

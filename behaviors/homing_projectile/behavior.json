@@ -97,5 +97,19 @@
   "version": "1.0.0",
   "category": "combate",
   "status": "implementado",
-  "godot_version": "4.7"
+  "godot_version": "4.7",
+  "combina_bem": [
+    "projectile",
+    "health",
+    "hurtbox",
+    "particle_impact",
+    "sfx_player",
+    "floating_text",
+    "screen_shake",
+    "knockback"
+  ],
+  "custo": "medio",
+  "verbo_pt": "perseguir",
+  "verbo_en": "home",
+  "nivel": "intermediario"
 }

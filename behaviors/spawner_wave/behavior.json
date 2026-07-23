@@ -141,5 +141,19 @@
     "horda",
     "inimigo",
     "survivor"
-  ]
+  ],
+  "combina_bem": [
+    "health",
+    "floating_text",
+    "wave_system",
+    "object_pool",
+    "sfx_player",
+    "hitbox",
+    "currency",
+    "hurtbox"
+  ],
+  "custo": "leve",
+  "verbo_pt": "gerar_inimigos",
+  "verbo_en": "spawn",
+  "nivel": "avancado"
 }

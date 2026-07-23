@@ -89,5 +89,19 @@
     "bullet_time",
     "slow_motion",
     "engine"
-  ]
+  ],
+  "combina_bem": [
+    "hit_stop",
+    "freeze_frame",
+    "health",
+    "hitbox",
+    "hurtbox",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake"
+  ],
+  "custo": "leve",
+  "verbo_pt": "controlar_tempo",
+  "verbo_en": "control_time",
+  "nivel": "intermediario"
 }

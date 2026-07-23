@@ -48,5 +48,19 @@
     "estrutura",
     "derrota",
     "game_over"
-  ]
+  ],
+  "combina_bem": [
+    "round_timer",
+    "player_controller",
+    "hurtbox",
+    "hitbox",
+    "health",
+    "particle_impact",
+    "sfx_player",
+    "screen_shake"
+  ],
+  "custo": "medio",
+  "verbo_pt": "definir_derrota",
+  "verbo_en": "define_defeat",
+  "nivel": "basico"
 }
