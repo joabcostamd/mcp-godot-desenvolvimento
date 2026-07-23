@@ -1609,11 +1609,11 @@
     "resultado": "3.1 concluida: budget_manage migrado para tools/rollups.py via create_manage_tool(). Removido de core/tool_definitions.py e server.py."
   },
   "fatia_4_2": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "c0be750eced7813d1d8cda7eee243db4129d49b0",
     "ficha": ".github/roadmap/ONDA_4_descoberta.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "4.2: tool_catalog+tool_groups coexistindo com catalog_search. Unificacao requer refatoracao de handlers — postergada."
+    "resultado": "4.2 concluida: tool_catalog+tool_groups depreciados. catalog_search unificado. 234 tools."
   },
   "fatia_4_3": {
     "status": "nao verificado",

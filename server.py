@@ -1582,8 +1582,6 @@ def _build_handlers() -> dict:
         "get_audit_log": _handle_get_audit_log,
         "get_audit_replay": _handle_get_audit_replay,
         "safe_write_gdscript": _handle_safe_write_gdscript,
-        "tool_catalog": _handle_tool_catalog,
-        "tool_groups": _handle_tool_groups,
         "game_serialize_state": _handle_game_serialize_state,
         "start_recording": _handle_start_recording,
         "stop_recording": _handle_stop_recording,
@@ -2673,19 +2671,6 @@ def _handle_safe_write_gdscript(args: dict) -> dict:
         try: from tools.editor_config import _notify_godot_file_changed; _notify_godot_file_changed(args["file_path"])
         except Exception: pass
     return result
-
-
-def _handle_tool_catalog(args: dict) -> dict:
-    return tool_catalog(
-        query=args.get("query", ""),
-        group=args.get("group", ""),
-        limit=args.get("limit", 20),
-        namespace=args.get("namespace", ""),
-    )
-
-
-def _handle_tool_groups(args: dict) -> dict:
-    return tool_groups(args["action"], args.get("group",""), args.get("enabled",True))
 
 
 def _handle_game_serialize_state(args: dict) -> dict:

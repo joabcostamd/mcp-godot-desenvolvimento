@@ -17,6 +17,8 @@ Origem: server.py linhas ~4600 e ~4996 (duplicados)
 from __future__ import annotations
 
 DEPRECATED_TOOLS: set[str] = {
+    # ONDA 4.2: unificados em catalog_search
+    "tool_catalog", "tool_groups",
     "add_audio_effect", "add_collision_shape", "add_control_node",
     "add_node", "add_script_signal", "add_script_variable",
     "add_state_transition", "attach_script", "build_export",
