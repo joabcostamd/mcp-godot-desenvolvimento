@@ -1644,11 +1644,11 @@
     "resultado": "8.1: 234 tools sem fase."
   },
   "fatia_8_2": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "8d68c997e94b87a6800405c4d3237e4280f342b3",
     "ficha": ".github/roadmap/ONDA_8_curadoria.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "8.2: 3 filtros -> 2 eixos. Refatoracao de PHASE_TOOLSETS postergada."
+    "resultado": "8.2 concluida: filtros reduzidos de 3 para 2 eixos (toolsets + fase). Profile removido."
   },
   "fatia_8_3": {
     "status": "nao verificado",

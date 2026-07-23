@@ -111,20 +111,9 @@ def _resolve_tool_profile() -> str | None:
     return None
 
 
-_ACTIVE_PROFILE = _resolve_tool_profile()
-if _ACTIVE_PROFILE and _ACTIVE_PROFILE != "full":
-    if _ACTIVE_PROFILE in TOOL_PROFILES:
-        _PROFILE_TOOLS = set(TOOL_PROFILES[_ACTIVE_PROFILE])
-        print(f"[MCP] Profile '{_ACTIVE_PROFILE}': {len(_PROFILE_TOOLS)} tools", file=sys.stderr)
-    else:
-        print(f"[MCP] Profile '{_ACTIVE_PROFILE}' desconhecido. Use: {sorted(TOOL_PROFILES.keys())}", file=sys.stderr)
-        _PROFILE_TOOLS = set(TOOL_PROFILES["dev"])  # fallback seguro
-elif _ACTIVE_PROFILE == "full":
-    _PROFILE_TOOLS = None  # sem filtro = todas as tools (~134)
-else:
-    # Default: full profile (sem filtro). Opcao C (CORE + fase) ja limita por fase
-    # Mantem maximo de 92 tools (PROTOTIPO), bem abaixo do limite de 128 do DeepSeek V4.
-    _PROFILE_TOOLS = None
+# ── ONDA 8.2: Profile removido (3 eixos → 2: toolsets + fase) ──
+# Filtro por fase já cobre a curadoria. Profile era redundante.
+_PROFILE_TOOLS = None
 
 # ── Feature 8: Toolsets por Fase (--phase) ────────────────────
 # Filtro dinâmico: consulta get_current_phase() do projeto ativo
@@ -1472,10 +1461,6 @@ def _make_import_handler(module_name: str, func_name: str):
     # ── PATCH 17: Filtrar por --toolsets se ativo ──
     if not _REGISTRY_VALIDATION_UNFILTERED and _ENABLED_TOOLS is not None:
         _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name in _ENABLED_TOOLS]
-
-    # ── GRUPO 3: Filtrar por --profile se ativo ──
-    if not _REGISTRY_VALIDATION_UNFILTERED and _PROFILE_TOOLS is not None:
-        _TOOL_DEFS_CACHE = [t for t in _TOOL_DEFS_CACHE if t.name in _PROFILE_TOOLS]
 
     # ── Feature 8: Filtrar por fase do projeto ativo (Opcao C) ──
     # _get_phase_tools() sempre retorna um set: CORE + fase atual, ou so CORE
