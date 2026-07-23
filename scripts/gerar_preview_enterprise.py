@@ -19,6 +19,13 @@ from gerar_preview_visual import (
     SCENE_FUNCTIONS, TEMPLATE_MAP,
     W, H, FPS, DURATION, N_FRAMES,
     get_behavior_dirs, load_behavior, save_behavior,
+    # Primitivas e utilidades para template adaptativo
+    _get_font, _alpha, _pulse, _blend, _ease_in_out,
+    draw_text_label, draw_badge, draw_ground, draw_character,
+    draw_health_bar, draw_projectile, draw_particle, draw_dialog_box,
+    C_BG, C_GROUND, C_GROUND_LINE, C_PLAYER, C_ENEMY,
+    C_HEALTH_BG, C_HEALTH, C_DAMAGE, C_PROJECTILE, C_PARTICLE,
+    C_TEXT, C_SUBTEXT, C_ACCENT, C_WHITE, C_ITEM,
 )
 
 # ── Adiciona mapeamentos críticos faltantes ─────────────────
@@ -134,6 +141,197 @@ TEMPLATE_MAP.update(EXTRA_MAPPINGS)
 
 def get_template(name):
     return TEMPLATE_MAP.get(name, "abstract")
+
+# ── TEMPLATE SYSTEM ADAPTATIVO ──────────────────────────────
+# Sobrescreve o scene_system genérico com versão que detecta subtipo
+
+def _system_subtype(data):
+    """Detecta o subtipo do behavior system pela descrição e nome."""
+    name = data.get("name","")
+    desc = (data.get("description_pt","") + " " + data.get("description_en","")).lower()
+    
+    # Prioridade: nome > descrição > tags
+    audio_names = {"audio_manager","sfx_player","music_playlist","ambience_zone","audio_visualizer"}
+    save_names = {"save_load","auto_save","save_slots","save_integrity","save_migration","encrypted_save","cloud_save","cross_save","checkpoint"}
+    network_names = {"network_sync","rpc_bridge","lobby","leaderboard"}
+    debug_names = {"debug_console","fps_counter","logger","crash_reporter","performance_monitor","profiler_hook"}
+    config_names = {"settings","input_manager","controller_remap","localization","profile_manager","mod_config"}
+    
+    if name in audio_names: return "audio"
+    if name in save_names: return "save"
+    if name in network_names: return "network"
+    if name in debug_names: return "debug"
+    if name in config_names: return "config"
+    
+    # Fallback por keywords na descrição
+    audio_kw = ["audio","som","sound","music","volume","sfx"]
+    save_kw = ["save","load","salvar","carregar","checkpoint","persistência"]
+    network_kw = ["network","sync","rpc","multiplayer","server"]
+    debug_kw = ["debug","console","log","crash","profiler","trace"]
+    
+    if any(kw in desc for kw in audio_kw) and name not in config_names: return "audio"
+    if any(kw in desc for kw in save_kw): return "save"
+    if any(kw in desc for kw in network_kw): return "network"
+    if any(kw in desc for kw in debug_kw): return "debug"
+    
+    return "generic"
+
+def scene_system_adaptive(data, frame_idx, n_frames):
+    """Template SYSTEM adaptativo — visual customizado por subtipo."""
+    from PIL import Image, ImageDraw
+    t = frame_idx / n_frames
+    img = Image.new("RGB", (W, H), C_BG)
+    draw = ImageDraw.Draw(img)
+    font_sm = _get_font(11)
+    font_md = _get_font(14)
+    font_lg = _get_font(20)
+    font_xl = _get_font(26)
+
+    subtype = _system_subtype(data)
+    name = data.get("name", "?").replace("_", " ").title()
+    cx, cy = W//2, H//2 - 20
+
+    # ── Cabeçalho comum ──
+    draw_text_label(draw, name, cx, 8, font_xl, C_ACCENT)
+    verb_line = "%s / %s" % (data.get("verbo_pt",""), data.get("verbo_en",""))
+    draw_text_label(draw, verb_line, cx, 40, font_sm, C_SUBTEXT)
+
+    # Badges
+    custo = data.get("custo", "leve")
+    nivel = data.get("nivel", "basico")
+    custo_c = {"leve": (80,200,120), "medio": (220,180,60), "pesado": (220,80,80)}.get(custo, C_SUBTEXT)
+    nivel_c = {"basico": (140,200,255), "intermediario": (180,160,255), "avancado": (255,180,100)}.get(nivel, C_SUBTEXT)
+    draw_badge(draw, custo.upper(), cx-100, 55, custo_c, font_sm)
+    draw_badge(draw, nivel.upper(), cx+30, 55, nivel_c, font_sm)
+
+    # ── Visual por subtipo ──
+    if subtype == "audio":
+        # Background pulsante para garantir variacao entre frames
+        bg_pulse = int(5 * _pulse(t, 2))
+        draw.rectangle([0, 0, W, H], fill=(C_BG[0]+bg_pulse, C_BG[1]+bg_pulse, C_BG[2]+bg_pulse))
+
+        # Ondas de áudio + ícone speaker com animacao forte
+        speaker_x, speaker_y = cx-80, cy+20
+        speaker_color = _alpha(C_ACCENT, 0.7 + 0.3*_pulse(t, 3))
+        draw.rectangle([speaker_x, speaker_y-10, speaker_x+16, speaker_y+10], fill=speaker_color)
+        draw.polygon([(speaker_x+16, speaker_y-16), (speaker_x+36, speaker_y-30),
+                      (speaker_x+36, speaker_y+30), (speaker_x+16, speaker_y+16)], fill=speaker_color)
+        # Ondas sonoras com amplitude forte e variada
+        for w in range(4):
+            wave_x = speaker_x + 50 + w*28
+            amp = 10 + int(16 * abs(math.sin(t*math.pi*4 + w*1.5)))
+            wave_alpha = 0.4 + 0.6*_pulse(t, 5+w)
+            wave_color = _alpha(C_ACCENT, wave_alpha)
+            draw.arc([wave_x, speaker_y-amp, wave_x+22, speaker_y+amp],
+                     0, int(math.pi*2), fill=wave_color, width=2+w)
+        # Texto pulsante indicando audio
+        freq_text = "~%dHz" % int(200 + 800*_pulse(t, 3))
+        draw_text_label(draw, freq_text, speaker_x+140, speaker_y, font_md, _alpha(C_TEXT, _pulse(t,2)))
+
+    elif subtype == "save":
+        # Disco de save + progresso circular
+        disk_r = 35
+        draw.ellipse([cx-disk_r, cy+10-disk_r, cx+disk_r, cy+10+disk_r],
+                     outline=C_ACCENT, width=3)
+        arc_angle = 360 * ((t * 1.5) % 1.0)
+        if arc_angle > 3:
+            draw.arc([cx-disk_r+4, cy+10-disk_r+4, cx+disk_r-4, cy+10+disk_r-4],
+                     0, min(360, arc_angle), fill=(80,220,120), width=4)
+        # "SAVE" label piscando
+        if _pulse(t, 2) > 0.5:
+            draw_text_label(draw, "SAVE", cx, cy+60, font_md, (80,220,120))
+
+    elif subtype == "network":
+        # Nós de rede conectados
+        nodes = [(cx-60, cy-10), (cx+60, cy-10), (cx, cy+50), (cx-40, cy+50), (cx+40, cy+50)]
+        # Conexões
+        for i, (x1, y1) in enumerate(nodes):
+            for j, (x2, y2) in enumerate(nodes):
+                if i < j:
+                    alpha = 0.15 + 0.1 * _pulse(t, 3+i+j)
+                    draw.line([x1, y1, x2, y2], fill=_alpha(C_ACCENT, alpha), width=1)
+        # Nós pulsando
+        for i, (nx, ny) in enumerate(nodes):
+            r = 6 + int(3*_pulse(t, 2+i))
+            draw.ellipse([nx-r, ny-r, nx+r, ny+r], fill=C_ACCENT)
+        # Pacotes viajando
+        pkg_t = (t * 2) % 1.0
+        pkg_idx = int(pkg_t * 4)
+        if pkg_idx < 4:
+            nx1, ny1 = nodes[pkg_idx]
+            nx2, ny2 = nodes[(pkg_idx+1)%4]
+            frac = (pkg_t * 4) % 1.0
+            px = int(nx1 + (nx2-nx1)*frac)
+            py = int(ny1 + (ny2-ny1)*frac)
+            draw.ellipse([px-4, py-4, px+4, py+4], fill=(255,220,80))
+
+    elif subtype == "debug":
+        # Console com linhas de log
+        console_x, console_y = cx-140, cy
+        draw.rounded_rectangle([console_x, console_y, console_x+280, console_y+120],
+                               radius=6, fill=(15,18,22), outline=C_ACCENT, width=1)
+        log_lines = [
+            ("[INFO]", "system initialized", (80,200,120)),
+            ("[DEBUG]", "processing data_%d" % int(t*10), C_ACCENT),
+            ("[WARN]", "threshold接近 limite", (220,180,60)),
+            ("[INFO]", "cycle complete in %.1fms" % (0.5+_pulse(t,3)*2), C_SUBTEXT),
+        ]
+        for i, (tag, msg, color) in enumerate(log_lines):
+            ly = console_y + 15 + i*24
+            draw_text_label(draw, tag, console_x+12, ly, font_sm, color, center=False)
+            draw_text_label(draw, msg, console_x+80, ly, font_sm, C_TEXT, center=False)
+        # Cursor piscando
+        if _pulse(t, 4) > 0.5:
+            draw.rectangle([console_x+270, console_y+107, console_x+278, console_y+117],
+                          fill=C_ACCENT)
+
+    elif subtype == "config":
+        # Sliders e toggles
+        configs = [
+            ("Master Vol", 0.8, (80,200,120)),
+            ("Music Vol", 0.6, C_ACCENT),
+            ("SFX Vol", 0.9, (180,160,255)),
+            ("Fullscreen", 1.0 if _pulse(t, 1) > 0.5 else 0.0, (255,180,100)),
+        ]
+        for i, (label, val, color) in enumerate(configs):
+            cy_i = cy - 20 + i*35
+            draw_text_label(draw, label, cx-150, cy_i, font_sm, C_TEXT, center=False)
+            # Slider track
+            track_x, track_y = cx-40, cy_i+6
+            draw.rectangle([track_x, track_y, track_x+180, track_y+6], fill=C_HEALTH_BG)
+            # Slider fill
+            fill_w = int(180 * (0.3 + 0.7*abs(math.sin(t*2+i))))
+            draw.rectangle([track_x, track_y, track_x+fill_w, track_y+6], fill=color)
+            # Knob
+            knob_x = track_x + fill_w
+            draw.ellipse([knob_x-5, track_y-2, knob_x+5, track_y+8], fill=color)
+
+    else:  # generic
+        # Visualização de dados padrão
+        for i in range(4):
+            bar_y = 85 + i*40
+            bar_w = 200 + int(150 * math.sin(t*2 + i))
+            draw.rectangle([cx-150, bar_y, cx-150+bar_w, bar_y+20],
+                          fill=_alpha(C_ACCENT, 0.2+i*0.05))
+            draw.rectangle([cx-150, bar_y, cx-150+bar_w, bar_y+20],
+                          outline=C_ACCENT, width=1)
+            draw_text_label(draw, "data_%d" % i, cx-160, bar_y+3, font_sm, C_SUBTEXT, center=False)
+        # Círculo central pulsante
+        pulse_r = 25 + int(8*_pulse(t, 3))
+        draw.ellipse([cx-pulse_r, cy+50-pulse_r, cx+pulse_r, cy+50+pulse_r],
+                     outline=_alpha(C_ACCENT, _pulse(t,2)*0.5), width=2)
+        draw.text((cx-15, cy+38), data.get("verbo_pt","..."), fill=C_TEXT, font=font_md)
+
+    # Gêneros no rodapé
+    genres = data.get("genres", [])[:5]
+    if genres:
+        genre_text = " Â· ".join(genres)
+        draw_text_label(draw, genre_text, cx, H-25, font_sm, C_SUBTEXT)
+
+    return img
+
+# Sobrescreve o scene_system genérico
+SCENE_FUNCTIONS["system"] = scene_system_adaptive
 
 # ── Encoders ────────────────────────────────────────────────
 FRAME_MS = 1000 // FPS
