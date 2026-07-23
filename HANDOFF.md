@@ -8,7 +8,7 @@
 ## Último Handoff (AGENTE 02 — 2026-07-23 — BLOCO TESTABILIDADE)
 
 **Worktree:** `mcp-godot-agente02` | **Branch:** `agente2/trabalho`
-**Commit:** `48b24a9` | **Push:** pendente
+**Commit:** `12f8d81` | **Push:** pendente
 
 ### Resumo
 Sessão focada no bloco Testabilidade: sota_1.6 (conflitos) + sota_1.7 (pares) +
@@ -17,7 +17,7 @@ behaviors: matriz de conflito, 1.881 testes de pares GdUnit4, mutation testing
 com 80% de detecção. 3 auditorias enterprise (20 issues corrigidos).
 
 ### Estado
-- Versão: v3.9.0 | Commit: pendente | Branch: agente2/trabalho
+- Versão: v3.9.0 | Commit: 12f8d81 | Branch: agente2/trabalho
 - sota_1.1: CONCLUÍDA — 249 behavior.json com combina_bem, custo, verbo_pt, verbo_en, nivel
 - sota_1.3: ⚠️ PARCIAL — 249 GIFs + 249 MP4s gerados, mas NÃO FINALIZADOS (ver pendência #1)
 - sota_1.6: CONCLUÍDA — check_conflicts() com cache thread-safe, 11/11 pytest
