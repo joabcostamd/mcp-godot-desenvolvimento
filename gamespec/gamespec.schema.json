@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mcp-godot-agent/gamespec.schema.json",
+  "title": "GameSpec",
+  "description": "DSL declarativa que descreve um jogo como composição de peças da biblioteca de behaviors.",
+  "type": "object",
+  "required": ["meta", "entidades", "regras"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["nome", "genero"],
+      "properties": {
+        "nome": {
+          "type": "string",
+          "description": "Nome do jogo."
+        },
+        "genero": {
+          "type": "string",
+          "description": "Gênero principal do jogo.",
+          "enum": [
+            "platformer", "topdown_shooter", "rpg", "roguelike",
+            "tower_defense", "fighting", "metroidvania", "bullet_hell",
+            "puzzle", "racing", "visual_novel", "rhythm", "generic"
+          ]
+        },
+        "idiomas": {
+          "type": "array",
+          "items": {"type": "string", "enum": ["pt", "en"]},
+          "default": ["pt", "en"],
+          "description": "Idiomas suportados."
+        },
+        "versao": {
+          "type": "string",
+          "description": "Versão do gamespec (semver)."
+        }
+      }
+    },
+    "entidades": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "tipo"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador único da entidade (ex: 'player', 'enemy_basic')."
+          },
+          "tipo": {
+            "type": "string",
+            "description": "Tipo base da entidade.",
+            "enum": ["character", "prop", "hud", "level", "projectile", "pickup", "trigger"]
+          },
+          "base_scene": {
+            "type": "string",
+            "description": "Caminho da cena base (ex: 'res://scenes/character_base.tscn'). Opcional — default por tipo."
+          },
+          "slots": {
+            "type": "object",
+            "description": "Slots de acoplamento (ex: {'weapon': 'res://...', 'head': null}).",
+            "additionalProperties": {
+              "type": ["string", "null"]
+            }
+          },
+          "behaviors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Nome do behavior (deve existir na biblioteca de 249)."
+                },
+                "params": {
+                  "type": "object",
+                  "description": "Parâmetros customizados do behavior.",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "niveis": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador do nível."
+          },
+          "seed": {
+            "type": "string",
+            "description": "Seed ou nome do nível base."
+          },
+          "fonte": {
+            "type": "string",
+            "enum": ["manual", "gerado"],
+            "default": "manual",
+            "description": "Origem do nível."
+          }
+        }
+      }
+    },
+    "regras": {
+      "type": "object",
+      "required": ["vitoria"],
+      "properties": {
+        "vitoria": {
+          "type": "string",
+          "description": "Condição de vitória.",
+          "enum": [
+            "destruir_todos", "chegar_em", "sobreviver_tempo",
+            "pontos_minimos", "coletar_todos", "derrotar_chefe"
+          ]
+        },
+        "derrota": {
+          "type": "string",
+          "description": "Condição de derrota.",
+          "enum": [
+            "hp_zero", "tempo_esgotado", "jogador_destruido",
+            "todos_inimigos_fugiram"
+          ]
+        },
+        "pontuacao": {
+          "type": "string",
+          "description": "Sistema de pontuação.",
+          "enum": ["por_inimigo", "por_tempo", "por_coleta", "combo"]
+        }
+      }
+    },
+    "estilo": {
+      "type": "object",
+      "properties": {
+        "paleta": {
+          "type": "string",
+          "description": "Paleta de cores."
+        },
+        "fonte": {
+          "type": "string",
+          "description": "Fonte principal."
+        },
+        "kit": {
+          "type": "string",
+          "description": "Kit de assets (ex: 'kenney_1bit', 'kaykit_dungeon')."
+        }
+      }
+    }
+  }
+}

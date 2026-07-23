@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "nome": "Breakout Mínimo",
+    "genero": "puzzle",
+    "idiomas": ["pt", "en"],
+    "versao": "0.1.0"
+  },
+  "entidades": [
+    {
+      "id": "paddle",
+      "tipo": "character",
+      "behaviors": [
+        {"name": "player_controller", "params": {"speed": 400}},
+        {"name": "hitbox", "params": {}},
+        {"name": "screen_shake", "params": {}}
+      ]
+    },
+    {
+      "id": "ball",
+      "tipo": "projectile",
+      "behaviors": [
+        {"name": "projectile", "params": {"speed": 300, "bounce": true}},
+        {"name": "hitbox", "params": {}},
+        {"name": "sfx_player", "params": {}}
+      ]
+    },
+    {
+      "id": "brick",
+      "tipo": "prop",
+      "behaviors": [
+        {"name": "destructible", "params": {"hp": 1}},
+        {"name": "hurtbox", "params": {}},
+        {"name": "particle_impact", "params": {}},
+        {"name": "score", "params": {"points": 10}}
+      ]
+    },
+    {
+      "id": "hud",
+      "tipo": "hud",
+      "behaviors": [
+        {"name": "health_bar", "params": {"show_labels": false}},
+        {"name": "score", "params": {}}
+      ]
+    }
+  ],
+  "niveis": [
+    {"id": "level_01", "seed": "default", "fonte": "manual"}
+  ],
+  "regras": {
+    "vitoria": "destruir_todos",
+    "derrota": "hp_zero",
+    "pontuacao": "por_inimigo"
+  },
+  "estilo": {
+    "paleta": "retro_8bits",
+    "fonte": "default"
+  }
+}

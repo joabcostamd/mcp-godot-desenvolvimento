@@ -16,6 +16,7 @@ from tools.gamespec_ops import (
     compile_gamespec,
     validate_gamespec,
 )
+import os
 
 
 class TestCheckConflicts:
@@ -74,22 +75,40 @@ class TestCache:
 
 
 class TestGameSpecStubs:
-    """Stubs de sota_1.5 devem ser explícitos sobre não estarem prontos."""
+    """sota_1.5: Validação e compilação de GameSpec."""
 
-    def test_compile_gamespec_levanta_not_implemented(self):
-        """compile_gamespec deve levantar NotImplementedError, não retornar False."""
-        with pytest.raises(NotImplementedError):
-            compile_gamespec("teste.json", ".")
+    def test_compile_gamespec_gera_tscn(self, tmp_path):
+        """compile_gamespec deve gerar um .tscn a partir do gamespec de exemplo."""
+        ok, msg = compile_gamespec("gamespec/examples/breakout.json", str(tmp_path))
+        assert ok is True, f"Falhou: {msg}"
+        assert "Cena compilada" in msg
+        # Verifica que o arquivo foi gerado (nome inclui acento do título)
+        import glob
+        tscn_files = list(glob.glob(os.path.join(str(tmp_path), "*.tscn")))
+        assert len(tscn_files) > 0, f"Nenhum .tscn gerado em {tmp_path}"
 
     def test_validate_gamespec_json_valido(self):
-        """validate_gamespec com JSON válido retorna True."""
-        ok, erros = validate_gamespec("behaviors/behavior.schema.json")
-        # behavior.schema.json é JSON válido
-        assert ok is True
-        assert erros == []
+        """validate_gamespec com o exemplo breakout deve passar."""
+        ok, erros = validate_gamespec("gamespec/examples/breakout.json")
+        assert ok is True, f"Erros: {erros}"
 
     def test_validate_gamespec_arquivo_inexistente(self):
         """validate_gamespec com arquivo inexistente retorna False."""
         ok, erros = validate_gamespec("arquivo_que_nao_existe.json")
         assert ok is False
         assert len(erros) > 0
+
+    def test_validate_gamespec_behavior_inexistente(self, tmp_path):
+        """Gamespec com behavior que não existe deve falhar validação."""
+        import json
+        bad_gs = {
+            "meta": {"nome": "Teste", "genero": "platformer"},
+            "entidades": [{"id": "e1", "tipo": "character", "behaviors": [{"name": "behavior_inexistente_xyz"}]}],
+            "regras": {"vitoria": "destruir_todos"},
+        }
+        path = os.path.join(str(tmp_path), "bad.json")
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(bad_gs, f)
+        ok, erros = validate_gamespec(path)
+        assert ok is False
+        assert any("não existe na biblioteca" in e for e in erros)
