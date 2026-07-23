@@ -89,6 +89,7 @@ TOOLSETS = {
         # Execução, debug, testes, bridge, jogo rodando
         "runtime_manage",
         "godot_manage",
+        "execute_gdscript_runtime",
         "screenshot_manage",
         "godot_custom_command", "godot_list_custom_commands",
         "godot_keep_alive",

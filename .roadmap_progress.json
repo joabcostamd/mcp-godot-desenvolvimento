@@ -1728,18 +1728,18 @@
     "resultado": "P.3: set/get_node_property — bug documentado."
   },
   "fatia_P_4": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "0eb3ca8c146e1944948fa3303efb0d30dbfeee40",
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "P.4: INV-03 falso positivo documentado."
+    "resultado": "P.4: INV-03 corrigido — execute_gdscript_runtime adicionado ao namespace runtime em TOOLSETS."
   },
   "fatia_P_5": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "0eb3ca8c146e1944948fa3303efb0d30dbfeee40",
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "P.5: 362 vs 166 testes — divergencia documentada."
+    "resultado": "P.5: 170 pass, 1 fail (INV-03, agora corrigido), 8 xfail = 179 testes."
   },
   "fatia_P_6": {
     "status": "concluida",
@@ -1777,10 +1777,10 @@
     "resultado": "P.10: mencoes a cline em instalar.py sao historicas."
   },
   "fatia_P_11": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "0eb3ca8c146e1944948fa3303efb0d30dbfeee40",
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "P.11: ruff nao instalado no venv."
+    "resultado": "P.11: ruff 0.15.22 instalado no venv."
   }
 }
