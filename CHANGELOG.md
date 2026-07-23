@@ -1,5 +1,31 @@
 # CHANGELOG — mcp-godot-desenvolvimento
 
+## v3.9.0 (2026-07-23) — Bloco Testabilidade (SOTA-1: sota_1.6 a 1.8)
+
+### sota_1.6: Matriz de conflito executável
+- `tools/gamespec_ops.py`: `check_conflicts()` bidirecional com validação de existência,
+  sugestão de alternativa via `combina_bem` excluindo conflitos, cache thread-safe
+  com double-check locking, path absoluto via `__file__`, tratamento de JSON corrompido.
+- Stubs `validate_gamespec()` e `compile_gamespec()` (→ `NotImplementedError`).
+- 11/11 pytest.
+
+### sota_1.7: Testes de composição dirigidos
+- `scripts/gerar_testes_pares.py`: gera 1.881 arquivos `.gd` GdUnit4 para cada par
+  `combina_bem` único. Template validado (health+hitbox PASS). Sanitização de sinais.
+- `scripts/rodar_testes_pares.py`: runner com lotes, JUnit XML, match exato de nomes.
+  Amostra de 30 pares executada.
+- `tests_godot/pairs/`: 1.881 testes gerados (~3.9MB).
+
+### sota_1.8: Mutation testing
+- `scripts/mutar.py`: 3 estratégias (comparador, booleano, emissão de sinal).
+  Backup de segurança em arquivo separado. Preservação de line endings.
+  80% detecção, 0 mutantes vivos em amostra de 10 behaviors.
+
+### Infraestrutura
+- `scripts/_godot_utils.py`: módulo compartilhado (elimina duplicação entre scripts).
+- `stdin=DEVNULL` em todos os `subprocess.run` (regra R12 do projeto).
+- `.gitignore`: adicionado `reports/` e `*.mutar_backup`.
+
 ## v3.8.0 (2026-07-21) — Reorganização de Tools F0-F5
 
 ### F5: Migração para domínios (5 concluídos)

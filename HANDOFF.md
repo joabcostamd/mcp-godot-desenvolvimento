@@ -5,29 +5,60 @@
 
 ---
 
-## Último Handoff (AGENTE 02 — 2026-07-23 — ENCERRAMENTO)
+## Último Handoff (AGENTE 02 — 2026-07-23 — BLOCO TESTABILIDADE)
 
 **Worktree:** `mcp-godot-agente02` | **Branch:** `agente2/trabalho`
-**Commit:** `a04e37f` | **Push:** OK
+**Commit:** `48b24a9` | **Push:** pendente
 
 ### Resumo
-Sessão focada em sota_1.1 (enriquecer fichas) + sota_1.3 (GIFs de preview).
-249 behaviors enriquecidos com 5 campos novos. Sistema completo de previews
-visuais com 10 templates + template system adaptativo (6 subtipos).
-Pipeline Enterprise: gifski + FFmpeg + Cairo. 249 GIFs + 249 MP4s gerados.
+Sessão focada no bloco Testabilidade: sota_1.6 (conflitos) + sota_1.7 (pares) +
+sota_1.8 (mutação). Infraestrutura completa de verificação de composição de
+behaviors: matriz de conflito, 1.881 testes de pares GdUnit4, mutation testing
+com 80% de detecção. 3 auditorias enterprise (20 issues corrigidos).
 
 ### Estado
-- Versão: v3.8.0 | Commit: a04e37f | Branch: agente2/trabalho
+- Versão: v3.9.0 | Commit: pendente | Branch: agente2/trabalho
 - sota_1.1: CONCLUÍDA — 249 behavior.json com combina_bem, custo, verbo_pt, verbo_en, nivel
-- sota_1.3: CONCLUÍDA — 249 GIFs (gifski, 51KB médio) + 249 MP4s (FFmpeg, 17KB médio)
+- sota_1.3: ⚠️ PARCIAL — 249 GIFs + 249 MP4s gerados, mas NÃO FINALIZADOS (ver pendência #1)
+- sota_1.6: CONCLUÍDA — check_conflicts() com cache thread-safe, 11/11 pytest
+- sota_1.7: CONCLUÍDA — 1.881 testes GdUnit4 gerados, amostra 30 pares validada
+- sota_1.8: CONCLUÍDA — mutation testing 80% detecção, 0 mutantes vivos
 - Templates: 10 cenas visuais + 6 subtipos adaptativos (system)
-- Cobertura: 246/249 mapeados, 5 abstract genuínos
+
+### 🚨 PENDÊNCIA BLOQUEANTE: sota_1.3 — GIFs NÃO FINALIZADOS
+
+**O que falta:** os 249 GIFs e 249 MP4s foram gerados, mas o Joab NÃO os
+revisou nem aprovou. A fatia NÃO está concluída. Não marcar como CONCLUÍDA
+até que o Joab confirme.
+
+**O que está feito:** pipeline funcional (gifski + FFmpeg + Cairo), 10 templates
+visuais, 6 subtipos adaptativos, scripts `gerar_preview_enterprise.py` e
+`gerar_preview_visual.py` prontos. Os arquivos estão em `art_cache/`.
+
+**O que falta decidir:** qualidade visual dos GIFs, tamanho final, quais
+behaviors abstratos precisam de overlay diferente, se os 249 MP4s são
+necessários ou só GIFs bastam.
 
 ### Pendências
-- [ ] sota_1.7 — Testes de composição dirigidos (pares combina_bem) [ALTA]
-- [ ] sota_1.8 — Mutation testing (amostra) [MÉDIA]
+- [ ] **#1 sota_1.3 — FINALIZAR GIFs (revisão Joab)** [🚨 BLOQUEANTE]
+- [ ] sota_1.2 — Busca semântica bilíngue (BGE-M3) [ALTA]
+- [ ] sota_1.4 — Tradutor de intenção v0 [SÊNIOR] [ALTA]
+- [ ] sota_1.5 — GameSpec v0 (DSL do jogo) [SÊNIOR] [ALTA]
 - [ ] sota_2.1 — Slots + herança de cena [MÉDIA]
 - [ ] sota_2.2 — Três sementes jogáveis [SÊNIOR] [ALTA]
+
+### Próximo bloco sugerido
+**Cérebro** (sota_1.2 + sota_1.4): busca semântica + tradutor de intenção.
+Depende de venv_ml (Python 3.12). Precisa instalar FlagEmbedding.
+
+### Arquivos-chave (novos)
+- `tools/gamespec_ops.py` — check_conflicts() enterprise-grade
+- `scripts/_godot_utils.py` — utilitários compartilhados Godot CLI
+- `scripts/gerar_testes_pares.py` — gerador de 1.881 testes GdUnit4
+- `scripts/rodar_testes_pares.py` — runner JUnit XML com lotes
+- `scripts/mutar.py` — mutation testing com backup de segurança
+- `tests/test_gamespec_ops.py` — 11 testes pytest
+- `tests_godot/pairs/` — 1.881 arquivos .gd (~3.9MB)
 
 ### Contexto que não está no código
 - `gerar_preview_enterprise.py` é o wrapper principal (importa do `gerar_preview_visual.py`)

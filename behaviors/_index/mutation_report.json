@@ -1,0 +1,193 @@
+{
+  "meta": {
+    "amostra": 10,
+    "mutacoes_por_behavior": 3,
+    "total_mutantes": 30,
+    "mortos": 24,
+    "vivos": 0,
+    "taxa_deteccao": 80.0
+  },
+  "resultados": [
+    {
+      "behavior": "achievement",
+      "mutacao": "troca_>_por_>=",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "achievement",
+      "mutacao": "inverte_booleano_default",
+      "status": "nao_aplicavel",
+      "motivo": "Mutação não alterou o código"
+    },
+    {
+      "behavior": "achievement",
+      "mutacao": "comenta_emit",
+      "status": "morto",
+      "exit_code": 3221225477
+    },
+    {
+      "behavior": "camera_path",
+      "mutacao": "troca_>_por_>=",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "camera_path",
+      "mutacao": "inverte_booleano_default",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "camera_path",
+      "mutacao": "comenta_emit",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "cloud_save",
+      "mutacao": "troca_>_por_>=",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "cloud_save",
+      "mutacao": "inverte_booleano_default",
+      "status": "nao_aplicavel",
+      "motivo": "Mutação não alterou o código"
+    },
+    {
+      "behavior": "cloud_save",
+      "mutacao": "comenta_emit",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "deck",
+      "mutacao": "troca_>_por_>=",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "deck",
+      "mutacao": "inverte_booleano_default",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "deck",
+      "mutacao": "comenta_emit",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "destructible",
+      "mutacao": "troca_>_por_>=",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "destructible",
+      "mutacao": "inverte_booleano_default",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "destructible",
+      "mutacao": "comenta_emit",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "dissolve",
+      "mutacao": "troca_>_por_>=",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "dissolve",
+      "mutacao": "inverte_booleano_default",
+      "status": "nao_aplicavel",
+      "motivo": "Mutação não alterou o código"
+    },
+    {
+      "behavior": "dissolve",
+      "mutacao": "comenta_emit",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "game_speed_control",
+      "mutacao": "troca_>_por_>=",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "game_speed_control",
+      "mutacao": "inverte_booleano_default",
+      "status": "nao_aplicavel",
+      "motivo": "Mutação não alterou o código"
+    },
+    {
+      "behavior": "game_speed_control",
+      "mutacao": "comenta_emit",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "l_system",
+      "mutacao": "troca_>_por_>=",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "l_system",
+      "mutacao": "inverte_booleano_default",
+      "status": "nao_aplicavel",
+      "motivo": "Mutação não alterou o código"
+    },
+    {
+      "behavior": "l_system",
+      "mutacao": "comenta_emit",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "mod_sandbox",
+      "mutacao": "troca_>_por_>=",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "mod_sandbox",
+      "mutacao": "inverte_booleano_default",
+      "status": "nao_aplicavel",
+      "motivo": "Mutação não alterou o código"
+    },
+    {
+      "behavior": "mod_sandbox",
+      "mutacao": "comenta_emit",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "tooltip",
+      "mutacao": "troca_>_por_>=",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "tooltip",
+      "mutacao": "inverte_booleano_default",
+      "status": "morto",
+      "exit_code": 105
+    },
+    {
+      "behavior": "tooltip",
+      "mutacao": "comenta_emit",
+      "status": "morto",
+      "exit_code": 105
+    }
+  ],
+  "reforco_teste": []
+}
