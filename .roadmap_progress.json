@@ -1756,11 +1756,11 @@
     "resultado": "P.7: config.local.json.example criado."
   },
   "fatia_P_8": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "a4e41167f6b9c55ef41d4e99dfacffbe2ac22eed",
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
-    "resultado": "P.8: 38 dominios — auditoria de consistencia pendente."
+    "resultado": "P.8: 38 dominios auditados. Todos com manifest.py. 33 com 6 arquivos. 5 com menos: camera(2), navigation(2), shader(2), physics(5), ui(5)."
   },
   "fatia_P_9": {
     "status": "nao verificado",
