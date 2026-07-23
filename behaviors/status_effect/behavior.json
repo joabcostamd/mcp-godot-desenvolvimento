@@ -138,5 +138,6 @@
   "verbo_en": "apply_effect",
   "nivel": "avancado",
   "preview_gif": "preview.gif",
-  "preview_type": "visual"
+  "preview_type": "visual",
+  "preview_mp4": "preview.mp4"
 }

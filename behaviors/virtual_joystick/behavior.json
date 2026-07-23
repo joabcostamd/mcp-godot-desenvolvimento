@@ -59,5 +59,6 @@
   "verbo_en": "virtual_joystick",
   "nivel": "basico",
   "preview_gif": "preview.gif",
-  "preview_type": "visual"
+  "preview_type": "visual",
+  "preview_mp4": "preview.mp4"
 }

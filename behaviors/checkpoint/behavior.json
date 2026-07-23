@@ -79,5 +79,6 @@
   "verbo_en": "save_progress",
   "nivel": "intermediario",
   "preview_gif": "preview.gif",
-  "preview_type": "visual"
+  "preview_type": "visual",
+  "preview_mp4": "preview.mp4"
 }

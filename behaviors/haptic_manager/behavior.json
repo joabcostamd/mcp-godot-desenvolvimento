@@ -58,5 +58,6 @@
   "verbo_en": "haptic",
   "nivel": "intermediario",
   "preview_gif": "preview.gif",
-  "preview_type": "visual"
+  "preview_type": "visual",
+  "preview_mp4": "preview.mp4"
 }

@@ -59,5 +59,6 @@
   "verbo_en": "sync_network",
   "nivel": "intermediario",
   "preview_gif": "preview.gif",
-  "preview_type": "visual"
+  "preview_type": "visual",
+  "preview_mp4": "preview.mp4"
 }

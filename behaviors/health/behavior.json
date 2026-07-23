@@ -197,5 +197,6 @@
   "verbo_en": "manage_health",
   "nivel": "avancado",
   "preview_gif": "preview.gif",
-  "preview_type": "visual"
+  "preview_type": "visual",
+  "preview_mp4": "preview.mp4"
 }
