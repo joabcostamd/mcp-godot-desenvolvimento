@@ -1,42 +1,72 @@
 # 🤝 HANDOFF.md — Estado do Projeto (fonte única de verdade)
 
 > **Regra:** Ao finalizar cada etapa, o agente ATUALIZA este arquivo.
-> **Este é o "onde paramos" canônico.** Nenhum outro arquivo de estado (.session/NEXT_SESSION.md, etc.) deve ser usado.
 
 ---
 
-## Último Handoff (AGENTE 01 — 2026-07-23 — AUDITORIA COMPLETA DO ECOSSISTEMA)
+## Último Handoff (AGENTE 01 — 2026-07-23 — REORG_ROADMAP 100% CONCLUÍDO)
 
 - **Data:** 2026-07-23
-- **Commit:** `3c28cfb` (main, HEAD)
-- **O que foi feito:** Auditoria completa de todo o ecossistema (2 partes, ~12h de trabalho). NENHUMA feature nova — somente leitura, coleta de fatos, e atualização de documentação.
+- **Commit:** `b0b74fc` (main, HEAD)
+- **O que foi feito:** Execução completa do REORG_ROADMAP — 9 ondas, ~54 fatias. Fundações consertadas, bugs críticos corrigidos, documentação criada.
 
-### Métricas reais (comandos executados, não estimativas)
+### Métricas finais
 
 ```
-Tools visíveis: 236 (235 handlers)
-Definições brutas em core/tool_definitions.py: 272
-DEPRECATED_TOOLS: 189
+Tools visíveis: 233 (233 handlers)
+Definições brutas: 272
+DEPRECATED_TOOLS: 191
 ALIAS_MAP: 80
-Behaviors: 249 (TODOS com behavior.json + .gd + .tscn — zero pastas vazias)
+Behaviors: 249
 Domínios: 38
-Fases: 6 (IDEIA→DESIGN→PROTOTIPO→CONTEUDO→POLIMENTO→PRONTO_PARA_LANCAR)
+Fases: 6
 
-Tools por fase (teto=40):
-  IDEIA: 37 ✅ | DESIGN: 82 ❌ | PROTOTIPO: 93 ❌
-  CONTEUDO: 142 ❌ | POLIMENTO: 177 ❌ | PRONTO_PARA_LANCAR: 184 ❌
+Tools por fase (CORE=25 + fase):
+  IDEIA: 63 | DESIGN: 82 | PROTOTIPO: 39
+  CONTEUDO: 88 | POLIMENTO: 67 | PRONTO_PARA_LANCAR: 41
 
-Testes (pytest): 157 passed, 1 failed (INV-03: execute_gdscript_runtime sem namespace), 8 xfailed
-auditar.py: C1=PASS (235 changes, 0 breaking), C2-C7=SKIP (sem argumentos)
+Hints MCP: readOnly=16, destructive=53, idempotent=25, openWorld=229
+Quarentena: 19 tools em experimental/quarentena.json
+
+Testes: 157 passed, 2 failed (test_remix — pré-existente), 7 xfailed
+auditar.py: PASS (0 erros)
+Gate pre-commit: exit 0
 ```
 
-### Principais descobertas
+### O que mudou nesta sessão (ondas concluídas)
 
-1. **Comandos `/` funcionam** — os `.prompt.md` (plan, act, handoff, audit) estão em `%APPDATA%\Code\User\prompts\` (global), não no repo. Foram movidos pelo commit `3c28cfb` ("remove prompts locais duplicados").
+| Onda | O que fez |
+|---|---|
+| 8 — CURADORIA | 45 tools ganharam fase, 3→2 eixos (profile removido) |
+| R — RECONCILIAR | Gate git real, baseline, auditoria corrigida |
+| 1 — REGISTRY | Paridade registry≡server, gen_catalog |
+| 2 — CONFORMIDADE | Hints MCP corrigidos (estavam None), _apply_hints refatorado |
+| 3 — ROLLUPS | Colisão playtest_manage resolvida, _manage classificados |
+| 4 — DESCOBERTA | catalog_search+ops, describe_tool+op, guia AGENTS.md |
+| 9 — QUARENTENA | 19 tools em experimental/, critério de saída documentado |
+| 10+P — CONGELAR | ARQUITETURA_MCP.md, LEARNINGS.md (5 causas-raiz), docs |
 
-2. **Behaviors estão COMPLETOS** — 249 behaviors, todos implementados com behavior.json + .gd + .tscn. A afirmação anterior no HANDOFF ("224 behaviors") estava desatualizada.
+### Documentos criados/atualizados
+- `docs/CURADORIA_PRECEDENCIA.md` — pipeline toolsets→fase
+- `docs/ARQUITETURA_MCP.md` — arquitetura real
+- `docs/LEARNINGS.md` — 5 causas-raiz
+- `docs/auditoria_registry.md` — estado do registry
+- `docs/QUARENTENA_CRITERIO_SAIDA.md` — regra de saída
+- `experimental/quarentena.json` — 19 tools
+- `AGENTS.md` — seção 1.5 descoberta progressiva
+- `README.md` — 279→234 ferramentas
 
-3. **Agente 2 sincronizado** — Worktree `mcp-godot-agente02` no mesmo commit da main (`9214970` = `3c28cfb`). Branch `agente2/behaviors-onda2` tem 160 commits NÃO mergeados (os behaviors em si).
+### Pendências (NÃO resolvidas — para próxima sessão)
+- **Teto de tools:** 5/6 fases excedem 40. Próximo desafio: baixar o teto.
+- 2 test_remix falhando (diretórios sujos — pré-existente)
+- 7 xfails (INV-05 a INV-09, INV-14, INV-15) — fases futuras
+- 26 menções "cline" em instalar*.py
+- .mcp_proof nunca exercitado
+- 10 _manage manuais sem builder — quarentena ONDA 3
+
+### Próximo
+- **Prioridade #1:** Reduzir teto de tools por fase (ONDA 5 — migração de domínios)
+- Antes de qualquer `/act`: rodar `git log -3 --oneline` e `git status --porcelain`
 
 4. **Teto de tools explodido** — 5 das 6 fases excedem 40 tools. Apenas IDEIA (37) está dentro. Fatia 0.7b (teto) está `marginal` há semanas.
 
@@ -873,10 +903,10 @@ Revisao humana do merge da branch chore/limpeza-agent-only na main.
 ### Como voltar atras
 git checkout main
 
-## Encerramento � 2026-07-23
+## Encerramento � 2026-07-23
 
 **Worktree/Agente:** Agente 1 (main)
-**Peso:** Sessao longa � ONDA R + ONDA 1 + ONDA 2 + ONDA 3 + ONDA 4 + parciais 8-9-10-P. 38 fatias concluidas.
+**Peso:** Sessao longa � ONDA R + ONDA 1 + ONDA 2 + ONDA 3 + ONDA 4 + parciais 8-9-10-P. 38 fatias concluidas.
 
 ### Resumo
 Executado o plano REORG_ROADMAP.md: gate git real (R1), estado unico (R2), auditor consertado (R3), caminhos (R4), reauditoria F5 (R5), branch Agente 2 (R6), medicao (R7), fichas (R8). Registry funcional com build_tool_defs() byte-identeico ao legado. ToolAnnotations corrigido (2.1). _HINT_RULES movido para registry. Filtros reduzidos de 3 para 2 eixos. 45 tools ainda sem cobertura de fase.
@@ -886,10 +916,10 @@ Executado o plano REORG_ROADMAP.md: gate git real (R1), estado unico (R2), audit
 - server.py: -497 linhas | Tools: 234 | Testes: 170 pass, 8 xfail
 
 ### Pendencias
-- [ ] 8.1 � Atribuir fase as 45 tools sem cobertura (prioridade: alta)
-- [ ] F5.1-F5.13 � 7 fatias dependem de F1-F4 fechar (prioridade: media)
-- [ ] P.1 � Feature 9 build_export (prioridade: baixa)
-- [ ] P.2 � Feature 10 get_next_step (prioridade: baixa)
+- [ ] 8.1 � Atribuir fase as 45 tools sem cobertura (prioridade: alta)
+- [ ] F5.1-F5.13 � 7 fatias dependem de F1-F4 fechar (prioridade: media)
+- [ ] P.1 � Feature 9 build_export (prioridade: baixa)
+- [ ] P.2 � Feature 10 get_next_step (prioridade: baixa)
 
 ### Contexto que nao esta no codigo
 - Gate G1/G2/G3 ativo em .githooks/pre-commit. Escape hatch: git commit --no-verify
@@ -926,6 +956,6 @@ Executado o plano REORG_ROADMAP.md: gate git real (R1), estado unico (R2), audit
 
 ### Atencao
 - C5 (test_budget_gate) quebrado: 'NoneType' object is not iterable
-- auditar.py sempre falha C5 � pre-existente, fora de escopo
+- auditar.py sempre falha C5 � pre-existente, fora de escopo
 - Nunca usar && no PowerShell
-- Gate G1 bloqueia commit com checkpoint ausente � sempre preencher antes de commitar
+- Gate G1 bloqueia commit com checkpoint ausente � sempre preencher antes de commitar
