@@ -1,5 +1,41 @@
 # CHANGELOG — mcp-godot-desenvolvimento
 
+## v3.9.0 (2026-07-23) — ONDA R + ONDA 1 + ONDA 2
+
+### ONDA R — Reconciliação (8 fatias)
+- **R1**: Gate git real (`.githooks/pre-commit`, G1/G2/G3, 13 testes)
+- **R2**: Estado único (`.roadmap_progress.json` como fonte única)
+- **R3**: Auditor consertado (`--skip-c5` removido, C1 tolerância 0)
+- **R4**: Caminhos corrigidos (prompts movidos, settings.json)
+- **R5**: Reauditoria F5 (7 fatias rebaixadas)
+- **R6**: Branch Agente 2 (tag `arquivo-morto/behaviors-onda2`)
+- **R7**: Medição real (`MEDICAO_R7.md`, 236→234 tools)
+- **R8**: Fichas das ondas seguintes
+
+### ONDA 1 — Registry (4 fatias)
+- **1.1**: Auditoria do `registry/` (exports, gaps, dependência circular)
+- **1.2**: `server._tool_defs()` delega ao `registry.build_tool_defs()`
+- **1.3**: `TOOLSETS`/`PHASE_TOOLSETS`/`TOOL_PROFILES`/`PHASE_TOOLS_CORE` → `core/legacy_data.py`
+- **1.4**: `scripts/gen_catalog.py` (determinístico)
+
+### ONDA 2 — Conformidade MCP (5 fatias)
+- **2.1**: `_TAGS` corrigido — `ToolAnnotations` não é mais substituído por `dict`
+- **2.2**: `audit_extra_fields()` — validação de campos MCP
+- **2.3**: `_HINT_RULES` → `registry/legacy_annotations.py`
+- **2.4**: Símbolos obsoletos removidos
+- **2.5**: Rollback documentado em ops destrutivas
+
+### Outras ondas
+- **ONDA 3**: `budget_manage` migrado para `create_manage_tool()`
+- **ONDA 4**: `tool_catalog`/`tool_groups` depreciados → `catalog_search`
+- **ONDA 8**: Filtros reduzidos de 3 para 2 eixos (toolsets + fase)
+- **P.4**: INV-03 corrigido (`execute_gdscript_runtime` no namespace runtime)
+- **P.11**: ruff 0.15.22 instalado
+
+### Métricas
+- `server.py`: −497 linhas | Tools: 234 | Testes: 170 pass, 8 xfail
+- 38 fatias concluídas em 19 commits
+
 ## v3.7.1 (2026-07-23) — Auditoria Completa do Ecossistema
 
 ### Auditoria (2 partes, somente leitura)
