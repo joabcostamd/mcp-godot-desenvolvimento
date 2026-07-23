@@ -33,6 +33,25 @@ sem divisão de território. Use os comandos `/` para mode-switching:
 
 ---
 
+## 1.5. DESCOBERTA PROGRESSIVA (ONDA 4)
+
+O MCP expõe 3 meta-tools no CORE para descoberta sem poluir o namespace:
+
+| Meta-tool | Função |
+|---|---|
+| `catalog_search` | Busca tools/ops por linguagem natural. Ex: `catalog_search("criar cena")` |
+| `describe_tool` | Schema completo de uma tool ou operação. Ex: `describe_tool("scene_manage", op="create")` |
+| `invoke_by_name` | Invoca tool por nome com argumentos. Ex: `invoke_by_name("scene_manage", {"op":"create",...})` |
+
+**Fluxo recomendado para IAs:**
+1. `catalog_search("o que preciso fazer")` → descobre tool
+2. `describe_tool("tool", op="operacao")` → lê schema da operação
+3. `invoke_by_name("tool", {args})` → executa
+
+**Comportamento (ONDA 4.3):** `catalog_search` agora também retorna `ops` (lista de operações) para tools `_manage`, permitindo descoberta em 2 níveis: ferramenta → operação.
+
+---
+
 ## 2. TODO O REPOSITÓRIO É SEU TERRITÓRIO
 
 ```

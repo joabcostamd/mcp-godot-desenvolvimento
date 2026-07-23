@@ -23,26 +23,37 @@ logger = logging.getLogger("mcp-godot.meta_ops")
 
 
 def catalog_search(query: str = "", group: str = "", limit: int = 20) -> dict:
-    """Busca ferramentas por linguagem natural (meta-tool do perfil lean).
+    """Busca ferramentas e operações por linguagem natural (meta-tool do perfil lean).
 
-    Wrapper sobre tool_catalog que aceita busca textual e/ou grupo.
+    Pesquisa em nomes, descrições e operações (ops) de tools _manage.
     Retorna lista de ferramentas que correspondem à consulta.
 
     Args:
         query: Texto parcial de busca (ex: "scene", "criar", "audio").
-        group: Grupo específico (ex: "scene", "art", "audio").
+        group: Grupo específico (ex: "project", "assets", "runtime").
         limit: Máximo de resultados (default 20).
 
     Returns:
-        {"status": "success", "tools": [{name, description, group, ...}], "total": int}
+        {"status": "success", "tools": [{name, description, group, ops, ...}], "total": int}
     """
     from tools.dynamic_groups import tool_catalog as _tc
     try:
         result = _tc({"query": query, "group": group, "limit": limit})
         if isinstance(result, dict) and result.get("status") == "success":
+            tools = result.get("results", [])
+            # ── ONDA 4.3: Enriquecer com ops (operações dos _manage) ──
+            import server as _srv
+            all_tools = {t.name: t for t in _srv._tool_defs()}
+            for tool_info in tools:
+                t = all_tools.get(tool_info.get("name", ""))
+                if t and hasattr(t, 'inputSchema') and isinstance(t.inputSchema, dict):
+                    props = t.inputSchema.get("properties", {})
+                    op_enum = props.get("op", {}).get("enum", [])
+                    if op_enum:
+                        tool_info["ops"] = op_enum
             return {
                 "status": "success",
-                "tools": result.get("results", []),
+                "tools": tools,
                 "total": result.get("total", 0),
             }
         return result
@@ -50,17 +61,18 @@ def catalog_search(query: str = "", group: str = "", limit: int = 20) -> dict:
         return {"status": "error", "message": f"Erro ao buscar catálogo: {e}"}
 
 
-def describe_tool(name: str) -> dict:
-    """Retorna o schema completo de uma ferramenta.
+def describe_tool(name: str, op: str = "") -> dict:
+    """Retorna o schema completo de uma ferramenta ou operação específica.
 
-    Busca em _tool_defs() pelo nome e retorna descrição, inputSchema,
-    hints e operação (read/write/read+write).
+    Busca em _tool_defs() pelo nome. Se 'op' for fornecido, retorna
+    apenas o schema daquela operação (para tools _manage).
 
     Args:
         name: Nome exato da tool (ex: "ping", "scene_manage").
+        op: Operação específica dentro de um _manage (ex: "create").
 
     Returns:
-        {"status": "success", "tool": {name, description, inputSchema, hints, operation}}
+        {"status": "success", "tool": {name, description, inputSchema, hints, operation, ops?}}
         ou {"status": "error", "message": "..."}
     """
     import server as _srv
@@ -71,22 +83,47 @@ def describe_tool(name: str) -> dict:
 
     for tool in tools:
         if tool.name == name:
-            ann = getattr(tool, "annotations", {}) or {}
-            return {
+            ann = getattr(tool, "annotations", None)
+            schema = getattr(tool, "inputSchema", {}) or {}
+            
+            # Extrair ops disponíveis (ONDA 4.4)
+            props = schema.get("properties", {}) if isinstance(schema, dict) else {}
+            op_enum = props.get("op", {}).get("enum", [])
+            
+            result = {
                 "status": "success",
                 "tool": {
                     "name": tool.name,
                     "description": getattr(tool, "description", ""),
-                    "inputSchema": getattr(tool, "inputSchema", {}),
                     "hints": {
-                        "readOnly": getattr(tool, "readOnlyHint", False),
-                        "destructive": getattr(tool, "destructiveHint", False),
-                        "idempotent": getattr(tool, "idempotentHint", False),
-                        "openWorld": getattr(tool, "openWorldHint", False),
+                        "readOnly": getattr(ann, "readOnlyHint", False) if ann else False,
+                        "destructive": getattr(ann, "destructiveHint", False) if ann else False,
+                        "idempotent": getattr(ann, "idempotentHint", False) if ann else False,
+                        "openWorld": getattr(ann, "openWorldHint", False) if ann else False,
                     },
-                    "operation": ann.get("operationCategory", "read+write"),
+                    "operation": getattr(ann, "operationCategory", "read+write") if ann else "read+write",
                 },
             }
+            
+            if op_enum:
+                result["tool"]["ops"] = op_enum
+            
+            # Se op especificado, filtra schema para aquela operação
+            if op and op_enum and op in op_enum:
+                result["tool"]["selected_op"] = op
+                # Simplifica: mantém só a descrição relevante
+                result["tool"]["inputSchema"] = {
+                    "type": "object",
+                    "properties": {
+                        "op": {"type": "string", "const": op},
+                        **{k: v for k, v in props.items() if k != "op"}
+                    },
+                    "required": ["op"],
+                }
+            elif not op:
+                result["tool"]["inputSchema"] = schema
+            
+            return result
 
     return {
         "status": "error",

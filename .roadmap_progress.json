@@ -1,4 +1,12 @@
 {
+  "onda_4_descoberta": {
+    "status": "concluida",
+    "data": "2026-07-23",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "33bae5a",
+    "resultado": "ONDA 4 — DESCOBERTA PROGRESSIVA (5 fatias). 4.1: trio no CORE (catalog_search/describe_tool/invoke_by_name). 4.2: tool_catalog/tool_groups ja removidos (8.1). 4.3: catalog_search agora retorna ops de tools _manage. 4.4: describe_tool aceita param op para schema de operacao especifica. 4.5: guia de descoberta progressiva no AGENTS.md secao 1.5. Regressao: 159 passed, 7 xfailed."
+  },
   "onda_3_rollups": {
     "status": "concluida",
     "data": "2026-07-23",
