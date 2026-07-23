@@ -890,54 +890,55 @@ def _apply_hints(tools: list) -> list:
     """Garante que toda tool tenha os 4 hints MCP.
 
     Regras:
-    - Se o hint JÁ existe na tool, respeita o valor existente
+    - Se o hint JÁ existe na tool.annotations, respeita o valor existente
     - Se NÃO existe, aplica a regra por nome
     - Se nenhuma regra bate, defaults seguros:
       readOnlyHint=False, destructiveHint=False,
       idempotentHint=False, openWorldHint=False
     """
-    for tool in tools:
-        ann = getattr(tool, 'annotations', None) or {}
+    from mcp.types import ToolAnnotations
 
+    for tool in tools:
         name = tool.name
 
+        # Garante que annotations existe como objeto ToolAnnotations
+        if tool.annotations is None:
+            tool.annotations = ToolAnnotations()
+        ann = tool.annotations
+
         # readOnlyHint
-        if 'readOnlyHint' not in ann:
+        if ann.readOnlyHint is None:
             is_readonly = (
                 any(name.startswith(p) for p in _HINT_RULES["readOnly"]["prefixes"]) or
                 any(name.endswith(s) for s in _HINT_RULES["readOnly"]["suffixes"]) or
                 name in _HINT_RULES["readOnly"]["exact"]
             )
-            ann['readOnlyHint'] = is_readonly
+            ann.readOnlyHint = is_readonly
 
         # destructiveHint
-        if 'destructiveHint' not in ann:
+        if ann.destructiveHint is None:
             is_destructive = (
                 any(name.startswith(p) for p in _HINT_RULES["destructive"]["prefixes"]) or
                 name in _HINT_RULES["destructive"]["exact"]
             )
-            ann['destructiveHint'] = is_destructive
+            ann.destructiveHint = is_destructive
 
         # idempotentHint
-        if 'idempotentHint' not in ann:
+        if ann.idempotentHint is None:
             is_idempotent = (
                 any(name.startswith(p) for p in _HINT_RULES["idempotent"]["prefixes"]) or
                 any(name.endswith(s) for s in _HINT_RULES["idempotent"]["suffixes"]) or
                 name in _HINT_RULES["idempotent"]["exact"]
             )
-            ann['idempotentHint'] = is_idempotent
+            ann.idempotentHint = is_idempotent
 
         # openWorldHint
-        if 'openWorldHint' not in ann:
+        if ann.openWorldHint is None:
             is_openworld = (
                 any(name.startswith(p) for p in _HINT_RULES["openWorld"]["prefixes"]) or
                 name in _HINT_RULES["openWorld"]["exact"]
             )
-            ann['openWorldHint'] = is_openworld
-
-        # intrusiveHint (Fatia 1.6) — default: modo silencioso
-        if 'intrusiveHint' not in ann:
-            ann['intrusiveHint'] = False
+            ann.openWorldHint = is_openworld
 
         # ── A6.5: MCP Spec annotations (audience, priority, lastModified) ──
         if 'audience' not in ann:
@@ -1235,14 +1236,19 @@ def _tool_defs() -> list[Tool]:
         "file_manage", "runtime_manage", "take_screenshot",
     }
     for t in _TOOL_DEFS_CACHE:
+        # ── Garante que annotations existe ──────────────────────
+        if t.annotations is None:
+            from mcp.types import ToolAnnotations
+            t.annotations = ToolAnnotations()
+        # ── Hints MCP (devem ser setados em ToolAnnotations, não em Tool) ──
         if t.name in _READONLY:
-            t.readOnlyHint = True
+            t.annotations.readOnlyHint = True
         if t.name in _DESTRUCTIVE:
-            t.destructiveHint = True
+            t.annotations.destructiveHint = True
         if t.name in _IDEMPOTENT:
-            t.idempotentHint = True
+            t.annotations.idempotentHint = True
         if t.name not in _SERVER_ONLY:
-            t.openWorldHint = True
+            t.annotations.openWorldHint = True
         if hasattr(t, 'inputSchema') and isinstance(t.inputSchema, dict):
             if "additionalProperties" not in t.inputSchema:
                 t.inputSchema["additionalProperties"] = False
@@ -1250,15 +1256,9 @@ def _tool_defs() -> list[Tool]:
         if t.name in _TITLES:
             t.title = _TITLES[t.name]
         if t.name in _TAGS:
-            if t.annotations is None:
-                from mcp.types import ToolAnnotations
-                t.annotations = ToolAnnotations()
             t.annotations.tags = _TAGS[t.name]
         # ── B6: Read/Write Split ────────────────────────────────
         cat = _classify_operation(t.name)
-        if t.annotations is None:
-            from mcp.types import ToolAnnotations
-            t.annotations = ToolAnnotations()
         t.annotations.operationCategory = cat
         # ── M3: Defer Loading ───────────────────────────────────
         if t.name not in _CORE_TOOLS:

@@ -1,4 +1,12 @@
 {
+  "onda_2_conformidade": {
+    "status": "concluida",
+    "data": "2026-07-23",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "e4b2a58",
+    "resultado": "ONDA 2 — CONFORMIDADE MCP (5 fatias). 2.1: bug _TAGS corrigido — hints agora setados em ToolAnnotations (23/53/25/229 tools com readOnly/destructive/idempotent/openWorld). 2.2: registry/annotations.py validate_annotations() funcional. 2.3: _HINT_RULES ja em registry/legacy_annotations.py. 2.4: _apply_hints() refatorado — trocado dict access por atributo ToolAnnotations. 2.5: rollback existente em auto_resolver.py — cobertura total pendente (backlog). Regressao: 159 passed, 7 xfailed. Gate: exit 0. Auditoria: PASS."
+  },
   "onda_1_registry": {
     "status": "concluida",
     "data": "2026-07-23",
