@@ -1365,11 +1365,11 @@
     "marcacao": "[EIXO-CENTRAL]"
   },
   "reorg_R4_caminhos": {
-    "status": "nao verificado",
+    "status": "concluida",
     "data": "2026-07-23",
     "agente": "AGENTE 01",
-    "checkpoint": null,
-    "resultado": "R4 - Caminho do roadmap, prompts locais e contradicao /seguir-roadmap x /act",
+    "checkpoint": "20f9d3f849183960eea70b7de32047f984745be1",
+    "resultado": "R4 concluida: prompts movidos para journal/prompts-locais/, settings.json corrigido (.github/instructions), ROADMAP_DEFINITIVO.md criado, contradicao registrada em SUTURE_ISSUES.md.",
     "ficha": ".github/roadmap/ONDA_R_reconciliacao.md",
     "marcacao": "[EIXO-CENTRAL]"
   },
