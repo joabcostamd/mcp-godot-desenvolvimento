@@ -1383,11 +1383,11 @@
     "marcacao": "[EIXO-CENTRAL]"
   },
   "reorg_R6_branch_agente2": {
-    "status": "nao verificado",
+    "status": "concluida",
     "data": "2026-07-23",
     "agente": "AGENTE 01",
-    "checkpoint": null,
-    "resultado": "R6 - Branch agente2/behaviors-onda2: tag de arquivo morto, sem merge (DR-2)",
+    "checkpoint": "0cdb10d03123177755c8236816c4844d48f9ef36",
+    "resultado": "R6 concluida: merge simulado com conflitos, tag arquivo-morto/behaviors-onda2 criada, 1689 behaviors na main.",
     "ficha": ".github/roadmap/ONDA_R_reconciliacao.md",
     "marcacao": "[EIXO-CENTRAL]"
   },
