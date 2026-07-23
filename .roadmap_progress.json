@@ -1,4 +1,12 @@
 {
+  "onda_3_rollups": {
+    "status": "concluida",
+    "data": "2026-07-23",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "33bae5a",
+    "resultado": "ONDA 3 — UNIFICAR ROLLUPS. playtest_manage COLISAO resolvida (builder removido de _ROLLUP_BUILDERS, mantida def manual mais completa). budget_manage ja migrado. 10 tools classificadas como quarentena (sem builder): mcp_telemetry_manage, fun_report_manage, complexity_gate_manage, teacher_manage, scope_manage, reviewer_manage, polish_manage, quickstart_manage, version_history_manage, publish_manage, community_manage. Migracao completa pendente de ONDA 9. Regressao: 159 passed, 7 xfailed."
+  },
   "onda_2_conformidade": {
     "status": "concluida",
     "data": "2026-07-23",

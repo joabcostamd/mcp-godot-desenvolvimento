@@ -1196,7 +1196,8 @@ _ROLLUP_BUILDERS = [
     # Etapa 5: game bridge (consolidação FATIA 0.7a)
     _build_game_bridge_manage,
     _build_music_manage,
-    _build_playtest_manage,
+    # ONDA 3: playtest_manage COLISAO — builder desativado (def manual em core/tool_definitions.py mais completa)
+    # _build_playtest_manage,
     # Etapa 6: i18n (FATIA 4.1)
     _build_localization_manage,
     # F5: godot execution consolidation
