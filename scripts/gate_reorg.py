@@ -207,7 +207,6 @@ def check_g3(repo_root: Path | None = None) -> list[str]:
         for phase in server.PHASE_TOOLSETS:
             tools = set(server.PHASE_TOOLSETS[phase]) | set(getattr(server, "PHASE_TOOLS_CORE", []))
             new_baseline["tools_por_fase"][f"PHASE_TOOLSETS:{phase}"] = len(tools)
-        new_baseline["_ultima_atualizacao"] = _safe_git_rev_parse(repo_root)
         new_baseline["_total_tools"] = len(server._tool_defs())
         save_json(baseline_file, new_baseline)
 

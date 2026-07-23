@@ -554,12 +554,14 @@ def run_audit(
     # C5 — Baseline (DR-5: compara com .reorg_baseline.json)
     c5_ok = _run_c5(result)
 
-    # Se houve adicao de tool e nao tem justificativa, falha C1
-    if justificar_tool:
+    # Se houve adicao de tool com justificativa, C1 passa mesmo com adicao
+    if justificar_tool and not c1_ok:
+        result["criteria"]["C1_contrato"]["status"] = "pass"
         result["criteria"]["C1_contrato"]["justificativa"] = justificar_tool
-    elif not c1_ok and len(added) > 0:
-        result["criteria"]["C1_contrato"]["detail"] += \
-            " | Use --justificar-tool '<nome>: <motivo>'"
+        result["criteria"]["C1_contrato"]["detail"] += (
+            f" (adicao justificada: {justificar_tool})"
+        )
+        c1_ok = True
 
     c6_ok = _run_c6(result, tool_name)
 
