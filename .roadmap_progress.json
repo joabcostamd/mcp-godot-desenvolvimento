@@ -1602,10 +1602,11 @@
     "resultado": "2.5 concluida: rollup builders sao factories — rollback ja documentado via create_manage_tool(). Sem ops destrutivas sem rollback detectadas."
   },
   "fatia_3_1": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "8be3ac98d9bad03d94939ac3dd1c3a7cf7ec90c0",
     "ficha": ".github/roadmap/ONDA_3_rollups.md",
-    "marcacao": "[EIXO-CENTRAL]"
+    "marcacao": "[EIXO-CENTRAL]",
+    "resultado": "3.1 concluida: 13 manage manuais auditados. Todos funcionais com handlers. playtest_manage com colisao raw/rollup documentada. Migracao para create_manage_tool() postergada (baixa prioridade)."
   },
   "fatia_4_2": {
     "status": "nao verificado",
