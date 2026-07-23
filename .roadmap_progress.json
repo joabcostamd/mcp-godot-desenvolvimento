@@ -1609,28 +1609,32 @@
     "resultado": "3.1 concluida: 13 manage manuais auditados. Todos funcionais com handlers. playtest_manage com colisao raw/rollup documentada. Migracao para create_manage_tool() postergada (baixa prioridade)."
   },
   "fatia_4_2": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "f8e9a8c1968f1bed00c81f7f9bc70194672c3c08",
     "ficha": ".github/roadmap/ONDA_4_descoberta.md",
-    "marcacao": "[EIXO-CENTRAL]"
+    "marcacao": "[EIXO-CENTRAL]",
+    "resultado": "4.2: tool_catalog+tool_groups coexistindo com catalog_search. Unificacao requer refatoracao de handlers — postergada."
   },
   "fatia_4_3": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "f8e9a8c1968f1bed00c81f7f9bc70194672c3c08",
     "ficha": ".github/roadmap/ONDA_4_descoberta.md",
-    "marcacao": "[EIXO-CENTRAL]"
+    "marcacao": "[EIXO-CENTRAL]",
+    "resultado": "4.3: catalog_search ja indexa ops via rollup builders. OK."
   },
   "fatia_4_4": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "f8e9a8c1968f1bed00c81f7f9bc70194672c3c08",
     "ficha": ".github/roadmap/ONDA_4_descoberta.md",
-    "marcacao": "[EIXO-CENTRAL]"
+    "marcacao": "[EIXO-CENTRAL]",
+    "resultado": "4.4: describe_tool ja aceita parametro tool. Op detail pendente."
   },
   "fatia_4_5": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "f8e9a8c1968f1bed00c81f7f9bc70194672c3c08",
     "ficha": ".github/roadmap/ONDA_4_descoberta.md",
-    "marcacao": "[EIXO-CENTRAL]"
+    "marcacao": "[EIXO-CENTRAL]",
+    "resultado": "4.5: trio de descoberta ja em CORE (B29 l.540). Guia pendente."
   },
   "fatia_8_1": {
     "status": "nao verificado",
