@@ -2,21 +2,24 @@
 tools/semantic_search.py — Busca semântica bilíngue sobre behaviors (sota_1.2).
 
 Bridge entre o MCP (venv principal, Python 3.14) e o embed_service (venv_ml,
-Python 3.12 + FlagEmbedding). Chamado via subprocess com run_subprocess_safe.
+Python 3.12 + FlagEmbedding). Chamado via subprocess.run com stdin=DEVNULL.
 
 Fonte: SOTA_01_FUNDACAO_CEREBRO.md, seção sota_1.2.
 """
 
 import json
 import os
+import glob as gl
 import subprocess
 from subprocess import DEVNULL
 from typing import List, Dict, Optional, Any
 
-# Caminhos
-_EMBED_SERVICE = os.path.join("ml", "embed_service.py")
-_VENV_ML_PYTHON = os.path.join(".venv_ml", "Scripts", "python.exe")
-_INDEX_DIR = os.path.join("behaviors", "_index")
+# Caminhos absolutos via __file__ (independente de CWD)
+_TOOLS_DIR = os.path.dirname(os.path.abspath(__file__))
+_REPO_ROOT = os.path.normpath(os.path.join(_TOOLS_DIR, ".."))
+_EMBED_SERVICE = os.path.join(_REPO_ROOT, "ml", "embed_service.py")
+_VENV_ML_PYTHON = os.path.join(_REPO_ROOT, ".venv_ml", "Scripts", "python.exe")
+_INDEX_DIR = os.path.join(_REPO_ROOT, "behaviors", "_index")
 _IDS_FILE = os.path.join(_INDEX_DIR, "ids.json")
 
 # Cache em memória por sessão
@@ -110,14 +113,12 @@ def _buscar_lexico(query: str) -> Dict[str, float]:
     Busca léxica: match exato de palavras da query nos sinônimos das fichas.
     Retorna {nome_behavior: score_normalizado}.
     """
-    import glob as gl
-
     query_lower = query.lower()
     palavras_query = set(query_lower.split())
 
     scores: Dict[str, float] = {}
 
-    pattern = os.path.join("behaviors", "*", "behavior.json")
+    pattern = os.path.join(_REPO_ROOT, "behaviors", "*", "behavior.json")
     for path in sorted(gl.glob(pattern)):
         nome = os.path.basename(os.path.dirname(path))
         if nome.startswith("_"):

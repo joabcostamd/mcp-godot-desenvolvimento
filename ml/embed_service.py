@@ -19,10 +19,12 @@ import json
 import os
 import sys
 import numpy as np
-from typing import List, Dict, Tuple
+from typing import List, Dict
 
-# --- Constantes ---
-BEHAVIORS_DIR = "behaviors"
+# --- Constantes (paths absolutos via __file__) ---
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+_REPO_ROOT = os.path.normpath(os.path.join(_SCRIPT_DIR, ".."))
+BEHAVIORS_DIR = os.path.join(_REPO_ROOT, "behaviors")
 INDEX_DIR = os.path.join(BEHAVIORS_DIR, "_index")
 EMBEDDINGS_FILE = os.path.join(INDEX_DIR, "embeddings.npz")
 IDS_FILE = os.path.join(INDEX_DIR, "ids.json")
@@ -68,7 +70,7 @@ def _montar_texto(ficha: dict) -> str:
     return " ".join(partes)
 
 
-def _carregar_fichas() -> List[Tuple[str, dict, str]]:
+def _carregar_fichas() -> List[tuple]:
     """Carrega todos os behavior.json. Retorna [(id, ficha, texto), ...]."""
     import glob
     resultados = []
