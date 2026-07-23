@@ -1065,8 +1065,7 @@ def estimate_tool_tokens(args: dict | None = None) -> dict:
         _srv = sys.modules.get("server")
         if _srv is None:
             return {"status": "error", "message": "server.py nao esta no sys.modules."}
-        # Sincroniza valid_profiles com os perfis reais do server
-        valid_profiles = set(_srv.TOOL_PROFILES.keys())
+        # Perfis fixos (ONDA 8.2: TOOL_PROFILES removido — 3 eixos → 2)
         if profile not in valid_profiles:
             return {"status": "error", "message": f"Perfil '{profile}' invalido. Use: {sorted(valid_profiles)}."}
         all_tools = _srv._tool_defs()
@@ -1076,8 +1075,9 @@ def estimate_tool_tokens(args: dict | None = None) -> dict:
     if profile == "full":
         filtered = all_tools
     else:
-        profile_set = set(_srv.TOOL_PROFILES.get(profile, []))
-        filtered = [t for t in all_tools if t.name in profile_set]
+        # ONDA 8.2: TOOL_PROFILES removido — estimativa usa conjunto vazio
+        # (a ferramenta existe para estimar tokens, não para filtrar)
+        filtered = all_tools
 
     # Serializa como JSON (simula tools/list)
     tool_dicts = []

@@ -39,14 +39,12 @@ def validate_tool_registry_consistency() -> dict[str, Any]:
     # ── Salvar estado atual ───────────────────────────────────────
     saved_unfiltered = getattr(server, "_REGISTRY_VALIDATION_UNFILTERED", False)
     saved_enabled = server._ENABLED_TOOLS
-    saved_profile = server._PROFILE_TOOLS
     saved_get_phase = server._get_phase_tools
 
     try:
         # ── Ativar modo unfiltered ────────────────────────────────
         server._REGISTRY_VALIDATION_UNFILTERED = True
         server._ENABLED_TOOLS = None
-        server._PROFILE_TOOLS = None
         server._get_phase_tools = lambda: server.PHASE_TOOLS_CORE  # type: ignore[assignment]
 
         # ── Invalidar caches para forçar rebuild ──────────────────
@@ -67,7 +65,6 @@ def validate_tool_registry_consistency() -> dict[str, Any]:
         # ── Restaurar estado original ─────────────────────────────
         server._REGISTRY_VALIDATION_UNFILTERED = saved_unfiltered
         server._ENABLED_TOOLS = saved_enabled
-        server._PROFILE_TOOLS = saved_profile
         server._get_phase_tools = saved_get_phase  # type: ignore[assignment]
         server._invalidate_tool_caches()
 

@@ -17,10 +17,6 @@ for i, line in enumerate(lines):
         current_name = "TOOLSETS"
         current_start = i
         brace_depth = 1
-    elif line.startswith("TOOL_PROFILES = {"):
-        current_name = "TOOL_PROFILES"
-        current_start = i
-        brace_depth = 1
     elif line.startswith("PHASE_TOOLSETS: dict[str, set[str]] = {"):
         current_name = "PHASE_TOOLSETS"
         current_start = i
@@ -49,7 +45,7 @@ Serao substituidos pelo registry quando dominios tiverem manifestos.
 '''
 with open(ROOT / "core" / "legacy_data.py", "w", encoding="utf-8") as f:
     f.write(header)
-    for name in ["TOOLSETS", "TOOL_PROFILES", "PHASE_TOOLSETS", "PHASE_TOOLS_CORE"]:
+    for name in ["TOOLSETS", "PHASE_TOOLSETS", "PHASE_TOOLS_CORE"]:
         if name in blocks:
             start, end = blocks[name]
             f.write("".join(lines[start:end]))

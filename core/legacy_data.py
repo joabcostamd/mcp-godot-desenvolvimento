@@ -189,44 +189,6 @@ TOOLSETS = {
     ],
 }
 
-TOOL_PROFILES = {
-    "core": [
-        "ping", "health_check", "self_test", "bootstrap_godot_mcp",
-        "read_file", "write_file", "safe_write_gdscript",
-        "compile_test", "run_game", "stop_game", "smart_restart",
-        "git_commit_checkpoint", "smoke_test", "dump_mcp_state",
-        "project_manage",
-    ],
-    "dev": [
-        "godot",
-        "ping", "health_check", "self_test", "bootstrap_godot_mcp",
-        "read_file", "write_file", "safe_write_gdscript",
-        "compile_test", "run_game", "stop_game", "smart_restart",
-        "git_commit_checkpoint", "smoke_test", "dump_mcp_state",
-        "project_manage", "scene_manage", "node_manage", "script_manage",
-        "file_manage", "asset_manage", "runtime_manage",
-        "validate_gdscript_syntax", "validate_project_refs", "find_usages",
-        "run_scripted_tests", "regression_test",
-        "run_gut_tests", "godot_class_ref", "godot_exec", "effect_probe",
-        "take_screenshot", "capture_runtime_errors", "get_runtime_state_digest",
-        "import_asset_manifest", "create_asset_manifest",
-        # ── Phase management (Feature 8: tool_list_changed) ──
-        "get_current_phase", "advance_phase", "get_phase_history",
-        "get_next_step", "resume_session",
-    ],
-    "lean": [
-        "godot",
-        "ping", "health_check", "self_test", "bootstrap_godot_mcp",
-        "read_file", "write_file", "safe_write_gdscript",
-        # ── Meta-tools (Fatia 0.15) ──
-        "catalog_search", "describe_tool", "invoke_by_name",
-        # ── Phase management ──
-        "get_current_phase", "advance_phase", "get_phase_history",
-        "get_next_step", "resume_session",
-    ],
-    "full": [],  # vazio = sem filtro (todas as tools)
-}
-
 PHASE_TOOLSETS: dict[str, set[str]] = {
     "IDEIA": {
         "ping", "health_check", "self_test", "bootstrap_godot_mcp",

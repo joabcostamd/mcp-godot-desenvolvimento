@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
 # Logger do MCP — A6.3: JSON estruturado
-from core.legacy_data import TOOLSETS, TOOL_PROFILES, PHASE_TOOLSETS, PHASE_TOOLS_CORE
+from core.legacy_data import TOOLSETS, PHASE_TOOLSETS, PHASE_TOOLS_CORE
 class _JsonFormatter(logging.Formatter):
     """Formata logs como JSON para parseabilidade (MCP Spec compliance)."""
     def format(self, record: logging.LogRecord) -> str:
@@ -90,30 +90,6 @@ def parse_toolset_arg() -> set[str] | None:
 _ENABLED_TOOLS: set[str] | None = parse_toolset_arg()
 if _ENABLED_TOOLS is not None:
     print(f"[MCP] Toolsets ativos: {sorted(_ENABLED_TOOLS)}", file=sys.stderr)
-
-# ── GRUPO 3: Tool Profiles (MCP_TOOL_PROFILE env var ou --profile) ──
-
-def _resolve_tool_profile() -> str | None:
-    """Resolve o perfil de tools: env var > --profile flag."""
-    import os as _os
-    env_profile = _os.environ.get("MCP_TOOL_PROFILE", "").strip().lower()
-    if env_profile:
-        return env_profile
-    try:
-        import argparse as _ap
-        parser = _ap.ArgumentParser(add_help=False)
-        parser.add_argument("--profile", default="", type=str)
-        args, _ = parser.parse_known_args()
-        if args.profile:
-            return args.profile.strip().lower()
-    except Exception:
-        pass
-    return None
-
-
-# ── ONDA 8.2: Profile removido (3 eixos → 2: toolsets + fase) ──
-# Filtro por fase já cobre a curadoria. Profile era redundante.
-_PROFILE_TOOLS = None
 
 # ── Feature 8: Toolsets por Fase (--phase) ────────────────────
 # Filtro dinâmico: consulta get_current_phase() do projeto ativo

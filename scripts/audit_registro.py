@@ -13,7 +13,7 @@ sys.path.insert(0, str(ROOT))
 
 # ── Imports do server ─────────────────────────────────────────────
 from server import _tool_defs, _build_handlers
-from server import TOOLSETS, PHASE_TOOLSETS, PHASE_TOOLS_CORE, TOOL_PROFILES
+from server import TOOLSETS, PHASE_TOOLSETS, PHASE_TOOLS_CORE
 
 # ── Imports do rollup ─────────────────────────────────────────────
 from tools.rollups import get_rollup_tool_defs, get_rollup_handlers

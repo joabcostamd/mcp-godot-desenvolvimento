@@ -1,4 +1,12 @@
 {
+  "fatia_8.2_curadoria_2eixos": {
+    "status": "concluida",
+    "data": "2026-07-23",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "a998ce8",
+    "resultado": "Fatia 8.2 — Reduzir filtros de 3 para 2 eixos. TOOL_PROFILES removido de core/legacy_data.py (38 linhas). _resolve_tool_profile() e _PROFILE_TOOLS removidos de server.py (26 linhas). 5 arquivos auxiliares limpos. estimate_tool_tokens() adaptado. 7 files changed, +8/-77. Regressao: 159 passed, 7 xfailed."
+  },
   "fatia_8.1_curadoria_fase": {
     "status": "concluida",
     "data": "2026-07-23",

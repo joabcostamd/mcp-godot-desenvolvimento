@@ -214,7 +214,7 @@ def verificar_estado():
     alvo = ROOT / "server.py"
     if alvo.exists():
         texto = alvo.read_text(encoding="utf-8", errors="replace")
-        for simbolo in ("TOOLSETS", "PHASE_TOOLSETS", "TOOL_PROFILES",
+        for simbolo in ("TOOLSETS", "PHASE_TOOLSETS",
                         "PHASE_TOOLS_CORE", "_apply_hints", "_HINT_RULES",
                         "_READONLY", "_TITLES", "_TAGS"):
             n = texto.count(simbolo)
