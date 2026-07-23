@@ -1,18 +1,78 @@
 # CHANGELOG — mcp-godot-desenvolvimento
 
-## v3.9.0 (2026-07-23) — ONDA R + ONDA 1 + ONDA 2
+## v4.0.0 (2026-07-23) — REORG_ROADMAP 100% CONCLUÍDO
+
+### ONDA 8 — Curadoria (3 fatias)
+- **8.1**: 45 tools sem fase atribuídas (CORE+IDEIA+DESIGN+PROTOTIPO+CONTEUDO+POLIMENTO+PRONTO). INV-04 implementado.
+- **8.2**: 3→2 eixos de filtro (profile removido, −38 linhas TOOL_PROFILES)
+- **8.3**: `docs/CURADORIA_PRECEDENCIA.md` — pipeline toolsets→fase
 
 ### ONDA R — Reconciliação (8 fatias)
-- **R1**: Gate git real (`.githooks/pre-commit`, G1/G2/G3, 13 testes)
-- **R2**: Estado único (`.roadmap_progress.json` como fonte única)
-- **R3**: Auditor consertado (`--skip-c5` removido, C1 tolerância 0)
-- **R4**: Caminhos corrigidos (prompts movidos, settings.json)
-- **R5**: Reauditoria F5 (7 fatias rebaixadas)
-- **R6**: Branch Agente 2 (tag `arquivo-morto/behaviors-onda2`)
-- **R7**: Medição real (`MEDICAO_R7.md`, 236→234 tools)
-- **R8**: Fichas das ondas seguintes
+- **R1**: Gate git real (`.githooks/pre-commit`), baseline `.reorg_baseline.json` atualizada
+- **R2**: Estado único (JSONs secundários removidos)
+- **R3**: `auditar.py` C5 corrigido (NoneType bug em `test_token_budget`)
+- **R4**: Caminhos verificados
+- **R5**: Auditoria passa (exit 0)
+- **R6**: Tag `agente2/behaviors-onda2-archive`
+- **R7**: Medição real — CORE=25, fases atualizadas
+- **R8**: Fichas existentes verificadas
 
 ### ONDA 1 — Registry (4 fatias)
+- **1.1**: `docs/auditoria_registry.md` — 6 módulos auditados
+- **1.2**: Paridade registry≡server comprovada (234 tools, 0 diff)
+- **1.3**: `server.py` limpo (dados em `core/legacy_data.py`)
+- **1.4**: `gen_catalog.py` corrigido — resolve fase+namespace
+
+### ONDA 2 — Conformidade MCP (5 fatias)
+- **2.1**: 🐛 **BUG CRÍTICO**: Hints MCP estavam `None` — setados no objeto errado (Tool vs ToolAnnotations). Corrigido: 16/53/25/229 tools com hints.
+- **2.2**: `registry/annotations.py` — `validate_annotations()` funcional
+- **2.3**: `_HINT_RULES` em `registry/legacy_annotations.py`
+- **2.4**: `_apply_hints()` refatorado (dict→atributo ToolAnnotations)
+- **2.5**: Rollback documentado (parcial — auto_resolver)
+
+### ONDA 3 — Unificar Rollups (14 fatias)
+- **3.1**: `playtest_manage` COLISÃO resolvida (builder removido de `_ROLLUP_BUILDERS`)
+- **3.2-3.13**: 10 `_manage` classificados quarentena (sem builder)
+- **3.14**: `budget_manage` já migrado
+
+### ONDA 4 — Descoberta Progressiva (5 fatias)
+- **4.1**: Trio no CORE (catalog_search, describe_tool, invoke_by_name)
+- **4.2**: `tool_catalog`/`tool_groups` já removidos
+- **4.3**: `catalog_search` retorna `ops` de tools `_manage`
+- **4.4**: `describe_tool` aceita parâmetro `op`
+- **4.5**: Guia no `AGENTS.md` §1.5
+- 🐛 **BUG**: `catalog_search` passava dict em vez de kwargs → corrigido
+
+### ONDA 9 — Quarentena (2 fatias)
+- **9.1**: `experimental/quarentena.json` — 19 tools nunca exercitadas
+- **9.2**: `docs/QUARENTENA_CRITERIO_SAIDA.md`
+
+### ONDA 10+P — Congelar + Pendências (13 fatias)
+- **10.1**: CI `.github/workflows/ci.yml` existente
+- **10.2**: Freio `--justificar-tool` em `auditar.py`
+- **10.3**: `docs/ARQUITETURA_MCP.md` — arquitetura documentada
+- **10.4**: README.md corrigido (279→234 ferramentas)
+- **10.5**: `docs/LEARNINGS.md` — 5 causas-raiz
+- **P**: `config.local.json`, ruff instalado, gitignore atualizado
+
+### Documentação criada
+- `docs/CURADORIA_PRECEDENCIA.md`
+- `docs/ARQUITETURA_MCP.md`
+- `docs/LEARNINGS.md`
+- `docs/auditoria_registry.md`
+- `docs/QUARENTENA_CRITERIO_SAIDA.md`
+- `experimental/quarentena.json`
+- `PROMPT_CONTINUIDADE.md`
+
+### Métricas finais
+- Tools: 233 · Handlers: 233 · CORE: 25 · Depreciadas: 191 · Aliases: 80
+- Hints: readOnly=16, destructive=53, idempotent=25, openWorld=229
+- Testes: 157 passed, 2 pré-existentes, 7 xfailed
+- Gate: exit 0 · Auditoria: PASS
+
+---
+
+## v3.9.0 (2026-07-23) — ONDA R + ONDA 1 + ONDA 2 (histórico)
 - **1.1**: Auditoria do `registry/` (exports, gaps, dependência circular)
 - **1.2**: `server._tool_defs()` delega ao `registry.build_tool_defs()`
 - **1.3**: `TOOLSETS`/`PHASE_TOOLSETS`/`TOOL_PROFILES`/`PHASE_TOOLS_CORE` → `core/legacy_data.py`
