@@ -1602,183 +1602,183 @@
     "resultado": "2.5 concluida: rollup builders sao factories — rollback ja documentado via create_manage_tool(). Sem ops destrutivas sem rollback detectadas."
   },
   "fatia_3_1": {
-    "status": "concluida",
-    "checkpoint": "8be3ac98d9bad03d94939ac3dd1c3a7cf7ec90c0",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_3_rollups.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "3.1 concluida: 13 manage manuais auditados. Todos funcionais com handlers. playtest_manage com colisao raw/rollup documentada. Migracao para create_manage_tool() postergada (baixa prioridade)."
   },
   "fatia_4_2": {
-    "status": "concluida",
-    "checkpoint": "f8e9a8c1968f1bed00c81f7f9bc70194672c3c08",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_4_descoberta.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "4.2: tool_catalog+tool_groups coexistindo com catalog_search. Unificacao requer refatoracao de handlers — postergada."
   },
   "fatia_4_3": {
-    "status": "concluida",
-    "checkpoint": "f8e9a8c1968f1bed00c81f7f9bc70194672c3c08",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_4_descoberta.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "4.3: catalog_search ja indexa ops via rollup builders. OK."
   },
   "fatia_4_4": {
-    "status": "concluida",
-    "checkpoint": "f8e9a8c1968f1bed00c81f7f9bc70194672c3c08",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_4_descoberta.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "4.4: describe_tool ja aceita parametro tool. Op detail pendente."
   },
   "fatia_4_5": {
-    "status": "concluida",
-    "checkpoint": "f8e9a8c1968f1bed00c81f7f9bc70194672c3c08",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_4_descoberta.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "4.5: trio de descoberta ja em CORE (B29 l.540). Guia pendente."
   },
   "fatia_8_1": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_8_curadoria.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "8.1: 59 tools sem fase documentadas. Atribuicao requer auditoria por dominio."
   },
   "fatia_8_2": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_8_curadoria.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "8.2: 3 filtros -> 2 eixos. Refatoracao de PHASE_TOOLSETS postergada."
   },
   "fatia_8_3": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_8_curadoria.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "8.3: Precedencia documentada em MEDICAO_R7.md."
   },
   "fatia_9_1": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_9_quarentena.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "9.1: experimental/ ja existe. Verticais nao exercitadas identificadas."
   },
   "fatia_9_2": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_9_quarentena.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "9.2: Criterio de saida: jogo real precisou da capacidade."
   },
   "fatia_10_1": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_10_congelar.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "10.1: CI pendente (GitHub Actions)."
   },
   "fatia_10_2": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_10_congelar.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "10.2: Freio via G3 baseline + C1 tolerancia 0."
   },
   "fatia_10_3": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_10_congelar.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "10.3: docs/auditoria_registry.md cobre arquitetura."
   },
   "fatia_10_4": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_10_congelar.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "10.4: Contagens referencia MEDICAO_R7.md."
   },
   "fatia_10_5": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_10_congelar.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "10.5: LEARNINGS pendente."
   },
   "fatia_P_1": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "P.1: Feature 9 build_export — pendente."
   },
   "fatia_P_2": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "P.2: Feature 10 get_next_step — pendente."
   },
   "fatia_P_3": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "P.3: set/get_node_property — bug documentado."
   },
   "fatia_P_4": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "P.4: INV-03 falso positivo documentado."
   },
   "fatia_P_5": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "P.5: 362 vs 166 testes — divergencia documentada."
   },
   "fatia_P_6": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "P.6: AGENTS.md secao 2 — verificado OK."
   },
   "fatia_P_7": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "P.7: config.local.json — ausente, exemplo pendente."
   },
   "fatia_P_8": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "P.8: 38 dominios — auditoria de consistencia pendente."
   },
   "fatia_P_9": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "P.9: .mcp_proof nunca exercitado."
   },
   "fatia_P_10": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "P.10: 22 mencoes a cline em instalar.py."
   },
   "fatia_P_11": {
-    "status": "concluida",
-    "checkpoint": "a4593b7a6fd8a6993880b86e83b4c07abe6732d7",
+    "status": "nao verificado",
+    "checkpoint": null,
     "ficha": ".github/roadmap/ONDA_P_pendencias.md",
     "marcacao": "[EIXO-CENTRAL]",
     "resultado": "P.11: ruff nao instalado no venv."
