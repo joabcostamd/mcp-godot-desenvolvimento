@@ -66,3 +66,45 @@ def validate_all(tools: list[Tool]) -> dict[str, list[str]]:
         if problems:
             result[tool.name] = problems
     return result
+
+
+# ── ONDA 2.2: Validação strict (campos extra) ─────────────────
+
+# Campos oficiais da spec MCP ToolAnnotations
+_MCP_SPEC_FIELDS = {"readOnlyHint", "destructiveHint", "idempotentHint", "openWorldHint", "title"}
+
+
+def list_extra_fields(tool: Tool) -> list[str]:
+    """Lista campos nas annotations que não são da spec MCP.
+
+    Campos como 'tags', 'operationCategory', 'deferLoading' são
+    extensões do projeto — não são erro, mas devem ser documentados.
+    """
+    ann = tool.annotations
+    if ann is None or not isinstance(ann, ToolAnnotations):
+        return []
+    all_fields = set(ann.model_fields.keys()) if hasattr(ann, 'model_fields') else set()
+    # Também verifica atributos setados dinamicamente
+    for attr in dir(ann):
+        if attr.startswith('_'):
+            continue
+        if attr in all_fields:
+            continue
+        val = getattr(ann, attr, None)
+        if val is not None and not callable(val):
+            all_fields.add(attr)
+    return sorted(all_fields - _MCP_SPEC_FIELDS)
+
+
+def audit_extra_fields(tools: list[Tool]) -> dict[str, list[str]]:
+    """Audita campos extra nas annotations de todas as tools.
+
+    Returns:
+        Dict {tool_name: [campos_extra]}. Vazio = todas conformes à spec.
+    """
+    result: dict[str, list[str]] = {}
+    for tool in tools:
+        extra = list_extra_fields(tool)
+        if extra:
+            result[tool.name] = extra
+    return result

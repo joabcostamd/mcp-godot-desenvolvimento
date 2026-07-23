@@ -1574,10 +1574,11 @@
     "resultado": "2.1 concluida: _TAGS corrigido. ToolAnnotations preservado. 236/236 tools com tipo correto. 28 tags, 197 categories."
   },
   "fatia_2_2": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "51f079c0aa720d672cdd8b04f66aa80fc077d6ba",
     "ficha": ".github/roadmap/ONDA_2_conformidade.md",
-    "marcacao": "[EIXO-CENTRAL]"
+    "marcacao": "[EIXO-CENTRAL]",
+    "resultado": "2.2 concluida: registry/annotations.py com audit_extra_fields() para campos nao-spec."
   },
   "fatia_2_3": {
     "status": "nao verificado",
