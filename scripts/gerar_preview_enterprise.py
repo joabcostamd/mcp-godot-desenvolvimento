@@ -62,9 +62,11 @@ EXTRA_MAPPINGS = {
     "audio_manager": "system", "audio_visualizer": "system",
     "input_manager": "system", "settings": "system",
     "authority": "system", "steam_input": "system",
+    # Audio → system (não é efeito visual)
+    "ambience_zone": "system", "sfx_player": "system", "music_playlist": "system",
     # Feedback extra
-    "sfx_player": "feedback", "music_playlist": "feedback",
-    "ambience_zone": "feedback", "screen_shake_toggle": "feedback",
+    "sfx_player": "system", "music_playlist": "system",
+    "ambience_zone": "system", "screen_shake_toggle": "feedback",
     "freeze_frame": "feedback", "hit_stop": "feedback",
     "floating_text": "feedback", "screen_flash": "feedback",
     "color_pulse": "feedback", "chromatic_aberration": "feedback",
@@ -90,7 +92,7 @@ EXTRA_MAPPINGS = {
     "hold_alternative": "movement",
     # Outros
     "pathfinding": "ai_enemy", "avoidance": "movement",
-    "stealth": "ai_enemy", "blackboard": "ai_enemy",
+    "stealth": "movement", "blackboard": "ai_enemy",
     "difficulty_curve": "ai_enemy", "difficulty_adjust": "ai_enemy",
     "state_machine": "ai_enemy", "behavior_tree": "ai_enemy",
     "spawner_wave": "ai_enemy", "wave_system": "ai_enemy",
@@ -121,11 +123,11 @@ EXTRA_MAPPINGS = {
     "tile_pattern_stamper": "system", "dungeon_generator": "system",
     "world_map_generator": "system", "infinite_world": "system",
     "random_walker": "system",
-    "destructible": "combat", "burnable": "feedback",
-    "lava_surface": "feedback", "water_surface": "movement",
+    "destructible": "combat", "burnable": "combat",
+    "lava_surface": "combat", "water_surface": "movement",
     "trigger_zone": "system", "racing_lap": "movement",
     "match3_grid": "system", "rhythm_timing": "system",
-    "drag_drop": "system", "screen_shake": "feedback",
+    "drag_drop": "dialogue", "screen_shake": "feedback",
 }
 
 TEMPLATE_MAP.update(EXTRA_MAPPINGS)
