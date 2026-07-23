@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "rastrear_analytics",
   "verbo_en": "track_analytics",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

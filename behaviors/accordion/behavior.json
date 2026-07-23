@@ -79,5 +79,7 @@
   "custo": "leve",
   "verbo_pt": "expandir",
   "verbo_en": "expand",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

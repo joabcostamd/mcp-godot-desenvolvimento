@@ -103,5 +103,7 @@
   "custo": "leve",
   "verbo_pt": "ambientar",
   "verbo_en": "ambience",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

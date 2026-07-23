@@ -146,6 +146,24 @@ def validate_new_fields(instance, valid_behavior_names):
     elif instance["nivel"] not in ("basico", "intermediario", "avancado"):
         errors.append(f"  - nivel: '{instance.get('nivel')}' inválido (esperado: basico|intermediario|avancado)")
 
+    # preview_gif (opicional, mas valida se presente)
+    if "preview_gif" in instance:
+        pg = instance["preview_gif"]
+        if not isinstance(pg, str) or not pg.endswith(".gif"):
+            errors.append(f"  - preview_gif: '{pg}' inválido (deve terminar em .gif)")
+        else:
+            # Verifica se o arquivo existe
+            import os as _os
+            gif_path = _os.path.join(_os.path.dirname(__file__), "..", "behaviors", instance.get("name", ""), pg)
+            if not _os.path.isfile(gif_path):
+                errors.append(f"  - preview_gif: arquivo '{pg}' não encontrado em {instance.get('name','?')}/")
+
+    # preview_type (opicional, mas valida se presente)
+    if "preview_type" in instance:
+        pt = instance["preview_type"]
+        if pt not in ("visual", "abstract"):
+            errors.append(f"  - preview_type: '{pt}' inválido (esperado: visual|abstract)")
+
     return errors
 
 
@@ -238,7 +256,7 @@ def main():
     if failed > 0:
         sys.exit(1)
     else:
-        print("\n✅ Todos os behaviors passaram na validação.")
+        print("\n[PASS] Todos os behaviors passaram na validacao.")
         sys.exit(0)
 
 

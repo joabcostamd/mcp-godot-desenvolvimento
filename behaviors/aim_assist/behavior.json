@@ -52,5 +52,7 @@
   "custo": "leve",
   "verbo_pt": "auxiliar_mira",
   "verbo_en": "assist_aim",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

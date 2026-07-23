@@ -176,6 +176,16 @@
       "description": "Nível de complexidade de uso/configuração: basico (≤3 params, sem deps), intermediario, avancado (7+ params ou 3+ deps).",
       "enum": ["basico", "intermediario", "avancado"]
     },
+    "preview_gif": {
+      "type": "string",
+      "description": "Caminho relativo para o GIF de preview do behavior (ex: preview.gif).",
+      "pattern": "^[a-z0-9_\\-\\.]+\\.gif$"
+    },
+    "preview_type": {
+      "type": "string",
+      "description": "Tipo de preview: visual (capturado do Godot) ou abstract (overlay de texto gerado).",
+      "enum": ["visual", "abstract"]
+    },
     "version": {
       "type": "string",
       "description": "Versão semântica (semver) do behavior.",

@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "sobrepor_animacao",
   "verbo_en": "layer_animation",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }
