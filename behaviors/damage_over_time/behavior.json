@@ -100,5 +100,7 @@
   "custo": "leve",
   "verbo_pt": "envenenar",
   "verbo_en": "damage_over_time",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

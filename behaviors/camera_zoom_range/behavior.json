@@ -75,5 +75,7 @@
   "custo": "medio",
   "verbo_pt": "zoom_range",
   "verbo_en": "zoom_range",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

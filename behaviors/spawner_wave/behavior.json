@@ -155,5 +155,7 @@
   "custo": "leve",
   "verbo_pt": "gerar_inimigos",
   "verbo_en": "spawn",
-  "nivel": "avancado"
+  "nivel": "avancado",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

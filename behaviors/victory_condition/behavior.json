@@ -67,5 +67,7 @@
   "custo": "medio",
   "verbo_pt": "definir_vitoria",
   "verbo_en": "define_victory",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

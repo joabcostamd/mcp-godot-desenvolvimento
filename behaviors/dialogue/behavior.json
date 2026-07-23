@@ -99,5 +99,7 @@
   "custo": "leve",
   "verbo_pt": "dialogar",
   "verbo_en": "dialogue",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

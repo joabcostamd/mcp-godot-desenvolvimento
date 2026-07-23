@@ -56,5 +56,7 @@
   "custo": "medio",
   "verbo_pt": "medir_fps",
   "verbo_en": "measure_fps",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

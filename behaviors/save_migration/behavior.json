@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "migrar_save",
   "verbo_en": "migrate_save",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

@@ -62,5 +62,7 @@
   "custo": "leve",
   "verbo_pt": "gerenciar_deck",
   "verbo_en": "manage_deck",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

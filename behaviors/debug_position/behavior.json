@@ -66,5 +66,7 @@
   "custo": "medio",
   "verbo_pt": "exibir_posicao",
   "verbo_en": "show_position",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

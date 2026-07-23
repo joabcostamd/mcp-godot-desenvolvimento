@@ -123,5 +123,7 @@
   "custo": "leve",
   "verbo_pt": "combinar_pecas",
   "verbo_en": "match_gems",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

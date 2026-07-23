@@ -72,5 +72,7 @@
   "custo": "leve",
   "verbo_pt": "teletransportar",
   "verbo_en": "teleport",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

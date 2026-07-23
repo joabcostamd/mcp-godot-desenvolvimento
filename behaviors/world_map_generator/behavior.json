@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "gerar_mapa",
   "verbo_en": "generate_map",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

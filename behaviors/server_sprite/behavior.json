@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "servidor_sprite",
   "verbo_en": "sprite_server",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

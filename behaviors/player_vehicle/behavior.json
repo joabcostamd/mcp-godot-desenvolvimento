@@ -97,5 +97,7 @@
   "custo": "medio",
   "verbo_pt": "dirigir",
   "verbo_en": "drive",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

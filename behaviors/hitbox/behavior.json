@@ -112,5 +112,7 @@
   "custo": "leve",
   "verbo_pt": "causar_dano",
   "verbo_en": "deal_damage",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

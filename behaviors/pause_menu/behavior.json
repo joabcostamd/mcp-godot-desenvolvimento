@@ -63,5 +63,7 @@
   "custo": "leve",
   "verbo_pt": "pausar",
   "verbo_en": "pause",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

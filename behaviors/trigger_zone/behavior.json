@@ -88,5 +88,7 @@
   "custo": "leve",
   "verbo_pt": "detectar",
   "verbo_en": "detect",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

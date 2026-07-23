@@ -60,5 +60,7 @@
   "custo": "leve",
   "verbo_pt": "ensinar",
   "verbo_en": "teach",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

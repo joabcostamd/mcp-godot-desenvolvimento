@@ -57,5 +57,7 @@
   "custo": "medio",
   "verbo_pt": "joystick_virtual",
   "verbo_en": "virtual_joystick",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

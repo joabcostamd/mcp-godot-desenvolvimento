@@ -59,5 +59,7 @@
   "custo": "leve",
   "verbo_pt": "traduzir",
   "verbo_en": "translate",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

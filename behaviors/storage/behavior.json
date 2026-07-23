@@ -71,5 +71,7 @@
   "custo": "leve",
   "verbo_pt": "armazenar",
   "verbo_en": "store",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

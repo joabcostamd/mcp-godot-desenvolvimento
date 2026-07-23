@@ -81,5 +81,7 @@
   "custo": "leve",
   "verbo_pt": "critar",
   "verbo_en": "crit",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

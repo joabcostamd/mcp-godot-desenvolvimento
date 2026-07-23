@@ -64,5 +64,7 @@
   "custo": "leve",
   "verbo_pt": "priorizar_camera",
   "verbo_en": "prioritize_camera",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

@@ -69,5 +69,7 @@
   "custo": "medio",
   "verbo_pt": "queimar",
   "verbo_en": "burn",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

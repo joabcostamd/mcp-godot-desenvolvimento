@@ -57,5 +57,7 @@
   "custo": "leve",
   "verbo_pt": "transmitir_evento",
   "verbo_en": "broadcast_event",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

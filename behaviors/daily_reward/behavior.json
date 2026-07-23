@@ -84,5 +84,7 @@
   "custo": "leve",
   "verbo_pt": "resgatar",
   "verbo_en": "claim",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

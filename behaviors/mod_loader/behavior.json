@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "carregar_mod",
   "verbo_en": "load_mod",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

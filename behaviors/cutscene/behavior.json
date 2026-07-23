@@ -56,5 +56,7 @@
   "custo": "leve",
   "verbo_pt": "tocar_cutscene",
   "verbo_en": "play_cutscene",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

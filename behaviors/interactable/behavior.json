@@ -95,5 +95,7 @@
   "custo": "medio",
   "verbo_pt": "interagir",
   "verbo_en": "interact",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

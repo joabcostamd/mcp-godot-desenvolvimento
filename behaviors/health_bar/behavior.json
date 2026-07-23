@@ -107,5 +107,7 @@
   "custo": "medio",
   "verbo_pt": "exibir_vida",
   "verbo_en": "display_health",
-  "nivel": "avancado"
+  "nivel": "avancado",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

@@ -70,5 +70,7 @@
   "custo": "medio",
   "verbo_pt": "percorrer_camera",
   "verbo_en": "path_camera",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

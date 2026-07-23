@@ -98,5 +98,7 @@
   "custo": "medio",
   "verbo_pt": "pontuar",
   "verbo_en": "score",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

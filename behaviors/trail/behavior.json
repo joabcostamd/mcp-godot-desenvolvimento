@@ -86,5 +86,7 @@
   "custo": "medio",
   "verbo_pt": "deixar_rastro",
   "verbo_en": "leave_trail",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

@@ -195,5 +195,7 @@
   "custo": "leve",
   "verbo_pt": "gerenciar_vida",
   "verbo_en": "manage_health",
-  "nivel": "avancado"
+  "nivel": "avancado",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

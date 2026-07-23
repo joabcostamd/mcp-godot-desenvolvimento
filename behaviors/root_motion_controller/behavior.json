@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "animar",
   "verbo_en": "animate",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

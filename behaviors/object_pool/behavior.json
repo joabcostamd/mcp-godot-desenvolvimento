@@ -96,5 +96,7 @@
   "custo": "leve",
   "verbo_pt": "reutilizar_objetos",
   "verbo_en": "pool_objects",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

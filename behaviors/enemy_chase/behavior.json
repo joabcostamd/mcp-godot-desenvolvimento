@@ -93,5 +93,7 @@
   "custo": "medio",
   "verbo_pt": "perseguir",
   "verbo_en": "chase",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

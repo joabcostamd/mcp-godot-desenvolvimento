@@ -99,5 +99,7 @@
   "custo": "leve",
   "verbo_pt": "piscar_tela",
   "verbo_en": "flash_screen",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

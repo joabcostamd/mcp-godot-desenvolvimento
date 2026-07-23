@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "zona_segura",
   "verbo_en": "safe_zone",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "capturar_erro",
   "verbo_en": "catch_error",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

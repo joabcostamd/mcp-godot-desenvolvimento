@@ -71,5 +71,7 @@
   "custo": "medio",
   "verbo_pt": "recuar",
   "verbo_en": "recoil",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

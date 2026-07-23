@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "ignorar_gate",
   "verbo_en": "bypass_gate",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "controlar_velocidade",
   "verbo_en": "control_speed",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

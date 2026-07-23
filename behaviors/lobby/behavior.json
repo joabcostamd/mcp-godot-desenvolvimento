@@ -79,5 +79,7 @@
   "custo": "leve",
   "verbo_pt": "criar_sala",
   "verbo_en": "create_lobby",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

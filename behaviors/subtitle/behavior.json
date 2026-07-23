@@ -61,5 +61,7 @@
   "custo": "leve",
   "verbo_pt": "legendar",
   "verbo_en": "subtitle",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

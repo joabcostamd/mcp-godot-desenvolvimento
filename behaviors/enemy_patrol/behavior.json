@@ -116,5 +116,7 @@
   "custo": "medio",
   "verbo_pt": "patrulhar",
   "verbo_en": "patrol",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

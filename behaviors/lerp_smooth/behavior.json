@@ -70,5 +70,7 @@
   "custo": "leve",
   "verbo_pt": "suavizar",
   "verbo_en": "smooth",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

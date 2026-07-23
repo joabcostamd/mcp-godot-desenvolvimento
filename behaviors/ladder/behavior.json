@@ -79,5 +79,7 @@
   "custo": "medio",
   "verbo_pt": "escalar",
   "verbo_en": "climb",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

@@ -142,5 +142,7 @@
   "custo": "medio",
   "verbo_pt": "gerenciar_ondas",
   "verbo_en": "manage_waves",
-  "nivel": "avancado"
+  "nivel": "avancado",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

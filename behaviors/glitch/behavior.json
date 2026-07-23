@@ -100,5 +100,7 @@
   "custo": "leve",
   "verbo_pt": "glitchar",
   "verbo_en": "glitch",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

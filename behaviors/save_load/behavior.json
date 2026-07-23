@@ -80,5 +80,7 @@
   "custo": "leve",
   "verbo_pt": "salvar",
   "verbo_en": "save",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

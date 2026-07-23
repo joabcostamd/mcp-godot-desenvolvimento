@@ -75,5 +75,7 @@
   "custo": "medio",
   "verbo_pt": "correr",
   "verbo_en": "race",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

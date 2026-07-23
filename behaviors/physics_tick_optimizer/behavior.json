@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "otimizar_fisica",
   "verbo_en": "optimize_physics",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

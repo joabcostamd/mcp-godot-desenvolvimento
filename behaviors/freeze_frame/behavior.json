@@ -82,5 +82,7 @@
   "custo": "leve",
   "verbo_pt": "congelar_frame",
   "verbo_en": "freeze_frame",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

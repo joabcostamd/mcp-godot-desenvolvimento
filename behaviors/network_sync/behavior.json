@@ -57,5 +57,7 @@
   "custo": "medio",
   "verbo_pt": "sincronizar_rede",
   "verbo_en": "sync_network",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

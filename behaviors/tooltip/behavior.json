@@ -90,5 +90,7 @@
   "custo": "medio",
   "verbo_pt": "exibir_dica",
   "verbo_en": "show_tooltip",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

@@ -80,5 +80,7 @@
   "custo": "medio",
   "verbo_pt": "conectar",
   "verbo_en": "connect",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

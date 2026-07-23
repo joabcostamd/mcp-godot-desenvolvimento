@@ -90,5 +90,7 @@
   "custo": "leve",
   "verbo_pt": "equipar",
   "verbo_en": "equip",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

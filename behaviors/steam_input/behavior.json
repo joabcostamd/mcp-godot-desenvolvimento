@@ -54,5 +54,7 @@
   "custo": "leve",
   "verbo_pt": "gerenciar_steam",
   "verbo_en": "manage_steam",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

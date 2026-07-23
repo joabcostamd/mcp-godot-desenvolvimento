@@ -104,5 +104,7 @@
   "custo": "leve",
   "verbo_pt": "segurar",
   "verbo_en": "hold",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

@@ -63,5 +63,7 @@
   "custo": "leve",
   "verbo_pt": "dissolver",
   "verbo_en": "dissolve",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

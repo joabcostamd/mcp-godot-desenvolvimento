@@ -83,5 +83,7 @@
   "custo": "medio",
   "verbo_pt": "seguir_camera",
   "verbo_en": "follow_camera",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

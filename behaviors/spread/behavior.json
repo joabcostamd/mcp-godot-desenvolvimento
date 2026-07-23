@@ -83,5 +83,7 @@
   "custo": "medio",
   "verbo_pt": "dispersar",
   "verbo_en": "spread",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

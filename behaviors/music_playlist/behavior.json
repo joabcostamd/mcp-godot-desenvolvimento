@@ -104,5 +104,7 @@
   "custo": "leve",
   "verbo_pt": "tocar_musica",
   "verbo_en": "play_music",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

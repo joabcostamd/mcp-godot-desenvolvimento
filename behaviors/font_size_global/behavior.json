@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "ajustar_fonte",
   "verbo_en": "adjust_font",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

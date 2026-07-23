@@ -69,5 +69,7 @@
   "custo": "medio",
   "verbo_pt": "desenhar_seta",
   "verbo_en": "draw_arrow",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

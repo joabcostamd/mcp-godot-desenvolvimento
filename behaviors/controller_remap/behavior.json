@@ -52,5 +52,7 @@
   "custo": "leve",
   "verbo_pt": "remapear_controle",
   "verbo_en": "remap_controller",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

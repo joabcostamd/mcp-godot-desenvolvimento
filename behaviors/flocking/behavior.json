@@ -115,5 +115,7 @@
   "custo": "pesado",
   "verbo_pt": "agrupar",
   "verbo_en": "flock",
-  "nivel": "avancado"
+  "nivel": "avancado",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

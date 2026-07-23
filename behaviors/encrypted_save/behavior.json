@@ -52,5 +52,7 @@
   "custo": "leve",
   "verbo_pt": "criptografar_save",
   "verbo_en": "encrypt_save",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

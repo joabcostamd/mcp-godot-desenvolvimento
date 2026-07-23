@@ -89,5 +89,7 @@
   "custo": "medio",
   "verbo_pt": "tremer",
   "verbo_en": "shake",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

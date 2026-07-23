@@ -67,5 +67,7 @@
   "custo": "leve",
   "verbo_pt": "corrigir_cor",
   "verbo_en": "correct_color",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

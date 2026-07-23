@@ -101,5 +101,7 @@
   "custo": "medio",
   "verbo_pt": "movimentar",
   "verbo_en": "move",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

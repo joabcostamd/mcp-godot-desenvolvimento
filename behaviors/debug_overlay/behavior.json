@@ -32,5 +32,7 @@
   "custo": "medio",
   "verbo_pt": "exibir_debug",
   "verbo_en": "show_debug",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

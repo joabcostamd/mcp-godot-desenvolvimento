@@ -64,5 +64,7 @@
   "custo": "medio",
   "verbo_pt": "olhar_para",
   "verbo_en": "look_at",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

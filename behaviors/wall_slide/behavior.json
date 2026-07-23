@@ -114,5 +114,7 @@
   "custo": "pesado",
   "verbo_pt": "escorregar",
   "verbo_en": "slide",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

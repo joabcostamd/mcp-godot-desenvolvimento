@@ -78,5 +78,7 @@
   "custo": "medio",
   "verbo_pt": "atrair",
   "verbo_en": "attract",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

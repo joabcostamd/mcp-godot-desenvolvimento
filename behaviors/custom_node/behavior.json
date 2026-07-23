@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "criar_no",
   "verbo_en": "create_node",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

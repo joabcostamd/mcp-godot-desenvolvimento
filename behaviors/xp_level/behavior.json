@@ -110,5 +110,7 @@
   "custo": "leve",
   "verbo_pt": "evoluir",
   "verbo_en": "level_up",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

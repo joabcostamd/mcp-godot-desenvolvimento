@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "converter_mono",
   "verbo_en": "convert_mono",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

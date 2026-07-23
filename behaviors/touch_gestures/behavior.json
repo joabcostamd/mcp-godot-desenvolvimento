@@ -85,5 +85,7 @@
   "custo": "medio",
   "verbo_pt": "detectar_gesto",
   "verbo_en": "detect_gesture",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

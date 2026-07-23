@@ -58,5 +58,7 @@
   "custo": "medio",
   "verbo_pt": "paralaxe",
   "verbo_en": "parallax",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

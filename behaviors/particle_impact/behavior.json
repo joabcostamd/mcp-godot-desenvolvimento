@@ -97,5 +97,7 @@
   "custo": "medio",
   "verbo_pt": "emitir_particula",
   "verbo_en": "emit_particle",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

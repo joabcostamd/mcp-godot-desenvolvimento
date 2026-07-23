@@ -80,5 +80,7 @@
   "custo": "leve",
   "verbo_pt": "transicionar",
   "verbo_en": "transition",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

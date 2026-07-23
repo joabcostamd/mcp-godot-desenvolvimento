@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "desfazer",
   "verbo_en": "undo",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

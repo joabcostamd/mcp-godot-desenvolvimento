@@ -81,5 +81,7 @@
   "custo": "medio",
   "verbo_pt": "decidir",
   "verbo_en": "decide",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

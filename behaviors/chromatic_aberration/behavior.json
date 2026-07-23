@@ -91,5 +91,7 @@
   "custo": "leve",
   "verbo_pt": "distorcer_cor",
   "verbo_en": "aberrate",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

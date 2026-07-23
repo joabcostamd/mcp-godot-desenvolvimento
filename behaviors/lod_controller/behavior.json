@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "controlar_lod",
   "verbo_en": "control_lod",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

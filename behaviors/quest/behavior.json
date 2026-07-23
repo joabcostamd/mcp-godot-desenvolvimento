@@ -92,5 +92,7 @@
   "custo": "leve",
   "verbo_pt": "rastrear_missao",
   "verbo_en": "track_quest",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

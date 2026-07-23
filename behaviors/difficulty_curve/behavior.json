@@ -79,5 +79,7 @@
   "custo": "medio",
   "verbo_pt": "ajustar_dificuldade",
   "verbo_en": "adjust_difficulty",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

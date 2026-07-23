@@ -92,5 +92,7 @@
   "custo": "leve",
   "verbo_pt": "gerenciar_estado",
   "verbo_en": "manage_state",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

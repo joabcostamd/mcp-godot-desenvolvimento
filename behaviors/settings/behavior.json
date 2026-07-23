@@ -110,5 +110,7 @@
   "custo": "medio",
   "verbo_pt": "configurar",
   "verbo_en": "configure",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

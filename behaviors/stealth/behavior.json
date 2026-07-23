@@ -76,5 +76,7 @@
   "custo": "medio",
   "verbo_pt": "esconder",
   "verbo_en": "hide",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

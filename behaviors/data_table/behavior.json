@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "tabela_dados",
   "verbo_en": "data_table",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

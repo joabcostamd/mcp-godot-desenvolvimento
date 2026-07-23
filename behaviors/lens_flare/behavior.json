@@ -68,5 +68,7 @@
   "custo": "medio",
   "verbo_pt": "brilhar",
   "verbo_en": "flare",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

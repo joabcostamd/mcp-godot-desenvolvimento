@@ -72,5 +72,7 @@
   "custo": "leve",
   "verbo_pt": "dropar",
   "verbo_en": "drop_loot",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

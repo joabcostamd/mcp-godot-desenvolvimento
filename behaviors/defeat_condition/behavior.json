@@ -62,5 +62,7 @@
   "custo": "medio",
   "verbo_pt": "definir_derrota",
   "verbo_en": "define_defeat",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

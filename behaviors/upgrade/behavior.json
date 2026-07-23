@@ -98,5 +98,7 @@
   "custo": "leve",
   "verbo_pt": "melhorar",
   "verbo_en": "upgrade",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

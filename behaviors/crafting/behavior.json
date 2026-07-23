@@ -75,5 +75,7 @@
   "custo": "leve",
   "verbo_pt": "criar",
   "verbo_en": "craft",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

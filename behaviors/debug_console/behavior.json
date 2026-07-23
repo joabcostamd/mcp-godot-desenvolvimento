@@ -75,5 +75,7 @@
   "custo": "leve",
   "verbo_pt": "registrar_console",
   "verbo_en": "log_console",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

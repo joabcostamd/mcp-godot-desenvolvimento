@@ -51,5 +51,7 @@
   "custo": "leve",
   "verbo_pt": "configurar_zona_morta",
   "verbo_en": "configure_deadzone",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

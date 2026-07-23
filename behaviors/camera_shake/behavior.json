@@ -113,5 +113,7 @@
   "custo": "medio",
   "verbo_pt": "tremer_camera",
   "verbo_en": "shake_camera",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

@@ -52,5 +52,7 @@
   "custo": "leve",
   "verbo_pt": "mirar_giroscopio",
   "verbo_en": "gyro_aim",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

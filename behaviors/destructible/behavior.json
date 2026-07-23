@@ -75,5 +75,7 @@
   "custo": "leve",
   "verbo_pt": "destruir",
   "verbo_en": "destroy",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

@@ -83,5 +83,7 @@
   "custo": "medio",
   "verbo_pt": "navegar",
   "verbo_en": "navigate",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

@@ -80,5 +80,7 @@
   "custo": "medio",
   "verbo_pt": "olhar_para",
   "verbo_en": "look_at",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "marcar_sujo",
   "verbo_en": "mark_dirty",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

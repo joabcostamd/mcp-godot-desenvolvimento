@@ -101,5 +101,7 @@
   "custo": "medio",
   "verbo_pt": "impulsionar",
   "verbo_en": "dash",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

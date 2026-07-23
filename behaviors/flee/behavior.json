@@ -107,5 +107,7 @@
   "custo": "medio",
   "verbo_pt": "fugir",
   "verbo_en": "flee",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

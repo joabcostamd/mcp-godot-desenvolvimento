@@ -152,5 +152,7 @@
   "custo": "leve",
   "verbo_pt": "criar_personagem",
   "verbo_en": "create_character",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

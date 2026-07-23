@@ -126,5 +126,7 @@
   "custo": "leve",
   "verbo_pt": "atingir",
   "verbo_en": "hitscan",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

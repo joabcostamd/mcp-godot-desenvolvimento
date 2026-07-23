@@ -32,5 +32,7 @@
   "custo": "leve",
   "verbo_pt": "registrar_log",
   "verbo_en": "log",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

@@ -69,5 +69,7 @@
   "custo": "medio",
   "verbo_pt": "seguir",
   "verbo_en": "follow",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

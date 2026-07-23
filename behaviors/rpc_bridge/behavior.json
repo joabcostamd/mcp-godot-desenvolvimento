@@ -73,5 +73,7 @@
   "custo": "leve",
   "verbo_pt": "preencher_rpc",
   "verbo_en": "bridge_rpc",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

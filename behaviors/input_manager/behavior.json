@@ -85,5 +85,7 @@
   "custo": "leve",
   "verbo_pt": "gerenciar_input",
   "verbo_en": "manage_input",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

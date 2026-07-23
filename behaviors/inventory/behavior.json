@@ -120,5 +120,7 @@
   "custo": "leve",
   "verbo_pt": "gerenciar_inventario",
   "verbo_en": "manage_inventory",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

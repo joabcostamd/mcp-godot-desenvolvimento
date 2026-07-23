@@ -110,5 +110,7 @@
   "custo": "leve",
   "verbo_pt": "animar_propriedade",
   "verbo_en": "tween",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

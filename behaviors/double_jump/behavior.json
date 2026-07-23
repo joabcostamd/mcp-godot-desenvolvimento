@@ -103,5 +103,7 @@
   "custo": "medio",
   "verbo_pt": "pular",
   "verbo_en": "jump",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

@@ -83,5 +83,7 @@
   "custo": "leve",
   "verbo_pt": "evoluir_skill",
   "verbo_en": "upgrade_skill",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

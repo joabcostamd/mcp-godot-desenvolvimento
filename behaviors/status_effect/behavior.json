@@ -136,5 +136,7 @@
   "custo": "medio",
   "verbo_pt": "aplicar_efeito",
   "verbo_en": "apply_effect",
-  "nivel": "avancado"
+  "nivel": "avancado",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

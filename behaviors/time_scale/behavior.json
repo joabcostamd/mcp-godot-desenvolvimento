@@ -103,5 +103,7 @@
   "custo": "leve",
   "verbo_pt": "controlar_tempo",
   "verbo_en": "control_time",
-  "nivel": "intermediario"
+  "nivel": "intermediario",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }

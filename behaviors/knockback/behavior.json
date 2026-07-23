@@ -91,5 +91,7 @@
   "custo": "leve",
   "verbo_pt": "empurrar",
   "verbo_en": "knockback",
-  "nivel": "basico"
+  "nivel": "basico",
+  "preview_gif": "preview.gif",
+  "preview_type": "abstract"
 }
