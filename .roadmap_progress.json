@@ -1,4 +1,12 @@
 {
+  "onda_R_reconciliar": {
+    "status": "concluida",
+    "data": "2026-07-23",
+    "tentativa": 1,
+    "agente": "AGENTE 01",
+    "checkpoint": "11dbba4",
+    "resultado": "ONDA R — RECONCILIAR (8 fatias). R1: gate .githooks/pre-commit funcional, baseline .reorg_baseline.json atualizada (63/82/39/88/67/41). R2: JSONs secundarios ja removidos. R3: auditar.py C1 0 breaking, C5 corrigido (NoneType bug em test_budget_gate.py). R4: caminhos verificados. R5: auditoria passa (exit 0). R6: tag agente2/behaviors-onda2-archive criada. R7: medicao real CORE=25, fases 38/57/14/63/42/16, total 234. R8: 13 fichas ONDA_*.md existentes. Regressao: 159 passed, 7 xfailed."
+  },
   "fatia_8.3_curadoria_precedencia": {
     "status": "concluida",
     "data": "2026-07-23",

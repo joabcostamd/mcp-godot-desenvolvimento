@@ -104,7 +104,7 @@ def test_token_budget(lean_only: bool = False) -> list[str]:
 
     if lean_only:
         assert len(failures) == 0, "\n".join(failures)
-        return
+        return failures
 
     # Perfil full (todas as tools de topo) — referência
     full_est = estimate_definition_tokens(all_tools)
@@ -127,6 +127,7 @@ def test_token_budget(lean_only: bool = False) -> list[str]:
             )
 
     assert len(failures) == 0, "\n".join(failures)
+    return failures
 
 
 # ═════════════════════════════════════════════════════════════════════
