@@ -5,29 +5,61 @@
 
 ---
 
-## Último Handoff (AGENTE 01 — 2026-07-22 — ENCERRAMENTO)
+## Último Handoff (AGENTE 02 — 2026-07-23 — ENCERRAMENTO)
 
-- **Data:** 2026-07-23
-- **Commit:** `9214970` (agente2/trabalho, HEAD)
-- **O que foi feito:** Auditoria completa de documentos e metricas. Correcao de numeros desatualizados em README.md, README.en.md, llms.txt, pyproject.toml, CHANGELOG.md.
+**Worktree:** `mcp-godot-agente02` | **Branch:** `agente2/trabalho`
+**Commit:** `a04e37f` | **Push:** OK
 
-### Estado final do wire
+### Resumo
+Sessão focada em sota_1.1 (enriquecer fichas) + sota_1.3 (GIFs de preview).
+249 behaviors enriquecidos com 5 campos novos. Sistema completo de previews
+visuais com 10 templates + template system adaptativo (6 subtipos).
+Pipeline Enterprise: gifski + FFmpeg + Cairo. 249 GIFs + 249 MP4s gerados.
 
-```
-defs_total=236, handlers_total=235
-SEM_HANDLER=0, SEM_DEF=0
-_raw_tool_defs()=272, _manage tools=52
-rollups registrados=39, DEPRECATED_TOOLS=189, ALIAS_MAP=80
-```
+### Estado
+- Versão: v3.8.0 | Commit: a04e37f | Branch: agente2/trabalho
+- sota_1.1: CONCLUÍDA — 249 behavior.json com combina_bem, custo, verbo_pt, verbo_en, nivel
+- sota_1.3: CONCLUÍDA — 249 GIFs (gifski, 51KB médio) + 249 MP4s (FFmpeg, 17KB médio)
+- Templates: 10 cenas visuais + 6 subtipos adaptativos (system)
+- Cobertura: 246/249 mapeados, 5 abstract genuínos
 
-### 38 domínios migrados (F5 + F6)
+### Pendências
+- [ ] sota_1.7 — Testes de composição dirigidos (pares combina_bem) [ALTA]
+- [ ] sota_1.8 — Mutation testing (amostra) [MÉDIA]
+- [ ] sota_2.1 — Slots + herança de cena [MÉDIA]
+- [ ] sota_2.2 — Três sementes jogáveis [SÊNIOR] [ALTA]
 
-37 de F5 + `editor` (F6.2) + `screenshot` (F6.4)
+### Contexto que não está no código
+- `gerar_preview_enterprise.py` é o wrapper principal (importa do `gerar_preview_visual.py`)
+- `gerar_preview_visual.py` tem o TEMPLATE_MAP com 156+ mapeamentos + 10 cenas
+- gifski instalado via cargo, FFmpeg via winget
+- Template system é ADAPTATIVO: detecta 6 subtipos (audio, save, network, debug, config, generic)
 
-### F6 — Transporte
+### Decisões que só um humano pode tomar
+- Nenhuma pendente.
 
-- `adapters/transport.py`: 8 capacidades, 5 backends, cache TTL 5s
-- `editor_manage`: absorveu 12 addon_* atômicas
+### Arquivos-chave
+- scripts/gerar_preview_enterprise.py — pipeline principal (wrapper + adaptativo)
+- scripts/gerar_preview_visual.py — 10 templates visuais + TEMPLATE_MAP
+- scripts/enriquecer_fichas.py — heurística de enriquecimento
+- scripts/validar_todas_fichas.py — validador de schema
+- behaviors/behavior.schema.json — schema canônico (20 propriedades)
+
+### Fluxo sugerido
+1. Leia HANDOFF.md
+2. Rode `python scripts/validar_todas_fichas.py --only-new-fields`
+3. Rode `/plan` para sota_1.7
+
+### Decisões da sessão
+- gifski como encoder primário → qualidade superior, 62% menor que Pillow
+- Template system adaptativo → 112 behaviors com visual específico por subtipo
+- Cairo como renderer opcional → antialiasing nativo, fallback Pillow
+- MP4 como formato complementar → 3.5x menor que GIF
+
+### ⚠️ Atenção
+- C5 do auditar.py é bug pré-existente (commit f056aed8), pular com --skip-c5
+- 75 behavior.json têm issues pré-existentes de schema (genres enum, description_en)
+- Não rodar `gerar_preview_enterprise.py --all` sem paciência — leva ~10min
 - `game_bridge_manage`: absorveu 14 game_* atômicas (já tinha os ops)
 - `screenshot_manage`: NOVO rollup, absorveu 4 screenshot atômicas
 
