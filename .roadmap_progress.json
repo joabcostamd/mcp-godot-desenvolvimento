@@ -1595,10 +1595,11 @@
     "resultado": "2.4 concluida: _READONLY/_DESTRUCTIVE/_IDEMPOTENT/_TITLES/_TAGS ja estao como locais em _tool_defs() desde ONDA 1.3. _apply_hints mantido (ainda usado)."
   },
   "fatia_2_5": {
-    "status": "nao verificado",
-    "checkpoint": null,
+    "status": "concluida",
+    "checkpoint": "66155c814f3af4b94f2095c7ad7faa6481c25f29",
     "ficha": ".github/roadmap/ONDA_2_conformidade.md",
-    "marcacao": "[EIXO-CENTRAL]"
+    "marcacao": "[EIXO-CENTRAL]",
+    "resultado": "2.5 concluida: rollup builders sao factories — rollback ja documentado via create_manage_tool(). Sem ops destrutivas sem rollback detectadas."
   },
   "fatia_3_1": {
     "status": "nao verificado",
