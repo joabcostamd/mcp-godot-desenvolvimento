@@ -103,7 +103,7 @@ def _run_c1(result: dict, c1_before: str | None, c1_after: str | None) -> bool:
                 detail_parts.append("Nenhuma mudanca detectada")
 
             detail = "; ".join(detail_parts) if detail_parts else "Nenhuma mudanca"
-            passed = len(added) <= 5 and len(removed) == 0  # tolerancia de 5 adicoes
+            passed = len(added) == 0 and len(removed) == 0
 
             result["criteria"]["C1_contrato"]["status"] = "pass" if passed else "fail"
             result["criteria"]["C1_contrato"]["detail"] = detail
@@ -533,10 +533,10 @@ def run_audit(
     c4_file: str | None = None,
     tool_name: str | None = None,
     output_file: str | None = None,
-    skip_c5: bool = False,
     visual: bool = False,
     visual_baseline: str = "baseline",
     visual_threshold: float = 1.0,
+    justificar_tool: str | None = None,
 ) -> dict:
     """Executa todos os criterios de autoauditoria.
 
@@ -551,15 +551,15 @@ def run_audit(
     c3_ok = _run_c3(result)
     c4_ok = _run_c4(result, c4_file)
 
-    if skip_c5:
-        result["criteria"]["C5_orcamento"]["status"] = "pre_existente"
-        result["criteria"]["C5_orcamento"]["detail"] = (
-            "Pulado (--skip-c5). Problema pre-existente documentado "
-            "no commit f056aed8. Responsabilidade da fatia 0.7."
-        )
-        c5_ok = True
-    else:
-        c5_ok = _run_c5(result)
+    # C5 — Baseline (DR-5: compara com .reorg_baseline.json)
+    c5_ok = _run_c5(result)
+
+    # Se houve adicao de tool e nao tem justificativa, falha C1
+    if justificar_tool:
+        result["criteria"]["C1_contrato"]["justificativa"] = justificar_tool
+    elif not c1_ok and len(added) > 0:
+        result["criteria"]["C1_contrato"]["detail"] += \
+            " | Use --justificar-tool '<nome>: <motivo>'"
 
     c6_ok = _run_c6(result, tool_name)
 
@@ -598,8 +598,8 @@ def main():
     parser.add_argument("--c4-checklist", help="Arquivo JSON com checklist C4")
     parser.add_argument("--tool-name", help="Nome da tool nova para C6")
     parser.add_argument("--output", help="Arquivo de saida (default: audit_result.json)")
-    parser.add_argument("--skip-c5", action="store_true",
-                       help="Pular C5 (problema pre-existente documentado)")
+    parser.add_argument("--justificar-tool",
+                       help="Justificativa para tool nova (obrigatorio se C1 detectar adicao)")
     parser.add_argument("--visual", action="store_true",
                        help="Executar regressao visual (C7) — requer Godot headless")
     parser.add_argument("--visual-baseline", default="baseline",
@@ -636,10 +636,10 @@ def main():
         c4_file=args.c4_checklist,
         tool_name=args.tool_name,
         output_file=args.output,
-        skip_c5=args.skip_c5,
         visual=args.visual,
         visual_baseline=args.visual_baseline,
         visual_threshold=args.visual_threshold,
+        justificar_tool=args.justificar_tool,
     )
 
     # Reporte

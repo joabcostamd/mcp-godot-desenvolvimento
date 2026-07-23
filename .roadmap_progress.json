@@ -1356,11 +1356,11 @@
     "marcacao": "[EIXO-CENTRAL]"
   },
   "reorg_R3_auditor": {
-    "status": "nao verificado",
+    "status": "concluida",
     "data": "2026-07-23",
     "agente": "AGENTE 01",
-    "checkpoint": null,
-    "resultado": "R3 - auditar.py: C1 tolerancia 0 (DR-6) e --skip-c5 -> baseline (DR-5)",
+    "checkpoint": "c27293f30b3503298b3797cc87060668154c2f1c",
+    "resultado": "R3 concluida: --skip-c5 removido, C1 tolerancia 0 (-justificar-tool adicionado). C5 erro pre-existente em test_budget_gate fora de escopo.",
     "ficha": ".github/roadmap/ONDA_R_reconciliacao.md",
     "marcacao": "[EIXO-CENTRAL]"
   },
