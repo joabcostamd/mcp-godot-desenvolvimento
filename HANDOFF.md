@@ -19,6 +19,7 @@ com 80% de detecção. 3 auditorias enterprise (20 issues corrigidos).
 ### Estado
 - Versão: v3.9.0 | Commit: 12f8d81 | Branch: agente2/trabalho
 - sota_1.1: CONCLUÍDA — 249 behavior.json com combina_bem, custo, verbo_pt, verbo_en, nivel
+- sota_1.2: CONCLUÍDA — BGE-M3 indexando 249 behaviors (926 KB), 9/9 pytest
 - sota_1.3: ⚠️ PARCIAL — 249 GIFs + 249 MP4s gerados, mas NÃO FINALIZADOS (ver pendência #1)
 - sota_1.6: CONCLUÍDA — check_conflicts() com cache thread-safe, 11/11 pytest
 - sota_1.7: CONCLUÍDA — 1.881 testes GdUnit4 gerados, amostra 30 pares validada
