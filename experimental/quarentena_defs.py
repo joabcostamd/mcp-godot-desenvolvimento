@@ -2,8 +2,8 @@
 Definições de tools em QUARENTENA — FASE 1 (2026-07-23).
 
 Estas tools foram removidas do wire (tools/list) porque nunca foram
-exercitadas por um jogo real. Continuam invocáveis via invoke_by_name,
-que importa deste arquivo.
+exercitadas por um jogo real. Continuam invocáveis via invoke_by_name
+(fallback para QUARENTENA_HANDLERS neste arquivo).
 
 Critério de saída da quarentena:
     Um jogo real precisou da capacidade + teste passa + tool volta ao wire.
@@ -13,6 +13,12 @@ from mcp.types import Tool
 
 # Tools movidas de core/tool_definitions.py em 2026-07-23
 QUARENTENA_TOOL_DEFS: list[Tool] = []
+
+# Handlers de fallback — invoke_by_name usa este dicionário quando
+# o handler não está em _build_handlers() (tools removidas do wire).
+# Cada handler faz lazy import do módulo original para evitar
+# dependência circular no startup do servidor.
+QUARENTENA_HANDLERS: dict[str, object] = {}
 
 # ── capsule_generate_store_image ──
 QUARENTENA_TOOL_DEFS.append(
@@ -460,3 +466,46 @@ QUARENTENA_TOOL_DEFS.append(
             },
         ),
 )
+
+# ── Handlers de fallback para invoke_by_name ────────────────────
+# Cada handler faz lazy import do módulo original.
+
+def _make_lazy_handler(module_path, func_name):
+    def _handler(args):
+        import importlib
+        mod = importlib.import_module(module_path)
+        func = getattr(mod, func_name)
+        return func(args)
+    return _handler
+
+def _make_manage_handler(module_path, func_name, default_op='preview'):
+    def _handler(args):
+        import importlib
+        mod = importlib.import_module(module_path)
+        func = getattr(mod, func_name)
+        op = args.get('op', default_op)
+        params = args.get('params', {})
+        return func(op=op, params=params)
+    return _handler
+
+QUARENTENA_HANDLERS = {
+    'cloud_save_configure': _make_lazy_handler('tools.achievement_ops', 'cloud_save_configure'),
+    'mod_manifest_generate': _make_lazy_handler('tools.mod_ops', 'mod_manifest_generate'),
+    'validate_mod_compatibility': _make_lazy_handler('tools.mod_ops', 'validate_mod_compatibility'),
+    'cutscene_create_timeline': _make_lazy_handler('tools.cutscene_ops', 'cutscene_create_timeline'),
+    'cutscene_add_camera_shot': _make_lazy_handler('tools.cutscene_ops', 'cutscene_add_camera_shot'),
+    'cutscene_add_dialogue_event': _make_lazy_handler('tools.cutscene_ops', 'cutscene_add_dialogue_event'),
+    'telemetry_track_event': _make_lazy_handler('tools.telemetry_ops', 'telemetry_track_event'),
+    'telemetry_get_funnel': _make_lazy_handler('tools.telemetry_ops', 'telemetry_get_funnel'),
+    'telemetry_session_summary': _make_lazy_handler('tools.telemetry_ops', 'telemetry_session_summary'),
+    'telemetry_heatmap': _make_lazy_handler('tools.telemetry_ops', 'telemetry_heatmap'),
+    'remote_balance_config': _make_lazy_handler('tools.adaptive_ops', 'remote_balance_config'),
+    'trailer_capture_clip': _make_lazy_handler('tools.trailer_ops', 'trailer_capture_clip'),
+    'trailer_render_sequence': _make_lazy_handler('tools.trailer_ops', 'trailer_render_sequence'),
+    'capsule_generate_store_image': _make_lazy_handler('tools.trailer_ops', 'capsule_generate_store_image'),
+    'onboarding_create_tutorial_step': _make_lazy_handler('tools.onboarding_ops', 'onboarding_create_tutorial_step'),
+    'onboarding_create_guided_tour': _make_lazy_handler('tools.onboarding_ops', 'onboarding_create_guided_tour'),
+    'onboarding_check_first_experience': _make_lazy_handler('tools.onboarding_ops', 'onboarding_check_first_experience'),
+    'publish_manage': _make_manage_handler('tools.publish_ops', 'publish_manage', 'preview'),
+    'community_manage': _make_manage_handler('tools.community_ops', 'community_manage', 'badge'),
+}

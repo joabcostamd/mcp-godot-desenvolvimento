@@ -3903,7 +3903,5 @@ def _raw_tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
-        # ── Publish (ONDA 4 — Fatia 4.A) ───────────────────────
-        # ── Community (Gaps ONDA 4) ────────────────────────────
     ]
 

@@ -183,18 +183,26 @@ def invoke_by_name(name: str, arguments: dict | None = None) -> dict:
     try:
         phase_tools = _srv._get_phase_tools()
         if name not in phase_tools:
-            current_phase = "desconhecida"
+            # FASE 1 — Quarentena: tools removidas do wire ainda são
+            # invocáveis via invoke_by_name. O phase gate é relaxado
+            # para tools em quarentena (invocação explícita).
             try:
-                from tools.phase_ops import get_current_phase
-                cp = get_current_phase()
-                current_phase = cp.get("phase", "desconhecida")
+                from experimental.quarentena_defs import QUARENTENA_HANDLERS
+                if name not in QUARENTENA_HANDLERS:
+                    raise ImportError("not in quarentena")
             except Exception:
-                pass
-            return {
-                "status": "error",
-                "message": f"Ferramenta '{name}' não está disponível na fase '{current_phase}'.",
-                "hint": "Use advance_phase para avançar de fase, ou verifique se o nome está correto.",
-            }
+                current_phase = "desconhecida"
+                try:
+                    from tools.phase_ops import get_current_phase
+                    cp = get_current_phase()
+                    current_phase = cp.get("phase", "desconhecida")
+                except Exception:
+                    pass
+                return {
+                    "status": "error",
+                    "message": f"Ferramenta '{name}' não está disponível na fase '{current_phase}'.",
+                    "hint": "Use advance_phase para avançar de fase, ou verifique se o nome está correto.",
+                }
     except Exception:
         pass  # Sem projeto ativo — fallback para tentar executar
 
@@ -225,6 +233,16 @@ def invoke_by_name(name: str, arguments: dict | None = None) -> dict:
         handler = handlers.get(name)
     except Exception as e:
         return {"status": "error", "message": f"Erro ao carregar handlers: {e}"}
+
+    if handler is None:
+        # ── Fallback: quarentena (FASE 1) ──
+        # Tools removidas do wire ainda são invocáveis se estiverem
+        # em experimental/quarentena_defs.py
+        try:
+            from experimental.quarentena_defs import QUARENTENA_HANDLERS
+            handler = QUARENTENA_HANDLERS.get(name)
+        except Exception:
+            pass
 
     if handler is None:
         return {
