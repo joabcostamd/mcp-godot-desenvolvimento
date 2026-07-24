@@ -384,7 +384,7 @@ PHASE_TOOLS_TOP: dict[str, set[str]] = {
         "vision_manage", "profile_frame",
     },
     "PRONTO_PARA_LANCAR": {
-        "export_manage", "build_export", "release_checklist",
+        "export_manage", "build_csharp", "release_checklist",
         "configure_export_preset", "deploy_itch",
     },
 }
