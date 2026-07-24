@@ -182,8 +182,7 @@ def list_features() -> dict:
     state = _load_state()
     result = {}
     for name in sorted(FEATURE_TOOLS.keys()):
-        enabled = not state.get(name, False)
-        result[name] = {
+        enabled = not state.get(name, False)        result[name] = {
             "enabled": enabled,
             "tools": sorted(FEATURE_TOOLS[name]) if FEATURE_TOOLS[name] else [],
         }
@@ -202,3 +201,56 @@ def _schedule_cache_invalidation() -> None:
 # ── MCP Tools (expostas como op em safety_manage ou standalone) ────
 # NÃO adicionar tools MCP de topo — estas funções são chamadas
 # internamente ou expostas como ops de rollup.
+
+
+# ── FASE 9: Feature Flags de Dois Eixos ──────────────────────────
+# Inspirado no GitHub MCP Server (FeatureFlagEnable + FeatureFlagDisable).
+# Suporta 2 eixos de controle por feature:
+#   enable:  lista de tools que SÓ aparecem se a feature está ativa
+#   disable: lista de tools que SOMEM se a feature está ativa
+#
+# Uso:
+#   FEATURE_FLAGS = {
+#       "nova_feature": {
+#           "enable": {"tool_nova"},
+#           "disable": set(),
+#       }
+#   }
+
+
+FEATURE_FLAGS: dict[str, dict[str, set[str]]] = {
+    # Exemplo de feature com 2 eixos:
+    # "experimental_vr": {
+    #     "enable": {"vr_manage", "vr_calibrate"},
+    #     "disable": {"camera_manage"},  # VR substitui câmera normal
+    # },
+}
+
+
+def get_enabled_by_flag() -> set[str]:
+    """Tools que só aparecem se sua feature está ativa (eixo enable)."""
+    state = _load_state()
+    enabled: set[str] = set()
+    for feature_name, config in FEATURE_FLAGS.items():
+        if not state.get(feature_name, False):  # feature ativa (não desligada)
+            enabled.update(config.get("enable", set()))
+    return enabled
+
+
+def get_disabled_by_flag() -> set[str]:
+    """Tools que somem se sua feature está ativa (eixo disable)."""
+    state = _load_state()
+    disabled: set[str] = set()
+    for feature_name, config in FEATURE_FLAGS.items():
+        if not state.get(feature_name, False):  # feature ativa
+            disabled.update(config.get("disable", set()))
+    return disabled
+
+
+def get_all_flag_tools() -> set[str]:
+    """União de todas as tools controladas por feature flags (2 eixos)."""
+    result: set[str] = set()
+    for config in FEATURE_FLAGS.values():
+        result.update(config.get("enable", set()))
+        result.update(config.get("disable", set()))
+    return result

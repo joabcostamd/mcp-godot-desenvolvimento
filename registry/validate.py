@@ -147,7 +147,14 @@ def validate_all(phase: str | None = None, fail_fast: bool = True) -> list[str]:
         if target not in rollup_names:
             errors.append(f"ALIAS: '{alias}' → '{target}' mas target não é rollup")
 
-    # ── 6. Consistência TOP tools ───────────────────────────────
+    # ── 7. Validação AST (FASE 9) ──────────────────────────────
+    try:
+        from scripts.validate_tool_ast import validate_all_defs
+        ast_errors = validate_all_defs()
+        for ae in ast_errors:
+            errors.append(f"AST: {ae}")
+    except Exception as e:
+        errors.append(f"AST: erro ao executar: {e}")
     for p, ts in PHASE_TOOLS_TOP.items():
         missing_top = [t for t in ts if t not in tools and t not in DEPRECATED_TOOLS]
         if missing_top:
