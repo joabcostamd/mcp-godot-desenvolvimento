@@ -4,45 +4,62 @@
 
 ---
 
-## Último Handoff (AGENTE 01 — 2026-07-23 — FASE 1: QUARENTENA REAL CONCLUÍDA)
+## Último Handoff (AGENTE 01 — 2026-07-23 — FASE 2: ROLLUPS CONCLUÍDA)
 
 - **Data:** 2026-07-23
-- **Commits:** `1b89fc4` (feat) + `58f78e1` (fix pós-auditoria)
-- **O que foi feito:** FASE 1 do plano de redução de teto — 19 tools movidas para quarentena REAL.
+- **Commit:** `a822623` (FASE 2)
+- **Commits da sessão:** `1b89fc4` (F1 feat) + `58f78e1` (F1 fix) + `c35cba2` (handoff) + `a822623` (F2 feat)
+- **O que foi feito:** FASE 1 + FASE 2 do plano de redução de teto.
 
-### Métricas pós-FASE 1
+### Métricas pós-FASE 2
 
 ```
-Tools ativas: 214 (eram 233, -19)
-Definições brutas: 101 (eram 120, -19)
-DEPRECATED_TOOLS: 195
-ALIAS_MAP: 80
-Behaviors: 249
-Domínios: 38
+Tools ativas: 209 (eram 233, -24)
+Definições brutas: 91 (eram 120, -29)
+DEPRECATED_TOOLS: 205 (eram 195, +10 atômicas)
+ALIAS_MAP: 90 (eram 80, +10 aliases)
+Rollups _manage: 49 (eram 44, +5)
 
 Tools por fase (CORE=25 + fase):
   IDEIA: 63 | DESIGN: 79 | PROTOTIPO: 39 ✅
-  CONTEUDO: 79 | POLIMENTO: 66 | PRONTO_PARA_LANCAR: 35 ✅
+  CONTEUDO: 79 | POLIMENTO: 61 | PRONTO_PARA_LANCAR: 35 ✅
 
-Quarentena REAL: 19 tools removidas do wire
-  Definições: experimental/quarentena_defs.py
-  Handlers: QUARENTENA_HANDLERS (lazy import, 19 handlers)
-  Fallback: invoke_by_name via tools/meta_ops.py
-
-GAPS: SEM_FASE=0, SEM_NS=0, FANTASMAS_FASE=0, FANTASMAS_NS=0, COLISOES=0
+GAPS: SEM_FASE=0, FANTASMAS=0, COLISOES=0
 Testes: 24 passed (invariants+gate), 7 xfailed
-auditar.py: PASS (C1 ok, C5 ok — "Fases com overflow: 0")
+auditar.py: PASS (C1 ok, C5 ok)
 Gate pre-commit: exit 0
 ```
 
-### O que foi feito (FASE 1 — Quarentena REAL)
+### O que foi feito
 
-| Arquivo | Mudança |
-|---------|---------|
-| `core/tool_definitions.py` | -371 linhas (19 Tool() removidas) |
-| `core/legacy_data.py` | -38 linhas (19 nomes removidos de TOOLSETS + PHASE_TOOLSETS) |
-| `server.py` | -96 linhas (imports + handlers) |
-| `experimental/quarentena_defs.py` | NOVO — 520 linhas (19 definições + QUARENTENA_HANDLERS) |
+| FASE | O quê | Delta tools |
+|------|-------|:-----------:|
+| F1 — Quarentena REAL | 19 tools removidas do wire → `quarentena_defs.py` | 233 → 214 (-19) |
+| F2 — Rollups | 10 atômicas → 5 rollups `_manage` | 214 → 209 (-5) |
+
+### Rollups criados (FASE 2)
+
+| Rollup | Ops | Atômicas colapsadas |
+|--------|-----|---------------------|
+| `workflow_manage` | snapshot, handoff | workflow_snapshot + workflow_handoff |
+| `security_manage` | configure, status | configure_security + security_status |
+| `audit_manage` | log, replay | get_audit_log + get_audit_replay |
+| `recording_manage` | start, stop | start_recording + stop_recording |
+| `vibe_manage` | enable, context | vibe_coding_mode + get_vibe_context |
+
+### Trajetória de redução (acumulada)
+
+```
+                    IDEIA  DESIGN  PROTOTIPO  CONTEUDO  POLIMENTO  PRONTO
+Linha de base:       63      82       39 ✅       88        67        41
+Pós-FASE 1:          63      79       39 ✅       79        66        35 ✅
+Pós-FASE 2:          63      79       39 ✅       79        61        35 ✅
+Meta (≤40):          40      40       40         40        40        40
+```
+
+### Próximo: FASE 3 — Revisão de Curadoria por Fase
+
+Auditar tools por fase: "é REALMENTE necessária aqui?" Tools sem evidência de uso → quarentena. Tools com 3+ fases → CORE.
 | `tools/meta_ops.py` | +35 linhas (fallback invoke_by_name para quarentena) |
 | `scripts/fase1_quarentena.py` | NOVO — script de migração reutilizável |
 
