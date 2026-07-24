@@ -244,6 +244,17 @@ def main(repo_root: Path | None = None) -> int:
     # G3
     errors.extend(check_g3(repo_root=repo_root))
 
+    # G4 (FASE 8): Invariantes + rollup-first + alias consistency
+    try:
+        from registry.validate import validate_all
+        inv_errors = validate_all(fail_fast=False)
+        # Só bloqueia em erros reais (INV-*, G3-lean), não em avisos (ROLLUP-FIRST)
+        blocking = [e for e in inv_errors if not e.startswith("ROLLUP-FIRST")]
+        for err in blocking:
+            errors.append(f"G4 {err}")
+    except Exception as e:
+        errors.append(f"G4 ERRO ao executar validate_all(): {e}")
+
     if errors:
         print("=" * 60)
         print("  GATE DE PRE-COMMIT — BLOQUEADO")
