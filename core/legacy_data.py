@@ -179,21 +179,15 @@ TOOLSETS = {
 PHASE_TOOLSETS: dict[str, set[str]] = {
     "IDEIA": {
         "ping", "health_check", "self_test", "bootstrap_godot_mcp",
-        "read_file", "write_file", "dump_mcp_state",
+        "read_file", "write_file",
         "project_manage", "project_status",
         "get_current_phase", "advance_phase", "get_phase_history",
         "create_milestone_plan", "get_milestone_plan", "advance_milestone",
         "set_project_brief", "get_project_brief", "update_project_brief",
         "gdd_generate",
-        "analysis_manage",
-        "godot_class_ref",
-        "validate_mcp_environment", "validate_godot_version",
         "setup_mcp_config", "install_mcp_addon",
         "safety_manage",
         "capture_proof", "verify_proof",
-        "audit_input_map", "audit_autoloads", "audit_scene_reachability",
-        "audit_uid_consistency", "audit_save_compatibility",
-        "validate_mcp_registry",
         "project_progress",
         # ── F8.1: Ideação e bootstrap ──
         "scope_manage", "teacher_manage", "quickstart_manage",
@@ -239,7 +233,14 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "dialogue_generate_personality",
         "quest_generate",
         "complexity_gate_manage", "fun_report_manage",
-        "reviewer_manage", },
+        "reviewer_manage",
+        # ── FASE 3: Movidos do IDEIA (auditoria/validação) ──
+        "analysis_manage", "godot_class_ref",
+        "validate_mcp_environment", "validate_godot_version",
+        "audit_input_map", "audit_autoloads", "audit_scene_reachability",
+        "audit_uid_consistency", "audit_save_compatibility",
+        "validate_mcp_registry",
+    },
     "PROTOTIPO": {
         # ── Execução runtime (core do prototipar) ──
         "runtime_manage",
@@ -322,6 +323,8 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "effect_probe",
         # ── F8.1: Polimento e QA ──
         "accessibility_audit_scene", "adaptive_difficulty_adjust",
+        # ── FASE 3: Movido do IDEIA ──
+        "dump_mcp_state",
         "localization_manage", "polish_manage", "validate_achievement_config",
 },
     "PRONTO_PARA_LANCAR": {
