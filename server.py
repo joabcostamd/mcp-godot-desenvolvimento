@@ -91,6 +91,22 @@ _ENABLED_TOOLS: set[str] | None = parse_toolset_arg()
 if _ENABLED_TOOLS is not None:
     print(f"[MCP] Toolsets ativos: {sorted(_ENABLED_TOOLS)}", file=sys.stderr)
 
+# ── FASE 4: Progressive Discovery (--lean) ────────────────────
+# Ativa modo lean: tools/list retorna apenas CORE + top-5 da fase.
+# O catálogo completo permanece acessível via catalog_search.
+_LEAN_MODE: bool = False
+
+def _parse_lean_arg() -> bool:
+    import argparse
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--lean", action="store_true", default=False)
+    args, _ = parser.parse_known_args()
+    return args.lean
+
+_LEAN_MODE = _parse_lean_arg()
+if _LEAN_MODE:
+    print("[MCP] Modo LEAN ativo — apenas CORE + top-5 por fase visíveis", file=sys.stderr)
+
 # ── Feature 8: Toolsets por Fase (--phase) ────────────────────
 # Filtro dinâmico: consulta get_current_phase() do projeto ativo
 # a cada _tool_defs(). Cumulativo: cada fase herda tools da anterior.
@@ -137,6 +153,16 @@ def _get_phase_tools() -> set[str]:
         return PHASE_TOOLS_CORE
 
     phase_tools = PHASE_TOOLSETS.get(phase, set())
+
+    # ── FASE 4: Progressive Discovery (--lean) ──
+    # Modo lean: tools/list retorna CORE + top-5 da fase.
+    # As demais tools da fase são acessíveis via catalog_search +
+    # describe_tool + invoke_by_name (descoberta progressiva).
+    if _LEAN_MODE:
+        from core.legacy_data import PHASE_TOOLS_TOP
+        top = PHASE_TOOLS_TOP.get(phase, set())
+        return PHASE_TOOLS_CORE | top
+
     return PHASE_TOOLS_CORE | phase_tools
 
 

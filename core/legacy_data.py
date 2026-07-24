@@ -358,3 +358,34 @@ PHASE_TOOLS_CORE = {
     "budget_manage", "mcp_telemetry_manage",
 }
 
+# ── FASE 4: Progressive Discovery (--lean mode) ─────────────────
+# Top-5 tools por fase quando modo lean está ativo.
+# O catálogo completo permanece acessível via catalog_search +
+# describe_tool + invoke_by_name (descoberta progressiva).
+PHASE_TOOLS_TOP: dict[str, set[str]] = {
+    "IDEIA": {
+        "gdd_generate", "set_project_brief", "create_milestone_plan",
+        "scope_manage", "quickstart_manage",
+    },
+    "DESIGN": {
+        "scene_manage", "node_manage", "script_manage",
+        "config_manage", "ui_manage",
+    },
+    "PROTOTIPO": {
+        "runtime_manage", "godot_manage", "editor_manage",
+        "game_bridge_manage", "physics_manage",
+    },
+    "CONTEUDO": {
+        "tilemap_manage", "navigation_manage", "dialogue_manage",
+        "inventory_manage", "d3_manage",
+    },
+    "POLIMENTO": {
+        "debug_manage", "test_manage", "screenshot_manage",
+        "vision_manage", "profile_frame",
+    },
+    "PRONTO_PARA_LANCAR": {
+        "export_manage", "build_export", "release_checklist",
+        "configure_export_preset", "deploy_itch",
+    },
+}
+
