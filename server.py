@@ -470,7 +470,6 @@ from tools.debugger_ops import debugger_set_breakpoint, debugger_status, debugge
 from tools.networking_ops import game_http_request, game_multiplayer
 from tools.safety_policy import set_safety_policy
 from tools.validate_write import safe_write_gdscript
-from tools.dynamic_groups import tool_catalog, tool_groups
 from tools.recording_ops import game_serialize_state
 from tools.runtime_rich import (
     game_call_method,
@@ -970,7 +969,7 @@ def _apply_hints(tools: list) -> list:
 
         if 'priority' not in ann:
             # Core/bootstrap tools = prioridade máxima
-            _CORE_PREFIXES = ("ping", "health_check", "self_test", "bootstrap", "validate_mcp", "tool_catalog", "tool_groups", "godot")
+            _CORE_PREFIXES = ("ping", "health_check", "self_test", "bootstrap", "validate_mcp", "godot")
             if name.startswith(_CORE_PREFIXES):
                 ann['priority'] = 1.0
             elif any(name.startswith(p) for p in ("validate_", "audit_", "debug_")):
@@ -1910,7 +1909,7 @@ SESSION_ALWAYS_ALLOWED = {
     "validate_mcp_environment", "validate_godot_version",
     "validate_mcp_registry",
     "safety_manage", "dump_mcp_state",
-    "tool_catalog", "tool_groups",
+    "catalog_search",
     "get_current_phase", "get_phase_history",
     "get_next_step", "resume_session",
 }
@@ -2245,7 +2244,7 @@ def _handle_godot(args: dict) -> dict:
             "status": "unmatched",
             "message": routed["message"],
             "suggestion": routed.get("suggestion"),
-            "hint": "Tente usar tool_catalog(query='...') para buscar a ferramenta certa.",
+            "hint": "Tente usar catalog_search(query='...') para buscar a ferramenta certa.",
         }
 
     # 2. Invocar a ferramenta encontrada
