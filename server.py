@@ -764,16 +764,11 @@ from tools.pipeline_ops import project_status
 from tools.orchestrator import create_entity, circuit_breaker_status
 
 # ── Camada 5 (Gameplay) ─────────────────────────────────────────────
-from tools.achievement_ops import create_achievement_system, cloud_save_configure, validate_achievement_config
-from tools.mod_ops import mod_manifest_generate, validate_mod_compatibility
-from tools.cutscene_ops import cutscene_create_timeline, cutscene_add_camera_shot, cutscene_add_dialogue_event
-from tools.telemetry_ops import telemetry_track_event, telemetry_get_funnel, telemetry_session_summary, telemetry_heatmap
+from tools.achievement_ops import create_achievement_system, validate_achievement_config
 from tools.mcp_telemetry_ops import mcp_telemetry_manage, track_mcp_event, track_phase_transition
-from tools.adaptive_ops import adaptive_difficulty_adjust, quest_generate, remote_balance_config
+from tools.adaptive_ops import adaptive_difficulty_adjust, quest_generate
 from tools.dialogue_ops import dialogue_generate_npc_lines, dialogue_generate_personality
 from tools.accessibility_ops import accessibility_apply_colorblind_filter, accessibility_add_subtitles, accessibility_remap_controls, accessibility_audit_scene, accessibility_certification_checklist
-from tools.trailer_ops import trailer_capture_clip, trailer_render_sequence, capsule_generate_store_image
-from tools.onboarding_ops import onboarding_create_tutorial_step, onboarding_create_guided_tour, onboarding_check_first_experience
 
 # ── Onda 6: Server Instructions (system prompt do MCP) ──────────────
 
@@ -1570,8 +1565,6 @@ def _build_handlers() -> dict:
         "bootstrap_godot_mcp": _handle_bootstrap_godot_mcp,
         "quickstart_manage": _handle_quickstart_manage,
         "version_history_manage": _handle_version_history_manage,
-        "publish_manage": _handle_publish_manage,
-        "community_manage": _handle_community_manage,
         "godot_keep_alive": godot_keep_alive,
         # Fase 2: Runtime
         # Fase 3: Editor
@@ -1797,31 +1790,14 @@ def _build_handlers() -> dict:
         "godot": _handle_godot,
         # ── Camada 5 (Gameplay): Handlers registrados 2026-07-19 ──
         "create_achievement_system": _handle_create_achievement_system,
-        "cloud_save_configure": _handle_cloud_save_configure,
         "validate_achievement_config": _handle_validate_achievement_config,
-        "mod_manifest_generate": _handle_mod_manifest_generate,
-        "validate_mod_compatibility": _handle_validate_mod_compatibility,
-        "cutscene_create_timeline": _handle_cutscene_create_timeline,
-        "cutscene_add_camera_shot": _handle_cutscene_add_camera_shot,
-        "cutscene_add_dialogue_event": _handle_cutscene_add_dialogue_event,
-        "telemetry_track_event": _handle_telemetry_track_event,
-        "telemetry_get_funnel": _handle_telemetry_get_funnel,
-        "telemetry_session_summary": _handle_telemetry_session_summary,
-        "telemetry_heatmap": _handle_telemetry_heatmap,
         "adaptive_difficulty_adjust": _handle_adaptive_difficulty_adjust,
         "quest_generate": _handle_quest_generate,
-        "remote_balance_config": _handle_remote_balance_config,
         "accessibility_apply_colorblind_filter": _handle_accessibility_apply_colorblind_filter,
         "accessibility_add_subtitles": _handle_accessibility_add_subtitles,
         "accessibility_remap_controls": _handle_accessibility_remap_controls,
         "accessibility_audit_scene": _handle_accessibility_audit_scene,
         "accessibility_certification_checklist": _handle_accessibility_certification_checklist,
-        "trailer_capture_clip": _handle_trailer_capture_clip,
-        "trailer_render_sequence": _handle_trailer_render_sequence,
-        "capsule_generate_store_image": _handle_capsule_generate_store_image,
-        "onboarding_create_tutorial_step": _handle_onboarding_create_tutorial_step,
-        "onboarding_create_guided_tour": _handle_onboarding_create_guided_tour,
-        "onboarding_check_first_experience": _handle_onboarding_check_first_experience,
         "dialogue_generate_npc_lines": _handle_dialogue_generate_npc_lines,
         "dialogue_generate_personality": _handle_dialogue_generate_personality,
 
@@ -2286,47 +2262,14 @@ def _handle_validate_mcp_registry(args: dict) -> dict:
 def _handle_create_achievement_system(args: dict) -> dict:
     return create_achievement_system(args)
 
-def _handle_cloud_save_configure(args: dict) -> dict:
-    return cloud_save_configure(args)
-
 def _handle_validate_achievement_config(args: dict) -> dict:
     return validate_achievement_config(args)
-
-def _handle_mod_manifest_generate(args: dict) -> dict:
-    return mod_manifest_generate(args)
-
-def _handle_validate_mod_compatibility(args: dict) -> dict:
-    return validate_mod_compatibility(args)
-
-def _handle_cutscene_create_timeline(args: dict) -> dict:
-    return cutscene_create_timeline(args)
-
-def _handle_cutscene_add_camera_shot(args: dict) -> dict:
-    return cutscene_add_camera_shot(args)
-
-def _handle_cutscene_add_dialogue_event(args: dict) -> dict:
-    return cutscene_add_dialogue_event(args)
-
-def _handle_telemetry_track_event(args: dict) -> dict:
-    return telemetry_track_event(args)
-
-def _handle_telemetry_get_funnel(args: dict) -> dict:
-    return telemetry_get_funnel(args)
-
-def _handle_telemetry_session_summary(args: dict) -> dict:
-    return telemetry_session_summary(args)
-
-def _handle_telemetry_heatmap(args: dict) -> dict:
-    return telemetry_heatmap(args)
 
 def _handle_adaptive_difficulty_adjust(args: dict) -> dict:
     return adaptive_difficulty_adjust(args)
 
 def _handle_quest_generate(args: dict) -> dict:
     return quest_generate(args)
-
-def _handle_remote_balance_config(args: dict) -> dict:
-    return remote_balance_config(args)
 
 def _handle_accessibility_apply_colorblind_filter(args: dict) -> dict:
     return accessibility_apply_colorblind_filter(args)
@@ -2342,25 +2285,6 @@ def _handle_accessibility_audit_scene(args: dict) -> dict:
 
 def _handle_accessibility_certification_checklist(args: dict) -> dict:
     return accessibility_certification_checklist(args)
-
-def _handle_trailer_capture_clip(args: dict) -> dict:
-    return trailer_capture_clip(args)
-
-def _handle_trailer_render_sequence(args: dict) -> dict:
-    return trailer_render_sequence(args)
-
-def _handle_capsule_generate_store_image(args: dict) -> dict:
-    return capsule_generate_store_image(args)
-
-def _handle_onboarding_create_tutorial_step(args: dict) -> dict:
-    return onboarding_create_tutorial_step(args)
-
-def _handle_onboarding_create_guided_tour(args: dict) -> dict:
-    return onboarding_create_guided_tour(args)
-
-def _handle_onboarding_check_first_experience(args: dict) -> dict:
-    return onboarding_check_first_experience(args)
-
 
 def _handle_dialogue_generate_npc_lines(args: dict) -> dict:
     return dialogue_generate_npc_lines(args)
@@ -2740,22 +2664,6 @@ def _handle_version_history_manage(args: dict) -> dict:
     # Constrói params a partir dos args (menos op)
     params = {k: v for k, v in args.items() if k != "op"}
     return version_history_manage(op=op, params=params)
-
-
-def _handle_publish_manage(args: dict) -> dict:
-    """Handler para publish_manage — publicação na AssetLib (Fatia 4.A)."""
-    from tools.publish_ops import publish_manage
-    op = args.get("op", "preview")
-    params = args.get("params", {})
-    return publish_manage(op=op, params=params)
-
-
-def _handle_community_manage(args: dict) -> dict:
-    """Handler para community_manage — ferramentas de comunidade (Gaps ONDA 4)."""
-    from tools.community_ops import community_manage
-    op = args.get("op", "badge")
-    params = args.get("params", {})
-    return community_manage(op=op, params=params)
 
 
 def _handle_generate_project_structure(args: dict) -> dict:

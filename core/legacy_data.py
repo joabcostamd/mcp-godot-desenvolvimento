@@ -39,14 +39,9 @@ TOOLSETS = {
         # Operações atômicas de cena (complementam os rollups)
         "raycast_manage",
         # Camada 5 (Gameplay): project
-        "create_achievement_system", "cloud_save_configure",
-        "mod_manifest_generate",
-        "cutscene_create_timeline", "cutscene_add_camera_shot", "cutscene_add_dialogue_event",
-        "quest_generate",
+        "create_achievement_system", "quest_generate",
         "dialogue_generate_npc_lines", "dialogue_generate_personality",
         "accessibility_apply_colorblind_filter", "accessibility_add_subtitles", "accessibility_remap_controls",
-        "onboarding_create_tutorial_step", "onboarding_create_guided_tour",
-    
         "skeleton_manage",
         "csg_create_node",
         "gi_create_node",
@@ -82,7 +77,6 @@ TOOLSETS = {
         # Juice/Polimento visual
         "juice_apply", "juice_list_presets",
         # Camada 5 (Gameplay): assets
-        "trailer_capture_clip", "trailer_render_sequence", "capsule_generate_store_image",
         "import_3d_model",
     ],
     "runtime": [
@@ -142,12 +136,8 @@ TOOLSETS = {
         "vision_manage",
         "localization_manage",
         # Camada 5 (Gameplay): analysis
-        "validate_achievement_config", "validate_mod_compatibility",
-        "telemetry_track_event", "telemetry_get_funnel", "telemetry_session_summary", "telemetry_heatmap",
-        "adaptive_difficulty_adjust",
+        "validate_achievement_config", "adaptive_difficulty_adjust",
         "accessibility_audit_scene", "accessibility_certification_checklist",
-        "onboarding_check_first_experience",
-    
         "runtime_list_signals",
         "runtime_watch_signal",
         # ── F3: _manage órfãos ganham namespace ──
@@ -181,11 +171,9 @@ TOOLSETS = {
         "release_checklist", "deploy_itch",
         "configure_export_preset",
         # Camada 5 (Gameplay): orchestration
-        "remote_balance_config",
         # ── F3: _manage órfãos ganham namespace ──
         "budget_manage", "mcp_telemetry_manage", "quickstart_manage",
-        "version_history_manage", "publish_manage", "community_manage",
-        "polish_manage",
+        "version_history_manage", "polish_manage",
     ],
 }
 
@@ -248,12 +236,11 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         # ── F8.1: Gameplay design tools ──
         "accessibility_add_subtitles", "accessibility_apply_colorblind_filter",
         "accessibility_remap_controls",
-        "cloud_save_configure", "create_achievement_system",
+        "create_achievement_system",
         "dialogue_generate_personality",
-        "mod_manifest_generate", "quest_generate",
+        "quest_generate",
         "complexity_gate_manage", "fun_report_manage",
-        "reviewer_manage", "validate_mod_compatibility",
-},
+        "reviewer_manage", },
     "PROTOTIPO": {
         # ── Execução runtime (core do prototipar) ──
         "runtime_manage",
@@ -308,13 +295,8 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "batch_atomic_edit", "add_nodes_batch",
         "set_properties_batch",
         # ── F8.1: Produção de conteúdo ──
-        "cutscene_create_timeline", "cutscene_add_camera_shot",
-        "cutscene_add_dialogue_event",
         "dialogue_generate_npc_lines", "music_manage",
-        "onboarding_create_tutorial_step", "onboarding_create_guided_tour",
-        "telemetry_track_event", "telemetry_get_funnel",
-        "telemetry_session_summary", "telemetry_heatmap",
-},
+        },
     "POLIMENTO": {
         "debug_manage",
         "vision_manage",
@@ -346,8 +328,7 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "effect_probe",
         # ── F8.1: Polimento e QA ──
         "accessibility_audit_scene", "adaptive_difficulty_adjust",
-        "localization_manage", "onboarding_check_first_experience",
-        "polish_manage", "validate_achievement_config",
+        "localization_manage", "polish_manage", "validate_achievement_config",
 },
     "PRONTO_PARA_LANCAR": {
         "export_manage",
@@ -361,9 +342,6 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "csharp_build_project",
         # ── F8.1: Lançamento e publicação ──
         "accessibility_certification_checklist",
-        "capsule_generate_store_image", "community_manage",
-        "publish_manage", "remote_balance_config",
-        "trailer_capture_clip", "trailer_render_sequence",
         "version_history_manage",
 },
 }
