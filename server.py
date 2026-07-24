@@ -92,20 +92,22 @@ if _ENABLED_TOOLS is not None:
     print(f"[MCP] Toolsets ativos: {sorted(_ENABLED_TOOLS)}", file=sys.stderr)
 
 # ── FASE 4: Progressive Discovery (--lean) ────────────────────
-# Ativa modo lean: tools/list retorna apenas CORE + top-5 da fase.
-# O catálogo completo permanece acessível via catalog_search.
-_LEAN_MODE: bool = False
+# Ativa modo lean (default): tools/list retorna apenas CORE + top-5 da fase.
+# Use --full para expor todas as tools da fase (modo legado).
+# O catálogo completo sempre permanece acessível via catalog_search.
+_LEAN_MODE: bool = True
 
 def _parse_lean_arg() -> bool:
     import argparse
     parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument("--lean", action="store_true", default=False)
+    parser.add_argument("--full", action="store_true", default=False,
+                       help="Desativa modo lean — expõe todas as tools da fase")
     args, _ = parser.parse_known_args()
-    return args.lean
+    return not args.full  # --full desativa lean
 
 _LEAN_MODE = _parse_lean_arg()
-if _LEAN_MODE:
-    print("[MCP] Modo LEAN ativo — apenas CORE + top-5 por fase visíveis", file=sys.stderr)
+if not _LEAN_MODE:
+    print("[MCP] Modo FULL — todas as tools por fase visíveis (--full)", file=sys.stderr)
 
 # ── Feature 8: Toolsets por Fase (--phase) ────────────────────
 # Filtro dinâmico: consulta get_current_phase() do projeto ativo
