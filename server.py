@@ -3496,6 +3496,25 @@ async def list_resources() -> list:
     except Exception:
         pass
 
+    # 3. Skills (FASE 5 — Progressive Discovery)
+    try:
+        from mcp.types import Resource, ResourceTemplate
+        from skills import list_skills
+        skill_list = list_skills()
+        all_resources.append(
+            Resource(uri="skill://", name="Skills — Fluxos Guiados",
+                     description=f"{len(skill_list)} fluxos de trabalho com ferramentas recomendadas",
+                     mimeType="application/json"),
+        )
+        all_resources.append(
+            ResourceTemplate(uriTemplate="skill://{name}",
+                     name="Skill Específica",
+                     description="Fluxo guiado com ferramentas, workflow e exemplo",
+                     mimeType="text/plain"),
+        )
+    except Exception:
+        pass
+
     return all_resources
 
 
@@ -3528,6 +3547,21 @@ async def read_resource(uri: str) -> str:
         from resources import read_resource as _read
         return _read(uri)
     except Exception as e:
+        pass
+
+    # 3. Skills (FASE 5)
+    if uri.startswith("skill://"):
+        try:
+            from skills import list_skills, skill_to_prompt
+            name = uri.replace("skill://", "").strip("/")
+            if not name:
+                return json.dumps(list_skills(), indent=2, ensure_ascii=False)
+            prompt = skill_to_prompt(name)
+            if prompt:
+                return prompt
+            return f"Skill '{name}' não encontrada. Skills disponíveis: {', '.join(s['name'] for s in list_skills())}"
+        except Exception as e:
+            return json.dumps({"status": "error", "message": f"Erro ao ler skill: {e}"})
         return json.dumps({
             "status": "error",
             "message": f"Erro ao ler resource '{uri}': {e}",
