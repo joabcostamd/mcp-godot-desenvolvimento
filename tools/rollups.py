@@ -1154,8 +1154,90 @@ def _build_screenshot_manage():
         tags=["screenshot", "captura", "visão"],
     )
 
+# ── FASE 2 (Rollups adicionais) ─────────────────────────────────
+from tools.workflow_ops import workflow_snapshot, workflow_handoff
+from tools.security_ops import configure_security, security_status
+from tools.safety_policy import get_audit_log, get_audit_replay
+from tools.recording_ops import start_recording, stop_recording
+from tools.vibe_ops import vibe_coding_mode, get_vibe_context
 
 # ── Builders registry ───────────────────────────────────────────────
+# ── FASE 2 (Rollups adicionais — colapso de atômicas) ────────────
+
+def _build_workflow_manage():
+    """workflow_snapshot + workflow_handoff → workflow_manage"""
+    return create_manage_tool(
+        tool_name="workflow_manage",
+        description="Gerencia workflow: snapshot do estado atual e handoff para proxima sessao.",
+        ops={
+            "snapshot": workflow_snapshot,
+            "handoff": workflow_handoff,
+        },
+        tool_hints={"destructiveHint": False, "idempotentHint": True, "openWorldHint": False},
+        title="Workflow",
+        tags=["workflow", "handoff", "snapshot"],
+    )
+
+
+def _build_security_manage():
+    """configure_security + security_status → security_manage"""
+    return create_manage_tool(
+        tool_name="security_manage",
+        description="Gerencia seguranca: configura token e verifica status de seguranca.",
+        ops={
+            "configure": configure_security,
+            "status": security_status,
+        },
+        tool_hints={"destructiveHint": True, "idempotentHint": False, "openWorldHint": False},
+        title="Seguranca",
+        tags=["seguranca", "token", "config"],
+    )
+
+
+def _build_audit_manage():
+    """get_audit_log + get_audit_replay → audit_manage"""
+    return create_manage_tool(
+        tool_name="audit_manage",
+        description="Gerencia auditoria: historico (log) e replay de acoes da IA.",
+        ops={
+            "log": get_audit_log,
+            "replay": get_audit_replay,
+        },
+        tool_hints={"destructiveHint": False, "idempotentHint": True, "openWorldHint": False},
+        title="Auditoria",
+        tags=["auditoria", "log", "replay"],
+    )
+
+
+def _build_recording_manage():
+    """start_recording + stop_recording → recording_manage"""
+    return create_manage_tool(
+        tool_name="recording_manage",
+        description="Gerencia gravacao: inicia e para gravacao de sessoes de jogo.",
+        ops={
+            "start": start_recording,
+            "stop": stop_recording,
+        },
+        tool_hints={"destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
+        title="Gravacao",
+        tags=["recording", "gravacao", "sessao"],
+    )
+
+
+def _build_vibe_manage():
+    """vibe_coding_mode + get_vibe_context → vibe_manage"""
+    return create_manage_tool(
+        tool_name="vibe_manage",
+        description="Gerencia Vibe Coding Mode: ativa/desativa e consulta contexto atual.",
+        ops={
+            "enable": vibe_coding_mode,
+            "context": get_vibe_context,
+        },
+        tool_hints={"destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
+        title="Vibe Coding",
+        tags=["vibe", "contexto", "modo"],
+    )
+
 
 _ROLLUP_BUILDERS = [
     # Onda 1 (piloto)
@@ -1216,6 +1298,13 @@ _ROLLUP_BUILDERS = [
     _build_screenshot_manage,
     # ONDA 3: budget_manage (migrado)
     _build_budget_manage,
+    # FASE 2: Rollups adicionais (10 atômicas → 5 rollups)
+    _build_workflow_manage,
+    _build_security_manage,
+    _build_audit_manage,
+    _build_recording_manage,
+    _build_vibe_manage,
+
 ]
 
 # Cache interno — garante que cada builder só executa UMA vez.

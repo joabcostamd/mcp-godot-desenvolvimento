@@ -245,35 +245,6 @@ def _raw_tool_defs() -> list[Tool]:
             },
         ),
         Tool(
-            name="workflow_snapshot",
-            description=(
-                "Salva snapshot do estado atual do projeto no workflow log. "
-                "Use ANTES de operações grandes para ter ponto de restauração."
-            ),
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "description": {"type": "string"},
-                    "project_path": {"type": "string"},
-                },
-                "required": [],
-            },
-        ),
-        Tool(
-            name="workflow_handoff",
-            description=(
-                "Prepara resumo para proxima sessao. Use no FINAL de cada sessao."
-            ),
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "next_steps": {"type": "array", "items": {"type": "string"}},
-                    "notes": {"type": "string"},
-                },
-                "required": [],
-            },
-        ),
-        Tool(
             name="project_map",
             description="Gera mapa do projeto: cenas, scripts, funcoes, assets. Formatos: json ou html.",
             inputSchema={
@@ -285,31 +256,19 @@ def _raw_tool_defs() -> list[Tool]:
                 "required": [],
             },
         ),
-        Tool(name="configure_security", description="Configura token de seguranca para o addon MCP.",
-            inputSchema={"type":"object","properties":{"generate_token":{"type":"boolean"},"allow_remote":{"type":"boolean"}},"required":[]}),
-        Tool(name="security_status", description="Verifica configuracao de seguranca atual.",
-            inputSchema={"type":"object","properties":{},"required":[]}),
-        Tool(name="run_gut_tests", description="Executa testes GUT via Godot headless. Ex: {'test_dir': 'res://tests'}.",
+Tool(name="run_gut_tests", description="Executa testes GUT via Godot headless. Ex: {'test_dir': 'res://tests'}.",
             inputSchema={"type":"object","properties":{"project_path":{"type":"string"},"test_dir":{"type":"string"},"timeout":{"type":"integer"}},"required":[]}),
         Tool(name="assert_node_exists", description="Verifica se no existe na cena. Ex: {'scene_path':'...','node_path':'./Player'}.",
             inputSchema={"type":"object","properties":{"scene_path":{"type":"string"},"node_path":{"type":"string"},"node_type":{"type":"string"}},"required":["scene_path","node_path"]}),
         Tool(name="simulate_input_sequence", description="Simula sequencia de inputs. Ex: {'actions':[{'type':'key','key':32}]}.",
             inputSchema={"type":"object","properties":{"actions":{"type":"array","items":{"type":"object"}},"delay_ms":{"type":"integer"}},"required":["actions"]}),
-        Tool(name="vibe_coding_mode", description="Ativa/desativa Vibe Coding Mode. Foco automatico na cena configurada.",
-            inputSchema={"type":"object","properties":{"enabled":{"type":"boolean"},"scene_path":{"type":"string"},"focus_node":{"type":"string"}},"required":[]}),
-        Tool(name="get_vibe_context", description="Retorna contexto atual do Vibe Coding Mode.",
-            inputSchema={"type":"object","properties":{},"required":[]}),
-        Tool(name="game_http_request", description="HTTP request no jogo. Ex: {'url':'https://api.ex.com','method':'GET'}.",
+Tool(name="game_http_request", description="HTTP request no jogo. Ex: {'url':'https://api.ex.com','method':'GET'}.",
             inputSchema={"type":"object","properties":{"url":{"type":"string"},"method":{"type":"string"},"headers":{"type":"object"},"body":{"type":"string"}},"required":["url"]}),
         Tool(name="game_multiplayer", description="Multiplayer ENet. Ex: {'action':'create_server','port':9090}.",
             inputSchema={"type":"object","properties":{"action":{"type":"string","enum":["create_server","create_client","disconnect","status"]},"port":{"type":"integer"},"address":{"type":"string"}},"required":["action"]}),
         Tool(name="set_safety_policy", description="Configura politica de seguranca (allowlist/blocklist).",
             inputSchema={"type":"object","properties":{"enabled":{"type":"boolean"},"allowlist":{"type":"array","items":{"type":"string"}},"blocklist":{"type":"array","items":{"type":"string"}},"confirm_destructive":{"type":"boolean"}},"required":[]}),
-        Tool(name="get_audit_log", description="Historico de auditoria das acoes da IA.",
-            inputSchema={"type":"object","properties":{"limit":{"type":"integer"}},"required":[]}),
-        Tool(name="get_audit_replay", description="Replay do historico de auditoria.",
-            inputSchema={"type":"object","properties":{"steps":{"type":"integer"}},"required":[]}),
-        Tool(name="safe_write_gdscript", description="Escreve .gd COM validacao. Recusa codigo invalido! Ex: {'file_path':'res://x.gd','content':'...'}.",
+Tool(name="safe_write_gdscript", description="Escreve .gd COM validacao. Recusa codigo invalido! Ex: {'file_path':'res://x.gd','content':'...'}.",
             inputSchema={"type":"object","properties":{"file_path":{"type":"string"},"content":{"type":"string"},"project_path":{"type":"string"},"strict":{"type":"boolean"}},"required":["file_path","content"]}),
         Tool(name="tool_catalog", description="Catalogo de tools por grupo. Ex: {'query':'scene','group':'core'}.",
             inputSchema={"type":"object","properties":{"query":{"type":"string"},"group":{"type":"string"},"limit":{"type":"integer"}},"required":[]}),
@@ -369,11 +328,7 @@ def _raw_tool_defs() -> list[Tool]:
         ),
         Tool(name="game_serialize_state", description="Salva/restaura estado completo do jogo como JSON.",
             inputSchema={"type":"object","properties":{"action":{"type":"string","enum":["save","load"]},"file_name":{"type":"string"}},"required":["action"]}),
-        Tool(name="start_recording", description="Inicia gravacao de sessao (inputs/estados).",
-            inputSchema={"type":"object","properties":{"session_name":{"type":"string"}},"required":[]}),
-        Tool(name="stop_recording", description="Para gravacao e retorna resumo.",
-            inputSchema={"type":"object","properties":{"session_name":{"type":"string"}},"required":["session_name"]}),
-        Tool(name="game_call_method", description="Chama metodo em no no jogo rodando.",
+Tool(name="game_call_method", description="Chama metodo em no no jogo rodando.",
             inputSchema={"type":"object","properties":{"node_path":{"type":"string"},"method":{"type":"string"},"args":{"type":"array"}},"required":["node_path","method"]}),
         Tool(name="game_spawn_node", description="Cria no dinamicamente no jogo.",
             inputSchema={"type":"object","properties":{"parent_path":{"type":"string"},"node_type":{"type":"string"},"node_name":{"type":"string"},"properties":{"type":"object"}},"required":["parent_path","node_type"]}),

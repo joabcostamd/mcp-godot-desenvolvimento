@@ -17,6 +17,17 @@ Origem: server.py linhas ~4600 e ~4996 (duplicados)
 from __future__ import annotations
 
 DEPRECATED_TOOLS: set[str] = {
+    # FASE 2: Atômicas colapsadas em rollups
+    "workflow_snapshot",
+    "workflow_handoff",
+    "configure_security",
+    "security_status",
+    "get_audit_log",
+    "get_audit_replay",
+    "start_recording",
+    "stop_recording",
+    "vibe_coding_mode",
+    "get_vibe_context",
     # ONDA 4.2: unificados em catalog_search
     "tool_catalog", "tool_groups",
     "add_audio_effect", "add_collision_shape", "add_control_node",
@@ -122,6 +133,17 @@ DEPRECATED_TOOLS: set[str] = {
 # Gerado em: Fechamento da Estabilizacao (K2) — 2026-07-21
 
 ALIAS_MAP: dict[str, tuple[str, str]] = {
+    # FASE 2: Aliases para rollups
+    "workflow_snapshot": ("workflow_manage", "snapshot"),
+    "workflow_handoff": ("workflow_manage", "handoff"),
+    "configure_security": ("security_manage", "configure"),
+    "security_status": ("security_manage", "status"),
+    "get_audit_log": ("audit_manage", "log"),
+    "get_audit_replay": ("audit_manage", "replay"),
+    "start_recording": ("recording_manage", "start"),
+    "stop_recording": ("recording_manage", "stop"),
+    "vibe_coding_mode": ("vibe_manage", "enable"),
+    "get_vibe_context": ("vibe_manage", "context"),
     # ── godot_* → godot_manage ──
     "godot_exec": ("godot_manage", "exec_gdscript"),
     "godot_run_project": ("godot_manage", "run_project"),

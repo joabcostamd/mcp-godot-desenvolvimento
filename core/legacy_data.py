@@ -101,8 +101,7 @@ TOOLSETS = {
         # Input/Recording
         "inject_input_event", "simulate_input_sequence",
         "watch_signal", "watch_state_start", "watch_state_collect",
-        "record_gameplay_gif", "start_recording", "stop_recording",
-        # Editor ao vivo
+        "record_gameplay_gif", # Editor ao vivo
         "editor_manage",
         "read_console_output",
         # Performance
@@ -118,6 +117,8 @@ TOOLSETS = {
         "runtime_connect_signal",
         "runtime_disconnect_signal",
         "runtime_emit_signal",
+        # FASE 2: Rollup recording
+        "recording_manage",
 ],
     "analysis": [
         # Análise, auditoria, qualidade, referências, introspecção
@@ -154,14 +155,10 @@ TOOLSETS = {
         "tool_catalog", "tool_groups",
         "catalog_search", "describe_tool", "invoke_by_name",
         "safety_manage",
-        "set_safety_policy", "configure_security", "security_status",
-        "circuit_breaker_status",
+        "set_safety_policy", "circuit_breaker_status",
         "get_current_phase", "advance_phase", "get_phase_history",
         "get_next_step", "resume_session",
-        "get_audit_log", "get_audit_replay",
-        "workflow_handoff", "workflow_snapshot",
         "set_auto_dismiss",
-        "vibe_coding_mode", "get_vibe_context",
         "project_progress",
         "generate_ci_snippet",
         "install_mcp_addon", "setup_mcp_config",
@@ -174,6 +171,8 @@ TOOLSETS = {
         # ── F3: _manage órfãos ganham namespace ──
         "budget_manage", "mcp_telemetry_manage", "quickstart_manage",
         "version_history_manage", "polish_manage",
+        # FASE 2: Rollups adicionais
+        "workflow_manage", "security_manage", "audit_manage", "vibe_manage",
     ],
 }
 
@@ -298,26 +297,21 @@ PHASE_TOOLSETS: dict[str, set[str]] = {
         "dialogue_generate_npc_lines", "music_manage",
         },
     "POLIMENTO": {
+        # FASE 2: Rollups adicionais
+        "workflow_manage", "security_manage", "audit_manage", "recording_manage", "vibe_manage",
         "debug_manage",
         "vision_manage",
         "profile_frame", "profile_memory",
         "set_safety_policy",
-        "security_status",
-        "configure_security",
         "circuit_breaker_status",
-        "get_audit_log", "get_audit_replay",
         "estimate_tool_tokens",
-        "workflow_handoff", "workflow_snapshot",
         "generate_ci_snippet",
         "find_unused_resources",
         "set_auto_dismiss",
         "test_manage",
-        "vibe_coding_mode", "get_vibe_context",
-    
         "runtime_list_signals",
         # ── F5 prep: recording moved from PROTOTIPO ──
-        "record_gameplay_gif", "start_recording", "stop_recording",
-        # ── Movidos do PROTOTIPO (F5 prep) ──
+        "record_gameplay_gif", # ── Movidos do PROTOTIPO (F5 prep) ──
         "freeze_game_clock", "unfreeze_game_clock",
         "step_game_time", "step_until",
         "watch_signal", "watch_state_start", "watch_state_collect",

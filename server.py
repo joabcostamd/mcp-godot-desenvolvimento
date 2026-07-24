@@ -434,20 +434,16 @@ from tools.project_ops import (
 from tools.bootstrap_ops import bootstrap_godot_mcp, godot_keep_alive
 from tools.batch_ops import batch_atomic_edit
 from tools.asset_download import download_asset, import_downloaded_asset
-from tools.workflow_ops import (
-    workflow_snapshot, workflow_handoff,
-)
+
 from tools.project_map import generate_project_map
-from tools.security_ops import configure_security, security_status
 from tools.gut_ops import run_gut_tests
 from tools.playmode_ops import assert_node_exists, simulate_input_sequence
-from tools.vibe_ops import vibe_coding_mode, get_vibe_context
 from tools.debugger_ops import debugger_set_breakpoint, debugger_status, debugger_step, debugger_get_stack, debugger_get_variables
 from tools.networking_ops import game_http_request, game_multiplayer
-from tools.safety_policy import set_safety_policy, get_audit_log, get_audit_replay
+from tools.safety_policy import set_safety_policy
 from tools.validate_write import safe_write_gdscript
 from tools.dynamic_groups import tool_catalog, tool_groups
-from tools.recording_ops import start_recording, stop_recording, game_serialize_state
+from tools.recording_ops import game_serialize_state
 from tools.runtime_rich import (
     game_call_method,
     game_spawn_node,
@@ -1517,16 +1513,10 @@ def _build_handlers() -> dict:
         "search_classdb": cached_tool("search_classdb", _handle_search_classdb),
         "download_asset": _handle_download_asset,
         "import_downloaded_asset": _handle_import_downloaded_asset,
-        "workflow_snapshot": _handle_workflow_snapshot,
-        "workflow_handoff": _handle_workflow_handoff,
         "project_map": _handle_project_map,
-        "configure_security": _handle_configure_security,
-        "security_status": _handle_security_status,
         "run_gut_tests": _handle_run_gut_tests,
         "assert_node_exists": _handle_assert_node_exists,
         "simulate_input_sequence": _handle_simulate_input_sequence,
-        "vibe_coding_mode": _handle_vibe_coding_mode,
-        "get_vibe_context": _handle_get_vibe_context,
         "debugger_set_breakpoint": _handle_debugger_set_breakpoint,
         "debugger_status": _handle_debugger_status,
         "debugger_step": _handle_debugger_step,
@@ -1535,12 +1525,8 @@ def _build_handlers() -> dict:
         "game_http_request": _handle_game_http_request,
         "game_multiplayer": _handle_game_multiplayer,
         "set_safety_policy": _handle_set_safety_policy,
-        "get_audit_log": _handle_get_audit_log,
-        "get_audit_replay": _handle_get_audit_replay,
         "safe_write_gdscript": _handle_safe_write_gdscript,
         "game_serialize_state": _handle_game_serialize_state,
-        "start_recording": _handle_start_recording,
-        "stop_recording": _handle_stop_recording,
         "game_call_method": _handle_game_call_method,
         "game_spawn_node": _handle_game_spawn_node,
         "game_raycast": _handle_game_raycast,
@@ -2454,31 +2440,12 @@ def _handle_import_downloaded_asset(args: dict) -> dict:
     )
 
 
-def _handle_workflow_snapshot(args: dict) -> dict:
-    return workflow_snapshot(args.get("description", ""), args.get("project_path"))
-
-
-def _handle_workflow_handoff(args: dict) -> dict:
-    return workflow_handoff(args.get("next_steps"), args.get("notes", ""))
-
-
 def _handle_project_map(args: dict) -> dict:
     return generate_project_map(
         args.get("project_path"),
         args.get("format", "json"),
         args.get("output_path"),
     )
-
-
-def _handle_configure_security(args: dict) -> dict:
-    return configure_security(
-        generate_token=args.get("generate_token", True),
-        allow_remote=args.get("allow_remote", False),
-    )
-
-
-def _handle_security_status(args: dict) -> dict:
-    return security_status()
 
 
 def _handle_run_gut_tests(args: dict) -> dict:
@@ -2496,18 +2463,6 @@ def _handle_assert_node_exists(args: dict) -> dict:
 
 def _handle_simulate_input_sequence(args: dict) -> dict:
     return simulate_input_sequence(args["actions"], args.get("delay_ms", 100))
-
-
-def _handle_vibe_coding_mode(args: dict) -> dict:
-    return vibe_coding_mode(
-        args.get("enabled", True),
-        args.get("scene_path"),
-        args.get("focus_node"),
-    )
-
-
-def _handle_get_vibe_context(args: dict) -> dict:
-    return get_vibe_context()
 
 
 def _handle_debugger_set_breakpoint(args: dict) -> dict:
@@ -2542,14 +2497,6 @@ def _handle_set_safety_policy(args: dict) -> dict:
     return set_safety_policy(args.get("enabled"), args.get("allowlist"), args.get("blocklist"), args.get("confirm_destructive"))
 
 
-def _handle_get_audit_log(args: dict) -> dict:
-    return get_audit_log(args.get("limit", 50))
-
-
-def _handle_get_audit_replay(args: dict) -> dict:
-    return get_audit_replay(args.get("steps", 10))
-
-
 def _handle_safe_write_gdscript(args: dict) -> dict:
     result = safe_write_gdscript(args["file_path"], args["content"], args.get("project_path"), args.get("strict", True))
     if isinstance(result, dict) and result.get("status") == "success":
@@ -2560,14 +2507,6 @@ def _handle_safe_write_gdscript(args: dict) -> dict:
 
 def _handle_game_serialize_state(args: dict) -> dict:
     return game_serialize_state(args["action"], args.get("file_name","game_state.json"))
-
-
-def _handle_start_recording(args: dict) -> dict:
-    return start_recording(args.get("session_name",""))
-
-
-def _handle_stop_recording(args: dict) -> dict:
-    return stop_recording(args["session_name"])
 
 
 def _handle_game_call_method(args: dict) -> dict:
